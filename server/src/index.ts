@@ -1,8 +1,8 @@
-// tslint:disable-next-line:no-console
-console.log('Hello world!')
+import express from "express"
+import CONFIG from './config/index'
 
-let a = 2
-let b = 1
+const app = express()
 
-// tslint:disable-next-line:no-console
-console.log('a', a)
+app.listen(CONFIG.port, () => {
+  console.log('listening on port: ', CONFIG.port)
+})
