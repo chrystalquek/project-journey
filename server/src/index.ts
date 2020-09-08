@@ -1,9 +1,12 @@
 import express from "express"
 import bodyParser from "body-parser"
 import CONFIG from './config/index'
+import db from './loaders/connection'
 
 // Import routes
 import volunteerRouter from './routes/volunteer'
+
+db
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }));

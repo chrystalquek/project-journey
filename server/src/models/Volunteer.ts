@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 const Schema = mongoose.Schema
 
 const VolunteerSchema = new Schema({
-  id: Number,
+  _id: mongoose.Types.ObjectId,
   full_name: String,
   password: String,
   identification_number: String,
@@ -89,4 +89,4 @@ const VolunteerSchema = new Schema({
   sessions_per_month: Number,
 })
 
-export default VolunteerSchema
+export default mongoose.model("Volunteer", VolunteerSchema)

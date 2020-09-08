@@ -3,7 +3,11 @@ const mongoDbConnectionString = "mongodb+srv://user:user@cluster0.8ap9j.gcp.mong
 mongoose.connect(mongoDbConnectionString, { 
   useNewUrlParser: true
 })
+
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connectione error'))
+db.once('open', () => {
+  console.log('connected!')
+});
 
 export default db
