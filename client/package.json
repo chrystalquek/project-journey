@@ -1,0 +1,22 @@
+{
+  "name": "journey-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "9.5.3",
+    "next-redux-wrapper": "^6.0.2",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^14.6.4",
+    "@types/react": "^16.9.49",
+    "typescript": "^4.0.2"
+  }
+}
