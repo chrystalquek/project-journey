@@ -7,7 +7,7 @@ export const addNewResource = async (resourceData: ResourceData) => {
         _id: new mongoose.Types.ObjectId(),
         name: resourceData.name,
         url: resourceData.url,
-        created_at: Date.now,
+        created_at: Date.now(),
         type: resourceData.type,
     });
 
