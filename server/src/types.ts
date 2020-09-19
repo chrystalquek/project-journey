@@ -32,6 +32,5 @@ export type VolunteerData = {
 export type ResourceData = {
     name: string;
     url: string;
-    created_at: string;
-    resource_type: string;
+    type: string;
 };

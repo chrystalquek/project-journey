@@ -5,7 +5,10 @@ const ResourceSchema = new Schema({
     _id: mongoose.Types.ObjectId,
     name: String,
     url: String,
-    created_at: Date,
+    created_at: {
+        type: Date,
+        default: Date.now,
+    },
     resource_type: {
         type: String,
         enum: ["google docs", "link", "pdf", "video"],
