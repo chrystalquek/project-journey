@@ -1,5 +1,8 @@
+import { ResourceData } from "./../types";
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
+
+export type ResourceModel = ResourceData & mongoose.Document;
 
 const ResourceSchema = new Schema({
     _id: mongoose.Types.ObjectId,
@@ -15,4 +18,4 @@ const ResourceSchema = new Schema({
     },
 });
 
-export default mongoose.model("Resource", ResourceSchema);
+export default mongoose.model<ResourceModel>("Resource", ResourceSchema);

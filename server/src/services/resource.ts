@@ -2,14 +2,70 @@ import mongoose from "mongoose";
 import { ResourceData } from "../types";
 import Resource from "../models/Resource";
 
-export const addNewResource = async (resourceData: ResourceData) => {
-    const resourceSchemaData = new Resource({
-        _id: new mongoose.Types.ObjectId(),
-        name: resourceData.name,
-        url: resourceData.url,
-        created_at: Date.now(),
-        type: resourceData.type,
-    });
+const createResource = async (resourceData: ResourceData): Promise<void> => {
+    try {
+        const resourceSchemaData = new Resource({
+            _id: new mongoose.Types.ObjectId(),
+            name: resourceData.name,
+            url: resourceData.url,
+            created_at: Date.now(),
+            type: resourceData.type,
+        });
+        const saved = await resourceSchemaData.save();
+        console.log(saved);
+    } catch (err) {
+        throw new Error("Server error");
+    }
+};
 
-    const result = await resourceSchemaData.save();
+const readResource = async (id: string): Promise<ResourceData> => {
+    try {
+        console.log("im here2");
+        const resource = await Resource.findById(id);
+        console.log("im here");
+
+        if (!resource) {
+            throw new Error("Resource is not found.");
+        }
+
+        return resource;
+    } catch (err) {
+        throw new Error("Server error");
+    }
+};
+
+const updateResource = async (
+    id: string,
+    updatedFields: ResourceData
+): Promise<void> => {
+    try {
+        await Resource.findOneAndUpdate(
+            { _id: id },
+            { $set: updatedFields },
+            { new: true }
+        );
+    } catch (err) {
+        throw new Error("Server error");
+    }
+};
+
+const deleteResource = async (id: string): Promise<void> => {
+    try {
+        const resource = await Resource.findById(id);
+
+        if (!resource) {
+            throw new Error("Resource can't be found");
+        }
+
+        await resource.remove();
+    } catch (err) {
+        throw new Error("Server error");
+    }
+};
+
+export default {
+    createResource,
+    readResource,
+    updateResource,
+    deleteResource,
 };
