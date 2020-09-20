@@ -1,25 +1,25 @@
-import express from "express"
-import expressValidator from "express-validator"
-import bodyParser from "body-parser"
-import CONFIG from './config/index'
-import db from './loaders/connection'
+import express from "express";
+import expressValidator from "express-validator";
+import bodyParser from "body-parser";
+import CONFIG from "./config/index";
+import db from "./loaders/connection";
 
 // Import routes
-import volunteerRouter from './routes/volunteer'
+import router from "./routes";
 
 // load db -> find better way instead of this
-db
+db;
 
-const app = express()
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(expressValidator())
+app.use(expressValidator());
 
 // Add routes to app
-app.use('/', volunteerRouter)
+app.use("/", router);
 
 app.listen(CONFIG.port, () => {
-  console.log('listening on port: ', CONFIG.port)
-})
+    console.log("listening on port: ", CONFIG.port);
+});
 
-export default app
+export default app;
