@@ -13,7 +13,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
         });
         await resourceSchemaData.save();
     } catch (err) {
-        throw new Error("Server error");
+        throw new Error(err.msg);
     }
 };
 
@@ -27,7 +27,7 @@ const readResource = async (id: string): Promise<ResourceData> => {
 
         return resource;
     } catch (err) {
-        throw new Error("Server error");
+        throw new Error(err.msg);
     }
 };
 
@@ -42,7 +42,7 @@ const updateResource = async (
             { new: true }
         );
     } catch (err) {
-        throw new Error("Server error");
+        throw new Error(err.msg);
     }
 };
 
@@ -56,7 +56,7 @@ const deleteResource = async (id: string): Promise<void> => {
 
         await resource.remove();
     } catch (err) {
-        throw new Error("Server error");
+        throw new Error(err.msg);
     }
 };
 

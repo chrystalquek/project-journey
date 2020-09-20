@@ -33,9 +33,11 @@ const createResource = async (
 
     try {
         await resourceService.createResource(req.body as ResourceData);
-        res.status(202).send("Resource data created");
+        res.status(HTTP_CODES.OK).send("Resource data created");
     } catch (err) {
-        res.status(500).json({ errors: [{ msg: "Server error" }] });
+        res.status(HTTP_CODES.SERVER_ERROR).json({
+            errors: [{ msg: err.msg }],
+        });
     }
 };
 
@@ -45,9 +47,11 @@ const readResource = async (
 ): Promise<void> => {
     try {
         const resource = await resourceService.readResource(req.params.id);
-        res.status(202).json(resource);
+        res.status(HTTP_CODES.OK).json(resource);
     } catch (err) {
-        res.status(500).json({ errors: [{ msg: "Server error" }] });
+        res.status(HTTP_CODES.SERVER_ERROR).json({
+            errors: [{ msg: err.msg }],
+        });
     }
 };
 
@@ -58,18 +62,22 @@ const updateResource = async (req: express.Request, res: express.Response) => {
 
         await resourceService.updateResource(id, updatedFields);
 
-        res.status(202).send("Resource data updated");
+        res.status(HTTP_CODES.OK).send("Resource data updated");
     } catch (err) {
-        res.status(500).json({ errors: [{ msg: "Server error" }] });
+        res.status(HTTP_CODES.SERVER_ERROR).json({
+            errors: [{ msg: err.msg }],
+        });
     }
 };
 
 const deleteResource = async (req: express.Request, res: express.Response) => {
     try {
         await resourceService.deleteResource(req.params.id);
-        res.status(202).send("Resource data deleted");
+        res.status(HTTP_CODES.OK).send("Resource data deleted");
     } catch (err) {
-        res.status(500).json({ errors: [{ msg: "Server error" }] });
+        res.status(HTTP_CODES.SERVER_ERROR).json({
+            errors: [{ msg: err.msg }],
+        });
     }
 };
 export default {
