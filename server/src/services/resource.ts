@@ -11,8 +11,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
             created_at: Date.now(),
             type: resourceData.type,
         });
-        const saved = await resourceSchemaData.save();
-        console.log(saved);
+        await resourceSchemaData.save();
     } catch (err) {
         throw new Error("Server error");
     }
@@ -20,9 +19,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
 
 const readResource = async (id: string): Promise<ResourceData> => {
     try {
-        console.log("im here2");
         const resource = await Resource.findById(id);
-        console.log("im here");
 
         if (!resource) {
             throw new Error("Resource is not found.");

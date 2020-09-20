@@ -43,9 +43,7 @@ const readResource = async (
     req: express.Request,
     res: express.Response
 ): Promise<void> => {
-    console.log("IM HERE");
     try {
-        console.log("IM HERE");
         const resource = await resourceService.readResource(req.params.id);
         res.status(202).json(resource);
     } catch (err) {
