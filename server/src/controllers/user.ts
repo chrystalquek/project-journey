@@ -16,9 +16,9 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
 
 const login = async (req: express.Request, res: express.Response) => {
     // Read username and password from request body
-    const { full_name, password } = req.body;
+    const { fullName, password } = req.body;
     
-    const user = await checkUserExists(full_name);
+    const user = await checkUserExists(fullName);
 
     if (user) {
         if (password == user.password || bcrypt.compareSync(password, user.password)) { // should remove password == user.password check eventually

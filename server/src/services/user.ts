@@ -1,7 +1,6 @@
 import { VolunteerData } from '../types'
 import Volunteer from '../models/Volunteer'
 
-// maybe should define a User Model eventually
 export const checkUserExists = async (fullName: String): Promise<VolunteerData> => {
     try {
         const user = await Volunteer.findOne({full_name: fullName});
