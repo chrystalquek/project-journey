@@ -1,25 +1,24 @@
 import mongoose from "mongoose"
-// import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { VolunteerData } from "../types";
 
 const Schema = mongoose.Schema
 
 // encrypt password
-// function setPassword(value: String) {
-//   return bcrypt.hashSync(value, 10);
-// }
+export function setPassword(value: string) {
+  return bcrypt.hashSync(value, 10);
+}
 
 export type VolunteerModel = VolunteerData & mongoose.Document;
 
 const VolunteerSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   full_name: String,
-  password: String,
-  // password: {
-  //   type: String,
-  //   required: true,
-  //   set: setPassword
-  // },
+  password: {
+    type: String,
+    required: true,
+    set: setPassword
+  },
   identification_number: String,
   home_address: String,
   mobile_number: String,
@@ -54,12 +53,12 @@ const VolunteerSchema = new Schema({
     enum: ["editor", "admin"]
   },
   referral: String, // referral for?
-  
+
   has_volunteered: Boolean,
   has_children_experience: Boolean,
   has_volunteered_other_places: Boolean,
   has_first_aid_certification: Boolean,
-  
+
   leadership_interest: {
     type: String,
     enum: ["yes", "no", "maybe", "other"]
@@ -68,7 +67,7 @@ const VolunteerSchema = new Schema({
     type: String
   },
   interests: {
-    type: [String], 
+    type: [String],
   },
   personality: {
     type: String,
