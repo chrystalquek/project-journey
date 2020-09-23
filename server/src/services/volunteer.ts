@@ -30,8 +30,3 @@ export const deleteVolunteer = async (volunteerId: number) => {
   return Volunteer.findByIdAndDelete(volunteerId)
     .catch(err => console.error(err));
 }
-
-
-
-
-
