@@ -1,10 +1,25 @@
 import mongoose from "mongoose"
+// import bcrypt from "bcrypt";
+import { VolunteerData } from "../types";
+
 const Schema = mongoose.Schema
+
+// encrypt password
+// function setPassword(value: String) {
+//   return bcrypt.hashSync(value, 10);
+// }
+
+export type VolunteerModel = VolunteerData & mongoose.Document;
 
 const VolunteerSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   full_name: String,
   password: String,
+  // password: {
+  //   type: String,
+  //   required: true,
+  //   set: setPassword
+  // },
   identification_number: String,
   home_address: String,
   mobile_number: String,
@@ -89,4 +104,4 @@ const VolunteerSchema = new Schema({
   sessions_per_month: Number,
 })
 
-export default mongoose.model("Volunteer", VolunteerSchema)
+export default mongoose.model<VolunteerModel>("Volunteer", VolunteerSchema)
