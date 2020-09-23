@@ -12,10 +12,12 @@ const validate = (method: VolunteerValidatorMethod) => {
     case 'createVolunteer': {
       return [body('fullName', 'fullName does not exist').exists()];
     }
+    default:
+      return [];
   }
 };
 
-const index = async (req: express.Request, res: express.Response) => {
+const index = async (req: express.Request, res: express.Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
@@ -25,7 +27,7 @@ const index = async (req: express.Request, res: express.Response) => {
   }
 
   await addNewVolunteer(req.body as VolunteerData);
-  return res.send('Volunteer data created');
+  res.send('Volunteer data created');
 };
 
 export default {
