@@ -1,25 +1,24 @@
-import mongoose from 'mongoose';
-// import bcrypt from "bcrypt";
-import { VolunteerData } from '../types';
+import mongoose from "mongoose"
+import bcrypt from "bcrypt";
+import { VolunteerData } from "../types";
 
-const { Schema } = mongoose;
+const Schema = mongoose.Schema
 
 // encrypt password
-// function setPassword(value: String) {
-//   return bcrypt.hashSync(value, 10);
-// }
+export function setPassword(value: string) {
+  return bcrypt.hashSync(value, 10);
+}
 
 export type VolunteerModel = VolunteerData & mongoose.Document;
 
 const VolunteerSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   full_name: String,
-  password: String,
-  // password: {
-  //   type: String,
-  //   required: true,
-  //   set: setPassword
-  // },
+  password: {
+    type: String,
+    required: true,
+    set: setPassword
+  },
   identification_number: String,
   home_address: String,
   mobile_number: String,
@@ -27,7 +26,7 @@ const VolunteerSchema = new Schema({
   email: String,
   social_media_platform: {
     type: String,
-    enum: ['instagram', 'facebook', 'snapchat', 'email', 'other'],
+    enum: ["instagram", "facebook", "snapchat", "email", "other"],
   },
   created_at: Date,
   modified_at: Date,
@@ -37,21 +36,21 @@ const VolunteerSchema = new Schema({
   matched_volunteer: Number, // (nullable)
   gender: {
     type: String,
-    enum: ['male', 'female'],
+    enum: ["male", "female"]
   },
   citizenship: {
     type: String,
-    enum: ['singapore', 'permanent_resident', 'foreigner'],
+    enum: ["singapore", "permanent_resident", "foreigner"],
   },
   orgnanization: String,
   position: String,
   status: {
     type: String,
-    enum: ['pending', 'verified'],
+    enum: ["pending", "verified"]
   },
   role: {
     type: String,
-    enum: ['editor', 'admin'],
+    enum: ["editor", "admin"]
   },
   referral: String, // referral for?
 
@@ -62,10 +61,10 @@ const VolunteerSchema = new Schema({
 
   leadership_interest: {
     type: String,
-    enum: ['yes', 'no', 'maybe', 'other'],
+    enum: ["yes", "no", "maybe", "other"]
   },
   description: {
-    type: String,
+    type: String
   },
   interests: {
     type: [String],
@@ -73,35 +72,35 @@ const VolunteerSchema = new Schema({
   personality: {
     type: String,
     enum: [
-      'INTJ_A',
-      'INTJ_T',
-      'INTP_A',
-      'INTP_T',
-      'ENTJ_A',
-      'ENTJ_T',
-      'ENFP_A',
-      'ENFP_T',
-      'ISTJ_A',
-      'ISTJ_T',
-      'ISFJ_A',
-      'ISFJ_T',
-      'ESTJ_A',
-      'ESTJ_T',
-      'ESFJ_A',
-      'ESFJ_T',
-      'ISTP_A',
-      'ISTP_T',
-      'ISFP_A',
-      'ISFP_T',
-      'ESTP_A',
-      'ESTP_T',
-      'ESFP_A',
-    ],
+      "INTJ_A",
+      "INTJ_T",
+      "INTP_A",
+      "INTP_T",
+      "ENTJ_A",
+      "ENTJ_T",
+      "ENFP_A",
+      "ENFP_T",
+      "ISTJ_A",
+      "ISTJ_T",
+      "ISFJ_A",
+      "ISFJ_T",
+      "ESTJ_A",
+      "ESTJ_T",
+      "ESFJ_A",
+      "ESFJ_T",
+      "ISTP_A",
+      "ISTP_T",
+      "ISFP_A",
+      "ISFP_T",
+      "ESTP_A",
+      "ESTP_T",
+      "ESFP_A"
+    ]
   },
   volunteer_reason: String,
   contribution: String,
   volunteer_length: Number,
   sessions_per_month: Number,
-});
+})
 
-export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);
+export default mongoose.model<VolunteerModel>("Volunteer", VolunteerSchema)
