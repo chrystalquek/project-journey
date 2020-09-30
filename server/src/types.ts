@@ -35,10 +35,3 @@ export type ResourceData = {
     url: string;
     type: string;
 };
-
-export enum EmailTemplate {
-    WELCOME,
-    ACTIVATION
-  }
-
-export type EmailTemplateKey = keyof typeof EmailTemplate;
