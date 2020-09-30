@@ -5,6 +5,7 @@ export type VolunteerData = {
     homeAddress: string;
     mobileNumber: string;
     dob: string;
+    email: string;
     socialMediaPlatform: string;
     nickname?: string;
     photoUrl: string;
@@ -34,3 +35,10 @@ export type ResourceData = {
     url: string;
     type: string;
 };
+
+export enum EmailTemplate {
+    WELCOME,
+    ACTIVATION
+  }
+
+export type EmailTemplateKey = keyof typeof EmailTemplate;
