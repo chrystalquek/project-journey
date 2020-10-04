@@ -26,16 +26,15 @@ const getSmtpTransport = async () => {
   });
 
   const accessToken = await oauth2Client.getAccessToken();
-
-  const smtpTransport = nodemailer.createTransport({
+  const transportOptions = {
     host: 'smtp.gmail.com',
     service: 'gmail',
-    port: Number(process.env.PORT),
+    port: 465,
     secure: true,
     auth: {
       type: 'OAuth2',
       user: process.env.SENDER_EMAIL_ADDRESS,
-      cliendId: process.env.GOOGLE_CLIENT_ID,
+      clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
       accessToken: accessToken.token,
@@ -43,7 +42,9 @@ const getSmtpTransport = async () => {
     tls: {
       rejectUnauthorized: false,
     },
-  } as TransportOptions);
+  };
+
+  const smtpTransport = nodemailer.createTransport(transportOptions as TransportOptions);
 
   return smtpTransport;
 };
@@ -53,10 +54,9 @@ const sendEmail = async (toAddresses: string[], ccAddresses: string[],
   const smtpTransport = await getSmtpTransport();
 
   const emailTemplate = getWelcomeStaticEmailTemplate(toAddresses, ccAddresses, bccAddresses);
-
   smtpTransport.sendMail(emailTemplate, (error, info) => {
     if (error) {
-      throw new Error(error.message);
+      console.error(error);
     } else {
       console.log(info);
     }
