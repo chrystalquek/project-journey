@@ -6,6 +6,7 @@ import db from './loaders/connection';
 
 // Import routes
 import router from './routes';
+import testRoute from './routes/test';
 
 // load db -> find better way instead of this
 db;
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(expressValidator());
 
+// Test route for deployment
+app.use('/test', testRoute)
 // Add routes to app
 app.use('/', router);
 
