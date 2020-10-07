@@ -43,4 +43,10 @@ export type VolunteerSchemaData = {
     modified_at: Date,
 }
 
-export type FormFieldType = String
+export type EnvironmentConstants = {
+    port: number,
+    env: string
+    disableAuthentication: boolean
+}
+
+export type FormFieldType = 'String' | 'Number'

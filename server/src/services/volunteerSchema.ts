@@ -17,7 +17,10 @@ export const addField = async (fieldName: string, fieldType: FormFieldType) => {
   await volunteerFieldData.save();
 };
 
-export const getAllFields = () => VolunteerSchema.find({});
+export const getAllFields = async () => {
+  const currentVolunteerSchema = await VolunteerSchema.find({});
+  return currentVolunteerSchema.map((value) => value.name);
+};
 
 export const updateField = async (
   fieldName: string,
