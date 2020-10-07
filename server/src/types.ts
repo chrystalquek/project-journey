@@ -35,3 +35,12 @@ export type ResourceData = {
     url: string;
     type: string;
 };
+
+export type VolunteerSchemaData = {
+    name: String,
+    field_type: String,
+    created_at: Date,
+    modified_at: Date,
+}
+
+export type FormFieldType = String
