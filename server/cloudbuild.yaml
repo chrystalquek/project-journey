@@ -2,7 +2,10 @@ steps:
 # Install
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
-# Deploy to GAE
-- name: "gcr.io/cloud-builders/npm"
-  args: ["run", "deploy"]
+# Build
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build']
+# Deploy
+- name: "gcr.io/cloud-builders/gcloud"
+  args: ["app", "deploy"]
   timeout: "1600s"
