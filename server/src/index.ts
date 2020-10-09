@@ -7,6 +7,8 @@ import db from './loaders/connection';
 // Import routes
 import router from './routes';
 
+require('dotenv').config();
+
 // load db -> find better way instead of this
 db;
 
