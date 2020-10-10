@@ -37,8 +37,8 @@ export type ResourceData = {
 };
 
 export type VolunteerSchemaData = {
-    name: String,
-    field_type: String,
+    name: string,
+    field_type: string,
     created_at: Date,
     modified_at: Date,
 }
