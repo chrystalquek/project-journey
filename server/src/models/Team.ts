@@ -3,10 +3,10 @@ import { TeamData } from "../types";
 
 const { Schema } = mongoose;
 
-type TeamModel = TeamData & mongoose.Document;
+export type TeamModel = TeamData & mongoose.Document;
 
+// If we don't declare _id explicitly, mongoose auto-initializes it for us
 const TeamSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
   name: String,
   leader: mongoose.Types.ObjectId,
   members: [mongoose.Types.ObjectId]

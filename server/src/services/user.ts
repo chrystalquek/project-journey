@@ -1,7 +1,7 @@
 import { VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 
-export const checkUserExists = async (fullName: String): Promise<VolunteerData> => {
+export const checkUserExists = async (fullName: string): Promise<VolunteerData> => {
   try {
     const user = await Volunteer.findOne({ full_name: fullName });
     if (!user) {

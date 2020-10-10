@@ -28,9 +28,8 @@ app.use(expressValidator());
 // Add routes to app
 app.use('/', router);
 
-console.log(CONFIG.port)
 app.listen(CONFIG.port, () => {
-  console.log('listening on port: ', CONFIG.port);
+  console.log(`App listening on port ${CONFIG.port}`);
 });
 
 export default app;

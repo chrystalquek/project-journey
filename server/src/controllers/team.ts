@@ -1,7 +1,8 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import { TeamData } from "../types";
-import console from 'console';
+
+import { body, validationResult } from "express-validator/check";
+import HTTP_CODES from "../constants/httpCodes";
+import { teamCreate, teamRead, teamUpdate, teamDelete } from "../services/team";
 
 export type TeamCreate = 'TeamCreate';
 export type TeamRead = 'TeamRead';
@@ -10,38 +11,60 @@ export type TeamDelete = 'TeamDelete';
 export type TeamMethod = TeamCreate | TeamRead | TeamUpdate | TeamDelete;
 
 // TODO @everyone - fill as required
-const validate = (method: TeamMethod) => {
-  if (method as TeamCreate) {
-    console.debug("Team create called");
+export const validate = (method: TeamMethod) => {
+  if (method === "TeamCreate") {
+    return [
+      body('members', 'members must be a string array').isArray(),
+      body('leader', 'leader cannot be empty').not().isEmpty(),
+      body('name', 'name cannot be empty').not().isEmpty()
+    ];
+  } else if (method === "TeamRead") {
     return [];
-  } else if (method as TeamRead) {
-    console.debug("Team read called");
+  } else if (method === "TeamUpdate") {
     return [];
-  } else if (method as TeamUpdate) {
-    console.debug("Team update called");
+  } else if (method === "TeamDelete") {
     return [];
-  } else if (method as TeamDelete) {
-    console.debug("Team delete called");
-    return [];
-  } else {
-    throw new Error("Unknown team method type");
   }
 }
 
 const createTeam = async (req: express.Request, res: express.Response) => {
-  return;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({ errors: errors.array() });
+  }
+
+  const result = await teamCreate(req.body);
+  res.send(result);
 }
 
 const readTeam = async (req: express.Request, res: express.Response) => {
-  return;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({ errors: errors.array() });
+  }
+
+  const result = await teamRead({ id: req.params.id });
+  res.send(result);
 }
 
 const updateTeam = async (req: express.Request, res: express.Response) => {
-  return;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({ errors: errors.array() });
+  }
+
+  const result = await teamUpdate({ id: req.params.id, ...req.body });
+  res.send(result);
 }
 
 const deleteTeam = async (req: express.Request, res: express.Response) => {
-  return;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({ errors: errors.array() });
+  }
+
+  const result = await teamDelete({ id: req.params.id, ...req.body });
+  res.send(result);
 }
 
 export default {

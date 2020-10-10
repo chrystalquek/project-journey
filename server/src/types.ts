@@ -53,5 +53,6 @@ export type FormFieldType = 'String' | 'Number';
 
 export type TeamData = {
   leader: string,
-  name: string
+  name: string,
+  members: [string]
 }

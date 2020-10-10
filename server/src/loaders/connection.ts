@@ -9,9 +9,9 @@ mongoose.connect(mongoDbConnectionString, {
 });
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connectione error'));
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
 db.once('open', () => {
-  console.log('connected!');
+  console.log('MongoDB connection established');
 });
 
 export default db;
