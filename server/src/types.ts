@@ -49,4 +49,9 @@ export type EnvironmentConstants = {
     disableAuthentication: boolean
 }
 
-export type FormFieldType = 'String' | 'Number'
+export type FormFieldType = 'String' | 'Number';
+
+export type TeamData = {
+  leader: string,
+  name: string
+}
