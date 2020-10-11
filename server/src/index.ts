@@ -6,6 +6,8 @@ import db from './loaders/connection';
 
 // Import routes
 import router from './routes';
+
+// TODO: @akhil - remove this code before going on prod or enable it only on dev
 import testRoute from './routes/test';
 
 // load db -> find better way instead of this
