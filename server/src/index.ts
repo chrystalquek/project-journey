@@ -7,6 +7,9 @@ import db from './loaders/connection';
 // Import routes
 import router from './routes';
 
+// TODO: @akhil - remove this code before going on prod or enable it only on dev
+import testRoute from './routes/test';
+
 require('dotenv').config();
 
 // load db -> find better way instead of this
@@ -17,6 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(expressValidator());
 
+// Test route for deployment
+app.use('/test', testRoute)
 // Add routes to app
 app.use('/', router);
 
