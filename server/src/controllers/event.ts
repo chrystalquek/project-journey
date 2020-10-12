@@ -15,9 +15,13 @@ const validate = (method: EventValidatorMethod) => {
         body('contentUrl', 'content url is invalid').isURL(),
         body('facilitatorName', 'facilitator name does not exist').exists(),
         body('facilitatorDescription', 'facilitator description does not exist').exists(),
-        body('startDate', 'start date does not exist').exists(), // .isBefore('endDate')
+        body('startDate', 'start date does not exist').exists(),
+        // body('startDate', 'start date is after end date').isBefore('endDate'),
+        // body('startDate', 'start date is of wrong date format').isISO8601(),
         body('endDate', 'end date does not exist').exists(),
-        body('deadline', 'deadline does not exist').exists(), // .isISO8601()
+        // body('endDate', 'end date is of wrong date format').isISO8601(),
+        body('deadline', 'deadline does not exist').exists(),
+        // body('deadline', 'deadline is of wrong date format').isISO8601(),
       ];
     }
     default: {

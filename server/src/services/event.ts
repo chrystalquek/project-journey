@@ -9,15 +9,15 @@ const createEvent = async (eventData: EventData): Promise<void> => {
       name: eventData.name,
       created_at: Date.now(),
       description: eventData.description,
-      contentUrl: eventData.contentUrl,
-      contentType: eventData.contentType,
-      facilitatorName: eventData.facilitatorName,
-      facilitatorDescription: eventData.facilitatorDescription,
-      startDate: eventData.startDate,
-      endDate: eventData.endDate,
+      content_url: eventData.contentUrl,
+      content_type: eventData.contentType,
+      facilitator_name: eventData.facilitatorName,
+      facilitator_description: eventData.facilitatorDescription,
+      start_date: eventData.startDate,
+      end_date: eventData.endDate,
       location: eventData.location,
       deadline: eventData.deadline,
-      additionalInformation: eventData.additionalInformation,
+      additional_information: eventData.additionalInformation,
       capacity: eventData.capacity,
     });
     await eventSchemaData.save();
@@ -47,7 +47,7 @@ const updateEvent = async (
   try {
     await Event.findOneAndUpdate(
       { _id: id },
-      { $set: updatedFields },
+      { $set: updatedFields }, // must map camelCase to snake-case, should we use https://github.com/bendrucker/snakecase-keys
       { new: true },
     );
   } catch (err) {
