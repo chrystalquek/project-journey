@@ -17,6 +17,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
     try {
       await emailService.sendEmail(['adoraclara@gmail.com'], [], []);
     } catch (err) {
+      // TODO: @clara - Can we not next try catch blocks here?
       console.log(err);
       console.log('error');
     }

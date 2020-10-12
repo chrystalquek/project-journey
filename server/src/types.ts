@@ -35,3 +35,18 @@ export type ResourceData = {
     url: string;
     type: string;
 };
+
+export type VolunteerSchemaData = {
+    name: String,
+    field_type: String,
+    created_at: Date,
+    modified_at: Date,
+}
+
+export type EnvironmentConstants = {
+    port: number,
+    env: string
+    disableAuthentication: boolean
+}
+
+export type FormFieldType = 'String' | 'Number'
