@@ -1,5 +1,6 @@
 import nodemailer, { TransportOptions } from 'nodemailer';
 import { google } from 'googleapis';
+import ejs from 'ejs';
 import emailTemplates from './emailTemplates';
 
 const { OAuth2 } = google.auth;
@@ -53,16 +54,30 @@ const sendEmail = async (toAddresses: string[], ccAddresses: string[],
   bccAddresses: string[]) => {
   const smtpTransport = await getSmtpTransport();
 
-  const emailTemplate = getWelcomeStaticEmailTemplate(toAddresses, ccAddresses, bccAddresses);
-  smtpTransport.sendMail(emailTemplate, (error, info) => {
-    if (error) {
-      console.error(error);
+  ejs.renderFile('src/views/welcome.ejs', { name: 'Stranger' }, (err, data) => {
+    if (err) {
+      console.log(err);
     } else {
-      console.log(info);
+      const mainOptions = {
+        from: `Blessings in a Bag <${process.env.SENDER_EMAIL_ADDRESS}>`,
+        to: toAddresses,
+        cc: ccAddresses,
+        bcc: bccAddresses,
+        subject: 'Hello',
+        html: data,
+      };
+      smtpTransport.sendMail(mainOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(`Message sent: ${info.response}`);
+        }
+      });
+      smtpTransport.close();
     }
   });
-  smtpTransport.close();
 };
+
 export default {
   sendEmail,
 };
