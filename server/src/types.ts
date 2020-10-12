@@ -82,5 +82,4 @@ export type EventData = {
     deadline: Date;
     additionalInformation: string;
     capacity: number;
-    // modify for enrollment table between volunteers & events
 }
