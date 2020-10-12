@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { FormFieldType, VolunteerSchemaData } from '../types';
 import VolunteerSchema from '../models/VolunteerSchema';
-import Volunteer from '../models/Volunteer';
 
 export const addField = async (fieldName: string, fieldType: FormFieldType) => {
   const createdAtDate = new Date().toISOString();

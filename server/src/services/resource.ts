@@ -17,7 +17,8 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
     try {
       await emailService.sendEmail(['adoraclara@gmail.com'], [], []);
     } catch (err) {
-      // TODO: @clara - Can we not next try catch blocks here?
+      // TODO: @clara - Can we not nest try catch blocks here?
+      // https://softwareengineering.stackexchange.com/questions/118788/is-using-nested-try-catch-blocks-an-anti-pattern
       console.log(err);
       console.log('error');
     }
