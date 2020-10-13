@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { ResourceData } from '../types';
 import Resource from '../models/Resource';
-import emailService from '../services/email';
-import { EmailTemplate } from './email';
+import emailService, { EmailType } from '../services/email';
+import dummyUser from '../dummy/user';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
@@ -15,11 +15,9 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
     });
     await resourceSchemaData.save();
     try {
-      await emailService.sendEmail(['adoraclara@gmail.com'], [], []);
+      await emailService.sendEmail(dummyUser, EmailType.WELCOME);
     } catch (err) {
-      // TODO: @clara - Can we not next try catch blocks here?
       console.log(err);
-      console.log('error');
     }
   } catch (err) {
     throw new Error(err.msg);

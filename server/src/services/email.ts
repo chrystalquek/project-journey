@@ -1,17 +1,16 @@
 import nodemailer, { TransportOptions } from 'nodemailer';
 import { google } from 'googleapis';
 import ejs from 'ejs';
-import emailTemplates from './emailTemplates';
+import { VolunteerData } from '../types';
 
 const { OAuth2 } = google.auth;
-const { getWelcomeStaticEmailTemplate } = emailTemplates;
 
-export enum EmailTemplate {
-  WELCOME,
-  ACTIVATION
-}
+export const EmailType = Object.freeze({
+  WELCOME: 'WELCOME',
+  ACTIVATION: 'ACTIVATION',
+});
 
-export type EmailTemplateKey = keyof typeof EmailTemplate;
+const EMAIL_TYPE_INVALID = 'Email type is invalid';
 
 const getSmtpTransport = async () => {
   const oauth2Client = new OAuth2(
@@ -50,21 +49,21 @@ const getSmtpTransport = async () => {
   return smtpTransport;
 };
 
-const sendEmail = async (toAddresses: string[], ccAddresses: string[],
-  bccAddresses: string[]) => {
+const sendEmailHelper = async (to: string[], cc: string[],
+  bcc: string[], subject: string, templateFile: string, templateData: object) => {
   const smtpTransport = await getSmtpTransport();
 
-  ejs.renderFile('src/views/welcome.ejs', { name: 'Stranger' }, (err, data) => {
+  ejs.renderFile(templateFile, templateData, (err, content) => {
     if (err) {
       console.log(err);
     } else {
       const mainOptions = {
         from: `Blessings in a Bag <${process.env.SENDER_EMAIL_ADDRESS}>`,
-        to: toAddresses,
-        cc: ccAddresses,
-        bcc: bccAddresses,
-        subject: 'Hello',
-        html: data,
+        to,
+        cc,
+        bcc,
+        subject,
+        html: content,
       };
       smtpTransport.sendMail(mainOptions, (error, info) => {
         if (error) {
@@ -75,7 +74,44 @@ const sendEmail = async (toAddresses: string[], ccAddresses: string[],
       });
       smtpTransport.close();
     }
+    console.log('halo');
   });
+};
+
+const welcomeEmailHelper = async (user: VolunteerData) => {
+  const to = user.email;
+  const cc = [];
+  const bcc = [];
+  const subject = 'Welcome';
+
+  console.log(to);
+
+  const templateData = {
+    name: user.fullName,
+  };
+  const templateFile = 'src/views/welcome.ejs';
+
+  return {
+    to, cc, bcc, subject, templateFile, templateData,
+  };
+};
+
+const sendEmail = async (user: VolunteerData, emailType: string) => {
+  let helperObject;
+
+  switch (emailType) {
+    case EmailType.WELCOME:
+      helperObject = await welcomeEmailHelper(user);
+      break;
+    default:
+      throw new Error(EMAIL_TYPE_INVALID);
+  }
+
+  const {
+    to, cc, bcc, subject, templateFile, templateData,
+  } = helperObject;
+
+  return sendEmailHelper(to, cc, bcc, subject, templateFile, templateData);
 };
 
 export default {
