@@ -74,7 +74,6 @@ const sendEmailHelper = async (to: string[], cc: string[],
       });
       smtpTransport.close();
     }
-    console.log('halo');
   });
 };
 
@@ -83,8 +82,6 @@ const welcomeEmailHelper = async (user: VolunteerData) => {
   const cc = [];
   const bcc = [];
   const subject = 'Welcome';
-
-  console.log(to);
 
   const templateData = {
     name: user.fullName,
