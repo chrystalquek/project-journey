@@ -50,3 +50,21 @@ export type EnvironmentConstants = {
 }
 
 export type FormFieldType = 'String' | 'Number'
+
+export type ResponseJSON = {
+    message?: string
+    errors?: Array<any>
+}
+
+export interface CreateVolunteerFieldResponse extends ResponseJSON {
+}
+
+export interface GetAllVolunteersFieldsResponse extends ResponseJSON {
+    data: Array<String>
+}
+
+export interface UpdateVolunteerFieldResponse extends ResponseJSON {
+}
+
+export interface DeleteVolunteerFieldResponse extends ResponseJSON {
+}

@@ -7,7 +7,7 @@ router.get('/', volunteerController.index);
 router.post(
   '/',
   volunteerController.validate('createVolunteer'),
-  volunteerController.index,
+  volunteerController.createNewVolunteer,
 );
 
 export default router;
