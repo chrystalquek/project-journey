@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { ResourceData } from '../types';
 import Resource from '../models/Resource';
-import emailService, { EmailType } from '../services/email';
+import emailService from '../services/email';
 import dummyUser from '../dummy/user';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
@@ -15,7 +15,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
     });
     await resourceSchemaData.save();
     try {
-      await emailService.sendEmail(dummyUser, EmailType.WELCOME);
+      await emailService.sendEmail(dummyUser, 'WELCOME');
     } catch (err) {
       console.log(err);
     }

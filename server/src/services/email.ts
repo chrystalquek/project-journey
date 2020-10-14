@@ -5,10 +5,7 @@ import { VolunteerData } from '../types';
 
 const { OAuth2 } = google.auth;
 
-export const EmailType = Object.freeze({
-  WELCOME: 'WELCOME',
-  ACTIVATION: 'ACTIVATION',
-});
+type EmailTemplate = 'WELCOME' | 'ACTIVATION';
 
 const EMAIL_TYPE_INVALID = 'Email type is invalid';
 
@@ -50,7 +47,7 @@ const getSmtpTransport = async () => {
 };
 
 const sendEmailHelper = async (to: string[], cc: string[],
-  bcc: string[], subject: string, templateFile: string, templateData: object) => {
+  bcc: string[], subject: string, templateFile: string, templateData: Record<string, string>) => {
   const smtpTransport = await getSmtpTransport();
 
   ejs.renderFile(templateFile, templateData, (err, content) => {
@@ -93,11 +90,11 @@ const welcomeEmailHelper = async (user: VolunteerData) => {
   };
 };
 
-const sendEmail = async (user: VolunteerData, emailType: string) => {
+const sendEmail = async (user: VolunteerData, emailType: EmailTemplate) => {
   let helperObject;
 
   switch (emailType) {
-    case EmailType.WELCOME:
+    case 'WELCOME':
       helperObject = await welcomeEmailHelper(user);
       break;
     default:
