@@ -17,12 +17,11 @@ const validate = (method: EventValidatorMethod) => {
         body('facilitatorDescription', 'facilitator description does not exist').exists(),
         body('startDate', 'start date does not exist').exists(),
         body('startDate', 'start date is after end date').custom((value, { req }) => value <= req.body.endDate),
-        // body('startDate', 'start date is of wrong date format').isISO8601(),
-        // depends on what date formats we are accepting
+        body('startDate', 'start date is of wrong date format').isISO8601(),
         body('endDate', 'end date does not exist').exists(),
-        // body('endDate', 'end date is of wrong date format').isISO8601(),
+        body('endDate', 'end date is of wrong date format').isISO8601(),
         body('deadline', 'deadline does not exist').exists(),
-        // body('deadline', 'deadline is of wrong date format').isISO8601(),
+        body('deadline', 'deadline is of wrong date format').isISO8601(),
       ];
     }
     default: {
