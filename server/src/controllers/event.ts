@@ -22,6 +22,8 @@ const validate = (method: EventValidatorMethod) => {
         body('endDate', 'end date is of wrong date format').isISO8601(),
         body('deadline', 'deadline does not exist').exists(),
         body('deadline', 'deadline is of wrong date format').isISO8601(),
+        body('volunteers', 'volunteers does not exist').exists(),
+        body('volunteers', 'number of volunteers exceeds capacity').custom((value, { req }) => req.body.capacity == null || value.length <= req.body.capacity),
       ];
     }
     default: {
@@ -59,6 +61,12 @@ const readEvent = async (
 ): Promise<void> => {
   try {
     const event = await eventService.readEvent(req.params.id);
+
+    // to access volunteers by Id
+    // const volunteers = Volunteer.find(
+    //   { _id: { $in: event.volunteers } },
+    // );
+
     res.status(HTTP_CODES.OK).json(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
