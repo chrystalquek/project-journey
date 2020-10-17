@@ -14,11 +14,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
       type: resourceData.type,
     });
     await resourceSchemaData.save();
-    try {
-      await emailService.sendEmail(dummyUser, 'WELCOME');
-    } catch (err) {
-      console.log(err);
-    }
+    await emailService.sendEmail(dummyUser, 'WELCOME');
   } catch (err) {
     throw new Error(err.msg);
   }
