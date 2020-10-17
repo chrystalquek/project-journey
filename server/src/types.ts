@@ -37,8 +37,8 @@ export type ResourceData = {
 };
 
 export type VolunteerSchemaData = {
-    name: String,
-    field_type: String,
+    name: string,
+    field_type: string,
     created_at: Date,
     modified_at: Date,
 }
@@ -49,7 +49,13 @@ export type EnvironmentConstants = {
     disableAuthentication: boolean
 }
 
-export type FormFieldType = 'String' | 'Number'
+export type FormFieldType = 'String' | 'Number';
+
+export type TeamData = {
+  leader: string,
+  name: string,
+  members: [string]
+}
 
 export type ResponseJSON = {
     message?: string

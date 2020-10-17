@@ -1,6 +1,14 @@
 import express from 'express';
 import expressValidator from 'express-validator';
 import bodyParser from 'body-parser';
+
+// The dotenv file should be parsed before any imports requiring process.env
+// tslint:disable-next-line:no-var-requires
+const result = require('dotenv').config();
+if (result.error) {
+  throw new Error("Error parsing dotenv");
+}
+
 import CONFIG from './config/index';
 import db from './loaders/connection';
 
