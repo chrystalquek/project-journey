@@ -56,3 +56,36 @@ export type TeamData = {
   name: string,
   members: [string]
 }
+
+export type ResponseJSON = {
+    message?: string
+    errors?: Array<any>
+}
+
+export interface CreateVolunteerFieldResponse extends ResponseJSON {
+}
+
+export interface GetAllVolunteersFieldsResponse extends ResponseJSON {
+    data: Array<String>
+}
+
+export interface UpdateVolunteerFieldResponse extends ResponseJSON {
+}
+
+export interface DeleteVolunteerFieldResponse extends ResponseJSON {
+}
+
+export type EventData = {
+    name: string;
+    description: string;
+    contentUrl: string;
+    contentType: string;
+    facilitatorName: string;
+    facilitatorDescription: string;
+    startDate: Date;
+    endDate: Date;
+    location: string;
+    deadline: Date;
+    additionalInformation: string;
+    capacity: number;
+}
