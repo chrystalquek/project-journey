@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 export type VolunteerData = {
     fullName: string;
     password: string;
@@ -88,4 +90,5 @@ export type EventData = {
     deadline: Date;
     additionalInformation: string;
     capacity: number;
+    volunteers: Array<mongoose.Types.ObjectId>;
 }
