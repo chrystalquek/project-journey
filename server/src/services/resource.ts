@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { ResourceData } from '../types';
 import Resource from '../models/Resource';
 import emailService from '../services/email';
-import { EmailTemplate } from './email';
+import dummyUser from '../dummy/user';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
@@ -14,14 +14,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
       type: resourceData.type,
     });
     await resourceSchemaData.save();
-    try {
-      await emailService.sendEmail(['adoraclara@gmail.com'], [], []);
-    } catch (err) {
-      // TODO: @clara - Can we not nest try catch blocks here?
-      // https://softwareengineering.stackexchange.com/questions/118788/is-using-nested-try-catch-blocks-an-anti-pattern
-      console.log(err);
-      console.log('error');
-    }
+    await emailService.sendEmail(dummyUser, 'WELCOME');
   } catch (err) {
     throw new Error(err.msg);
   }
