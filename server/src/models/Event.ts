@@ -5,6 +5,8 @@ const { Schema } = mongoose;
 
 export type EventModel = EventData & mongoose.Document;
 
+const options = { discriminatorKey: 'eventType' };
+
 const EventSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   name: String,
@@ -27,6 +29,6 @@ const EventSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-});
+}, options);
 
 export default mongoose.model<EventModel>('Event', EventSchema);

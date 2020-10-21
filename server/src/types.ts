@@ -92,3 +92,8 @@ export type EventData = {
     capacity: number;
     volunteers: Array<mongoose.Types.ObjectId>;
 }
+
+export type OpportunityData = EventData & {
+    photo: string;
+    positions: Array<string>
+}
