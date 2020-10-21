@@ -64,13 +64,7 @@ const updateOpportunity = async (
 
 const deleteOpportunity = async (id: string): Promise<void> => {
   try {
-    const opportunity = await Opportunity.findById(id);
-
-    if (!opportunity) {
-      throw new Error("Opportunity can't be found");
-    }
-
-    await opportunity.remove();
+    await Opportunity.findOneAndDelete({ _id: id });
   } catch (err) {
     throw new Error(err.msg);
   }

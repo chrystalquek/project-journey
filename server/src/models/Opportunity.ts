@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 
 export type OpportunityModel = OpportunityData & mongoose.Document;
 
+// TODO: make variable schema
 const OpportunitySchema = new Schema({
   positions: [String],
   photo: String,
