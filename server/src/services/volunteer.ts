@@ -3,12 +3,52 @@ import mongoose from 'mongoose';
 import { VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 
-// Deprecate
 export const addNewVolunteer = async (volunteerData: VolunteerData) => {
+  const {
+    fullName,
+    password,
+    identificationNumber,
+    homeAddress,
+    mobileNumber,
+    birthday,
+    email,
+    socialMediaPlatform,
+    nickname,
+    photoUrl,
+    gender,
+    citizenship,
+    organization,
+    position,
+    status,
+    role,
+    description,
+    interests,
+    personality,
+    volunteerRemark,
+  } = volunteerData;
+
   const volunteerSchemaData = new Volunteer({
     _id: new mongoose.Types.ObjectId(),
-    full_name: volunteerData.fullName,
-    password: volunteerData.password, // password is hashed automatically
+    full_name: fullName,
+    password,
+    identification_number: identificationNumber,
+    home_address: homeAddress,
+    mobile_number: mobileNumber,
+    birthday,
+    email,
+    social_media_platform: socialMediaPlatform,
+    nickname,
+    photo_url: photoUrl,
+    gender,
+    citizenship,
+    organization,
+    position,
+    status,
+    role,
+    description,
+    interests,
+    personality,
+    voluteer_remark: volunteerRemark,
   });
 
   await volunteerSchemaData.save();

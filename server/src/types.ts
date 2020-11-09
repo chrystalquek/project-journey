@@ -1,22 +1,27 @@
 import mongoose from 'mongoose';
 
+type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
+type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
+type VolunteerStatus = 'pending' | 'verified'
+type VolunteerRole = 'editor' | 'admin'
+
 export type VolunteerData = {
     fullName: string;
     password: string;
     identificationNumber: string;
     homeAddress: string;
     mobileNumber: string;
-    dob: string;
+    birthday: string;
     email: string;
-    socialMediaPlatform: string;
+    socialMediaPlatform: SocialMediaPlatform;
     nickname?: string;
     photoUrl: string;
     gender: string;
-    citizenship: string;
+    citizenship: CitizenshipStatus;
     organization: string;
     position: string;
-    status: string;
-    role: string;
+    status: VolunteerStatus;
+    role: VolunteerRole;
     referral?: string;
     hasVolunteered?: boolean;
     hasChildrenExperience?: boolean;
@@ -27,9 +32,10 @@ export type VolunteerData = {
     interests: string;
     personality: string;
     reason: string;
-    contribution?: string; // ??
-    volunteer_length: string;
-    sessions_per_month: number;
+    contribution?: string;
+    volunteerLength: string;
+    sessionsPerMonth: number;
+    volunteerRemark: string;
 };
 
 export type ResourceData = {

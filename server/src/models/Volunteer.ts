@@ -5,13 +5,11 @@ import { VolunteerData } from '../types';
 const { Schema } = mongoose;
 
 // encrypt password
-export function setPassword(value: string) {
-  return bcrypt.hashSync(value, 10);
-}
+export const setPassword = (value: string) => bcrypt.hashSync(value, 10);
 
 export type VolunteerModel = VolunteerData & mongoose.Document;
 
-const VolunteerSchema = new Schema({
+export const VolunteerSchemaDefinition = {
   _id: mongoose.Types.ObjectId,
   full_name: String,
   password: {
@@ -22,14 +20,12 @@ const VolunteerSchema = new Schema({
   identification_number: String,
   home_address: String,
   mobile_number: String,
-  dob: Date,
+  birthday: Date,
   email: String,
   social_media_platform: {
     type: String,
     enum: ['instagram', 'facebook', 'snapchat', 'email', 'other'],
   },
-  created_at: Date,
-  modified_at: Date,
   year_joined: Number,
   nickname: String, // optional?
   photo_url: String,
@@ -101,6 +97,18 @@ const VolunteerSchema = new Schema({
   contribution: String,
   volunteer_length: Number,
   sessions_per_month: Number,
+
+  // Remarks
+  volunteer_remark: String,
+  adminstrator_remark: String,
+};
+
+const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
+  strict: true,
 });
 
 export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);
