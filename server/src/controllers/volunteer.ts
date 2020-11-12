@@ -2,7 +2,7 @@ import express from 'express';
 import _ from 'lodash';
 import { body, validationResult } from 'express-validator/check';
 import { VolunteerData } from '../types';
-import { addNewVolunteer, addVolunteerBasedOnSchema } from '../services/volunteer';
+import { addNewVolunteer, isUserEmailUnique } from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
 import {
@@ -11,6 +11,7 @@ import {
   LEADERSHIP_INTEREST_TYPES,
   PERSONALITY_TYPES,
   RACE_TYPES,
+  SOCIAL_MEDIA_PLATFORMS,
 } from '../models/Volunteer';
 
 export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer';
@@ -39,19 +40,29 @@ const validate = (method: VolunteerValidatorMethod) => {
     case 'createVolunteer': {
       return [
         // Login details
-        body('email').isEmail().normalizeEmail(),
+        body('email').isEmail().normalizeEmail().custom(async (email: string) => {
+          const isEmailUnique = await isUserEmailUnique(email);
+          if (!isEmailUnique) {
+            throw new Error('E-mail is already in use');
+          }
+          return true;
+        }),
         body('password').isString().isLength({
           min: LENGTH_MINIMUM_PASSWORD,
         }),
 
         // Personal details
-        body('name', '"name" is not a string').isString(),
+        body('name').isString(),
         body('address').isString(),
         body('mobileNumber').isString().isMobilePhone('en-SG'),
         body('birthday').isISO8601().toDate(),
-        body('socialMediaPlatform').isString(),
+        body('socialMediaPlatform').isString().custom(
+          (socialMedia: string) => stringEnumValidator(SOCIAL_MEDIA_PLATFORMS, 'Social Media Platform', socialMedia),
+        ),
         body('gender').custom((gender: string) => stringEnumValidator(GENDER_TYPES, 'Gender', gender)),
-        body('citizenship').custom((citizenship: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenship)),
+        body('citizenship').custom(
+          (citizenship: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenship),
+        ),
         body('race').custom((race: string) => stringEnumValidator(RACE_TYPES, 'Race', race)),
         body('organization').isString(),
         body('position').isString(),
@@ -63,10 +74,16 @@ const validate = (method: VolunteerValidatorMethod) => {
         body('hasFirstAidCertification').isBoolean(),
 
         // Enum responses
-        body('leadershipInterest').isString().custom((leadershipInterest: string) => stringEnumValidator(LEADERSHIP_INTEREST_TYPES, 'Leadership Interest', leadershipInterest)),
+        body('leadershipInterest').isString().custom(
+          (leadershipInterest: string) => stringEnumValidator(
+            LEADERSHIP_INTEREST_TYPES, 'Leadership Interest', leadershipInterest,
+          ),
+        ),
         body('description').isString(),
         body('interests').isArray(),
-        body('personality').isString().custom((personality: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personality)),
+        body('personality').isString().custom(
+          (personality: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personality),
+        ),
         body('skills').isArray(),
 
         // Volunteering related
@@ -75,7 +92,7 @@ const validate = (method: VolunteerValidatorMethod) => {
         body('volunteerContribution').isString(),
 
         // Remarks
-        body('volunteerRemark').isString(),
+        body('volunteerRemark').isString().optional(),
       ];
     }
     default:
@@ -84,6 +101,8 @@ const validate = (method: VolunteerValidatorMethod) => {
 };
 
 const createNewVolunteer = async (req: express.Request, res: express.Response) => {
+  // TODO: Move to middleware
+  // https://express-validator.github.io/docs/running-imperatively.html
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({

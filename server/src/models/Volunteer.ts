@@ -38,6 +38,7 @@ export const PERSONALITY_TYPES = [
   'ESTP_T',
   'ESFP_A',
 ];
+export const SOCIAL_MEDIA_PLATFORMS = ['instagram', 'facebook', 'snapchat', 'email', 'other'];
 
 export const VolunteerSchemaDefinition = {
   _id: mongoose.Types.ObjectId,
@@ -54,7 +55,7 @@ export const VolunteerSchemaDefinition = {
   email: String,
   social_media_platform: {
     type: String,
-    enum: ['instagram', 'facebook', 'snapchat', 'email', 'other'],
+    enum: SOCIAL_MEDIA_PLATFORMS,
   },
   nickname: {
     type: String,
