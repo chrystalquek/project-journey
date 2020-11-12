@@ -1,8 +1,8 @@
 import express from 'express';
 import _ from 'lodash';
-import { body, validationResult } from 'express-validator/check';
+import { body, param, validationResult } from 'express-validator/check';
 import { VolunteerData } from '../types';
-import { addNewVolunteer, isUserEmailUnique } from '../services/volunteer';
+import { addNewVolunteer, getVolunteer, isUserEmailUnique } from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
 import {
@@ -95,6 +95,11 @@ const validate = (method: VolunteerValidatorMethod) => {
         body('volunteerRemark').isString().optional(),
       ];
     }
+    case 'getVolunteer': {
+      return [
+        param('email').isEmail(),
+      ];
+    }
     default:
       return [];
   }
@@ -121,7 +126,29 @@ const createNewVolunteer = async (req: express.Request, res: express.Response) =
   }
 };
 
+const getVolunteerDetails = async (req: express.Request, res: express.Response) => {
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: validationErrors.array(),
+    });
+    return;
+  }
+
+  try {
+    const volunteerDetails = await getVolunteer(req.params.email);
+    res.status(HTTP_CODES.OK).json({
+      data: volunteerDetails,
+    });
+  } catch (error) {
+    res.status(HTTP_CODES.OK).json({
+      message: error,
+    });
+  }
+};
+
 export default {
   validate,
   createNewVolunteer,
+  getVolunteerDetails,
 };

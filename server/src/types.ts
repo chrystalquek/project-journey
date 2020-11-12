@@ -4,39 +4,61 @@ type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'ot
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
 type VolunteerRole = 'editor' | 'admin'
+type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 
 export type VolunteerData = {
+    _id: string;
     name: string;
     password: string;
-    identificationNumber: string;
-    homeAddress: string;
+    identificationNumber?: string;
+
+    // personal details
+    address: string;
     mobileNumber: string;
-    birthday: string;
+    birthday: Date;
     email: string;
     socialMediaPlatform: SocialMediaPlatform;
     nickname?: string;
-    photoUrl: string;
+    photoUrl?: string;
     gender: string;
     citizenship: CitizenshipStatus;
-    organization: string;
-    position: string;
+    race: Race;
+
+    organization?: string;
+    position?: string;
+
+    // System data
     status: VolunteerStatus;
     role: VolunteerRole;
-    referral?: string;
+
+    referral?: string; // unsure why we have it here?
+
     hasVolunteered?: boolean;
     hasChildrenExperience?: boolean;
     hasVolunteeredOtherPlaces?: boolean;
     hasFirstAidCertification?: boolean;
+
     leadershipInterest: string;
     description: string;
-    interests: string;
+    interests: Array<string>;
     personality: string;
-    reason: string;
-    contribution?: string;
-    volunteerLength: string;
-    sessionsPerMonth: number;
-    volunteerRemark: string;
+    skills: Array<string>
+
+    volunteerContribution?: string;
+    volunteerReason: string;
+    volunteerFrequency: number;
+
+    volunteerRemarks: string;
+    administratorRemarks: string;
 };
+
+export type VolunteerPublicData = Omit<
+    VolunteerData,
+    'password' |
+    '_id' |
+    'identificationNumber' |
+    'administratorRemarks'
+>
 
 export type ResourceData = {
     name: string;

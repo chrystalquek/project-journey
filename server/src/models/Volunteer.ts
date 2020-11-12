@@ -42,18 +42,18 @@ export const SOCIAL_MEDIA_PLATFORMS = ['instagram', 'facebook', 'snapchat', 'ema
 
 export const VolunteerSchemaDefinition = {
   _id: mongoose.Types.ObjectId,
-  full_name: String,
+  name: String,
   password: {
     type: String,
     required: true,
     set: setPassword,
   },
-  identification_number: String, // TODO: Confirm do we need to store this? (sensitive data)
+  identificationNumber: String, // TODO: Confirm do we need to store this? (sensitive data)
   address: String,
-  mobile_number: String,
+  mobileNumber: String,
   birthday: Date,
   email: String,
-  social_media_platform: {
+  socialMediaPlatform: {
     type: String,
     enum: SOCIAL_MEDIA_PLATFORMS,
   },
@@ -61,8 +61,8 @@ export const VolunteerSchemaDefinition = {
     type: String,
     default: '',
   },
-  photo_url: String, // Process on server side - not immediately available
-  matched_volunteer: Number, // (nullable) -> support later phase
+  photoUrl: String, // Process on server side - not immediately available
+  matchedVolunteer: Number, // (nullable) -> support later phase
   gender: {
     type: String,
     enum: GENDER_TYPES,
@@ -87,12 +87,12 @@ export const VolunteerSchemaDefinition = {
   },
   referral: String, // TODO: Confirm the existence of this field
 
-  has_volunteered: Boolean,
-  has_children_experience: Boolean,
-  has_volunteered_other_places: Boolean,
-  has_first_aid_certification: Boolean,
+  hasVolunteered: Boolean,
+  hasChildrenExperience: Boolean,
+  hasVolunteeredExternally: Boolean,
+  hasFirstAidCertification: Boolean,
 
-  leadership_interest: {
+  leadershipInterest: {
     type: String,
     enum: LEADERSHIP_INTEREST_TYPES,
   },
@@ -109,13 +109,13 @@ export const VolunteerSchemaDefinition = {
   skills: {
     type: [String],
   },
-  volunteer_reason: String,
-  volunteer_contribution: String,
-  volunteer_frequency: Number,
+  volunteerReason: String,
+  volunteerContribution: String,
+  volunteerFrequency: Number,
 
   // Remarks
-  volunteer_remark: String,
-  adminstrator_remark: String,
+  volunteerRemarks: String,
+  administratorRemarks: String,
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {

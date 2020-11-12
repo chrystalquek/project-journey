@@ -2,6 +2,7 @@
 import mongoose from 'mongoose';
 import { VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
+import volunteerUtil from '../helpers/volunteer';
 
 // Helper methods
 export const isUserEmailUnique = async (email: string) => {
@@ -16,7 +17,7 @@ export const addNewVolunteer = async (volunteerData: VolunteerData) => {
     name,
     password,
     identificationNumber,
-    homeAddress,
+    address,
     mobileNumber,
     birthday,
     email,
@@ -32,21 +33,21 @@ export const addNewVolunteer = async (volunteerData: VolunteerData) => {
     description,
     interests,
     personality,
-    volunteerRemark,
+    volunteerRemarks,
   } = volunteerData;
 
   const volunteerSchemaData = new Volunteer({
     _id: new mongoose.Types.ObjectId(),
-    full_name: name,
+    name,
     password,
-    identification_number: identificationNumber,
-    home_address: homeAddress,
-    mobile_number: mobileNumber,
+    identificationNumber,
+    address,
+    mobileNumber,
     birthday,
     email,
-    social_media_platform: socialMediaPlatform,
+    socialMediaPlatform,
     nickname,
-    photo_url: photoUrl,
+    photoUrl,
     gender,
     citizenship,
     organization,
@@ -56,18 +57,28 @@ export const addNewVolunteer = async (volunteerData: VolunteerData) => {
     description,
     interests,
     personality,
-    voluteer_remark: volunteerRemark,
+    volunteerRemarks,
   });
 
   await volunteerSchemaData.save();
 };
 
 /**
- * Finds the volunteer with given id, or null if not found.
+ * Gets volunteer details for specific user.
+ * Throws error if user doesn't exist
+ * @param email User email to be searched
  */
-// TODO: Better error handling here
-export const getVolunteer = async (volunteerId: number) => Volunteer.findById({ _id: volunteerId })
-  .catch((err) => console.error(err));
+export const getVolunteer = async (email: string) => {
+  const volunteer = await Volunteer.findOne({
+    email,
+  }).lean().exec();
+
+  if (!volunteer) {
+    throw new Error(`Volunteer with email: ${email} not found`);
+  }
+
+  return volunteerUtil.extractVolunteerDetails(volunteer);
+};
 
 // TODO: Better error handling here
 export const updateVolunteer = async (volunteerId: number, volunteerData: VolunteerData) => Volunteer.findByIdAndUpdate(volunteerId, volunteerData)
