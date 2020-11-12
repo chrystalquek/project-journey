@@ -4,10 +4,40 @@ import { VolunteerData } from '../types';
 
 const { Schema } = mongoose;
 
-// encrypt password
 export const setPassword = (value: string) => bcrypt.hashSync(value, 10);
 
 export type VolunteerModel = VolunteerData & mongoose.Document;
+
+// ENUM Types
+export const GENDER_TYPES = ['male', 'female'];
+export const CITIZENSHIP_TYPES = ['singapore', 'permanent_resident', 'foreigner'];
+export const RACE_TYPES = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
+export const LEADERSHIP_INTEREST_TYPES = ['yes', 'no', 'maybe'];
+export const PERSONALITY_TYPES = [
+  'INTJ_A',
+  'INTJ_T',
+  'INTP_A',
+  'INTP_T',
+  'ENTJ_A',
+  'ENTJ_T',
+  'ENFP_A',
+  'ENFP_T',
+  'ISTJ_A',
+  'ISTJ_T',
+  'ISFJ_A',
+  'ISFJ_T',
+  'ESTJ_A',
+  'ESTJ_T',
+  'ESFJ_A',
+  'ESFJ_T',
+  'ISTP_A',
+  'ISTP_T',
+  'ISFP_A',
+  'ISFP_T',
+  'ESTP_A',
+  'ESTP_T',
+  'ESFP_A',
+];
 
 export const VolunteerSchemaDefinition = {
   _id: mongoose.Types.ObjectId,
@@ -34,15 +64,15 @@ export const VolunteerSchemaDefinition = {
   matched_volunteer: Number, // (nullable) -> support later phase
   gender: {
     type: String,
-    enum: ['male', 'female'],
+    enum: GENDER_TYPES,
   },
   citizenship: {
     type: String,
-    enum: ['singapore', 'permanent_resident', 'foreigner'],
+    enum: CITIZENSHIP_TYPES,
   },
   race: {
     type: String,
-    enum: ['chinese', 'malay', 'indian', 'caucasian', 'other'],
+    enum: RACE_TYPES,
   },
   orgnanization: String,
   position: String,
@@ -63,7 +93,7 @@ export const VolunteerSchemaDefinition = {
 
   leadership_interest: {
     type: String,
-    enum: ['yes', 'no', 'maybe'],
+    enum: LEADERSHIP_INTEREST_TYPES,
   },
   description: {
     type: String,
@@ -73,31 +103,7 @@ export const VolunteerSchemaDefinition = {
   },
   personality: {
     type: String,
-    enum: [
-      'INTJ_A',
-      'INTJ_T',
-      'INTP_A',
-      'INTP_T',
-      'ENTJ_A',
-      'ENTJ_T',
-      'ENFP_A',
-      'ENFP_T',
-      'ISTJ_A',
-      'ISTJ_T',
-      'ISFJ_A',
-      'ISFJ_T',
-      'ESTJ_A',
-      'ESTJ_T',
-      'ESFJ_A',
-      'ESFJ_T',
-      'ISTP_A',
-      'ISTP_T',
-      'ISFP_A',
-      'ISFP_T',
-      'ESTP_A',
-      'ESTP_T',
-      'ESFP_A',
-    ],
+    enum: PERSONALITY_TYPES,
   },
   skills: {
     type: [String],

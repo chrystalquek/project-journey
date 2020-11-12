@@ -1,14 +1,39 @@
 import express from 'express';
+import _ from 'lodash';
 import { body, validationResult } from 'express-validator/check';
 import { VolunteerData } from '../types';
 import { addNewVolunteer, addVolunteerBasedOnSchema } from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
+import {
+  CITIZENSHIP_TYPES,
+  GENDER_TYPES,
+  LEADERSHIP_INTEREST_TYPES,
+  PERSONALITY_TYPES,
+  RACE_TYPES,
+} from '../models/Volunteer';
 
 export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
+/**
+ * Helper function to deal with validation of request body inputs
+ * @param enumTypes Array of accepted string values
+ * @param enumName Variable name used for identification in error statement
+ * @param value String to test out against enumTypes
+ */
+const stringEnumValidator = (enumTypes: Array<string>, enumName: string, value: string) => {
+  if (!_.includes(enumTypes, value)) {
+    throw new Error(`${enumName}: "${value}" must be either ${enumTypes.join(', ')}`);
+  }
+  return true;
+};
+
+/**
+ * Handles route request validation for controllers
+ * @param method Controller handler names
+ */
 const validate = (method: VolunteerValidatorMethod) => {
   switch (method) {
     case 'createVolunteer': {
@@ -25,13 +50,11 @@ const validate = (method: VolunteerValidatorMethod) => {
         body('mobileNumber').isString().isMobilePhone('en-SG'),
         body('birthday').isISO8601().toDate(),
         body('socialMediaPlatform').isString(),
-        body('gender').isString(), // Check if male female with custom validator
-        body('citizenship').isString(), // Check citizenship enum
-        body('race').isString(),
+        body('gender').custom((gender: string) => stringEnumValidator(GENDER_TYPES, 'Gender', gender)),
+        body('citizenship').custom((citizenship: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenship)),
+        body('race').custom((race: string) => stringEnumValidator(RACE_TYPES, 'Race', race)),
         body('organization').isString(),
         body('position').isString(),
-        // body('status').isString(), // Check if 'pending' or 'verified'
-        // body('role').isString(), // Check if 'editor' or 'admin'
 
         // Boolean responses
         body('hasVolunteered').isBoolean(),
@@ -40,10 +63,10 @@ const validate = (method: VolunteerValidatorMethod) => {
         body('hasFirstAidCertification').isBoolean(),
 
         // Enum responses
-        body('leadershipInterest').isString(), // Check enum ['yes', 'no', 'maybe']
-        body('description').isString(), // Check volunteer description
+        body('leadershipInterest').isString().custom((leadershipInterest: string) => stringEnumValidator(LEADERSHIP_INTEREST_TYPES, 'Leadership Interest', leadershipInterest)),
+        body('description').isString(),
         body('interests').isArray(),
-        body('personality').isString(), // Check enum ['INTJ'] types
+        body('personality').isString().custom((personality: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personality)),
         body('skills').isArray(),
 
         // Volunteering related
@@ -60,19 +83,6 @@ const validate = (method: VolunteerValidatorMethod) => {
   }
 };
 
-const index = async (req: express.Request, res: express.Response): Promise<void> => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.mapped(),
-    });
-    return;
-  }
-  await addNewVolunteer(req.body as VolunteerData);
-  res.send('Volunteer data created');
-};
-
-// TODO: @matt - Implement HOC to prevent boiler plate validation checks for controllers
 const createNewVolunteer = async (req: express.Request, res: express.Response) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
@@ -93,7 +103,6 @@ const createNewVolunteer = async (req: express.Request, res: express.Response) =
 };
 
 export default {
-  index,
   validate,
   createNewVolunteer,
 };
