@@ -5,7 +5,7 @@ import Volunteer from '../models/Volunteer';
 
 export const addNewVolunteer = async (volunteerData: VolunteerData) => {
   const {
-    fullName,
+    name,
     password,
     identificationNumber,
     homeAddress,
@@ -29,7 +29,7 @@ export const addNewVolunteer = async (volunteerData: VolunteerData) => {
 
   const volunteerSchemaData = new Volunteer({
     _id: new mongoose.Types.ObjectId(),
-    full_name: fullName,
+    full_name: name,
     password,
     identification_number: identificationNumber,
     home_address: homeAddress,

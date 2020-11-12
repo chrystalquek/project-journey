@@ -17,8 +17,8 @@ export const VolunteerSchemaDefinition = {
     required: true,
     set: setPassword,
   },
-  identification_number: String,
-  home_address: String,
+  identification_number: String, // TODO: Confirm do we need to store this? (sensitive data)
+  address: String,
   mobile_number: String,
   birthday: Date,
   email: String,
@@ -26,10 +26,12 @@ export const VolunteerSchemaDefinition = {
     type: String,
     enum: ['instagram', 'facebook', 'snapchat', 'email', 'other'],
   },
-  year_joined: Number,
-  nickname: String, // optional?
-  photo_url: String,
-  matched_volunteer: Number, // (nullable)
+  nickname: {
+    type: String,
+    default: '',
+  },
+  photo_url: String, // Process on server side - not immediately available
+  matched_volunteer: Number, // (nullable) -> support later phase
   gender: {
     type: String,
     enum: ['male', 'female'],
@@ -37,6 +39,10 @@ export const VolunteerSchemaDefinition = {
   citizenship: {
     type: String,
     enum: ['singapore', 'permanent_resident', 'foreigner'],
+  },
+  race: {
+    type: String,
+    enum: ['chinese', 'malay', 'indian', 'caucasian', 'other'],
   },
   orgnanization: String,
   position: String,
@@ -48,7 +54,7 @@ export const VolunteerSchemaDefinition = {
     type: String,
     enum: ['editor', 'admin'],
   },
-  referral: String, // referral for?
+  referral: String, // TODO: Confirm the existence of this field
 
   has_volunteered: Boolean,
   has_children_experience: Boolean,
@@ -57,7 +63,7 @@ export const VolunteerSchemaDefinition = {
 
   leadership_interest: {
     type: String,
-    enum: ['yes', 'no', 'maybe', 'other'],
+    enum: ['yes', 'no', 'maybe'],
   },
   description: {
     type: String,
@@ -93,10 +99,12 @@ export const VolunteerSchemaDefinition = {
       'ESFP_A',
     ],
   },
+  skills: {
+    type: [String],
+  },
   volunteer_reason: String,
-  contribution: String,
-  volunteer_length: Number,
-  sessions_per_month: Number,
+  volunteer_contribution: String,
+  volunteer_frequency: Number,
 
   // Remarks
   volunteer_remark: String,

@@ -6,7 +6,7 @@ type VolunteerStatus = 'pending' | 'verified'
 type VolunteerRole = 'editor' | 'admin'
 
 export type VolunteerData = {
-    fullName: string;
+    name: string;
     password: string;
     identificationNumber: string;
     homeAddress: string;
@@ -102,4 +102,31 @@ export type EventData = {
 export type OpportunityData = EventData & {
     photo: string;
     positions: Array<string>
+}
+
+/**
+ * Individual error type for saving in DB
+ * Error type is at per field level
+ * e.g: 'name', 'password'
+ */
+export interface MongooseSaveSubError {
+    name: string
+    message: string
+    properties: {
+        message: string
+        type: string
+        path: string
+        value: string
+    }
+    kind: string
+    path: string
+    value: string
+}
+
+/**
+ * General error type for saving in DB
+ */
+export type MongooseSaveError = {
+    errors: Record<string, MongooseSaveSubError>
+    _message: string
 }
