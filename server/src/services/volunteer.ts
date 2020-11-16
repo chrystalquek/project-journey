@@ -84,6 +84,12 @@ export const getVolunteer = async (email: string) => {
 export const updateVolunteer = async (volunteerId: number, volunteerData: VolunteerData) => Volunteer.findByIdAndUpdate(volunteerId, volunteerData)
   .catch((err) => console.error(err));
 
-// TODO: Better error handling here
-export const deleteVolunteer = async (volunteerId: number) => Volunteer.findByIdAndDelete(volunteerId)
-  .catch((err) => console.error(err));
+/**
+ * Removes volunteer from DB (hard delete)
+ * @param email User email to be used to search
+ */
+export const deleteVolunteer = async (email: string) => {
+  await Volunteer.findOneAndDelete({
+    email,
+  });
+};

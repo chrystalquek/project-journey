@@ -13,5 +13,10 @@ router.get(
   volunteerController.validate('getVolunteer'),
   volunteerController.getVolunteerDetails,
 );
+router.delete(
+  '/',
+  volunteerController.validate('deleteVolunteer'),
+  volunteerController.removeVolunteer,
+);
 
 export default router;

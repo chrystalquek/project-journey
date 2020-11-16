@@ -2,7 +2,9 @@ import express from 'express';
 import _ from 'lodash';
 import { body, param, validationResult } from 'express-validator/check';
 import { VolunteerData } from '../types';
-import { addNewVolunteer, getVolunteer, isUserEmailUnique } from '../services/volunteer';
+import {
+  addNewVolunteer, deleteVolunteer, getVolunteer, isUserEmailUnique,
+} from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
 import {
@@ -14,7 +16,7 @@ import {
   SOCIAL_MEDIA_PLATFORMS,
 } from '../models/Volunteer';
 
-export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer';
+export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer' | 'deleteVolunteer'
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
@@ -100,6 +102,11 @@ const validate = (method: VolunteerValidatorMethod) => {
         param('email').isEmail(),
       ];
     }
+    case 'deleteVolunteer': {
+      return [
+        body('email').isEmail(),
+      ];
+    }
     default:
       return [];
   }
@@ -127,6 +134,8 @@ const createNewVolunteer = async (req: express.Request, res: express.Response) =
 };
 
 const getVolunteerDetails = async (req: express.Request, res: express.Response) => {
+  // TODO: Move to middleware
+  // https://express-validator.github.io/docs/running-imperatively.html
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
@@ -141,7 +150,29 @@ const getVolunteerDetails = async (req: express.Request, res: express.Response) 
       data: volunteerDetails,
     });
   } catch (error) {
-    res.status(HTTP_CODES.OK).json({
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      message: error,
+    });
+  }
+};
+
+const removeVolunteer = async (req: express.Request, res: express.Response) => {
+  // TODO: Move to middleware
+  // https://express-validator.github.io/docs/running-imperatively.html
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: validationErrors.array(),
+    });
+    return;
+  }
+
+  try {
+    const { email } = req.body;
+    await deleteVolunteer(email);
+    res.status(HTTP_CODES.OK).send();
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
     });
   }
@@ -151,4 +182,5 @@ export default {
   validate,
   createNewVolunteer,
   getVolunteerDetails,
+  removeVolunteer,
 };

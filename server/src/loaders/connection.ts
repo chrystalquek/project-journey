@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
-const mongoDbConnectionString = 'mongodb+srv://user:user@cluster0.8ap9j.gcp.mongodb.net/user?retryWrites=true&w=majority';
-mongoose.connect(mongoDbConnectionString, {
+const CONNECTION_STRING = 'mongodb+srv://user:user@cluster0.8ap9j.gcp.mongodb.net/user?retryWrites=true&w=majority';
+mongoose.connect(CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
