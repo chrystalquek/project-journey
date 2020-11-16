@@ -81,7 +81,7 @@ const welcomeEmailHelper = async (user: VolunteerData) => {
   const subject = 'Welcome';
 
   const templateData = {
-    name: user.fullName,
+    name: user.name,
   };
   const templateFile = 'src/views/welcome.ejs';
 
