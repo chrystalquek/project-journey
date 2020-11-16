@@ -3,35 +3,13 @@ import _ from 'lodash';
 import { body, param, validationResult } from 'express-validator/check';
 import { VolunteerData } from '../types';
 import {
-  addNewVolunteer, deleteVolunteer, getVolunteer, isUserEmailUnique,
+  addNewVolunteer, deleteVolunteer, getVolunteer, updateVolunteerDetails,
 } from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
-import {
-  CITIZENSHIP_TYPES,
-  GENDER_TYPES,
-  LEADERSHIP_INTEREST_TYPES,
-  PERSONALITY_TYPES,
-  RACE_TYPES,
-  SOCIAL_MEDIA_PLATFORMS,
-} from '../models/Volunteer';
+import VALIDATOR from '../helpers/validation';
 
-export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer' | 'deleteVolunteer'
-
-const LENGTH_MINIMUM_PASSWORD = 8;
-
-/**
- * Helper function to deal with validation of request body inputs
- * @param enumTypes Array of accepted string values
- * @param enumName Variable name used for identification in error statement
- * @param value String to test out against enumTypes
- */
-const stringEnumValidator = (enumTypes: Array<string>, enumName: string, value: string) => {
-  if (!_.includes(enumTypes, value)) {
-    throw new Error(`${enumName}: "${value}" must be either ${enumTypes.join(', ')}`);
-  }
-  return true;
-};
+export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer' | 'deleteVolunteer' | 'updateVolunteer'
 
 /**
  * Handles route request validation for controllers
@@ -42,59 +20,41 @@ const validate = (method: VolunteerValidatorMethod) => {
     case 'createVolunteer': {
       return [
         // Login details
-        body('email').isEmail().normalizeEmail().custom(async (email: string) => {
-          const isEmailUnique = await isUserEmailUnique(email);
-          if (!isEmailUnique) {
-            throw new Error('E-mail is already in use');
-          }
-          return true;
-        }),
-        body('password').isString().isLength({
-          min: LENGTH_MINIMUM_PASSWORD,
-        }),
+        VALIDATOR.email(true),
+        VALIDATOR.password,
 
         // Personal details
-        body('name').isString(),
-        body('address').isString(),
-        body('mobileNumber').isString().isMobilePhone('en-SG'),
-        body('birthday').isISO8601().toDate(),
-        body('socialMediaPlatform').isString().custom(
-          (socialMedia: string) => stringEnumValidator(SOCIAL_MEDIA_PLATFORMS, 'Social Media Platform', socialMedia),
-        ),
-        body('gender').custom((gender: string) => stringEnumValidator(GENDER_TYPES, 'Gender', gender)),
-        body('citizenship').custom(
-          (citizenship: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenship),
-        ),
-        body('race').custom((race: string) => stringEnumValidator(RACE_TYPES, 'Race', race)),
-        body('organization').isString(),
-        body('position').isString(),
+        VALIDATOR.name,
+        VALIDATOR.address,
+        VALIDATOR.mobile,
+        VALIDATOR.birthday,
+        VALIDATOR.socialMediaPlatform,
+        VALIDATOR.gender,
+        VALIDATOR.citizenship,
+        VALIDATOR.race,
+        VALIDATOR.organization,
+        VALIDATOR.position,
 
         // Boolean responses
-        body('hasVolunteered').isBoolean(),
-        body('hasChildrenExperience').isBoolean(),
-        body('hasExternalVolunteerExperience').isBoolean(),
-        body('hasFirstAidCertification').isBoolean(),
+        VALIDATOR.hasVolunteered,
+        VALIDATOR.hasChildrenExperience,
+        VALIDATOR.hasExternalVolunteerExperience,
+        VALIDATOR.hasFirstAidCertification,
 
         // Enum responses
-        body('leadershipInterest').isString().custom(
-          (leadershipInterest: string) => stringEnumValidator(
-            LEADERSHIP_INTEREST_TYPES, 'Leadership Interest', leadershipInterest,
-          ),
-        ),
-        body('description').isString(),
-        body('interests').isArray(),
-        body('personality').isString().custom(
-          (personality: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personality),
-        ),
-        body('skills').isArray(),
+        VALIDATOR.leadershipInterest,
+        VALIDATOR.description,
+        VALIDATOR.interests,
+        VALIDATOR.personalityType,
+        VALIDATOR.skills,
 
         // Volunteering related
-        body('volunteerReason').isString(), // Categorize answers
-        body('volunteerFrequency').isNumeric(), // Frequency per month
-        body('volunteerContribution').isString(),
+        VALIDATOR.volunteerReason, // Categorize answers
+        VALIDATOR.volunteerFrequency, // Frequency per month
+        VALIDATOR.volunteerContribution,
 
         // Remarks
-        body('volunteerRemark').isString().optional(),
+        VALIDATOR.volunteerRemark,
       ];
     }
     case 'getVolunteer': {
@@ -105,6 +65,25 @@ const validate = (method: VolunteerValidatorMethod) => {
     case 'deleteVolunteer': {
       return [
         body('email').isEmail(),
+      ];
+    }
+    case 'updateVolunteer': {
+      return [
+        VALIDATOR.email(false),
+        VALIDATOR.password.optional(),
+        VALIDATOR.name.optional(),
+        VALIDATOR.address.optional(),
+        VALIDATOR.mobile.optional(),
+
+        VALIDATOR.socialMediaPlatform.optional(),
+        VALIDATOR.organization.optional(),
+        VALIDATOR.position.optional(),
+        VALIDATOR.leadershipInterest.optional(),
+
+        VALIDATOR.description.optional(),
+        VALIDATOR.interests.optional(),
+        VALIDATOR.personalityType.optional(),
+        VALIDATOR.skills.optional(),
       ];
     }
     default:
@@ -156,6 +135,27 @@ const getVolunteerDetails = async (req: express.Request, res: express.Response) 
   }
 };
 
+const updateVolunteer = async (req: express.Request, res: express.Response) => {
+  // TODO: Move to middleware
+  // https://express-validator.github.io/docs/running-imperatively.html
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: validationErrors.array(),
+    });
+    return;
+  }
+
+  try {
+    await updateVolunteerDetails(req.body.email as string, req.body as Partial<VolunteerData>);
+    res.status(HTTP_CODES.OK).send();
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      message: error,
+    });
+  }
+};
+
 const removeVolunteer = async (req: express.Request, res: express.Response) => {
   // TODO: Move to middleware
   // https://express-validator.github.io/docs/running-imperatively.html
@@ -183,4 +183,5 @@ export default {
   createNewVolunteer,
   getVolunteerDetails,
   removeVolunteer,
+  updateVolunteer,
 };

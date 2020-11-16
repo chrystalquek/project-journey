@@ -18,5 +18,10 @@ router.delete(
   volunteerController.validate('deleteVolunteer'),
   volunteerController.removeVolunteer,
 );
+router.put(
+  '/',
+  volunteerController.validate('updateVolunteer'),
+  volunteerController.updateVolunteer,
+);
 
 export default router;

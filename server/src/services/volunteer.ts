@@ -5,7 +5,7 @@ import Volunteer from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
 
 // Helper methods
-export const isUserEmailUnique = async (email: string) => {
+export const doesUserEmailExist = async (email: string) => {
   const user = await Volunteer.findOne({
     email,
   });
@@ -80,9 +80,17 @@ export const getVolunteer = async (email: string) => {
   return volunteerUtil.extractVolunteerDetails(volunteer);
 };
 
-// TODO: Better error handling here
-export const updateVolunteer = async (volunteerId: number, volunteerData: VolunteerData) => Volunteer.findByIdAndUpdate(volunteerId, volunteerData)
-  .catch((err) => console.error(err));
+/**
+ * Updates volunteer data with email
+ * @param email
+ * @param updatedVolunteerData
+ */
+export const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
+  await getVolunteer(email);
+  await Volunteer.findOneAndUpdate({
+    email,
+  }, updatedVolunteerData);
+};
 
 /**
  * Removes volunteer from DB (hard delete)
