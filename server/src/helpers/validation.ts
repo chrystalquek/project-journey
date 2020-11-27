@@ -37,6 +37,9 @@ const email = (emailMustBeUnique: boolean) => body('email').isEmail().normalizeE
 const password = body('password').isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
 });
+const newPassword = body('newPassword').isString().isLength({
+  min: LENGTH_MINIMUM_PASSWORD,
+});
 
 const name = body('name').isString();
 
@@ -80,6 +83,7 @@ const volunteerRemark = body('volunteerRemark').isString().optional();
 export default {
   email,
   password,
+  newPassword,
   name,
   address,
   mobile,

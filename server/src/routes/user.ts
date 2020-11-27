@@ -10,6 +10,11 @@ router.post(
   userController.validate('login'),
   userController.login,
 );
+router.post(
+  '/password',
+  userController.validate('updatePassword'),
+  userController.updatePassword,
+);
 
 // Expanding this for other use-cases
 protectedRouter.get('/', userController.getAllUsers); // example usage of protectedRoute
