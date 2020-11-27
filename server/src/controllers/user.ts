@@ -1,10 +1,27 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { checkUserExists, readAllUsers } from '../services/user';
+import { validationResult } from 'express-validator/check';
+import { getUser, readAllUsers } from '../services/user';
 
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
+import VALIDATOR from '../helpers/validation';
+
+export type UserValidatorMethod = 'login'
+
+const validate = (method: UserValidatorMethod) => {
+  switch (method) {
+    case 'login': {
+      return [
+        VALIDATOR.email(false),
+        VALIDATOR.password,
+      ];
+    }
+    default:
+      return [];
+  }
+};
 
 const getAllUsers = async (req: express.Request, res: express.Response) => {
   const users = await readAllUsers();
@@ -14,31 +31,43 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
 };
 
 const login = async (req: express.Request, res: express.Response) => {
-  // Read username and password from request body
-  const { fullName, password } = req.body;
+  // TODO: Move to middleware
+  // https://express-validator.github.io/docs/running-imperatively.html
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: validationErrors.array(),
+    });
+    return;
+  }
 
-  const user = await checkUserExists(fullName);
+  const { email, password } = req.body;
 
-  if (user) {
+  try {
+    const user = await getUser(email);
     if (bcrypt.compareSync(password, user.password)) {
       const token = jwt.sign({ user }, accessTokenSecret, {
         expiresIn: '24h',
       });
-
-      res.json({
+      res.status(HTTP_CODES.OK).json({
         token,
       });
     } else {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({
-        errors: [{ msg: 'Unauthenticated' }],
+        errors: [{
+          message: 'Password is incorrect, please try again',
+        }],
       });
     }
-  } else {
-    res.send('Username or password incorrect');
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: error.message,
+    });
   }
 };
 
 export default {
   getAllUsers,
   login,
+  validate,
 };

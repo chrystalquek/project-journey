@@ -1,16 +1,12 @@
 import { VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 
-export const checkUserExists = async (fullName: string): Promise<VolunteerData> => {
-  try {
-    const user = await Volunteer.findOne({ full_name: fullName });
-    if (!user) {
-      throw new Error('User is not found.');
-    }
-    return user;
-  } catch (err) {
-    throw new Error(err.msg);
+export const getUser = async (email: string): Promise<VolunteerData> => {
+  const user = await Volunteer.findOne({ email });
+  if (!user) {
+    throw new Error(`User with email: ${email} is not found`);
   }
+  return user;
 };
 
 export const readAllUsers = async (): Promise<VolunteerData[]> => {
