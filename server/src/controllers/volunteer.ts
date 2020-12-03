@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { body, param, validationResult } from 'express-validator/check';
 import { VolunteerData } from '../types';
 import {
-  addNewVolunteer, deleteVolunteer, getVolunteer, updateVolunteerDetails,
+  addNewVolunteer, deleteVolunteer, findVolunteers, getVolunteer, updateVolunteerDetails,
 } from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -178,10 +178,34 @@ const removeVolunteer = async (req: express.Request, res: express.Response) => {
   }
 };
 
+const searchVolunteers = async (req: express.Request, res: express.Response) => {
+  // TODO: Move to middleware
+  // https://express-validator.github.io/docs/running-imperatively.html
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: validationErrors.array(),
+    });
+    return;
+  }
+
+  try {
+    const volunteersDetails = await findVolunteers(req.query.name as string);
+    res.status(HTTP_CODES.OK).json({
+      data: volunteersDetails,
+    });
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      message: error,
+    });
+  }
+};
+
 export default {
   validate,
   createNewVolunteer,
   getVolunteerDetails,
   removeVolunteer,
   updateVolunteer,
+  searchVolunteers,
 };

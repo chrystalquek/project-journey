@@ -101,3 +101,13 @@ export const deleteVolunteer = async (email: string) => {
     email,
   });
 };
+
+/**
+ * Finds volunteers based on keywords.
+ * @param keywords to be searched in volunteers names
+ */
+export const findVolunteers = async (keywords: string) => {
+  const volunteers = await Volunteer.find({ $text: { $search: keywords } });
+
+  return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
+};
