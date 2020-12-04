@@ -16,17 +16,16 @@ const initialState = { server: {}, client: {} };
 const rootReducer = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
     case HYDRATE:
-      // sep client, server state in case getStaticProps, getServerSideProps cause state conflicts
       return {
-        client: { ...state.client, ...action.payload.client },
+        ...state,
         server: { ...state.server, ...action.payload.server },
       };
     case 'TICK':
       // TODO: test method, remove whenever
       console.log(action);
       return {
-        client: { ...state.client, ...action.payload.client },
-        server: { ...state.server, ...action.payload.server },
+        ...state,
+        client: { ...state.client, tick: action.payload },
       };
     default:
       return state;
