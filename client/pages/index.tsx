@@ -1,5 +1,14 @@
 import Head from 'next/head';
+import { wrapper } from '../store';
 import styles from '../styles/Home.module.css';
+
+// TODO: test method, remove whenever
+export const getStaticProps = wrapper.getStaticProps(
+  ({ store }) => {
+    console.log('2. Page.getStaticProps uses the store to dispatch things');
+    store.dispatch({ type: 'TICK', payload: 'test payload' });
+  },
+);
 
 export default function Home() {
   return (
