@@ -1,4 +1,6 @@
 import React from 'react';
+import 'antd/dist/antd.css'
+import '../styles/vars.css'
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
