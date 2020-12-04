@@ -2,10 +2,11 @@ import React from 'react';
 import 'antd/dist/antd.css'
 import '../styles/vars.css'
 import type { AppProps } from 'next/app';
+import { wrapper } from '../store';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

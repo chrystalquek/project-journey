@@ -1,0 +1,5 @@
+# tell eslint to ignore these files and directories
+# https://eslint.org/docs/user-guide/configuring
+/build
+/node_modules
+/.idea

@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "rm -rf ./build && NODE_ENV=production next build",
+    "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
     "dev": "next dev",
     "gcp-predeploy": "find ./build -name '\\[...*' -exec bash -c 'mv \"$1\" \"${1/.../@@@}\"' -- {} \\;",
     "gcp-build": "find ./build -name '\\[@@@*' -exec bash -c 'mv \"$1\" \"${1/@@@/...}\"' -- {} \\;",
-    "build": "rm -rf ./build && NODE_ENV=production next build",
+    "lint-fix": "eslint --fix . --ext .js,.jsx,.ts,.tsx",
     "start": "next start -p 8080",
-    "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -17,6 +18,7 @@
     "next-redux-wrapper": "^6.0.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-redux": "^7.2.2",
     "redux": "^4.0.5"
   },
   "devDependencies": {
