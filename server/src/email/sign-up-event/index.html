@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0 auto;
+            font-family: 'Nunito', sans-serif;
+            font-size: 12px;
+        }
+
+        .frame {
+            max-width: 600px;
+            margin: 10px auto;
+            background-color: #EDF1F1;
+        }
+
+        header {
+            max-width: 400px;
+            width: 400px;
+            height: 110px;
+        }
+
+        .logo {
+            margin-left: 20px;
+            vertical-align: middle;
+        }
+
+        .vl {
+            display: inline-block;
+            vertical-align: middle;
+            width: 0px;
+            height: 71px;
+            border: 0.4px solid #7B7B7B;
+        }
+
+        .quote {
+            position: relative;
+            left: 40px;
+            display: inline-block;
+            width: 221px;
+            font-size: 17px;
+            font-weight: 300;
+            font-style: italic;
+            text-align: right;
+            vertical-align: middle;
+            margin: 0;  
+        }
+
+        main {
+            max-width: 400px;
+            background-color: #FFFFFF;
+        }
+
+        .main-text {
+            max-width: 330px;
+        }
+
+        h1 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        p {
+            margin-top: 1em;
+        }
+
+        .details {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 1em;
+            padding-bottom: 2em;
+        }
+
+        .boxed {
+            background-color: #E7FBFF;
+            margin-top: 1em;
+        }
+
+        h2 {
+            text-align: center;
+            padding-top: 1em;
+            font-weight: 700;
+        }
+
+        .points {
+            margin-top: 1em;
+            padding: 0;
+            list-style-position: outside;
+            padding-left: 15px;
+            padding-bottom: 3em;
+            list-style-type: none;
+        }
+
+        .points > li::before {
+            content: "\2022";
+            color: #0089A1;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .points > li {
+            margin-top: 1em;
+        }
+
+        .main-footer {
+            text-align: center;
+            margin-top: 1em;
+        }
+
+        em {
+            font-style: normal;
+            font-weight: 600;
+            color: #0089A1;
+        }
+
+        .signature {
+            font-family: 'Pacifico', cursive;
+            font-size: 14px;
+            padding-bottom: 30px;
+        }
+        
+        footer {
+            margin-top: 33px;
+            padding-bottom: 30px;
+            text-align: center;
+            color: #595858;
+            margin-bottom: 111px;
+        }
+
+        .socmed {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .socmed > li {
+            display: inline;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        address {
+            font-style: normal;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="frame">
+        <header>
+            <img src="images/logo.svg" alt="logo" class="logo">
+            <div class="vl"></div>
+            <p class="quote">"Do what you can, with what you have, where you are."</p>
+        </header>
+    
+        <main>
+            <div class="main-text">
+                <h1>Hi Jesslyn!</h1>
+                <p>Thank you for signing up for <strong>[insert event title]</strong>!</p>
+                <p>
+                    This email is a confirmation that we have received your registration.
+                    Please find details below regarding the session:
+                </p>
+    
+                <ul class="details">
+                    <li><strong>Date:</strong> [insert date]</li>
+                    <li><strong>Time:</strong> [insert time from and to]</li>
+                    <li><strong>Location:</strong> [insert location details and directions]</li>
+                </ul>
+            </div>
+    
+            <div class="boxed">
+                <div class="main-text">
+                    <h2>Pointers before attending our session</h2>
+                    <ul class="points">
+                        <li>Come with an open mind</li>
+                        <li>Make a mental note of all the questions you'd like to ask our team, we
+                            love questions.</li>
+                        <li>Feel free to bring food/snacks to eat during the session</li>
+                        <li>Pens and Papers are available should you want to take down notes, please
+                            apporach one of our team members if you need such materials.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="main-text main-footer">
+                <p>
+                    Should you have any specific queries regarding this event, please
+                    contact <em>[insert POC]</em> on <em>
+                    [insert POC phone number].</em><br>
+                    We look forward to seeing you soon.
+                </p>
+    
+                <p class="signature">Team Blessings</p>
+            </div>
+        </main>
+
+        <footer>
+            <ul class="socmed">
+                <li><a href=""><img src="images/instagram.svg" alt="Instagram"></a></li>
+                <li><a href=""><img src="images/facebook.svg" alt="Facebook"></a></li>
+                <li><a href=""><img src="images/twitter.svg" alt="Twitter"></a></li>
+                <li><a href=""><img src="images/linkedin.svg" alt="LinkedIn"></a></li>
+            </ul>
+
+            <address>
+                <p><a href="https://www.blessingsinabag.co">www.blessingsinabag.co</a></p>
+                <p>
+                    Blessings in a Bag <br>
+                    315 Outram Road <br>
+                    #08-06A Tan Boot Liat Building, <br>
+                    Singapore, Singapore
+                </p>
+            </address>
+        </footer>
+    </div>
+</body>
+</html>
