@@ -126,4 +126,6 @@ const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {
   strict: true,
 });
 
+VolunteerSchema.index({ name: 'text' }); // to enable searching by name
+
 export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);

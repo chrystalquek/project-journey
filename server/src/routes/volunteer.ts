@@ -23,5 +23,9 @@ router.put(
   volunteerController.validate('updateVolunteer'),
   volunteerController.updateVolunteer,
 );
+router.get(
+  '/',
+  volunteerController.searchVolunteers,
+);
 
 export default router;
