@@ -24,6 +24,10 @@ const userSlice = createSlice({
       const { payload } = action;
       state = payload;
     });
+    builder.addCase(user.rejected, (state) => {
+      state.name = '';
+      state.email = '';
+    });
   },
 });
 
