@@ -5,8 +5,9 @@ import React, { FC, useCallback } from 'react';
 import Link from 'next/link';
 import { useForm } from 'antd/lib/form/Form';
 import styles from '../../styles/auth/login.styles';
-import NavBar from '../NavBar';
-import Footer from '../Footer';
+
+import NavBar from '../common/NavBar';
+import Footer from '../common/Footer';
 import { LoginArgs } from '../../actions/user';
 
 const { Content } = Layout;
