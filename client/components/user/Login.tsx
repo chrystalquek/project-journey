@@ -1,7 +1,7 @@
 import {
   Form, Input, Button, Layout, Row, Col,
 } from 'antd';
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
 import { useForm } from 'antd/lib/form/Form';
 import styles from '../../styles/auth/login.styles';
@@ -21,10 +21,6 @@ const Login: FC<LoginProps> = ({
 }: LoginProps) => {
   const [form] = useForm();
 
-  const onFinishFailed = useCallback((errorInfo) => {
-    console.log('Failed:', errorInfo);
-  }, []);
-
   const isFormDisabled = !form.isFieldsTouched(true)
     || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
@@ -32,14 +28,13 @@ const Login: FC<LoginProps> = ({
     <Layout>
       <NavBar />
       <Content style={styles.content}>
-        <Row style={{ justifyContent: 'center' }}>
+        <Row style={styles.rowContent}>
           <Col span={8}>
             <Form
               layout="vertical"
               name="login"
               initialValues={{ remember: true }}
               onFinish={handleFormSubmit}
-              onFinishFailed={onFinishFailed}
               requiredMark={false}
               className="mb-5"
             >

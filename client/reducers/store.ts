@@ -1,6 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import userReducer from './user';
+import userReducer, { User } from './user';
+
+export type StoreState = {
+  user: User
+}
 
 const reducer = {
   user: userReducer,

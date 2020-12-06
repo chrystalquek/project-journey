@@ -7,6 +7,11 @@ const content: CSSProperties = {
   minHeight: '90vh',
 };
 
+const rowContent: CSSProperties = {
+  justifyContent: 'center',
+};
+
 export default {
   content,
+  rowContent,
 };

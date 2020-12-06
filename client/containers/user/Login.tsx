@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import login from '../../actions/user';
+import login, { LoginArgs } from '../../actions/user';
 import Login from '../../components/user/Login';
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = () => {};
 
 const mapDispatchToProps = (dispatch) => ({
-  handleFormSubmit: (args) => dispatch(login(args)),
+  handleFormSubmit: (args: LoginArgs) => dispatch(login(args)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
