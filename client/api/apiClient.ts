@@ -1,9 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LoginArgs, LoginResponse } from '../actions/user';
+import { LoginRequest } from './request';
+import { LoginResponse } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
-class ApiClient {
+export interface ApiClient {
+  login(request: LoginRequest): Promise<LoginResponse>
+}
+
+class AxiosApiClient implements ApiClient {
   private axiosInstance: AxiosInstance
 
   constructor(
@@ -14,7 +19,7 @@ class ApiClient {
     });
   }
 
-  async userLogin(request: LoginArgs): Promise<LoginResponse> {
+  async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'get');
   }
 
@@ -28,11 +33,18 @@ class ApiClient {
     switch (method) {
       case 'get':
         return (await this.axiosInstance.get(path, config)).data;
+      case 'post':
+        return (await this.axiosInstance.post(path, request, config)).data;
+      case 'put':
+        return (await this.axiosInstance.put(path, request, config)).data;
+      case 'delete':
+        return (await this.axiosInstance.delete(path, config)).data;
       default:
-        return Promise.resolve();
+        return Promise.resolve(); // best way to handle this?
     }
   }
 }
 
-const sharedClient: ApiClient = new ApiClient('http://localhost:5000');
+// TODO: Replace with .env endpoint
+const sharedClient: AxiosApiClient = new AxiosApiClient('http://localhost:5000');
 export default sharedClient;

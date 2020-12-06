@@ -1,25 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../api/apiClient';
+import { LoginRequest } from '../api/request';
+import { LoginResponse } from '../api/response';
 
 export type LoginArgs = {
   email: string,
   password: string
 }
 
-export type LoginResponse = {
-  email: string
-  name: string
-}
-
 const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
   'user/login',
   async ({ email, password }) => {
-    const request = {
+    const request: LoginRequest = {
       email,
       password,
     };
 
-    const response = await apiClient.userLogin(request);
+    const response = await apiClient.login(request) as LoginResponse;
     return response;
   },
 );

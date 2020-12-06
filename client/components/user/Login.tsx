@@ -13,7 +13,6 @@ import { LoginArgs } from '../../actions/user';
 const { Content } = Layout;
 
 type LoginProps = {
-  // eslint-disable-next-line no-unused-vars
   handleFormSubmit: (formData: LoginArgs) => Promise<void>
 }
 
