@@ -2,7 +2,6 @@ import { Layout, Menu, Button, Divider, Row, Col, Card } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { UserOutlined } from '@ant-design/icons';
-import styles from '../../styles/Auth.module.css';
 import NavBar from '../../components/NavBar'
 import Footer from '../../components/Footer'
 
@@ -14,6 +13,27 @@ export default function Signup() {
     <Layout>
       <NavBar />
       <Content style={{ padding: '80px 150px 0px 150px', marginTop: 80, textAlign: 'center', minHeight: '90vh' }}>
+        <div>
+          <Row style={{ justifyContent: 'center', textAlign:'left' }}>
+            <Col span={12}>
+              <p>
+                Yay! We are excited that you are interested to volunteer with us. lorem ipsum (information to help the users make a decision)
+                Please be reminded that there is a minimum commitment of 3 months (serving a minimum of 3 sessions a month) in order to have direction interaction with our learning community (aged 6 to 16 years old).  We have this policy for a number of reasons:
+                <ul>
+                  <li>Limit the emotional trauma in our children that occurs when volunteers come for a few sessions and leave.  </li>
+
+                  <li> It takes time for children to warm up to new faces and it won't happen instantly.</li>
+
+                  <li> 3 months provides you with the opportunity to witness the progression and impact you're making (in yourself and in our children)</li>
+
+                  <li> You'll be journeying with other individuals who share a commitment and passion for our program.  There are opportunities to meet new people and develop friendships.</li>
+
+                  <li>  Allows you time to be on-boarded, mentored and guided by some incredible WCA Captains on the team.</li>
+                </ul>
+              </p>
+            </Col>
+          </Row>
+        </div>
         <div>
           <Row style={{ justifyContent: 'center' }}>
             <Col span={12}>
