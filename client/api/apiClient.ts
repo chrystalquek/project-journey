@@ -20,7 +20,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async login(request: LoginRequest): Promise<LoginResponse> {
-    return this.send(request, 'user/login', 'get');
+    return this.send(request, 'user/login', 'post');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {
