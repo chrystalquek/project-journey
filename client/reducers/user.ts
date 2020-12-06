@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import user from '../actions/user';
 
-export type User = {
+export type UserState = {
   token: string
 }
 
-const initialState: User = {
+const initialState: UserState = {
   token: '',
 };
 
