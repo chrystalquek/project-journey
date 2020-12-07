@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
-type VolunteerRole = 'editor' | 'admin'
+export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 
 export type VolunteerData = {
@@ -152,5 +152,3 @@ export type MongooseSaveError = {
     errors: Record<string, MongooseSaveSubError>
     _message: string
 }
-
-export type Role = 'admin' | 'lead' | 'volunteer';

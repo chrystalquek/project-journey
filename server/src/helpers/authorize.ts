@@ -1,9 +1,8 @@
-import { VolunteerRole } from './types';
+import jwt from 'express-jwt';
+import { VolunteerRole } from '../types';
 
 import { accessTokenSecret } from '../helpers/auth';
 import HTTP_CODES from '../constants/httpCodes';
-
-const jwt = require('express-jwt');
 
 const authorize = (roles: Array<VolunteerRole> = []) => [
   jwt({ accessTokenSecret, algorithms: ['HS256'] }),
@@ -17,4 +16,4 @@ const authorize = (roles: Array<VolunteerRole> = []) => [
   },
 ];
 
-module.exports = authorize;
+export default authorize;
