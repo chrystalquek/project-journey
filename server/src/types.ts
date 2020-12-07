@@ -35,7 +35,7 @@ export type VolunteerData = {
 
     hasVolunteered?: boolean;
     hasChildrenExperience?: boolean;
-    hasVolunteeredOtherPlaces?: boolean;
+    hasExternalVolunteerExperience?: boolean;
     hasFirstAidCertification?: boolean;
 
     leadershipInterest: string;
