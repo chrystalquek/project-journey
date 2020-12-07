@@ -5,7 +5,7 @@ import { accessTokenSecret } from '../helpers/auth';
 import HTTP_CODES from '../constants/httpCodes';
 
 const authorize = (roles: Array<VolunteerRole> = []) => [
-  jwt({ accessTokenSecret, algorithms: ['HS256'] }),
+  jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
 
   (req, res, next) => {
     if (roles.length && !roles.includes(req.user.role)) {
