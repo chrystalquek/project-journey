@@ -152,3 +152,5 @@ export type MongooseSaveError = {
     errors: Record<string, MongooseSaveSubError>
     _message: string
 }
+
+export type Role = 'admin' | 'lead' | 'volunteer';

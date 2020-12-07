@@ -54,7 +54,7 @@ const login = async (req: express.Request, res: express.Response) => {
   try {
     const user = await getUser(email);
     if (bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign({ user }, accessTokenSecret, {
+      const token = jwt.sign({ sub: user._id, role: user.role }, accessTokenSecret, {
         expiresIn: '24h',
       });
       res.status(HTTP_CODES.OK).json({
