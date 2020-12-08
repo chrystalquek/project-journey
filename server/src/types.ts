@@ -6,6 +6,7 @@ type VolunteerStatus = 'pending' | 'verified'
 type VolunteerRole = 'editor' | 'admin'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 type SignUpStatus = 'pending' | 'accepted' | 'rejected'
+export type SignUpFindBy = 'eventId' | 'userId' | 'signUpId'
 
 export type VolunteerData = {
     _id: string;
