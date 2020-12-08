@@ -5,6 +5,7 @@ type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
 type VolunteerRole = 'editor' | 'admin'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
+type SignUpStatus = 'pending' | 'accepted' | 'rejected'
 
 export type VolunteerData = {
     _id: string;
@@ -124,6 +125,14 @@ export type EventData = {
 export type OpportunityData = EventData & {
     photo: string;
     positions: Array<string>
+}
+
+export type SignUpData = {
+    eventId: string,
+    userId: string,
+    status: SignUpStatus,
+    preferences: Array<string>,
+    isRestricted: boolean,
 }
 
 /**
