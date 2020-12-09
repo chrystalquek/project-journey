@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
-type VolunteerRole = 'editor' | 'admin'
+export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 
 export type VolunteerData = {
@@ -35,7 +35,7 @@ export type VolunteerData = {
 
     hasVolunteered?: boolean;
     hasChildrenExperience?: boolean;
-    hasVolunteeredOtherPlaces?: boolean;
+    hasExternalVolunteerExperience?: boolean;
     hasFirstAidCertification?: boolean;
 
     leadershipInterest: string;
