@@ -1,18 +1,19 @@
 import express from 'express';
 import userController from '../controllers/user';
 import { createProtectedRouter } from '../helpers/auth';
+import { validate } from '../helpers/validation';
 
 const router = express.Router();
 const protectedRouter = createProtectedRouter(router);
 
 router.post(
   '/login',
-  userController.validate('login'),
+  validate(userController.getValidations('login')),
   userController.login,
 );
 router.post(
   '/password',
-  userController.validate('updatePassword'),
+  validate(userController.getValidations('updatePassword')),
   userController.updatePassword,
 );
 

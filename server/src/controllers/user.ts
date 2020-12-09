@@ -1,7 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { validationResult } from 'express-validator';
 import { getUser, readAllUsers } from '../services/user';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -39,16 +38,6 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
 };
 
 const login = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-    return;
-  }
-
   const { email, password } = req.body;
 
   try {
@@ -75,15 +64,6 @@ const login = async (req: express.Request, res: express.Response) => {
 };
 
 const updatePassword = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-  }
-
   const {
     email,
     password,
