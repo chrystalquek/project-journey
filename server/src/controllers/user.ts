@@ -8,6 +8,7 @@ import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
 import VALIDATOR from '../helpers/validation';
 import { updateVolunteerDetails } from '../services/volunteer';
+import { VolunteerData } from '../types';
 
 export type UserValidatorMethod = 'login' | 'updatePassword'
 
@@ -57,7 +58,9 @@ const login = async (req: express.Request, res: express.Response) => {
       const userCopy = Object.assign(user);
       delete userCopy.password;
 
-      const token = jwt.sign(userCopy, accessTokenSecret, {
+      const userWithoutPassword: Omit<VolunteerData, 'password'> = userCopy;
+
+      const token = jwt.sign(userWithoutPassword, accessTokenSecret, {
         expiresIn: '24h',
       });
       res.status(HTTP_CODES.OK).json({
