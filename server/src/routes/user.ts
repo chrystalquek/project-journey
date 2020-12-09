@@ -2,6 +2,7 @@ import express from 'express';
 import userController from '../controllers/user';
 import { createProtectedRouter } from '../helpers/auth';
 import { validate } from '../helpers/validation';
+import authorize from '../helpers/authorize';
 
 const router = express.Router();
 const protectedRouter = createProtectedRouter(router);
@@ -18,6 +19,6 @@ router.post(
 );
 
 // Expanding this for other use-cases
-protectedRouter.get('/', userController.getAllUsers); // example usage of protectedRoute
+protectedRouter.get('/', authorize(['admin']), userController.getAllUsers); // example usage of protectedRoute
 
 export default router;

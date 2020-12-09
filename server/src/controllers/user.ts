@@ -2,6 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { getUser, readAllUsers } from '../services/user';
+import { VolunteerData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
@@ -10,7 +11,7 @@ import { updateVolunteerDetails } from '../services/volunteer';
 
 export type UserValidatorMethod = 'login' | 'updatePassword'
 
-const validate = (method: UserValidatorMethod) => {
+const getValidations = (method: UserValidatorMethod) => {
   switch (method) {
     case 'login': {
       return [
@@ -43,9 +44,15 @@ const login = async (req: express.Request, res: express.Response) => {
   try {
     const user = await getUser(email);
     if (bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign({ user }, accessTokenSecret, {
+      const userCopy = Object.assign(user);
+      delete userCopy.password;
+
+      const userWithoutPassword: Omit<VolunteerData, 'password'> = userCopy;
+
+      const token = jwt.sign(userWithoutPassword, accessTokenSecret, {
         expiresIn: '24h',
       });
+
       res.status(HTTP_CODES.OK).json({
         token,
       });
@@ -94,6 +101,6 @@ const updatePassword = async (req: express.Request, res: express.Response) => {
 export default {
   getAllUsers,
   login,
-  validate,
+  getValidations,
   updatePassword,
 };

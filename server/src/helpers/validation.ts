@@ -60,7 +60,7 @@ const race = body('race').custom((raceType: string) => stringEnumValidator(RACE_
 const organization = body('organization').isString();
 const position = body('position').isString();
 const hasVolunteered = body('hasVolunteered').isBoolean();
-const hasChildrenExperience = body('hasChildernExpereince').isBoolean();
+const hasChildrenExperience = body('hasChildrenExperience').isBoolean();
 const hasExternalVolunteerExperience = body('hasExternalVolunteerExperience').isBoolean();
 const hasFirstAidCertification = body('hasFirstAidCertification').isBoolean();
 

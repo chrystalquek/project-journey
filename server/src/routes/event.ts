@@ -2,6 +2,7 @@ import express from 'express';
 import eventController from '../controllers/event';
 import { createProtectedRouter } from '../helpers/auth';
 import { validate } from '../helpers/validation';
+import authorize from '../helpers/authorize';
 
 const router = express.Router();
 const protectedRouter = createProtectedRouter(router);
@@ -14,7 +15,7 @@ protectedRouter.get('/:id', eventController.readEvent);
 // @route   DELETE /event
 // @desc    Delete a event by id
 // @access  Private
-protectedRouter.delete('/:id', eventController.deleteEvent);
+protectedRouter.delete('/:id', authorize(['admin']), eventController.deleteEvent);
 
 // @route   PUT /event
 // @desc    Update a event by id
