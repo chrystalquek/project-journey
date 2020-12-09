@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator/check';
 import { getUser, readAllUsers } from '../services/user';
+import { VolunteerData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
@@ -57,9 +58,12 @@ const login = async (req: express.Request, res: express.Response) => {
       const userCopy = Object.assign(user);
       delete userCopy.password;
 
-      const token = jwt.sign(userCopy, accessTokenSecret, {
+      const userWithoutPassword: Omit<VolunteerData, 'password'> = userCopy;
+
+      const token = jwt.sign(userWithoutPassword, accessTokenSecret, {
         expiresIn: '24h',
       });
+
       res.status(HTTP_CODES.OK).json({
         token,
       });
