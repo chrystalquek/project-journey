@@ -1,5 +1,5 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import { EventData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
