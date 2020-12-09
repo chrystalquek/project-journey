@@ -30,7 +30,7 @@ ul li::marker {
 }
 
 a {
-  color: inherit;
+  color: #0023DC;
   text-decoration: none;
 }
 
@@ -97,14 +97,13 @@ em {
 /* Header */
 
 .header {
-  padding: 35px 30px 0 30px ;
+  padding: 35px 30px 0 30px;
   text-align: left;
   color: #111122;
   font-weight: 600;
   font-size: 26px;
   text-decoration: none;
 }
-
 
 .header h1 div {
   display: inline-block;
@@ -210,6 +209,19 @@ address {
   font-style: normal;
 }
 
+.circle{
+  width: 56px;
+  height: 56px;
+  border-radius: 30px;
+  font-size: 18px;
+  color: black;
+  text-align: center;
+  background: #d0de39;
+  line-height: 3;
+  font-weight: 700;
+}
+
+
 /* Tables */
 
 .table table {
@@ -242,6 +254,10 @@ address {
 
 .dark {
   background-color: #e7fbff; /* light-blue */
+}
+
+table#decoded tr td:first-child {
+  padding-right: 30px;
 }
 
 /* Utilities */
