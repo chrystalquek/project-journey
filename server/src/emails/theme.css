@@ -265,3 +265,13 @@ table#decoded tr td:first-child {
 .break-all {
   word-break: break-all;
 }
+
+/* Button */
+.button {
+  background-color: #d0de39;
+  border-radius: 30px;
+  border: none;
+  padding:10px 20px;
+  margin: 20px;
+
+}
