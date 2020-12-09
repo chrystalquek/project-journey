@@ -126,6 +126,14 @@ export type OpportunityData = EventData & {
     positions: Array<string>
 }
 
+export type SignUpData = {
+    eventId: string,
+    userId: string,
+    status: SignUpStatus,
+    preferences: Array<string>,
+    isRestricted: boolean,
+}
+
 /**
  * Individual error type for saving in DB
  * Error type is at per field level

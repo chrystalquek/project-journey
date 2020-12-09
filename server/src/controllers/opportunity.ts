@@ -1,5 +1,5 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator/check';
+import { body, validationResult } from 'express-validator';
 import { OpportunityData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import opportunityService from '../services/opportunity';

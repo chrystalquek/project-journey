@@ -1,5 +1,5 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator/check';
+import { body, validationResult } from 'express-validator';
 
 import HTTP_CODES from '../constants/httpCodes';
 import { addField, getAllFields, updateField } from '../services/volunteerSchema';

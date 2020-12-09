@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { validationResult } from 'express-validator/check';
+import { validationResult } from 'express-validator';
 import { getUser, readAllUsers } from '../services/user';
 
 import HTTP_CODES from '../constants/httpCodes';
