@@ -1,5 +1,5 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator/check';
+import { body } from 'express-validator';
 import signUpService from '../services/signUp';
 import { SIGN_UP_STATUS } from './../models/SignUp';
 import { SignUpData, SignUpIdType } from '../types';
@@ -12,12 +12,11 @@ const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
     case 'createSignUp': {
       return [
-        body('eventId', 'event id does not exist').exists().isString(),
-        body('userId', 'user id does not exist').exists().isString(),
-        body('status', 'status does not exist').exists().isString()
-            .custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
-        body('preferences', 'preferences does not exist').exists().isArray().notEmpty(),
-        body('isRestricted', 'is restricted does not exist').exists().isBoolean()
+        body('eventId', 'event id does not exist').isString(),
+        body('userId', 'user id does not exist').isString(),
+        body('status', 'status does not exist').custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
+        body('preferences', 'preferences does not exist').isArray().notEmpty(),
+        body('isRestricted', 'is restricted does not exist').isBoolean()
       ];
     }
     default: {
