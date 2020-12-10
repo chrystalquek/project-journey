@@ -20,7 +20,7 @@ router.delete(
 );
 
 router.put(
-  ':id/:idType',
+  '/:id/:idType',
   signUpController.updateSignUp,
 );
 
