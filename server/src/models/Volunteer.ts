@@ -83,7 +83,7 @@ export const VolunteerSchemaDefinition = {
   },
   role: {
     type: String,
-    enum: ['editor', 'admin'],
+    enum: ['editor', 'admin', 'lead'],
   },
   referral: String, // TODO: Confirm the existence of this field
 
