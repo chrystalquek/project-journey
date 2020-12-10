@@ -32,4 +32,5 @@ protectedRouter.post(
   opportunityController.createOpportunity,
 );
 
-export default protectedRouter;
+// TODO: @akhil - Check whether need export router or protectecRouter
+export default router;
