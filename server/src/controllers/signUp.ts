@@ -1,10 +1,11 @@
+import { SignUpIdType } from './../types';
+import { SIGN_UP_STATUS } from './../models/SignUp';
 import express from 'express';
 import { body, validationResult } from 'express-validator/check';
 import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import signUpService from '../services/signUp';
 import {stringEnumValidator} from "../helpers/validation";
-import {v4 as uuidv4} from "uuid";
 
 export type SignUpValidatorMethod = 'createSignUp';
 
@@ -14,8 +15,9 @@ const validate = (method: SignUpValidatorMethod) => {
       return [
         body('eventId', 'event id does not exist').exists().isString(),
         body('userId', 'user id does not exist').exists().isString(),
-        body('status', 'status does not exist').exists().isString().custom((statusText: string) => stringEnumValidator(SignUpStatus, 'Status', statusText)),
-        body('preferences', 'preferences does not exist').exists().isArray().notEmpty(),
+        body('status', 'status does not exist').exists().isString().custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
+        // TODO: add notEmpty() after express-validator version bump
+        body('preferences', 'preferences does not exist').exists().isArray(),
         body('isRestricted', 'is restricted does not exist').exists().isBoolean()
       ];
     }
@@ -25,6 +27,10 @@ const validate = (method: SignUpValidatorMethod) => {
   }
 };
 
+/**
+ * Creates a new sign up
+ * @param req.body sign up data without the sign_up_id property
+ */
 const createSignUp = async (
   req: express.Request,
   res: express.Response,
@@ -40,13 +46,8 @@ const createSignUp = async (
   }
 
   try {
-    const tempSignUp = req.body; 
-    tempSignUp.externalId = uuidv4(); 
-
-    const signUpData: SignUpData = tempSignUp; 
-
-    await signUpService.createSignUp(signUpData);
-    res.status(HTTP_CODES.OK).send();
+    const signUpData = await signUpService.createSignUp(req.body);
+    res.status(HTTP_CODES.OK).json(signUpData);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -56,8 +57,9 @@ const createSignUp = async (
 
 /**
  * Retrieves a sign up with the specified sign up, event, or volunteer id. 
- * @param params.id one of the ids in the sign up
- * @param params.idType type of the specified id
+ * @param req.params.id one of the ids in the sign up
+ * @param req.params.idType type of the specified id
+ * @return userSignUpDetails the sign up data with the specified id
  */
 const readSignUp = async (
   req: express.Request,
@@ -65,9 +67,9 @@ const readSignUp = async (
 ): Promise<void> => {
   try {
     const { id, idType } = req.params;
-    const signUp = await signUpService.readSignUp(id, idType as SignUpIdType);
+    const userSignUpDetails = await signUpService.readSignUp(id, idType as SignUpIdType);
 
-    res.status(HTTP_CODES.OK).json(signUp);
+    res.status(HTTP_CODES.OK).json(userSignUpDetails);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -75,12 +77,18 @@ const readSignUp = async (
   }
 };
 
+/**
+ * Updates an existing sign up
+ * @param req.params.id one of the ids in the sign up
+ * @param req.params.idType type of the specified id
+ * @param req.body the updated sign up data 
+ */
 const updateSignUp = async (req: express.Request, res: express.Response) => {
   try {
     const { id, idType } = req.params;
     const updatedFields = req.body as SignUpData;
 
-    await signUpService.updateSignUp(id, idType as SignUpIdType, updatedFields);
+    await signUpService.updateSignUp(id as string, idType as SignUpIdType, updatedFields);
 
     res.status(HTTP_CODES.OK).send(); 
   } catch (err) {
@@ -90,6 +98,11 @@ const updateSignUp = async (req: express.Request, res: express.Response) => {
   }
 };
 
+/**
+ * Deletes a sign up
+ * @param req.params.id one of the ids in the sign up
+ * @param req.params.idType type of the specified id
+ */
 const deleteSignUp = async (req: express.Request, res: express.Response) => {
   try {
     const { id, idType } = req.params;
