@@ -5,7 +5,7 @@ import resourceRouter from './resource';
 import userRouter from './user';
 import volunteerRouter from './volunteer';
 import opportunityRouter from './opportunity';
-import signUpRouter from "./signup"; 
+import signUpRouter from "./signUp"; 
 
 const router = express.Router();
 
