@@ -81,6 +81,16 @@ export const getVolunteer = async (email: string) => {
 };
 
 /**
+ * Gets all volunteer details.
+ */
+export const getAllVolunteers = async () => {
+  const volunteers = await Volunteer.find();
+
+  return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
+};
+
+
+/**
  * Updates volunteer data with email
  * @param email
  * @param updatedVolunteerData

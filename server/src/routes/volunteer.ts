@@ -13,6 +13,10 @@ router.get(
   volunteerController.validate('getVolunteer'),
   volunteerController.getVolunteerDetails,
 );
+router.get(
+  '/',
+  volunteerController.getAllVolunteerDetails,
+);
 router.delete(
   '/',
   volunteerController.validate('deleteVolunteer'),
@@ -22,10 +26,6 @@ router.put(
   '/',
   volunteerController.validate('updateVolunteer'),
   volunteerController.updateVolunteer,
-);
-router.get(
-  '/',
-  volunteerController.searchVolunteers,
 );
 
 export default router;

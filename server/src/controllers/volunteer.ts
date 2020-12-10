@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { body, param, validationResult } from 'express-validator/check';
 import { VolunteerData } from '../types';
 import {
-  addNewVolunteer, deleteVolunteer, findVolunteers, getVolunteer, updateVolunteerDetails,
+  addNewVolunteer, deleteVolunteer, findVolunteers, getAllVolunteers, getVolunteer, updateVolunteerDetails,
 } from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -135,6 +135,37 @@ const getVolunteerDetails = async (req: express.Request, res: express.Response) 
   }
 };
 
+const getAllVolunteerDetails = async (req: express.Request, res: express.Response) => {
+  // TODO: Move to middleware
+  // https://express-validator.github.io/docs/running-imperatively.html
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: validationErrors.array(),
+    });
+    return;
+  }
+
+  try {
+    // handles both searching volunteers and returning all volunteers
+    if (req.query.name) {
+      const volunteersDetails = await findVolunteers(req.query.name as string);
+      res.status(HTTP_CODES.OK).json({
+        data: volunteersDetails,
+      });
+    } else {
+      const volunteersDetails = await getAllVolunteers();
+      res.status(HTTP_CODES.OK).json({
+        data: volunteersDetails,
+      });
+    }
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      message: error,
+    });
+  }
+};
+
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   // TODO: Move to middleware
   // https://express-validator.github.io/docs/running-imperatively.html
@@ -178,34 +209,11 @@ const removeVolunteer = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const searchVolunteers = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-    return;
-  }
-
-  try {
-    const volunteersDetails = await findVolunteers(req.query.name as string);
-    res.status(HTTP_CODES.OK).json({
-      data: volunteersDetails,
-    });
-  } catch (error) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
-    });
-  }
-};
-
 export default {
   validate,
   createNewVolunteer,
   getVolunteerDetails,
+  getAllVolunteerDetails,
   removeVolunteer,
   updateVolunteer,
-  searchVolunteers,
 };
