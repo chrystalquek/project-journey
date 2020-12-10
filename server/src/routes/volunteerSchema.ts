@@ -1,29 +1,30 @@
 import express from 'express';
 import volunteerSchemaController from '../controllers/volunteerSchema';
+import { validate } from "../helpers/validation";
 
 const router = express.Router();
 
 router.post(
   '/',
-  volunteerSchemaController.validate('createNewVolunteerField'),
+  validate(volunteerSchemaController.getValidations('createNewVolunteerField')),
   volunteerSchemaController.createNewVolunteerField,
 );
 
 router.delete(
   '/',
-  volunteerSchemaController.validate('deleteVolunteerField'),
+  validate(volunteerSchemaController.getValidations('deleteVolunteerField')),
   volunteerSchemaController.deleteVolunteerField,
 );
 
 router.get(
   '/',
-  volunteerSchemaController.validate('getAllVolunteerFields'),
+  validate(volunteerSchemaController.getValidations('getAllVolunteerFields')),
   volunteerSchemaController.getAllVolunteerFields,
 );
 
 router.put(
   '/',
-  volunteerSchemaController.validate('updateVolunteerField'),
+  validate(volunteerSchemaController.getValidations('updateVolunteerField')),
   volunteerSchemaController.updateVolunteerField,
 );
 

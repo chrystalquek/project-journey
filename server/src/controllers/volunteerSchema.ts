@@ -16,7 +16,7 @@ export type VolunteerSchemaMethod =
   'getAllVolunteerFields' |
   'updateVolunteerField'
 
-const validate = (method: VolunteerSchemaMethod) => {
+const getValidations = (method: VolunteerSchemaMethod) => {
   switch (method) {
     case 'createNewVolunteerField': {
       return [
@@ -48,14 +48,6 @@ const createNewVolunteerField = async (
   request: express.Request,
   response: express.Response,
 ): Promise<void> => {
-  const errors = validationResult(request);
-  if (!errors.isEmpty()) {
-    response.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.array(),
-    });
-    return;
-  }
-
   try {
     await addField(request.body.name, request.body.fieldType);
     response.status(HTTP_CODES.OK).json({
@@ -71,14 +63,6 @@ const deleteVolunteerField = async (
   request: express.Request,
   response: express.Response,
 ): Promise<void> => {
-  const errors = validationResult(request);
-  if (!errors.isEmpty()) {
-    response.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.array(),
-    });
-    return;
-  }
-
   try {
     await addField(request.body.name, request.body.fieldType);
     response.status(HTTP_CODES.OK).json({
@@ -94,14 +78,6 @@ const getAllVolunteerFields = async (
   request: express.Request,
   response: express.Response,
 ): Promise<void> => {
-  const errors = validationResult(request);
-  if (!errors.isEmpty()) {
-    response.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.array(),
-    } as ResponseJSON);
-    return;
-  }
-
   try {
     const fields = await getAllFields();
     response.status(HTTP_CODES.OK).json({
@@ -119,14 +95,6 @@ const updateVolunteerField = async (
   request: express.Request,
   response: express.Response,
 ): Promise<void> => {
-  const errors = validationResult(request);
-  if (!errors.isEmpty()) {
-    response.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.array(),
-    } as ResponseJSON);
-    return;
-  }
-
   try {
     await updateField(
       request.body.name,
@@ -147,5 +115,5 @@ export default {
   getAllVolunteerFields,
   deleteVolunteerField,
   updateVolunteerField,
-  validate,
+  getValidations,
 };
