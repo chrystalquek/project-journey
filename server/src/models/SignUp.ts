@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 export type SignUpModel = SignUpData & mongoose.Document;
 
 const SignUpSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
+  external_id: String,
   event_id: String,
   user_id: String,
   status: {

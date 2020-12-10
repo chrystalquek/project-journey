@@ -5,8 +5,8 @@ type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
 export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
-type SignUpStatus = 'pending' | 'accepted' | 'rejected'
-export type SignUpFindBy = 'eventId' | 'userId' | 'signUpId'
+export type SignUpStatus = 'pending' | 'accepted' | 'rejected'
+export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 
 export type VolunteerData = {
     _id: string;
@@ -129,6 +129,7 @@ export type OpportunityData = EventData & {
 }
 
 export type SignUpData = {
+    externalId: string,
     eventId: string,
     userId: string,
     status: SignUpStatus,

@@ -1,8 +1,10 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator/check';
-import { SignUpData, SignUpIdType } from '../types';
+import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import signUpService from '../services/signUp';
+import {stringEnumValidator} from "../helpers/validation";
+import {v4 as uuidv4} from "uuid";
 
 export type SignUpValidatorMethod = 'createSignUp';
 
@@ -10,11 +12,11 @@ const validate = (method: SignUpValidatorMethod) => {
   switch (method) {
     case 'createSignUp': {
       return [
-        body('eventId', 'event id does not exist').exists(),
-        body('userId', 'user id does not exist').exists(),
-        body('status', 'status does not exist').exists(),
-        body('preferences', 'preferences does not exist').exists(),
-        body('isRestricted', 'is restricted does not exist').exists(),
+        body('eventId', 'event id does not exist').exists().isString(),
+        body('userId', 'user id does not exist').exists().isString(),
+        body('status', 'status does not exist').exists().isString().custom((statusText: string) => stringEnumValidator(SignUpStatus, 'Status', statusText)),
+        body('preferences', 'preferences does not exist').exists().isArray().notEmpty(),
+        body('isRestricted', 'is restricted does not exist').exists().isBoolean()
       ];
     }
     default: {
@@ -27,6 +29,7 @@ const createSignUp = async (
   req: express.Request,
   res: express.Response,
 ): Promise<void> => {
+  // TODO: move to middleware 
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -37,8 +40,13 @@ const createSignUp = async (
   }
 
   try {
-    await signUpService.createSignUp(req.body as SignUpData);
-    res.status(HTTP_CODES.OK).send('Sign up data created');
+    const tempSignUp = req.body; 
+    tempSignUp.externalId = uuidv4(); 
+
+    const signUpData: SignUpData = tempSignUp; 
+
+    await signUpService.createSignUp(signUpData);
+    res.status(HTTP_CODES.OK).send();
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -46,6 +54,11 @@ const createSignUp = async (
   }
 };
 
+/**
+ * Retrieves a sign up with the specified sign up, event, or volunteer id. 
+ * @param params.id one of the ids in the sign up
+ * @param params.idType type of the specified id
+ */
 const readSignUp = async (
   req: express.Request,
   res: express.Response,
@@ -69,7 +82,7 @@ const updateSignUp = async (req: express.Request, res: express.Response) => {
 
     await signUpService.updateSignUp(id, idType as SignUpIdType, updatedFields);
 
-    res.status(HTTP_CODES.OK).send('Sign up data updated');
+    res.status(HTTP_CODES.OK).send(); 
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -81,7 +94,7 @@ const deleteSignUp = async (req: express.Request, res: express.Response) => {
   try {
     const { id, idType } = req.params;
     await signUpService.deleteSignUp(id, idType as SignUpIdType);
-    res.status(HTTP_CODES.OK).send('Sign up data deleted');
+    res.status(HTTP_CODES.OK).send();
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
