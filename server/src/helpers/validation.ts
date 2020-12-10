@@ -14,7 +14,7 @@ const LENGTH_MINIMUM_PASSWORD = 8;
  * @param enumName Variable name used for identification in error statement
  * @param value String to test out against enumTypes
  */
-const stringEnumValidator = (enumTypes: Array<string>, enumName: string, value: string) => {
+export const stringEnumValidator = (enumTypes: Array<string>, enumName: string, value: string) => {
   if (!_.includes(enumTypes, value)) {
     throw new Error(`${enumName}: "${value}" must be either ${enumTypes.join(', ')}`);
   }
