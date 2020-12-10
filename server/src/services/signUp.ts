@@ -25,7 +25,7 @@ const readSignUp = async (id: string, idType: SignUpIdType): Promise<SignUpData>
     let signUp;
     switch (idType) {
       case 'signUpId':
-        signUp = await SignUp.findById(id);
+        signUp = await SignUp.find({ sign_up_id: id });
         break;
       case 'eventId':
         signUp = await SignUp.find({ event_id: id });
@@ -39,9 +39,6 @@ const readSignUp = async (id: string, idType: SignUpIdType): Promise<SignUpData>
     if (!signUp) {
       throw new Error('Sign up is not found');
     }
-    console.log("IM HERE"); 
-
-    console.log(signUp); 
     return signUp;
   } catch (err) {
     throw new Error(err.msg);
@@ -82,16 +79,11 @@ const updateSignUp = async (id: string, idType: SignUpIdType, updatedFields: Sig
 
 const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => {
   try {
-    let signUp;
-    console.log(id);
-    console.log(idType); 
-
     switch (idType) {
       case 'signUpId':
-        signUp = await SignUp.findOneAndDelete({sign_up_id: id});
+        let signUp = await SignUp.findOneAndDelete({sign_up_id: id});
         break;
       case 'eventId':
-        console.log("HERE"); 
         signUp = await SignUp.findOneAndDelete({ event_id: id });
         break;
       case 'userId':

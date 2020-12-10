@@ -1,10 +1,9 @@
-import { SignUpIdType } from './../types';
-import { SIGN_UP_STATUS } from './../models/SignUp';
 import express from 'express';
 import { body, validationResult } from 'express-validator/check';
-import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
-import HTTP_CODES from '../constants/httpCodes';
 import signUpService from '../services/signUp';
+import { SIGN_UP_STATUS } from './../models/SignUp';
+import { SignUpData, SignUpIdType } from '../types';
+import HTTP_CODES from '../constants/httpCodes';
 import {stringEnumValidator} from "../helpers/validation";
 
 export type SignUpValidatorMethod = 'createSignUp';
@@ -15,7 +14,8 @@ const validate = (method: SignUpValidatorMethod) => {
       return [
         body('eventId', 'event id does not exist').exists().isString(),
         body('userId', 'user id does not exist').exists().isString(),
-        body('status', 'status does not exist').exists().isString().custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
+        body('status', 'status does not exist').exists().isString()
+            .custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
         // TODO: add notEmpty() after express-validator version bump
         body('preferences', 'preferences does not exist').exists().isArray(),
         body('isRestricted', 'is restricted does not exist').exists().isBoolean()
@@ -29,7 +29,7 @@ const validate = (method: SignUpValidatorMethod) => {
 
 /**
  * Creates a new sign up
- * @param req.body sign up data without the sign_up_id property
+ * @param req.body sign up data without the sign_up_id field
  */
 const createSignUp = async (
   req: express.Request,
