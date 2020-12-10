@@ -1,7 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link href="./theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,300&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+    />
+    <style>
+      body,
+      body *:not(html):not(style):not(br):not(tr):not(code) {
+        box-sizing: border-box;
+        font-family: "Nunito", sans-serif;
+        position: relative;
+      }
+
+      body {
+        -webkit-text-size-adjust: none;
+        background-color: #edf1f1;
+        height: 100%;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+        width: 100% !important;
+      }
+
+      p,
+      ul,
+      ol {
+        line-height: 1.4;
+      }
+
+      ul li::marker {
+        color: #00badc;
+      }
+
+      a {
+        color: #0023dc;
+        text-decoration: none;
+      }
+
+      /* Typography */
+
+      h1 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 0;
+        text-align: left;
+      }
+
+      h2 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 17px;
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.5em;
+        margin-top: 0;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      em {
+        font-style: normal;
+        font-weight: 600;
+        color: #0089a1; /* light-blue */
+      }
+
+      .signature {
+        font-family: "Pacifico", cursive;
+        font-weight: 400;
+      }
+
+      /* Layout */
+
+      .wrapper {
+        -premailer-cellpadding: 0;
+        -premailer-cellspacing: 0;
+        -premailer-width: 100%;
+        background-color: #edf2f7;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+
+      .content {
+        -premailer-cellpadding: 0;
+        -premailer-cellspacing: 0;
+        -premailer-width: 100%;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+
+      /* Header */
+
+      .header {
+        padding: 35px 30px 0 30px;
+        text-align: left;
+        color: #111122;
+        font-weight: 600;
+        font-size: 26px;
+        text-decoration: none;
+      }
+
+      .header h1 div {
+        display: inline-block;
+        white-space: nowrap;
+      }
+
+      .header h1 div span {
+        white-space: pre-line;
+      }
+
+      .logo {
+        vertical-align: middle;
+        margin: 0 -10px;
+      }
+
+      .vl {
+        display: inline-block;
+        vertical-align: middle;
+        width: 0px;
+        height: 70px;
+        border-right: 1px solid #7b7b7b99;
+      }
+
+      .quote {
+        position: relative;
+        width: 270px;
+        font-size: 20px;
+        font-weight: 300;
+        font-style: italic;
+        text-align: right;
+        margin: 0 1em;
+        vertical-align: middle;
+        display: inline-block;
+      }
+
+      /* Body */
+
+      .body {
+        -premailer-cellpadding: 0;
+        -premailer-cellspacing: 0;
+        -premailer-width: 100%;
+        background-color: #edf2f7;
+        border-bottom: 1px solid #edf2f7;
+        border-top: 1px solid #edf2f7;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+
+      .inner-body {
+        -premailer-cellpadding: 0;
+        -premailer-cellspacing: 0;
+        -premailer-width: 570px;
+        background-color: #ffffff;
+        border-color: #e8e5ef;
+        border-radius: 2px;
+        border-width: 1px;
+        box-shadow: 0 2px 0 rgba(0, 0, 150, 0.025),
+          2px 4px 0 rgba(0, 0, 150, 0.015);
+        border: 1px solid #eee;
+        margin: 0 auto;
+        padding: 0;
+        width: 570px;
+      }
+
+      .details {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 1em;
+      }
+
+      .questions {
+        text-align: center;
+      }
+      /* Footer */
+
+      .footer {
+        -premailer-cellpadding: 0;
+        -premailer-cellspacing: 0;
+        -premailer-width: 570px;
+        margin: 0 auto;
+        text-align: center;
+        width: 570px;
+        padding: 30px 35px;
+      }
+
+      .footer p {
+        text-align: center;
+        color: #595858;
+        font-size: 14px;
+      }
+
+      .socmed {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .socmed > li {
+        display: inline;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      address {
+        font-style: normal;
+      }
+
+      .circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 30px;
+        font-size: 18px;
+        color: black;
+        text-align: center;
+        background: #d0de39;
+        line-height: 3;
+        font-weight: 700;
+      }
+
+      /* Tables */
+
+      .table table {
+        -premailer-cellpadding: 0;
+        -premailer-cellspacing: 0;
+        -premailer-width: 100%;
+        margin: 30px auto;
+        width: 100%;
+      }
+
+      .table th {
+        border-bottom: 1px solid #edeff2;
+        margin: 0;
+        padding-bottom: 8px;
+      }
+
+      .table td {
+        color: #74787e;
+        font-size: 15px;
+        line-height: 18px;
+        margin: 0;
+        padding: 10px 0;
+      }
+
+      .content-cell {
+        max-width: 100vw;
+        padding: 35px;
+        border-top: 1px solid #f4f7fa;
+      }
+
+      .dark {
+        background-color: #e7fbff; /* light-blue */
+      }
+
+      table#decoded tr td:first-child {
+        padding-right: 30px;
+      }
+
+      /* Utilities */
+
+      .break-all {
+        word-break: break-all;
+      }
+
+      /* Button */
+      .button {
+        background-color: #d0de39;
+        border-radius: 30px;
+        border: none;
+        padding: 10px 20px;
+        margin: 20px;
+        cursor: pointer;
+      }
+
+      input:focus, input:active {
+        outline:none!important;
+      }
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   </head>
@@ -73,14 +359,15 @@
                   <strong>{{event_title}}</strong>!
                 </p>
                 <p>
-                    Here at Blessings, feedback is important to us. 
-                    It would mean a lot to us if you could take 5 minutes to complete the feedback form below.
+                  Here at Blessings, feedback is important to us. It would mean
+                  a lot to us if you could take 5 minutes to complete the
+                  feedback form below.
                 </p>
-                <div style="text-align: center;">
-                    <button class="button">
-                        Click here to submit a feedback
-                    </button>
-                    <p class="signature">Team Blessings</p>
+                <div style="text-align: center">
+                  <a href="" target="_blank">
+                    <input type="button" value="Click here to submit a feedback" class="button">
+                  </a>
+                  <p class="signature">Team Blessings</p>
                 </div>
               </td>
             </tr>
@@ -172,7 +459,9 @@
 
                 <address>
                   <p>
-                    <a href="https://www.blessingsinabag.co" style="color: #595858"
+                    <a
+                      href="https://www.blessingsinabag.co"
+                      style="color: #595858"
                       >www.blessingsinabag.co</a
                     >
                   </p>
