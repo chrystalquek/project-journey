@@ -1,11 +1,12 @@
 import express from 'express';
 import signUpController from '../controllers/signUp';
+import { validate } from '../helpers/validation';
 
 const router = express.Router();
 
 router.post(
   '/',
-  signUpController.validate('createSignUp'),
+  validate(signUpController.getValidations('createSignUp')),
   signUpController.createSignUp,
 );
 
