@@ -129,10 +129,7 @@ export type OpportunityData = EventData & {
 }
 
 export type SignUpData = {
-<<<<<<< HEAD
-=======
     signUpId: string,
->>>>>>> 6aac63209e07d01b435da465625dc49fea2005c7
     eventId: string,
     userId: string,
     status: SignUpStatus,
