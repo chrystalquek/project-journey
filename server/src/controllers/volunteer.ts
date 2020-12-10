@@ -1,6 +1,6 @@
 import express from 'express';
 import _ from 'lodash';
-import { body, param, validationResult } from 'express-validator/check';
+import { body, param } from 'express-validator';
 import { VolunteerData } from '../types';
 import {
   addNewVolunteer, deleteVolunteer, findVolunteers, getVolunteer, updateVolunteerDetails,
@@ -15,7 +15,7 @@ export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer' | 'del
  * Handles route request validation for controllers
  * @param method Controller handler names
  */
-const validate = (method: VolunteerValidatorMethod) => {
+const getValidations = (method: VolunteerValidatorMethod) => {
   switch (method) {
     case 'createVolunteer': {
       return [
@@ -92,16 +92,6 @@ const validate = (method: VolunteerValidatorMethod) => {
 };
 
 const createNewVolunteer = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-    return;
-  }
-
   try {
     await addNewVolunteer(req.body as VolunteerData);
     res.status(HTTP_CODES.OK).send();
@@ -113,16 +103,6 @@ const createNewVolunteer = async (req: express.Request, res: express.Response) =
 };
 
 const getVolunteerDetails = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-    return;
-  }
-
   try {
     const volunteerDetails = await getVolunteer(req.params.email);
     res.status(HTTP_CODES.OK).json({
@@ -136,16 +116,6 @@ const getVolunteerDetails = async (req: express.Request, res: express.Response) 
 };
 
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-    return;
-  }
-
   try {
     await updateVolunteerDetails(req.body.email as string, req.body as Partial<VolunteerData>);
     res.status(HTTP_CODES.OK).send();
@@ -157,16 +127,6 @@ const updateVolunteer = async (req: express.Request, res: express.Response) => {
 };
 
 const removeVolunteer = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-    return;
-  }
-
   try {
     const { email } = req.body;
     await deleteVolunteer(email);
@@ -179,16 +139,6 @@ const removeVolunteer = async (req: express.Request, res: express.Response) => {
 };
 
 const searchVolunteers = async (req: express.Request, res: express.Response) => {
-  // TODO: Move to middleware
-  // https://express-validator.github.io/docs/running-imperatively.html
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: validationErrors.array(),
-    });
-    return;
-  }
-
   try {
     const volunteersDetails = await findVolunteers(req.query.name as string);
     res.status(HTTP_CODES.OK).json({
@@ -202,7 +152,7 @@ const searchVolunteers = async (req: express.Request, res: express.Response) => 
 };
 
 export default {
-  validate,
+  getValidations,
   createNewVolunteer,
   getVolunteerDetails,
   removeVolunteer,

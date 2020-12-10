@@ -1,12 +1,12 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator/check';
+import { body } from 'express-validator';
 import { OpportunityData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import opportunityService from '../services/opportunity';
 
 export type OpportunityValidatorMethod = 'createOpportunity';
 
-const validate = (method: OpportunityValidatorMethod) => {
+const getValidations = (method: OpportunityValidatorMethod) => {
   switch (method) {
     case 'createOpportunity': {
       return [
@@ -24,15 +24,6 @@ const createOpportunity = async (
   req: express.Request,
   res: express.Response,
 ): Promise<void> => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.array(),
-    });
-    return;
-  }
-
   try {
     await opportunityService.createOpportunity(req.body as OpportunityData);
     res.status(HTTP_CODES.OK).send('Opportunity data created');
@@ -88,5 +79,5 @@ export default {
   readOpportunity,
   updateOpportunity,
   deleteOpportunity,
-  validate,
+  getValidations,
 };

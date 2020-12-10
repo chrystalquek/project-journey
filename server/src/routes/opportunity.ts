@@ -2,6 +2,7 @@ import express from 'express';
 import eventController from '../controllers/event';
 import opportunityController from '../controllers/opportunity';
 import { createProtectedRouter } from '../helpers/auth';
+import { validate } from '../helpers/validation';
 
 const router = express.Router();
 const protectedRouter = createProtectedRouter(router);
@@ -26,8 +27,8 @@ protectedRouter.put('/:id', opportunityController.updateOpportunity);
 // @access  Private
 protectedRouter.post(
   '/',
-  eventController.validate('createEvent'),
-  opportunityController.validate('createOpportunity'),
+  validate(eventController.getValidations('createEvent')),
+  validate(opportunityController.getValidations('createOpportunity')),
   opportunityController.createOpportunity,
 );
 
