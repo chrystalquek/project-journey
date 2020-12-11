@@ -97,8 +97,8 @@ const deleteEvent = async (req: express.Request, res: express.Response) => {
 /**
  * Retrieves all upcoming events.
  */
-const readAllUpcomingEvents = async (req: express.Request, res: express.Response) => {
-  const upcomingEvents = await eventService.readAllUpcomingEvents();
+const readAllEvents = async (req: express.Request, res: express.Response) => {
+  const upcomingEvents = await eventService.readAllEvents(req.params.eventType);
   res.json({
     upcomingEvents,
   });
@@ -106,13 +106,21 @@ const readAllUpcomingEvents = async (req: express.Request, res: express.Response
 
 /**
  * Retrieves all signed up upcoming events.
+ * Assists view_upcoming_events (volunteer) - List of all upcoming events signed up by volunteer
+ * Assists view_my_past_events (volunteer) - List of all past events done by volunteer
  * @param req.params.userId userId in SignUpData
  * @param req.params.eventType event type based on time period - all, upcoming, past
  */
 const readSignedUpEvents = async (req: express.Request, res: express.Response) => {
   const { userId, eventType } = req.params;
   const signUps: SignUpData[] = await signUpService.readSignUps(userId, 'userId');
-  const signedUpEventsIds: string[] = signUps.map((signUp) => signUp.eventId);
+
+  // For past events, filter the ones with accepted status
+  const filteredSignUps: SignUpData[] = eventType === 'past'
+    ? signUps.filter((signUp) => signUp.status === 'accepted')
+    : signUps;
+
+  const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.eventId);
 
   const signedUpEvents = await eventService
     .readEvents(signedUpEventsIds, eventType as EventSearchType);
@@ -123,7 +131,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
 export default {
   createEvent,
   readEvent,
-  readAllUpcomingEvents,
+  readAllEvents,
   readSignedUpEvents,
   updateEvent,
   deleteEvent,

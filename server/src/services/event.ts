@@ -73,11 +73,29 @@ const readEvents = async (ids: string[], type: EventSearchType): Promise<EventDa
   }
 };
 
-const readAllUpcomingEvents = async (): Promise<EventData[]> => {
+/**
+ * Retrieves all, upcoming, or past events
+ * Assists view_events (admin) - List of all upcoming events from DB
+ * Assists view_past_events (admin) - List all past events from DB
+ * @param eventType event type - all, upcoming, or past.
+ */
+const readAllEvents = async (eventType: EventSearchType): Promise<EventData[]> => {
   try {
-    const upcomingEvents = await Event.find({ start_date: { $gt: new Date() } });
+    let events;
+    switch (eventType) {
+      case 'all':
+        events = await Event.find({});
+        break;
+      case 'past':
+        events = await Event.find({ start_date: { $lt: new Date() } });
+        break;
+      case 'upcoming':
+        events = await Event.find({ start_date: { $gt: new Date() } });
+        break;
+      default: throw new Error('Event type is invalid');
+    }
 
-    return upcomingEvents;
+    return events;
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -116,7 +134,7 @@ export default {
   createEvent,
   readEvent,
   readEvents,
-  readAllUpcomingEvents,
+  readAllEvents,
   updateEvent,
   deleteEvent,
 };
