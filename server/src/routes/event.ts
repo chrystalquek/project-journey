@@ -10,17 +10,17 @@ const protectedRouter = createProtectedRouter(router);
 // @route   GET /event/:id
 // @desc    Get event by id
 // @access  Private
-protectedRouter.get('/:id', eventController.readEvent);
+protectedRouter.get('/single/:id', eventController.readEvent);
 
 // @route   GET /event/:eventType
 // @desc    Get either all, upcoming, or past events
 // @access  Private
-protectedRouter.get('/:eventType', eventController.readEvents);
+protectedRouter.get('/multiple/:eventType', eventController.readEvents);
 
 // @route   GET /event/:userId/:eventType
 // @desc    Get either all, upcoming, or past signed up events
 // @access  Private
-protectedRouter.get('/:userId/:eventType', eventController.readSignedUpEvents);
+protectedRouter.get('/signup/:userId/:eventType', eventController.readSignedUpEvents);
 
 // @route   DELETE /event
 // @desc    Delete a event by id
