@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { SignUpData, SignUpIdType } from '../types';
-
 import SignUp from '../models/SignUp';
+import { SignUpData, SignUpIdType } from '../types';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
 const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>): Promise<void> => {
@@ -20,9 +19,9 @@ const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>): Promise<v
   }
 };
 
-const readSignUps = async (id: string, idType: SignUpIdType): Promise<SignUpData[]> => {
+const readSignUps = async (id: string, idType: SignUpIdType) => {
   try {
-    let signUp: SignUpData[];
+    let signUp;
     switch (idType) {
       case 'signUpId':
         signUp = await SignUp.find({ sign_up_id: id });
@@ -36,9 +35,6 @@ const readSignUps = async (id: string, idType: SignUpIdType): Promise<SignUpData
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
 
-    if (signUp.length === 0) {
-      throw new Error('Sign up is not found');
-    }
     return signUp;
   } catch (err) {
     throw new Error(err.msg);
