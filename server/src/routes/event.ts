@@ -12,6 +12,11 @@ const protectedRouter = createProtectedRouter(router);
 // @access  Private
 protectedRouter.get('/:id', eventController.readEvent);
 
+// @route   GET /event/:id
+// @desc    Get all upcoming events
+// @access  Private
+protectedRouter.get('/', eventController.readAllUpcomingEvents);
+
 // @route   DELETE /event
 // @desc    Delete a event by id
 // @access  Private
@@ -20,13 +25,14 @@ protectedRouter.delete('/:id', authorize(['admin']), eventController.deleteEvent
 // @route   PUT /event
 // @desc    Update a event by id
 // @access  Private
-protectedRouter.put('/:id', eventController.updateEvent);
+protectedRouter.put('/:id', authorize(['admin']), eventController.updateEvent);
 
 // @route   POST /event
 // @desc    Post a new event
 // @access  Private
 protectedRouter.post(
   '/',
+  authorize(['admin']),
   validate(eventController.getValidations('createEvent')),
   eventController.createEvent,
 );

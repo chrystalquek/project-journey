@@ -41,6 +41,16 @@ const readEvent = async (id: string): Promise<EventData> => {
   }
 };
 
+const readAllUpcomingEvents = async (): Promise<EventData[]> => {
+  try {
+    const upcomingEvents = await Event.find({});
+
+    return upcomingEvents;
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
 const updateEvent = async (
   id: string,
   updatedFields: EventData,
@@ -73,6 +83,7 @@ const deleteEvent = async (id: string): Promise<void> => {
 export default {
   createEvent,
   readEvent,
+  readAllUpcomingEvents,
   updateEvent,
   deleteEvent,
 };

@@ -92,9 +92,20 @@ const deleteEvent = async (req: express.Request, res: express.Response) => {
   }
 };
 
+/**
+ * Retrieves all upcoming events.
+ */
+const readAllUpcomingEvents = async (req: express.Request, res: express.Response) => {
+  const upcomingEvents = await eventService.readAllUpcomingEvents();
+  res.json({
+    upcomingEvents,
+  });
+};
+
 export default {
   createEvent,
   readEvent,
+  readAllUpcomingEvents,
   updateEvent,
   deleteEvent,
   getValidations,
