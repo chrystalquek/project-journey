@@ -1,0 +1,15 @@
+{
+    "name": "string",
+    "description": "string",
+    "contentUrl": "string",
+    "contentType": "string",
+    "facilitatorName": "string",
+    "facilitatorDescription": "string",
+    "startDate": "2020-01-01",
+    "endDate": "2020-01-01",
+    "location": "string",
+    "deadline": "2020-01-01",
+    "additionalInformation": "string",
+    "capacity": 1,
+    "volunteers": [1,2,3]
+}
