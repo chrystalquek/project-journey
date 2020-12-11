@@ -43,7 +43,7 @@ const readEvent = async (id: string): Promise<EventData> => {
 
 const readAllUpcomingEvents = async (): Promise<EventData[]> => {
   try {
-    const upcomingEvents = await Event.find({});
+    const upcomingEvents = await Event.find({'start_date': { $gte: new Date()}});
 
     return upcomingEvents;
   } catch (err) {
