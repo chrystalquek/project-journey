@@ -1,8 +1,10 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { EventData } from '../types';
+import { EventSearchType, EventData, SignUpData } from '../types';
+
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
+import signUpService from '../services/signUp';
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -102,10 +104,27 @@ const readAllUpcomingEvents = async (req: express.Request, res: express.Response
   });
 };
 
+/**
+ * Retrieves all signed up upcoming events.
+ * @param req.params.userId userId in SignUpData
+ * @param req.params.eventType event type based on time period - all, upcoming, past
+ */
+const readSignedUpEvents = async (req: express.Request, res: express.Response) => {
+  const { userId, eventType } = req.params;
+  const signUps: SignUpData[] = await signUpService.readSignUps(userId, 'userId');
+  const signedUpEventsIds: string[] = signUps.map((signUp) => signUp.eventId);
+
+  const signedUpEvents = await eventService
+    .readEvents(signedUpEventsIds, eventType as EventSearchType);
+
+  res.json({ signedUpEvents });
+};
+
 export default {
   createEvent,
   readEvent,
   readAllUpcomingEvents,
+  readSignedUpEvents,
   updateEvent,
   deleteEvent,
   getValidations,

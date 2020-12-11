@@ -4,7 +4,7 @@ import { SignUpData } from '../types';
 const { Schema } = mongoose;
 
 export type SignUpModel = SignUpData & mongoose.Document;
-export const SIGN_UP_STATUS = ['pending', 'accepted, rejected']
+export const SIGN_UP_STATUS = ['pending', 'accepted, rejected'];
 
 const SignUpSchema = new Schema({
   sign_up_id: String,

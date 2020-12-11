@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { EventData } from '../types';
+import { EventSearchType, EventData } from '../types';
+
 import Event from '../models/Event';
 
 const createEvent = async (eventData: EventData): Promise<void> => {
@@ -41,9 +42,40 @@ const readEvent = async (id: string): Promise<EventData> => {
   }
 };
 
+const readEvents = async (ids: string[], type: EventSearchType): Promise<EventData> => {
+  try {
+    let events;
+    switch (type) {
+      case 'all':
+        events = await Event.find({
+          _id: { $in: ids },
+        });
+        break;
+      case 'upcoming':
+        events = await Event.find({
+          _id: { $in: ids },
+          start_date: { $gt: new Date() },
+        });
+        break;
+      case 'past':
+        events = await Event.find({
+          _id: { $in: ids },
+          start_date: { $lt: new Date() },
+        });
+        break;
+      default:
+        throw new Error('Event type is invalid');
+    }
+
+    return events;
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
 const readAllUpcomingEvents = async (): Promise<EventData[]> => {
   try {
-    const upcomingEvents = await Event.find({'start_date': { $gte: new Date()}});
+    const upcomingEvents = await Event.find({ start_date: { $gt: new Date() } });
 
     return upcomingEvents;
   } catch (err) {
@@ -83,6 +115,7 @@ const deleteEvent = async (id: string): Promise<void> => {
 export default {
   createEvent,
   readEvent,
+  readEvents,
   readAllUpcomingEvents,
   updateEvent,
   deleteEvent,

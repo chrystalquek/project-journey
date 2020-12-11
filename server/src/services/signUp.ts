@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 import { SignUpData, SignUpIdType } from '../types';
+
 import SignUp from '../models/SignUp';
-import {v4 as uuidv4} from "uuid";
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
-const createSignUp = async (signUpData: Omit<SignUpData, "signUpId">): Promise<void> => {
+const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>): Promise<void> => {
   try {
     const signUpSchemaData = new SignUp({
       sign_up_id: uuidv4(),
@@ -20,9 +20,9 @@ const createSignUp = async (signUpData: Omit<SignUpData, "signUpId">): Promise<v
   }
 };
 
-const readSignUp = async (id: string, idType: SignUpIdType): Promise<SignUpData> => {
+const readSignUps = async (id: string, idType: SignUpIdType): Promise<SignUpData[]> => {
   try {
-    let signUp;
+    let signUp: SignUpData[];
     switch (idType) {
       case 'signUpId':
         signUp = await SignUp.find({ sign_up_id: id });
@@ -36,7 +36,7 @@ const readSignUp = async (id: string, idType: SignUpIdType): Promise<SignUpData>
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
 
-    if (!signUp) {
+    if (signUp.length === 0) {
       throw new Error('Sign up is not found');
     }
     return signUp;
@@ -45,7 +45,8 @@ const readSignUp = async (id: string, idType: SignUpIdType): Promise<SignUpData>
   }
 };
 
-const updateSignUp = async (id: string, idType: SignUpIdType, updatedFields: SignUpData): Promise<void> => {
+const updateSignUp = async (id: string, idType: SignUpIdType,
+  updatedFields: SignUpData): Promise<void> => {
   try {
     switch (idType) {
       case 'signUpId':
@@ -81,13 +82,13 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
   try {
     switch (idType) {
       case 'signUpId':
-        let signUp = await SignUp.findOneAndDelete({sign_up_id: id});
+        await SignUp.findOneAndDelete({ sign_up_id: id });
         break;
       case 'eventId':
-        signUp = await SignUp.findOneAndDelete({ event_id: id });
+        await SignUp.findOneAndDelete({ event_id: id });
         break;
       case 'userId':
-        signUp = await SignUp.findOneAndDelete({ user_id: id });
+        await SignUp.findOneAndDelete({ user_id: id });
         break;
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
@@ -98,7 +99,7 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
 
 export default {
   createSignUp,
-  readSignUp,
+  readSignUps,
   updateSignUp,
   deleteSignUp,
 };
