@@ -5,7 +5,7 @@ import Event from '../models/Event';
 
 const createEvent = async (eventData: EventData): Promise<void> => {
   try {
-    const eventSchemaData = new Event({
+    const eventSchemaData: mongoose.Document = new Event({
       _id: new mongoose.Types.ObjectId(),
       name: eventData.name,
       created_at: Date.now(),
@@ -93,7 +93,7 @@ const readEventsById = async (ids: string[], eventType: EventSearchType): Promis
  */
 const readEvents = async (eventType: EventSearchType): Promise<EventData[]> => {
   try {
-    let events;
+    let events: EventData[];
     switch (eventType) {
       case 'all':
         events = await Event.find({});
@@ -106,7 +106,6 @@ const readEvents = async (eventType: EventSearchType): Promise<EventData[]> => {
         break;
       default: throw new Error('Event type is invalid');
     }
-
     return events;
   } catch (err) {
     throw new Error(err.msg);
