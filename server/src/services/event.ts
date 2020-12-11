@@ -28,6 +28,10 @@ const createEvent = async (eventData: EventData): Promise<void> => {
   }
 };
 
+/**
+ * Retrieves the event with the specified id.
+ * @param id event id
+ */
 const readEvent = async (id: string): Promise<EventData> => {
   try {
     const event = await Event.findById(id);
@@ -42,10 +46,17 @@ const readEvent = async (id: string): Promise<EventData> => {
   }
 };
 
-const readEvents = async (ids: string[], type: EventSearchType): Promise<EventData> => {
+/**
+ * Retrieves either all, upcoming, or past events from the specified event ids.
+ * A helper function for readSignedUpEvents
+ * @param ids array of event ids
+ * @param eventType event type - all, upcoming, or past
+ * @return either all, upcoming, or past events
+ */
+const readEventsById = async (ids: string[], eventType: EventSearchType): Promise<EventData> => {
   try {
     let events;
-    switch (type) {
+    switch (eventType) {
       case 'all':
         events = await Event.find({
           _id: { $in: ids },
@@ -74,12 +85,13 @@ const readEvents = async (ids: string[], type: EventSearchType): Promise<EventDa
 };
 
 /**
- * Retrieves all, upcoming, or past events
+ * Retrieves either all, upcoming, or past events
  * Assists view_events (admin) - List of all upcoming events from DB
  * Assists view_past_events (admin) - List all past events from DB
- * @param eventType event type - all, upcoming, or past.
+ * @param eventType event type - all, upcoming, or past
+ * @return either all, upcoming, or past events
  */
-const readAllEvents = async (eventType: EventSearchType): Promise<EventData[]> => {
+const readEvents = async (eventType: EventSearchType): Promise<EventData[]> => {
   try {
     let events;
     switch (eventType) {
@@ -134,7 +146,7 @@ export default {
   createEvent,
   readEvent,
   readEvents,
-  readAllEvents,
+  readEventsById,
   updateEvent,
   deleteEvent,
 };

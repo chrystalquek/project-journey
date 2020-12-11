@@ -13,12 +13,12 @@ const protectedRouter = createProtectedRouter(router);
 protectedRouter.get('/:id', eventController.readEvent);
 
 // @route   GET /event/:eventType
-// @desc    Get all upcoming events
+// @desc    Get either all, upcoming, or past events
 // @access  Private
-protectedRouter.get('/:eventType', eventController.readAllEvents);
+protectedRouter.get('/:eventType', eventController.readEvents);
 
 // @route   GET /event/:userId/:eventType
-// @desc    Get all, upcoming, or past signed up events
+// @desc    Get either all, upcoming, or past signed up events
 // @access  Private
 protectedRouter.get('/:userId/:eventType', eventController.readSignedUpEvents);
 
