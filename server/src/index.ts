@@ -1,7 +1,7 @@
 import express from 'express';
 import expressValidator from 'express-validator';
 import bodyParser from 'body-parser';
-import cors from 'cors'
+import cors from 'cors';
 
 // The dotenv file should be parsed before any imports requiring process.env
 // tslint:disable-next-line:no-var-requires
