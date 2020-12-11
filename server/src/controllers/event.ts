@@ -98,7 +98,7 @@ const deleteEvent = async (req: express.Request, res: express.Response) => {
  * Retrieves all upcoming events.
  */
 const readAllEvents = async (req: express.Request, res: express.Response) => {
-  const upcomingEvents = await eventService.readAllEvents(req.params.eventType);
+  const upcomingEvents = await eventService.readAllEvents(req.params.eventType as EventSearchType);
   res.json({
     upcomingEvents,
   });
@@ -115,7 +115,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
   const { userId, eventType } = req.params;
   const signUps: SignUpData[] = await signUpService.readSignUps(userId, 'userId');
 
-  // For past events, filter the ones with accepted status
+  // For past events, filter sign ups with accepted status
   const filteredSignUps: SignUpData[] = eventType === 'past'
     ? signUps.filter((signUp) => signUp.status === 'accepted')
     : signUps;
