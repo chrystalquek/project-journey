@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { EventSearchType, EventData, SignUpData } from '../types';
+import { EventSearchType, EventData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
@@ -71,11 +71,18 @@ const readEvent = async (
 /**
  * Retrieves either all, upcoming, or past events.
  */
-const readEvents = async (req: express.Request, res: express.Response) => {
-  const upcomingEvents = await eventService.readEvents(req.params.eventType as EventSearchType);
-  res.json({
-    upcomingEvents,
-  });
+const readEvents = async (req: express.Request, res: express.Response): Promise<void> => {
+  try {
+    const events = await eventService.readEvents(req.params.eventType as EventSearchType);
+
+    res.status(HTTP_CODES.OK).json({
+      events,
+    });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
 };
 
 /**
@@ -86,20 +93,26 @@ const readEvents = async (req: express.Request, res: express.Response) => {
  * @param req.params.eventType event type based on time period - all, upcoming, past
  */
 const readSignedUpEvents = async (req: express.Request, res: express.Response) => {
-  const { userId, eventType } = req.params;
-  const signUps: SignUpData[] = await signUpService.readSignUps(userId, 'userId');
+  try {
+    const { userId, eventType } = req.params;
+    const signUps = await signUpService.readSignUps(userId, 'userId');
 
-  // For past events, filter sign ups with accepted status
-  const filteredSignUps: SignUpData[] = eventType === 'past'
-    ? signUps.filter((signUp) => signUp.status === 'accepted')
-    : signUps;
+    /** For past events, filter sign ups with accepted status */
+    const filteredSignUps = eventType === 'past'
+      ? signUps.filter((signUp) => signUp.status === 'accepted')
+      : signUps;
 
-  const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.eventId);
+    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);
 
-  const signedUpEvents = await eventService
-    .readEventsById(signedUpEventsIds, eventType as EventSearchType);
+    const signedUpEvents = await eventService
+      .readEventsById(signedUpEventsIds, eventType as EventSearchType);
 
-  res.json({ signedUpEvents });
+    res.status(HTTP_CODES.OK).json({ signedUpEvents });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
 };
 
 const updateEvent = async (req: express.Request, res: express.Response) => {
