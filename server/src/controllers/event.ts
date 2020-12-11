@@ -1,12 +1,12 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator/check';
+import { body } from 'express-validator';
 import { EventData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
 
 export type EventValidatorMethod = 'createEvent';
 
-const validate = (method: EventValidatorMethod) => {
+const getValidations = (method: EventValidatorMethod) => {
   switch (method) {
     case 'createEvent': {
       return [
@@ -36,15 +36,6 @@ const createEvent = async (
   req: express.Request,
   res: express.Response,
 ): Promise<void> => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.array(),
-    });
-    return;
-  }
-
   try {
     await eventService.createEvent(req.body as EventData);
     res.status(HTTP_CODES.OK).send('Event data created');
@@ -106,5 +97,5 @@ export default {
   readEvent,
   updateEvent,
   deleteEvent,
-  validate,
+  getValidations,
 };

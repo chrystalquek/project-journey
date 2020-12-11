@@ -1,8 +1,8 @@
 import express from 'express';
 import eventController from '../controllers/event';
 import { createProtectedRouter } from '../helpers/auth';
+import { validate } from '../helpers/validation';
 import authorize from '../helpers/authorize';
-import { VolunteerRole } from '../types';
 
 const router = express.Router();
 const protectedRouter = createProtectedRouter(router);
@@ -27,7 +27,7 @@ protectedRouter.put('/:id', eventController.updateEvent);
 // @access  Private
 protectedRouter.post(
   '/',
-  eventController.validate('createEvent'),
+  validate(eventController.getValidations('createEvent')),
   eventController.createEvent,
 );
 

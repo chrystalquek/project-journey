@@ -1,9 +1,11 @@
 import _ from 'lodash';
-import { body } from 'express-validator/check';
+import { body, validationResult, ValidationChain } from 'express-validator';
+import express from 'express';
 import {
   CITIZENSHIP_TYPES, GENDER_TYPES, LEADERSHIP_INTEREST_TYPES,
   PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS,
 } from '../models/Volunteer';
+import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
@@ -14,7 +16,7 @@ const LENGTH_MINIMUM_PASSWORD = 8;
  * @param enumName Variable name used for identification in error statement
  * @param value String to test out against enumTypes
  */
-const stringEnumValidator = (enumTypes: Array<string>, enumName: string, value: string) => {
+export const stringEnumValidator = (enumTypes: Array<string>, enumName: string, value: string) => {
   if (!_.includes(enumTypes, value)) {
     throw new Error(`${enumName}: "${value}" must be either ${enumTypes.join(', ')}`);
   }
@@ -79,6 +81,18 @@ const volunteerReason = body('volunteerReason').isString();
 const volunteerFrequency = body('volunteerFrequency').isNumeric();
 const volunteerContribution = body('volunteerContribution').isString();
 const volunteerRemark = body('volunteerRemark').isString().optional();
+
+export const validate = (validations: ValidationChain[]) => async (
+  req: express.Request, res: express.Response, next: Function) => {
+  await Promise.all(validations.map((validation: ValidationChain) => validation.run(req)));
+
+  const validationErrors = validationResult(req);
+  if (validationErrors.isEmpty()) {
+    return next();
+  }
+
+  res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({ errors: validationErrors.array() });
+};
 
 export default {
   email,

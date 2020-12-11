@@ -1,5 +1,6 @@
 import express from 'express';
 import resourceController from '../controllers/resource';
+import { validate } from '../helpers/validation';
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.put('/:id', resourceController.updateResource);
 // @access  Public
 router.post(
   '/',
-  resourceController.validate('createResource'),
+  validate(resourceController.getValidations('createResource')),
   resourceController.createResource,
 );
 

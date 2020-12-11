@@ -1,16 +1,17 @@
 import express from 'express';
 import volunteerController from '../controllers/volunteer';
+import { validate } from '../helpers/validation';
 
 const router = express.Router();
 
 router.post(
   '/',
-  volunteerController.validate('createVolunteer'),
+  validate(volunteerController.getValidations('createVolunteer')),
   volunteerController.createNewVolunteer,
 );
 router.get(
   '/:email',
-  volunteerController.validate('getVolunteer'),
+  validate(volunteerController.getValidations('getVolunteer')),
   volunteerController.getVolunteerDetails,
 );
 router.get(
@@ -19,12 +20,12 @@ router.get(
 );
 router.delete(
   '/',
-  volunteerController.validate('deleteVolunteer'),
+  validate(volunteerController.getValidations('deleteVolunteer')),
   volunteerController.removeVolunteer,
 );
 router.put(
   '/',
-  volunteerController.validate('updateVolunteer'),
+  validate(volunteerController.getValidations('updateVolunteer')),
   volunteerController.updateVolunteer,
 );
 
