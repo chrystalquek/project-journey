@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rm -rf ./build && NODE_ENV=production next build",
     "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
-    "dev": "next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "gcp-predeploy": "find ./build -name '\\[...*' -exec bash -c 'mv \"$1\" \"${1/.../@@@}\"' -- {} \\;",
     "gcp-build": "find ./build -name '\\[@@@*' -exec bash -c 'mv \"$1\" \"${1/@@@/...}\"' -- {} \\;",
     "lint-fix": "eslint --fix . --ext .js,.jsx,.ts,.tsx",
@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^1.5.0",
     "antd": "^4.9.1",
     "axios": "^0.21.0",
+    "cross-env": "^7.0.3",
     "fontsource-roboto": "^3.0.3",
     "next": "^10.0.3",
     "next-redux-wrapper": "^6.0.2",
