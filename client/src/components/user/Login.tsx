@@ -6,12 +6,12 @@ import Link from 'next/link';
 import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
 import { useRouter } from 'next/dist/client/router';
-import styles from '../../styles/auth/login.styles';
+import styles from '../../../styles/auth/login.styles';
 
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
-import { LoginArgs } from '../../actions/user';
-import { UserState } from '../../reducers/user';
+import { LoginArgs } from '../../../redux/actions/user';
+import { UserState } from '../../../redux/reducers/user';
 
 const { Content } = Layout;
 

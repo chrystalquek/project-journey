@@ -2,7 +2,7 @@ import { Layout, Menu, Button } from 'antd';
 import Image from 'next/image';
 import { UserOutlined } from '@ant-design/icons';
 import { FC } from 'react';
-import styles from '../../styles/common/navbar.styles';
+import styles from '../../../styles/common/navbar.styles';
 
 const { Header } = Layout;
 
