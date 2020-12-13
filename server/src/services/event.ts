@@ -53,7 +53,7 @@ const readEvent = async (id: string): Promise<EventData> => {
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEventsById = async (ids: string[], eventType: EventSearchType): Promise<EventData> => {
+const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promise<EventData> => {
   try {
     let events;
     switch (eventType) {
@@ -145,7 +145,7 @@ export default {
   createEvent,
   readEvent,
   readEvents,
-  readEventsById,
+  readEventsByIds,
   updateEvent,
   deleteEvent,
 };

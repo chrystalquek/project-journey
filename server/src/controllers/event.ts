@@ -105,7 +105,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);
 
     const signedUpEvents = await eventService
-      .readEventsById(signedUpEventsIds, eventType as EventSearchType);
+      .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
 
     res.status(HTTP_CODES.OK).json({ signedUpEvents });
   } catch (err) {
