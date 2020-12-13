@@ -1,8 +1,10 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { EventData } from '../types';
+import { EventSearchType, EventData } from '../types';
+
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
+import signUpService from '../services/signUp';
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -66,6 +68,53 @@ const readEvent = async (
   }
 };
 
+/**
+ * Retrieves either all, upcoming, or past events.
+ */
+const readEvents = async (req: express.Request, res: express.Response): Promise<void> => {
+  try {
+    const events = await eventService.readEvents(req.params.eventType as EventSearchType);
+
+    res.status(HTTP_CODES.OK).json({
+      events,
+    });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+};
+
+/**
+ * Retrieves eitherall, upcoming, or past signed up events.
+ * Assists view_upcoming_events (volunteer) - List of all upcoming events signed up by volunteer
+ * Assists view_my_past_events (volunteer) - List of all past events done by volunteer
+ * @param req.params.userId userId in SignUpData
+ * @param req.params.eventType event type based on time period - all, upcoming, past
+ */
+const readSignedUpEvents = async (req: express.Request, res: express.Response) => {
+  try {
+    const { userId, eventType } = req.params;
+    const signUps = await signUpService.readSignUps(userId, 'userId');
+
+    /** For past events, filter sign ups with accepted status */
+    const filteredSignUps = eventType === 'past'
+      ? signUps.filter((signUp) => signUp.status === 'accepted')
+      : signUps;
+
+    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);
+
+    const signedUpEvents = await eventService
+      .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
+
+    res.status(HTTP_CODES.OK).json({ signedUpEvents });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+};
+
 const updateEvent = async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
@@ -95,6 +144,8 @@ const deleteEvent = async (req: express.Request, res: express.Response) => {
 export default {
   createEvent,
   readEvent,
+  readEvents,
+  readSignedUpEvents,
   updateEvent,
   deleteEvent,
   getValidations,

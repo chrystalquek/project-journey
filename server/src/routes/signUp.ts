@@ -12,7 +12,7 @@ router.post(
 
 router.get(
   '/:id/:idType',
-  signUpController.readSignUp,
+  signUpController.readSignUps,
 );
 
 router.delete(
