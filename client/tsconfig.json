@@ -4,9 +4,10 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@containers/*": ["src/containers/*"],
-      "@constants/*": ["utils/constants/*"],
       "@utils/*": ["utils/*"],
-      "@public/*": ["public/*"]
+      "@redux/*": ["redux/*"],
+      "@public/*": ["public/*"],
+      "@styles/*": ["styles/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

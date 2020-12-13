@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import {favicon} from '@constants/imagePaths';
+import {favicon} from '@utils/constants/imagePaths';
 
 // https://nextjs.org/docs/api-reference/next/head
 const Header = ({ title }) => {
