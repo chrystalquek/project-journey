@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import store from '../redux/store';
 import NavBar from '../src/components/common/NavBar';
 
-export default function Home() {
+const Home = () => {
   return (
     <Provider store={store}>
       <Head title="Blessings in a Bag" />
@@ -13,3 +13,5 @@ export default function Home() {
     </Provider>
   );
 }
+
+export default Home;

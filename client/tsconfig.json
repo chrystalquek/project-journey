@@ -5,6 +5,7 @@
       "@components/*": ["src/components/*"],
       "@containers/*": ["src/containers/*"],
       "@constants/*": ["utils/constants/*"],
+      "@redux/*": ["redux/*"],
       "@utils/*": ["utils/*"],
       "@public/*": ["public/*"]
     },
