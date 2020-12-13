@@ -8,7 +8,7 @@ const createRow = (header, data) => (
     <Grid item xs={2}>
       <Typography variant='caption'>{header}</Typography>
     </Grid>
-    <Grid item>
+    <Grid item xs={10}>
       <Typography variant='caption'>{data}</Typography>
     </Grid>
   </Grid>

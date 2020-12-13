@@ -5,6 +5,7 @@ import NotesForAdmin from './NotesForAdmin'
 import ContactInformation from './ContactInformation'
 import SignUpInformation from './SignUpInformation'
 import EventCount from './EventCount'
+import AppBar from '@material-ui/core/AppBar'
 
 const defaultUser = {
   name:"Benjamin Lim",
@@ -13,6 +14,7 @@ const defaultUser = {
   contactNumber:"9695 2546",
   email:"benjaminvolunteer@gmail.com",
   lorem:"lorem ipsum dolor sit amet",
+  loremIpsum:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
   buddy:"Angeline Soh",
   birthDate:"03/04/1999",
   memberSince:"04/03/2010",
@@ -24,10 +26,10 @@ const defaultUser = {
 const Profile = () => (
   <Grid container direction="column">
     <Grid item>
-      This is the header
+      <AppBar />
     </Grid>
     <Grid item container>
-      <Grid item xs={1} sm={2} />
+      <Grid item xs={false} sm={2} />
       <Grid item container direction="column" xs={12} sm={8} spacing={4}>
         <Grid item>
           <MyProfile user={defaultUser} />
@@ -47,7 +49,7 @@ const Profile = () => (
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={1} sm={2} />
+      <Grid item xs={false} sm={2} />
     </Grid>
   </Grid>
 )
