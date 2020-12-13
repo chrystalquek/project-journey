@@ -17,6 +17,7 @@ const NavBar: FC = () => (
     <Menu theme="light" mode="horizontal" defaultSelectedKeys={['Home']}>
       <Menu.Item key="Home">Home</Menu.Item>
       <Menu.Item key="Events">Events</Menu.Item>
+      <Menu.Item key="Volunteers">Volunteers</Menu.Item>
     </Menu>
   </Header>
 );

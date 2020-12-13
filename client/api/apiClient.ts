@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { VolunteerData } from '../reducers/volunteer';
 import { LoginRequest } from './request';
 import { LoginResponse } from './response';
 
@@ -19,20 +20,27 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
+  // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'post');
+  }
+
+  // volunteer
+  async getAllVolunteers(): Promise<Array<VolunteerData>> {
+    return this.send({}, 'volunteer', 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
     };
 
     const config: AxiosRequestConfig = { headers };
 
     switch (method) {
       case 'get':
-        return (await this.axiosInstance.get(path, config)).data;
+        return (await this.axiosInstance.get(path, config)).data.data; // data is nested
       case 'post':
         return (await this.axiosInstance.post(path, request, config)).data;
       case 'put':
