@@ -1,10 +1,10 @@
 import React from 'react';
-import 'antd/dist/antd.css';
-import '../styles/vars.css';
 import type { AppProps } from 'next/app';
-import '../styles/globals.css';
+import 'antd/dist/antd.css';
+import '@styles/vars.css';
+import '@styles/globals.css';
 import { Provider } from 'react-redux';
-import store from '../reducers/store';
+import store from '@redux/store';
 
 function App({ Component, pageProps }: AppProps) {
   return (
