@@ -56,26 +56,26 @@ export enum VOLUNTEER_ROLE {
 }
 
 export type VolunteerData = {
-  _id: String,
+  _id: string,
   name: string,
-  password: String,
-  identificationNumber: String,
-  address: String,
-  mobileNumber: String,
+  password: string,
+  identificationNumber: string,
+  address: string,
+  mobileNumber: string,
   birthday: Date,
-  email: String,
+  email: string,
   socialMediaPlatform: SOCIAL_MEDIA_PLATFORMS,
-  nickname?: String,
-  photoUrl: String,
+  nickname?: string,
+  photoUrl: string,
   matchedVolunteer: Number,
   gender: GENDER_TYPES,
   citizenship: CITIZENSHIP_TYPES,
   race: RACE_TYPES,
-  orgnanization: String,
-  position: String,
+  orgnanization: string,
+  position: string,
   status: VOLUNTEER_STATUS,
   role: VOLUNTEER_ROLE,
-  referral: String,
+  referral: string,
 
   hasVolunteered: Boolean,
   hasChildrenExperience: Boolean,
@@ -83,17 +83,17 @@ export type VolunteerData = {
   hasFirstAidCertification: Boolean,
 
   leadershipInterest: LEADERSHIP_INTEREST_TYPES,
-  description: String,
-  interests: Array<String>,
+  description: string,
+  interests: Array<string>,
   personality: PERSONALITY_TYPES,
-  skills: Array<String>,
-  volunteerReason: String,
-  volunteerContribution: String,
+  skills: Array<string>,
+  volunteerReason: string,
+  volunteerContribution: string,
   volunteerFrequency: Number,
 
   // Remarks
-  volunteerRemarks: String,
-  administratorRemarks: String,
+  volunteerRemarks: string,
+  administratorRemarks: string,
 }
 
 export type VolunteerState = {
