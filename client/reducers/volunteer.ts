@@ -109,28 +109,18 @@ const volunteerSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // Simplify immutable updates with redux toolkit
+    // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(volunteer.pending, (state) => {
-      return {
-        ...state,
-        volunteers: []
-      };
-    })
-      .addCase(volunteer.fulfilled, (state, action) => {
-        const { payload } = action;
-        return {
-          ...state,
-          volunteers: payload
-        }
-      })
-      .addCase(volunteer.rejected, (state) => {
-        return {
-          ...state,
-          volunteers: []
-        }
-      })
-      .addDefaultCase((state) => {
-        return state;
-      })
+      state.volunteers = [];
+    });
+    builder.addCase(volunteer.fulfilled, (state, action) => {
+      const { payload } = action;
+      state.volunteers = payload;
+    });
+    builder.addCase(volunteer.rejected, (state) => {
+      state.volunteers = [];
+    });
   },
 });
 
