@@ -1,14 +1,15 @@
 import React, { FC, useEffect } from 'react';
 import Head from 'next/head';
 
+import {
+  makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+} from '@material-ui/core';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
 import { VolunteerData, VolunteerState } from '../../reducers/volunteer';
-import store from '../../reducers/store';
-import { makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 
 type VolunteerProfileProps = {
-  volunteer: VolunteerState
+  volunteers: VolunteerState
   getAllVolunteers: () => Promise<Array<VolunteerData>>
 }
 
@@ -19,18 +20,15 @@ const useStyles = makeStyles({
 });
 
 const VolunteerProfile: FC<VolunteerProfileProps> = ({
-  volunteer,
+  volunteers,
   getAllVolunteers,
 }: VolunteerProfileProps) => {
-
   const classes = useStyles();
 
+  // Only load on initial render to prevent infinite loop
   useEffect(() => {
     getAllVolunteers();
-  }, [volunteer]);
-
-  store.getState().volunteer?.volunteers.forEach(vol => console.log(vol.name))
-  volunteer?.volunteers.forEach(vol => console.log(vol.name))
+  }, []);
 
   return (
     <>
@@ -48,8 +46,8 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {volunteer?.volunteers.map((row, index) => (
-              <TableRow key={index}>
+            {volunteers?.volunteers.map((row) => (
+              <TableRow key={row.email}>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>?volunteer type</TableCell>
                 <TableCell>?member since</TableCell>

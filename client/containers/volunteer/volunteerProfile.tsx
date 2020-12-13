@@ -3,15 +3,12 @@ import getAllVolunteers from '../../actions/volunteer';
 import VolunteerProfile from '../../components/volunteer/volunteerProfile';
 import { StoreState } from '../../reducers/store';
 
-const mapStateToProps = (state: StoreState) => {
-  console.log(state.volunteer);
-  return {
-    volunteers: state.volunteer
-  }
-};
+const mapStateToProps = (state: StoreState) => ({
+  volunteers: state.volunteer,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-  getAllVolunteers: () => dispatch(getAllVolunteers())
+  getAllVolunteers: () => dispatch(getAllVolunteers()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VolunteerProfile);
