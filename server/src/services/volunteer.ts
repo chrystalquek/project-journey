@@ -81,6 +81,16 @@ export const getVolunteer = async (email: string) => {
 };
 
 /**
+ * Gets all volunteer details.
+ */
+export const getAllVolunteers = async () => {
+  const volunteers = await Volunteer.find().lean().exec();
+
+  return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
+};
+
+
+/**
  * Updates volunteer data with email
  * @param email
  * @param updatedVolunteerData
@@ -107,7 +117,7 @@ export const deleteVolunteer = async (email: string) => {
  * @param keywords to be searched in volunteers names
  */
 export const findVolunteers = async (keywords: string) => {
-  const volunteers = await Volunteer.find({ $text: { $search: keywords } });
+  const volunteers = await Volunteer.find({ $text: { $search: keywords } }).lean().exec();
 
   return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
 };

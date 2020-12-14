@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { body, param } from 'express-validator';
 import { VolunteerData } from '../types';
 import {
-  addNewVolunteer, deleteVolunteer, findVolunteers, getVolunteer, updateVolunteerDetails,
+  addNewVolunteer, deleteVolunteer, findVolunteers, getAllVolunteers, getVolunteer, updateVolunteerDetails,
 } from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -115,6 +115,28 @@ const getVolunteerDetails = async (req: express.Request, res: express.Response) 
   }
 };
 
+const getAllVolunteerDetails = async (req: express.Request, res: express.Response) => {
+  try {
+    // handles both searching volunteers and returning all volunteers
+    if (req.query.name) {
+      const volunteersDetails = await findVolunteers(req.query.name as string);
+      res.status(HTTP_CODES.OK).json({
+        data: volunteersDetails,
+      });
+    } else {
+      const volunteersDetails = await getAllVolunteers();
+      res.status(HTTP_CODES.OK).json({
+        data: volunteersDetails,
+      });
+    }
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      message: error,
+    });
+  }
+}
+
+
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
     await updateVolunteerDetails(req.body.email as string, req.body as Partial<VolunteerData>);
@@ -138,24 +160,11 @@ const removeVolunteer = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const searchVolunteers = async (req: express.Request, res: express.Response) => {
-  try {
-    const volunteersDetails = await findVolunteers(req.query.name as string);
-    res.status(HTTP_CODES.OK).json({
-      data: volunteersDetails,
-    });
-  } catch (error) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
-    });
-  }
-};
-
 export default {
   getValidations,
   createNewVolunteer,
   getVolunteerDetails,
+  getAllVolunteerDetails,
   removeVolunteer,
   updateVolunteer,
-  searchVolunteers,
 };
