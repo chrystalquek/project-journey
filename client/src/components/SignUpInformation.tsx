@@ -6,7 +6,7 @@ import DataRow from '@components/common/DataRow'
 
 const SignUpInformation = ({ user }) => {
   return (
-    <Grid container direction='column'>
+    <Grid style={{padding:'20px 20px'}} container direction='column'>
       <Grid item>
         <Typography variant='h4'>Sign Up Information</Typography>
       </Grid>
