@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import apiClient from '../api/apiClient';
+import apiClient from '../../api/apiClient';
 
 const getAllVolunteers = createAsyncThunk(
   'volunteer',

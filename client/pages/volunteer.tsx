@@ -1,1 +1,1 @@
-export { default } from '../containers/volunteer/volunteerProfile';
+export { default } from '../src/containers/volunteer/VolunteerProfile';
