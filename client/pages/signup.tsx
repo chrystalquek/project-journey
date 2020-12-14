@@ -2,8 +2,8 @@ import {
   Layout, Divider, Row, Col, Card,
 } from 'antd';
 import Link from 'next/link';
-import NavBar from '../../components/common/NavBar';
-import Footer from '../../components/common/Footer';
+import NavBar from '../src/components/common/NavBar';
+import Footer from '../src/components/common/Footer';
 
 const { Content } = Layout;
 

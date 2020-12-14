@@ -2,7 +2,7 @@ import {
   Layout,
 } from 'antd';
 import { FC } from 'react';
-import styles from '../../styles/common/footer.styles';
+import styles from '@styles/common/footer.styles';
 
 const { Footer } = Layout;
 

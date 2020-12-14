@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { VolunteerData } from '../reducers/volunteer';
+import { VolunteerData } from '../redux/reducers/volunteer';
 import { LoginRequest } from './request';
 import { LoginResponse } from './response';
 

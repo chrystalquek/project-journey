@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import userReducer, { UserState } from './user';
-import volunteerReducer, { VolunteerState } from './volunteer';
+import userReducer, { UserState } from './reducers/user';
+import volunteerReducer, { VolunteerState } from './reducers/volunteer';
 
 export type StoreState = {
   user: UserState
