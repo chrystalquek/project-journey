@@ -20,6 +20,7 @@
     "@reduxjs/toolkit": "^1.5.0",
     "antd": "^4.9.1",
     "axios": "^0.21.0",
+    "fontsource-roboto": "^3.0.3",
     "next": "^10.0.3",
     "next-redux-wrapper": "^6.0.2",
     "react": "16.13.1",
