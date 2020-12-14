@@ -11,28 +11,28 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: "'Open Sans', sans-serif",
     h1: {
-      fontSize: "2rem",
-      fontWeight: 700
+      fontSize: '2rem',
+      fontWeight: 700,
     },
     h2: {
-      fontSize: "1.5rem",
-      fontWeight: 700
+      fontSize: '1.5rem',
+      fontWeight: 700,
     },
     h3: {
-      fontSize: "1.25rem",
-      fontWeight: 500
+      fontSize: '1.25rem',
+      fontWeight: 500,
     },
     h4: {
-      fontSize: "1rem",
-      fontWeight: 600
+      fontSize: '1rem',
+      fontWeight: 600,
     },
     body1: {
-      fontSize: "0.9rem",
+      fontSize: '0.9rem',
       fontWeight: 500,
-      color: "#595858",
+      color: '#595858',
     },
-  }
-})
+  },
+});
 
 function App({ Component, pageProps }: AppProps) {
   return (
