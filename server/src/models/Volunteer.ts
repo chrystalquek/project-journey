@@ -9,6 +9,9 @@ export const setPassword = (value: string) => bcrypt.hashSync(value, 10);
 export type VolunteerModel = VolunteerData & mongoose.Document;
 
 // ENUM Types
+// should we declare as enums instead?
+// enum strings can be all caps, snakecase?
+// same for client
 export const GENDER_TYPES = ['male', 'female'];
 export const CITIZENSHIP_TYPES = ['singapore', 'permanent_resident', 'foreigner'];
 export const RACE_TYPES = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
@@ -39,6 +42,7 @@ export const PERSONALITY_TYPES = [
   'ESFP_A',
 ];
 export const SOCIAL_MEDIA_PLATFORMS = ['instagram', 'facebook', 'snapchat', 'email', 'other'];
+export const VOLUNTEER_TYPE = ['Ad-hoc', 'Commited', 'Lead', 'Admin'];
 
 export const VolunteerSchemaDefinition = {
   _id: mongoose.Types.ObjectId,
@@ -112,6 +116,10 @@ export const VolunteerSchemaDefinition = {
   volunteerReason: String,
   volunteerContribution: String,
   volunteerFrequency: Number,
+  volunteerType: {
+    type: String,
+    enum: VOLUNTEER_TYPE,
+  },
 
   // Remarks
   volunteerRemarks: String,
