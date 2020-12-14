@@ -6,7 +6,7 @@ import DataRow from '@components/common/DataRow'
 
 const ContactInformation = ({ user }) => {
   return (
-    <Grid style={{padding:'20px 20px'}} container direction='column'>
+    <Grid style={{padding:'20px 20px'}} container direction='column' sm={12} md={'auto'}>
       <Grid item>
         <Typography variant='h4'>Contact Information</Typography>
       </Grid>

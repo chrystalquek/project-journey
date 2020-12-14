@@ -1,6 +1,6 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import MyProfile from '@components/MyProfile'
+import ProfileHeader from '@components/ProfileHeader'
 import NotesForAdmin from '@components/NotesForAdmin'
 import ContactInformation from '@components/ContactInformation'
 import SignUpInformation from '@components/SignUpInformation'
@@ -29,27 +29,27 @@ const Profile = () => (
       <AppBar />
     </Grid>
     <Grid item container>
-      <Grid item xs={false} sm={2} />
-      <Grid item container direction="column" xs={12} sm={8} spacing={2}>
+      <Grid item xs={false} sm={false} md={2} />
+      <Grid item container direction="column" xs={12} sm={12} md={8} spacing={2}>
         <Grid item>
-          <MyProfile user={defaultUser} />
+          <ProfileHeader user={defaultUser} />
         </Grid>
         <Grid item container>
-          <Grid item xs={12} sm={7}>
+          <Grid item xs={12} sm={12} md={7}>
             <NotesForAdmin user={defaultUser} />
           </Grid>
-          <Grid item xs={12} sm={5}>
+          <Grid item xs={12} sm={12} md={5}>
             <ContactInformation user={defaultUser} />
           </Grid>
-          <Grid item xs={12} sm={7}>
+          <Grid item xs={12} sm={12} md={7}>
             <SignUpInformation user={defaultUser} />
           </Grid>
-          <Grid item xs={12} sm={5}>
+          <Grid item xs={12} sm={12} md={5}>
             <EventCount user={defaultUser} />
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={false} sm={2} />
+      <Grid item xs={false} sm={false} md={2} />
     </Grid>
   </Grid>
 )

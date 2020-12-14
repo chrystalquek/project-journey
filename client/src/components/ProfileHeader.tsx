@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const MyProfile = ({ isMobile, user }) => {
+const ProfileHeader = ({ isMobile, user }) => {
   const classes = useStyles()
   const direction = isMobile ? 'column' : 'row'
   const justify = isMobile ? 'center' : 'flex-start'
@@ -59,4 +59,4 @@ const mapSizesToPros = ({ width }) => ({
   isMobile: width < 600,
 })
 
-export default withSizes(mapSizesToPros)(MyProfile)
+export default withSizes(mapSizesToPros)(ProfileHeader)
