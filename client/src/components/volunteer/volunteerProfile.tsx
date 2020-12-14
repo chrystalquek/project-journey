@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
-import { VolunteerData, VolunteerState } from '../../reducers/volunteer';
+import { VolunteerData, VolunteerState } from '../../../redux/reducers/volunteer';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
@@ -15,7 +15,9 @@ type VolunteerProfileProps = {
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    width: 1200,
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
 });
 
@@ -36,26 +38,26 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
         <title>Volunteer Profiles</title>
       </Head>
       <NavBar />
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Volunteer Type</TableCell>
-              <TableCell>Member Since</TableCell>
+
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell><b>Name</b></TableCell>
+            <TableCell><b>Volunteer Type</b></TableCell>
+            <TableCell><b>Member Since</b></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {volunteers?.volunteers.map((vol) => (
+            <TableRow key={vol.email}>
+              <TableCell><b>{vol.name}</b></TableCell>
+              <TableCell>{vol.volunteerType}</TableCell>
+              <TableCell>{new Date(vol.created_at).toLocaleDateString()}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {volunteers?.volunteers.map((vol) => (
-              <TableRow key={vol.email}>
-                <TableCell>{vol.name}</TableCell>
-                <TableCell>{vol.volunteerType}</TableCell>
-                <TableCell>{new Date(vol.created_at).toLocaleDateString()}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          ))}
+        </TableBody>
+      </Table>
+
       <Footer />
     </>
   );
