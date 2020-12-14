@@ -7,6 +7,7 @@ export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | 'accepted' | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
+export type EventSearchType = 'all' | 'upcoming' | 'past'
 
 export type VolunteerData = {
     _id: string;

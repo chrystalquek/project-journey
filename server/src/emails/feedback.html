@@ -281,6 +281,11 @@
         border: none;
         padding: 10px 20px;
         margin: 20px;
+        cursor: pointer;
+      }
+
+      input:focus, input:active {
+        outline:none!important;
       }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -298,7 +303,7 @@
       }
       @media only screen and (max-width: 500px) {
         .button {
-          width: 100% !important;
+          max-width: 100% !important;
         }
       }
     </style>
@@ -350,62 +355,20 @@
                 <h1>Hi {{name}}!👋</h1>
                 <br />
                 <p>
-                  Thank you for signing up for
+                  Thank you for attending
                   <strong>{{event_title}}</strong>!
                 </p>
                 <p>
-                  We look forward to meeting you! Please find details below
-                  regarding the session:
+                  Here at Blessings, feedback is important to us. It would mean
+                  a lot to us if you could take 5 minutes to complete the
+                  feedback form below.
                 </p>
-
-                <ul class="details">
-                  <li><strong>Date:</strong> {{date}}</li>
-                  <li><strong>Time:</strong> {{time_start}} - {{time_end}}</li>
-                  <li><strong>Location:</strong> {{location_details}}</li>
-                </ul>
-
-                <p>
-                  <strong>Important information to note:</strong><br />
-                  {{event_information}}
-                </p>
-              </td>
-            </tr>
-            <tr class="content section-coloured">
-              <td class="content-cell dark">
-                <h2>Pointers before attending our session</h2>
-                <ul>
-                  <li><p style="color: black">Come with an open mind</p></li>
-                  <li>
-                    <p style="color: black">
-                      Make a mental note of all the questions you'd like to ask
-                      our team, we love questions.
-                    </p>
-                  </li>
-                  <li>
-                    <p style="color: black">
-                      Feel free to bring food/snacks to eat during the session
-                    </p>
-                  </li>
-                  <li>
-                    <p style="color: black">
-                      Pens and Papers are available should you want to take down
-                      notes, please approach one of our team members if you need
-                      such materials.
-                    </p>
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr class="content">
-              <td class="content-cell questions">
-                <p>
-                  Should you have any specific queries regarding this event,
-                  please contact <em>{{POC_name}}</em> on
-                  <em> {{POC_mobile_number}}</em>.
-                  <br />
-                  We look forward to seeing you soon.
-                </p>
-                <p class="signature">Team Blessings</p>
+                <div style="text-align: center">
+                  <a href="" target="_blank">
+                    <input type="button" value="Click here to submit a feedback" class="button">
+                  </a>
+                  <p class="signature">Team Blessings</p>
+                </div>
               </td>
             </tr>
           </table>

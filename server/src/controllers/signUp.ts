@@ -1,10 +1,10 @@
 import express from 'express';
 import { body } from 'express-validator';
 import signUpService from '../services/signUp';
-import { SIGN_UP_STATUS } from './../models/SignUp';
-import { SignUpData, SignUpIdType } from '../types';
+import { SIGN_UP_STATUS } from '../models/SignUp';
+import { EventSearchType, SignUpData, SignUpIdType } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
-import {stringEnumValidator} from "../helpers/validation";
+import { stringEnumValidator } from '../helpers/validation';
 
 export type SignUpValidatorMethod = 'createSignUp';
 
@@ -16,7 +16,7 @@ const getValidations = (method: SignUpValidatorMethod) => {
         body('userId', 'user id does not exist').isString(),
         body('status', 'status does not exist').custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
         body('preferences', 'preferences does not exist').isArray().notEmpty(),
-        body('isRestricted', 'is restricted does not exist').isBoolean()
+        body('isRestricted', 'is restricted does not exist').isBoolean(),
       ];
     }
     default: {
@@ -44,18 +44,20 @@ const createSignUp = async (
 };
 
 /**
- * Retrieves a sign up with the specified sign up, event, or volunteer id. 
+ * Retrieves sign ups with the specified sign up, event, or volunteer id.
  * @param req.params.id one of the ids in the sign up
  * @param req.params.idType type of the specified id
  * @return userSignUpDetails the sign up data with the specified id
  */
-const readSignUp = async (
+const readSignUps = async (
   req: express.Request,
   res: express.Response,
 ): Promise<void> => {
   try {
     const { id, idType } = req.params;
-    const userSignUpDetails = await signUpService.readSignUp(id, idType as SignUpIdType);
+    const userSignUpDetails: SignUpData[] = await signUpService.readSignUps(
+      id, idType as SignUpIdType,
+    );
 
     res.status(HTTP_CODES.OK).json(userSignUpDetails);
   } catch (err) {
@@ -69,7 +71,7 @@ const readSignUp = async (
  * Updates an existing sign up
  * @param req.params.id one of the ids in the sign up
  * @param req.params.idType type of the specified id
- * @param req.body the updated sign up data 
+ * @param req.body the updated sign up data
  */
 const updateSignUp = async (req: express.Request, res: express.Response) => {
   try {
@@ -78,7 +80,7 @@ const updateSignUp = async (req: express.Request, res: express.Response) => {
 
     await signUpService.updateSignUp(id as string, idType as SignUpIdType, updatedFields);
 
-    res.status(HTTP_CODES.OK).send(); 
+    res.status(HTTP_CODES.OK).send();
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -105,7 +107,7 @@ const deleteSignUp = async (req: express.Request, res: express.Response) => {
 
 export default {
   createSignUp,
-  readSignUp,
+  readSignUps,
   updateSignUp,
   deleteSignUp,
   getValidations,
