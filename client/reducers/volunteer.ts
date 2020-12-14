@@ -1,23 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 import volunteer from '../actions/volunteer';
 
-export enum GENDER_TYPES {
+export enum GENDER {
   'male', 'female'
 }
 
-export enum CITIZENSHIP_TYPES {
+export enum CITIZENSHIP {
   'singapore', 'permanent_resident', 'foreigner'
 }
 
-export enum RACE_TYPES {
+export enum RACE {
   'chinese', 'malay', 'indian', 'caucasian', 'other'
 }
 
-export enum LEADERSHIP_INTEREST_TYPES {
+export enum LEADERSHIP_INTEREST {
   'yes', 'no', 'maybe'
 }
 
-export enum PERSONALITY_TYPES {
+export enum PERSONALITY {
   'INTJ_A',
   'INTJ_T',
   'INTP_A',
@@ -55,45 +55,52 @@ export enum VOLUNTEER_ROLE {
   'editor', 'admin', 'lead'
 }
 
+export enum VOLUNTEER_TYPE {
+  'Ad-hoc', 'Commited', 'Lead', 'Admin'
+}
+
 export type VolunteerData = {
   _id: string,
   name: string,
-  password: string,
-  identificationNumber: string,
+  password: string, // rm?
+  identificationNumber: string, // rm?
   address: string,
   mobileNumber: string,
   birthday: Date,
   email: string,
   socialMediaPlatform: SOCIAL_MEDIA_PLATFORMS,
-  nickname?: string,
+  nickname: string,
   photoUrl: string,
-  matchedVolunteer: Number,
-  gender: GENDER_TYPES,
-  citizenship: CITIZENSHIP_TYPES,
-  race: RACE_TYPES,
+  matchedVolunteer: number,
+  gender: GENDER,
+  citizenship: CITIZENSHIP,
+  race: RACE,
   orgnanization: string,
   position: string,
   status: VOLUNTEER_STATUS,
   role: VOLUNTEER_ROLE,
   referral: string,
 
-  hasVolunteered: Boolean,
-  hasChildrenExperience: Boolean,
-  hasVolunteeredExternally: Boolean,
-  hasFirstAidCertification: Boolean,
+  hasVolunteered: boolean,
+  hasChildrenExperience: boolean,
+  hasVolunteeredExternally: boolean,
+  hasFirstAidCertification: boolean,
 
-  leadershipInterest: LEADERSHIP_INTEREST_TYPES,
+  leadershipInterest: LEADERSHIP_INTEREST,
   description: string,
-  interests: Array<string>,
-  personality: PERSONALITY_TYPES,
-  skills: Array<string>,
+  interests: [string],
+  personality: PERSONALITY,
+  skills: [string],
   volunteerReason: string,
   volunteerContribution: string,
-  volunteerFrequency: Number,
+  volunteerFrequency: number,
+  volunteerType: VOLUNTEER_TYPE,
 
   // Remarks
   volunteerRemarks: string,
   administratorRemarks: string,
+
+  created_at: Date, // used for member since // is snake case not camel case
 }
 
 export type VolunteerState = {

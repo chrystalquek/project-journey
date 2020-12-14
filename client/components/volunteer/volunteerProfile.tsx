@@ -37,7 +37,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       </Head>
       <NavBar />
       <TableContainer>
-        <Table aria-label="simple table">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
@@ -46,11 +46,11 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {volunteers?.volunteers.map((row) => (
-              <TableRow key={row.email}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>?volunteer type</TableCell>
-                <TableCell>?member since</TableCell>
+            {volunteers?.volunteers.map((vol) => (
+              <TableRow key={vol.email}>
+                <TableCell>{vol.name}</TableCell>
+                <TableCell>{vol.volunteerType}</TableCell>
+                <TableCell>{new Date(vol.created_at).toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>
