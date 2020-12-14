@@ -21,14 +21,25 @@ const theme = createMuiTheme({
     h3: {
       fontSize: "1.25rem",
       fontWeight: 500
-    }
+    },
+    h4: {
+      fontSize: "0.9rem",
+      fontWeight: 600
+    },
+    body1: {
+      fontSize: "0.8rem",
+      fontWeight: 500,
+      color: "#595858",
+    },
   }
 })
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </Provider>
   );
 }

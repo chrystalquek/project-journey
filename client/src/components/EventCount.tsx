@@ -1,31 +1,21 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-
-const createRow = (header, data) => (
-  <Grid container item>
-    <Grid item xs={11}>
-      <Typography variant='caption'>{header}</Typography>
-    </Grid>
-    <Grid item xs={1}>
-      <Typography variant='caption'>{data}</Typography>
-    </Grid>
-  </Grid>
-)
+import ProfileDivider from '@components/common/ProfileDivider'
+import DataRow from '@components/common/DataRow'
 
 const EventCount = ({ user }) => {
   return (
     <Grid container direction='column'>
       <Grid item>
-        <Typography variant='subtitle1'>Event Count</Typography>
+        <Typography variant='h4'>Event Count</Typography>
       </Grid>
       <Grid item>
-        <Divider />
+        <ProfileDivider />
       </Grid>
-      {createRow('Volunteering Sessions:', user.volunteeringSessions)}
-      {createRow('Workshops:', user.workshops)}
-      {createRow('Hangouts:', user.hangouts)}
+      <DataRow header='Volunteering Sessions' data={user.volunteeringSessions} xs1={11} xs2={1}/>
+      <DataRow header='Workshops' data={user.workshops} xs1={11} xs2={1}/>
+      <DataRow header='Hangouts' data={user.hangouts} xs1={11} xs2={1}/>
     </Grid>
   )
 }

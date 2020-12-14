@@ -1,31 +1,21 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-
-const createRow = (header, data) => (
-  <Grid container item>
-    <Grid item xs={2}>
-      <Typography variant='caption'>{header}</Typography>
-    </Grid>
-    <Grid item xs={10}>
-      <Typography variant='caption'>{data}</Typography>
-    </Grid>
-  </Grid>
-)
+import ProfileDivider from '@components/common/ProfileDivider'
+import DataRow from '@components/common/DataRow'
 
 const ContactInformation = ({ user }) => {
   return (
     <Grid container direction='column'>
       <Grid item>
-        <Typography variant='subtitle1'>Contact Information</Typography>
+        <Typography variant='h4'>Contact Information</Typography>
       </Grid>
       <Grid item>
-        <Divider />
+        <ProfileDivider />
       </Grid>
-      {createRow('Tel. No.:', user.contactNumber)}
-      {createRow('E-mail:', user.email)}
-      {createRow('Lorem:', user.lorem)}
+      <DataRow header='Tel. No.' data={user.contactNumber} xs1={3} xs2={9}/>
+      <DataRow header='E-mail' data={user.email} xs1={3} xs2={9}/>
+      <DataRow header='Lorem' data={user.lorem} xs1={3} xs2={9}/>
     </Grid>
   )
 }

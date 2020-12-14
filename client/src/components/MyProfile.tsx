@@ -14,9 +14,12 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     textAlign: 'left',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       textAlign: 'center'
     }
+  },
+  link: {
+    color: '#00BADC'
   }
 }))
 
@@ -40,9 +43,13 @@ const MyProfile = ({ isMobile, user }) => {
         </Avatar>
       </Grid>
       <Grid item xs={12} sm={'auto'}>
-        <Typography variant='h6' className={classes.header}>{user.name}</Typography>
-        <Typography variant='caption' className={classes.header}>Volunteer Status: {user.volunteerStatus}</Typography><br/>
-        <Typography variant='caption' className={classes.header}>Become a commited volunteer</Typography>
+        <Typography variant='h2' className={classes.header}>{user.name}</Typography>
+        <Typography className={classes.header}>
+          <strong>Volunteer Status:</strong> {user.volunteerStatus}
+        </Typography>
+        <Typography className={`${classes.header} ${classes.link}`}>
+          <u>Become a commited volunteer</u>
+        </Typography>
       </Grid>
     </Grid>
   )

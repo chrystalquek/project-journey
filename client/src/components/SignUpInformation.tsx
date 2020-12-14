@@ -1,33 +1,23 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-
-const createRow = (header, data) => (
-  <Grid container item>
-    <Grid item xs={3}>
-      <Typography variant='caption'>{header}</Typography>
-    </Grid>
-    <Grid item xs={9}>
-      <Typography variant='caption'>{data}</Typography>
-    </Grid>
-  </Grid>
-)
+import ProfileDivider from '@components/common/ProfileDivider'
+import DataRow from '@components/common/DataRow'
 
 const SignUpInformation = ({ user }) => {
   return (
     <Grid container direction='column'>
       <Grid item>
-        <Typography variant='subtitle1'>Sign Up Information</Typography>
+        <Typography variant='h4'>Sign Up Information</Typography>
       </Grid>
       <Grid item>
-        <Divider />
+        <ProfileDivider />
       </Grid>
-      {createRow('Buddy:', user.buddy)}
-      {createRow('Date of birth:', user.birthDate)}
-      {createRow('Lorem:', user.lorem)}
-      {createRow('Lorem ipsum:', user.loremIpsum)}
-      {createRow('Member since:', user.memberSince)}
+      <DataRow header='Buddy' data={user.buddy} xs1={3} xs2={9}/>
+      <DataRow header='Date of birth' data={user.birthDate} xs1={3} xs2={9}/>
+      <DataRow header='Lorem' data={user.lorem} xs1={3} xs2={9}/>
+      <DataRow header='Lorem ipsum' data={user.loremIpsum} xs1={3} xs2={9}/>
+      <DataRow header='Member since' data={user.memberSince} xs1={3} xs2={9}/>
     </Grid>
   )
 }
