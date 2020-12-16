@@ -32,6 +32,15 @@ const theme = createMuiTheme({
       color: '#595858',
     },
   },
+  palette: {
+    primary: {
+      main: '#d0de39', //yellow green
+    },
+    secondary: {
+      light: '#e5f8fb', //light blue for background
+      main: '#00bbdc' //blue
+    },
+  }
 });
 
 function App({ Component, pageProps }: AppProps) {
