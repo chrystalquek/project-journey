@@ -6,8 +6,11 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+  grid: {
+    padding: '20px 20px'
+  },
   paper: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: theme.palette.grey[100],
     height: '50px',
     padding: '5px 10px',
   },
@@ -21,7 +24,7 @@ const NotesForAdmin = ({ user }) => {
     : 'No notes written.\nDouble click to leave a note for Admin.';
 
   return (
-    <Grid style={{ padding: '20px 20px' }} container direction="column">
+    <Grid className={classes.grid} container direction="column">
       <Grid item>
         <Typography variant="h4">Notes for Admin</Typography>
       </Grid>

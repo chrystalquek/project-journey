@@ -8,7 +8,7 @@ import withSizes from 'react-sizes';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
-    backgroundColor: '#D0DE39',
+    backgroundColor: theme.palette.primary.main,
     height: '70px',
     width: '70px',
   },
@@ -19,8 +19,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   link: {
-    color: '#00BADC',
+    color: theme.palette.secondary.main,
   },
+  grid: {
+    backgroundColor: theme.palette.secondary.light,
+    padding: '12px'
+  },
+  personIcon: {
+    fontSize: 40 
+  }
 }));
 
 const ProfileHeader = ({ isMobile, user }) => {
@@ -35,18 +42,17 @@ const ProfileHeader = ({ isMobile, user }) => {
       direction={direction}
       justify={justify}
       spacing={2}
-      style={{ backgroundColor: '#E5F8FB', padding: '12px' }}
+      className={classes.grid}
     >
       <Grid item xs={12} sm="auto">
         <Avatar className={classes.avatar}>
-          <PersonOutlineIcon style={{ fontSize: 40 }} />
+          <PersonOutlineIcon className={classes.personIcon} />
         </Avatar>
       </Grid>
       <Grid item xs={12} sm="auto">
         <Typography variant="h2" className={classes.header}>{user.name}</Typography>
         <Typography className={classes.header}>
-          <strong>Volunteer Status:</strong>
-          {' '}
+          <strong>Volunteer Status: </strong>
           {user.volunteerStatus}
         </Typography>
         <Typography className={`${classes.header} ${classes.link}`}>

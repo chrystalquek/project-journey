@@ -45,7 +45,7 @@ const Profile = () => (
             <SignUpInformation user={defaultUser} />
           </Grid>
           <Grid item xs={12} md={5}>
-            <EventCount user={defaultUser} />``
+            <EventCount user={defaultUser} />
           </Grid>
         </Grid>
       </Grid>

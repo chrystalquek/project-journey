@@ -6,8 +6,11 @@ import DataRow from '@components/common/DataRow';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+  grid: {
+    padding: '20px 20px'
+  },
   link: {
-    color: '#00BADC',
+    color: theme.palette.secondary.main,
   },
 }));
 
@@ -15,7 +18,7 @@ const EventCount = ({ user }) => {
   const classes = useStyles();
 
   return (
-    <Grid style={{ padding: '20px 20px' }} container direction="column">
+    <Grid className={classes.grid} container direction="column">
       <Grid item>
         <Typography variant="h4">Event Count</Typography>
       </Grid>
