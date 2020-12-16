@@ -5,6 +5,8 @@ import { VolunteerData } from '../types';
 import {
   addNewVolunteer, deleteVolunteer, findVolunteers, getAllVolunteers, getVolunteer, updateVolunteerDetails,
 } from '../services/volunteer';
+import jwt from 'express-jwt';
+import { accessTokenSecret } from '../helpers/auth';
 
 import HTTP_CODES from '../constants/httpCodes';
 import VALIDATOR from '../helpers/validation';
@@ -84,6 +86,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.interests.optional(),
         VALIDATOR.personalityType.optional(),
         VALIDATOR.skills.optional(),
+        VALIDATOR.administratorRemarks.optional(),
       ];
     }
     default:
@@ -136,6 +139,17 @@ const getAllVolunteerDetails = async (req: express.Request, res: express.Respons
   }
 }
 
+const checkUpdateRights = () => [
+  jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
+
+  (req, res, next) => {
+    if (req.body.administratorRemarks && req.user.role != 'Admin') {
+      return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    }
+
+    next();
+  },
+];
 
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
@@ -166,5 +180,6 @@ export default {
   getVolunteerDetails,
   getAllVolunteerDetails,
   removeVolunteer,
+  checkUpdateRights,
   updateVolunteer,
 };
