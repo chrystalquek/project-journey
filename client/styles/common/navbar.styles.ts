@@ -1,7 +1,7 @@
 import { CSSProperties } from 'react';
 
 const header: CSSProperties = {
-  display: "flex",
+  display: 'flex',
   // position: 'fixed',
   // zIndex: 1,
   // width: '100%',

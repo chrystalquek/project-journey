@@ -7,7 +7,8 @@
       "@constants/*": ["utils/constants/*"],
       "@redux/*": ["redux/*"],
       "@utils/*": ["utils/*"],
-      "@public/*": ["public/*"]
+      "@public/*": ["public/*"],
+      "@type/*": ["types/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

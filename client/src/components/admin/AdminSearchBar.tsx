@@ -1,7 +1,5 @@
-const AdminSearchBar = () => {
-  return (
-    <div>THIS IS A SEARCH BAR!</div>
-  )
-};
+const AdminSearchBar = () => (
+  <div>THIS IS A SEARCH BAR!</div>
+);
 
 export default AdminSearchBar;
