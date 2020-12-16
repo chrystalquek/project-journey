@@ -29,27 +29,27 @@ const Profile = () => (
       <AppBar />
     </Grid>
     <Grid item container>
-      <Grid item xs={false} sm={false} md={2} />
-      <Grid item container direction="column" xs={12} sm={12} md={8} spacing={2}>
+      <Grid item md={2} />
+      <Grid item container direction="column" xs={12} md={8} spacing={2}>
         <Grid item>
           <ProfileHeader user={defaultUser} />
         </Grid>
         <Grid item container>
-          <Grid item xs={12} sm={12} md={7}>
+          <Grid item xs={12} md={7}>
             <NotesForAdmin user={defaultUser} />
           </Grid>
-          <Grid item xs={12} sm={12} md={5}>
+          <Grid item xs={12} md={5}>
             <ContactInformation user={defaultUser} />
           </Grid>
-          <Grid item xs={12} sm={12} md={7}>
+          <Grid item xs={12} md={7}>
             <SignUpInformation user={defaultUser} />
           </Grid>
-          <Grid item xs={12} sm={12} md={5}>
-            <EventCount user={defaultUser} />
+          <Grid item xs={12} md={5}>
+            <EventCount user={defaultUser} />``
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={false} sm={false} md={2} />
+      <Grid item md={2} />
     </Grid>
   </Grid>
 );
