@@ -82,6 +82,8 @@ const volunteerFrequency = body('volunteerFrequency').isNumeric();
 const volunteerContribution = body('volunteerContribution').isString();
 const volunteerRemark = body('volunteerRemark').isString().optional();
 
+const administratorRemarks = body('administratorRemarks');
+
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request, res: express.Response, next: Function) => {
   await Promise.all(validations.map((validation: ValidationChain) => validation.run(req)));
@@ -121,4 +123,5 @@ export default {
   volunteerFrequency,
   volunteerContribution,
   volunteerRemark,
+  administratorRemarks,
 };
