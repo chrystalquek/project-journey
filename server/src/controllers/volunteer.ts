@@ -143,7 +143,7 @@ const checkUpdateRights = () => [
   jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
 
   (req, res, next) => {
-    if (req.body.administratorRemarks && req.user.role != 'Admin') {
+    if (req.body.administratorRemarks && req.user.role != 'admin') {
       return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
     }
 
