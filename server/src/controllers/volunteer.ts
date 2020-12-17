@@ -36,6 +36,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.race,
         VALIDATOR.organization,
         VALIDATOR.position,
+        VALIDATOR.volunteerType,
 
         // Boolean responses
         VALIDATOR.hasVolunteered,
@@ -81,6 +82,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.organization.optional(),
         VALIDATOR.position.optional(),
         VALIDATOR.leadershipInterest.optional(),
+        VALIDATOR.volunteerType.optional(),
 
         VALIDATOR.description.optional(),
         VALIDATOR.interests.optional(),

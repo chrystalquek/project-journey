@@ -26,6 +26,7 @@ export type VolunteerData = {
     gender: string;
     citizenship: CitizenshipStatus;
     race: Race;
+    volunteerType: string;
 
     organization?: string;
     position?: string;
