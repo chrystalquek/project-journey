@@ -1,6 +1,6 @@
+import VolunteerProfile from '@components/volunteer/VolunteerProfile';
 import { connect } from 'react-redux';
 import getAllVolunteers from '../../../redux/actions/volunteer';
-import VolunteerProfile from '../../components/volunteer/VolunteerProfile';
 import { StoreState } from '../../../redux/store';
 
 const mapStateToProps = (state: StoreState) => ({
