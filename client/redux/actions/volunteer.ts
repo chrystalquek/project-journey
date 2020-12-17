@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../../api/apiClient';
 
 const getAllVolunteers = createAsyncThunk(
-  'volunteer',
+  'volunteer/getAll',
   async () => {
     const response = await apiClient.getAllVolunteers();
     return response;

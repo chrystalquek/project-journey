@@ -11,7 +11,7 @@ const initialState: VolunteerState = {
 };
 
 const volunteerSlice = createSlice({
-  name: 'volunteer',
+  name: 'volunteer/getAll',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -22,7 +22,7 @@ const volunteerSlice = createSlice({
     });
     builder.addCase(volunteer.fulfilled, (state, action) => {
       const { payload } = action;
-      state.volunteers = payload;
+      state.volunteers = payload.data;
     });
     builder.addCase(volunteer.rejected, (state) => {
       state.volunteers = [];

@@ -6,20 +6,18 @@ import {
 } from '@material-ui/core';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
-import { VolunteerData, VolunteerState } from '../../../redux/reducers/volunteer';
+import { VolunteerState } from '../../../redux/reducers/volunteer';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
-  getAllVolunteers: () => Promise<Array<VolunteerData>>
+  getAllVolunteers: () => Promise<void>
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   table: {
-    width: 1200,
-    marginLeft: 'auto',
-    marginRight: 'auto'
+    margin: theme.spacing(10),
   },
-});
+}));
 
 const VolunteerProfile: FC<VolunteerProfileProps> = ({
   volunteers,
@@ -39,26 +37,29 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       </Head>
       <NavBar />
 
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell><b>Name</b></TableCell>
-            <TableCell><b>Volunteer Type</b></TableCell>
-            <TableCell><b>Member Since</b></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {volunteers?.volunteers.map((vol) => (
-            <TableRow key={vol.email}>
-              <TableCell><b>{vol.name}</b></TableCell>
-              <TableCell>{vol.volunteerType}</TableCell>
-              <TableCell>{new Date(vol.created_at).toLocaleDateString()}</TableCell>
+      <TableContainer className={classes.table}>
+        <Table >
+          <TableHead>
+            <TableRow>
+              <TableCell><b>Name</b></TableCell>
+              <TableCell><b>Volunteer Type</b></TableCell>
+              <TableCell><b>Member Since</b></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {volunteers?.volunteers.map((vol) => (
+              <TableRow key={vol.email}>
+                <TableCell><b>{vol.name}</b></TableCell>
+                <TableCell>{vol.volunteerType}</TableCell>
+                <TableCell>{new Date(vol.created_at).toLocaleDateString()}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <Footer />
+
     </>
   );
 };
