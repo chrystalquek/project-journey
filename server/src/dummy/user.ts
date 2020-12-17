@@ -14,6 +14,7 @@ let dummyUser: VolunteerData = {
   race: "chinese",
   status: "verified",
   role: "lead",
+  volunteerType: "lead",
   leadershipInterest: "yes",
   description: "string",
   interests: ["string"],

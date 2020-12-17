@@ -42,7 +42,7 @@ export const PERSONALITY_TYPES = [
   'ESFP_A',
 ];
 export const SOCIAL_MEDIA_PLATFORMS = ['instagram', 'facebook', 'snapchat', 'email', 'other'];
-export const VOLUNTEER_TYPE = ['Ad-hoc', 'Commited', 'Lead', 'Admin'];
+export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'lead', 'admin'];
 
 export const VolunteerSchemaDefinition = {
   _id: mongoose.Types.ObjectId,
