@@ -3,19 +3,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
-import { makeStyles } from '@material-ui/core/styles';
+import PaddedGrid from '@components/common/PaddedGrid';
 
-const useStyles = makeStyles((theme) => ({
-  grid: {
-    padding: '20px 20px'
-  }
-}));
-
-const SignUpInformation = ({ user }) => {
-  const classes = useStyles()
-
-  return (
-    <Grid className={classes.grid} container direction="column">
+const SignUpInformation = ({ user }) => (
+    <PaddedGrid>
       <Grid item>
         <Typography variant="h4">Sign Up Information</Typography>
       </Grid>
@@ -27,8 +18,7 @@ const SignUpInformation = ({ user }) => {
       <DataRow header="Lorem" data={user.lorem} xs1={3} xs2={9} />
       <DataRow header="Lorem ipsum" data={user.loremIpsum} xs1={3} xs2={9} />
       <DataRow header="Member since" data={user.memberSince} xs1={3} xs2={9} />
-    </Grid>
+    </PaddedGrid>
   )
-}
 
 export default SignUpInformation;

@@ -3,12 +3,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
+import PaddedGrid from '@components/common/PaddedGrid';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  grid: {
-    padding: '20px 20px'
-  },
   link: {
     color: theme.palette.secondary.main,
   },
@@ -18,7 +16,7 @@ const EventCount = ({ user }) => {
   const classes = useStyles();
 
   return (
-    <Grid className={classes.grid} container direction="column">
+    <PaddedGrid>
       <Grid item>
         <Typography variant="h4">Event Count</Typography>
       </Grid>
@@ -31,7 +29,7 @@ const EventCount = ({ user }) => {
       <Grid item>
         <Typography className={classes.link}><u>View past events</u></Typography>
       </Grid>
-    </Grid>
+    </PaddedGrid>
   );
 };
 

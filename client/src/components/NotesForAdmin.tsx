@@ -4,11 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import ProfileDivider from '@components/common/ProfileDivider';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import PaddedGrid from './common/PaddedGrid';
 
 const useStyles = makeStyles((theme) => ({
-  grid: {
-    padding: '20px 20px'
-  },
   paper: {
     backgroundColor: theme.palette.grey[100],
     height: '50px',
@@ -24,7 +22,7 @@ const NotesForAdmin = ({ user }) => {
     : 'No notes written.\nDouble click to leave a note for Admin.';
 
   return (
-    <Grid className={classes.grid} container direction="column">
+    <PaddedGrid>
       <Grid item>
         <Typography variant="h4">Notes for Admin</Typography>
       </Grid>
@@ -36,7 +34,7 @@ const NotesForAdmin = ({ user }) => {
           <Typography>{desc}</Typography>
         </Paper>
       </Grid>
-    </Grid>
+    </PaddedGrid>
   );
 };
 
