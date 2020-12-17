@@ -49,7 +49,7 @@ const login = async (req: express.Request, res: express.Response) => {
 
       const userWithoutPassword: Omit<VolunteerData, 'password'> = userCopy;
 
-      const token = jwt.sign(userWithoutPassword, accessTokenSecret, {
+      const token = jwt.sign(JSON.parse(JSON.stringify(userWithoutPassword)), accessTokenSecret, {
         expiresIn: '24h',
       });
 
