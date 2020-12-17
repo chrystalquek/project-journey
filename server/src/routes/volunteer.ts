@@ -25,7 +25,7 @@ router.delete(
 );
 router.put(
   '/',
-  volunteerController.checkUpdateRights,
+  volunteerController.checkUpdateRights(),
   validate(volunteerController.getValidations('updateVolunteer')),
   volunteerController.updateVolunteer,
 );
