@@ -1,11 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LoginRequest } from './request';
-import { LoginResponse } from './response';
+import { GetVolunteersResponse, LoginResponse } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
+  getAllVolunteers(): Promise<GetVolunteersResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -19,14 +20,24 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
+  // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'post');
   }
 
+  // volunteer
+  async getAllVolunteers(): Promise<GetVolunteersResponse> {
+    return this.send({}, 'volunteer', 'get');
+  }
+
   protected async send(request: any, path: string, method: HttpMethod) {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     };
+
+    if (process.env.NODE_ENV === 'development') {
+      headers['Access-Control-Allow-Origin'] = '*';
+    }
 
     const config: AxiosRequestConfig = { headers };
 
