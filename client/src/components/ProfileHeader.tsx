@@ -3,8 +3,8 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import { makeStyles } from '@material-ui/core/styles';
-import withSizes from 'react-sizes';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -30,8 +30,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProfileHeader = ({ isMobile, user }) => {
+const ProfileHeader = ({ user }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const direction = isMobile ? 'column' : 'row';
   const justify = isMobile ? 'center' : 'flex-start';
 
@@ -63,8 +65,4 @@ const ProfileHeader = ({ isMobile, user }) => {
   );
 };
 
-const mapSizesToPros = ({ width }) => ({
-  isMobile: width < 600,
-});
-
-export default withSizes(mapSizesToPros)(ProfileHeader);
+export default ProfileHeader;
