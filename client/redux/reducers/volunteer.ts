@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from 'types/volunteer';
-import volunteer from '../actions/volunteer';
+import volunteer from '@redux/actions/volunteer';
 
 export type VolunteerState = {
   volunteers: Array<VolunteerData>;
