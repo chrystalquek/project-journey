@@ -8,11 +8,7 @@ type AdminEventsProps = {
   getAdminEvents: () => any,
 };
 
-const AdminEvents: FC<AdminEventsProps> = ({
-  events,
-  getAdminEvents
-}: AdminEventsProps) => {
-
+const AdminEvents: FC<AdminEventsProps> = ({ events, getAdminEvents }) => {
   useEffect(() => {
     getAdminEvents()
   }, [])

@@ -1,11 +1,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LoginRequest } from './request';
-import {EventData, LoginResponse} from './response';
+import { LoginResponse } from './response';
+import {EventData} from "@type/event";
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
+  getAllEvents(): Promise<Array<EventData>>
 }
 
 class AxiosApiClient implements ApiClient {
