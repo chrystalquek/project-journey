@@ -9,6 +9,13 @@ export type SignUpStatus = 'pending' | 'accepted' | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
 
+export type RoleData = {
+    name: string;
+    description: string;
+    capacity: number;
+    volunteers: Array<mongoose.Types.ObjectId>;
+}
+
 export type VolunteerData = {
     _id: string;
     name: string;
@@ -120,8 +127,7 @@ export type EventData = {
     location: string;
     deadline: Date;
     additionalInformation: string;
-    capacity: number;
-    volunteers: Array<mongoose.Types.ObjectId>;
+    roles: Array<RoleData>;
 }
 
 export type OpportunityData = EventData & {
