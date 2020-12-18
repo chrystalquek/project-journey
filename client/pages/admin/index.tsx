@@ -5,7 +5,7 @@ import NavBar from '@components/common/NavBar';
 const AdminHome = () => (
   <>
     <Head title="Blessings in a Bag" />
-    <NavBar />
+    {/*<NavBar />*/}
     <AdminEventsPage />
   </>
 );

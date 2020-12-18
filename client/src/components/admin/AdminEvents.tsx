@@ -14,11 +14,9 @@ const AdminEvents: FC<AdminEventsProps> = ({ events, getAdminEvents }) => {
   }, [])
 
   return (
-    <Grid container spacing={3}>
-      {events.map((event) => (
-        <Grid item xs={6}>
-          <AdminEvent event={event} />
-        </Grid>
+    <Grid container>
+      {events?.map((event) => (
+        <AdminEvent event={event} />
       ))}
     </Grid>
   );

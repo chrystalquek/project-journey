@@ -1,13 +1,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LoginRequest } from './request';
-import { LoginResponse } from './response';
+import {GetAllEventsResponse, LoginResponse} from './response';
 import {EventData} from "@type/event";
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
-  getAllEvents(): Promise<Array<EventData>>
+  getAllEvents(): Promise<GetAllEventsResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -25,8 +25,8 @@ class AxiosApiClient implements ApiClient {
     return this.send(request, 'user/login', 'post');
   }
 
-  async getAllEvents(): Promise<Array<EventData>> {
-    return this.send({}, 'event/multiple/all', 'get');
+  async getAllEvents(): Promise<GetAllEventsResponse> {
+    return this.send(null, 'event/multiple/all', 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {

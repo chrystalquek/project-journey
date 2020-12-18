@@ -7,7 +7,7 @@ export type AdminState = {
 }
 
 const initialState: AdminState = {
-  adminEvents: [],
+  adminEvents: null,
 };
 
 const adminSlice = createSlice({
@@ -17,14 +17,14 @@ const adminSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAdminEvents.pending, (state) => {
       state.adminEvents = [];
-    })
-      .addCase(getAdminEvents.fulfilled, (state, action) => {
-        const { payload } = action;
-        state.adminEvents = payload;
-      })
-      .addCase(getAdminEvents.rejected, (state) => {
-        state.adminEvents = [];
-      });
+    });
+    builder.addCase(getAdminEvents.fulfilled, (state, action) => {
+      console.log(action.payload.events)
+      state.adminEvents = action.payload.events;
+    });
+    builder.addCase(getAdminEvents.rejected, (state) => {
+      state.adminEvents = [];
+    });
   }
 });
 

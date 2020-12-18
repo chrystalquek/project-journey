@@ -1,52 +1,45 @@
 import Card from '@material-ui/core/Card';
-import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {reactLogo} from "@constants/imagePaths";
 import {Box} from "@material-ui/core";
+import {FC} from "react";
+import {EventData} from "@type/event";
+import {getVacancies, parseDate} from "@utils/event";
 
-const useStyles = makeStyles({
-  root: {
-    width: 345,
-    height: 345,
-    borderRadius: 8
-  },
-  media: {
-    height: 140,
-  },
-});
+type AdminEventProps = {
+  event: EventData,
+}
 
-// TODO: Use event data and populate
-const AdminEvent = ({ event }) => {
-  const classes = useStyles();
+const AdminEvent: FC<AdminEventProps> = ({ event }) => {
+  const vacancies = getVacancies(event);
+  const filled = vacancies[0];
+  const total = vacancies[1];
+  let date = parseDate(event.start_date, event.end_date)
 
   return (
-    <Card className={classes.root}>
+    <Card>
       <CardActionArea>
         <CardMedia
-          className={classes.media}
           image={reactLogo}
-          title="Contemplative Reptile"
+          title="TBD"
         />
         <CardContent>
           <Typography component="div">
             <Box fontWeight="fontWeightBold" my={1}>
-              Volunteering: Regular Session [Committed]
+              {event && event.name ? event.name : 'No event name provided'}
             </Box>
           </Typography>
           <Typography component="div">
             <Box fontWeight="fontWeightRegular" my={2}>
-              29th October 2020
-              2.30pm - 6.00pm
+              {date ? date : 'No date provided'}
             </Box>
           </Typography>
           <Typography component="div">
             <Box fontWeight="fontWeightRegular" my={1}>
-              10/15 vacancies left
+              {filled}/{total} vacancies left
             </Box>
           </Typography>
         </CardContent>

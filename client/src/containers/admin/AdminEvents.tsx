@@ -3,9 +3,9 @@ import {StoreState} from "@redux/store";
 import {getAdminEvents} from "@redux/actions/admin";
 import AdminEvents from "@components/admin/AdminEvents";
 
-const mapStateToProps = (state: StoreState) => {
-  return { adminEvents: state.admin.adminEvents }
-};
+const mapStateToProps = (state: StoreState) => ({
+  events: state.admin.adminEvents
+});
 
 const mapDispatchToProps = (dispatch) => ({
   getAdminEvents: () => dispatch(getAdminEvents())
