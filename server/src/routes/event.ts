@@ -10,34 +10,34 @@ const protectedRouter = createProtectedRouter(router);
 // @route   GET /event/:id
 // @desc    Get event by id
 // @access  Private
-router.get('/single/:id', eventController.readEvent);
+protectedRouter.get('/single/:id', eventController.readEvent);
 
 // @route   GET /event/:eventType
 // @desc    Get either all, upcoming, or past events
 // @access  Private
-router.get('/multiple/:eventType', eventController.readEvents);
+protectedRouter.get('/multiple/:eventType', eventController.readEvents);
 
 // @route   GET /event/:userId/:eventType
 // @desc    Get either all, upcoming, or past signed up events
 // @access  Private
-router.get('/signup/:userId/:eventType', eventController.readSignedUpEvents);
+protectedRouter.get('/signup/:userId/:eventType', eventController.readSignedUpEvents);
 
 // @route   DELETE /event
 // @desc    Delete a event by id
 // @access  Private
-router.delete('/:id', eventController.deleteEvent);
+protectedRouter.delete('/:id', authorize(['admin']), eventController.deleteEvent);
 
 // @route   PUT /event
 // @desc    Update a event by id
 // @access  Private
-router.put('/:id', eventController.updateEvent);
+protectedRouter.put('/:id', eventController.updateEvent);
 
 // @route   POST /event
 // @desc    Post a new event
 // @access  Private
-router.post(
+protectedRouter.post(
   '/',
-  // authorize(['admin']),
+  authorize(['admin']),
   validate(eventController.getValidations('createEvent')),
   eventController.createEvent,
 );
