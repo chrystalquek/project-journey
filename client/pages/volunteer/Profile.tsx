@@ -30,7 +30,7 @@ const Profile = () => (
     </Grid>
     <Grid item container>
       <Grid item md={2} />
-      <Grid item container direction="column" xs={12} md={8} spacing={2}>
+      <Grid item container direction="column" xs={12} md={8}>
         <Grid item>
           <ProfileHeader user={defaultUser} />
         </Grid>
