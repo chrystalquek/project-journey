@@ -1,8 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
-import SignUp from '../models/SignUp';
-import { SignUpData, SignUpIdType } from '../types';
+import mongoose from 'mongoose';
+import SignUp, { SignUpModel } from '../models/SignUp';
+
+import Event from '../models/Event';
+import { SignUpData, SignUpIdType, RoleData } from '../types';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
+
 const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>): Promise<void> => {
   try {
     const signUpSchemaData = new SignUp({
@@ -41,33 +45,65 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
   }
 };
 
+const addOrRemoveVolunteerFromEvent = async (eventId: string,
+  volunteerId: string, roleName: string, isVolunteerToBeAdded: boolean) => {
+  try {
+    const unupdatedEvent = await Event.findById(eventId);
+    const eventRoles = (unupdatedEvent?.roles)?.map((role) => {
+      if (role.name === roleName) {
+        if (isVolunteerToBeAdded) {
+          role.volunteers.push(volunteerId);
+        } else {
+          const index = role.volunteers.indexOf(volunteerId);
+          role.volunteers.splice(index, 1);
+        }
+      }
+      return role;
+    });
+
+    await Event.findOneAndUpdate({ _id: eventId }, { $set: { roles: eventRoles } });
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
 const updateSignUp = async (id: string, idType: SignUpIdType,
   updatedFields: SignUpData): Promise<void> => {
   try {
+    let oldSignUp;
     switch (idType) {
       case 'signUpId':
-        await SignUp.findOneAndUpdate(
+        oldSignUp = await SignUp.findOneAndUpdate(
           { sign_up_id: id },
           { $set: updatedFields },
-          { new: true },
         );
         break;
       case 'eventId':
-        await SignUp.findOneAndUpdate(
+        oldSignUp = await SignUp.findOneAndUpdate(
           { event_id: id },
           { $set: updatedFields },
-          { new: true },
         );
         break;
       case 'userId':
-        await SignUp.findOneAndUpdate(
+        oldSignUp = await SignUp.findOneAndUpdate(
           { user_id: id },
           { $set: updatedFields },
-          { new: true },
         );
         break;
       default:
         throw new Error(INVALID_SIGN_UP_ID_TYPE);
+    }
+
+    /** Add or remove volunteer from Event.volunteers array if SignUp.status changes */
+    /** status is an array if the sign up is accepted i.e. ["accepted", string] */
+    if (!Array.isArray(oldSignUp.status) && Array.isArray(updatedFields.status)) {
+      addOrRemoveVolunteerFromEvent(oldSignUp.event_id, oldSignUp.user_id,
+        updatedFields.status[1], true);
+    }
+
+    if (Array.isArray(oldSignUp.status) && !Array.isArray(updatedFields.status)) {
+      addOrRemoveVolunteerFromEvent(oldSignUp.event_id, oldSignUp.user_id,
+        oldSignUp.status[1], false);
     }
   } catch (err) {
     throw new Error(err.msg);

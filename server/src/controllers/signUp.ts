@@ -1,10 +1,9 @@
 import express from 'express';
 import { body } from 'express-validator';
+import { signUpStatusValidator } from '../helpers/validation';
 import signUpService from '../services/signUp';
-import { SIGN_UP_STATUS } from '../models/SignUp';
-import { EventSearchType, SignUpData, SignUpIdType } from '../types';
+import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
-import { stringEnumValidator } from '../helpers/validation';
 
 export type SignUpValidatorMethod = 'createSignUp';
 
@@ -14,7 +13,7 @@ const getValidations = (method: SignUpValidatorMethod) => {
       return [
         body('eventId', 'event id does not exist').isString(),
         body('userId', 'user id does not exist').isString(),
-        body('status', 'status does not exist').custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
+        body('status', 'status does not exist').custom((status: SignUpStatus) => signUpStatusValidator(status)),
         body('preferences', 'preferences does not exist').isArray().notEmpty(),
         body('isRestricted', 'is restricted does not exist').isBoolean(),
       ];

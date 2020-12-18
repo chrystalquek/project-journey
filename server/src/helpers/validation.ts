@@ -7,6 +7,7 @@ import {
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
+import { RoleData, SignUpStatus } from '../types';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
@@ -21,6 +22,24 @@ export const stringEnumValidator = (enumTypes: Array<string>, enumName: string, 
     throw new Error(`${enumName}: "${value}" must be either ${enumTypes.join(', ')}`);
   }
   return true;
+};
+
+export const signUpStatusValidator = (value: SignUpStatus) => {
+  if (value === 'pending' || value === 'rejected' || (Array.isArray(value) && value[0] === 'accepted')) {
+    return true;
+  }
+  return false;
+};
+
+export const roleCapacityValidator = (roles: Array<RoleData>) => {
+  let isValid = true;
+
+  roles.forEach((role) => {
+    if (role.capacity < role.volunteers.length) {
+      isValid = false;
+    }
+  });
+  return isValid;
 };
 
 const email = (emailMustBeUnique: boolean) => body('email').isEmail().normalizeEmail().custom(async (emailString: string) => {

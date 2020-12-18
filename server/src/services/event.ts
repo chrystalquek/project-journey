@@ -19,8 +19,7 @@ const createEvent = async (eventData: EventData): Promise<void> => {
       location: eventData.location,
       deadline: eventData.deadline,
       additional_information: eventData.additionalInformation,
-      capacity: eventData.capacity,
-      volunteers: eventData.volunteers,
+      roles: eventData.roles,
     });
     await eventSchemaData.save();
   } catch (err) {
