@@ -3,7 +3,7 @@ import { body, validationResult, ValidationChain } from 'express-validator';
 import express from 'express';
 import {
   CITIZENSHIP_TYPES, GENDER_TYPES, LEADERSHIP_INTEREST_TYPES,
-  PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS,
+  PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS, VOLUNTEER_TYPE
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
@@ -81,6 +81,11 @@ const volunteerReason = body('volunteerReason').isString();
 const volunteerFrequency = body('volunteerFrequency').isNumeric();
 const volunteerContribution = body('volunteerContribution').isString();
 const volunteerRemark = body('volunteerRemark').isString().optional();
+const volunteerType = body('volunteerType').isString().custom(
+  (volunteerType: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', volunteerType),
+);
+
+const administratorRemarks = body('administratorRemarks');
 
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request, res: express.Response, next: Function) => {
@@ -120,5 +125,7 @@ export default {
   volunteerReason,
   volunteerFrequency,
   volunteerContribution,
+  volunteerType,
   volunteerRemark,
+  administratorRemarks,
 };

@@ -33,6 +33,7 @@ export const addNewVolunteer = async (volunteerData: VolunteerData) => {
     description,
     interests,
     personality,
+    volunteerType,
     volunteerRemarks,
   } = volunteerData;
 
@@ -57,6 +58,7 @@ export const addNewVolunteer = async (volunteerData: VolunteerData) => {
     description,
     interests,
     personality,
+    volunteerType,
     volunteerRemarks,
   });
 
