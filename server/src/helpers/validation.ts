@@ -25,10 +25,10 @@ export const stringEnumValidator = (enumTypes: Array<string>, enumName: string, 
 };
 
 export const signUpStatusValidator = (value: SignUpStatus) => {
-  if (value === 'pending' || value === 'rejected' || (Array.isArray(value) && value[0] === 'accepted')) {
+  if (value === 'pending' || value === 'rejected' || (Array.isArray(value) && value[0] === 'accepted' && value.length === 2)) {
     return true;
   }
-  return false;
+  throw new Error('status must be either "pending", "rejected", or ["accepted": <acceptedRole>]');
 };
 
 export const roleCapacityValidator = (roles: Array<RoleData>) => {

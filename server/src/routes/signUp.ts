@@ -28,6 +28,7 @@ router.delete(
 
 router.put(
   '/:id/:idType',
+  validate(signUpController.getValidations('updateSignUp')),
   signUpController.updateSignUp,
 );
 

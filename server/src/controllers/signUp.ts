@@ -5,15 +5,16 @@ import signUpService from '../services/signUp';
 import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 
-export type SignUpValidatorMethod = 'createSignUp';
+export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
 
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
-    case 'createSignUp': {
+    case 'createSignUp':
+    case 'updateSignUp': {
       return [
         body('eventId', 'event id does not exist').isString(),
         body('userId', 'user id does not exist').isString(),
-        body('status', 'status does not exist').custom((status: SignUpStatus) => signUpStatusValidator(status)),
+        body('status').custom((status: SignUpStatus) => signUpStatusValidator(status)),
         body('preferences', 'preferences does not exist').isArray().notEmpty(),
         body('isRestricted', 'is restricted does not exist').isBoolean(),
       ];
