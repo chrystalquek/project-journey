@@ -9,7 +9,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DataRow = ({
+type Props = {
+  header: string,
+  data: string,
+  xs1: number,
+  xs2: number
+}
+
+const DataRow: FC<Props> = ({
   header, data, xs1, xs2,
 }) => {
   const classes = useStyles()
