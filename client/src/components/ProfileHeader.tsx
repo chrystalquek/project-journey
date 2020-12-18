@@ -23,11 +23,11 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     backgroundColor: theme.palette.secondary.light,
-    padding: '12px'
+    padding: '12px',
   },
   personIcon: {
-    fontSize: 40 
-  }
+    fontSize: 40,
+  },
 }));
 
 const ProfileHeader = ({ user }) => {

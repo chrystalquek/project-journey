@@ -1,21 +1,21 @@
-import React, { FC }  from 'react';
+import React, { FC } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   grid: {
-    padding: '20px 20px'
+    padding: '20px 20px',
   },
 }));
 
 const PaddedGrid: FC = ({ children }) => {
-  const classes = useStyles()
+  const classes = useStyles();
 
   return (
-    <Grid className={classes.grid} container direction='column'>
+    <Grid className={classes.grid} container direction="column">
       {children}
     </Grid>
-  );  
-}
+  );
+};
 
 export default PaddedGrid;

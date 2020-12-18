@@ -34,13 +34,13 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: '#d0de39', //yellow green
+      main: '#d0de39', // yellow green
     },
     secondary: {
-      light: '#e5f8fb', //light blue for background
-      main: '#00bbdc' //blue
+      light: '#e5f8fb', // light blue for background
+      main: '#00bbdc', // blue
     },
-  }
+  },
 });
 
 function App({ Component, pageProps }: AppProps) {

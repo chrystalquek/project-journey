@@ -1,11 +1,11 @@
-import React, { FC }  from 'react';
+import React, { FC } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   grid: {
-    padding: '5px 0px'
+    padding: '5px 0px',
   },
 }));
 
@@ -19,7 +19,7 @@ type Props = {
 const DataRow: FC<Props> = ({
   header, data, xs1, xs2,
 }) => {
-  const classes = useStyles()
+  const classes = useStyles();
 
   return (
     <Grid container item className={classes.grid}>
@@ -35,7 +35,7 @@ const DataRow: FC<Props> = ({
         <Typography>{data}</Typography>
       </Grid>
     </Grid>
-  );  
-}
+  );
+};
 
 export default DataRow;
