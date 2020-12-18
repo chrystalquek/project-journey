@@ -23,7 +23,8 @@ const EventSchema = new Schema({
   location: String,
   deadline: Date,
   additional_information: String,
-  capacity: Number,
+  rolesWithCapacity: { type: Map, of: Number },
+  rolesWithVolunteer: { type: Map, of: [mongoose.Types.ObjectId] },
   volunteers: [mongoose.Types.ObjectId],
   created_at: {
     type: Date,
