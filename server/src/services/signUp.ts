@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 import SignUp, { SignUpModel } from '../models/SignUp';
 
 import Event from '../models/Event';
-import { SignUpData, SignUpIdType, RoleData } from '../types';
+import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
+type UpdateEventVolunteersAction = 'add' | 'remove' | 'replace'
 
 const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>): Promise<void> => {
   try {
@@ -45,23 +46,53 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
   }
 };
 
-const addOrRemoveVolunteerFromEvent = async (eventId: string,
-  volunteerId: string, roleName: string, isVolunteerToBeAdded: boolean) => {
+const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(status);
+
+const addEventVolunteers = (roles, newRole, volunteerId) => {
+  const updatedRoles = roles.map((role) => {
+    if (role.name === newRole) {
+      role.volunteers.push(volunteerId);
+    }
+    return role;
+  });
+  return updatedRoles;
+};
+
+const removeEventVolunteers = (roles, oldRole, volunteerId) => {
+  const updatedRoles = roles.map((role) => {
+    if (role.name === oldRole) {
+      const index = role.volunteers.indexOf(volunteerId);
+      role.volunteers.splice(index, 1);
+    }
+    return role;
+  });
+  return updatedRoles;
+};
+
+const updateEventVolunteers = async (eventId: string, volunteerId: string,
+  oldRole: string | null, newRole: string | null, actionType: UpdateEventVolunteersAction) => {
   try {
     const unupdatedEvent = await Event.findById(eventId);
-    const eventRoles = (unupdatedEvent?.roles)?.map((role) => {
-      if (role.name === roleName) {
-        if (isVolunteerToBeAdded) {
-          role.volunteers.push(volunteerId);
-        } else {
-          const index = role.volunteers.indexOf(volunteerId);
-          role.volunteers.splice(index, 1);
-        }
-      }
-      return role;
-    });
+    let eventRoles;
 
-    await Event.findOneAndUpdate({ _id: eventId }, { $set: { roles: eventRoles } });
+    if (unupdatedEvent != null) {
+      switch (actionType) {
+        case 'add':
+          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRole, volunteerId);
+          break;
+        case 'remove':
+          eventRoles = removeEventVolunteers(unupdatedEvent.roles, oldRole, volunteerId);
+          break;
+        case 'replace':
+          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRole, volunteerId);
+          eventRoles = removeEventVolunteers(eventRoles, oldRole, volunteerId);
+          break;
+        default:
+          throw new Error('Invalid action type');
+      }
+
+      await Event.findOneAndUpdate({ _id: eventId }, { $set: { roles: eventRoles } });
+    }
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -70,22 +101,22 @@ const addOrRemoveVolunteerFromEvent = async (eventId: string,
 const updateSignUp = async (id: string, idType: SignUpIdType,
   updatedFields: SignUpData): Promise<void> => {
   try {
-    let oldSignUp;
+    let oldFields;
     switch (idType) {
       case 'signUpId':
-        oldSignUp = await SignUp.findOneAndUpdate(
+        oldFields = await SignUp.findOneAndUpdate(
           { sign_up_id: id },
           { $set: updatedFields },
         );
         break;
       case 'eventId':
-        oldSignUp = await SignUp.findOneAndUpdate(
+        oldFields = await SignUp.findOneAndUpdate(
           { event_id: id },
           { $set: updatedFields },
         );
         break;
       case 'userId':
-        oldSignUp = await SignUp.findOneAndUpdate(
+        oldFields = await SignUp.findOneAndUpdate(
           { user_id: id },
           { $set: updatedFields },
         );
@@ -94,16 +125,28 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
         throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
 
-    /** Add or remove volunteer from Event.volunteers array if SignUp.status changes */
+    /** Add, remove, or replace volunteer from Event.volunteers array if SignUp.status changes */
     /** status is an array if the sign up is accepted i.e. ["accepted", string] */
-    if (!Array.isArray(oldSignUp.status) && Array.isArray(updatedFields.status)) {
-      addOrRemoveVolunteerFromEvent(oldSignUp.event_id, oldSignUp.user_id,
-        updatedFields.status[1], true);
+
+    /** No change needed */
+    if (!checkIfAccepted(oldFields.status) && !checkIfAccepted(updatedFields.status)) {
+      return;
     }
 
-    if (Array.isArray(oldSignUp.status) && !Array.isArray(updatedFields.status)) {
-      addOrRemoveVolunteerFromEvent(oldSignUp.event_id, oldSignUp.user_id,
-        oldSignUp.status[1], false);
+    if (!checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)) {
+      updateEventVolunteers(oldFields.event_id, oldFields.user_id,
+        null, updatedFields.status[1], 'add');
+    }
+
+    if (checkIfAccepted(oldFields.status) && !checkIfAccepted(updatedFields.status)) {
+      updateEventVolunteers(oldFields.event_id, oldFields.user_id,
+        oldFields.status[1], null, 'remove');
+    }
+
+    if (checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)
+      && oldFields.status[1] !== updatedFields.status[1]) {
+      updateEventVolunteers(oldFields.event_id, oldFields.user_id,
+        oldFields.status[1], updatedFields.status[1], 'replace');
     }
   } catch (err) {
     throw new Error(err.msg);
