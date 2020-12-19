@@ -1,11 +1,11 @@
 import express from 'express';
 import { body } from 'express-validator';
+import signUpService, { checkIfAccepted } from '../services/signUp';
 import { roleCapacityValidator } from '../helpers/validation';
 import { EventSearchType, EventData, RoleData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
-import signUpService from '../services/signUp';
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -101,7 +101,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     /** For past events, filter sign ups with accepted status */
     /** status is an array if the sign up is accepted i.e. ["accepted", string] */
     const filteredSignUps = eventType === 'past'
-      ? signUps.filter((signUp) => Array.isArray(signUp.status))
+      ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
       : signUps;
 
     const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);

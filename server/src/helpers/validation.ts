@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { body, validationResult, ValidationChain } from 'express-validator';
 import express from 'express';
+import { checkIfAccepted } from '../services/signUp';
 import {
   CITIZENSHIP_TYPES, GENDER_TYPES, LEADERSHIP_INTEREST_TYPES,
   PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS,
@@ -25,7 +26,7 @@ export const stringEnumValidator = (enumTypes: Array<string>, enumName: string, 
 };
 
 export const signUpStatusValidator = (value: SignUpStatus) => {
-  if (value === 'pending' || value === 'rejected' || (Array.isArray(value) && value[0] === 'accepted' && value.length === 2)) {
+  if (value === 'pending' || value === 'rejected' || (checkIfAccepted(value) && value[0] === 'accepted' && value.length === 2)) {
     return true;
   }
   throw new Error('status must be either "pending", "rejected", or ["accepted": <acceptedRole>]');

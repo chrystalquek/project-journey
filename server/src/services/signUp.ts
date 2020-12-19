@@ -46,7 +46,7 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
   }
 };
 
-const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(status);
+export const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(status) && status[0] === 'accepted';
 
 const addEventVolunteers = (roles, newRole, volunteerId) => {
   const updatedRoles = roles.map((role) => {
