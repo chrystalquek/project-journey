@@ -46,8 +46,18 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
   }
 };
 
+/**
+ * Checks if the SignUpStatus is of type ['accepted', acceptedRole]
+ * @param status either 'pending', 'rejected', or ['accepted', acceptedRole]
+ */
 export const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(status) && status[0] === 'accepted';
 
+/**
+ * Adds a volunteer id to event.roles.volunteers
+ * @param roles event.roles
+ * @param newRole name of the new role
+ * @param volunteerId user id of the volunteer to be added
+ */
 const addEventVolunteers = (roles, newRole, volunteerId) => {
   const updatedRoles = roles.map((role) => {
     if (role.name === newRole) {
@@ -58,6 +68,12 @@ const addEventVolunteers = (roles, newRole, volunteerId) => {
   return updatedRoles;
 };
 
+/**
+ * Removes a volunteer id from event.roles.volunteers
+ * @param roles event.roles
+ * @param oldRole name of the previous role
+ * @param volunteerId user id of the volunteer to be removed
+ */
 const removeEventVolunteers = (roles, oldRole, volunteerId) => {
   const updatedRoles = roles.map((role) => {
     if (role.name === oldRole) {
@@ -69,7 +85,15 @@ const removeEventVolunteers = (roles, oldRole, volunteerId) => {
   return updatedRoles;
 };
 
-const updateEventVolunteers = async (eventId: string, volunteerId: string,
+/**
+ * Updates event roles, specifically event.roles.volunteers, upon sign up status change.
+ * @param eventId id of the corresponding event
+ * @param volunteerId  user id of the volunteer
+ * @param oldRole previous accepted role, if any
+ * @param newRole new accepted role, if any
+ * @param actionType either 'add', 'remove', or 'replace'
+ */
+const updateEventRoles = async (eventId: string, volunteerId: string,
   oldRole: string | null, newRole: string | null, actionType: UpdateEventVolunteersAction) => {
   try {
     const unupdatedEvent = await Event.findById(eventId);
@@ -98,6 +122,12 @@ const updateEventVolunteers = async (eventId: string, volunteerId: string,
   }
 };
 
+/**
+ * Update sign up (and corresponding event when necessary)
+ * @param id one of the ids in the sign up
+ * @param idType type of the specified id
+ * @param updatedFields updated sign up data
+ */
 const updateSignUp = async (id: string, idType: SignUpIdType,
   updatedFields: SignUpData): Promise<void> => {
   try {
@@ -128,24 +158,27 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
     /** Add, remove, or replace volunteer from Event.volunteers array if SignUp.status changes */
     /** status is an array if the sign up is accepted i.e. ["accepted", string] */
 
-    /** No change needed */
+    /** Not accepted --> Not accepted : No change */
     if (!checkIfAccepted(oldFields.status) && !checkIfAccepted(updatedFields.status)) {
       return;
     }
 
+    /** Not accepted --> Accepted : Add */
     if (!checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)) {
-      updateEventVolunteers(oldFields.event_id, oldFields.user_id,
+      updateEventRoles(oldFields.event_id, oldFields.user_id,
         null, updatedFields.status[1], 'add');
     }
 
+    /** Accepted --> Not Accepted : Remove */
     if (checkIfAccepted(oldFields.status) && !checkIfAccepted(updatedFields.status)) {
-      updateEventVolunteers(oldFields.event_id, oldFields.user_id,
+      updateEventRoles(oldFields.event_id, oldFields.user_id,
         oldFields.status[1], null, 'remove');
     }
 
+    /** Accepted --> Accepted but acceptedRole changed : Replace */
     if (checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)
       && oldFields.status[1] !== updatedFields.status[1]) {
-      updateEventVolunteers(oldFields.event_id, oldFields.user_id,
+      updateEventRoles(oldFields.event_id, oldFields.user_id,
         oldFields.status[1], updatedFields.status[1], 'replace');
     }
   } catch (err) {
