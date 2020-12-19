@@ -19,8 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 400,
     },
     media: {
-      height: 0,
-      paddingTop: "100%", // 16:9
+      height: "200px",
     },
     bold: {
       fontWeight: 600,
@@ -30,11 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function RecipeReviewCard(props: EventCardProps) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   return (
     <Card className={classes.root}>
