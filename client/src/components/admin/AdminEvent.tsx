@@ -3,8 +3,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import {reactLogo} from "@constants/imagePaths";
-import {Box} from "@material-ui/core";
+import {testEventImage3} from "@constants/imagePaths";
+import {makeStyles} from "@material-ui/core";
 import {FC} from "react";
 import {EventData} from "@type/event";
 import {getVacancies, parseDate} from "@utils/event";
@@ -13,7 +13,14 @@ type AdminEventProps = {
   event: EventData,
 }
 
+const useStyles = makeStyles({
+  bold: {
+    fontWeight: 700
+  }
+})
+
 const AdminEvent: FC<AdminEventProps> = ({ event }) => {
+  const classes = useStyles();
   const vacancies = getVacancies(event);
   const filled = vacancies[0];
   const total = vacancies[1];
@@ -22,25 +29,23 @@ const AdminEvent: FC<AdminEventProps> = ({ event }) => {
   return (
     <Card>
       <CardActionArea>
+        {/* How to specify height for responsive images? */}
         <CardMedia
-          image={reactLogo}
-          title="TBD"
+          component="img"
+          alt="Event"
+          height="100%"
+          image={testEventImage3}
+          title={event && event.name ? event.name : 'Event'}
         />
         <CardContent>
-          <Typography component="div">
-            <Box fontWeight="fontWeightBold" my={1}>
-              {event && event.name ? event.name : 'No event name provided'}
-            </Box>
+          <Typography gutterBottom className={classes.bold}>
+            {event && event.name ? event.name : 'No event name provided'}
           </Typography>
-          <Typography component="div">
-            <Box fontWeight="fontWeightRegular" my={2}>
-              {date ? date : 'No date provided'}
-            </Box>
+          <Typography gutterBottom>
+            {date ? date : 'No date provided'}
           </Typography>
-          <Typography component="div">
-            <Box fontWeight="fontWeightRegular" my={1}>
-              {filled}/{total} vacancies left
-            </Box>
+          <Typography color="primary" gutterBottom className={classes.bold}>
+            {filled}/{total} vacancies left
           </Typography>
         </CardContent>
       </CardActionArea>

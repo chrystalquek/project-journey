@@ -1,4 +1,4 @@
-import { Grid, Paper } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import AdminEvent from '@components/admin/AdminEvent';
 import {FC, useEffect} from "react";
 import {EventData} from "@type/event";
@@ -16,7 +16,7 @@ const AdminEvents: FC<AdminEventsProps> = ({ events, getAdminEvents }) => {
   return (
     <Grid container>
       {events?.map((event) => (
-        <AdminEvent event={event} />
+        <AdminEvent key={event.name+event.description} event={event} />
       ))}
     </Grid>
   );
