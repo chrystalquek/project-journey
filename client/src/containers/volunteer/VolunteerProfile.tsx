@@ -8,7 +8,7 @@ const mapStateToProps = (state: StoreState) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getVolunteers: (pageNo: number, size: number) => dispatch(getVolunteers({ pageNo, size }))
+  getVolunteers: (pageNo: number, size: number, volunteerType: string) => dispatch(getVolunteers({ pageNo, size, volunteerType }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VolunteerProfile);

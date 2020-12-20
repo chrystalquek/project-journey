@@ -6,5 +6,6 @@ export type LoginRequest = {
 export type QueryOptions = {
   pageNo: number
   size: number
-  keywords?: string
 }
+
+export type VolunteerQueryOptions = QueryOptions & { volunteerType: string }
