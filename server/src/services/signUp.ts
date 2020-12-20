@@ -80,6 +80,11 @@ const removeEventVolunteers = (roles: Array<RoleData>, oldRoleName: string,
   const updatedRoles = roles.map((role) => {
     if (role.name === oldRoleName) {
       const index = role.volunteers.indexOf(volunteerId);
+
+      if (index === -1) {
+        return new Error('Volunteer is not found in the specified event.');
+      }
+
       role.volunteers.splice(index, 1);
     }
     return role;
