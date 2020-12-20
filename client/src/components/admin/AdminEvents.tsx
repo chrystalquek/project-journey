@@ -5,18 +5,13 @@ import {EventData} from "@type/event";
 
 type AdminEventsProps = {
   events: Array<EventData>,
-  getAdminEvents: () => any,
 };
 
-const AdminEvents: FC<AdminEventsProps> = ({ events, getAdminEvents }) => {
-  useEffect(() => {
-    getAdminEvents()
-  }, [])
-
+const AdminEvents: FC<AdminEventsProps> = ({ events }) => {
   return (
-      <Grid container spacing={2} style={{ margin: '1rem' }}>
+      <Grid container spacing={4}>
         {events?.map((event) => (
-          <Grid xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <AdminEvent key={event.name+event.description} event={event} />
           </Grid>
         ))}

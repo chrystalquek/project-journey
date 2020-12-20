@@ -1,5 +1,5 @@
 const SearchBar = () => (
-  <div>THIS IS A SEARCH BAR!</div>
+  <div>SEARCH BAR - TO BE IMPLEMENTED</div>
 );
 
 export default SearchBar;

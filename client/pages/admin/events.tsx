@@ -1,5 +1,5 @@
 import Head from '@components/common/Header';
-import AdminEventsPage from '@components/admin/AdminEventsPage';
+import AdminEventsPage from '@containers/admin/AdminEventsPage';
 
 const AdminEvents = () => (
   <>
