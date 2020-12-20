@@ -86,11 +86,16 @@ export const getVolunteer = async (email: string) => {
  * Gets all volunteer details.
  */
 export const getAllVolunteers = async (query: QueryOptions) => {
-  // no of volunteers that match keywords (if any)
-  const count = await (query.keywords ? Volunteer.find({ $text: { $search: query.keywords } }) : Volunteer.find()).countDocuments();
+  // no of volunteers that match name (if any)
+  const count = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find())
+    .find({ volunteerType: { $in: query.volunteerType } })
+    .countDocuments();
 
   // get only part of the collection cos of pagination
-  const volunteers = await (query.keywords ? Volunteer.find({ $text: { $search: query.keywords } }) : Volunteer.find()).skip(query.skip).limit(query.limit).lean().exec();
+  const volunteers = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find())
+    .find({ volunteerType: { $in: query.volunteerType } })
+    .skip(query.skip).limit(query.limit).lean()
+    .exec();
 
   const data = volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
 

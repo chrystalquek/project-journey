@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
-export type QueryOptions = { skip?, limit?, keywords?} // query parameters for GET
+export type QueryOptions = {
+    skip: number,
+    limit: number,
+    [field: string]: any
+} // query parameters for GET
 
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'

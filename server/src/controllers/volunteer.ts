@@ -126,7 +126,7 @@ const getAllVolunteerDetails = async (req: express.Request, res: express.Respons
 
     const pageNo = Number(req.query.pageNo);
     const size = Number(req.query.size);
-    const query: QueryOptions = {};
+    const query: QueryOptions = { skip: 0, limit: 0 };
     if (pageNo < 0) {
       throw new Error('Invalid page number, should start with 0');
     }
@@ -134,7 +134,10 @@ const getAllVolunteerDetails = async (req: express.Request, res: express.Respons
     query.limit = size;
 
     if (req.query.name) {
-      query.keywords = req.query.name;
+      query.name = req.query.name;
+    }
+    if (req.query.volunteerType) {
+      query.volunteerType = (req.query.volunteerType as string).split(',');
     }
     const volunteersDetails = await getAllVolunteers(query);
     res.status(HTTP_CODES.OK).json(volunteersDetails);
