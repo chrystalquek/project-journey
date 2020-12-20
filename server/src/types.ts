@@ -74,6 +74,7 @@ export type ResourceData = {
     type: string;
 };
 
+// TODO: Remove this
 export type VolunteerSchemaData = {
     name: string,
     field_type: string,
@@ -140,6 +141,30 @@ export type SignUpData = {
     status: SignUpStatus,
     preferences: Array<string>,
     isRestricted: boolean,
+}
+
+export type FormData = {
+    name: string;
+    description: string;
+    type: 'short-answer' | 'mcq' | 'checkbox',
+}
+
+export type QuestionData = {
+    text: string;
+    type: string;
+    formId: string;
+}
+
+export type OptionData = {
+    questionId: string;
+    text: string;
+}
+
+export type AnswerData = {
+    questionId: string;
+    optionId: string;
+    userId: string;
+    text: String
 }
 
 /**
