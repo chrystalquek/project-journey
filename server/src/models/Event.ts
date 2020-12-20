@@ -23,8 +23,9 @@ const EventSchema = new Schema({
   location: String,
   deadline: Date,
   additional_information: String,
-  capacity: Number,
-  volunteers: [mongoose.Types.ObjectId],
+  roles: [{
+    name: String, description: String, capacity: Number, volunteers: [mongoose.Types.ObjectId],
+  }],
   created_at: {
     type: Date,
     default: Date.now,

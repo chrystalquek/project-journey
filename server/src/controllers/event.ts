@@ -1,10 +1,11 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { EventSearchType, EventData } from '../types';
+import signUpService, { checkIfAccepted } from '../services/signUp';
+import { roleCapacityValidator } from '../helpers/validation';
+import { EventSearchType, EventData, RoleData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
-import signUpService from '../services/signUp';
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -24,8 +25,8 @@ const getValidations = (method: EventValidatorMethod) => {
         body('endDate', 'end date is of wrong date format').isISO8601(),
         body('deadline', 'deadline does not exist').exists(),
         body('deadline', 'deadline is of wrong date format').isISO8601(),
-        body('volunteers', 'volunteers does not exist').exists(),
-        body('volunteers', 'number of volunteers exceeds capacity').custom((value, { req }) => req.body.capacity == null || value.length <= req.body.capacity),
+        body('roles', 'roles does not exist').exists(),
+        body('roles', 'number of volunteers exceeds role capacity').custom((roles: RoleData[]) => roleCapacityValidator(roles)),
       ];
     }
     default: {
@@ -98,8 +99,9 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     const signUps = await signUpService.readSignUps(userId, 'userId');
 
     /** For past events, filter sign ups with accepted status */
+    /** status is an array if the sign up is accepted i.e. ["accepted", string] */
     const filteredSignUps = eventType === 'past'
-      ? signUps.filter((signUp) => signUp.status === 'accepted')
+      ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
       : signUps;
 
     const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);
