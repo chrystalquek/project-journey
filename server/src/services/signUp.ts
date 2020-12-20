@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 import SignUp, { SignUpModel } from '../models/SignUp';
 
 import Event from '../models/Event';
-import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
+import {
+  RoleData, SignUpData, SignUpIdType, SignUpStatus,
+} from '../types';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
 type UpdateEventVolunteersAction = 'add' | 'remove' | 'replace'
@@ -55,12 +57,12 @@ export const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(
 /**
  * Adds a volunteer id to event.roles.volunteers
  * @param roles event.roles
- * @param newRole name of the new role
+ * @param newRoleName name of the new role
  * @param volunteerId user id of the volunteer to be added
  */
-const addEventVolunteers = (roles, newRole, volunteerId) => {
+const addEventVolunteers = (roles: Array<RoleData>, newRoleName: string, volunteerId: string) => {
   const updatedRoles = roles.map((role) => {
-    if (role.name === newRole) {
+    if (role.name === newRoleName) {
       role.volunteers.push(volunteerId);
     }
     return role;
@@ -71,12 +73,13 @@ const addEventVolunteers = (roles, newRole, volunteerId) => {
 /**
  * Removes a volunteer id from event.roles.volunteers
  * @param roles event.roles
- * @param oldRole name of the previous role
+ * @param oldRoleName name of the previous role
  * @param volunteerId user id of the volunteer to be removed
  */
-const removeEventVolunteers = (roles, oldRole, volunteerId) => {
+const removeEventVolunteers = (roles: Array<RoleData>, oldRoleName: string,
+  volunteerId: string) => {
   const updatedRoles = roles.map((role) => {
-    if (role.name === oldRole) {
+    if (role.name === oldRoleName) {
       const index = role.volunteers.indexOf(volunteerId);
       role.volunteers.splice(index, 1);
     }
@@ -89,12 +92,12 @@ const removeEventVolunteers = (roles, oldRole, volunteerId) => {
  * Updates event roles, specifically event.roles.volunteers, upon sign up status change.
  * @param eventId id of the corresponding event
  * @param volunteerId  user id of the volunteer
- * @param oldRole previous accepted role, if any
- * @param newRole new accepted role, if any
+ * @param oldRoleName previous accepted role, if any
+ * @param newRoleName new accepted role, if any
  * @param actionType either 'add', 'remove', or 'replace'
  */
-const updateEventRoles = async (eventId: string, volunteerId: string,
-  oldRole: string | null, newRole: string | null, actionType: UpdateEventVolunteersAction) => {
+const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleName: string | null,
+  newRoleName: string | null, actionType: UpdateEventVolunteersAction) => {
   try {
     const unupdatedEvent = await Event.findById(eventId);
     let eventRoles;
@@ -102,14 +105,15 @@ const updateEventRoles = async (eventId: string, volunteerId: string,
     if (unupdatedEvent != null) {
       switch (actionType) {
         case 'add':
-          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRole, volunteerId);
+          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName as string, volunteerId);
           break;
         case 'remove':
-          eventRoles = removeEventVolunteers(unupdatedEvent.roles, oldRole, volunteerId);
+          eventRoles = removeEventVolunteers(unupdatedEvent.roles, oldRoleName as string,
+            volunteerId);
           break;
         case 'replace':
-          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRole, volunteerId);
-          eventRoles = removeEventVolunteers(eventRoles, oldRole, volunteerId);
+          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName as string, volunteerId);
+          eventRoles = removeEventVolunteers(eventRoles, oldRoleName as string, volunteerId);
           break;
         default:
           throw new Error('Invalid action type');
