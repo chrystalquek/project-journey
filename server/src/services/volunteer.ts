@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import mongoose from 'mongoose';
-import { VolunteerData } from '../types';
+import { QueryOptions, VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
 
@@ -85,12 +85,17 @@ export const getVolunteer = async (email: string) => {
 /**
  * Gets all volunteer details.
  */
-export const getAllVolunteers = async () => {
-  const volunteers = await Volunteer.find().lean().exec();
+export const getAllVolunteers = async (query: QueryOptions) => {
+  // no of volunteers that match keywords (if any)
+  const count = await (query.keywords ? Volunteer.find({ $text: { $search: query.keywords } }) : Volunteer.find()).countDocuments();
 
-  return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
+  // get only part of the collection cos of pagination
+  const volunteers = await (query.keywords ? Volunteer.find({ $text: { $search: query.keywords } }) : Volunteer.find()).skip(query.skip).limit(query.limit).lean().exec();
+
+  const data = volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
+
+  return { data, count };
 };
-
 
 /**
  * Updates volunteer data with email
@@ -114,12 +119,11 @@ export const deleteVolunteer = async (email: string) => {
   });
 };
 
-/**
- * Finds volunteers based on keywords.
- * @param keywords to be searched in volunteers names
- */
-export const findVolunteers = async (keywords: string) => {
-  const volunteers = await Volunteer.find({ $text: { $search: keywords } }).lean().exec();
+// /**
+//  * Finds volunteers based on keywords.
+//  * @param keywords to be searched in volunteers names
+//  */
+// export const findVolunteers = async (keywords: string) => {
 
-  return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
-};
+//   return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
+// };

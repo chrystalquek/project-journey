@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+export type QueryOptions = { skip?, limit?, keywords?} // query parameters for GET
+
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
@@ -86,9 +88,9 @@ export type EnvironmentConstants = {
 export type FormFieldType = 'String' | 'Number';
 
 export type TeamData = {
-  leader: string,
-  name: string,
-  members: [string]
+    leader: string,
+    name: string,
+    members: [string]
 }
 
 export type ResponseJSON = {
