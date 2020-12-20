@@ -4,9 +4,6 @@ import { EventData } from '../types';
 const { Schema } = mongoose;
 
 export type EventModel = EventData & mongoose.Document;
-export type RoleDataSchema = [{
-  name: String, description: String, capacity: Number, volunteers: [mongoose.Types.ObjectId],
-}];
 
 const options = { discriminatorKey: 'eventType' };
 
@@ -26,7 +23,9 @@ const EventSchema = new Schema({
   location: String,
   deadline: Date,
   additional_information: String,
-  roles: RoleDataSchema,
+  roles: [{
+    name: String, description: String, capacity: Number, volunteers: [mongoose.Types.ObjectId],
+  }],
   created_at: {
     type: Date,
     default: Date.now,

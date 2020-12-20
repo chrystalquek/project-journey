@@ -25,8 +25,16 @@ export const stringEnumValidator = (enumTypes: Array<string>, enumName: string, 
   return true;
 };
 
+const checkIfStatusValid = (value: SignUpStatus) => {
+  const isPending = value === 'pending';
+  const isRejected = value === 'rejected';
+  const isAccepted = checkIfAccepted(value);
+
+  return isPending || isRejected || isAccepted;
+};
+
 export const signUpStatusValidator = (value: SignUpStatus) => {
-  if (value === 'pending' || value === 'rejected' || (checkIfAccepted(value) && value[0] === 'accepted' && value.length === 2)) {
+  if (checkIfStatusValid(value)) {
     return true;
   }
   throw new Error('status must be either "pending", "rejected", or ["accepted": <acceptedRole>]');

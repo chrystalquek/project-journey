@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import mongoose from 'mongoose';
-import SignUp, { SignUpModel } from '../models/SignUp';
+import SignUp from '../models/SignUp';
 
 import Event from '../models/Event';
 import {
@@ -52,7 +51,7 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
  * Checks if the SignUpStatus is of type ['accepted', acceptedRole]
  * @param status either 'pending', 'rejected', or ['accepted', acceptedRole]
  */
-export const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(status) && status[0] === 'accepted';
+export const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(status) && status[0] === 'accepted' && status.length === 2;
 
 /**
  * Adds a volunteer id to event.roles.volunteers
