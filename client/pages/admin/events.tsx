@@ -1,8 +1,7 @@
 import Head from '@components/common/Header';
 import AdminEventsPage from '@components/admin/AdminEventsPage';
-import NavBar from '@components/common/NavBar';
 
-const AdminHome = () => (
+const AdminEvents = () => (
   <>
     <Head title="Blessings in a Bag" />
     {/*<NavBar />*/}
@@ -10,4 +9,4 @@ const AdminHome = () => (
   </>
 );
 
-export default AdminHome;
+export default AdminEvents;

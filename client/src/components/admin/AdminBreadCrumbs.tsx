@@ -1,15 +1,13 @@
-import { Breadcrumbs, Link, Typography } from '@material-ui/core';
+import { Breadcrumbs, Typography } from '@material-ui/core';
 
-const AdminBreadCrumbs = () => (
-  <Breadcrumbs aria-label="breadcrumb">
-    <Link color="inherit" href="/" onClick={() => ''}>
-      Material-UI
-    </Link>
-    <Link color="inherit" href="/getting-started/installation/" onClick={() => ''}>
-      Core
-    </Link>
-    <Typography color="textPrimary">Breadcrumb</Typography>
-  </Breadcrumbs>
-);
+const AdminBreadCrumbs = () => {
+  return (
+    <Breadcrumbs aria-label="breadcrumb">
+      {/* There isn't any admin/events page, so no <Link> is actually needed... */}
+      <Typography color="textPrimary">Events</Typography>
+      <Typography color="textPrimary">Search events</Typography>
+    </Breadcrumbs>
+  )
+}
 
 export default AdminBreadCrumbs;

@@ -14,11 +14,13 @@ const AdminEvents: FC<AdminEventsProps> = ({ events, getAdminEvents }) => {
   }, [])
 
   return (
-    <Grid container>
-      {events?.map((event) => (
-        <AdminEvent key={event.name+event.description} event={event} />
-      ))}
-    </Grid>
+      <Grid container spacing={2} style={{ margin: '1rem' }}>
+        {events?.map((event) => (
+          <Grid xs={12} sm={6} md={4}>
+            <AdminEvent key={event.name+event.description} event={event} />
+          </Grid>
+        ))}
+      </Grid>
   );
 }
 

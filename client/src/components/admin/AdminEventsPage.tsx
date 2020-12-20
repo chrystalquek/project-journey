@@ -1,13 +1,13 @@
 import Container from '@material-ui/core/Container';
 import AdminBreadCrumbs from '@components/admin/AdminBreadCrumbs';
-import AdminSearchBar from '@components/admin/AdminSearchBar';
+import SearchBar from '@components/common/SearchBar';
 import AdminEvents from '@containers/admin/AdminEvents';
 
 const AdminEventsPage = () => {
   return (
-    <Container>
+    <Container fixed>
       <AdminBreadCrumbs />
-      <AdminSearchBar />
+      <SearchBar />
       <div>15 Upcoming Events</div>
       <AdminEvents />
     </Container>

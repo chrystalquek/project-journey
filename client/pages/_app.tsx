@@ -6,6 +6,7 @@ import '@styles/globals.css';
 import { Provider } from 'react-redux';
 import store from '@redux/store';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import {CssBaseline} from "@material-ui/core";
 
 const theme = createMuiTheme({
   typography: {
@@ -47,6 +48,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
     </Provider>
