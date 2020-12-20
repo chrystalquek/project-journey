@@ -30,7 +30,6 @@ function SearchBar(props) {
         variant="outlined"
         margin="dense"
       ></TextField>
-      <div>Hello</div>
     </>
   );
 }
