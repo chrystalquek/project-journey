@@ -153,6 +153,7 @@ export type QuestionData = {
     text: string;
     type: string;
     formId: string;
+    isRequired: boolean;
 }
 
 export type OptionData = {
