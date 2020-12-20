@@ -41,14 +41,13 @@ export const signUpStatusValidator = (value: SignUpStatus) => {
 };
 
 export const roleCapacityValidator = (roles: Array<RoleData>) => {
-  let isValid = true;
-
-  roles.forEach((role) => {
-    if (role.capacity < role.volunteers.length) {
-      isValid = false;
+  for (let i = 0; i < roles.length; i += 1) {
+    const currRole = roles[i];
+    if (currRole.capacity < currRole.volunteers.length) {
+      return false;
     }
-  });
-  return isValid;
+  }
+  return true;
 };
 
 const email = (emailMustBeUnique: boolean) => body('email').isEmail().normalizeEmail().custom(async (emailString: string) => {
