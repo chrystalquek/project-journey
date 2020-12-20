@@ -1,30 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from 'types/volunteer';
-import volunteer from '@redux/actions/volunteer';
+import { getVolunteers } from '@redux/actions/volunteer';
 
 export type VolunteerState = {
   volunteers: Array<VolunteerData>;
+  page: number,
+  count: number;
 }
 
 const initialState: VolunteerState = {
   volunteers: [],
+  page: 0,
+  count: 0,
 };
 
 const volunteerSlice = createSlice({
-  name: 'volunteer/getAll',
+  name: 'volunteer',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     // Simplify immutable updates with redux toolkit
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
-    builder.addCase(volunteer.pending, (state) => {
+    builder.addCase(getVolunteers.pending, (state) => {
       state.volunteers = [];
     });
-    builder.addCase(volunteer.fulfilled, (state, action) => {
+    builder.addCase(getVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
-      state.volunteers = payload.data;
+      state.volunteers = payload.response.data;
+      state.count = payload.response.count;
+      state.page = payload.pageNo;
     });
-    builder.addCase(volunteer.rejected, (state) => {
+    builder.addCase(getVolunteers.rejected, (state) => {
       state.volunteers = [];
     });
   },

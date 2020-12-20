@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import Head from 'next/head';
 
 import {
-  makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow,
 } from '@material-ui/core';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
@@ -10,7 +10,7 @@ import { VolunteerState } from '@redux/reducers/volunteer';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
-  getAllVolunteers: () => Promise<void>
+  getVolunteers: (pageNo: number, size: number) => Promise<void>
 }
 
 const useStyles = makeStyles(theme => ({
@@ -21,14 +21,20 @@ const useStyles = makeStyles(theme => ({
 
 const VolunteerProfile: FC<VolunteerProfileProps> = ({
   volunteers,
-  getAllVolunteers,
+  getVolunteers
 }: VolunteerProfileProps) => {
   const classes = useStyles();
 
+  const size = 5;
+
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    getAllVolunteers();
+    getVolunteers(0, size);
   }, []);
+
+  const handleChangePage = (event, newPage: number) => {
+    getVolunteers(newPage, size);
+  };
 
   return (
     <>
@@ -57,6 +63,14 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5]}
+        component="div"
+        count={volunteers.count}
+        rowsPerPage={size}
+        page={volunteers.page}
+        onChangePage={handleChangePage}
+      />
 
       <Footer />
 

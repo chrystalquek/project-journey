@@ -6,4 +6,5 @@ export type LoginResponse = {
 
 export type GetVolunteersResponse = {
   data: Array<VolunteerData>
+  count: number
 }

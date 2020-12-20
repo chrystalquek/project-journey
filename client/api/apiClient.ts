@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LoginRequest } from './request';
+import { LoginRequest, QueryOptions } from './request';
 import { GetVolunteersResponse, LoginResponse } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
-  getAllVolunteers(): Promise<GetVolunteersResponse>
+  getVolunteers(query: QueryOptions): Promise<GetVolunteersResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -26,8 +26,8 @@ class AxiosApiClient implements ApiClient {
   }
 
   // volunteer
-  async getAllVolunteers(): Promise<GetVolunteersResponse> {
-    return this.send({}, 'volunteer', 'get');
+  async getVolunteers(query: QueryOptions): Promise<GetVolunteersResponse> {
+    return this.send({}, `volunteer/?pageNo=${query.pageNo}&size=${query.size}`, 'get'); // TODO collectionOptions
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {
