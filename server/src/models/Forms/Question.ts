@@ -9,7 +9,7 @@ const QuestionSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   form_id: mongoose.Types.ObjectId,
   text: String,
-  isRequired: Boolean,
+  is_required: Boolean,
 });
 
 export default mongoose.model<QuestionModel>('Question', QuestionSchema);

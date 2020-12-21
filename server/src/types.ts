@@ -147,9 +147,11 @@ export type FormData = {
     name: string;
     description: string;
     type: 'short-answer' | 'mcq' | 'checkbox',
+    eventId: string;
 }
 
 export type QuestionData = {
+    id: string;
     text: string;
     type: string;
     formId: string;
