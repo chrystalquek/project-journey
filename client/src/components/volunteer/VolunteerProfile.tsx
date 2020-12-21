@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react';
 import Head from 'next/head';
 
 import {
+  capitalize,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -16,56 +17,25 @@ import Footer from '../common/Footer';
 import { VolunteerState } from '@redux/reducers/volunteer';
 import { VOLUNTEER_TYPE } from 'types/volunteer';
 import { QueryParams } from 'api/request';
+import { convertFilterObjectToQueryString, getEnumKeys, initializeFilterObject } from '@utils/helpers/TableOptions';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
   getVolunteers: (query: QueryParams) => Promise<void>
 }
 
-// const useStyles = makeStyles(theme => ({
-//   table: {
-//     margin: theme.spacing(10),
-//   },
-// }));
-
 const VolunteerProfile: FC<VolunteerProfileProps> = ({
   volunteers,
   getVolunteers
 }: VolunteerProfileProps) => {
-  // const classes = useStyles();
 
   // constants
-  const size = 10; // incase can give options to change no of rows per page
+  const size = 10;
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
     getVolunteers({ pageNo: 0, size, volunteerType: convertFilterObjectToQueryString(filterVolunteerType) });
   }, []);
-
-  // helpers
-
-  // takes in an enum and returns a string array with all its keys
-  // e.g. enum {"a", "b"} => ["a", "b"]
-  const getEnumKeys = (enumObj: any) => Object.keys(enumObj).filter(key => !isNaN(Number(enumObj[key])));
-
-  // takes in an enum and returns a filter object containing enum key to boolean pairs, initialized to true
-  // e.g. enum {"a", "b"} => {"a": true, "b": true}
-  const initializeFilterObject = (enumObj: any) => {
-    const keys = getEnumKeys(enumObj);
-    const filterObject: any = {};
-    keys.forEach(key => filterObject[key] = true);
-    return filterObject;
-  }
-
-  // takes in a filter object and returns a comma-separated string representation
-  // e.g. {"a": true, "b": false, "c": true} => ",a,c"
-  const convertFilterObjectToQueryString = (filterObj: any) => Object.keys(filterObj).reduce((a, b) => filterObj[b] ? a + "," + b : a, "");
-
-  const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
-    return s.charAt(0).toUpperCase() + s.slice(1)
-  }
-
 
   // get array of strings from enum
   const volunteerTypeValues = getEnumKeys(VOLUNTEER_TYPE);

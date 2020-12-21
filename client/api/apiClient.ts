@@ -20,6 +20,10 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
+  private toURLParams = (query: QueryParams) => {
+    return "?" + new URLSearchParams(query).toString();
+  }
+
   // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'post');
@@ -27,7 +31,7 @@ class AxiosApiClient implements ApiClient {
 
   // volunteer
   async getVolunteers(query: QueryParams): Promise<GetVolunteersResponse> {
-    return this.send({}, `volunteer/?${new URLSearchParams(query).toString()}`, 'get');
+    return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {
