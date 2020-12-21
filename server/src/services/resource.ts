@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 import { ResourceData } from '../types';
 import Resource from '../models/Resource';
 import emailService from '../services/email';
-import { generateDummyUser } from '../dummy/user';
+import generateDummyUser from '../dummy/user';
+import generateDummyEvent from '../dummy/event';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
@@ -14,7 +15,6 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
       type: resourceData.type,
     });
     await resourceSchemaData.save();
-    await emailService.sendEmail( generateDummyUser(), 'WELCOME');
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -27,6 +27,11 @@ const readResource = async (id: string): Promise<ResourceData> => {
     if (!resource) {
       throw new Error('Resource is not found.');
     }
+
+    await emailService.sendEmail('FEEDBACK', generateDummyUser(), generateDummyEvent());
+    await emailService.sendEmail('EVENT_SIGN_UP_CONFIRMATION', generateDummyUser(), generateDummyEvent());
+    await emailService.sendEmail('WAITLIST_TO_CONFIRMED', generateDummyUser(), generateDummyEvent());
+    await emailService.sendEmail('WELCOME', generateDummyUser(), generateDummyEvent());
 
     return resource;
   } catch (err) {
