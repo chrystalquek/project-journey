@@ -80,7 +80,7 @@ const Login: FC<LoginProps> = ({
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
               <Typography className={classes.pageHeader}>Login</Typography>
-              <form className={classes.form} noValidate>
+              <form className={classes.form} onSubmit={handleFormSubmit}>
               <Typography className={classes.header}> Email </Typography>
               <TextField
                 variant='outlined'
