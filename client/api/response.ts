@@ -1,4 +1,4 @@
-import { VolunteerData } from "types/volunteer"
+import { VolunteerData } from 'types/volunteer';
 
 export type LoginResponse = {
   token: string

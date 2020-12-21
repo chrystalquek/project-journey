@@ -31,4 +31,4 @@ export default function EventCount({ user }) {
       </Grid>
     </PaddedGrid>
   );
-};
+}

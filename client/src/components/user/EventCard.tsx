@@ -1,9 +1,9 @@
-import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 type EventCardProps = {
   title: string;
@@ -13,19 +13,17 @@ type EventCardProps = {
   maximumVacancy: string;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      maxWidth: 400,
-    },
-    media: {
-      height: "200px",
-    },
-    bold: {
-      fontWeight: 600,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    maxWidth: 400,
+  },
+  media: {
+    height: '200px',
+  },
+  bold: {
+    fontWeight: 600,
+  },
+}));
 
 export default function RecipeReviewCard(props: EventCardProps) {
   const classes = useStyles();
@@ -58,7 +56,11 @@ export default function RecipeReviewCard(props: EventCardProps) {
           component="p"
           className={classes.bold}
         >
-          {props.currentVacancy}/{props.maximumVacancy} vacancies left
+          {props.currentVacancy}
+          /
+          {props.maximumVacancy}
+          {' '}
+          vacancies left
         </Typography>
       </CardContent>
     </Card>

@@ -32,7 +32,7 @@ class AxiosApiClient implements ApiClient {
 
   protected async send(request: any, path: string, method: HttpMethod) {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     };
 
     if (process.env.NODE_ENV === 'development') {

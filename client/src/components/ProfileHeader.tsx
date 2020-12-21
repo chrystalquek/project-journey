@@ -61,4 +61,4 @@ export default function ProfileHeader({ user }) {
       </Grid>
     </Grid>
   );
-};
+}

@@ -21,4 +21,4 @@ export default function SignUpInformation({ user }) {
       <DataRow header="Member since" data={user.memberSince} xs1={3} xs2={9} />
     </PaddedGrid>
   );
-} 
+}
