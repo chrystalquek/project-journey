@@ -15,6 +15,14 @@ const initialState: VolunteerState = {
   count: 0,
 };
 
+const parseVolunteer = (volunteer: VolunteerData) => {
+  return {
+    ...volunteer,
+    birthday: new Date(volunteer.birthday),
+    created_at: new Date(volunteer.created_at),
+  }
+}
+
 const volunteerSlice = createSlice({
   name: 'volunteer',
   initialState,
@@ -27,7 +35,7 @@ const volunteerSlice = createSlice({
     });
     builder.addCase(getVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
-      state.volunteers = payload.response.data;
+      state.volunteers = payload.response.data.map(vol => parseVolunteer(vol));
       state.count = payload.response.count;
       state.page = payload.pageNo;
     });

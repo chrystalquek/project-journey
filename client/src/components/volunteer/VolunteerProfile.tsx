@@ -35,7 +35,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
   // const classes = useStyles();
 
   // constants
-  const size = 5; // incase can give options to change no of rows per page
+  const size = 10; // incase can give options to change no of rows per page
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
@@ -105,8 +105,8 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       </Head>
       <NavBar />
 
-      <Grid container direction="row" spacing={3} xs={10}>
-        <Grid item xs={8}>
+      <Grid container direction="row" spacing={3} justify="center">
+        <Grid item xs={7}>
           <TableContainer>
             <Table >
               <TableHead>
@@ -121,7 +121,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
                   <TableRow key={vol.email}>
                     <TableCell><b>{vol.name}</b></TableCell>
                     <TableCell>{vol.volunteerType}</TableCell>
-                    <TableCell>{new Date(vol.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>{vol.created_at.toLocaleDateString()}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -137,7 +137,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
           />
         </Grid>
 
-        <Grid item xs={2} >
+        <Grid item xs={3} >
           <Typography>Filter by</Typography>
           <Typography>Volunteer Type <IconButton onClick={() => handleToggle()}>{openFilter ? <RemoveIcon /> : <AddIcon />}</IconButton></Typography>
           {openFilter &&
