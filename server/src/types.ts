@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 export type QueryParams = {
     skip: number,
     limit: number,
@@ -11,9 +9,15 @@ type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
 export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
-export type SignUpStatus = 'pending' | 'accepted' | 'rejected'
+export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
+export interface RoleData {
+    name: string;
+    description: string;
+    capacity: number;
+    volunteers: Array<string>;
+}
 
 export type VolunteerData = {
     _id: string;
@@ -127,8 +131,7 @@ export type EventData = {
     location: string;
     deadline: Date;
     additionalInformation: string;
-    capacity: number;
-    volunteers: Array<mongoose.Types.ObjectId>;
+    roles: Array<RoleData>;
 }
 
 export type OpportunityData = EventData & {

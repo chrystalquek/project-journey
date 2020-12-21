@@ -19,8 +19,7 @@ const createOpportunity = async (opportunityData: OpportunityData): Promise<void
       location: opportunityData.location,
       deadline: opportunityData.deadline,
       additional_information: opportunityData.additionalInformation,
-      capacity: opportunityData.capacity,
-      volunteers: opportunityData.volunteers,
+      roles: opportunityData.roles,
 
       // Specific
       photo: opportunityData.photo,
