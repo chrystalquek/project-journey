@@ -159,15 +159,16 @@ export type QuestionData = {
 }
 
 export type OptionData = {
+    id: string
     questionId: string;
     text: string;
 }
 
 export type AnswerData = {
     questionId: string;
-    optionId: string;
     userId: string;
-    text: String
+    content: string;
+    formId: string;
 }
 
 /**
