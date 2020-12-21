@@ -3,9 +3,8 @@ export type LoginRequest = {
   password: string
 }
 
-export type QueryOptions = {
+export type QueryParams = {
   pageNo: number
   size: number
+  [field: string]: any
 }
-
-export type VolunteerQueryOptions = QueryOptions & { volunteerType: string }

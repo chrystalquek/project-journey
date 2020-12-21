@@ -7,7 +7,7 @@ import {
   FormGroup,
   Grid,
   IconButton,
-  makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography,
+  Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -15,10 +15,11 @@ import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
 import { VolunteerState } from '@redux/reducers/volunteer';
 import { VOLUNTEER_TYPE } from 'types/volunteer';
+import { QueryParams } from 'api/request';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
-  getVolunteers: (pageNo: number, size: number, volunteerType: string) => Promise<void>
+  getVolunteers: (query: QueryParams) => Promise<void>
 }
 
 // const useStyles = makeStyles(theme => ({
@@ -34,36 +35,56 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
   // const classes = useStyles();
 
   // constants
-  const size = 5;
+  const size = 5; // incase can give options to change no of rows per page
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    getVolunteers(0, size, filterVolunteerTypeToString(filterVolunteerType));
+    getVolunteers({ pageNo: 0, size, volunteerType: convertFilterObjectToQueryString(filterVolunteerType) });
   }, []);
 
+  // helpers
+
+  // takes in an enum and returns a string array with all its keys
+  // e.g. enum {"a", "b"} => ["a", "b"]
+  const getEnumKeys = (enumObj: any) => Object.keys(enumObj).filter(key => !isNaN(Number(enumObj[key])));
+
+  // takes in an enum and returns a filter object containing enum key to boolean pairs, initialized to true
+  // e.g. enum {"a", "b"} => {"a": true, "b": true}
+  const initializeFilterObject = (enumObj: any) => {
+    const keys = getEnumKeys(enumObj);
+    const filterObject: any = {};
+    keys.forEach(key => filterObject[key] = true);
+    return filterObject;
+  }
+
+  // takes in a filter object and returns a comma-separated string representation
+  // e.g. {"a": true, "b": false, "c": true} => ",a,c"
+  const convertFilterObjectToQueryString = (filterObj: any) => Object.keys(filterObj).reduce((a, b) => filterObj[b] ? a + "," + b : a, "");
+
+  const capitalize = (s) => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
+  }
+
+
+  // get array of strings from enum
+  const volunteerTypeValues = getEnumKeys(VOLUNTEER_TYPE);
+
   // for filtering by volunteer type
-  const [filterVolunteerType, setFilterVolunteerType] = React.useState({ "ad-hoc": true, "committed": true, "lead": true, "admin": true });
+  const [filterVolunteerType, setFilterVolunteerType] = React.useState(initializeFilterObject(VOLUNTEER_TYPE));
 
   const handleFilterVolunteerTypeChange = (event) => {
     setFilterVolunteerType({
       ...filterVolunteerType,
       [event.target.name]: event.target.checked
     });
-    getVolunteers(0, size, filterVolunteerTypeToString({
-      ...filterVolunteerType,
-      [event.target.name]: event.target.checked
-    }));
+    getVolunteers({
+      pageNo: 0, size, volunteerType: convertFilterObjectToQueryString({
+        ...filterVolunteerType,
+        [event.target.name]: event.target.checked
+      })
+    });
   };
-
-  const filterVolunteerTypeToString = (filterVolunteerType) => {
-    let result = ""
-    Object.keys(filterVolunteerType).forEach(key => {
-      if (filterVolunteerType[key]) {
-        result += "," + key
-      }
-    })
-    return result;
-  }
 
   // for opening filter menu
   const [openFilter, setOpenFilter] = React.useState(false);
@@ -74,7 +95,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
 
 
   const handleChangePage = (event, newPage: number) => {
-    getVolunteers(newPage, size, filterVolunteerTypeToString(filterVolunteerType));
+    getVolunteers({ pageNo: newPage, size, volunteerType: convertFilterObjectToQueryString(filterVolunteerType) });
   };
 
   return (
@@ -121,22 +142,10 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
           <Typography>Volunteer Type <IconButton onClick={() => handleToggle()}>{openFilter ? <RemoveIcon /> : <AddIcon />}</IconButton></Typography>
           {openFilter &&
             <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={filterVolunteerType["ad-hoc"]} onChange={handleFilterVolunteerTypeChange} name="ad-hoc" />}
-                label="Ad-hoc"
-              />
-              <FormControlLabel
-                control={<Checkbox checked={filterVolunteerType["committed"]} onChange={handleFilterVolunteerTypeChange} name="committed" />}
-                label="Committed"
-              />
-              <FormControlLabel
-                control={<Checkbox checked={filterVolunteerType["lead"]} onChange={handleFilterVolunteerTypeChange} name="lead" />}
-                label="Lead"
-              />
-              <FormControlLabel
-                control={<Checkbox checked={filterVolunteerType["admin"]} onChange={handleFilterVolunteerTypeChange} name="admin" />}
-                label="Admin"
-              />
+              {volunteerTypeValues.map(volunteerType => <FormControlLabel
+                control={<Checkbox checked={filterVolunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
+                label={capitalize(volunteerType)}
+              />)}
             </FormGroup>
           }
 

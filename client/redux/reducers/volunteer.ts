@@ -3,7 +3,8 @@ import { VolunteerData } from 'types/volunteer';
 import { getVolunteers } from '@redux/actions/volunteer';
 
 export type VolunteerState = {
-  volunteers: Array<VolunteerData>;
+  // TODO need to save to a big hashmap of volunteers?
+  volunteers: Array<VolunteerData>; // display in table
   page: number,
   count: number;
 }
