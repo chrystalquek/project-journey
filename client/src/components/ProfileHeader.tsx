@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import BecomeCommitedDialog from '@components/BecomeCommitedDialog';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -17,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       textAlign: 'center',
     },
-  },
-  link: {
-    color: theme.palette.secondary.main,
   },
   grid: {
     backgroundColor: theme.palette.secondary.light,
@@ -57,8 +55,8 @@ export default function ProfileHeader({ user }) {
           <strong>Volunteer Status: </strong>
           {user.volunteerStatus}
         </Typography>
-        <Typography className={`${classes.header} ${classes.link}`}>
-          <u>Become a commited volunteer</u>
+        <Typography className={`${classes.header}`}>
+          <BecomeCommitedDialog />
         </Typography>
       </Grid>
     </Grid>

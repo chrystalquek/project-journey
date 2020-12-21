@@ -5,8 +5,9 @@ import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
 import PaddedGrid from '@components/common/PaddedGrid';
 
-const ContactInformation = ({ user }) => (
-  <PaddedGrid>
+export default function ContactInformation({ user }) {
+  return (
+    <PaddedGrid>
     <Grid item>
       <Typography variant="h4">Contact Information</Typography>
     </Grid>
@@ -17,6 +18,5 @@ const ContactInformation = ({ user }) => (
     <DataRow header="E-mail" data={user.email} xs1={3} xs2={9} />
     <DataRow header="Lorem" data={user.lorem} xs1={3} xs2={9} />
   </PaddedGrid>
-);
-
-export default ContactInformation;
+  )
+}
