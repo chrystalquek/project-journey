@@ -2,7 +2,7 @@ import express from 'express';
 import _ from 'lodash';
 import { body, param } from 'express-validator';
 import jwt from 'express-jwt';
-import { QueryOptions, VolunteerData } from '../types';
+import { QueryParams, VolunteerData } from '../types';
 import {
   addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, updateVolunteerDetails,
 } from '../services/volunteer';
@@ -126,7 +126,7 @@ const getAllVolunteerDetails = async (req: express.Request, res: express.Respons
 
     const pageNo = Number(req.query.pageNo);
     const size = Number(req.query.size);
-    const query: QueryOptions = { skip: 0, limit: 0 };
+    const query: QueryParams = { skip: 0, limit: 0 };
     if (pageNo < 0) {
       throw new Error('Invalid page number, should start with 0');
     }

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export type QueryOptions = {
+export type QueryParams = {
     skip: number,
     limit: number,
     [field: string]: any
