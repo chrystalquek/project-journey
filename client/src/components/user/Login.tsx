@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 20,
 
   },
+  pageHeader: {
+    fontSize: "32px",
+    fontWeight: "bold",
+    marginBottom: "40px"
+  },
   loginButtonContainer: {
     padding: "20px 0px 20px 0px"
   },
@@ -74,6 +79,7 @@ const Login: FC<LoginProps> = ({
         <Content style={styles.content}>
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
+              <Typography className={classes.pageHeader}>Login</Typography>
               <form className={classes.form} noValidate>
               <Typography className={classes.header}> Email </Typography>
               <TextField
