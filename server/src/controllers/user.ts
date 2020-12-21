@@ -1,10 +1,35 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { checkUserExists, readAllUsers } from '../services/user';
+import { getUser, readAllUsers } from '../services/user';
+import { VolunteerData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
+import VALIDATOR from '../helpers/validation';
+import { updateVolunteerDetails } from '../services/volunteer';
+
+export type UserValidatorMethod = 'login' | 'updatePassword'
+
+const getValidations = (method: UserValidatorMethod) => {
+  switch (method) {
+    case 'login': {
+      return [
+        VALIDATOR.email(false),
+        VALIDATOR.password,
+      ];
+    }
+    case 'updatePassword': {
+      return [
+        VALIDATOR.email(false),
+        VALIDATOR.password,
+        VALIDATOR.newPassword,
+      ];
+    }
+    default:
+      return [];
+  }
+};
 
 const getAllUsers = async (req: express.Request, res: express.Response) => {
   const users = await readAllUsers();
@@ -14,31 +39,68 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
 };
 
 const login = async (req: express.Request, res: express.Response) => {
-  // Read username and password from request body
-  const { fullName, password } = req.body;
+  const { email, password } = req.body;
 
-  const user = await checkUserExists(fullName);
-
-  if (user) {
+  try {
+    const user = await getUser(email);
     if (bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign({ user }, accessTokenSecret, {
+      const userCopy = Object.assign(user);
+      delete userCopy.password;
+
+      const userWithoutPassword: Omit<VolunteerData, 'password'> = userCopy;
+
+      const token = jwt.sign(JSON.parse(JSON.stringify(userWithoutPassword)), accessTokenSecret, {
         expiresIn: '24h',
       });
 
-      res.json({
+      res.status(HTTP_CODES.OK).json({
         token,
       });
     } else {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({
-        errors: [{ msg: 'Unauthenticated' }],
+      res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+        errors: [{
+          message: 'Password is incorrect, please try again',
+        }],
       });
     }
-  } else {
-    res.send('Username or password incorrect');
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: error.message,
+    });
+  }
+};
+
+const updatePassword = async (req: express.Request, res: express.Response) => {
+  const {
+    email,
+    password,
+    newPassword,
+  } = req.body;
+
+  try {
+    const user = await getUser(email);
+    if (bcrypt.compareSync(password, user.password)) {
+      await updateVolunteerDetails(email, { password: newPassword });
+      res.status(HTTP_CODES.OK).send();
+    } else {
+      res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+        errors: [{
+          message: 'Password is incorrect, please try again',
+        }],
+      });
+    }
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: [{
+        message: error.message,
+      }],
+    });
   }
 };
 
 export default {
   getAllUsers,
   login,
+  getValidations,
+  updatePassword,
 };

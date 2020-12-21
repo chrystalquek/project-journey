@@ -1,12 +1,12 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator/check';
+import { body } from 'express-validator';
 import { ResourceData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import resourceService from '../services/resource';
 
 export type ResourceValidatorMethod = 'createResource';
 
-const validate = (method: ResourceValidatorMethod) => {
+const getValidations = (method: ResourceValidatorMethod) => {
   switch (method) {
     case 'createResource': {
       return [
@@ -25,15 +25,6 @@ const createResource = async (
   req: express.Request,
   res: express.Response,
 ): Promise<void> => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: errors.array(),
-    });
-    return;
-  }
-
   try {
     await resourceService.createResource(req.body as ResourceData);
     res.status(HTTP_CODES.OK).send('Resource data created');
@@ -89,5 +80,5 @@ export default {
   readResource,
   updateResource,
   deleteResource,
-  validate,
+  getValidations,
 };
