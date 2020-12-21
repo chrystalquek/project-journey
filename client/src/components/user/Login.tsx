@@ -1,6 +1,9 @@
 import {
-  Form, Input, Button, Layout, Row, Col,
+  Form, Input, Button, Layout
 } from 'antd';
+import {
+  Grid
+} from '@material-ui/core'
 import React, { FC, useEffect } from 'react';
 import Link from 'next/link';
 import { useForm } from 'antd/lib/form/Form';
@@ -44,8 +47,8 @@ const Login: FC<LoginProps> = ({
       <Layout>
         <NavBar />
         <Content style={styles.content}>
-          <Row style={styles.rowContent}>
-            <Col span={8}>
+          <Grid container style={styles.rowContent}>
+            <Grid item xs={4}>
               <Form
                 layout="vertical"
                 name="login"
@@ -92,8 +95,8 @@ const Login: FC<LoginProps> = ({
                   Sign up
                 </Link>
               </div>
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         </Content>
         <Footer />
       </Layout>
