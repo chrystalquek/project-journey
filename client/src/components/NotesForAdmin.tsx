@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NotesForAdmin = ({ user }) => {
+export default function NotesForAdmin({ user }) {
   const classes = useStyles();
 
   const desc = user.notes
@@ -37,5 +37,3 @@ const NotesForAdmin = ({ user }) => {
     </PaddedGrid>
   );
 };
-
-export default NotesForAdmin;

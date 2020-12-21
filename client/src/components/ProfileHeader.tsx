@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileHeader = ({ user }) => {
+export default function ProfileHeader({ user }) {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -64,5 +64,3 @@ const ProfileHeader = ({ user }) => {
     </Grid>
   );
 };
-
-export default ProfileHeader;

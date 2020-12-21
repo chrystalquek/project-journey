@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventCount = ({ user }) => {
+export default function EventCount({ user }) {
   const classes = useStyles();
 
   return (
@@ -32,5 +32,3 @@ const EventCount = ({ user }) => {
     </PaddedGrid>
   );
 };
-
-export default EventCount;
