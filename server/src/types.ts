@@ -1,3 +1,9 @@
+export type QueryParams = {
+    skip: number,
+    limit: number,
+    [field: string]: any
+} // query parameters for GET
+
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
 type VolunteerStatus = 'pending' | 'verified'
@@ -90,9 +96,9 @@ export type EnvironmentConstants = {
 export type FormFieldType = 'String' | 'Number';
 
 export type TeamData = {
-  leader: string,
-  name: string,
-  members: [string]
+    leader: string,
+    name: string,
+    members: [string]
 }
 
 export type ResponseJSON = {
