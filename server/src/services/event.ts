@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { EventSearchType, EventData } from '../types';
+import { QueryParams, EventSearchType, EventData, EventSearchQuery } from '../types';
 
 import Event from '../models/Event';
 
@@ -90,18 +90,20 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEvents = async (eventType: EventSearchType): Promise<EventData[]> => {
+const readEvents = async (eventType: EventSearchQuery): Promise<EventData[]> => {
   try {
     let events: EventData[];
-    switch (eventType) {
+    
+    switch (eventType.searchType) {
+    
       case 'all':
-        events = await Event.find({});
+        events = await Event.find({}).skip(eventType.skip).limit(eventType.limit);
         break;
       case 'past':
-        events = await Event.find({ start_date: { $lt: new Date() } });
+        events = await Event.find({ start_date: { $lt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
         break;
       case 'upcoming':
-        events = await Event.find({ start_date: { $gt: new Date() } });
+        events = await Event.find({ start_date: { $gt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
         break;
       default: throw new Error('Event type is invalid');
     }

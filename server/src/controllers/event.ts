@@ -2,9 +2,8 @@ import express from 'express';
 import { body } from 'express-validator';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import { roleCapacityValidator } from '../helpers/validation';
-import { EventSearchType, EventData, RoleData } from '../types';
+import { EventSearchType, EventData, RoleData, QueryParams, EventSearchQuery } from '../types';
 import jwt from 'express-jwt';
-import {QueryParams, EventData} from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
 
@@ -78,23 +77,21 @@ const readEvent = async (
 const readEvents = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
 
-   
+    const searchType = req.params.eventType as EventSearchType;
     const pageNo = Number(req.query.pageNo);
-    const size = Number (req.query.size);
-    const query: QueryParams = {skip: 0, limit: 0 };
+    const size = Number(req.query.size);
+    const query: EventSearchQuery = { searchType, skip: 0, limit: 0 };
 
     if (pageNo < 0){
       throw new Error ('Invalid page number, should start with 0');
     }
-
     query.skip = size * pageNo;
     query.limit = size;
-
     const events = await eventService.readEvents(query);
-
     res.status(HTTP_CODES.OK).json({
       events
     });
+
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
