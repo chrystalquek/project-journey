@@ -90,7 +90,7 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEvents = async (eventType: EventSearchQuery): Promise<EventData[]> => {
+const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
   try {
     let events: EventData[];
     
