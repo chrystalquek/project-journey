@@ -2,7 +2,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import { roleCapacityValidator } from '../helpers/validation';
-import { EventSearchType, EventData, RoleData, QueryParams, EventSearchQuery } from '../types';
+import { EventSearchType, EventData, RoleData, QueryParams} from '../types';
 import jwt from 'express-jwt';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
