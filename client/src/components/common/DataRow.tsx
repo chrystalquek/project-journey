@@ -12,7 +12,9 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
   header: string,
   data: string,
+  // xs1 is column width of the row header
   xs1: boolean | 'auto' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
+  // xs2 is column width of the row data
   xs2: boolean | 'auto' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 }
 

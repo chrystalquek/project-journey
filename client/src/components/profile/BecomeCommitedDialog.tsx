@@ -80,11 +80,14 @@ export default function BecomeCommited() {
 
   return (
     <div>
+      {/* Link to open the dialog */}
       <Typography className={classes.header}>
         <Link color="secondary" onClick={handleClickOpen}>
           <u>Become a committed volunteer</u>
         </Link>
       </Typography>
+
+      {/* Dialog */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -100,6 +103,8 @@ export default function BecomeCommited() {
         </DialogTitle>
         <DialogContent>
           <Grid container direction="column" spacing={2}>
+
+            {/* Form fields */}
             <Grid item>
               <TextField
                 variant="outlined"
@@ -138,6 +143,8 @@ export default function BecomeCommited() {
                 rows={5}
               />
             </Grid>
+
+            {/* Agreement checkbox */}
             <Grid item>
               <FormControlLabel
                 control={<Checkbox checked={checked} onChange={handleCheck} />}

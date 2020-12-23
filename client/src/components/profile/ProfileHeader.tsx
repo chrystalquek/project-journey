@@ -44,11 +44,15 @@ export default function ProfileHeader({ user }) {
       spacing={2}
       className={classes.grid}
     >
+
+      {/* Avatar icon */}
       <Grid item xs={12} sm="auto">
         <Avatar className={classes.avatar}>
           <PersonOutlineIcon className={classes.personIcon} />
         </Avatar>
       </Grid>
+
+      {/* User details */}
       <Grid item xs={12} sm="auto">
         <Typography variant="h2" className={classes.header}>{user.name}</Typography>
         <Typography className={classes.header}>

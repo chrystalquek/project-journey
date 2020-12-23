@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import DiscardSaveButtons from '@components/profile/DiscardSaveButtons';
 
+// Sub-component for Remarks section
 export default function RemarksTextField({
   value, onChange, label, show, onSave, onDiscard,
 }) {

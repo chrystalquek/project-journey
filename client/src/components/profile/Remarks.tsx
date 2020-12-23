@@ -22,11 +22,12 @@ export default function Remarks({ user }) {
   };
 
   const saveVolunteerRemarks = () => {
-    // sync database
+    // TODO: sync database
     user.volunteerRemarks = volunteerRemarks;
     setVolunteerRemarksChanged(false);
   };
   const saveAdminRemarks = () => {
+    // TODO: sync database
     user.adminRemarks = adminRemarks;
     setAdminRemarksChanged(false);
   };
@@ -49,6 +50,8 @@ export default function Remarks({ user }) {
         <ProfileDivider />
       </Grid>
       <Grid item container direction="column" spacing={2}>
+
+        {/* Volunteer remarks */}
         <RemarksTextField
           value={volunteerRemarks}
           onChange={handleVolunteerRemarks}
@@ -57,6 +60,8 @@ export default function Remarks({ user }) {
           onSave={saveVolunteerRemarks}
           onDiscard={discardVolunteerRemarks}
         />
+
+        {/* Admin remarks (only renders for admin) */}
         {user.status === 'admin'
           ? (
             <RemarksTextField

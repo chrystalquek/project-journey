@@ -19,6 +19,8 @@ export default function DiscardSaveButtons({ show, onSave, onDiscard }) {
   return show
     ? (
       <Grid item container spacing={2}>
+
+        {/* SAVE button */}
         <Grid item>
           <Button
             variant="contained"
@@ -32,6 +34,8 @@ export default function DiscardSaveButtons({ show, onSave, onDiscard }) {
             </Typography>
           </Button>
         </Grid>
+
+        {/* DISCARD button */}
         <Grid item>
           <Button
             color="secondary"
