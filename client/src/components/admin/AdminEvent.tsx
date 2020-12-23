@@ -21,10 +21,8 @@ const useStyles = makeStyles({
 
 const AdminEvent: FC<AdminEventProps> = ({ event }) => {
   const classes = useStyles();
-  const vacancies = getVacancies(event);
-  const filled = vacancies[0];
-  const total = vacancies[1];
-  let date = parseDate(event.start_date, event.end_date)
+  const { filled, total } =  getVacancies(event);
+  let { date, time } = parseDate(event.start_date, event.end_date)
 
   return (
     <Card>
@@ -41,8 +39,11 @@ const AdminEvent: FC<AdminEventProps> = ({ event }) => {
           <Typography gutterBottom className={classes.bold}>
             {event && event.name ? event.name : 'No event name provided'}
           </Typography>
-          <Typography gutterBottom>
+          <Typography>
             {date ? date : 'No date provided'}
+          </Typography>
+          <Typography gutterBottom>
+            {time ? time : 'No time provided'}
           </Typography>
           <Typography color="primary" gutterBottom className={classes.bold}>
             {filled}/{total} vacancies left
