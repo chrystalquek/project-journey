@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import ProfileHeader from '@components/ProfileHeader';
-import NotesForAdmin from '@components/NotesForAdmin';
+import Remarks from '@components/Remarks';
 import ContactInformation from '@components/ContactInformation';
 import SignUpInformation from '@components/SignUpInformation';
 import EventCount from '@components/EventCount';
@@ -9,8 +9,9 @@ import AppBar from '@material-ui/core/AppBar';
 
 const defaultUser = {
   name: 'Benjamin Lim',
-  volunteerStatus: 'Ad-hoc Volunteer',
-  notes: '',
+  status: 'ad-hoc volunteer',
+  volunteerRemarks: '',
+  adminRemarks: 'Ben & jerry',
   contactNumber: '9695 2546',
   email: 'benjaminvolunteer@gmail.com',
   lorem: 'lorem ipsum dolor sit amet',
@@ -36,7 +37,7 @@ const Profile = () => (
         </Grid>
         <Grid item container>
           <Grid item xs={12} md={7}>
-            <NotesForAdmin user={defaultUser} />
+            <Remarks user={defaultUser} />
           </Grid>
           <Grid item xs={12} md={5}>
             <ContactInformation user={defaultUser} />

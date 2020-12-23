@@ -53,9 +53,9 @@ export default function ProfileHeader({ user }) {
         <Typography variant="h2" className={classes.header}>{user.name}</Typography>
         <Typography className={classes.header}>
           <strong>Volunteer Status: </strong>
-          {user.volunteerStatus}
+          {user.status}
         </Typography>
-        {user.volunteerStatus === 'ad-hoc volunteer'
+        {user.status === 'ad-hoc volunteer'
           ? <BecomeCommitedDialog />
           : null}
       </Grid>
