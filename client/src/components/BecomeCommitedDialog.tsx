@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,6 +18,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     justifyContent: 'center',
     padding: '30px',
+  },
+  header: {
+    textAlign: 'left',
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'center',
+    },
   },
 }));
 
@@ -59,24 +65,26 @@ export default function BecomeCommited() {
     </Typography>
   );
 
-  const handleClickOpen = () => {
+  const handleClickOpen = useCallback(() => {
     setOpen(true);
-  };
+  }, [open]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
     setChecked(false);
-  };
+  }, [open, checked]);
 
-  const handleCheck = () => {
+  const handleCheck = useCallback(() => {
     setChecked(!checked);
-  };
+  }, [checked]);
 
   return (
     <div>
-      <Link color="secondary" onClick={handleClickOpen}>
-        <u>Become a committed volunteer</u>
-      </Link>
+      <Typography className={classes.header}>
+        <Link color="secondary" onClick={handleClickOpen}>
+          <u>Become a committed volunteer</u>
+        </Link>
+      </Typography>
       <Dialog
         open={open}
         onClose={handleClose}

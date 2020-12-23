@@ -55,9 +55,9 @@ export default function ProfileHeader({ user }) {
           <strong>Volunteer Status: </strong>
           {user.volunteerStatus}
         </Typography>
-        <Typography className={`${classes.header}`}>
-          <BecomeCommitedDialog />
-        </Typography>
+        {user.volunteerStatus === 'ad-hoc volunteer'
+          ? <BecomeCommitedDialog />
+          : null}
       </Grid>
     </Grid>
   );
