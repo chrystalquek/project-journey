@@ -67,6 +67,17 @@ const Login: FC<LoginProps> = ({
     }
   }, [user]);
 
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        router.push('/');
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(e.target.email.value)
@@ -76,7 +87,6 @@ const Login: FC<LoginProps> = ({
       password: e.target.password.value,
     }
     handleFormSubmit(loginArgs)
-    console.log("Token: " + user.token)
   }
 
   return (
