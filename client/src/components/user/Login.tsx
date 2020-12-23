@@ -80,8 +80,6 @@ const Login: FC<LoginProps> = ({
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(e.target.email.value)
-    console.log(e.target.password.value)
     let loginArgs: LoginArgs = {
       email: e.target.email.value,
       password: e.target.password.value,
