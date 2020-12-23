@@ -13,12 +13,6 @@ export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'; 
 
-export type EventSearchQuery = {
-    searchType: EventSearchType;
-    skip: number;
-    limit: number;
-}
-
 export interface RoleData {
     name: string;
     description: string;
