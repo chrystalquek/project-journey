@@ -26,9 +26,9 @@ const theme = createMuiTheme({
       color: '#595858',
     },
     body2: {
-      fontSize: '0.7rem',
-      fontWeight: 500,
-    }
+      fontSize: '0.8rem',
+      fontWeight: 600,
+    },
   },
   palette: {
     primary: {
@@ -37,7 +37,7 @@ const theme = createMuiTheme({
     secondary: {
       light: '#e5f8fb', // light blue for background
       main: '#00bbdc', // blue
-      dark: '#0096ae'
+      dark: '#0096ae',
     },
     text: {
       primary: '#000',

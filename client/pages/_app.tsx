@@ -6,7 +6,7 @@ import '@styles/globals.css';
 import { Provider } from 'react-redux';
 import store from '@redux/store';
 import { ThemeProvider } from '@material-ui/core/styles';
-import theme from '@styles/theme'
+import theme from '@styles/theme';
 
 function App({ Component, pageProps }: AppProps) {
   return (

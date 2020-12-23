@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import BecomeCommitedDialog from '@components/BecomeCommitedDialog';
+import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {

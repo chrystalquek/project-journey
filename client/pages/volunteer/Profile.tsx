@@ -1,10 +1,10 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import ProfileHeader from '@components/ProfileHeader';
-import Remarks from '@components/Remarks';
-import ContactInformation from '@components/ContactInformation';
-import SignUpInformation from '@components/SignUpInformation';
-import EventCount from '@components/EventCount';
+import ProfileHeader from '@components/profile/ProfileHeader';
+import Remarks from '@components/profile/Remarks';
+import ContactInformation from '@components/profile/ContactInformation';
+import SignUpInformation from '@components/profile/SignUpInformation';
+import EventCount from '@components/profile/EventCount';
 import AppBar from '@material-ui/core/AppBar';
 
 const defaultUser = {
