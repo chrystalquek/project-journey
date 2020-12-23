@@ -1,11 +1,11 @@
 import express from 'express';
 import _ from 'lodash';
 import { body, param } from 'express-validator';
-import { VolunteerData } from '../types';
-import {
-  addNewVolunteer, deleteVolunteer, findVolunteers, getAllVolunteers, getVolunteer, updateVolunteerDetails,
-} from '../services/volunteer';
 import jwt from 'express-jwt';
+import { QueryParams, VolunteerData } from '../types';
+import {
+  addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, updateVolunteerDetails,
+} from '../services/volunteer';
 import { accessTokenSecret } from '../helpers/auth';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -123,23 +123,30 @@ const getVolunteerDetails = async (req: express.Request, res: express.Response) 
 const getAllVolunteerDetails = async (req: express.Request, res: express.Response) => {
   try {
     // handles both searching volunteers and returning all volunteers
-    if (req.query.name) {
-      const volunteersDetails = await findVolunteers(req.query.name as string);
-      res.status(HTTP_CODES.OK).json({
-        data: volunteersDetails,
-      });
-    } else {
-      const volunteersDetails = await getAllVolunteers();
-      res.status(HTTP_CODES.OK).json({
-        data: volunteersDetails,
-      });
+
+    const pageNo = Number(req.query.pageNo);
+    const size = Number(req.query.size);
+    const query: QueryParams = { skip: 0, limit: 0 };
+    if (pageNo < 0) {
+      throw new Error('Invalid page number, should start with 0');
     }
+    query.skip = size * pageNo;
+    query.limit = size;
+
+    if (req.query.name) {
+      query.name = req.query.name;
+    }
+    if (req.query.volunteerType) {
+      query.volunteerType = (req.query.volunteerType as string).split(',');
+    }
+    const volunteersDetails = await getAllVolunteers(query);
+    res.status(HTTP_CODES.OK).json(volunteersDetails);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
     });
   }
-}
+};
 
 const checkUpdateRights = () => [
   jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
