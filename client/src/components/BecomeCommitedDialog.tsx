@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function BecomeCommited() {
-  const [open, setOpen] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
