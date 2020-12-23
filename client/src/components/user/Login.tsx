@@ -1,8 +1,5 @@
 import {
-  Form, Input, Layout
-} from 'antd';
-import {
-  Grid, Button, TextField, Typography, Paper
+  Box, Grid, Button, TextField, Typography, Paper
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FC, useEffect } from 'react';
@@ -48,8 +45,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const { Content } = Layout;
-
 type LoginProps = {
   user: UserState
   handleFormSubmit: (formData: LoginArgs) => Promise<void>
@@ -89,9 +84,9 @@ const Login: FC<LoginProps> = ({
       <Head>
         <title>Login</title>
       </Head>
-      <Layout>
+      <Box>
         <NavBar />
-        <Content style={styles.content}>
+        <Box style={styles.content}>
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
               <Typography className={classes.pageHeader}>Login</Typography>
@@ -145,9 +140,9 @@ const Login: FC<LoginProps> = ({
               </div>
             </Grid>
           </Grid>
-        </Content>
+        </Box>
         <Footer />
-      </Layout>
+      </Box>
     </>
   );
 };
