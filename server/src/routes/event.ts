@@ -15,7 +15,7 @@ protectedRouter.get('/single/:id', eventController.readEvent);
 // @route   GET /event/:eventType
 // @desc    Get either all, upcoming, or past events
 // @access  Private
-router.get('/multiple/:eventType', eventController.readEvents);
+protectedRouter.get('/multiple/:eventType', eventController.readEvents);
 
 // @route   GET /event/:userId/:eventType
 // @desc    Get either all, upcoming, or past signed up events

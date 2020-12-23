@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { QueryParams, EventSearchType, EventData, EventSearchQuery } from '../types';
+import { QueryParams, EventSearchType, EventData} from '../types';
 
 import Event from '../models/Event';
 
