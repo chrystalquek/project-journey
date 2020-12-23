@@ -2,7 +2,7 @@ import {
   Form, Input, Layout
 } from 'antd';
 import {
-  Grid, Button, TextField, Typography
+  Grid, Button, TextField, Typography, Paper
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FC, useEffect } from 'react';
@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '10px',
     fontWeight: "bold",
     fontSize: "14px"
+  },
+  formContainer: {
+    padding: "20px"
   }
 }));
 
@@ -69,6 +72,18 @@ const Login: FC<LoginProps> = ({
     }
   }, [user]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(e.target.email.value)
+    console.log(e.target.password.value)
+    let loginArgs: LoginArgs = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    }
+    handleFormSubmit(loginArgs)
+    console.log("Token: " + user.token)
+  }
+
   return (
     <>
       <Head>
@@ -80,41 +95,43 @@ const Login: FC<LoginProps> = ({
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
               <Typography className={classes.pageHeader}>Login</Typography>
-              <form className={classes.form} onSubmit={handleFormSubmit}>
-              <Typography className={classes.header}> Email </Typography>
-              <TextField
-                variant='outlined'
-                margin='normal'
-                // required
-                fullWidth
-                id='email'
-                label="e.g. username@gmail.com"
-                name='email'
-                autoComplete='email'
-              />
-              <Typography className={classes.header}> Password </Typography>
-              <TextField
-                variant='outlined'
-                margin='normal'
-                // required
-                fullWidth
-                name='password'
-                type='password'
-                id='password'
-                autoComplete='current-password'
-              />
-              <Grid className={classes.loginButtonContainer}>
-                <Button
-                  color="primary"
-                  type="submit"
-                  disabled={isFormDisabled}
-                  className={classes.loginButton}
-                  size="large"
-                >
-                  Log In
-                </Button>
-              </Grid>
-            </form>
+              <Paper className={classes.formContainer}>
+                <form className={classes.form} onSubmit={handleSubmit}>
+                  <Typography className={classes.header}> Email </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    id='email'
+                    label="e.g. username@gmail.com"
+                    name='email'
+                    autoComplete='email'
+                  />
+                  <Typography className={classes.header}> Password </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    name='password'
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
+                  />
+                  <Grid className={classes.loginButtonContainer}>
+                    <Button
+                      color="primary"
+                      type="submit"
+                      disabled={isFormDisabled}
+                      className={classes.loginButton}
+                      size="large"
+                    >
+                      Log In
+                    </Button>
+                  </Grid>
+              </form>
+            </Paper>
 
               <div className="section">
                 <div>
