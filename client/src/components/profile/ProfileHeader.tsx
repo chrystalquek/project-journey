@@ -1,10 +1,7 @@
 import React from 'react';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
+import { Grid, Typography, Avatar, useMediaQuery } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,11 +1,10 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
+import { Grid, AppBar } from '@material-ui/core';
 import ProfileHeader from '@components/profile/ProfileHeader';
 import Remarks from '@components/profile/Remarks';
 import ContactInformation from '@components/profile/ContactInformation';
 import SignUpInformation from '@components/profile/SignUpInformation';
 import EventCount from '@components/profile/EventCount';
-import AppBar from '@material-ui/core/AppBar';
 
 const defaultUser = {
   name: 'Benjamin Lim',
