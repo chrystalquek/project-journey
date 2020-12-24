@@ -4,7 +4,7 @@ export type LoginRequest = {
 }
 
 export type QueryParams = {
-  pageNo: number
-  size: number
+  pageNo?: number
+  size?: number
   [field: string]: any
 }

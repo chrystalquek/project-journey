@@ -17,44 +17,35 @@ import Footer from '../common/Footer';
 import { VolunteerState } from '@redux/reducers/volunteer';
 import { VOLUNTEER_TYPE } from 'types/volunteer';
 import { QueryParams } from 'api/request';
-import { convertFilterObjectToQueryString, getEnumKeys, initializeFilterObject } from '@utils/helpers/TableOptions';
+import { getEnumKeys } from '@utils/helpers/TableOptions';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
   getVolunteers: (query: QueryParams) => Promise<void>
 }
 
+// constants
+export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
+
 const VolunteerProfile: FC<VolunteerProfileProps> = ({
   volunteers,
   getVolunteers
 }: VolunteerProfileProps) => {
 
-  // constants
-  const size = 10;
-
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    getVolunteers({ pageNo: 0, size, volunteerType: convertFilterObjectToQueryString(filterVolunteerType) });
+    getVolunteers({});
   }, []);
 
   // get array of strings from enum
   const volunteerTypeValues = getEnumKeys(VOLUNTEER_TYPE);
 
-  // for filtering by volunteer type
-  const [filterVolunteerType, setFilterVolunteerType] = React.useState(initializeFilterObject(VOLUNTEER_TYPE));
-
   const handleFilterVolunteerTypeChange = (event) => {
-    setFilterVolunteerType({
-      ...filterVolunteerType,
-      [event.target.name]: event.target.checked
-    });
     getVolunteers({
-      pageNo: 0, size, volunteerType: convertFilterObjectToQueryString({
-        ...filterVolunteerType,
-        [event.target.name]: event.target.checked
-      })
-    });
+      volunteerType: event.target.name
+    })
   };
+
 
   // for opening filter menu
   const [openFilter, setOpenFilter] = React.useState(false);
@@ -65,8 +56,10 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
 
 
   const handleChangePage = (event, newPage: number) => {
-    getVolunteers({ pageNo: newPage, size, volunteerType: convertFilterObjectToQueryString(filterVolunteerType) });
+    getVolunteers({ pageNo: newPage });
   };
+
+  const currentPageVolunteers = volunteers.meta.currentPageIds.map(id => volunteers.data[id]);
 
   return (
     <>
@@ -87,7 +80,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {volunteers?.volunteers.map((vol) => (
+                {currentPageVolunteers.map((vol) => (
                   <TableRow key={vol.email}>
                     <TableCell><b>{vol.name}</b></TableCell>
                     <TableCell>{vol.volunteerType}</TableCell>
@@ -98,11 +91,11 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5]}
+            rowsPerPageOptions={[rowsPerPage]}
             component="div"
-            count={volunteers.count}
-            rowsPerPage={size}
-            page={volunteers.page}
+            count={volunteers.meta.count}
+            rowsPerPage={rowsPerPage}
+            page={volunteers.meta.pageNo}
             onChangePage={handleChangePage}
           />
         </Grid>
@@ -113,7 +106,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
           {openFilter &&
             <FormGroup>
               {volunteerTypeValues.map(volunteerType => <FormControlLabel
-                control={<Checkbox checked={filterVolunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
+                control={<Checkbox checked={volunteers.meta.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
                 label={capitalize(volunteerType)}
               />)}
             </FormGroup>

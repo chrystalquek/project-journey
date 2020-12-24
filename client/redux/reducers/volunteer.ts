@@ -1,27 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData } from 'types/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { getVolunteers } from '@redux/actions/volunteer';
+import { initializeFilterObject } from '@utils/helpers/TableOptions';
 
 export type VolunteerState = {
-  // TODO need to save to a big hashmap of volunteers?
-  volunteers: Array<VolunteerData>; // display in table
-  page: number,
-  count: number;
+  data: Record<string, VolunteerData>;
+  meta: {
+    currentPageIds: Array<string>
+    pageNo: number,
+    count: number
+    filters: {
+      volunteerType: Record<VOLUNTEER_TYPE, boolean>
+    }
+  }
 }
 
 const initialState: VolunteerState = {
-  volunteers: [],
-  page: 0,
-  count: 0,
-};
-
-const parseVolunteer = (volunteer: VolunteerData) => {
-  return {
-    ...volunteer,
-    birthday: new Date(volunteer.birthday),
-    created_at: new Date(volunteer.created_at),
+  data: {},
+  meta: {
+    currentPageIds: [],
+    pageNo: 0,
+    count: 0,
+    filters: {
+      volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
+    }
   }
-}
+};
 
 const volunteerSlice = createSlice({
   name: 'volunteer',
@@ -31,16 +35,23 @@ const volunteerSlice = createSlice({
     // Simplify immutable updates with redux toolkit
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getVolunteers.pending, (state) => {
-      state.volunteers = [];
+      state.meta.currentPageIds = []
     });
     builder.addCase(getVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
-      state.volunteers = payload.response.data.map(vol => parseVolunteer(vol));
-      state.count = payload.response.count;
-      state.page = payload.pageNo;
+      // normalize from array to object structure
+      payload.data.forEach(volunteer => state.data[volunteer._id] = {
+        ...volunteer,
+        birthday: new Date(volunteer.birthday),
+        created_at: new Date(volunteer.created_at),
+      });
+      state.meta.currentPageIds = payload.data.map(volunteer => volunteer._id);
+      state.meta.count = payload.count;
+      state.meta.pageNo = payload.pageNo;
+      state.meta.filters.volunteerType = payload.filters.volunteerType;
     });
     builder.addCase(getVolunteers.rejected, (state) => {
-      state.volunteers = [];
+      state.meta.currentPageIds = []
     });
   },
 });

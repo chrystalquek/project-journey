@@ -8,7 +8,7 @@ export const getEnumKeys = (enumObj: any) => Object.keys(enumObj).filter(key => 
 // e.g. enum {"a", "b"} => {"a": true, "b": true}
 export const initializeFilterObject = (enumObj: any) => {
     const keys = getEnumKeys(enumObj);
-    const filterObject: any = {};
+    const filterObject: Record<any, boolean> = {};
     keys.forEach(key => filterObject[key] = true);
     return filterObject;
 }
@@ -17,7 +17,6 @@ export const initializeFilterObject = (enumObj: any) => {
 // e.g. {"a": true, "b": false, "c": true} => ",a,c"
 export const convertFilterObjectToQueryString = (filterObj: any) => Object.keys(filterObj).reduce((a, b) => filterObj[b] ? a + "," + b : a, "");
 
-export const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
+export const capitalize = (s: string) => {
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
