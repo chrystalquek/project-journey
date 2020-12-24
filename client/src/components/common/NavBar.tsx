@@ -8,7 +8,6 @@ import { useRouter } from 'next/dist/client/router';
 const { Header } = Layout;
 
 const NavBar: FC = () => {
-
   const router = useRouter();
 
   return (
@@ -26,7 +25,7 @@ const NavBar: FC = () => {
         {/* TODO: hide for regular volunteers */}
       </Menu>
     </Header>
-  )
+  );
 };
 
 export default NavBar;
