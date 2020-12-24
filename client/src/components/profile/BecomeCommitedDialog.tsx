@@ -27,7 +27,7 @@ export default function BecomeCommited() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const checkboxLabel = () => (
+  const CheckboxLabel = (
     <Typography>
       I understand to regularly participate in BIAB events in the
       <Link color="secondary">
@@ -39,7 +39,7 @@ export default function BecomeCommited() {
     </Typography>
   );
 
-  const termsAndAgreement = () => (
+  const TermsAndAgreement = (
     <Typography>
       By confirming, my application, I agree to the
       <Link color="secondary">
@@ -141,11 +141,11 @@ export default function BecomeCommited() {
             <Grid item>
               <FormControlLabel
                 control={<Checkbox checked={checked} onChange={handleCheck} />}
-                label={checkboxLabel()}
+                label={CheckboxLabel}
               />
             </Grid>
             <Grid item>
-              {termsAndAgreement()}
+              {TermsAndAgreement}
             </Grid>
           </Grid>
         </DialogContent>

@@ -14,8 +14,7 @@ const useStyles = makeStyles((theme) => ({
 export default function DiscardSaveButtons({ show, onSave, onDiscard }) {
   const classes = useStyles();
 
-  return show
-    ? (
+  return show && (
       <Grid item container spacing={2}>
 
         {/* SAVE button */}
@@ -47,6 +46,5 @@ export default function DiscardSaveButtons({ show, onSave, onDiscard }) {
           </Button>
         </Grid>
       </Grid>
-    )
-    : null;
+    );
 }

@@ -58,9 +58,7 @@ export default function ProfileHeader({ user }) {
           <strong>Volunteer Status: </strong>
           {user.status}
         </Typography>
-        {user.status === 'ad-hoc volunteer'
-          ? <BecomeCommitedDialog />
-          : null}
+        { user.status === 'ad-hoc volunteer' && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );

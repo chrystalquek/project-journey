@@ -61,8 +61,7 @@ export default function Remarks({ user }) {
         />
 
         {/* Admin remarks (only renders for admin) */}
-        {user.status === 'admin'
-          ? (
+        {user.status === 'admin' && (
             <RemarksTextField
               value={adminRemarks}
               onChange={handleAdminRemarks}
@@ -71,8 +70,7 @@ export default function Remarks({ user }) {
               onSave={saveAdminRemarks}
               onDiscard={discardAdminRemarks}
             />
-          )
-          : null}
+          )}
       </Grid>
     </PaddedGrid>
   );
