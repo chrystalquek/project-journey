@@ -1,10 +1,10 @@
 import React from 'react';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
+import {
+  Grid, Typography, Avatar, useMediaQuery,
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
   },
-  link: {
-    color: theme.palette.secondary.main,
-  },
   grid: {
     backgroundColor: theme.palette.secondary.light,
     padding: '12px',
@@ -30,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileHeader = ({ user }) => {
+export default function ProfileHeader({ user }) {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -46,23 +43,23 @@ const ProfileHeader = ({ user }) => {
       spacing={2}
       className={classes.grid}
     >
+
+      {/* Avatar icon */}
       <Grid item xs={12} sm="auto">
         <Avatar className={classes.avatar}>
           <PersonOutlineIcon className={classes.personIcon} />
         </Avatar>
       </Grid>
+
+      {/* User details */}
       <Grid item xs={12} sm="auto">
         <Typography variant="h2" className={classes.header}>{user.name}</Typography>
         <Typography className={classes.header}>
           <strong>Volunteer Status: </strong>
-          {user.volunteerStatus}
+          {user.status}
         </Typography>
-        <Typography className={`${classes.header} ${classes.link}`}>
-          <u>Become a commited volunteer</u>
-        </Typography>
+        { user.status === 'ad-hoc volunteer' && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );
-};
-
-export default ProfileHeader;
+}

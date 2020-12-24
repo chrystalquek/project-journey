@@ -4,7 +4,7 @@ const footer: CSSProperties = {
   textAlign: 'center',
   bottom: 0,
   position: 'fixed',
-  width: '100%'
+  width: '100%',
 };
 
 export default {

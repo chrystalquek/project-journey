@@ -4,16 +4,16 @@ import Head from 'next/head';
 import {
   makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@material-ui/core';
+import { VolunteerState } from '@redux/reducers/volunteer';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
-import { VolunteerState } from '@redux/reducers/volunteer';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
   getAllVolunteers: () => Promise<void>
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   table: {
     margin: theme.spacing(10),
   },
@@ -38,7 +38,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       <NavBar />
 
       <TableContainer className={classes.table}>
-        <Table >
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell><b>Name</b></TableCell>
