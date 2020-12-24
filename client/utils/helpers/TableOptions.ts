@@ -16,7 +16,3 @@ export const initializeFilterObject = (enumObj: any) => {
 // takes in a filter object and returns a comma-separated string representation
 // e.g. {"a": true, "b": false, "c": true} => ",a,c"
 export const convertFilterObjectToQueryString = (filterObj: any) => Object.keys(filterObj).reduce((a, b) => filterObj[b] ? a + "," + b : a, "");
-
-export const capitalize = (s: string) => {
-    return s.charAt(0).toUpperCase() + s.slice(1)
-}
