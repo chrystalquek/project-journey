@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import {
   Button, TextField, Dialog, DialogActions, DialogContent,
   DialogTitle, Link, Typography, Checkbox, useMediaQuery,
-  FormControlLabel, Grid
-} from '@material-ui/core'
+  FormControlLabel, Grid,
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({

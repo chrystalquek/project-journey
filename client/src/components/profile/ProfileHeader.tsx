@@ -1,6 +1,8 @@
 import React from 'react';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-import { Grid, Typography, Avatar, useMediaQuery } from '@material-ui/core'
+import {
+  Grid, Typography, Avatar, useMediaQuery,
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 

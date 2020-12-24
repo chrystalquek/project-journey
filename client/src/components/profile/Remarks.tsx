@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';

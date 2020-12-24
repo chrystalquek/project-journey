@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
 import PaddedGrid from '@components/common/PaddedGrid';
