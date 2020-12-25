@@ -55,9 +55,11 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
+  const volunteerType = volunteers.meta.filters.volunteerType; // get filter object
+
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    getVolunteers({});
+    getVolunteers({ volunteerType });
   }, []);
 
   // get array of strings from enum
@@ -65,7 +67,10 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
 
   const handleFilterVolunteerTypeChange = (event) => {
     getVolunteers({
-      volunteerType: event.target.name
+      volunteerType: {
+        ...volunteerType,
+        [event.target.name]: !volunteerType[event.target.name]
+      }// change boolean for checkbox that changed
     })
   };
 
@@ -74,7 +79,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
   const handleChangePage = (event, newPage: number) => {
-    getVolunteers({ pageNo: newPage });
+    getVolunteers({ pageNo: newPage, volunteerType });
   };
 
   const currentPageVolunteers = volunteers.meta.currentPageIds.map(id => volunteers.data[id]);
@@ -109,7 +114,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
     /></>;
 
 
-  const filterOptions = <Grid direction="column"><Typography variant="h4">Filter By</Typography>
+  const filterOptions = <Grid><Typography variant="h4">Filter By</Typography>
     <Divider />
    Volunteer Type <IconButton size='small' className={classes.rightButton} onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon /> : <AddIcon />}</IconButton>
     {openFilter &&
