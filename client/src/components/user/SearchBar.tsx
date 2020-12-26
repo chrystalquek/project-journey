@@ -5,18 +5,15 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 
 // Pass the function that updates the 'filter' value to filter your content
 type SearchBarProps = {
-  setFilterFunction: (string) => void;
+  setFilterFunction: (searchText: string) => void;
 };
 
 function SearchBar({ setFilterFunction }: SearchBarProps) {
-  const [filterValue, setFilterValue] = useState("");
-
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFilterValue(e.target.value);
       setFilterFunction(e.target.value);
     },
-    [filterValue]
+    []
   );
 
   return (
@@ -27,7 +24,7 @@ function SearchBar({ setFilterFunction }: SearchBarProps) {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon></SearchIcon>
+              <SearchIcon />
             </InputAdornment>
           ),
         }}
