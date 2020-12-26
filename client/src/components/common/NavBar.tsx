@@ -37,11 +37,20 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
     },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    buttons: {
+    buttonsContainer: {
       flexGrow: 1,
+      marginLeft: theme.spacing(4),
+    },
+    button: {
+      textTransform: "none",
+      marginLeft: theme.spacing(2),
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: "bold",
+    },
+    buttonRight: {
+      textTransform: "none",
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: "bold",
     },
     nameContainer: {
       display: "flex",
@@ -57,14 +66,16 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
     },
+    listButton: {
+      textTransform: "none",
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: "bold",
+    },
     iconSize: {
       fontSize: "24px",
     },
-    buttonName: {
-      marginLeft: theme.spacing(1),
-    },
     nested: {
-      paddingLeft: theme.spacing(4),
+      paddingLeft: theme.spacing(6),
     },
   })
 );
@@ -110,15 +121,15 @@ export default function NavBar({ userData }: NavBarProps) {
 
   const navigationRender = () => {
     // Should be volunteerType === 'Admin' ?? Need Clarification
-    const homeButtonJSX = (
-      <Button>
-        <Typography variant="body1">Home</Typography>
-      </Button>
-    );
+    const homeButtonJSX = <Button className={classes.button}>Home</Button>;
 
     const eventButtonJSX = (
-      <Button ref={eventRef} onClick={toggleEventMenu}>
-        <Typography variant="body1">Events</Typography>
+      <Button
+        ref={eventRef}
+        onClick={toggleEventMenu}
+        className={classes.button}
+      >
+        Events
       </Button>
     );
 
@@ -142,8 +153,12 @@ export default function NavBar({ userData }: NavBarProps) {
 
     const volunteerJSX = (
       <>
-        <Button ref={volunteerRef} onClick={toggleVolunteerMenu}>
-          <Typography variant="body1">Volunteer</Typography>
+        <Button
+          ref={volunteerRef}
+          onClick={toggleVolunteerMenu}
+          className={classes.button}
+        >
+          Volunteer
         </Button>
         <Popper
           open={openVolunteerMenu}
@@ -186,23 +201,11 @@ export default function NavBar({ userData }: NavBarProps) {
         <>
           <div className={classes.loginButtonContainer}>
             <ExitToAppIcon className={classes.iconSize} color="primary" />
-            <Typography
-              variant="body1"
-              display="inline"
-              className={classes.buttonName}
-            >
-              Login
-            </Typography>
+            <Button className={classes.buttonRight}>Login</Button>
           </div>
           <div className={classes.signupButtonContainer}>
             <PersonIcon className={classes.iconSize} color="primary" />
-            <Typography
-              variant="body1"
-              display="inline"
-              className={classes.buttonName}
-            >
-              Sign Up
-            </Typography>
+            <Button className={classes.buttonRight}>Sign Up</Button>
           </div>
         </>
       );
@@ -220,10 +223,18 @@ export default function NavBar({ userData }: NavBarProps) {
         <>
           {profilePicture}
           <div className={classes.nameContainer}>
-            <Typography style={{ flex: 1 }}>
+            <Typography style={{ color: "#000000", flex: 1 }}>
               <Box fontWeight={700}>{userData.name}</Box>
             </Typography>
-            <Typography style={{ flex: 1 }}>Edit Profile</Typography>
+            <Button
+              className={classes.button}
+              style={{ margin: 0, padding: 0, textAlign: "left" }}
+              disableRipple
+            >
+              <Typography style={{ flex: 1, fontWeight: "700" }}>
+                Edit Profile
+              </Typography>
+            </Button>
           </div>
         </>
       );
@@ -233,7 +244,7 @@ export default function NavBar({ userData }: NavBarProps) {
   const renderWebVersion = () => (
     <>
       <Image src="/blessings-in-a-bag.png" width={100} height={100}></Image>
-      <div className={classes.buttons}>{navigationRender()}</div>
+      <div className={classes.buttonsContainer}>{navigationRender()}</div>
       {loggedInRender()}
     </>
   );
@@ -267,8 +278,12 @@ export default function NavBar({ userData }: NavBarProps) {
   const navigationMobileRender = () => {
     const volunteerMenu = (
       <>
-        <ListItem button onClick={toggleVolunteerMobileMenu}>
-          <ListItemText primary="Volunteer" />
+        <ListItem
+          button
+          className={classes.listButton}
+          onClick={toggleVolunteerMobileMenu}
+        >
+          <ListItemText disableTypography primary="Volunteer" />
           {openVolunteerMenuMobile ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={openVolunteerMenuMobile} timeout="auto" unmountOnExit>
@@ -294,11 +309,15 @@ export default function NavBar({ userData }: NavBarProps) {
         }}
       >
         <List>
-          <ListItem>
-            <ListItemText primary="Home" />
+          <ListItem button className={classes.listButton}>
+            <ListItemText disableTypography primary="Home" />
           </ListItem>
-          <ListItem button onClick={toggleEventMobileMenu}>
-            <ListItemText primary="Event" />
+          <ListItem
+            button
+            className={classes.listButton}
+            onClick={toggleEventMobileMenu}
+          >
+            <ListItemText disableTypography primary="Event" />
             {openEventMenuMobile ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openEventMenuMobile} timeout="auto" unmountOnExit>
@@ -315,17 +334,17 @@ export default function NavBar({ userData }: NavBarProps) {
         <div style={{ flex: 1 }} />
         {!userData && (
           <List>
-            <ListItem>
+            <ListItem button className={classes.listButton}>
               <ListItemIcon>
-                <ExitToAppIcon />
+                <ExitToAppIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Login" />
+              <ListItemText disableTypography primary="Login" />
             </ListItem>
-            <ListItem>
+            <ListItem button className={classes.listButton}>
               <ListItemIcon>
-                <PersonIcon />
+                <PersonIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Sign Up" />
+              <ListItemText disableTypography primary="Sign Up" />
             </ListItem>
           </List>
         )}
@@ -335,7 +354,7 @@ export default function NavBar({ userData }: NavBarProps) {
 
   const loggedInMobileRender = () => {
     if (!userData || !userData.photoUrl) {
-      return <AccountCircleIcon style={{ fontSize: "41px" }} color="primary" />;
+      return <AccountCircleIcon style={{ fontSize: "40px" }} color="primary" />;
     } else {
       return <Avatar alt={userData.name} src={userData.photoUrl} />;
     }
