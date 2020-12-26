@@ -20,6 +20,11 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
+  // create user
+  async signup(request: LoginRequest): Promise<LoginResponse> {
+    return this.send(request, 'volunteer', 'post');
+  }
+
   // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'post');
