@@ -18,10 +18,18 @@ import {
   MenuItem,
   Fade,
   MenuList,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Collapse,
 } from "@material-ui/core";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import PersonIcon from "@material-ui/icons/Person";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 import { VolunteerData } from "types/volunteer";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -55,6 +63,9 @@ const useStyles = makeStyles((theme: Theme) =>
     buttonName: {
       marginLeft: theme.spacing(1),
     },
+    nested: {
+      paddingLeft: theme.spacing(4),
+    },
   })
 );
 
@@ -67,13 +78,19 @@ export default function NavBar({ userData }: NavBarProps) {
 
   const theme = useTheme();
 
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const eventRef = useRef<HTMLButtonElement>(null);
   const volunteerRef = useRef<HTMLButtonElement>(null);
 
   const [openEventMenu, setOpenEventMenu] = useState<boolean>(false);
   const [openVolunteerMenu, setOpenVolunteerMenu] = useState<boolean>(false);
+
+  const eventMenuArray = !userData
+    ? ["Upcoming Events"]
+    : userData.volunteerType === "Admin"
+    ? ["Browse Events", "Past Events"]
+    : ["Browse Events", "My Upcoming Events", "My Past Events"];
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);
@@ -104,12 +121,6 @@ export default function NavBar({ userData }: NavBarProps) {
         <Typography variant="body1">Events</Typography>
       </Button>
     );
-
-    const eventMenuArray = !userData
-      ? ["Upcoming Events"]
-      : userData.volunteerType === "Admin"
-      ? ["Browse Events", "Past Events"]
-      : ["Browse Events", "My Upcoming Events", "My Past Events"];
 
     const eventMenuWrapperJSX = (
       <Popper open={openEventMenu} anchorEl={eventRef.current} transition>
@@ -164,7 +175,7 @@ export default function NavBar({ userData }: NavBarProps) {
         {homeButtonJSX}
         {eventButtonJSX}
         {eventMenuWrapperJSX}
-        {userData.volunteerType === "Admin" && volunteerJSX}
+        {userData && userData.volunteerType === "Admin" && volunteerJSX}
       </>
     );
   };
@@ -200,7 +211,6 @@ export default function NavBar({ userData }: NavBarProps) {
         userData.photoUrl === undefined ? (
           <>
             <AccountCircleIcon style={{ fontSize: "40px" }} color="primary" />
-            <div> G?? </div>
           </>
         ) : (
           <Avatar alt={userData.name} src={userData.photoUrl} />
@@ -220,13 +230,137 @@ export default function NavBar({ userData }: NavBarProps) {
     }
   };
 
+  const renderWebVersion = () => (
+    <>
+      <Image src="/blessings-in-a-bag.png" width={100} height={100}></Image>
+      <div className={classes.buttons}>{navigationRender()}</div>
+      {loggedInRender()}
+    </>
+  );
+
+  // ******************************* Mobile version starts here *******************************
+  const [drawer, setDrawer] = useState<boolean>(false);
+  const [openEventMenuMobile, setOpenEventMenuMobile] = useState<boolean>(
+    false
+  );
+  const [
+    openVolunteerMenuMobile,
+    setOpenVolunteerMenuMobile,
+  ] = useState<boolean>(false);
+
+  const openDrawer = () => {
+    setDrawer(true);
+  };
+
+  const closeDrawer = () => {
+    setDrawer(false);
+  };
+
+  const toggleEventMobileMenu = () => {
+    setOpenEventMenuMobile((prevOpen) => !prevOpen);
+  };
+
+  const toggleVolunteerMobileMenu = () => {
+    setOpenVolunteerMenuMobile((prevOpen) => !prevOpen);
+  };
+
+  const navigationMobileRender = () => {
+    const volunteerMenu = (
+      <>
+        <ListItem button onClick={toggleVolunteerMobileMenu}>
+          <ListItemText primary="Volunteer" />
+          {openVolunteerMenuMobile ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openVolunteerMenuMobile} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested}>
+              <ListItemText primary="Volunteer Profiles" />
+            </ListItem>
+            <ListItem button className={classes.nested}>
+              <ListItemText primary="Pending Approvals" />
+            </ListItem>
+          </List>
+        </Collapse>
+      </>
+    );
+
+    return (
+      <div
+        style={{
+          width: "200px",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <List>
+          <ListItem>
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem button onClick={toggleEventMobileMenu}>
+            <ListItemText primary="Event" />
+            {openEventMenuMobile ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openEventMenuMobile} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {eventMenuArray.map((eventMenu, index) => (
+                <ListItem button className={classes.nested} key={index}>
+                  <ListItemText primary={eventMenu} />
+                </ListItem>
+              ))}
+            </List>
+          </Collapse>
+          {userData && userData.volunteerType === "Admin" && volunteerMenu}
+        </List>
+        <div style={{ flex: 1 }} />
+        {!userData && (
+          <List>
+            <ListItem>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="Login" />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary="Sign Up" />
+            </ListItem>
+          </List>
+        )}
+      </div>
+    );
+  };
+
+  const loggedInMobileRender = () => {
+    if (!userData || !userData.photoUrl) {
+      return <AccountCircleIcon style={{ fontSize: "41px" }} color="primary" />;
+    } else {
+      return <Avatar alt={userData.name} src={userData.photoUrl} />;
+    }
+  };
+
+  const renderMobileVersion = () => (
+    <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+      <IconButton edge="start" onClick={openDrawer}>
+        <MenuIcon style={{ fontSize: "40px" }} />
+      </IconButton>
+      <Drawer anchor="left" open={drawer} onClose={closeDrawer}>
+        {navigationMobileRender()}
+      </Drawer>
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <Image src="/blessings-in-a-bag.png" width={75} height={75}></Image>
+      </div>
+      {loggedInMobileRender()}
+    </div>
+  );
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar>
-          <Image src="/blessings-in-a-bag.png" width={100} height={100}></Image>
-          <div className={classes.buttons}>{navigationRender()}</div>
-          {loggedInRender()}
+          {isSmallScreen ? renderMobileVersion() : renderWebVersion()}
         </Toolbar>
       </AppBar>
     </div>
