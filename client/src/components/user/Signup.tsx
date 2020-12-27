@@ -1,19 +1,105 @@
-import { useState } from 'react';
+import {
+  Box, Grid, Button, TextField, Typography, Paper
+} from '@material-ui/core'
+import React, { FC, useEffect, useState } from 'react';
 import {
   Layout, Divider, Row, Col, Card,
 } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import Head from 'next/head';
+import { useRouter } from 'next/dist/client/router';
+import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
+import styles from '@styles/auth/login.styles';
 import NavBar from '@components/common/NavBar';
 import Footer from '@components/common/Footer';
+import { SignupArgs } from '@redux/actions/user';
+import { UserState } from '@redux/reducers/user';
+import axios from 'axios';
+
+const useStyles = makeStyles((theme) => ({
+  loginButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: 'black',
+    textTransform: 'none',
+    padding: '5px 50px 5px 50px',
+    borderRadius: 20,
+
+  },
+  pageHeader: {
+    fontSize: "32px",
+    fontWeight: "bold",
+    marginBottom: "40px"
+  },
+  loginButtonContainer: {
+    padding: "20px 0px 20px 0px"
+  },
+  form: {
+    
+  },
+  header: {
+    textAlign: 'left',
+    marginTop: '10px',
+    fontWeight: "bold",
+    fontSize: "14px"
+  },
+  formContainer: {
+    padding: "20px"
+  }
+}));
 
 const { Content } = Layout;
 
-export default function Signup() {
+type SignupProps = {
+  user: UserState
+  handleFormSubmit: (formData: SignupArgs) => Promise<void>
+}
+
+const Signup: FC<SignupProps> = ({
+  user,
+  handleFormSubmit,
+}: SignupProps) => {
+  const [form] = useForm();
+  const router = useRouter();
+  const classes = useStyles();
+  const isFormDisabled = !form.isFieldsTouched(true)
+  || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleStepChange = (event, newCurrentStep) => {
     setCurrentStep(newCurrentStep);
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    let signupArgs: SignupArgs = {
+      name: e.target.email.name,
+      email: e.target.email.value,
+      password: e.target.password.value,
+      birthday: e.target.birthday.value,
+      gender: "male",
+      citizenship: "singapore",
+      race: "other",
+      hasVolunteered: true,
+      hasChildrenExperience: true,
+      hasExternalVolunteerExperience: true,
+      hasFirstAidCertification: true,
+      volunteerFrequency: 1,
+      volunteerReason: "Want to",
+      volunteerContribution: "string"
+
+    }
+    console.log(JSON.stringify(signupArgs))
+    handleFormSubmit(signupArgs)
+    // try {
+    //   axios.post("http://localhost:5000/volunteer", signupArgs )
+    //   .then(res => {
+    //     console.log("This is the error" + res);
+    //   })
+    // } catch (error) {
+    //   console.log(error)
+    // }
+  }
 
   const VolunteerTypeStep = props => {
     return (
@@ -100,13 +186,127 @@ export default function Signup() {
 
   const VolunteerInfoStep = props => {
     return (
-      <div></div>
+      <>
+      <Head>
+        <title>Login</title>
+      </Head>
+      <Box>
+        <NavBar />
+        <Box style={styles.content}>
+          <Grid container style={styles.rowContent}>
+            <Grid item xs={4}>
+              <Typography className={classes.pageHeader}>Registration</Typography>
+                <form className={classes.form} onSubmit={handleSubmit}>
+                  <Typography className={classes.header}> Name </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    id='name'
+                    label="e.g. John Doe"
+                    name='name'
+                    autoComplete='name'
+                  />
+                  <Typography className={classes.header}> Email </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    id='email'
+                    label="e.g. username@gmail.com"
+                    name='email'
+                    autoComplete='email'
+                  />
+                  <Typography className={classes.header}> Password </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    name='password'
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
+                  />
+                  <Typography className={classes.header}> Date of Birth </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    id='birthday'
+                    name='birthday'
+                    type='date'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  <Typography className={classes.header}> Comments </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    multiline
+                    id='comments'
+                    label="e.g. This is a long multiline answer"
+                    name='comments'
+                  />
+                  <div className="section">
+                    <div>
+                      <span>
+                        By signing up, I agree to the&nbsp;
+                        <Link href="/">
+                        Privacy
+                        </Link>
+                        &nbsp;and&nbsp;
+                        <Link href="/">
+                        Terms of Service
+                        </Link>
+                        &nbsp;of Blessings in a Bag
+                      </span>
+                    </div>
+                  </div>
+                  <Grid className={classes.loginButtonContainer}>
+                    <Button
+                      color="primary"
+                      type="submit"
+                      disabled={isFormDisabled}
+                      className={classes.loginButton}
+                      size="large"
+                    >
+                      Sign Up
+                    </Button>
+                  </Grid>
+              </form>
+
+              <div className="section">
+                <div>
+                  <span>
+                    Already have an account?
+                  </span>
+                </div>
+                <Link href="/auth/signup">
+                  Login
+                </Link>
+              </div>
+            </Grid>
+          </Grid>
+        </Box>
+        <Footer />
+      </Box>
+    </>
     )
   }
 
-  if (currentStep == 0) {
+  if (currentStep == 1) {
     return <VolunteerTypeStep />
   } else {
     return <VolunteerInfoStep />
   }
 }
+
+
+export default Signup;
