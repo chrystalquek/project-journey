@@ -12,6 +12,7 @@ type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
+export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
 export interface RoleData {
     name: string;
     description: string;
@@ -120,6 +121,17 @@ export interface UpdateVolunteerFieldResponse extends ResponseJSON {
 export interface DeleteVolunteerFieldResponse extends ResponseJSON {
 }
 
+export type QuestionsOptionsRequestData = {
+    text: string;
+    type: FormQuestionType;
+    isRequired: boolean;
+    options: Array<{ content: string }>
+}
+export interface CreateFormQuestionsRequest {
+    eventId: string,
+    questions: Array<QuestionsOptionsRequestData>
+}
+
 export type EventData = {
     name: string;
     description: string;
@@ -152,14 +164,13 @@ export type SignUpData = {
 export type FormData = {
     name: string;
     description: string;
-    type: 'short-answer' | 'mcq' | 'checkbox',
     eventId: string;
 }
 
 export type QuestionData = {
     id: string;
     text: string;
-    type: string;
+    type: FormQuestionType;
     formId: string;
     isRequired: boolean;
 }

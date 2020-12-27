@@ -6,15 +6,16 @@ import { FormData } from '../../types';
  * Create form attached to event
  * @param formData form data created
  */
-const createForm = async (formData: FormData): Promise<void> => {
+const createForm = async (formData: FormData): Promise<string> => {
+  const formId = new mongoose.Types.ObjectId();
   const formSchemaData = new Form({
-    _id: new mongoose.Types.ObjectId(),
+    _id: formId,
     name: formData.name,
     description: formData.description,
-    type: formData.type,
     eventId: formData.eventId,
   });
   await formSchemaData.save();
+  return formId.toHexString();
 };
 
 /**

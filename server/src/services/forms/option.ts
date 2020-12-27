@@ -6,7 +6,7 @@ import { OptionData } from '../../types';
  * Bulk-insert options attached to form
  * @param options Option answers for question
  */
-const createOptionsForQuestion = async (options: Array<OptionData>): Promise<void> => {
+const createOptionsForQuestion = async (options: Array<Omit<OptionData, 'id'>>): Promise<void> => {
   const bulkOptions = options.map((option) => ({
     _id: new mongoose.Types.ObjectId(),
     question_id: option.questionId,
