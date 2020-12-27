@@ -3,9 +3,7 @@ import _ from 'lodash';
 import { body, param } from 'express-validator';
 import jwt from 'express-jwt';
 import { QueryParams, VolunteerData } from '../types';
-import {
-  addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, updateVolunteerDetails,
-} from '../services/volunteer';
+import volunteerService from '../services/volunteer';
 import { accessTokenSecret } from '../helpers/auth';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -98,7 +96,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
 
 const createNewVolunteer = async (req: express.Request, res: express.Response) => {
   try {
-    await addNewVolunteer(req.body as VolunteerData);
+    await volunteerService.addNewVolunteer(req.body as VolunteerData);
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
@@ -109,7 +107,7 @@ const createNewVolunteer = async (req: express.Request, res: express.Response) =
 
 const getVolunteerDetails = async (req: express.Request, res: express.Response) => {
   try {
-    const volunteerDetails = await getVolunteer(req.params.email);
+    const volunteerDetails = await volunteerService.getVolunteer(req.params.email);
     res.status(HTTP_CODES.OK).json({
       data: volunteerDetails,
     });
@@ -139,11 +137,30 @@ const getAllVolunteerDetails = async (req: express.Request, res: express.Respons
     if (req.query.volunteerType) {
       query.volunteerType = (req.query.volunteerType as string).split(',');
     }
-    const volunteersDetails = await getAllVolunteers(query);
+    const volunteersDetails = await volunteerService.getAllVolunteers(query);
     res.status(HTTP_CODES.OK).json(volunteersDetails);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
+    });
+  }
+};
+
+/**
+ * Retrieves sign ups with that are pending approval
+ * @return number of pending sign ups
+ */
+const getPendingVolunteers = async (
+  req: express.Request,
+  res: express.Response,
+): Promise<void> => {
+  try {
+    const pendingVolunteersCount = await volunteerService.getPendingVolunteers();
+
+    res.status(HTTP_CODES.OK).json({ count: pendingVolunteersCount });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
     });
   }
 };
@@ -162,7 +179,9 @@ const checkUpdateRights = () => [
 
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
-    await updateVolunteerDetails(req.body.email as string, req.body as Partial<VolunteerData>);
+    await volunteerService.updateVolunteerDetails(
+      req.body.email as string, req.body as Partial<VolunteerData>,
+    );
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
@@ -174,7 +193,7 @@ const updateVolunteer = async (req: express.Request, res: express.Response) => {
 const removeVolunteer = async (req: express.Request, res: express.Response) => {
   try {
     const { email } = req.body;
-    await deleteVolunteer(email);
+    await volunteerService.deleteVolunteer(email);
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
@@ -188,6 +207,7 @@ export default {
   createNewVolunteer,
   getVolunteerDetails,
   getAllVolunteerDetails,
+  getPendingVolunteers,
   removeVolunteer,
   checkUpdateRights,
   updateVolunteer,

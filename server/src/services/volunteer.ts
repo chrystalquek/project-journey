@@ -101,6 +101,11 @@ export const getAllVolunteers = async (query: QueryParams) => {
 };
 
 /**
+ * Gets total number of pending volunteers.
+ */
+export const getPendingVolunteers = async () => Volunteer.countDocuments({ status: 'pending' });
+
+/**
  * Updates volunteer data with email
  * @param email
  * @param updatedVolunteerData
@@ -122,11 +127,6 @@ export const deleteVolunteer = async (email: string) => {
   });
 };
 
-// /**
-//  * Finds volunteers based on keywords.
-//  * @param keywords to be searched in volunteers names
-//  */
-// export const findVolunteers = async (keywords: string) => {
-
-//   return volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
-// };
+export default {
+  addNewVolunteer, deleteVolunteer, getAllVolunteers, getPendingVolunteers, getVolunteer, updateVolunteerDetails,
+};

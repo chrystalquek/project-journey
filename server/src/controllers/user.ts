@@ -34,7 +34,7 @@ const getValidations = (method: UserValidatorMethod) => {
 const getAllUsers = async (req: express.Request, res: express.Response) => {
   const users = await readAllUsers();
   res.json({
-    users,
+    data: users,
   });
 };
 
