@@ -59,6 +59,7 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
     };
 
     const response = await apiClient.login(request) as LoginResponse;
+    localStorage.setItem("token", JSON.stringify(response.token))
     return response;
   },
 );
