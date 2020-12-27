@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LoginRequest, QueryParams } from './request';
-import { GetVolunteersResponse, LoginResponse } from './response';
+import { SignupRequest, LoginRequest, QueryParams } from './request';
+import { GetVolunteersResponse, SignupResponse, LoginResponse } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -21,7 +21,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   // create user
-  async signup(request: LoginRequest): Promise<LoginResponse> {
+  async signup(request: SignupRequest): Promise<SignupResponse> {
     return this.send(request, 'volunteer', 'post');
   }
   
