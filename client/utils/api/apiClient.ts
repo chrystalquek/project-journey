@@ -1,12 +1,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LoginRequest, QueryParams } from './request';
-import { GetVolunteersResponse, LoginResponse } from './response';
+import { GetAllEventsResponse, GetVolunteersResponse, LoginResponse } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
   getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
+  getAllEvents(): Promise<GetAllEventsResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -34,14 +35,14 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
+  async getAllEvents(): Promise<GetAllEventsResponse> {
+    return this.send({}, 'event/multiple/all', 'get');
+  }
+
   protected async send(request: any, path: string, method: HttpMethod) {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
-
-    if (process.env.NODE_ENV === 'development') {
-      headers['Access-Control-Allow-Origin'] = '*';
-    }
 
     const config: AxiosRequestConfig = { headers };
 
