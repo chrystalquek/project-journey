@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     color: 'black',
     textTransform: 'none',
-    padding: '5px 50px 5px 50px',
+    padding: '5px 50px',
     borderRadius: 20,
 
   },
