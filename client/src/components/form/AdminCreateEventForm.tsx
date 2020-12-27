@@ -24,7 +24,16 @@ const volunteerTypes = [
   { value: 'Ad-hoc', label: 'Ad-hoc' },
 ];
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  coverImage: {
+    width: '1010px',
+    height: '369px',
+  },
+  facilPhotograph: {
+    width: '215px',
+    height: '225px',
+  },
+});
 
 const AdminCreateEventForm = () => {
   const classes = useStyles();
@@ -64,7 +73,7 @@ const AdminCreateEventForm = () => {
       <PaddedGrid>
         <Grid container direction="column" spacing={2}>
           {/* Type of event */}
-          <Grid item container xs={12}>
+          <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4">Type of Event</Typography>
             </Grid>
@@ -90,9 +99,15 @@ const AdminCreateEventForm = () => {
             </Grid>
           </Grid>
 
-          <DropZoneCard />
+          {/* Cover Image */}
+          <Grid item container>
+            <div className={classes.coverImage}>
+              <DropZoneCard isBig />
+            </div>
+          </Grid>
+
           {/* Name of event */}
-          <Grid item container xs={12}>
+          <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4">Name of Event</Typography>
             </Grid>
@@ -113,7 +128,7 @@ const AdminCreateEventForm = () => {
           </Grid>
 
           {/* Volunteer Type */}
-          <Grid item container xs={12}>
+          <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4">Volunteer Type</Typography>
             </Grid>
@@ -141,7 +156,7 @@ const AdminCreateEventForm = () => {
 
           {/* Date - From & To */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item container xs={12} direction="row" alignItems="center" spacing={2}>
+            <Grid item container direction="row" alignItems="center" spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h4">Date</Typography>
               </Grid>
@@ -187,7 +202,7 @@ const AdminCreateEventForm = () => {
           </MuiPickersUtilsProvider>
 
           {/* Time - From & To */}
-          <Grid item container xs={12} direction="row" alignItems="center" spacing={2}>
+          <Grid item container direction="row" alignItems="center" spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h4">Time</Typography>
             </Grid>
@@ -237,7 +252,7 @@ const AdminCreateEventForm = () => {
 
           {/* Sign-up Deadline */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item container xs={12}>
+            <Grid item container>
               <Grid item xs={12}>
                 <Typography variant="h4">Sign-up Deadline</Typography>
               </Grid>
@@ -257,7 +272,7 @@ const AdminCreateEventForm = () => {
           </MuiPickersUtilsProvider>
 
           {/* Number of Vacancies */}
-          <Grid item container xs={12}>
+          <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4">Number of Vacancies</Typography>
             </Grid>
@@ -278,7 +293,7 @@ const AdminCreateEventForm = () => {
           </Grid>
 
           {/* Event Description */}
-          <Grid item container xs={12}>
+          <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4">Event Description</Typography>
             </Grid>
@@ -301,7 +316,7 @@ const AdminCreateEventForm = () => {
           </Grid>
 
           {/* Name of Facilitator */}
-          <Grid item container xs={12}>
+          <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4"> Name of Facilitator</Typography>
             </Grid>
@@ -321,8 +336,15 @@ const AdminCreateEventForm = () => {
             </Grid>
           </Grid>
 
+          {/* Photograph of Facilitator */}
+          <Grid item container>
+            <div className={classes.facilPhotograph}>
+              <DropZoneCard isBig={false} />
+            </div>
+          </Grid>
+
           {/* Description of Facilitator */}
-          <Grid item container xs={12}>
+          <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4">Description of Facilitator</Typography>
             </Grid>

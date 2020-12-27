@@ -6,29 +6,49 @@ import {
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
 const useStyles = makeStyles({
-  card: {
+  root: {
+    display: 'flex',
     boxShadow: 'none',
-    border: '1px dashed #545454',
-    borderRadius: '10px',
+    border: '1px dashed #545454', // grey
+    height: '100%',
+    width: '100%',
+  },
+  icon: {
+    color: '#D8D8D8', // grey
   },
 });
 
-const DropZoneCard = () => {
+const DropZoneCard = (prop) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.card}>
-      <Grid container direction="row" alignItems="center" justify="center" spacing={2}>
-        <Grid item xs={12} />
-        <Grid item container direction="row" justify="center" xs={12}>
-          <AddAPhotoIcon />
+    <Card className={classes.root}>
+      <Grid item xs={12} container direction="column" alignItems="center" justify="center">
+        {/** Padding */}
+        <Grid item xs={prop.isBig === true ? 4 : 3} />
+
+        {/** Content */}
+        <Grid item xs={prop.isBig === true ? 4 : 6} container direction="row" alignItems="center" justify="center">
+          <Grid item container>
+            <Grid item container direction="row" justify="center" xs={12}>
+              <AddAPhotoIcon className={classes.icon} />
+            </Grid>
+            <Grid item />
+            <Grid item container direction="row" justify="center" xs={12}>
+              <Typography variant="subtitle1" color="textSecondary" align="center">
+                Browse file to
+                <br />
+                add
+                {prop.isBig ? ' cover ' : ' '}
+                image
+              </Typography>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item container direction="row" justify="center" xs={12}>
-          <Typography variant="subtitle1" color="textSecondary">
-            Browse file to add cover image
-          </Typography>
-        </Grid>
-        <Grid item xs={12} />
+
+        {/** Padding */}
+        <Grid item xs={prop.isBig === true ? 4 : 3} />
+
       </Grid>
     </Card>
   );

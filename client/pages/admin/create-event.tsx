@@ -10,8 +10,8 @@ const AdminCreateEvent = () => (
       <Grid item md={2} />
       <Grid item container direction="column" xs={12} md={8}>
         <AdminCreateEventForm />
-        <Grid item md={2} />
       </Grid>
+      <Grid item md={2} />
     </Grid>
   </Grid>
 );
