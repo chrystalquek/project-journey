@@ -1,9 +1,9 @@
-import { VolunteerData } from "../types";
+import { VolunteerData } from "types/volunteer";
 
 export const dummyUser: VolunteerData = {
   _id: "5fad08fd0479e62ddaee2a3a",
+  nickname: "string",
   name: "Lead",
-  password: "stringstringstring",
   address: "string",
   mobileNumber: "82919191",
   birthday: new Date("October 13, 2014 11:13:00"),
@@ -25,7 +25,14 @@ export const dummyUser: VolunteerData = {
   administratorRemarks: "string",
   hasVolunteered: true,
   hasChildrenExperience: true,
-  hasExternalVolunteerExperience: true,
+  hasVolunteeredExternally: true,
   hasFirstAidCertification: true,
-  volunteerContribution: "string"
+  volunteerContribution: "string",
+  photoUrl: "string",
+  matchedVolunteer: 1,
+  orgnanization: "string",
+  position: "string",
+  referral: "string",
+  status: "pending",
+  createdAt: new Date("October 13, 2020 11:13:00")
 };

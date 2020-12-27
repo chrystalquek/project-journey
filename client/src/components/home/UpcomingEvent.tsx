@@ -10,12 +10,11 @@ import { EventData } from 'types/event';
 
 const useStyles = makeStyles((theme) => ({
     pane: {
-        //  margin: theme.spacing(10),
         background: theme.palette.secondary.light,
         overflow: 'auto',
     },
     card: {
-        margin: theme.spacing(8),
+        margin: theme.spacing(5),
     },
     greenText: {
         color: theme.palette.text.secondary
@@ -23,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     orangeText: {
         color: theme.palette.warning.main
     },
+    header: {
+        padding: theme.spacing(5)
+    }
 }));
 
 type UpcomingEventProps = {
@@ -95,7 +97,7 @@ const UpcomingEvent: FC<UpcomingEventProps> = ({
         }
     }
 
-    return (<Grid className={classes.pane}><Typography variant='h4' align="center">Upcoming Events</Typography>
+    return (<Grid className={classes.pane}><Typography className={classes.header} variant='h4' align="center">{isAdmin(user) ? "" : "My"}Upcoming Events</Typography>
         {upcomingEvents.map(event =>
             <Card className={classes.card} key={event._id}><CardContent>
                 <Typography>{event.startDate.getDate() + " " + monthNames[event.startDate.getMonth()] + " " + event.startDate.getFullYear()}</Typography>
