@@ -1,44 +1,22 @@
 import Head from '@components/common/Header';
 import NavBar from '@components/common/NavBar';
 import PaddedGrid from '@components/common/PaddedGrid';
-import { makeStyles, Grid, Card, CardContent, Typography } from '@material-ui/core';
+import PendingApproval from '@containers/home/PendingApproval';
+import UpcomingEvent from '@containers/home/UpcomingEvent';
+import { makeStyles, Grid } from '@material-ui/core';
 import { Footer } from 'antd/lib/layout/layout';
-import React, { FC, useEffect } from 'react';
-import PendingApproval from './PendingApproval';
-import UpcomingEvent from './UpcomingEvent';
+import React, { FC } from 'react';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     // table: {
     //     margin: theme.spacing(10),
     // },
 }));
 
-type HomeProps = {
-    // volunteers: VolunteerState
-    // getAllVolunteers: () => Promise<void>
-}
+type HomeProps = {}
 
 const Home: FC<HomeProps> = ({
-    // volunteers,
-    // getAllVolunteers,
 }: HomeProps) => {
-    const classes = useStyles();
-
-    // Only load on initial render to prevent infinite loop
-    useEffect(() => {
-        // getAllVolunteers();
-    }, []);
-
-    const defaultEvent = {
-        name: "Volunteering",
-        startDate: new Date(),
-        endDate: new Date(),
-    };
-
-    // admin: TODO is it only those than I'm facilitating?
-    // volunteer:
-    const upcomingEvents = [defaultEvent, defaultEvent, defaultEvent, defaultEvent, defaultEvent];
-
 
     return (
         <>
@@ -47,10 +25,11 @@ const Home: FC<HomeProps> = ({
             <PaddedGrid>
                 <Grid container direction="row" spacing={5} >
                     <Grid item xs={9}>
-                        <UpcomingEvent events={upcomingEvents} />
+                        <UpcomingEvent />
                     </Grid>
                     <Grid item xs={3}>
-                        <PendingApproval />
+                        {(true || isAdmin) &&
+                            <PendingApproval />}
                     </Grid>
                 </Grid>
                 <Footer />

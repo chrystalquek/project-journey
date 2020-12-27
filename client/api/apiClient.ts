@@ -1,12 +1,17 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LoginRequest, QueryParams } from './request';
-import { GetVolunteersResponse, LoginResponse } from './response';
+import { GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
   getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
+  getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
+  getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
+  getEvents(query: QueryParams): Promise<GetEventsResponse>
+  getPendingSignUps(): Promise<GetCountResponse>
+  getPendingVolunteers(): Promise<GetCountResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -32,6 +37,37 @@ class AxiosApiClient implements ApiClient {
   // volunteer
   async getVolunteers(query: QueryParams): Promise<GetVolunteersResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
+  }
+
+
+  // http://localhost:5000/signup/5fad08fd0479e62ddaee2a3a/userId
+  // signup/:id/:idType
+  // Retrieves sign ups with the specified sign up, event, or volunteer id.
+
+
+  // http://localhost:5000/event/signup/5fad08fd0479e62ddaee2a3a/upcoming 
+  // /signup/:userId/:eventType
+
+  // http://localhost:5000/event/multiple/upcoming for admin
+
+  async getSignUps(query: QueryParams): Promise<GetSignUpsResponse> {
+    return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
+  }
+
+  async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
+    return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
+  }
+
+  async getEvents(query: QueryParams): Promise<GetEventsResponse> {
+    return this.send({}, `event/multiple/${query.eventType}`, 'get');
+  }
+
+  async getPendingSignUps(): Promise<GetCountResponse> {
+    return this.send({}, `signup/pending`, 'get');
+  }
+
+  async getPendingVolunteers(): Promise<GetCountResponse> {
+    return this.send({}, `volunteer/pending`, 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {

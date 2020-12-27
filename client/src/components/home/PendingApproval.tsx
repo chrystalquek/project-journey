@@ -1,4 +1,5 @@
 import { makeStyles, Grid, Card, CardContent, Typography } from '@material-ui/core';
+import { GetCountResponse } from 'api/response';
 import React, { FC, useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,27 +20,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type PendingApprovalProps = {
-    // volunteers: VolunteerState
-    // getAllVolunteers: () => Promise<void>
+    getPendingSignUps: () => Promise<{ payload: GetCountResponse }>,
+    getPendingVolunteers: () => Promise<{ payload: GetCountResponse }>
 }
 
 const PendingApproval: FC<PendingApprovalProps> = ({
-    // volunteers,
-    // getAllVolunteers,
+    getPendingSignUps,
+    getPendingVolunteers
 }: PendingApprovalProps) => {
     const classes = useStyles();
 
     // Only load on initial render to prevent infinite loop
     useEffect(() => {
-        // getAllVolunteers();
+        getPendingSignUps().then((resp) => setPendingSignUpCount(resp.payload.count));
+        getPendingVolunteers().then((resp) => setPendingVolunteerCount(resp.payload.count));
     }, []);
+
+    const [pendingSignUpCount, setPendingSignUpCount] = React.useState(0);
+    const [pendingVolunteerCount, setPendingVolunteerCount] = React.useState(0);
 
     return (<Card><CardContent>
         <Grid container direction="row">
             <Grid item xs={10}>
                 <Typography variant="h4">Pending Approvals</Typography>
-                <Typography>5 pending volunteer approvals</Typography>
-                <Typography>4 pending volunteer approvals</Typography>
+                <Typography>{pendingVolunteerCount} pending volunteer approvals</Typography>
+                <Typography>{pendingSignUpCount} pending event approvals</Typography>
             </Grid>
             <Grid item xs={2}>
                 <div className={classes.shapeCircle}>4</div>
