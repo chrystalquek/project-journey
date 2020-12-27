@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LoginRequest } from './request';
+import { LoginRequest, QueryParams } from './request';
 import { GetVolunteersResponse, LoginResponse } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
-  getAllVolunteers(): Promise<GetVolunteersResponse>
+  getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -20,14 +20,18 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
+  private toURLParams = (query: QueryParams) => {
+    return "?" + new URLSearchParams(query).toString();
+  }
+
   // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'post');
   }
 
   // volunteer
-  async getAllVolunteers(): Promise<GetVolunteersResponse> {
-    return this.send({}, 'volunteer', 'get');
+  async getVolunteers(query: QueryParams): Promise<GetVolunteersResponse> {
+    return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {
