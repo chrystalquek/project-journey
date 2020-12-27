@@ -53,7 +53,7 @@ export enum VOLUNTEER_ROLE {
 }
 
 export enum VOLUNTEER_TYPE {
-    'Ad-hoc', 'Commited', 'Lead', 'Admin'
+    'ad-hoc', 'committed', 'lead', 'admin'
 }
 
 export type VolunteerData = {
@@ -95,6 +95,6 @@ export type VolunteerData = {
     volunteerRemarks: string,
     administratorRemarks: string,
 
-    created_at: Date, // used for member since // is snake case not camel case 
+    created_at: Date, // used for member since // is snake case not camel case
     // is there a way to parse strings into dates automatically when the strings are just fetched via api?
 }

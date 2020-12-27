@@ -1,6 +1,5 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import { Grid, Typography } from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
 import PaddedGrid from '@components/common/PaddedGrid';
@@ -12,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventCount = ({ user }) => {
+export default function EventCount({ user }) {
   const classes = useStyles();
 
   return (
@@ -31,6 +30,4 @@ const EventCount = ({ user }) => {
       </Grid>
     </PaddedGrid>
   );
-};
-
-export default EventCount;
+}
