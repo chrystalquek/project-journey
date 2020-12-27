@@ -1,5 +1,5 @@
 import { EventData } from "types/event"
-import { SignUpData } from "types/signup"
+import { SignUpData } from "types/signUp"
 import { VolunteerData, VOLUNTEER_TYPE } from "types/volunteer"
 
 export type LoginResponse = {

@@ -1,0 +1,31 @@
+import { VolunteerData } from "../types";
+
+export const dummyUser: VolunteerData = {
+  _id: "5fad08fd0479e62ddaee2a3a",
+  name: "Lead",
+  password: "stringstringstring",
+  address: "string",
+  mobileNumber: "82919191",
+  birthday: new Date("October 13, 2014 11:13:00"),
+  email: "string@gmail.com",
+  socialMediaPlatform: "instagram",
+  gender: "female",
+  citizenship: "singapore",
+  race: "chinese",
+  role: "lead",
+  volunteerType: "admin",
+  leadershipInterest: "yes",
+  description: "string",
+  interests: ["string"],
+  personality: "ISFJ_A",
+  skills: ["string"],
+  volunteerReason: "string",
+  volunteerFrequency: 1,
+  volunteerRemarks: "string",
+  administratorRemarks: "string",
+  hasVolunteered: true,
+  hasChildrenExperience: true,
+  hasExternalVolunteerExperience: true,
+  hasFirstAidCertification: true,
+  volunteerContribution: "string"
+};

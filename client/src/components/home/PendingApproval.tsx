@@ -45,7 +45,7 @@ const PendingApproval: FC<PendingApprovalProps> = ({
                 <Typography>{pendingSignUpCount} pending event approvals</Typography>
             </Grid>
             <Grid item xs={2}>
-                <div className={classes.shapeCircle}>4</div>
+                <div className={classes.shapeCircle}>{pendingVolunteerCount + pendingSignUpCount}</div>
             </Grid>
         </Grid>
     </CardContent></Card>);

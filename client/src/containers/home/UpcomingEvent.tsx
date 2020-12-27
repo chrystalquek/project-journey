@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { StoreState } from '@redux/store';
 import { getSignedUpEvents, getEvents } from '@redux/actions/event';
-import { getSignUps } from '@redux/actions/signup';
+import { getSignUps } from '@redux/actions/signUp';
 import { QueryParams } from 'api/request';
 import UpcomingEvent from '@components/home/UpcomingEvent';
 

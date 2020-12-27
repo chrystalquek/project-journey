@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE, VOLUNTEER_TYPE_OPTIONS } from 'types/volunteer';
 import { getVolunteers } from '@redux/actions/volunteer';
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
 
@@ -22,7 +22,7 @@ const initialState: VolunteerState = {
     pageNo: 0,
     count: 0,
     filters: {
-      volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
+      volunteerType: initializeFilterObject(VOLUNTEER_TYPE_OPTIONS),
     }
   }
 };
@@ -43,7 +43,7 @@ const volunteerSlice = createSlice({
       payload.data.forEach(volunteer => state.data[volunteer._id] = {
         ...volunteer,
         birthday: new Date(volunteer.birthday),
-        created_at: new Date(volunteer.created_at),
+        createdAt: new Date(volunteer.createdAt),
       });
       state.meta.currentPageIds = payload.data.map(volunteer => volunteer._id);
       state.meta.count = payload.count;

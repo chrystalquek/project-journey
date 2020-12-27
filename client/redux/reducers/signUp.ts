@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getSignUps } from '@redux/actions/signup';
-import { SignUpData } from 'types/signup';
+import { getSignUps } from '@redux/actions/signUp';
+import { SignUpData } from 'types/signUp';
 
 export type SignUpState = {
   data: Record<string, SignUpData>;

@@ -3,17 +3,11 @@ import NavBar from '@components/common/NavBar';
 import PaddedGrid from '@components/common/PaddedGrid';
 import PendingApproval from '@containers/home/PendingApproval';
 import UpcomingEvent from '@containers/home/UpcomingEvent';
-import { makeStyles, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { Footer } from 'antd/lib/layout/layout';
 import React, { FC } from 'react';
 import { UserState } from '@redux/reducers/user';
 import { isAdmin } from '@utils/helpers/auth';
-
-const useStyles = makeStyles(() => ({
-    // table: {
-    //     margin: theme.spacing(10),
-    // },
-}));
 
 type HomeProps = {
     user: UserState

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { StoreState } from '@redux/store';
-import { getPendingSignUps } from '@redux/actions/signup';
+import { getPendingSignUps } from '@redux/actions/signUp';
 import PendingApproval from '@components/home/PendingApproval';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
 

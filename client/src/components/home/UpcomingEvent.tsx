@@ -86,7 +86,7 @@ const UpcomingEvent: FC<UpcomingEventProps> = ({
                 case 'pending':
                     return <Typography><i>Sign-up pending</i></Typography>
                 case 'rejected':
-                    return <Typography className={classes.greenText}>Sign-up successful</Typography>
+                    return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>
                 default:
                     const roleAssigned = status[1];
                     return <Typography className={classes.greenText}>Volunteer role assigned - {roleAssigned}</Typography>;
@@ -97,7 +97,7 @@ const UpcomingEvent: FC<UpcomingEventProps> = ({
 
     return (<Grid className={classes.pane}><Typography variant='h4' align="center">Upcoming Events</Typography>
         {upcomingEvents.map(event =>
-            <Card className={classes.card}><CardContent>
+            <Card className={classes.card} key={event._id}><CardContent>
                 <Typography>{event.startDate.getDate() + " " + monthNames[event.startDate.getMonth()] + " " + event.startDate.getFullYear()}</Typography>
                 <Typography variant='h4'>{event.name}</Typography>
                 <Typography>Time: {formatAMPM(event.startDate)} - {formatAMPM(event.endDate)}</Typography>

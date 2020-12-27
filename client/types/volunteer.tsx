@@ -1,60 +1,59 @@
-export enum GENDER {
-    'male', 'female'
-}
+export type GENDER = 'male' | 'female'
 
-export enum CITIZENSHIP {
-    'singapore', 'permanent_resident', 'foreigner'
-}
 
-export enum RACE {
-    'chinese', 'malay', 'indian', 'caucasian', 'other'
-}
+export type CITIZENSHIP = 'singapore' | 'permanent_resident' | 'foreigner';
 
-export enum LEADERSHIP_INTEREST {
-    'yes', 'no', 'maybe'
-}
+export type RACE = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 
-export enum PERSONALITY {
-    'INTJ_A',
-    'INTJ_T',
-    'INTP_A',
-    'INTP_T',
-    'ENTJ_A',
-    'ENTJ_T',
-    'ENFP_A',
-    'ENFP_T',
-    'ISTJ_A',
-    'ISTJ_T',
-    'ISFJ_A',
-    'ISFJ_T',
-    'ESTJ_A',
-    'ESTJ_T',
-    'ESFJ_A',
-    'ESFJ_T',
-    'ISTP_A',
-    'ISTP_T',
-    'ISFP_A',
-    'ISFP_T',
-    'ESTP_A',
-    'ESTP_T',
-    'ESFP_A',
-}
 
-export enum SOCIAL_MEDIA_PLATFORMS {
-    'instagram', 'facebook', 'snapchat', 'email', 'other'
-}
+export type LEADERSHIP_INTEREST =
+    'yes' | 'no' | 'maybe'
 
-export enum VOLUNTEER_STATUS {
-    'pending', 'verified'
-}
 
-export enum VOLUNTEER_ROLE {
-    'editor', 'admin', 'lead'
-}
+export type PERSONALITY =
+    'INTJ_A' |
+    'INTJ_T' |
+    'INTP_A' |
+    'INTP_T' |
+    'ENTJ_A' |
+    'ENTJ_T' |
+    'ENFP_A' |
+    'ENFP_T' |
+    'ISTJ_A' |
+    'ISTJ_T' |
+    'ISFJ_A' |
+    'ISFJ_T' |
+    'ESTJ_A' |
+    'ESTJ_T' |
+    'ESFJ_A' |
+    'ESFJ_T' |
+    'ISTP_A' |
+    'ISTP_T' |
+    'ISFP_A' |
+    'ISFP_T' |
+    'ESTP_A' |
+    'ESTP_T' |
+    'ESFP_A';
 
-export enum VOLUNTEER_TYPE {
-    'ad-hoc', 'committed', 'lead', 'admin'
-}
+
+export type SOCIAL_MEDIA_PLATFORMS =
+    'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
+
+
+export type VOLUNTEER_STATUS =
+    'pending' | 'verified'
+
+
+export type VOLUNTEER_ROLE =
+    'editor' | 'admin' | 'lead'
+
+
+export type VOLUNTEER_TYPE =
+    'ad-hoc' | 'committed' | 'lead' | 'admin'
+
+export const VOLUNTEER_TYPE_OPTIONS: Array<VOLUNTEER_TYPE> =
+    ['ad-hoc', 'committed', 'lead', 'admin']
+
 
 export type VolunteerData = {
     _id: string,
@@ -95,6 +94,6 @@ export type VolunteerData = {
     volunteerRemarks: string,
     administratorRemarks: string,
 
-    created_at: Date, // used for member since // is snake case not camel case
+    createdAt: Date, // used for member since // is snake case not camel case
     // is there a way to parse strings into dates automatically when the strings are just fetched via api?
 }
