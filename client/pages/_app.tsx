@@ -6,6 +6,8 @@ import '@styles/globals.css';
 import { Provider } from 'react-redux';
 import store from '@redux/store';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DayJsUtils from '@date-io/dayjs';
 import {CssBaseline} from "@material-ui/core";
 
 const theme = createMuiTheme({
@@ -48,8 +50,10 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
+        <MuiPickersUtilsProvider utils={DayJsUtils}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </MuiPickersUtilsProvider>
       </ThemeProvider>
     </Provider>
   );

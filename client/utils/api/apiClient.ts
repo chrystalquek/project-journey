@@ -32,7 +32,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async getAllEvents(): Promise<GetAllEventsResponse> {
-    return this.send(null, 'event/multiple/all', 'get');
+    return this.send({}, 'event/multiple/all', 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {

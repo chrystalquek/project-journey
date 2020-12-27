@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export type EventData = {
   name: string;
   description: string;
@@ -18,4 +20,28 @@ export type EventData = {
     description: string,
     capacity: number,
   }>
+}
+
+export type EventFilterOptions = {
+  [EventFilters.DATE]: dayjs.Dayjs,
+  [EventFilters.EVENTTYPE]: {
+    [EventFilters.VOLUNTEERING]: boolean,
+    [EventFilters.WORKSHOPS]: boolean,
+    [EventFilters.HANGOUTS]: boolean
+  },
+  [EventFilters.VOLUNTEERTYPE]: {
+    [EventFilters.ADHOC]: boolean,
+    [EventFilters.COMMITTED]: boolean
+  }
+}
+
+export enum EventFilters {
+  DATE = 'date',
+  EVENTTYPE = 'eventType',
+  VOLUNTEERING = 'volunteering',
+  WORKSHOPS = 'workshops',
+  HANGOUTS = 'hangouts',
+  VOLUNTEERTYPE = 'volunteerType',
+  ADHOC = 'adhoc',
+  COMMITTED = 'committed'
 }

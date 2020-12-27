@@ -7,7 +7,7 @@ export type AdminState = {
 }
 
 const initialState: AdminState = {
-  adminEvents: null,
+  adminEvents: [],
 };
 
 const adminSlice = createSlice({
