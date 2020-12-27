@@ -2,10 +2,11 @@ import express from 'express';
 import { body } from 'express-validator';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import { roleCapacityValidator } from '../helpers/validation';
-import { EventSearchType, EventData, RoleData } from '../types';
-
+import { EventSearchType, EventData, RoleData, QueryParams} from '../types';
+import jwt from 'express-jwt';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
+
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -55,6 +56,7 @@ const readEvent = async (
 ): Promise<void> => {
   try {
     const event = await eventService.readEvent(req.params.id);
+    
 
     // to access volunteers by Id
     // const volunteers = Volunteer.find(
@@ -74,11 +76,22 @@ const readEvent = async (
  */
 const readEvents = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const events = await eventService.readEvents(req.params.eventType as EventSearchType);
 
+    const searchType = req.params.eventType as EventSearchType;
+    const pageNo = Number(req.query.pageNo);
+    const size = Number(req.query.size);
+    const query: QueryParams = { searchType, skip: 0, limit: 0 };
+
+    if (pageNo < 0){
+      throw new Error ('Invalid page number, should start with 0');
+    }
+    query.skip = size * pageNo;
+    query.limit = size;
+    const events = await eventService.readEvents(query);
     res.status(HTTP_CODES.OK).json({
-      events,
+      events
     });
+
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
