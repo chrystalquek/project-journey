@@ -39,17 +39,6 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
-
-  // http://localhost:5000/signup/5fad08fd0479e62ddaee2a3a/userId
-  // signup/:id/:idType
-  // Retrieves sign ups with the specified sign up, event, or volunteer id.
-
-
-  // http://localhost:5000/event/signup/5fad08fd0479e62ddaee2a3a/upcoming 
-  // /signup/:userId/:eventType
-
-  // http://localhost:5000/event/multiple/upcoming for admin
-
   async getSignUps(query: QueryParams): Promise<GetSignUpsResponse> {
     return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
   }

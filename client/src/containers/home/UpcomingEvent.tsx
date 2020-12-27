@@ -6,6 +6,7 @@ import { QueryParams } from 'api/request';
 import UpcomingEvent from '@components/home/UpcomingEvent';
 
 const mapStateToProps = (state: StoreState) => ({
+    user: state.user,
     events: state.event,
     signUps: state.signUp,
 });

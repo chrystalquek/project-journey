@@ -6,6 +6,8 @@ import UpcomingEvent from '@containers/home/UpcomingEvent';
 import { makeStyles, Grid } from '@material-ui/core';
 import { Footer } from 'antd/lib/layout/layout';
 import React, { FC } from 'react';
+import { UserState } from '@redux/reducers/user';
+import { isAdmin } from '@utils/helpers/auth';
 
 const useStyles = makeStyles(() => ({
     // table: {
@@ -13,9 +15,12 @@ const useStyles = makeStyles(() => ({
     // },
 }));
 
-type HomeProps = {}
+type HomeProps = {
+    user: UserState
+}
 
 const Home: FC<HomeProps> = ({
+    user
 }: HomeProps) => {
 
     return (
@@ -28,7 +33,7 @@ const Home: FC<HomeProps> = ({
                         <UpcomingEvent />
                     </Grid>
                     <Grid item xs={3}>
-                        {(true || isAdmin) &&
+                        {isAdmin(user) &&
                             <PendingApproval />}
                     </Grid>
                 </Grid>

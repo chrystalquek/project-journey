@@ -9,8 +9,6 @@ const useStyles = makeStyles((theme) => ({
         height: 40,
         borderRadius: '50%',
         textAlign: 'center',
-        // verticalAlign: 'middle',
-        // margin: 'auto',
         fontSize: 'large',
         color: 'white',
         display: 'flex',

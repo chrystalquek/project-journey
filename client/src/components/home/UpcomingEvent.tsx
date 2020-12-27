@@ -1,6 +1,8 @@
 import { makeStyles, Grid, Card, CardContent, Typography } from '@material-ui/core';
 import { EventState } from '@redux/reducers/event';
 import { SignUpState } from '@redux/reducers/signUp';
+import { UserState } from '@redux/reducers/user';
+import { isAdmin } from '@utils/helpers/auth';
 import { QueryParams } from 'api/request';
 import { GetSignUpsResponse, GetEventsResponse } from 'api/response';
 import React, { FC, useEffect } from 'react';
@@ -24,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type UpcomingEventProps = {
+    user: UserState,
     events: EventState,
     signUps: SignUpState,
     getSignUps: (query: QueryParams) => Promise<{ payload: GetSignUpsResponse }>,
@@ -33,6 +36,7 @@ type UpcomingEventProps = {
 
 
 const UpcomingEvent: FC<UpcomingEventProps> = ({
+    user,
     events,
     signUps,
     getSignUps,
@@ -41,20 +45,17 @@ const UpcomingEvent: FC<UpcomingEventProps> = ({
 }: UpcomingEventProps) => {
     const classes = useStyles();
 
-    // Only load on initial render to prevent infinite loop
     useEffect(() => {
-        if (true || isAdmin) {
+        if (isAdmin(user)) {
             getEvents({ eventType: 'upcoming' }).then((resp) => setEventIds(resp.payload.data.map(event => event._id)));
         } else {
-            getSignedUpEvents({ eventType: 'upcoming', userId: '5fad08fd0479e62ddaee2a3a' }).then((resp) => setEventIds(resp.payload.data.map(event => event._id)));
-            getSignUps({ id: '5fad08fd0479e62ddaee2a3a', idType: 'userId' }).then((resp) => setSignUpIds(resp.payload.data.map(signUp => signUp._id)));
+            getSignedUpEvents({ eventType: 'upcoming', userId: user.user._id }).then((resp) => setEventIds(resp.payload.data.map(event => event._id)));
+            getSignUps({ id: user.user._id, idType: 'userId' }).then((resp) => setSignUpIds(resp.payload.data.map(signUp => signUp._id)));
         }
     }, []);
 
     const [eventIds, setEventIds] = React.useState([]); // event list for both admin and volunteer
 
-    // admin: TODO is it only those than I'm facilitating?
-    // volunteer:
     const upcomingEvents = eventIds.map(id => events.data[id]);
 
 
@@ -65,7 +66,6 @@ const UpcomingEvent: FC<UpcomingEventProps> = ({
         "July", "August", "September", "October", "November", "December"];
 
     function formatAMPM(date) {
-        console.log(date);
         var hours = date.getHours();
         var minutes = date.getMinutes();
         var ampm = hours >= 12 ? 'pm' : 'am';
@@ -77,11 +77,11 @@ const UpcomingEvent: FC<UpcomingEventProps> = ({
     }
 
     const generateNotification = (event: EventData) => {
-        if (true || isAdmin) {
+        if (isAdmin(user)) {
             const moreVolunteersCount = event.roles.map(role => role.capacity - role.volunteers.length).reduce((a, b) => a + b, 0);
             return <Typography className={(moreVolunteersCount > 0) ? classes.greenText : classes.orangeText}>{moreVolunteersCount} more volunteers needed</Typography>;
         } else {
-            const status = upcomingSignUps.find(signUp => signUp.eventId == event._id)?.status || ["jia", "lat"]; // will definitely be found in signUps
+            const status = upcomingSignUps.find(signUp => signUp.eventId == event._id).status; // will definitely be found in signUps
             switch (status) {
                 case 'pending':
                     return <Typography><i>Sign-up pending</i></Typography>
