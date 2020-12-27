@@ -1,4 +1,4 @@
-import { VolunteerData } from 'types/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from "types/volunteer"
 
 export type LoginResponse = {
   token: string
@@ -6,4 +6,9 @@ export type LoginResponse = {
 
 export type GetVolunteersResponse = {
   data: Array<VolunteerData>
+  count: number
+  pageNo: number
+  filters: {
+    volunteerType: Record<VOLUNTEER_TYPE, boolean>
+  }
 }
