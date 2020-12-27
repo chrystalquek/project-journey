@@ -10,6 +10,7 @@ import {
 import PaddedGrid from '@components/common/PaddedGrid';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
+import DropZoneCard from '@components/common/DropZoneCard';
 
 const eventTypes = [
   { value: 'Workshop', label: 'Workshop' },
@@ -89,6 +90,7 @@ const AdminCreateEventForm = () => {
             </Grid>
           </Grid>
 
+          <DropZoneCard />
           {/* Name of event */}
           <Grid item container xs={12}>
             <Grid item xs={12}>
