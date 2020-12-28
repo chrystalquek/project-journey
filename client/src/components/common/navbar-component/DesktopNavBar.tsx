@@ -232,14 +232,13 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         </>
       );
     } else {
-      const profilePicture =
-        userData.photoUrl === undefined ? (
-          <>
-            <AccountCircleIcon classes={classes.iconSize40} color="primary" />
-          </>
-        ) : (
-          <Avatar alt={userData.name} src={userData.photoUrl} />
-        );
+      const profilePicture = !userData?.photoUrl ? (
+        <>
+          <AccountCircleIcon className={classes.iconSize40} color="primary" />
+        </>
+      ) : (
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
       return (
         <>
