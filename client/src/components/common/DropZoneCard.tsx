@@ -23,36 +23,47 @@ const DropZoneCard = (prop) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
-      <Grid item xs={12} container direction="column" alignItems="center" justify="center">
-        {/** Padding */}
-        <Grid item xs={prop.isBig === true ? 4 : 3} />
+    <>
+      <label htmlFor="image">
+        <Card className={classes.root}>
+          <Grid item xs={12} container direction="column" alignItems="center" justify="center">
+            {/** Padding */}
+            <Grid item xs={prop.isBig === true ? 4 : 3} />
 
-        {/** Content */}
-        <Grid item xs={prop.isBig === true ? 4 : 6} container direction="row" alignItems="center" justify="center">
-          <Grid item container>
-            <Grid item container direction="row" justify="center" xs={12}>
-              <AddAPhotoIcon className={classes.icon} />
+            {/** Content */}
+            <Grid item xs={prop.isBig === true ? 4 : 6} container direction="row" alignItems="center" justify="center">
+              <Grid item container>
+                <Grid item container direction="row" justify="center" xs={12}>
+                  <AddAPhotoIcon className={classes.icon} />
+                </Grid>
+                <Grid item />
+                <Grid item container direction="row" justify="center" xs={12}>
+                  <Typography variant="subtitle1" color="textSecondary" align="center">
+                    Browse file to
+                    <br />
+                    add
+                    {prop.isBig ? ' cover ' : ' '}
+                    image
+                  </Typography>
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item />
-            <Grid item container direction="row" justify="center" xs={12}>
-              <Typography variant="subtitle1" color="textSecondary" align="center">
-                Browse file to
-                <br />
-                add
-                {prop.isBig ? ' cover ' : ' '}
-                image
-              </Typography>
-            </Grid>
+
+            {/** Padding */}
+            <Grid item xs={prop.isBig === true ? 4 : 3} />
+
           </Grid>
-        </Grid>
 
-        {/** Padding */}
-        <Grid item xs={prop.isBig === true ? 4 : 3} />
-
-      </Grid>
-
-    </Card>
+        </Card>
+      </label>
+      <input
+        id="image"
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={prop.onUploadImage}
+      />
+    </>
   );
 };
 

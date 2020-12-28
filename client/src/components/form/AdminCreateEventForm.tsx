@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
-  TextField, makeStyles, MenuItem, Typography, Grid,
+  TextField, makeStyles, MenuItem, Typography, Grid, Button,
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -40,6 +40,10 @@ const useStyles = makeStyles({
   facilPhotograph: {
     width: '215px',
     height: '225px',
+  },
+  button: {
+    borderRadius: '20px',
+    textTransform: 'none',
   },
 });
 
@@ -199,6 +203,7 @@ const AdminCreateEventForm = () => {
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
+                  color="secondary"
                 />
               </Grid>
               <Grid item>
@@ -218,6 +223,7 @@ const AdminCreateEventForm = () => {
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
+                  color="secondary"
                 />
               </Grid>
             </Grid>
@@ -247,6 +253,7 @@ const AdminCreateEventForm = () => {
                 inputProps={{
                   step: 300, // 5 min
                 }}
+                color="secondary"
               />
             </Grid>
             <Grid item>
@@ -268,6 +275,7 @@ const AdminCreateEventForm = () => {
                 inputProps={{
                   step: 300, // 5 min
                 }}
+                color="secondary"
               />
             </Grid>
           </Grid>
@@ -288,6 +296,7 @@ const AdminCreateEventForm = () => {
                   onChange={(date) => setFormData({ ...formData, deadline: date })}
                   disablePast
                   format="dd/MM/yyyy HH:mm"
+                  color="secondary"
                 />
               </Grid>
             </Grid>
@@ -361,7 +370,7 @@ const AdminCreateEventForm = () => {
 
               <Grid item container>
                 <div className={classes.facilPhotograph}>
-                  <DropZoneCard isBig={false} />
+                  <DropZoneCard isBig={false} onUploadImage={handleImageUpload} />
                 </div>
               </Grid>
               <Grid item container>
@@ -387,6 +396,17 @@ const AdminCreateEventForm = () => {
               </Grid>
             </>
           )}
+
+          {/* Create Event Button */}
+          <Grid item container direction="row" justify="flex-end">
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              <Typography variant="body1"> Create Event</Typography>
+            </Button>
+          </Grid>
         </Grid>
       </PaddedGrid>
     </form>
