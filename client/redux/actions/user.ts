@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import apiClient from '../../api/apiClient';
-import { LoginRequest } from '../../api/request';
-import { LoginResponse } from '../../api/response';
+import { LoginRequest } from '@utils/api/request';
+import { LoginResponse } from '@utils/api/response';
+import apiClient from '@utils/api/apiClient';
 
 export type LoginArgs = {
   email: string,
@@ -17,6 +17,7 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
     };
 
     const response = await apiClient.login(request) as LoginResponse;
+    localStorage.setItem("token", JSON.stringify(response.token))
     return response;
   },
 );
