@@ -42,7 +42,7 @@ const updateQuestions = async (updatedQuestions: Array<Partial<QuestionData>>): 
  */
 const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
   const questions = await Question.find({
-    formId,
+    form_id: formId,
   }).lean().exec();
   return questions.map((question) => ({
     // eslint-disable-next-line no-underscore-dangle
