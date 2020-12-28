@@ -12,7 +12,7 @@ const createOptionsForQuestion = async (options: Array<Omit<OptionData, 'id'>>):
     question_id: option.questionId,
     text: option.text,
   }));
-  await (new Option(bulkOptions)).save();
+  await Option.insertMany(bulkOptions);
 };
 
 /**

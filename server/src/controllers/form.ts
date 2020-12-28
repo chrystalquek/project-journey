@@ -43,16 +43,17 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
       eventId,
     });
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const question of questions) {
-      // Fill up relevant questions
-      const questionsData = questions.map((questionData) => ({
-        formId,
-        isRequired: questionData.isRequired,
-        text: questionData.text,
-        type: questionData.type,
-      }));
-      const questionId = await questionService.insertQuestions(questionsData);
+    const questionsData = questions.map((questionData) => ({
+      formId,
+      isRequired: questionData.isRequired,
+      text: questionData.text,
+      type: questionData.type,
+    }));
+    const questionIds = await questionService.insertQuestions(questionsData);
+    for (let i = 0; i < questionIds.length; i += 1) {
+      const question = questions[i];
+      const questionId = questionIds[i];
+
       const optionsData = question.options.map((option) => ({
         questionId,
         text: option.content,

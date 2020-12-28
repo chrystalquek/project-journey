@@ -55,8 +55,7 @@ const questionValidator = (questions: Array<QuestionsOptionsRequestData>) => {
   questions.forEach((question) => {
     if (question.isRequired === undefined
       || question.text?.length === 0
-      || question.type?.length === 0
-      || question.options.length === 0) {
+      || question.type?.length === 0) {
       throw new Error('Question Options data is not as expected');
     }
   });

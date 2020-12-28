@@ -6,17 +6,21 @@ import { QuestionData } from '../../types';
  * Bulk-insert questions attached to form
  * @param questions question data to be created
  */
-const insertQuestions = async (questions: Array<Omit<QuestionData, 'id'>>): Promise<string> => {
-  const questionId = new mongoose.Types.ObjectId();
-  const bulkQuestions = questions.map((question) => ({
-    _id: questionId,
-    form_id: question.formId,
-    is_required: question.isRequired,
-    text: question.text,
-    type: question.type,
-  }));
-  await (new Question(bulkQuestions)).save();
-  return questionId.toHexString();
+const insertQuestions = async (questions: Array<Omit<QuestionData, 'id'>>): Promise<Array<string>> => {
+  const questionIds: Array<string> = [];
+  const bulkQuestions = questions.map((question) => {
+    const questionId = new mongoose.Types.ObjectId();
+    questionIds.push(questionId.toHexString());
+    return {
+      _id: questionId,
+      form_id: question.formId,
+      is_required: question.isRequired,
+      text: question.text,
+      type: question.type,
+    };
+  });
+  await Question.insertMany(bulkQuestions);
+  return questionIds;
 };
 
 /**
