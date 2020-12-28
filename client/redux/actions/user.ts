@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import apiClient from '../../api/apiClient';
-import { SignupRequest, LoginRequest } from '../../api/request';
-import { SignupResponse, LoginResponse } from '../../api/response';
+import { SignupRequest, LoginRequest } from '@utils/api/request';
+import { SignupResponse, LoginResponse } from '@utils/api/response';
+import apiClient from '@utils/api/apiClient';
 
 export type SignupArgs = {
   name: string
