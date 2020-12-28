@@ -24,6 +24,14 @@ const volunteerTypes = [
   { value: 'Ad-hoc', label: 'Ad-hoc' },
 ];
 
+const getEventTypePlaceholder = (eventType) => {
+  switch (eventType) {
+    case 'Workshop': return 'eg. Workshop: Facilitation 101';
+    case 'Hangout': return 'eg. Hangout Session';
+    case 'Volunteering': return 'eg. Volunteering: Session 4';
+    default: throw new Error();
+  }
+};
 const useStyles = makeStyles({
   coverImage: {
     width: '1010px',
@@ -83,6 +91,9 @@ const AdminCreateEventForm = () => {
     <form onSubmit={handleSubmit}>
       <PaddedGrid>
         <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <Typography variant="h1">Create Event</Typography>
+          </Grid>
           {/* Type of event */}
           <Grid item container>
             <Grid item xs={12}>
@@ -127,7 +138,7 @@ const AdminCreateEventForm = () => {
                 variant="outlined"
                 margin="dense"
                 id="name"
-                placeholder="eg. Workshop: Facilitation 101"
+                placeholder={getEventTypePlaceholder(eventType)}
                 type="text"
                 fullWidth
                 color="secondary"
@@ -321,59 +332,61 @@ const AdminCreateEventForm = () => {
                 value={description}
                 onChange={handleChange}
                 multiline
-                rows={5}
+                rows={15}
               />
             </Grid>
           </Grid>
 
-          {/* Name of Facilitator */}
-          <Grid item container>
-            <Grid item xs={12}>
-              <Typography variant="h4"> Name of Facilitator</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                margin="dense"
-                id="type"
-                placeholder="eg. Ms Anna Soh"
-                type="text"
-                fullWidth
-                color="secondary"
-                name="facilitatorName"
-                value={facilitatorName}
-                onChange={handleChange}
-              />
-            </Grid>
-          </Grid>
+          {eventType !== 'Volunteering' && (
+            <>
+              <Grid item container>
+                <Grid item xs={12}>
+                  <Typography variant="h4"> Name of Facilitator</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    margin="dense"
+                    id="type"
+                    placeholder="eg. Ms Anna Soh"
+                    type="text"
+                    fullWidth
+                    color="secondary"
+                    name="facilitatorName"
+                    value={facilitatorName}
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
 
-          {/* Photograph of Facilitator */}
-          <Grid item container>
-            <div className={classes.facilPhotograph}>
-              <DropZoneCard isBig={false} />
-            </div>
-          </Grid>
-
-          {/* Description of Facilitator */}
-          <Grid item container>
-            <Grid item xs={12}>
-              <Typography variant="h4">Description of Facilitator</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                margin="dense"
-                id="type"
-                placeholder="Type something here..."
-                type="text"
-                fullWidth
-                color="secondary"
-                name="facilitatorDescription"
-                value={facilitatorDescription}
-                onChange={handleChange}
-              />
-            </Grid>
-          </Grid>
+              <Grid item container>
+                <div className={classes.facilPhotograph}>
+                  <DropZoneCard isBig={false} />
+                </div>
+              </Grid>
+              <Grid item container>
+                <Grid item xs={12}>
+                  <Typography variant="h4">Description of Facilitator</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    margin="dense"
+                    id="type"
+                    placeholder="Type something here..."
+                    type="text"
+                    fullWidth
+                    color="secondary"
+                    name="facilitatorDescription"
+                    value={facilitatorDescription}
+                    onChange={handleChange}
+                    multiline
+                    rows={15}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
         </Grid>
       </PaddedGrid>
     </form>
