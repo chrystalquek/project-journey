@@ -19,6 +19,22 @@ const createForm = async (formData: FormData): Promise<string> => {
 };
 
 /**
+ * Get form details
+ * @param eventId eventId related to form
+ */
+const getForm = async (eventId: string) => {
+  const form = await Form.findOne({
+    eventId,
+  }).lean().exec();
+
+  if (!form) {
+    throw new Error(`Form with specified event id: ${eventId} could not be founds`);
+  }
+
+  return form;
+};
+
+/**
  * Delete form attached to event - unlikely will be used
  * @param eventId to use to delete form (1 to 1 relationship)
  */
@@ -37,5 +53,6 @@ const deleteForm = async (eventId: string): Promise<void> => {
 
 export default {
   createForm,
+  getForm,
   deleteForm,
 };

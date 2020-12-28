@@ -30,11 +30,11 @@ const updateQuestions = async (updatedOptions: Array<Partial<OptionData>>): Prom
 
 /**
  * Retrieve all questsions from specified form id
- * @param formId Mongoose form id
+ * @param questionId Mongoose question id
  */
-const getOptionsForQuestion = async (formId: string): Promise<Array<OptionData>> => {
+const getOptionsForQuestion = async (questionId: string): Promise<Array<OptionData>> => {
   const options = await Option.find({
-    formId,
+    questionId,
   }).lean().exec();
   return options.map((option) => ({
     // eslint-disable-next-line no-underscore-dangle
