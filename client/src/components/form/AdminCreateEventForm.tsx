@@ -55,7 +55,7 @@ const AdminCreateEventForm = () => {
   });
 
   const {
-    eventType, name, volunteerType, dateFrom, dateTo, timeFrom, timeTo, deadline,
+    eventType, coverImage, name, volunteerType, dateFrom, dateTo, timeFrom, timeTo, deadline,
     vacancies, description, facilitatorName, facilitatorPhotograph,
     facilitatorDescription,
   } = formData;
@@ -66,6 +66,17 @@ const AdminCreateEventForm = () => {
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  // TODO: connect with backend
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const form = new FormData();
+    const config = {
+      header: { 'Content-Type': 'multipart/form-data' },
+    };
+    form.append('file', file);
+    // hit api
   };
 
   return (
