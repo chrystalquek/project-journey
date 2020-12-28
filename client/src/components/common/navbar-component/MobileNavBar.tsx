@@ -149,7 +149,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                   button
                   className={classes.nested}
                   key={index}
-                  onClick={() => router.push("/admin")}
+                  onClick={() => router.push("/admin/events")}
                 >
                   <ListItemText primary={eventMenu} />
                 </ListItem>

@@ -136,7 +136,10 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
               <ClickAwayListener onClickAway={handleCloseEventMenu}>
                 <MenuList>
                   {eventMenuArray.map((menuName, index) => (
-                    <MenuItem key={index} onClick={() => router.push("/admin")}>
+                    <MenuItem
+                      key={index}
+                      onClick={() => router.push("/admin/events")}
+                    >
                       {menuName}
                     </MenuItem>
                   ))}
