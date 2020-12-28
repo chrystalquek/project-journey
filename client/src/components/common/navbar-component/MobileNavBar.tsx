@@ -126,7 +126,11 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     return (
       <div className={classes.drawerFrame}>
         <List>
-          <ListItem button className={classes.listButton}>
+          <ListItem
+            button
+            className={classes.listButton}
+            onClick={() => router.push("/")}
+          >
             <ListItemText disableTypography primary="Home" />
           </ListItem>
           <ListItem
