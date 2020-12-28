@@ -59,7 +59,26 @@ const readSignUps = async (
       id, idType as SignUpIdType,
     );
 
-    res.status(HTTP_CODES.OK).json(userSignUpDetails);
+    res.status(HTTP_CODES.OK).json({ data: userSignUpDetails });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+};
+
+/**
+ * Retrieves sign ups with that are pending approval
+ * @return number of pending sign ups
+ */
+const readPendingSignUps = async (
+  req: express.Request,
+  res: express.Response,
+): Promise<void> => {
+  try {
+    const pendingSignUpsCount = await signUpService.readPendingSignUps();
+
+    res.status(HTTP_CODES.OK).json({ count: pendingSignUpsCount });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -108,6 +127,7 @@ const deleteSignUp = async (req: express.Request, res: express.Response) => {
 export default {
   createSignUp,
   readSignUps,
+  readPendingSignUps,
   updateSignUp,
   deleteSignUp,
   getValidations,
