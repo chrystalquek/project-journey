@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import {
   Avatar,
   Box,
@@ -13,67 +13,65 @@ import {
   MenuItem,
   Fade,
   MenuList,
-} from "@material-ui/core";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import PersonIcon from "@material-ui/icons/Person";
-import { VolunteerData } from "types/volunteer";
+} from '@material-ui/core';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import PersonIcon from '@material-ui/icons/Person';
+import { VolunteerData } from 'types/volunteer';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    buttonsContainer: {
-      flexGrow: 1,
-      marginLeft: theme.spacing(4),
-    },
-    button: {
-      textTransform: "none",
-      marginLeft: theme.spacing(2),
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: "bold",
-    },
-    buttonRight: {
-      textTransform: "none",
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: "bold",
-    },
-    nameContainer: {
-      display: "flex",
-      flexDirection: "column",
-      marginLeft: theme.spacing(2),
-    },
-    nameStyle: {
-      color: "#000000",
-      flex: 1,
-    },
-    loginButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-      marginRight: theme.spacing(2),
-    },
-    signupButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-    },
-    editProfileButton: {
-      margin: 0,
-      padding: 0,
-      textAlign: "left",
-    },
-    editProfileText: {
-      flex: 1,
-      fontWeight: "bold",
-    },
-    iconSize24: {
-      fontSize: "24px",
-    },
-    iconSize40: {
-      fontSize: "40px",
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    flexGrow: 1,
+  },
+  buttonsContainer: {
+    flexGrow: 1,
+    marginLeft: theme.spacing(4),
+  },
+  button: {
+    textTransform: 'none',
+    marginLeft: theme.spacing(2),
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+  buttonRight: {
+    textTransform: 'none',
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+  nameContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: theme.spacing(2),
+  },
+  nameStyle: {
+    color: '#000000',
+    flex: 1,
+  },
+  loginButtonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: theme.spacing(2),
+  },
+  signupButtonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  editProfileButton: {
+    margin: 0,
+    padding: 0,
+    textAlign: 'left',
+  },
+  editProfileText: {
+    flex: 1,
+    fontWeight: 'bold',
+  },
+  iconSize24: {
+    fontSize: '24px',
+  },
+  iconSize40: {
+    fontSize: '40px',
+  },
+}));
 
 type NavBarProps = {
   userData: null | VolunteerData;
@@ -90,10 +88,10 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   const [openVolunteerMenu, setOpenVolunteerMenu] = useState<boolean>(false);
 
   const eventMenuArray = !userData
-    ? ["Upcoming Events"]
-    : userData.volunteerType.toLowerCase() === "admin"
-    ? ["Browse Events", "Past Events"]
-    : ["Browse Events", "My Upcoming Events", "My Past Events"];
+    ? ['Upcoming Events']
+    : userData.volunteerType.toString().toLowerCase() === 'admin'
+      ? ['Browse Events', 'Past Events']
+      : ['Browse Events', 'My Upcoming Events', 'My Past Events'];
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);
@@ -113,7 +111,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const navigationRender = () => {
     const homeButton = (
-      <Button className={classes.button} onClick={() => router.push("/")}>
+      <Button className={classes.button} onClick={() => router.push('/')}>
         Home
       </Button>
     );
@@ -138,7 +136,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {eventMenuArray.map((menuName, index) => (
                     <MenuItem
                       key={index}
-                      onClick={() => router.push("/admin/events")}
+                      onClick={() => router.push('/admin/events')}
                     >
                       {menuName}
                     </MenuItem>
@@ -173,14 +171,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     {/* Requires changes for the router */}
                     <MenuItem
                       onClick={() => {
-                        router.push("/volunteer");
+                        router.push('/volunteer');
                       }}
                     >
                       Volunteer Profiles
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        router.push("/volunteer");
+                        router.push('/volunteer');
                       }}
                     >
                       Pending Approvals
@@ -199,9 +197,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         {homeButton}
         {eventButton}
         {eventMenuWrapper}
-        {userData &&
-          userData.volunteerType.toLowerCase() === "admin" &&
-          volunteer}
+        {userData
+          && userData.volunteerType.toString().toLowerCase() === 'admin'
+          && volunteer}
       </>
     );
   };
@@ -215,7 +213,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
             <Button
               className={classes.buttonRight}
               onClick={() => {
-                router.push("/login");
+                router.push('/login');
               }}
             >
               Login
@@ -226,7 +224,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
             <Button
               className={classes.buttonRight}
               onClick={() => {
-                router.push("/signup");
+                router.push('/signup');
               }}
             >
               Sign Up
@@ -234,39 +232,38 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           </div>
         </>
       );
-    } else {
-      const profilePicture = !userData?.photoUrl ? (
-        <>
-          <AccountCircleIcon className={classes.iconSize40} color="primary" />
-        </>
-      ) : (
-        <Avatar alt={userData.name} src={userData.photoUrl} />
-      );
-
-      return (
-        <>
-          {profilePicture}
-          <div className={classes.nameContainer}>
-            <Typography className={classes.nameStyle}>
-              <Box fontWeight={700}>{userData.name}</Box>
-            </Typography>
-            <Button
-              className={`${classes.button} ${classes.editProfileButton}`}
-              disableRipple
-            >
-              <Typography className={classes.editProfileText}>
-                Edit Profile
-              </Typography>
-            </Button>
-          </div>
-        </>
-      );
     }
+    const profilePicture = !userData?.photoUrl ? (
+      <>
+        <AccountCircleIcon className={classes.iconSize40} color="primary" />
+      </>
+    ) : (
+      <Avatar alt={userData.name} src={userData.photoUrl} />
+    );
+
+    return (
+      <>
+        {profilePicture}
+        <div className={classes.nameContainer}>
+          <Typography className={classes.nameStyle}>
+            <Box fontWeight={700}>{userData.name}</Box>
+          </Typography>
+          <Button
+            className={`${classes.button} ${classes.editProfileButton}`}
+            disableRipple
+          >
+            <Typography className={classes.editProfileText}>
+              Edit Profile
+            </Typography>
+          </Button>
+        </div>
+      </>
+    );
   };
 
   return (
     <>
-      <Image src="/blessings-in-a-bag.png" width={100} height={100}></Image>
+      <Image src="/blessings-in-a-bag.png" width={100} height={100} />
       <div className={classes.buttonsContainer}>{navigationRender()}</div>
       {loggedInRender()}
     </>
