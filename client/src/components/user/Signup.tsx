@@ -100,7 +100,7 @@ const Signup: FC<SignupProps> = ({
     nextStep()
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     let signupArgs: SignupArgs = {
       name: e.target.name.value,
@@ -119,7 +119,13 @@ const Signup: FC<SignupProps> = ({
       volunteerContribution: "string",
       volunteerType: volunteerType
     }
-    handleFormSubmit(signupArgs)
+    const response = await handleFormSubmit(signupArgs)
+    console.log("response type" + response['type'] + JSON.stringify(response['type']))
+    if (response['type'] == "volunteer//fulfilled") {
+      router.push('/login');
+    } else {
+      console.error('Email in use')
+    }
   }
 
   const VolunteerType = props => {
