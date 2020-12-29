@@ -1,6 +1,6 @@
 import {
-  Box, Grid, Button, TextField, Typography, Paper
-} from '@material-ui/core'
+  Box, Grid, Button, TextField, Typography, Paper,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FC, useEffect } from 'react';
 import Link from 'next/link';
@@ -24,25 +24,25 @@ const useStyles = makeStyles((theme) => ({
 
   },
   pageHeader: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    marginBottom: "40px"
+    fontSize: '32px',
+    fontWeight: 'bold',
+    marginBottom: '40px',
   },
   loginButtonContainer: {
-    padding: "20px 0px 20px 0px"
+    padding: '20px 0px 20px 0px',
   },
   form: {
-    
+
   },
   header: {
     textAlign: 'left',
     marginTop: '10px',
-    fontWeight: "bold",
-    fontSize: "14px"
+    fontWeight: 'bold',
+    fontSize: '14px',
   },
   formContainer: {
-    padding: "20px"
-  }
+    padding: '20px',
+  },
 }));
 
 type LoginProps = {
@@ -69,23 +69,23 @@ const Login: FC<LoginProps> = ({
 
   useEffect(() => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (token) {
         router.push('/');
       }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    let loginArgs: LoginArgs = {
+    e.preventDefault();
+    const loginArgs: LoginArgs = {
       email: e.target.email.value,
       password: e.target.password.value,
-    }
-    handleFormSubmit(loginArgs)
-  }
+    };
+    handleFormSubmit(loginArgs);
+  };
 
   return (
     <>
@@ -93,7 +93,7 @@ const Login: FC<LoginProps> = ({
         <title>Login</title>
       </Head>
       <Box>
-        <NavBar />
+        <NavBar userData={null} />
         <Box style={styles.content}>
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
@@ -102,25 +102,25 @@ const Login: FC<LoginProps> = ({
                 <form className={classes.form} onSubmit={handleSubmit}>
                   <Typography className={classes.header}> Email </Typography>
                   <TextField
-                    variant='outlined'
-                    margin='normal'
+                    variant="outlined"
+                    margin="normal"
                     // required
                     fullWidth
-                    id='email'
+                    id="email"
                     label="e.g. username@gmail.com"
-                    name='email'
-                    autoComplete='email'
+                    name="email"
+                    autoComplete="email"
                   />
                   <Typography className={classes.header}> Password </Typography>
                   <TextField
-                    variant='outlined'
-                    margin='normal'
+                    variant="outlined"
+                    margin="normal"
                     // required
                     fullWidth
-                    name='password'
-                    type='password'
-                    id='password'
-                    autoComplete='current-password'
+                    name="password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
                   />
                   <Grid className={classes.loginButtonContainer}>
                     <Button
@@ -133,8 +133,8 @@ const Login: FC<LoginProps> = ({
                       Log In
                     </Button>
                   </Grid>
-              </form>
-            </Paper>
+                </form>
+              </Paper>
 
               <div className="section">
                 <div>

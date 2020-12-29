@@ -23,8 +23,8 @@ const initialState: VolunteerState = {
     count: 0,
     filters: {
       volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
-    }
-  }
+    },
+  },
 };
 
 const volunteerSlice = createSlice({
@@ -35,23 +35,23 @@ const volunteerSlice = createSlice({
     // Simplify immutable updates with redux toolkit
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getVolunteers.pending, (state) => {
-      state.meta.currentPageIds = []
+      state.meta.currentPageIds = [];
     });
     builder.addCase(getVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
       // normalize from array to object structure
-      payload.data.forEach(volunteer => state.data[volunteer._id] = {
+      payload.data.forEach((volunteer) => state.data[volunteer._id] = {
         ...volunteer,
         birthday: new Date(volunteer.birthday),
         created_at: new Date(volunteer.created_at),
       });
-      state.meta.currentPageIds = payload.data.map(volunteer => volunteer._id);
+      state.meta.currentPageIds = payload.data.map((volunteer) => volunteer._id);
       state.meta.count = payload.count;
       state.meta.pageNo = payload.pageNo;
       state.meta.filters.volunteerType = payload.filters.volunteerType;
     });
     builder.addCase(getVolunteers.rejected, (state) => {
-      state.meta.currentPageIds = []
+      state.meta.currentPageIds = [];
     });
   },
 });
