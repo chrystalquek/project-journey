@@ -18,6 +18,7 @@ export type SignupArgs = {
   volunteerReason: string
   volunteerContribution: string
   birthday: Date
+  volunteerType: string
 }
 
 export type LoginArgs = {
@@ -27,7 +28,7 @@ export type LoginArgs = {
 
 export const signup = createAsyncThunk<SignupResponse, SignupArgs, { state }>(
   'volunteer/',
-  async ({ name, email, password, gender, citizenship, race,hasVolunteered, hasChildrenExperience, hasExternalVolunteerExperience,hasFirstAidCertification, volunteerFrequency, volunteerReason,volunteerContribution, birthday }) => {
+  async ({ name, email, password, gender, citizenship, race,hasVolunteered, hasChildrenExperience, hasExternalVolunteerExperience,hasFirstAidCertification, volunteerFrequency, volunteerReason,volunteerContribution, birthday, volunteerType }) => {
     const request: SignupRequest = {
       name,
       email,
@@ -42,7 +43,8 @@ export const signup = createAsyncThunk<SignupResponse, SignupArgs, { state }>(
       volunteerFrequency,
       volunteerReason,
       volunteerContribution,
-      birthday
+      birthday,
+      volunteerType
     };
 
     const response = await apiClient.signup(request) as SignupResponse;

@@ -13,6 +13,7 @@ export type SignupRequest = {
   volunteerReason: string
   volunteerContribution: string
   birthday: Date
+  volunteerType: string
 }
 
 export type LoginRequest = {
