@@ -7,3 +7,5 @@ export type LoginResponse = {
 export type GetVolunteersResponse = {
   data: Array<VolunteerData>
 }
+
+export type PostEventResponse = {}

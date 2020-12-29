@@ -1,4 +1,4 @@
-import AdminCreateEventForm from '@components/form/AdminCreateEventForm';
+import AdminEventForm from '@components/form/AdminEventForm';
 import { Grid, AppBar } from '@material-ui/core';
 
 const AdminCreateEvent = () => (
@@ -9,9 +9,9 @@ const AdminCreateEvent = () => (
     <Grid item container>
       <Grid item md={2} />
       <Grid item container direction="column" xs={12} md={8}>
-        <AdminCreateEventForm />
+        <AdminEventForm />
+        <Grid item md={2} />
       </Grid>
-      <Grid item md={2} />
     </Grid>
   </Grid>
 );

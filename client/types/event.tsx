@@ -1,5 +1,6 @@
 export type EventData = {
     name: string;
+    coverImage?: string; // TODO: change to appropriate type
     volunteerType: string;
     startDateAndTime: Date;
     endDateAndTime: Date;
@@ -12,6 +13,7 @@ export type EventData = {
     roles?: Array<RoleData>;
     contentUrl?: string;
     contentType?: string;
+    location: string;
 }
 
 export interface RoleData {

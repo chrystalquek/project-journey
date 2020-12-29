@@ -11,6 +11,8 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import DropZoneCard from '@components/common/DropZoneCard';
+import { useDispatch } from 'react-redux';
+import { postEvent } from '@redux/actions/event';
 
 const eventTypes = [
   { value: 'Workshop', label: 'Workshop' },
@@ -32,7 +34,7 @@ const getEventTypePlaceholder = (eventType) => {
     default: throw new Error();
   }
 };
-const useStyles = makeStyles({
+const useStyles = makeStyles(() => ({
   coverImage: {
     width: '1010px',
     height: '369px',
@@ -45,35 +47,66 @@ const useStyles = makeStyles({
     borderRadius: '20px',
     textTransform: 'none',
   },
-});
+}));
 
-const AdminCreateEventForm = () => {
+const combineDateAndTime = (date: Date, time: string): Date => {
+  console.log(date);
+  console.log(date.toString());
+  console.log(time);
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  const dateString = `${month}/${day}/${year}`;
+  console.log(dateString);
+  console.log(new Date(`${dateString} ${time}`));
+  return new Date(`${dateString} ${time}`).toJSON();
+};
+type AdminEventFormProps = {}
+
+const AdminEventForm: FC<AdminEventFormProps> = () => {
   const classes = useStyles();
 
-  const [formData, setFormData] = useState({
-    eventType: 'Workshop',
-    name: '',
-    volunteerType: 'Committed Only',
+  const dispatch = useDispatch();
+
+  const [eventType, setEventType] = useState('Workshop');
+  const [dateAndTime, setDateAndTime] = useState({
     dateFrom: new Date(),
     dateTo: new Date(),
     timeFrom: '00:00',
     timeTo: '00:00',
+  });
+
+  const [formData, setFormData] = useState({
+    name: '',
+    coverImage: '',
+    volunteerType: 'Committed Only',
+    startDateAndTime: new Date(),
+    endDateAndTime: new Date(),
     deadline: new Date(),
-    vacancies: '',
+    vacancies: 0,
     description: '',
     facilitatorName: '',
-    facilitatorPhotograph: '',
+    facilitatorPhoto: '',
     facilitatorDescription: '',
+    roles: [],
+    contentUrl: null,
+    contentType: 'pdf', // TODO: fix this
+    location: '',
   });
 
   const {
-    eventType, coverImage, name, volunteerType, dateFrom, dateTo, timeFrom, timeTo, deadline,
-    vacancies, description, facilitatorName, facilitatorPhotograph,
-    facilitatorDescription,
+    name, coverImage, volunteerType, deadline,
+    vacancies, description, facilitatorName, facilitatorPhoto,
+    facilitatorDescription, roles, contentUrl, contentType,
   } = formData;
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const startDateAndTime = combineDateAndTime(dateAndTime.dateFrom, dateAndTime.timeFrom);
+    const endDateAndTime = combineDateAndTime(dateAndTime.dateTo, dateAndTime.timeTo);
+
+    setFormData({ ...formData, startDateAndTime, endDateAndTime });
+    dispatch(postEvent(formData));
   };
 
   const handleChange = (event) => {
@@ -114,7 +147,7 @@ const AdminCreateEventForm = () => {
                 color="secondary"
                 name="eventType"
                 value={eventType}
-                onChange={handleChange}
+                onChange={(e) => setEventType(e.target.value)}
               >
                 {eventTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -198,8 +231,8 @@ const AdminCreateEventForm = () => {
                   margin="dense"
                   id="date-from"
                   name="dateFrom"
-                  value={dateFrom}
-                  onChange={(date) => setFormData({ ...formData, dateFrom: date })}
+                  value={dateAndTime.dateFrom}
+                  onChange={(dateFrom) => setDateAndTime({ ...dateAndTime, dateFrom })}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -218,8 +251,8 @@ const AdminCreateEventForm = () => {
                   margin="dense"
                   id="date-to"
                   name="dateTo"
-                  value={dateTo}
-                  onChange={(date) => setFormData({ ...formData, dateTo: date })}
+                  value={dateAndTime.dateTo}
+                  onChange={(dateTo) => setDateAndTime({ ...dateAndTime, dateTo })}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -243,9 +276,9 @@ const AdminCreateEventForm = () => {
                 variant="outlined"
                 name="timeFrom"
                 fullWidth
-                value={timeFrom}
+                value={dateAndTime.timeFrom}
                 margin="dense"
-                onChange={handleChange}
+                onChange={(e) => setDateAndTime({ ...dateAndTime, timeFrom: e.target.value })}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -265,9 +298,9 @@ const AdminCreateEventForm = () => {
                 variant="outlined"
                 name="timeTo"
                 fullWidth
-                value={timeTo}
+                value={dateAndTime.timeTo}
                 margin="dense"
-                onChange={handleChange}
+                onChange={(e) => setDateAndTime({ ...dateAndTime, timeTo: e.target.value })}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -293,7 +326,7 @@ const AdminCreateEventForm = () => {
                   ampm={false}
                   margin="dense"
                   value={deadline}
-                  onChange={(date) => setFormData({ ...formData, deadline: date })}
+                  onChange={(date) => setFormData({ ...formData, deadline: date.toJSON })}
                   disablePast
                   format="dd/MM/yyyy HH:mm"
                   color="secondary"
@@ -403,6 +436,7 @@ const AdminCreateEventForm = () => {
               variant="contained"
               color="primary"
               className={classes.button}
+              onClick={handleSubmit}
             >
               <Typography variant="body1"> Create Event</Typography>
             </Button>
@@ -413,4 +447,4 @@ const AdminCreateEventForm = () => {
   );
 };
 
-export default AdminCreateEventForm;
+export default AdminEventForm;
