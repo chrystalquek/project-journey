@@ -101,10 +101,9 @@ const Signup: FC<SignupProps> = ({
     // }
   }
 
-  const VolunteerTypeStep = props => {
+  const VolunteerType = props => {
     return (
       <Layout>
-        <NavBar />
         <Content style={{
           padding: '80px 150px 0px 150px', marginTop: 80, textAlign: 'center', minHeight: '90vh',
         }}
@@ -179,19 +178,14 @@ const Signup: FC<SignupProps> = ({
             </Link>
           </div>
         </Content>
-        <Footer />
       </Layout>
     );
   }
 
-  const VolunteerInfoStep = props => {
+  const VolunteerInfo = props => {
     return (
       <>
-      <Head>
-        <title>Login</title>
-      </Head>
       <Box>
-        <NavBar />
         <Box style={styles.content}>
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
@@ -281,31 +275,34 @@ const Signup: FC<SignupProps> = ({
                     </Button>
                   </Grid>
               </form>
-
               <div className="section">
-                <div>
-                  <span>
-                    Already have an account?
-                  </span>
-                </div>
-                <Link href="/auth/signup">
-                  Login
+                Already have an account?
+                {' '}
+                <br />
+                <Link href="/auth/login">
+                  Log in
                 </Link>
               </div>
+              <br />
             </Grid>
           </Grid>
         </Box>
-        <Footer />
       </Box>
     </>
     )
   }
 
-  if (currentStep == 1) {
-    return <VolunteerTypeStep />
-  } else {
-    return <VolunteerInfoStep />
-  }
+  return (
+    <React.Fragment>
+      <Head>
+        <title>Signup</title>
+      </Head>
+      <NavBar />
+      <VolunteerType />
+      <VolunteerInfo />
+      <Footer />
+    </React.Fragment>
+  )
 }
 
 
