@@ -14,7 +14,7 @@ const bulkInsertAnswers = async (answers: Array<AnswerData>): Promise<void> => {
     content: answer.content,
     form_id: answer.formId,
   }));
-  await (new Answer(bulkAnswers)).save();
+  await Answer.insertMany(bulkAnswers);
 };
 
 /**

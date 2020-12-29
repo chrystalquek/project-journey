@@ -6,10 +6,11 @@ import HTTP_CODES from '../constants/httpCodes';
 import formService from '../services/forms/form';
 import optionsService from '../services/forms/option';
 import questionService from '../services/forms/question';
+import answerService from '../services/forms/answer';
 import { CreateFormQuestionsRequest, QuestionsOptionsRequestData } from '../types';
 import validation from '../helpers/validation';
 
-export type FormValidatorMethod = 'createForm' | 'getFormDetails'
+export type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
 
 const getValidations = (method: FormValidatorMethod) => {
   switch (method) {
@@ -23,6 +24,11 @@ const getValidations = (method: FormValidatorMethod) => {
     case 'getFormDetails': {
       return [
         param('eventId').isString(),
+      ];
+    }
+    case 'answerForm': {
+      return [
+
       ];
     }
     default: {
@@ -71,25 +77,49 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
 
 const getEventFormDetails = async (req: express.Request, res: express.Response) => {
   const { eventId } = req.params;
-  const form = await formService.getForm(eventId);
-  const questions = await questionService.getQuestions(form._id);
 
-  const questionsWithOptions: Array<any> = [];
-  for (let i = 0; i < questions.length; i += 1) {
-    const question = questions[i];
-    const optionsForQuestion = await optionsService.getOptionsForQuestion(question.id);
+  try {
+    const form = await formService.getForm(eventId);
+    const questions = await questionService.getQuestions(form._id);
 
-    questionsWithOptions.push({
-      ...question,
-      options: optionsForQuestion,
+    // TODO: Replace <any> with custom Question Option type
+    const questionsWithOptions: Array<any> = [];
+    for (let i = 0; i < questions.length; i += 1) {
+      const question = questions[i];
+      const optionsForQuestion = await optionsService.getOptionsForQuestion(question.id);
+
+      questionsWithOptions.push({
+        ...question,
+        options: optionsForQuestion,
+      });
+    }
+
+    res.status(HTTP_CODES.OK).send(questionsWithOptions);
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
     });
   }
+};
 
-  res.status(HTTP_CODES.OK).send(questionsWithOptions);
+const answerFormQuestions = async (req: express.Request, res: express.Response) => {
+  const {
+    answers,
+  } = req.body;
+
+  try {
+    await answerService.bulkInsertAnswers(answers);
+    res.status(HTTP_CODES.OK).send();
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
 };
 
 export default {
   createForm,
   getEventFormDetails,
   getValidations,
+  answerFormQuestions,
 };
