@@ -26,6 +26,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 20,
 
   },
+  backButton: {
+    backgroundColor: theme.palette.secondary.main,
+    color: 'black',
+    textTransform: 'none',
+    padding: '5px 50px 5px 50px',
+    borderRadius: 20,
+    marginBottom: '20px'
+  },
   pageHeader: {
     fontSize: "32px",
     fontWeight: "bold",
@@ -45,6 +53,11 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainer: {
     padding: "20px"
+  },
+  volunteerInfo: {
+    padding: '80px 150px 0px 150px',
+    textAlign: 'center',
+    minHeight: '90vh',
   }
 }));
 
@@ -59,21 +72,38 @@ const Signup: FC<SignupProps> = ({
   user,
   handleFormSubmit,
 }: SignupProps) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [volunteerType, setVolunteerType] = useState("ad-hoc") // default set as ad-hoc
   const [form] = useForm();
   const router = useRouter();
   const classes = useStyles();
   const isFormDisabled = !form.isFieldsTouched(true)
   || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
-  const [currentStep, setCurrentStep] = useState(0);
 
-  const handleStepChange = (event, newCurrentStep) => {
-    setCurrentStep(newCurrentStep);
+   // Proceed to next step
+  const nextStep = () => {
+    setCurrentStep(currentStep + 1)
   };
+
+  // Go back to prev step
+  const prevStep = () => {
+    setCurrentStep(currentStep - 1)
+  };
+
+  const selectAdhoc = () => {
+    setVolunteerType("ad-hoc")
+    nextStep()
+  }
+
+  const selectCommitted = () => {
+    setVolunteerType("committed")
+    nextStep()
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     let signupArgs: SignupArgs = {
-      name: e.target.email.name,
+      name: e.target.name.value,
       email: e.target.email.value,
       password: e.target.password.value,
       birthday: e.target.birthday.value,
@@ -86,19 +116,10 @@ const Signup: FC<SignupProps> = ({
       hasFirstAidCertification: true,
       volunteerFrequency: 1,
       volunteerReason: "Want to",
-      volunteerContribution: "string"
-
+      volunteerContribution: "string",
+      volunteerType: volunteerType
     }
-    console.log(JSON.stringify(signupArgs))
     handleFormSubmit(signupArgs)
-    // try {
-    //   axios.post("http://localhost:5000/volunteer", signupArgs )
-    //   .then(res => {
-    //     console.log("This is the error" + res);
-    //   })
-    // } catch (error) {
-    //   console.log(error)
-    // }
   }
 
   const VolunteerType = props => {
@@ -156,12 +177,12 @@ const Signup: FC<SignupProps> = ({
             <div style={{ padding: 24 }}>
               <Row gutter={24} style={{ justifyContent: 'center' }}>
                 <Col span={6}>
-                  <Card hoverable title="Ad-hoc Volunteer" headStyle={{ background: '#D0DE39', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }}>
+                  <Card hoverable title="Ad-hoc Volunteer" headStyle={{ background: '#D0DE39', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectAdhoc}>
                     You are only intending to volunteer one-off at Blessings in a Bag
                   </Card>
                 </Col>
                 <Col span={6}>
-                  <Card hoverable title="Regular Volunteer" headStyle={{ background: '#00BADC', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }}>
+                  <Card hoverable title="Regular Volunteer" headStyle={{ background: '#00BADC', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectCommitted}>
                     You are able to commit to a minimum of 3 months at Blessings in a Bag
                   </Card>
                 </Col>
@@ -186,9 +207,10 @@ const Signup: FC<SignupProps> = ({
     return (
       <>
       <Box>
-        <Box style={styles.content}>
+        <Box className={classes.volunteerInfo}>
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
+              <Button className={classes.backButton} onClick={prevStep}>Back</Button>
               <Typography className={classes.pageHeader}>Registration</Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>
                   <Typography className={classes.header}> Name </Typography>
@@ -292,14 +314,21 @@ const Signup: FC<SignupProps> = ({
     )
   }
 
+  const VolunteerSignup = props => {
+    if (currentStep == 0) {
+      return <VolunteerType />
+    } else {
+      return <VolunteerInfo />
+    }
+  }
+
   return (
     <React.Fragment>
       <Head>
         <title>Signup</title>
       </Head>
       <NavBar />
-      <VolunteerType />
-      <VolunteerInfo />
+      <VolunteerSignup />
       <Footer />
     </React.Fragment>
   )
