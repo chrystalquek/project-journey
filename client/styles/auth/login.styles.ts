@@ -1,17 +1,12 @@
-import { CSSProperties } from 'react';
+import { CSSProperties } from "react";
 
 const content: CSSProperties = {
-  padding: '80px 150px 0px 150px',
+  padding: "80px auto 0px auto",
   marginTop: 80,
-  textAlign: 'center',
-  minHeight: '90vh',
-};
-
-const rowContent: CSSProperties = {
-  justifyContent: 'center',
+  textAlign: "center",
+  minHeight: "90vh",
 };
 
 export default {
   content,
-  rowContent,
 };
