@@ -347,7 +347,7 @@ const Signup: FC<SignupProps> = ({
       <Head>
         <title>Signup</title>
       </Head>
-      <NavBar />
+      <NavBar userData={null} />
       <VolunteerSignup />
       <Footer />
     </React.Fragment>
