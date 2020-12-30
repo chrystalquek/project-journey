@@ -1,5 +1,5 @@
 import {EventData} from "@type/event";
-import {VolunteerData} from "@type/volunteer";
+import {VolunteerData, VOLUNTEER_TYPE} from "@type/volunteer";
 
 export type SignupResponse = {
 
@@ -15,4 +15,9 @@ export type GetAllEventsResponse = {
 
 export type GetVolunteersResponse = {
   data: Array<VolunteerData>
+  count: number
+  pageNo: number
+  filters: {
+    volunteerType: Record<VOLUNTEER_TYPE, boolean>
+  }
 }
