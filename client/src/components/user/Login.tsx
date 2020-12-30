@@ -13,6 +13,7 @@ import NavBar from '@components/common/NavBar';
 import Footer from '@components/common/Footer';
 import { LoginArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
+import { LoginResponse } from '@utils/api/response';
 
 const useStyles = makeStyles((theme) => ({
   loginButton: {
@@ -41,17 +42,17 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '14px',
   },
   formContainer: {
-    padding: "20px"
+    padding: '20px',
   },
   invalidText: {
-    marginBottom: "10px",
-    color: "#e60026"
-  }
+    marginBottom: '10px',
+    color: '#e60026',
+  },
 }));
 
 type LoginProps = {
   user: UserState
-  handleFormSubmit: (formData: LoginArgs) => Promise<void>
+  handleFormSubmit: (formData: LoginArgs) => Promise<LoginResponse>
 }
 
 const Login: FC<LoginProps> = ({
@@ -71,35 +72,24 @@ const Login: FC<LoginProps> = ({
     }
   }, [user]);
 
-  useEffect(() => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        router.push('/');
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    let loginArgs: LoginArgs = {
+    e.preventDefault();
+    const loginArgs: LoginArgs = {
       email: e.target.email.value,
       password: e.target.password.value,
+    };
+    const response = await handleFormSubmit(loginArgs);
+    // @ts-ignore type exists
+    if (response?.type === 'user/login/rejected') {
+      setInvalid(true);
     }
-    const response = await handleFormSubmit(loginArgs)
-    if (response['type'] == "user/login/rejected") {
-      setInvalid(true)
-    }
-  }
-  const InvalidCredentials = props => {
+  };
+  const InvalidCredentials = (props) => {
     if (invalid) {
-      return <Typography className={classes.invalidText}>Invalid email & password</Typography>
-    } else {
-      return <React.Fragment />
+      return <Typography className={classes.invalidText}>Invalid email &absp; password</Typography>;
     }
-  }
+    return <></>;
+  };
 
   return (
     <>
@@ -157,7 +147,7 @@ const Login: FC<LoginProps> = ({
                     Don&apos;t have an account?
                   </span>
                 </div>
-                <Link href="/auth/signup">
+                <Link href="/signup">
                   Sign up
                 </Link>
               </div>
