@@ -81,9 +81,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
     name: '',
     coverImage: '',
     volunteerType: 'Committed Only',
-    startDate: '',
-    endDate: '',
-    deadline: '',
+    deadline: dayjs(),
     vacancies: 0,
     description: '',
     facilitatorName: '',
@@ -108,12 +106,14 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    setFormData({
+    const formToSend = {
       ...formData,
+      deadline: deadline.toISOString(),
       startDate: getDateAndTimeIsoString(fromDate, fromTime),
       endDate: getDateAndTimeIsoString(toDate, toTime),
-    });
-    dispatch(postEvent(formData));
+    };
+
+    dispatch(postEvent(formToSend));
   };
 
   const handleChange = (event) => {
@@ -329,7 +329,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
                 ampm={false}
                 margin="dense"
                 value={deadline}
-                onChange={(date) => setFormData({ ...formData, deadline: date.toJSON() })}
+                onChange={(date) => setFormData({ ...formData, deadline: date })}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
                 color="secondary"
