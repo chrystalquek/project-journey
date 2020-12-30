@@ -11,7 +11,8 @@ export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
-export type EventSearchType = 'all' | 'upcoming' | 'past'; 
+export type EventSearchType = 'all' | 'upcoming' | 'past'
+export type EventType = 'workshop' | 'hangout' | 'volunteering'
 
 export interface RoleData {
     name: string;
@@ -139,6 +140,7 @@ export interface DeleteVolunteerFieldResponse extends ResponseJSON {
 export type EventData = {
     name: string;
     coverImage?: string; // TODO: change to appropriate type
+    eventType: EventType;
     volunteerType: string;
     startDate: Date;
     endDate: Date;

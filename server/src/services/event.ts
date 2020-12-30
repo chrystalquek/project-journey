@@ -1,30 +1,29 @@
 import mongoose from 'mongoose';
-import { QueryParams, EventSearchType, EventData} from '../types';
+import { QueryParams, EventSearchType, EventData } from '../types';
 
 import Event from '../models/Event';
 
 const createEvent = async (eventData: EventData): Promise<void> => {
-  console.log('im here');
   try {
     const eventSchemaData: mongoose.Document = new Event({
       _id: new mongoose.Types.ObjectId(),
       name: eventData.name,
-      created_at: Date.now(),
-      description: eventData.description,
-      content_url: eventData.contentUrl,
-      content_type: eventData.contentType,
-      facilitator_name: eventData.facilitatorName,
-      facilitator_description: eventData.facilitatorDescription,
+      eventType: eventData.eventType,
+      volunteerType: eventData.volunteerType,
       start_date: eventData.startDate,
       end_date: eventData.endDate,
-      location: eventData.location,
       deadline: eventData.deadline,
-      additional_information: eventData.description,
+      created_at: Date.now(),
+      vacancies: eventData.vacancies,
+      description: eventData.description,
+      facilitator_name: eventData.facilitatorName,
+      facilitator_description: eventData.facilitatorDescription,
       roles: eventData.roles,
+      content_url: eventData.contentUrl,
+      content_type: eventData.contentType,
+      location: eventData.location,
     });
-    console.log('saved');
     await eventSchemaData.save();
-    console.log('saved');
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -96,9 +95,8 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
 const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
   try {
     let events: EventData[];
-    
+
     switch (eventType.searchType) {
-    
       case 'all':
         events = await Event.find({}).skip(eventType.skip).limit(eventType.limit);
         break;
