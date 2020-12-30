@@ -49,18 +49,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const combineDateAndTime = (date: Date, time: string): Date => {
-  console.log(date);
-  console.log(date.toString());
-  console.log(time);
+/**
+ * Combine date and time as JSON string
+ * @param date Date object representing date
+ * @param time string representing time
+ */
+const getDateAndTimeJson = (date: Date, time: string): string => {
   const day = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();
   const dateString = `${month}/${day}/${year}`;
-  console.log(dateString);
-  console.log(new Date(`${dateString} ${time}`));
   return new Date(`${dateString} ${time}`).toJSON();
 };
+
 type AdminEventFormProps = {}
 
 const AdminEventForm: FC<AdminEventFormProps> = () => {
@@ -69,20 +70,21 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
   const dispatch = useDispatch();
 
   const [eventType, setEventType] = useState('Workshop');
+
   const [dateAndTime, setDateAndTime] = useState({
-    dateFrom: new Date(),
-    dateTo: new Date(),
-    timeFrom: '00:00',
-    timeTo: '00:00',
+    startDate: new Date(),
+    endDate: new Date(),
+    startTime: '00:00',
+    endTime: '00:00',
   });
 
   const [formData, setFormData] = useState({
     name: '',
     coverImage: '',
     volunteerType: 'Committed Only',
-    startDateAndTime: new Date(),
-    endDateAndTime: new Date(),
-    deadline: new Date(),
+    startDateAndTime: new Date().toJSON(),
+    endDateAndTime: new Date().toJSON(),
+    deadline: new Date().toJSON(),
     vacancies: 0,
     description: '',
     facilitatorName: '',
@@ -100,12 +102,18 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
     facilitatorDescription, roles, contentUrl, contentType,
   } = formData;
 
+  const {
+    startDate, startTime, endDate, endTime,
+  } = dateAndTime;
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const startDateAndTime = combineDateAndTime(dateAndTime.dateFrom, dateAndTime.timeFrom);
-    const endDateAndTime = combineDateAndTime(dateAndTime.dateTo, dateAndTime.timeTo);
 
-    setFormData({ ...formData, startDateAndTime, endDateAndTime });
+    setFormData({
+      ...formData,
+      startDateAndTime: getDateAndTimeJson(startDate, startTime),
+      endDateAndTime: getDateAndTimeJson(endDate, endTime),
+    });
     dispatch(postEvent(formData));
   };
 
@@ -230,9 +238,9 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
                   format="dd/MM/yyyy"
                   margin="dense"
                   id="date-from"
-                  name="dateFrom"
-                  value={dateAndTime.dateFrom}
-                  onChange={(dateFrom) => setDateAndTime({ ...dateAndTime, dateFrom })}
+                  name="startDate"
+                  value={startDate}
+                  onChange={(date) => setDateAndTime({ ...dateAndTime, startDate: date })}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -250,9 +258,9 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
                   format="dd/MM/yyyy"
                   margin="dense"
                   id="date-to"
-                  name="dateTo"
-                  value={dateAndTime.dateTo}
-                  onChange={(dateTo) => setDateAndTime({ ...dateAndTime, dateTo })}
+                  name="endDate"
+                  value={endDate}
+                  onChange={(date) => setDateAndTime({ ...dateAndTime, endDate: date })}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -274,11 +282,11 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
               <TextField
                 id="time"
                 variant="outlined"
-                name="timeFrom"
+                name="startTime"
                 fullWidth
-                value={dateAndTime.timeFrom}
+                value={startTime}
                 margin="dense"
-                onChange={(e) => setDateAndTime({ ...dateAndTime, timeFrom: e.target.value })}
+                onChange={(e) => setDateAndTime({ ...dateAndTime, startTime: e.target.value })}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -296,11 +304,11 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
               <TextField
                 id="time"
                 variant="outlined"
-                name="timeTo"
+                name="endTime"
                 fullWidth
-                value={dateAndTime.timeTo}
+                value={endTime}
                 margin="dense"
-                onChange={(e) => setDateAndTime({ ...dateAndTime, timeTo: e.target.value })}
+                onChange={(e) => setDateAndTime({ ...dateAndTime, endTime: e.target.value })}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -326,7 +334,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
                   ampm={false}
                   margin="dense"
                   value={deadline}
-                  onChange={(date) => setFormData({ ...formData, deadline: date.toJSON })}
+                  onChange={(date) => setFormData({ ...formData, deadline: date.toJSON() })}
                   disablePast
                   format="dd/MM/yyyy HH:mm"
                   color="secondary"
