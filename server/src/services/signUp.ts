@@ -114,7 +114,7 @@ const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleNam
     const unupdatedEvent = await Event.findById(eventId);
     let eventRoles;
 
-    if (unupdatedEvent != null) {
+    if (unupdatedEvent != null && unupdatedEvent.roles) {
       switch (actionType) {
         case 'add':
           eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName as string, volunteerId);

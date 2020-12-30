@@ -18,7 +18,7 @@ const createOpportunity = async (opportunityData: OpportunityData): Promise<void
       end_date: opportunityData.endDate,
       location: opportunityData.location,
       deadline: opportunityData.deadline,
-      additional_information: opportunityData.additionalInformation,
+      additional_information: opportunityData.description,
       roles: opportunityData.roles,
 
       // Specific

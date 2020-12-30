@@ -35,7 +35,7 @@ app.use('/test', testRoute);
 app.use('/', router);
 
 if (config.env == 'development') {
-  app.use(cors())
+  app.use(cors());
 }
 
 app.listen(CONFIG.port, () => {

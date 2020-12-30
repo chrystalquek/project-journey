@@ -11,7 +11,8 @@ export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
-export type EventSearchType = 'all' | 'upcoming' | 'past'; 
+export type EventSearchType = 'all' | 'upcoming' | 'past'
+export type EventType = 'workshop' | 'hangout' | 'volunteering'
 
 export interface RoleData {
     name: string;
@@ -120,19 +121,39 @@ export interface UpdateVolunteerFieldResponse extends ResponseJSON {
 export interface DeleteVolunteerFieldResponse extends ResponseJSON {
 }
 
+// TODO: delete if we are following FE
+// export type EventData = {
+//     name: string;
+//     description: string;
+//     contentUrl: string;
+//     contentType: string;
+//     facilitatorName: string;
+//     facilitatorDescription: string;
+//     startDate: Date;
+//     endDate: Date;
+//     location: string;
+//     deadline: Date;
+//     additionalInformation: string;
+//     roles: Array<RoleData>;
+// }
+
 export type EventData = {
     name: string;
-    description: string;
-    contentUrl: string;
-    contentType: string;
-    facilitatorName: string;
-    facilitatorDescription: string;
+    coverImage?: string; // TODO: change to appropriate type
+    eventType: EventType;
+    volunteerType: string;
     startDate: Date;
     endDate: Date;
-    location: string;
     deadline: Date;
-    additionalInformation: string;
-    roles: Array<RoleData>;
+    vacancies: number;
+    description: string;
+    facilitatorName?: string;
+    facilitatorPhoto?: string;
+    facilitatorDescription?: string;
+    roles?: Array<RoleData>;
+    contentUrl?: string;
+    contentType?: string;
+    location: string;
 }
 
 export type OpportunityData = EventData & {
