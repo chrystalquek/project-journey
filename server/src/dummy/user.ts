@@ -7,7 +7,7 @@ const dummyUser: VolunteerData = {
   address: 'string',
   mobileNumber: '82919191',
   birthday: new Date('October 13, 2014 11:13:00'),
-  email: 'claraadora@gmail.com',
+  email: 'alexandermatthew12@gmail.com',
   socialMediaPlatform: 'instagram',
   gender: 'female',
   citizenship: 'singapore',

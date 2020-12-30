@@ -105,11 +105,11 @@ const eventSignUpConfirmationEmailHelper = async (user: VolunteerData, event: Ev
   const templateData = {
     name: user.name,
     event_title: event.name,
-    date: event.startDate,
-    time_start: event.startDate,
-    time_end: event.endDate,
+    date: event.startDateAndTime,
+    time_start: event.startDateAndTime,
+    time_end: event.endDateAndTime,
     location_details: event.location,
-    event_information: event.additionalInformation,
+    event_information: event.description,
     POC_name: event.facilitatorName,
     POC_mobile_number: event.facilitatorDescription,
   };
@@ -147,11 +147,11 @@ const waitlistToConfirmedEmailHelper = async (user: VolunteerData, event: EventD
   const templateData = {
     name: user.name,
     event_title: event.name,
-    date: event.startDate,
-    time_start: event.startDate,
-    time_end: event.endDate,
+    date: event.startDateAndTime,
+    time_start: event.startDateAndTime,
+    time_end: event.endDateAndTime,
     location_details: event.location,
-    event_information: event.additionalInformation,
+    event_information: event.description,
     POC_name: event.facilitatorName,
     POC_mobile_number: event.facilitatorDescription,
   };

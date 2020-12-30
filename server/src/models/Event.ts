@@ -15,6 +15,7 @@ const EventSchema = new Schema({
   content_type: {
     type: String,
     enum: ['pdf', 'video', 'image', 'links', 'document'],
+    default: 'pdf',
   },
   facilitator_name: String,
   facilitator_description: String,

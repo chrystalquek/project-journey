@@ -35,9 +35,8 @@ protectedRouter.put('/:id', authorize(['admin']), eventController.updateEvent);
 // @route   POST /event
 // @desc    Post a new event
 // @access  Private
-protectedRouter.post(
+router.post(
   '/',
-  authorize(['admin']),
   validate(eventController.getValidations('createEvent')),
   eventController.createEvent,
 );

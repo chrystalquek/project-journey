@@ -4,6 +4,7 @@ import { EventSearchType, EventData } from '../types';
 import Event from '../models/Event';
 
 const createEvent = async (eventData: EventData): Promise<void> => {
+  console.log('im here');
   try {
     const eventSchemaData: mongoose.Document = new Event({
       _id: new mongoose.Types.ObjectId(),
@@ -14,14 +15,16 @@ const createEvent = async (eventData: EventData): Promise<void> => {
       content_type: eventData.contentType,
       facilitator_name: eventData.facilitatorName,
       facilitator_description: eventData.facilitatorDescription,
-      start_date: eventData.startDate,
-      end_date: eventData.endDate,
+      start_date: eventData.startDateAndTime,
+      end_date: eventData.endDateAndTime,
       location: eventData.location,
       deadline: eventData.deadline,
-      additional_information: eventData.additionalInformation,
+      additional_information: eventData.description,
       roles: eventData.roles,
     });
+    console.log('saved');
     await eventSchemaData.save();
+    console.log('saved');
   } catch (err) {
     throw new Error(err.msg);
   }

@@ -28,6 +28,7 @@ const readResource = async (id: string): Promise<ResourceData> => {
       throw new Error('Resource is not found.');
     }
 
+    /** TODO: move to the appropriate use cases */
     await emailService.sendEmail('FEEDBACK', generateDummyUser(), generateDummyEvent());
     await emailService.sendEmail('EVENT_SIGN_UP_CONFIRMATION', generateDummyUser(), generateDummyEvent());
     await emailService.sendEmail('WAITLIST_TO_CONFIRMED', generateDummyUser(), generateDummyEvent());

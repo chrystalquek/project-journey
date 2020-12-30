@@ -14,11 +14,11 @@ const createOpportunity = async (opportunityData: OpportunityData): Promise<void
       content_type: opportunityData.contentType,
       facilitator_name: opportunityData.facilitatorName,
       facilitator_description: opportunityData.facilitatorDescription,
-      start_date: opportunityData.startDate,
-      end_date: opportunityData.endDate,
+      start_date: opportunityData.startDateAndTime,
+      end_date: opportunityData.endDateAndTime,
       location: opportunityData.location,
       deadline: opportunityData.deadline,
-      additional_information: opportunityData.additionalInformation,
+      additional_information: opportunityData.description,
       roles: opportunityData.roles,
 
       // Specific

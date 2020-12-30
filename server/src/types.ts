@@ -113,19 +113,38 @@ export interface UpdateVolunteerFieldResponse extends ResponseJSON {
 export interface DeleteVolunteerFieldResponse extends ResponseJSON {
 }
 
+// TODO: delete if we are following FE
+// export type EventData = {
+//     name: string;
+//     description: string;
+//     contentUrl: string;
+//     contentType: string;
+//     facilitatorName: string;
+//     facilitatorDescription: string;
+//     startDate: Date;
+//     endDate: Date;
+//     location: string;
+//     deadline: Date;
+//     additionalInformation: string;
+//     roles: Array<RoleData>;
+// }
+
 export type EventData = {
     name: string;
-    description: string;
-    contentUrl: string;
-    contentType: string;
-    facilitatorName: string;
-    facilitatorDescription: string;
-    startDate: Date;
-    endDate: Date;
-    location: string;
+    coverImage?: string; // TODO: change to appropriate type
+    volunteerType: string;
+    startDateAndTime: Date;
+    endDateAndTime: Date;
     deadline: Date;
-    additionalInformation: string;
-    roles: Array<RoleData>;
+    vacancies: number;
+    description: string;
+    facilitatorName?: string;
+    facilitatorPhoto?: string;
+    facilitatorDescription?: string;
+    roles?: Array<RoleData>;
+    contentUrl?: string;
+    contentType?: string;
+    location: string;
 }
 
 export type OpportunityData = EventData & {
