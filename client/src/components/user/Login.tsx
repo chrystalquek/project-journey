@@ -79,7 +79,8 @@ const Login: FC<LoginProps> = ({
       password: e.target.password.value,
     };
     const response = await handleFormSubmit(loginArgs);
-    if (response.type === 'user/login/rejected') {
+    // @ts-ignore type exists
+    if (response?.type === 'user/login/rejected') {
       setInvalid(true);
     }
   };
