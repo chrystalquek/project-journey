@@ -25,6 +25,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { VolunteerData } from "types/volunteer";
+import { useDispatch } from "react-redux";
+import { resetUser } from "@redux/reducers/user";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,11 +71,14 @@ type NavBarProps = {
 
 export default function MobileNavBar({ userData }: NavBarProps) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const classes = useStyles();
+
   const [drawer, setDrawer] = useState<boolean>(false);
   const [openEventMenu, setOpenEventMenu] = useState<boolean>(false);
   const [openVolunteerMenu, setOpenVolunteerMenu] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
+
   const logoutRef = useRef<HTMLButtonElement>(null);
 
   const eventMenuArray = !userData
@@ -106,7 +111,9 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     setOpenLogout(false);
   };
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    dispatch(resetUser());
+  };
 
   const navigationRender = () => {
     const volunteerMenu = (

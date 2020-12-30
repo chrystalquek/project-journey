@@ -1,30 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData } from '@type/volunteer';
-import jwt from 'jsonwebtoken';
-import user from '../actions/user';
+import { createSlice } from "@reduxjs/toolkit";
+import { VolunteerData } from "@type/volunteer";
+import jwt from "jsonwebtoken";
+import user from "../actions/user";
 
 export type UserState = {
-  token: string,
-  user: VolunteerData | null
-}
+  token: string;
+  user: VolunteerData | null;
+};
 
 const initialState: UserState = {
-  token: '',
+  token: "",
   user: null,
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     resetUser(state) {
-      state.token = '';
+      state.token = "";
       state.user = null;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(user.pending, (state) => {
-      state.token = '';
+      state.token = "";
     });
     builder.addCase(user.fulfilled, (state, action) => {
       const { payload } = action;
@@ -37,9 +37,10 @@ const userSlice = createSlice({
       };
     });
     builder.addCase(user.rejected, (state) => {
-      state.token = '';
+      state.token = "";
     });
   },
 });
 
+export const { resetUser } = userSlice.actions;
 export default userSlice.reducer;

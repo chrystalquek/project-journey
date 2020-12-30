@@ -19,6 +19,8 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import PersonIcon from "@material-ui/icons/Person";
 import { VolunteerData } from "types/volunteer";
+import { useDispatch } from "react-redux";
+import { resetUser } from "@redux/reducers/user";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -82,6 +84,7 @@ type NavBarProps = {
 
 export default function DesktopNavBar({ userData }: NavBarProps) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const eventRef = useRef<HTMLButtonElement>(null);
@@ -122,7 +125,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     setOpenLogout(false);
   };
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    dispatch(resetUser());
+  };
 
   const navigationRender = () => {
     const homeButton = (
