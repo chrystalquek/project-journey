@@ -18,7 +18,7 @@ import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
 import { VolunteerState } from '@redux/reducers/volunteer';
 import { VOLUNTEER_TYPE } from 'types/volunteer';
-import { QueryParams } from 'api/request';
+import { QueryParams } from '@utils/api/request';
 import { getEnumKeys } from '@utils/helpers/TableOptions';
 import RightDrawer from '@components/common/RightDrawer';
 
