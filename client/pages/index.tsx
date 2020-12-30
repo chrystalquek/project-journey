@@ -4,7 +4,7 @@ import NavBar from '../src/components/common/NavBar';
 const Home = () => (
   <>
     <Head title="Blessings in a Bag" />
-    <NavBar />
+    <NavBar userData={null} />
     <p>Homepage goes here</p>
     <p>Footer goes here</p>
   </>

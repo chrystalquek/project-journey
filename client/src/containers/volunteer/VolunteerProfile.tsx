@@ -9,7 +9,7 @@ const mapStateToProps = (state: StoreState) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getVolunteers: (query: QueryParams) => dispatch(getVolunteers(query))
+  getVolunteers: (query: QueryParams) => dispatch(getVolunteers(query)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VolunteerProfile);
