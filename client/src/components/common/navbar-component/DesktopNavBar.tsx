@@ -133,9 +133,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
             <Paper>
               <ClickAwayListener onClickAway={handleCloseEventMenu}>
                 <MenuList>
-                  {eventMenuArray.map((menuName, index) => (
+                  {eventMenuArray.map((menuName) => (
                     <MenuItem
-                      key={index}
+                      key={menuName}
                       onClick={() => router.push('/admin/events')}
                     >
                       {menuName}
@@ -250,6 +250,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
+            onClick={() => router.push('/volunteer/Profile')}
             disableRipple
           >
             <Typography className={classes.editProfileText}>
