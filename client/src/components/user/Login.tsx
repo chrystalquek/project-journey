@@ -2,7 +2,7 @@ import {
   Box, Grid, Button, TextField, Typography, Paper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
@@ -13,6 +13,7 @@ import NavBar from '@components/common/NavBar';
 import Footer from '@components/common/Footer';
 import { LoginArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
+import { LoginResponse } from '@utils/api/response';
 
 const useStyles = makeStyles((theme) => ({
   loginButton: {
@@ -43,11 +44,15 @@ const useStyles = makeStyles((theme) => ({
   formContainer: {
     padding: '20px',
   },
+  invalidText: {
+    marginBottom: '10px',
+    color: '#e60026',
+  },
 }));
 
 type LoginProps = {
   user: UserState
-  handleFormSubmit: (formData: LoginArgs) => Promise<void>
+  handleFormSubmit: (formData: LoginArgs) => Promise<LoginResponse>
 }
 
 const Login: FC<LoginProps> = ({
@@ -56,7 +61,7 @@ const Login: FC<LoginProps> = ({
 }: LoginProps) => {
   const [form] = useForm();
   const router = useRouter();
-
+  const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
   const isFormDisabled = !form.isFieldsTouched(true)
     || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
@@ -67,13 +72,22 @@ const Login: FC<LoginProps> = ({
     }
   }, [user]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const loginArgs: LoginArgs = {
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    handleFormSubmit(loginArgs);
+    const response = await handleFormSubmit(loginArgs);
+    if (response.type === 'user/login/rejected') {
+      setInvalid(true);
+    }
+  };
+  const InvalidCredentials = (props) => {
+    if (invalid) {
+      return <Typography className={classes.invalidText}>Invalid email &absp; password</Typography>;
+    }
+    return <></>;
   };
 
   return (
@@ -112,6 +126,7 @@ const Login: FC<LoginProps> = ({
                     autoComplete="current-password"
                   />
                   <Grid className={classes.loginButtonContainer}>
+                    <InvalidCredentials />
                     <Button
                       color="primary"
                       type="submit"
