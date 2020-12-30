@@ -58,6 +58,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '80px 150px 0px 150px',
     textAlign: 'center',
     minHeight: '90vh',
+  },
+  invalidText: {
+    marginBottom: "10px",
+    color: "#e60026"
   }
 }));
 
@@ -74,6 +78,7 @@ const Signup: FC<SignupProps> = ({
 }: SignupProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [volunteerType, setVolunteerType] = useState("ad-hoc") // default set as ad-hoc
+  const [invalid, setInvalid] = useState(false);
   const [form] = useForm();
   const router = useRouter();
   const classes = useStyles();
@@ -124,7 +129,7 @@ const Signup: FC<SignupProps> = ({
     if (response['type'] == "volunteer//fulfilled") {
       router.push('/login');
     } else {
-      console.error('Email in use')
+      setInvalid(true)
     }
   }
 
@@ -207,6 +212,14 @@ const Signup: FC<SignupProps> = ({
         </Content>
       </Layout>
     );
+  }
+
+  const InvalidCredentials = props => {
+    if (invalid) {
+      return <Typography className={classes.invalidText}>Email address already exists</Typography>
+    } else {
+      return <React.Fragment />
+    }
   }
 
   const VolunteerInfo = props => {
@@ -292,6 +305,7 @@ const Signup: FC<SignupProps> = ({
                     </div>
                   </div>
                   <Grid className={classes.loginButtonContainer}>
+                    <InvalidCredentials />
                     <Button
                       color="primary"
                       type="submit"
