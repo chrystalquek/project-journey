@@ -89,8 +89,6 @@ const Login: FC<LoginProps> = ({
       password: e.target.password.value,
     }
     const response = await handleFormSubmit(loginArgs)
-    console.log("response" + response + JSON.stringify(response))
-    console.log("response type" + response['type'] + JSON.stringify(response['type']))
     if (response['type'] == "user/login/rejected") {
       setInvalid(true)
     }

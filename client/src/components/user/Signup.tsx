@@ -15,7 +15,6 @@ import NavBar from '@components/common/NavBar';
 import Footer from '@components/common/Footer';
 import { SignupArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
-import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   loginButton: {
@@ -125,7 +124,6 @@ const Signup: FC<SignupProps> = ({
       volunteerType: volunteerType
     }
     const response = await handleFormSubmit(signupArgs)
-    console.log("response type" + response['type'] + JSON.stringify(response['type']))
     if (response['type'] == "volunteer//fulfilled") {
       router.push('/login');
     } else {
