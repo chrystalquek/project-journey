@@ -1,9 +1,11 @@
 import express from 'express';
 import { body } from 'express-validator';
+import jwt from 'express-jwt';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import { roleCapacityValidator } from '../helpers/validation';
-import { EventSearchType, EventData, RoleData } from '../types';
-
+import {
+  EventSearchType, EventData, RoleData, QueryParams,
+} from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
 
@@ -74,10 +76,19 @@ const readEvent = async (
  */
 const readEvents = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const events = await eventService.readEvents(req.params.eventType as EventSearchType);
+    const searchType = req.params.eventType as EventSearchType;
+    const pageNo = Number(req.query.pageNo);
+    const size = Number(req.query.size);
+    const query: QueryParams = { searchType, skip: 0, limit: 0 };
 
+    if (pageNo < 0) {
+      throw new Error('Invalid page number, should start with 0');
+    }
+    query.skip = size * pageNo;
+    query.limit = size;
+    const events = await eventService.readEvents(query);
     res.status(HTTP_CODES.OK).json({
-      events,
+      data: events,
     });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -109,7 +120,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
 
-    res.status(HTTP_CODES.OK).json({ signedUpEvents });
+    res.status(HTTP_CODES.OK).json({ data: signedUpEvents });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

@@ -1,14 +1,24 @@
 import express from 'express';
 import volunteerController from '../controllers/volunteer';
+import { createProtectedRouter } from '../helpers/auth';
+import authorize from '../helpers/authorize';
 import { validate } from '../helpers/validation';
 
 const router = express.Router();
+const protectedRouter = createProtectedRouter(router);
 
 router.post(
   '/',
   validate(volunteerController.getValidations('createVolunteer')),
   volunteerController.createNewVolunteer,
 );
+
+protectedRouter.get(
+  '/pending',
+  authorize(['admin']),
+  volunteerController.getPendingVolunteers,
+);
+
 router.get(
   '/:email',
   validate(volunteerController.getValidations('getVolunteer')),
