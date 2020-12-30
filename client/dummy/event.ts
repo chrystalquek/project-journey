@@ -1,4 +1,4 @@
-import { EventData } from '../types';
+import { EventData } from '../types/event';
 
 const dummyEvent: EventData = {
   name: 'Volunteering: Regular Session [Committed]',
@@ -8,9 +8,9 @@ const dummyEvent: EventData = {
   contentType: 'pdf',
   facilitatorName: 'event 1 facil',
   facilitatorDescription: 'desc',
-  startDateAndTime: new Date('2021-12-12T00:00:00.000Z'),
-  endDateAndTime: new Date('2021-12-12T00:00:00.000Z'),
-  deadline: new Date(),
+  startDate: JSON.stringify(new Date('2021-12-12T00:00:00.000Z')),
+  endDate: JSON.stringify(new Date('2021-12-12T00:00:00.000Z')),
+  deadline: JSON.stringify(new Date()),
   roles: [{
     volunteers: ['5fdcb0f2332e9c2a4d5bb7bb'],
     name: 'cameraman',
@@ -29,8 +29,8 @@ export default dummyEvent;
 // "contentType": "pdf",
 // "facilitatorName": "event 1 facil",
 // "facilitatorDescription": "desc",
-// "startDateAndTime": "2021-01-01",
-// "endDateAndTime": "2021-02-02",
+// "startDate": "2021-01-01",
+// "endDate": "2021-02-02",
 // "location": "Jakarta",
 // "deadline": "2021-12-12",
 // "additionalInformation": "info",

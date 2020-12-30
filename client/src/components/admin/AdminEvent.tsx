@@ -3,11 +3,11 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import {testEventImage3} from "@constants/imagePaths";
-import {makeStyles} from "@material-ui/core";
-import {FC} from "react";
-import {EventData} from "@type/event";
-import {getVacancies, parseDate} from "@utils/event";
+import { testEventImage3 } from '@constants/imagePaths';
+import { makeStyles } from '@material-ui/core';
+import { FC } from 'react';
+import { EventData } from '@type/event';
+import { getVacancies, parseDate } from '@utils/event';
 
 type AdminEventProps = {
   event: EventData,
@@ -15,14 +15,14 @@ type AdminEventProps = {
 
 const useStyles = makeStyles({
   bold: {
-    fontWeight: 700
-  }
-})
+    fontWeight: 700,
+  },
+});
 
 const AdminEvent: FC<AdminEventProps> = ({ event }) => {
   const classes = useStyles();
-  const { filled, total } =  getVacancies(event);
-  const { date, time } = parseDate(event.start_date, event.end_date)
+  const { filled, total } = getVacancies(event);
+  const { date, time } = parseDate(event.startDate, event.endDate);
 
   return (
     <Card>
@@ -40,18 +40,24 @@ const AdminEvent: FC<AdminEventProps> = ({ event }) => {
             {event && event.name ? event.name : 'No event name provided'}
           </Typography>
           <Typography>
-            {date ? date : 'No date provided'}
+            {date || 'No date provided'}
           </Typography>
           <Typography gutterBottom>
-            {time ? time : 'No time provided'}
+            {time || 'No time provided'}
           </Typography>
           <Typography color="primary" gutterBottom className={classes.bold}>
-            {filled}/{total} {filled == 1 ? 'vacancy' : 'vacancies'} left
+            {filled}
+            /
+            {total}
+            {' '}
+            {filled == 1 ? 'vacancy' : 'vacancies'}
+            {' '}
+            left
           </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
-  )
-}
+  );
+};
 
 export default AdminEvent;

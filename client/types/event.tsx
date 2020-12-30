@@ -1,17 +1,13 @@
 import dayjs from 'dayjs';
-
-export type EventData = {
-    name: string;
-    coverImage?: string;
-}
+import { StringDecoder } from 'string_decoder';
 
 export type EventData = {
     name: string;
     coverImage?: string; // TODO: change to appropriate type
     volunteerType: string;
-    startDateAndTime: Date;
-    endDateAndTime: Date;
-    deadline: Date;
+    startDate: string;
+    endDate: string;
+    deadline: string;
     vacancies: number;
     description: string;
     facilitatorName?: string;

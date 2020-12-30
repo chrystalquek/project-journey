@@ -3,16 +3,14 @@ import {
   TextField, makeStyles, MenuItem, Typography, Grid, Button,
 } from '@material-ui/core';
 import {
-  MuiPickersUtilsProvider,
   KeyboardDatePicker,
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
 import PaddedGrid from '@components/common/PaddedGrid';
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 import DropZoneCard from '@components/common/DropZoneCard';
 import { useDispatch } from 'react-redux';
 import { postEvent } from '@redux/actions/event';
+import dayjs from 'dayjs';
 
 const eventTypes = [
   { value: 'Workshop', label: 'Workshop' },
@@ -54,12 +52,13 @@ const useStyles = makeStyles(() => ({
  * @param date Date object representing date
  * @param time string representing time
  */
-const getDateAndTimeJson = (date: Date, time: string): string => {
+const getDateAndTimeIsoString = (dateDayJs: dayjs.Dayjs, time: string): string => {
+  const date = dateDayJs.toDate();
   const day = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();
   const dateString = `${month}/${day}/${year}`;
-  return new Date(`${dateString} ${time}`).toJSON();
+  return new Date(`${dateString} ${time}`).toISOString();
 };
 
 type AdminEventFormProps = {}
@@ -72,19 +71,19 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
   const [eventType, setEventType] = useState('Workshop');
 
   const [dateAndTime, setDateAndTime] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    startTime: '00:00',
-    endTime: '00:00',
+    fromDate: dayjs(),
+    toDate: dayjs(),
+    fromTime: '00:00',
+    toTime: '00:00',
   });
 
   const [formData, setFormData] = useState({
     name: '',
     coverImage: '',
     volunteerType: 'Committed Only',
-    startDateAndTime: new Date().toJSON(),
-    endDateAndTime: new Date().toJSON(),
-    deadline: new Date().toJSON(),
+    startDate: '',
+    endDate: '',
+    deadline: '',
     vacancies: 0,
     description: '',
     facilitatorName: '',
@@ -103,7 +102,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
   } = formData;
 
   const {
-    startDate, startTime, endDate, endTime,
+    fromDate, toDate, fromTime, toTime,
   } = dateAndTime;
 
   const handleSubmit = (event) => {
@@ -111,8 +110,8 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
 
     setFormData({
       ...formData,
-      startDateAndTime: getDateAndTimeJson(startDate, startTime),
-      endDateAndTime: getDateAndTimeJson(endDate, endTime),
+      startDate: getDateAndTimeIsoString(fromDate, fromTime),
+      endDate: getDateAndTimeIsoString(toDate, toTime),
     });
     dispatch(postEvent(formData));
   };
@@ -222,53 +221,49 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
           </Grid>
 
           {/* Date - From & To */}
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item container direction="row" alignItems="center" spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h4">Date</Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="body1">From</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <KeyboardDatePicker
-                  disableToolbar
-                  variant="inline"
-                  inputVariant="outlined"
-                  format="dd/MM/yyyy"
-                  margin="dense"
-                  id="date-from"
-                  name="startDate"
-                  value={startDate}
-                  onChange={(date) => setDateAndTime({ ...dateAndTime, startDate: date })}
-                  KeyboardButtonProps={{
-                    'aria-label': 'change date',
-                  }}
-                  color="secondary"
-                />
-              </Grid>
-              <Grid item>
-                <Typography variant="body1">To</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <KeyboardDatePicker
-                  disableToolbar
-                  variant="inline"
-                  inputVariant="outlined"
-                  format="dd/MM/yyyy"
-                  margin="dense"
-                  id="date-to"
-                  name="endDate"
-                  value={endDate}
-                  onChange={(date) => setDateAndTime({ ...dateAndTime, endDate: date })}
-                  KeyboardButtonProps={{
-                    'aria-label': 'change date',
-                  }}
-                  color="secondary"
-                />
-              </Grid>
+          <Grid item container direction="row" alignItems="center" spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h4">Date</Typography>
             </Grid>
-          </MuiPickersUtilsProvider>
+            <Grid item>
+              <Typography variant="body1">From</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                inputVariant="outlined"
+                format="DD/MM/YYYY"
+                margin="dense"
+                id="date-from"
+                name="fromDate"
+                value={dayjs(fromDate)}
+                onChange={(date) => setDateAndTime({ ...dateAndTime, fromDate: date })}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                color="secondary"
+              />
+            </Grid>
+            <Grid item>
+              <Typography variant="body1">To</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                inputVariant="outlined"
+                format="DD/MM/YYYY"
+                margin="dense"
+                id="date-to"
+                name="toDate"
+                value={toDate}
+                onChange={(date) => setDateAndTime({ ...dateAndTime, toDate: date })}
+                minDate={dayjs(new Date())}
+                color="secondary"
+              />
+            </Grid>
+          </Grid>
 
           {/* Time - From & To */}
           <Grid item container direction="row" alignItems="center" spacing={2}>
@@ -282,11 +277,11 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
               <TextField
                 id="time"
                 variant="outlined"
-                name="startTime"
+                name="fromTime"
                 fullWidth
-                value={startTime}
+                value={fromTime}
                 margin="dense"
-                onChange={(e) => setDateAndTime({ ...dateAndTime, startTime: e.target.value })}
+                onChange={(e) => setDateAndTime({ ...dateAndTime, fromTime: e.target.value })}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -304,11 +299,11 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
               <TextField
                 id="time"
                 variant="outlined"
-                name="endTime"
+                name="toTime"
                 fullWidth
-                value={endTime}
+                value={toTime}
                 margin="dense"
-                onChange={(e) => setDateAndTime({ ...dateAndTime, endTime: e.target.value })}
+                onChange={(e) => setDateAndTime({ ...dateAndTime, toTime: e.target.value })}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -322,26 +317,25 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
           </Grid>
 
           {/* Sign-up Deadline */}
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item container>
-              <Grid item xs={12}>
-                <Typography variant="h4">Sign-up Deadline</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <KeyboardDateTimePicker
-                  variant="inline"
-                  inputVariant="outlined"
-                  ampm={false}
-                  margin="dense"
-                  value={deadline}
-                  onChange={(date) => setFormData({ ...formData, deadline: date.toJSON() })}
-                  disablePast
-                  format="dd/MM/yyyy HH:mm"
-                  color="secondary"
-                />
-              </Grid>
+          <Grid item container>
+            <Grid item xs={12}>
+              <Typography variant="h4">Sign-up Deadline</Typography>
             </Grid>
-          </MuiPickersUtilsProvider>
+            <Grid item xs={12}>
+              <KeyboardDateTimePicker
+                disableToolbar
+                variant="inline"
+                inputVariant="outlined"
+                ampm={false}
+                margin="dense"
+                value={deadline}
+                onChange={(date) => setFormData({ ...formData, deadline: date.toJSON() })}
+                disablePast
+                format="DD/MM/YYYY HH:mm"
+                color="secondary"
+              />
+            </Grid>
+          </Grid>
 
           {/* Number of Vacancies */}
           <Grid item container>

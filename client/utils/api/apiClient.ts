@@ -8,7 +8,6 @@ type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
-  getAllVolunteers(): Promise<GetVolunteersResponse>
   postEvent(request: PostEventRequest): Promise<PostEventResponse>
   getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
   getAllEvents(): Promise<GetAllEventsResponse>

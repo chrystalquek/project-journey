@@ -1,10 +1,13 @@
 import AdminEventForm from '@components/form/AdminEventForm';
-import { Grid, AppBar } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import Head from '@components/common/Header';
+import NavBar from '@components/common/NavBar';
 
 const AdminCreateEvent = () => (
-  <Grid container direction="column">
+  <Grid container direction="column" spacing={6}>
     <Grid item>
-      <AppBar />
+      <Head title="Blessings in a Bag" />
+      <NavBar userData={null} />
     </Grid>
     <Grid item container>
       <Grid item md={2} />

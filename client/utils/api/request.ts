@@ -1,3 +1,5 @@
+import { EventData } from 'types/event';
+
 export type LoginRequest = {
   email: string
   password: string
@@ -8,3 +10,5 @@ export type QueryParams = {
   size?: number
   [field: string]: any
 }
+
+export type PostEventRequest = EventData;
