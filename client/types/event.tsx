@@ -4,6 +4,7 @@ import { StringDecoder } from 'string_decoder';
 export type EventData = {
     name: string;
     coverImage?: string; // TODO: change to appropriate type
+    eventType: string;
     volunteerType: string;
     startDate: string;
     endDate: string;

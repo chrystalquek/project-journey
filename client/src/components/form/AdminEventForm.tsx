@@ -68,8 +68,6 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
 
   const dispatch = useDispatch();
 
-  const [eventType, setEventType] = useState('Workshop');
-
   const [dateAndTime, setDateAndTime] = useState({
     fromDate: dayjs(),
     toDate: dayjs(),
@@ -80,6 +78,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
   const [formData, setFormData] = useState({
     name: '',
     coverImage: '',
+    eventType: 'Workshop',
     volunteerType: 'Committed Only',
     deadline: dayjs(),
     vacancies: 0,
@@ -94,7 +93,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
   });
 
   const {
-    name, coverImage, volunteerType, deadline,
+    name, coverImage, eventType, volunteerType, deadline,
     vacancies, description, facilitatorName, facilitatorPhoto,
     facilitatorDescription, roles, contentUrl, contentType,
   } = formData;
@@ -154,7 +153,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
                 color="secondary"
                 name="eventType"
                 value={eventType}
-                onChange={(e) => setEventType(e.target.value)}
+                onChange={handleChange}
               >
                 {eventTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
