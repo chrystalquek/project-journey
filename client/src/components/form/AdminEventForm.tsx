@@ -20,8 +20,10 @@ const eventTypes = [
 
 // TODO: update types
 const volunteerTypes = [
-  { value: 'Committed Only', label: 'Committed Only' },
+  { value: 'Committed', label: 'Committed' },
   { value: 'Ad-hoc', label: 'Ad-hoc' },
+  { value: 'Lead', label: 'Lead' },
+  { value: 'Admin', label: 'Admin' },
 ];
 
 const getEventTypePlaceholder = (eventType) => {
@@ -107,6 +109,8 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
 
     const formToSend = {
       ...formData,
+      eventType: eventType.toLowerCase(),
+      volunteerType: volunteerType.toLowerCase(),
       deadline: deadline.toISOString(),
       startDate: getDateAndTimeIsoString(fromDate, fromTime),
       endDate: getDateAndTimeIsoString(toDate, toTime),
