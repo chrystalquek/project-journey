@@ -2,42 +2,89 @@ import React, { FC, useEffect } from 'react';
 import Head from 'next/head';
 
 import {
-  makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  capitalize,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  IconButton,
+  makeStyles,
+  Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, useMediaQuery, useTheme,
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import { VolunteerState } from '@redux/reducers/volunteer';
-import NavBar from '../common/NavBar';
+import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { QueryParams } from '@utils/api/request';
+import { getEnumKeys } from '@utils/helpers/TableOptions';
+import RightDrawer from '@components/common/RightDrawer';
 import Footer from '../common/Footer';
+import NavBar from '../common/NavBar';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
-  getAllVolunteers: () => Promise<void>
+  getVolunteers: (query: QueryParams) => Promise<void>
 }
 
+// constants
+export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
+
 const useStyles = makeStyles((theme) => ({
-  table: {
-    margin: theme.spacing(10),
+  link: {
+    color: '#069',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+    textTransform: 'none',
+  },
+  rightButton: {
+    float: 'right',
+  },
+  border: {
+    padding: theme.spacing(2),
   },
 }));
 
 const VolunteerProfile: FC<VolunteerProfileProps> = ({
   volunteers,
-  getAllVolunteers,
+  getVolunteers,
 }: VolunteerProfileProps) => {
   const classes = useStyles();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+
+  const { volunteerType } = volunteers.meta.filters; // get filter object
+
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    getAllVolunteers();
+    getVolunteers({ volunteerType });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>Volunteer Profiles</title>
-      </Head>
-      <NavBar />
+  // get array of strings from enum
+  const volunteerTypeValues = getEnumKeys(VOLUNTEER_TYPE);
 
-      <TableContainer className={classes.table}>
+  const handleFilterVolunteerTypeChange = (event) => {
+    getVolunteers({
+      volunteerType: {
+        ...volunteerType,
+        [event.target.name]: !volunteerType[event.target.name],
+      }, // change boolean for checkbox that changed
+    });
+  };
+
+  // for opening filter menu
+  const [openFilter, setOpenFilter] = React.useState(isMobile);
+
+  const handleChangePage = (event, newPage: number) => {
+    getVolunteers({ pageNo: newPage, volunteerType });
+  };
+
+  const currentPageVolunteers = volunteers.meta.currentPageIds.map((id) => volunteers.data[id]);
+
+  const volunteerTable = (
+    <>
+      <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
@@ -47,16 +94,73 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {volunteers?.volunteers.map((vol) => (
+            {currentPageVolunteers.map((vol) => (
               <TableRow key={vol.email}>
                 <TableCell><b>{vol.name}</b></TableCell>
                 <TableCell>{vol.volunteerType}</TableCell>
-                <TableCell>{new Date(vol.created_at).toLocaleDateString()}</TableCell>
+                <TableCell>{vol.created_at.toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[rowsPerPage]}
+        component="div"
+        count={volunteers.meta.count}
+        rowsPerPage={rowsPerPage}
+        page={volunteers.meta.pageNo}
+        onChangePage={handleChangePage}
+      />
+    </>
+  );
+
+  const filterOptions = (
+    <Grid>
+      <Typography variant="h4">Filter By</Typography>
+      <Divider />
+      Volunteer Type
+      {' '}
+      <IconButton size="small" className={classes.rightButton} onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon /> : <AddIcon />}</IconButton>
+      {openFilter
+      && (
+      <FormGroup>
+        {volunteerTypeValues.map((volunteerType) => (
+          <FormControlLabel
+            control={<Checkbox checked={volunteers.meta.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
+            label={capitalize(volunteerType)}
+          />
+        ))}
+      </FormGroup>
+      )}
+      <Divider />
+    </Grid>
+  );
+
+  return (
+    <>
+      <Head>
+        <title>Volunteer Profiles</title>
+      </Head>
+      <NavBar userData={null} />
+
+      {!isMobile
+        ? (
+          <Grid container direction="row" spacing={3} justify="center">
+            <Grid item xs={7}>
+              {volunteerTable}
+            </Grid>
+            <Grid item xs={3}>
+              {filterOptions}
+            </Grid>
+          </Grid>
+        )
+        : (
+          <>
+            <RightDrawer buttonTitle={<div className={classes.link}>Filter results</div>} content={filterOptions} />
+            <Grid className={classes.border}>{volunteerTable}</Grid>
+          </>
+        )}
 
       <Footer />
 

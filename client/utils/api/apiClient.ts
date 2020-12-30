@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LoginRequest, PostEventRequest } from './request';
-import { GetVolunteersResponse, LoginResponse, PostEventResponse } from './response';
+import { LoginRequest, PostEventRequest, QueryParams } from './request';
+import {
+  GetAllEventsResponse, GetVolunteersResponse, LoginResponse, PostEventResponse,
+} from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -8,6 +10,8 @@ export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
   getAllVolunteers(): Promise<GetVolunteersResponse>
   postEvent(request: PostEventRequest): Promise<PostEventResponse>
+  getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
+  getAllEvents(): Promise<GetAllEventsResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -21,14 +25,20 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
+  private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+
   // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'post');
   }
 
   // volunteer
-  async getAllVolunteers(): Promise<GetVolunteersResponse> {
-    return this.send({}, 'volunteer', 'get');
+  async getVolunteers(query: QueryParams): Promise<GetVolunteersResponse> {
+    return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
+  }
+
+  async getAllEvents(): Promise<GetAllEventsResponse> {
+    return this.send({}, 'event/multiple/all', 'get');
   }
 
   // admin post event
@@ -44,11 +54,6 @@ class AxiosApiClient implements ApiClient {
     if (process.env.NODE_ENV === 'development') {
       headers['Access-Control-Allow-Origin'] = '*';
     }
-
-    console.log(request);
-    console.log(typeof request);
-    console.log(path);
-    console.log(method);
 
     const config: AxiosRequestConfig = { headers };
 

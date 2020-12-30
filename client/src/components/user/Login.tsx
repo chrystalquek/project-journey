@@ -1,6 +1,7 @@
 import {
-  Form, Input, Button, Layout, Row, Col,
-} from 'antd';
+  Box, Grid, Button, TextField, Typography, Paper,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { FC, useEffect } from 'react';
 import Link from 'next/link';
 import { useForm } from 'antd/lib/form/Form';
@@ -13,7 +14,36 @@ import Footer from '@components/common/Footer';
 import { LoginArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 
-const { Content } = Layout;
+const useStyles = makeStyles((theme) => ({
+  loginButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: 'black',
+    textTransform: 'none',
+    padding: '5px 50px',
+    borderRadius: 20,
+
+  },
+  pageHeader: {
+    fontSize: '32px',
+    fontWeight: 'bold',
+    marginBottom: '40px',
+  },
+  loginButtonContainer: {
+    padding: '20px 0px 20px 0px',
+  },
+  form: {
+
+  },
+  header: {
+    textAlign: 'left',
+    marginTop: '10px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+  },
+  formContainer: {
+    padding: '20px',
+  },
+}));
 
 type LoginProps = {
   user: UserState
@@ -27,6 +57,7 @@ const Login: FC<LoginProps> = ({
   const [form] = useForm();
   const router = useRouter();
 
+  const classes = useStyles();
   const isFormDisabled = !form.isFieldsTouched(true)
     || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
@@ -36,51 +67,74 @@ const Login: FC<LoginProps> = ({
     }
   }, [user]);
 
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        router.push('/');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const loginArgs: LoginArgs = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+    handleFormSubmit(loginArgs);
+  };
+
   return (
     <>
       <Head>
         <title>Login</title>
       </Head>
-      <Layout>
-        <NavBar />
-        <Content style={styles.content}>
-          <Row style={styles.rowContent}>
-            <Col span={8}>
-              <Form
-                layout="vertical"
-                name="login"
-                initialValues={{ remember: true }}
-                onFinish={handleFormSubmit}
-                requiredMark={false}
-                className="mb-5"
-              >
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  rules={[{ required: true, message: 'Please input your username!' }]}
-                >
-                  <Input placeholder="username@gmail.com" />
-                </Form.Item>
-
-                <Form.Item
-                  label="Password"
-                  name="password"
-                  rules={[{ required: true, message: 'Please input your password!' }]}
-                  className="mb-4"
-                >
-                  <Input.Password />
-                </Form.Item>
-
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    disabled={isFormDisabled}
-                  >
-                    Log in
-                  </Button>
-                </Form.Item>
-              </Form>
+      <Box>
+        <NavBar userData={null} />
+        <Box style={styles.content}>
+          <Grid container style={styles.rowContent}>
+            <Grid item xs={4}>
+              <Typography className={classes.pageHeader}>Login</Typography>
+              <Paper className={classes.formContainer}>
+                <form className={classes.form} onSubmit={handleSubmit}>
+                  <Typography className={classes.header}> Email </Typography>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    // required
+                    fullWidth
+                    id="email"
+                    label="e.g. username@gmail.com"
+                    name="email"
+                    autoComplete="email"
+                  />
+                  <Typography className={classes.header}> Password </Typography>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    // required
+                    fullWidth
+                    name="password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                  />
+                  <Grid className={classes.loginButtonContainer}>
+                    <Button
+                      color="primary"
+                      type="submit"
+                      disabled={isFormDisabled}
+                      className={classes.loginButton}
+                      size="large"
+                    >
+                      Log In
+                    </Button>
+                  </Grid>
+                </form>
+              </Paper>
 
               <div className="section">
                 <div>
@@ -92,11 +146,11 @@ const Login: FC<LoginProps> = ({
                   Sign up
                 </Link>
               </div>
-            </Col>
-          </Row>
-        </Content>
+            </Grid>
+          </Grid>
+        </Box>
         <Footer />
-      </Layout>
+      </Box>
     </>
   );
 };

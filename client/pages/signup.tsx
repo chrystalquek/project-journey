@@ -10,7 +10,7 @@ const { Content } = Layout;
 export default function Signup() {
   return (
     <Layout>
-      <NavBar />
+      <NavBar userData={null} />
       <Content style={{
         padding: '80px 150px 0px 150px', marginTop: 80, textAlign: 'center', minHeight: '90vh',
       }}
