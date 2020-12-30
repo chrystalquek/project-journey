@@ -133,8 +133,8 @@ export type EventData = {
     name: string;
     coverImage?: string; // TODO: change to appropriate type
     volunteerType: string;
-    startDateAndTime: Date;
-    endDateAndTime: Date;
+    startDate: Date;
+    endDate: Date;
     deadline: Date;
     vacancies: number;
     description: string;

@@ -8,8 +8,8 @@ const dummyEvent: EventData = {
   contentType: 'pdf',
   facilitatorName: 'event 1 facil',
   facilitatorDescription: 'desc',
-  startDateAndTime: new Date('2021-12-12T00:00:00.000Z'),
-  endDateAndTime: new Date('2021-12-12T00:00:00.000Z'),
+  startDate: new Date('2021-12-12T00:00:00.000Z'),
+  endDate: new Date('2021-12-12T00:00:00.000Z'),
   deadline: new Date(),
   roles: [{
     volunteers: ['5fdcb0f2332e9c2a4d5bb7bb'],
