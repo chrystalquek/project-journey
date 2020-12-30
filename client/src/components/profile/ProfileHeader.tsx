@@ -9,8 +9,8 @@ import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: theme.palette.primary.main,
-    height: '70px',
-    width: '70px',
+    height: '100px',
+    width: '100px',
   },
   header: {
     textAlign: 'left',
@@ -20,10 +20,10 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     backgroundColor: theme.palette.secondary.light,
-    padding: '12px',
+    padding: '20px',
   },
   personIcon: {
-    fontSize: 40,
+    fontSize: 60,
   },
 }));
 
