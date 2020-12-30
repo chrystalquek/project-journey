@@ -16,7 +16,12 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    resetUser(state) {
+      state.token = '';
+      state.user = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(user.pending, (state) => {
       state.token = '';
