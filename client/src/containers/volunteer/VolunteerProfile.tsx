@@ -6,6 +6,7 @@ import { QueryParams } from '@utils/api/request';
 
 const mapStateToProps = (state: StoreState) => ({
   volunteers: state.volunteer,
+  userData: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

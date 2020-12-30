@@ -67,17 +67,6 @@ const Login: FC<LoginProps> = ({
     }
   }, [user]);
 
-  useEffect(() => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        router.push('/');
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const loginArgs: LoginArgs = {
@@ -142,7 +131,7 @@ const Login: FC<LoginProps> = ({
                     Don&apos;t have an account?
                   </span>
                 </div>
-                <Link href="/auth/signup">
+                <Link href="/signup">
                   Sign up
                 </Link>
               </div>
