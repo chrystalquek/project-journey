@@ -2,7 +2,7 @@ import {
   Box, Grid, Button, TextField, Typography, Paper
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
@@ -42,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainer: {
     padding: "20px"
+  },
+  invalidText: {
+    marginBottom: "10px",
+    color: "#e60026"
   }
 }));
 
@@ -56,7 +60,7 @@ const Login: FC<LoginProps> = ({
 }: LoginProps) => {
   const [form] = useForm();
   const router = useRouter();
-
+  const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
   const isFormDisabled = !form.isFieldsTouched(true)
     || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
@@ -78,13 +82,25 @@ const Login: FC<LoginProps> = ({
     }
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     let loginArgs: LoginArgs = {
       email: e.target.email.value,
       password: e.target.password.value,
     }
-    handleFormSubmit(loginArgs)
+    const response = await handleFormSubmit(loginArgs)
+    console.log("response" + response + JSON.stringify(response))
+    console.log("response type" + response['type'] + JSON.stringify(response['type']))
+    if (response['type'] == "user/login/rejected") {
+      setInvalid(true)
+    }
+  }
+  const InvalidCredentials = props => {
+    if (invalid) {
+      return <Typography className={classes.invalidText}>Invalid email & password</Typography>
+    } else {
+      return <React.Fragment />
+    }
   }
 
   return (
@@ -123,6 +139,7 @@ const Login: FC<LoginProps> = ({
                     autoComplete='current-password'
                   />
                   <Grid className={classes.loginButtonContainer}>
+                    <InvalidCredentials />
                     <Button
                       color="primary"
                       type="submit"
