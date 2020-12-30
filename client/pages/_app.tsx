@@ -1,8 +1,6 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
-import 'antd/dist/antd.css';
-import '@styles/vars.css';
-import '@styles/globals.css';
+import '@styles/app.css'
 import { Provider } from 'react-redux';
 import store from '@redux/store';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
