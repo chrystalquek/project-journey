@@ -1,51 +1,68 @@
 export enum GENDER {
-    'male', 'female'
+    MALE = 'male',
+    FEMALE = 'female'
 }
 
 export enum CITIZENSHIP {
-    'singapore', 'permanent_resident', 'foreigner'
+    SINGAPORE = 'singapore',
+    PR = 'permanent_resident',
+    FOREIGNER = 'foreigner'
 }
 
 export enum RACE {
-    'chinese', 'malay', 'indian', 'caucasian', 'other'
+    CHINESE = 'chinese', 
+    MALAY = 'malay', 
+    INDIAN = 'indian', 
+    CAUCASIAN = 'caucasian', 
+    OTHER = 'other'
 }
 
 export enum LEADERSHIP_INTEREST {
-    'yes', 'no', 'maybe'
+    YES = 'yes', 
+    NO = 'no', 
+    MAYBE = 'maybe'
 }
 
 export enum PERSONALITY {
-    'INTJ_A',
-    'INTJ_T',
-    'INTP_A',
-    'INTP_T',
-    'ENTJ_A',
-    'ENTJ_T',
-    'ENFP_A',
-    'ENFP_T',
-    'ISTJ_A',
-    'ISTJ_T',
-    'ISFJ_A',
-    'ISFJ_T',
-    'ESTJ_A',
-    'ESTJ_T',
-    'ESFJ_A',
-    'ESFJ_T',
-    'ISTP_A',
-    'ISTP_T',
-    'ISFP_A',
-    'ISFP_T',
-    'ESTP_A',
-    'ESTP_T',
-    'ESFP_A',
+    INTJ_A = 'INTJ_A',
+    INTJ_T = 'INTJ_T',
+    INTP_A = 'INTP_A',
+    INTP_T = 'INTP_T',
+    ENTJ_A = 'ENTJ_A',
+    ENTJ_T = 'ENTJ_T',
+    ENFP_A = 'ENFP_A',
+    ENFP_T = 'ENFP_T',
+    ISTJ_A = 'ISTJ_A',
+    ISTJ_T = 'ISTJ_T',
+    ISFJ_A = 'ISFJ_A',
+    ISFJ_T = 'ISFJ_T',
+    ESTJ_A = 'ESTJ_A',
+    ESTJ_T = 'ESTJ_T',
+    ESFJ_A = 'ESFJ_A',
+    ESFJ_T = 'ESFJ_T',
+    ISTP_A = 'ISTP_A',
+    ISTP_T = 'ISTP_T',
+    ISFP_A = 'ISFP_A',
+    ISFP_T = 'ISFP_T',
+    ESTP_A = 'ESTP_A',
+    ESTP_T = 'ESTP_T',
+    ESFP_A = 'ESFP_A',
+    ESFP_T = 'ESFP_T'
 }
 
 export enum SOCIAL_MEDIA_PLATFORMS {
-    'instagram', 'facebook', 'snapchat', 'email', 'other'
+    INSTAGRAM = 'instagram', 
+    FACEBOOK = 'facebook', 
+    SNAPCHAT = 'snapchat', 
+    EMAIL = 'email', 
+    OTHER = 'other'
 }
 
 export enum VOLUNTEER_TYPE {
-    'ad-hoc', 'committed', 'lead', 'admin'
+    ADHOC = 'ad-hoc', 
+    COMMITED = 'committed', 
+    LEAD = 'lead', 
+    ADMIN = 'admin'
 }
 
 export type VolunteerData = {
