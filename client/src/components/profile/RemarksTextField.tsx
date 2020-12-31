@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Grid, TextField } from '@material-ui/core';
 import DiscardSaveButtons from '@components/profile/DiscardSaveButtons';
 
 // Sub-component for Remarks section
-export default function RemarksTextField({
+
+type props = {
+  value: string,
+  label: string,
+  show: boolean,
+  onChange(event: any): void,
+  onSave(): void,
+  onDiscard(): void,
+}
+
+const RemarksTextField: FC<props> = ({
   value, onChange, label, show, onSave, onDiscard,
-}) {
+}) => {
   return (
     <Grid item container direction="column" spacing={1}>
       <Grid item xs={12}>
@@ -28,3 +38,5 @@ export default function RemarksTextField({
     </Grid>
   );
 }
+
+export default RemarksTextField

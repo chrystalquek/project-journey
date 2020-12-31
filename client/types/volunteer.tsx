@@ -44,7 +44,7 @@ export enum SOCIAL_MEDIA_PLATFORMS {
     'instagram', 'facebook', 'snapchat', 'email', 'other'
 }
 
-export enum VOLUNTEER_STATUS {
+export enum VOLUNTEER_TYPE {
     'ad-hoc', 'committed', 'lead', 'admin'
 }
 
@@ -64,7 +64,7 @@ export type VolunteerData = {
     race: RACE,
     orgnanization: string,
     position: string,
-    status: VOLUNTEER_STATUS,
+    volunteerType: VOLUNTEER_TYPE,
     referral: string,
 
     hasVolunteered: boolean,

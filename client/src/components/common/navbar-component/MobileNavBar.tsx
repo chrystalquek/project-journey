@@ -24,7 +24,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import PersonIcon from "@material-ui/icons/Person";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import { VolunteerData } from "types/volunteer";
+import { VolunteerData, VOLUNTEER_TYPE } from "types/volunteer";
 import { useDispatch } from "react-redux";
 import { resetUser } from "@redux/reducers/user";
 
@@ -83,7 +83,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const eventMenuArray = !userData
     ? ["Upcoming Events"]
-    : userData.volunteerType.toString().toLowerCase() === "admin"
+    : userData.volunteerType === VOLUNTEER_TYPE["admin"]
     ? ["Browse Events", "Past Events"]
     : ["Browse Events", "My Upcoming Events", "My Past Events"];
 
@@ -182,7 +182,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             </List>
           </Collapse>
           {userData &&
-            userData.volunteerType.toString().toLowerCase() === "admin" &&
+            userData.volunteerType === VOLUNTEER_TYPE["admin"] &&
             volunteerMenu}
         </List>
         <div className={classes.drawerWhitespace} />

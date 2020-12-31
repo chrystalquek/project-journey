@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
-import { VolunteerData, VOLUNTEER_STATUS } from '@type/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -58,10 +58,10 @@ const ProfileHeader: FC<props> = ({ user }) => {
       <Grid item xs={12} sm="auto">
         <Typography variant="h2" className={classes.header}>{user.name}</Typography>
         <Typography className={classes.header}>
-          <strong>Volunteer Status: </strong>
-          {user.status}
+          <strong>Volunteer Type: </strong>
+          {user.volunteerType.toString()}
         </Typography>
-        { user.status === VOLUNTEER_STATUS['ad-hoc'] && <BecomeCommitedDialog /> }
+        { user.volunteerType === VOLUNTEER_TYPE['ad-hoc'] && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );

@@ -1,5 +1,5 @@
 import { UserState } from "@redux/reducers/user";
-import { CITIZENSHIP, GENDER, LEADERSHIP_INTEREST, PERSONALITY, RACE, SOCIAL_MEDIA_PLATFORMS, VolunteerData, VOLUNTEER_STATUS } from "@type/volunteer";
+import { CITIZENSHIP, GENDER, LEADERSHIP_INTEREST, PERSONALITY, RACE, SOCIAL_MEDIA_PLATFORMS, VolunteerData, VOLUNTEER_TYPE } from "@type/volunteer";
 
 const dummyData : VolunteerData = {
   _id: 'sampleid',
@@ -17,7 +17,7 @@ const dummyData : VolunteerData = {
   race: RACE['chinese'],
   orgnanization: 'NUS',
   position: 'student',
-  status: VOLUNTEER_STATUS['admin'],
+  volunteerType: VOLUNTEER_TYPE['admin'],
   referral: 'Magic Johnson',
 
   hasVolunteered: true,
@@ -26,7 +26,7 @@ const dummyData : VolunteerData = {
   hasFirstAidCertification: true,
 
   leadershipInterest: LEADERSHIP_INTEREST['yes'],
-  description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+  description: "Lorem Ipsum is simply dummy text.",
   interests: ['basketball', 'cooking', 'running'],
   personality: PERSONALITY['ENFP_A'],
   skills: ['programming', 'cooking'],
