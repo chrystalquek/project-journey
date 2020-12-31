@@ -15,8 +15,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import AdminEvent from '@components/admin/AdminEvent';
 import AdminEventsFilter from '@components/admin/AdminEventsFilter';
-
-import dayjs from 'dayjs';
 import {withFilters} from "@utils/helpers/AdminEventsPage";
 
 type AdminEventsPageProps = {
@@ -70,7 +68,7 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const filteredEvents = withFilters(events, filters);
+  const filteredEvents = withFilters(events ? events : [], filters);
 
   useEffect(() => {
     getAdminEvents();
