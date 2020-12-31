@@ -1,6 +1,6 @@
 import Head from '@components/common/Header';
 import NavBar from '@components/common/NavBar';
-import AdminEventsPage from '@containers/admin/AdminEventsPage';
+import AdminEventsPage from '@containers/event/EventsPage';
 import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
 

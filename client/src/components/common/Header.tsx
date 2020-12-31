@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { favicon } from '@utils/constants/imagePaths';
+import { favicon } from '@constants/imagePaths';
 import { FC } from 'react';
 
 type HeaderProps = {

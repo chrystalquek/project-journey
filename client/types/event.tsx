@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 
 export type EventData = {
   name: string;
+  event_type: string;
+  volunteer_type: string;
   description: string;
   content_url: string;
   content_type: string;
@@ -22,6 +24,18 @@ export type EventData = {
   }>
 }
 
+// Used in filtering component
+export enum EventFilters {
+  DATE = 'date',
+  EVENTTYPE = 'eventType',
+  VOLUNTEERING = 'volunteering',
+  WORKSHOPS = 'workshops',
+  HANGOUTS = 'hangouts',
+  VOLUNTEERTYPE = 'volunteerType',
+  ADHOC = 'adhoc',
+  COMMITTED = 'committed'
+}
+
 export type EventFilterOptions = {
   [EventFilters.DATE]: dayjs.Dayjs,
   [EventFilters.EVENTTYPE]: {
@@ -35,13 +49,19 @@ export type EventFilterOptions = {
   }
 }
 
-export enum EventFilters {
-  DATE = 'date',
-  EVENTTYPE = 'eventType',
-  VOLUNTEERING = 'volunteering',
-  WORKSHOPS = 'workshops',
-  HANGOUTS = 'hangouts',
-  VOLUNTEERTYPE = 'volunteerType',
-  ADHOC = 'adhoc',
-  COMMITTED = 'committed'
+// Used when filtering actual events
+export enum Event {
+  Volunteering = 'volunteering',
+  Workshop = 'workshop',
+  Hangout = 'hangout'
 }
+export type EventType = Event.Volunteering | Event.Workshop | Event.Hangout;
+
+export enum Volunteer {
+  Adhoc = 'ad-hoc',
+  Committed = 'committed',
+  Lead = 'lead',
+  Admin = 'admin'
+}
+export type VolunteerType = Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin;
+

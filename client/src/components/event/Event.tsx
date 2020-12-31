@@ -7,7 +7,7 @@ import { testEventImage3 } from '@constants/imagePaths';
 import { makeStyles } from '@material-ui/core';
 import { FC } from 'react';
 import { EventData } from '@type/event';
-import { getVacancies, parseDate } from '@utils/event';
+import { getVacancies, parseDate } from '@utils/helpers/EventsPage';
 
 type AdminEventProps = {
   event: EventData,
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AdminEvent: FC<AdminEventProps> = ({ event }) => {
+const Event: FC<AdminEventProps> = ({ event }) => {
   const classes = useStyles();
   const { filled, total } = getVacancies(event);
   const { date, time } = parseDate(event.start_date, event.end_date);
@@ -60,4 +60,4 @@ const AdminEvent: FC<AdminEventProps> = ({ event }) => {
   );
 };
 
-export default AdminEvent;
+export default Event;
