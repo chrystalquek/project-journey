@@ -8,7 +8,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AdminBreadCrumbs = () => {
+const EventBreadCrumbs = () => {
   const classes = useStyles();
 
   return (
@@ -20,4 +20,4 @@ const AdminBreadCrumbs = () => {
   );
 };
 
-export default AdminBreadCrumbs;
+export default EventBreadCrumbs;

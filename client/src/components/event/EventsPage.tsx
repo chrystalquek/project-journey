@@ -1,5 +1,5 @@
 import Container from '@material-ui/core/Container';
-import AdminBreadCrumbs from '@components/admin/AdminBreadCrumbs';
+import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import SearchBar from '@components/common/SearchBar';
 import {
   Button,
@@ -13,9 +13,9 @@ import { EventData, EventFilterOptions, EventFilters } from '@type/event';
 import { FC, useEffect, useState } from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import AdminEvent from '@components/admin/AdminEvent';
-import AdminEventsFilter from '@components/admin/AdminEventsFilter';
-import {withFilters} from "@utils/helpers/AdminEventsPage";
+import Event from '@components/event/Event';
+import EventsFilter from '@components/event/EventsFilter';
+import {withFilters} from "@utils/helpers/EventsPage";
 
 type AdminEventsPageProps = {
   events: Array<EventData>,
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
+const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   const theme = useTheme();
   const classes = useStyles();
   const screenSmall = useMediaQuery(theme.breakpoints.only('sm'));
@@ -106,13 +106,13 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
           <Grid container spacing={4}>
             {filteredEvents?.map((event) => (
               <Grid item className={classes.card} sm={6} md={4}>
-                <AdminEvent key={event.name + event.description} event={event} />
+                <Event key={event.name + event.description} event={event} />
               </Grid>
             ))}
           </Grid>
           <Drawer anchor="right" open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
             <Box m={8}>
-              <AdminEventsFilter filters={filters} setFilters={setFilters} />
+              <EventsFilter filters={filters} setFilters={setFilters} />
             </Box>
           </Drawer>
         </Grid>
@@ -122,7 +122,7 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
   return (
     <Container fixed>
       <Grid container spacing={2}>
-        <Grid item sm={12}><AdminBreadCrumbs /></Grid>
+        <Grid item sm={12}><EventBreadCrumbs /></Grid>
         <Grid item container sm={9}>
           <Grid item sm={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
           <Grid item sm={12}>
@@ -139,7 +139,7 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
           <Grid item container sm={12} spacing={2}>
             {filteredEvents?.map((event) => (
               <Grid key={JSON.stringify(event)} item className={classes.card} sm={6} md={4}>
-                <AdminEvent key={JSON.stringify(event)} event={event} />
+                <Event key={JSON.stringify(event)} event={event} />
               </Grid>
             ))}
           </Grid>
@@ -148,11 +148,11 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
           <Box mb={4}>
             <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
           </Box>
-          <AdminEventsFilter filters={filters} setFilters={setFilters} />
+          <EventsFilter filters={filters} setFilters={setFilters} />
         </Grid>
       </Grid>
     </Container>
   );
 };
 
-export default AdminEventsPage;
+export default EventsPage;
