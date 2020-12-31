@@ -45,14 +45,6 @@ export enum SOCIAL_MEDIA_PLATFORMS {
 }
 
 export enum VOLUNTEER_STATUS {
-    'pending', 'verified'
-}
-
-export enum VOLUNTEER_ROLE {
-    'editor', 'admin', 'lead'
-}
-
-export enum VOLUNTEER_TYPE {
     'ad-hoc', 'committed', 'lead', 'admin'
 }
 
@@ -73,7 +65,6 @@ export type VolunteerData = {
     orgnanization: string,
     position: string,
     status: VOLUNTEER_STATUS,
-    role: VOLUNTEER_ROLE,
     referral: string,
 
     hasVolunteered: boolean,
@@ -83,18 +74,22 @@ export type VolunteerData = {
 
     leadershipInterest: LEADERSHIP_INTEREST,
     description: string,
-    interests: [string],
+    interests: string[],
     personality: PERSONALITY,
-    skills: [string],
+    skills: string[],
     volunteerReason: string,
     volunteerContribution: string,
     volunteerFrequency: number,
-    volunteerType: VOLUNTEER_TYPE,
 
     // Remarks
     volunteerRemarks: string,
-    administratorRemarks: string,
+    adminRemarks: string,
 
-    created_at: Date, // used for member since // is snake case not camel case
+    // Event count
+    volunteeringSessionsCount: number,
+    workshopsCount: number,
+    hangoutsCount: number
+
+    createdAt: Date, // used for member since // is snake case not camel case
     // is there a way to parse strings into dates automatically when the strings are just fetched via api?
 }
