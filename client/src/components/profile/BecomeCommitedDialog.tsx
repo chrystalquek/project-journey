@@ -162,6 +162,6 @@ const BecomeCommited: FC = () => {
       </Dialog>
     </div>
   );
-}
+};
 
 export default BecomeCommited;

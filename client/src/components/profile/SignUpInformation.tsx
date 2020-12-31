@@ -10,8 +10,8 @@ type props = {
 }
 
 const SignUpInformation: FC<props> = ({ user }) => {
-  const birthday = user.birthday.toLocaleDateString('en-US')
-  const createdAt = user.createdAt.toLocaleDateString('en-US')
+  const birthday = user.birthday.toLocaleDateString('en-US');
+  const createdAt = user.createdAt.toLocaleDateString('en-US');
   return (
     <PaddedGrid>
       <Grid item>
@@ -27,6 +27,6 @@ const SignUpInformation: FC<props> = ({ user }) => {
       <DataRow header="Member since" data={createdAt} xs1={3} xs2={9} />
     </PaddedGrid>
   );
-}
+};
 
-export default SignUpInformation
+export default SignUpInformation;

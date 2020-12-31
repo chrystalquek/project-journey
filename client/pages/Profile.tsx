@@ -11,7 +11,7 @@ import { StoreState } from '@redux/store';
 import dummyUser from '@utils/constants/dummyUser';
 
 const Profile = () => {
-  var userData = useSelector((state: StoreState) => state.user);
+  let userData = useSelector((state: StoreState) => state.user);
   userData = userData.user === null ? dummyUser : userData;
 
   return (
@@ -44,6 +44,5 @@ const Profile = () => {
       </Grid>
     </Grid>
   );
-  
-}
+};
 export default Profile;

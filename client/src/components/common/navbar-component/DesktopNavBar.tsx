@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import {
   Avatar,
   Box,
@@ -14,69 +14,67 @@ import {
   Fade,
   MenuList,
   IconButton,
-} from "@material-ui/core";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import PersonIcon from "@material-ui/icons/Person";
-import { VolunteerData, VOLUNTEER_TYPE } from "types/volunteer";
-import { useDispatch } from "react-redux";
-import { resetUser } from "@redux/reducers/user";
+} from '@material-ui/core';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import PersonIcon from '@material-ui/icons/Person';
+import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { useDispatch } from 'react-redux';
+import { resetUser } from '@redux/reducers/user';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    buttonsContainer: {
-      flexGrow: 1,
-      marginLeft: theme.spacing(4),
-    },
-    button: {
-      textTransform: "none",
-      marginLeft: theme.spacing(2),
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: "bold",
-    },
-    buttonRight: {
-      textTransform: "none",
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: "bold",
-    },
-    nameContainer: {
-      display: "flex",
-      flexDirection: "column",
-      marginLeft: theme.spacing(2),
-    },
-    nameStyle: {
-      color: "#000000",
-      flex: 1,
-    },
-    loginButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-      marginRight: theme.spacing(2),
-    },
-    signupButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-    },
-    editProfileButton: {
-      margin: 0,
-      padding: 0,
-      textAlign: "left",
-    },
-    editProfileText: {
-      flex: 1,
-      fontWeight: "bold",
-    },
-    iconSize24: {
-      fontSize: "24px",
-    },
-    iconSize40: {
-      fontSize: "40px",
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    flexGrow: 1,
+  },
+  buttonsContainer: {
+    flexGrow: 1,
+    marginLeft: theme.spacing(4),
+  },
+  button: {
+    textTransform: 'none',
+    marginLeft: theme.spacing(2),
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+  buttonRight: {
+    textTransform: 'none',
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+  nameContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: theme.spacing(2),
+  },
+  nameStyle: {
+    color: '#000000',
+    flex: 1,
+  },
+  loginButtonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: theme.spacing(2),
+  },
+  signupButtonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  editProfileButton: {
+    margin: 0,
+    padding: 0,
+    textAlign: 'left',
+  },
+  editProfileText: {
+    flex: 1,
+    fontWeight: 'bold',
+  },
+  iconSize24: {
+    fontSize: '24px',
+  },
+  iconSize40: {
+    fontSize: '40px',
+  },
+}));
 
 type NavBarProps = {
   userData: null | VolunteerData;
@@ -96,10 +94,10 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   const [openLogout, setOpenLogout] = useState<boolean>(false);
 
   const eventMenuArray = !userData
-    ? ["Upcoming Events"]
-    : userData.volunteerType === VOLUNTEER_TYPE["admin"]
-    ? ["Browse Events", "Past Events"]
-    : ["Browse Events", "My Upcoming Events", "My Past Events"];
+    ? ['Upcoming Events']
+    : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
+      ? ['Browse Events', 'Past Events']
+      : ['Browse Events', 'My Upcoming Events', 'My Past Events'];
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);
@@ -131,7 +129,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const navigationRender = () => {
     const homeButton = (
-      <Button className={classes.button} onClick={() => router.push("/")}>
+      <Button className={classes.button} onClick={() => router.push('/')}>
         Home
       </Button>
     );
@@ -156,7 +154,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {eventMenuArray.map((menuName) => (
                     <MenuItem
                       key={menuName}
-                      onClick={() => router.push("/admin/events")}
+                      onClick={() => router.push('/admin/events')}
                     >
                       {menuName}
                     </MenuItem>
@@ -191,14 +189,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     {/* Requires changes for the router */}
                     <MenuItem
                       onClick={() => {
-                        router.push("/volunteer");
+                        router.push('/volunteer');
                       }}
                     >
                       Volunteer Profiles
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        router.push("/volunteer");
+                        router.push('/volunteer');
                       }}
                     >
                       Pending Approvals
@@ -217,9 +215,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         {homeButton}
         {eventButton}
         {eventMenuWrapper}
-        {userData &&
-          userData.volunteerType === VOLUNTEER_TYPE["admin"] &&
-          volunteer}
+        {userData
+          && userData.volunteerType === VOLUNTEER_TYPE.ADMIN
+          && volunteer}
       </>
     );
   };
@@ -229,22 +227,22 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
       return (
         <>
           <div className={classes.loginButtonContainer}>
-            <ExitToAppIcon className={classes.iconSize24} color='primary' />
+            <ExitToAppIcon className={classes.iconSize24} color="primary" />
             <Button
               className={classes.buttonRight}
               onClick={() => {
-                router.push("/login");
+                router.push('/login');
               }}
             >
               Login
             </Button>
           </div>
           <div className={classes.signupButtonContainer}>
-            <PersonIcon className={classes.iconSize24} color='primary' />
+            <PersonIcon className={classes.iconSize24} color="primary" />
             <Button
               className={classes.buttonRight}
               onClick={() => {
-                router.push("/signup");
+                router.push('/signup');
               }}
             >
               Sign Up
@@ -254,14 +252,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
       );
     }
     const profilePicture = !userData?.photoUrl ? (
-      <AccountCircleIcon className={classes.iconSize40} color='primary' />
+      <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
       <Avatar alt={userData.name} src={userData.photoUrl} />
     );
 
     return (
       <>
-        <IconButton edge='start' onClick={toggleLogoutMenu} ref={logoutRef}>
+        <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
           {profilePicture}
           <Popper open={openLogout} anchorEl={logoutRef.current} transition>
             {({ TransitionProps }) => (
@@ -285,7 +283,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
-            onClick={() => router.push("/volunteer/Profile")}
+            onClick={() => router.push('/volunteer/Profile')}
             disableRipple
           >
             <Typography className={classes.editProfileText}>
@@ -299,7 +297,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   return (
     <>
-      <Image src='/blessings-in-a-bag.png' width={100} height={100} />
+      <Image src="/blessings-in-a-bag.png" width={100} height={100} />
       <div className={classes.buttonsContainer}>{navigationRender()}</div>
       {loggedInRender()}
     </>

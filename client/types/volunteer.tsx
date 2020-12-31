@@ -10,16 +10,16 @@ export enum CITIZENSHIP {
 }
 
 export enum RACE {
-    CHINESE = 'chinese', 
-    MALAY = 'malay', 
-    INDIAN = 'indian', 
-    CAUCASIAN = 'caucasian', 
+    CHINESE = 'chinese',
+    MALAY = 'malay',
+    INDIAN = 'indian',
+    CAUCASIAN = 'caucasian',
     OTHER = 'other'
 }
 
 export enum LEADERSHIP_INTEREST {
-    YES = 'yes', 
-    NO = 'no', 
+    YES = 'yes',
+    NO = 'no',
     MAYBE = 'maybe'
 }
 
@@ -51,17 +51,17 @@ export enum PERSONALITY {
 }
 
 export enum SOCIAL_MEDIA_PLATFORMS {
-    INSTAGRAM = 'instagram', 
-    FACEBOOK = 'facebook', 
-    SNAPCHAT = 'snapchat', 
-    EMAIL = 'email', 
+    INSTAGRAM = 'instagram',
+    FACEBOOK = 'facebook',
+    SNAPCHAT = 'snapchat',
+    EMAIL = 'email',
     OTHER = 'other'
 }
 
 export enum VOLUNTEER_TYPE {
-    ADHOC = 'ad-hoc', 
-    COMMITED = 'committed', 
-    LEAD = 'lead', 
+    ADHOC = 'ad-hoc',
+    COMMITED = 'committed',
+    LEAD = 'lead',
     ADMIN = 'admin'
 }
 

@@ -61,10 +61,10 @@ const ProfileHeader: FC<props> = ({ user }) => {
           <strong>Volunteer Type: </strong>
           {user.volunteerType.toString()}
         </Typography>
-        { user.volunteerType === VOLUNTEER_TYPE['ad-hoc'] && <BecomeCommitedDialog /> }
+        { user.volunteerType === VOLUNTEER_TYPE.ADHOC && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );
-}
+};
 
-export default ProfileHeader
+export default ProfileHeader;

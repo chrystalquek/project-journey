@@ -35,6 +35,6 @@ const EventCount: FC<props> = ({ user }) => {
       </Grid>
     </PaddedGrid>
   );
-}
+};
 
 export default EventCount;

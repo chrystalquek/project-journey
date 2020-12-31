@@ -9,20 +9,18 @@ type props = {
   user: VolunteerData
 }
 
-const ContactInformation: FC<props> = ({ user }) => {
-  return (
-    <PaddedGrid>
-      <Grid item>
-        <Typography variant="h4">Contact Information</Typography>
-      </Grid>
-      <Grid item>
-        <ProfileDivider />
-      </Grid>
-      <DataRow header="Tel. No." data={user.mobileNumber} xs1={3} xs2={9} />
-      <DataRow header="E-mail" data={user.email} xs1={3} xs2={9} />
-      <DataRow header="Lorem" data={user.description} xs1={3} xs2={9} />
-    </PaddedGrid>
-  );
-}
+const ContactInformation: FC<props> = ({ user }) => (
+  <PaddedGrid>
+    <Grid item>
+      <Typography variant="h4">Contact Information</Typography>
+    </Grid>
+    <Grid item>
+      <ProfileDivider />
+    </Grid>
+    <DataRow header="Tel. No." data={user.mobileNumber} xs1={3} xs2={9} />
+    <DataRow header="E-mail" data={user.email} xs1={3} xs2={9} />
+    <DataRow header="Lorem" data={user.description} xs1={3} xs2={9} />
+  </PaddedGrid>
+);
 
 export default ContactInformation;

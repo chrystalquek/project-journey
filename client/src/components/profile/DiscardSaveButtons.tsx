@@ -53,6 +53,6 @@ const DiscardSaveButtons: FC<props> = ({ show, onSave, onDiscard }) => {
     </Grid>
   </Grid>
   );
-}
+};
 
 export default DiscardSaveButtons;

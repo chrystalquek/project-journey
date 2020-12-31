@@ -65,7 +65,7 @@ const Remarks: FC<props> = ({ user }) => {
         />
 
         {/* Admin remarks (only renders for admin) */}
-        {user.volunteerType === VOLUNTEER_TYPE['admin'] && (
+        {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
         <RemarksTextField
           value={adminRemarks}
           onChange={handleAdminRemarks}
@@ -78,6 +78,6 @@ const Remarks: FC<props> = ({ user }) => {
       </Grid>
     </PaddedGrid>
   );
-}
+};
 
-export default Remarks
+export default Remarks;
