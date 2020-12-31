@@ -62,15 +62,15 @@ export default function Remarks({ user }) {
 
         {/* Admin remarks (only renders for admin) */}
         {user.status === 'admin' && (
-            <RemarksTextField
-              value={adminRemarks}
-              onChange={handleAdminRemarks}
-              label="Notes on volunteer"
-              show={adminRemarksChanged}
-              onSave={saveAdminRemarks}
-              onDiscard={discardAdminRemarks}
-            />
-          )}
+        <RemarksTextField
+          value={adminRemarks}
+          onChange={handleAdminRemarks}
+          label="Notes on volunteer"
+          show={adminRemarksChanged}
+          onSave={saveAdminRemarks}
+          onDiscard={discardAdminRemarks}
+        />
+        )}
       </Grid>
     </PaddedGrid>
   );

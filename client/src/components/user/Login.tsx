@@ -1,6 +1,6 @@
 import { Box, Grid, Button, Typography, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import { useForm } from "antd/lib/form/Form";
 import Head from "next/head";
@@ -12,6 +12,7 @@ import NavBar from "@components/common/NavBar";
 import Footer from "@components/common/Footer";
 import { LoginArgs } from "@redux/actions/user";
 import { UserState } from "@redux/reducers/user";
+import { LoginResponse } from "@utils/api/response";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -53,6 +54,10 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     color: "#000",
   },
+  invalidText: {
+    marginBottom: "10px",
+    color: "#e60026",
+  },
 }));
 
 type LoginProps = {
@@ -63,7 +68,7 @@ type LoginProps = {
 const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
   const [form] = useForm();
   const router = useRouter();
-
+  const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
   const isFormDisabled =
     !form.isFieldsTouched(true) ||
@@ -76,22 +81,33 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
   }, [user]);
 
   useEffect(() => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        router.push("/");
-      }
-    } catch (e) {
-      console.error(e);
+    if (user.status === "rejected") {
+      alert("Login failed");
+    } else if (user.status === "fulfilled") {
+      router.push("/");
     }
-  }, []);
+  }, [user.status]);
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const loginArgs: LoginArgs = {
       email: values.email,
       password: values.password,
     };
-    handleFormSubmit(loginArgs);
+    const response = await handleFormSubmit(loginArgs);
+    // @ts-ignore type exists
+    if (response?.type === "user/login/rejected") {
+      setInvalid(true);
+    }
+  };
+  const InvalidCredentials = (props) => {
+    if (invalid) {
+      return (
+        <Typography className={classes.invalidText}>
+          Invalid email &absp; password
+        </Typography>
+      );
+    }
+    return <></>;
   };
 
   const validate = (values) => {
@@ -160,6 +176,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
                     autoComplete='current-password'
                   />
                   <Grid className={classes.loginButtonContainer}>
+                    <InvalidCredentials />
                     <Button
                       color='primary'
                       type='submit'

@@ -4,7 +4,8 @@ import 'antd/dist/antd.css';
 import '@styles/vars.css';
 import '@styles/globals.css';
 import { Provider } from 'react-redux';
-import store from '@redux/store';
+import configureStore from '@redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DayJsUtils from '@date-io/dayjs';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -12,12 +13,14 @@ import theme from '@styles/theme';
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={DayJsUtils}>
-          <Component {...pageProps} />
-        </MuiPickersUtilsProvider>
-      </ThemeProvider>
+    <Provider store={configureStore.store}>
+      <PersistGate loading={null} persistor={configureStore.persistor}>
+        <ThemeProvider theme={theme}>
+          <MuiPickersUtilsProvider utils={DayJsUtils}>
+            <Component {...pageProps} />
+          </MuiPickersUtilsProvider>
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   );
 }

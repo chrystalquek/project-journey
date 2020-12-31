@@ -1,5 +1,4 @@
-import { EventData } from '@type/event';
-import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 
 export type SignupResponse = {
 
@@ -7,10 +6,6 @@ export type SignupResponse = {
 
 export type LoginResponse = {
   token: string
-}
-
-export type GetAllEventsResponse = {
-  events: Array<EventData>
 }
 
 export type GetVolunteersResponse = {

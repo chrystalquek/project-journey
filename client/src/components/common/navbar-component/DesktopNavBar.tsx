@@ -13,11 +13,14 @@ import {
   MenuItem,
   Fade,
   MenuList,
+  IconButton,
 } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData } from 'types/volunteer';
+import { useDispatch } from 'react-redux';
+import { resetUser } from '@redux/reducers/user';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -79,13 +82,16 @@ type NavBarProps = {
 
 export default function DesktopNavBar({ userData }: NavBarProps) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const eventRef = useRef<HTMLButtonElement>(null);
   const volunteerRef = useRef<HTMLButtonElement>(null);
+  const logoutRef = useRef<HTMLButtonElement>(null);
 
   const [openEventMenu, setOpenEventMenu] = useState<boolean>(false);
   const [openVolunteerMenu, setOpenVolunteerMenu] = useState<boolean>(false);
+  const [openLogout, setOpenLogout] = useState<boolean>(false);
 
   const eventMenuArray = !userData
     ? ['Upcoming Events']
@@ -107,6 +113,18 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleCloseVolunteerMenu = () => {
     setOpenVolunteerMenu(false);
+  };
+
+  const toggleLogoutMenu = () => {
+    setOpenLogout((prevOpen) => !prevOpen);
+  };
+
+  const closeLogoutMenu = () => {
+    setOpenLogout(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(resetUser());
   };
 
   const navigationRender = () => {
@@ -133,9 +151,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
             <Paper>
               <ClickAwayListener onClickAway={handleCloseEventMenu}>
                 <MenuList>
-                  {eventMenuArray.map((menuName, index) => (
+                  {eventMenuArray.map((menuName) => (
                     <MenuItem
-                      key={index}
+                      key={menuName}
                       onClick={() => router.push('/admin/events')}
                     >
                       {menuName}
@@ -234,22 +252,38 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
       );
     }
     const profilePicture = !userData?.photoUrl ? (
-      <>
-        <AccountCircleIcon className={classes.iconSize40} color="primary" />
-      </>
+      <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
       <Avatar alt={userData.name} src={userData.photoUrl} />
     );
 
     return (
       <>
-        {profilePicture}
+        <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
+          {profilePicture}
+          <Popper open={openLogout} anchorEl={logoutRef.current} transition>
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={400}>
+                <Paper>
+                  <ClickAwayListener onClickAway={closeLogoutMenu}>
+                    <MenuList>
+                      <MenuItem dense onClick={handleLogout}>
+                        Logout
+                      </MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
+        </IconButton>
         <div className={classes.nameContainer}>
           <Typography className={classes.nameStyle}>
             <Box fontWeight={700}>{userData.name}</Box>
           </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
+            onClick={() => router.push('/volunteer/Profile')}
             disableRipple
           >
             <Typography className={classes.editProfileText}>
