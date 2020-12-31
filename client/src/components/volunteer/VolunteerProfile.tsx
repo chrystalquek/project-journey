@@ -10,7 +10,16 @@ import {
   Grid,
   IconButton,
   makeStyles,
-  Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, useMediaQuery, useTheme,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -19,11 +28,13 @@ import { VOLUNTEER_TYPE } from '@type/volunteer';
 import { QueryParams } from '@utils/api/request';
 import { getEnumKeys } from '@utils/helpers/TableOptions';
 import RightDrawer from '@components/common/RightDrawer';
+import { UserState } from '@redux/reducers/user';
 import Footer from '../common/Footer';
 import NavBar from '../common/NavBar';
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
+  userData: UserState
   getVolunteers: (query: QueryParams) => Promise<void>
 }
 
@@ -47,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 const VolunteerProfile: FC<VolunteerProfileProps> = ({
   volunteers,
+  userData,
   getVolunteers,
 }: VolunteerProfileProps) => {
   const classes = useStyles();
@@ -142,7 +154,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       <Head>
         <title>Volunteer Profiles</title>
       </Head>
-      <NavBar userData={null} />
+      <NavBar userData={userData.user} />
 
       {!isMobile
         ? (
