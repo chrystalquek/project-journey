@@ -1,6 +1,6 @@
 import {
-  Box, Grid, Button, TextField, Typography, Paper
-} from '@material-ui/core'
+  Box, Grid, Button, TextField, Typography, Paper,
+} from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
 import {
   Layout, Divider, Row, Col, Card,
@@ -31,27 +31,27 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     padding: '5px 50px 5px 50px',
     borderRadius: 20,
-    marginBottom: '20px'
+    marginBottom: '20px',
   },
   pageHeader: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    marginBottom: "40px"
+    fontSize: '32px',
+    fontWeight: 'bold',
+    marginBottom: '40px',
   },
   loginButtonContainer: {
-    padding: "20px 0px 20px 0px"
+    padding: '20px 0px 20px 0px',
   },
   form: {
-    
+
   },
   header: {
     textAlign: 'left',
     marginTop: '10px',
-    fontWeight: "bold",
-    fontSize: "14px"
+    fontWeight: 'bold',
+    fontSize: '14px',
   },
   formContainer: {
-    padding: "20px"
+    padding: '20px',
   },
   volunteerInfo: {
     padding: '80px 150px 0px 150px',
@@ -59,9 +59,9 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '90vh',
   },
   invalidText: {
-    marginBottom: "10px",
-    color: "#e60026"
-  }
+    marginBottom: '10px',
+    color: '#e60026',
+  },
 }));
 
 const { Content } = Layout;
@@ -76,7 +76,7 @@ const Signup: FC<SignupProps> = ({
   handleFormSubmit,
 }: SignupProps) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [volunteerType, setVolunteerType] = useState("ad-hoc") // default set as ad-hoc
+  const [volunteerType, setVolunteerType] = useState('ad-hoc'); // default set as ad-hoc
   const [invalid, setInvalid] = useState(false);
   const [form] = useForm();
   const router = useRouter();
@@ -84,71 +84,70 @@ const Signup: FC<SignupProps> = ({
   const isFormDisabled = !form.isFieldsTouched(true)
   || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
-   // Proceed to next step
+  // Proceed to next step
   const nextStep = () => {
-    setCurrentStep(currentStep + 1)
+    setCurrentStep(currentStep + 1);
   };
 
   // Go back to prev step
   const prevStep = () => {
-    setCurrentStep(currentStep - 1)
+    setCurrentStep(currentStep - 1);
   };
 
   const selectAdhoc = () => {
-    setVolunteerType("ad-hoc")
-    nextStep()
-  }
+    setVolunteerType('ad-hoc');
+    nextStep();
+  };
 
   const selectCommitted = () => {
-    setVolunteerType("committed")
-    nextStep()
-  }
+    setVolunteerType('committed');
+    nextStep();
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    let signupArgs: SignupArgs = {
+    e.preventDefault();
+    const signupArgs: SignupArgs = {
       name: e.target.name.value,
       email: e.target.email.value,
       password: e.target.password.value,
       birthday: e.target.birthday.value,
-      gender: "male",
-      citizenship: "singapore",
-      race: "other",
+      gender: 'male',
+      citizenship: 'singapore',
+      race: 'other',
       hasVolunteered: true,
       hasChildrenExperience: true,
       hasExternalVolunteerExperience: true,
       hasFirstAidCertification: true,
       volunteerFrequency: 1,
-      volunteerReason: "Want to",
-      volunteerContribution: "string",
-      volunteerType: volunteerType
-    }
-    const response = await handleFormSubmit(signupArgs)
-    if (response['type'] == "volunteer//fulfilled") {
+      volunteerReason: 'Want to',
+      volunteerContribution: 'string',
+      volunteerType,
+    };
+    const response = await handleFormSubmit(signupArgs);
+    if (response.type == 'volunteer//fulfilled') {
       router.push('/login');
     } else {
-      setInvalid(true)
+      setInvalid(true);
     }
-  }
+  };
 
-  const VolunteerType = props => {
-    return (
-      <Layout>
-        <Content style={{
-          padding: '80px 150px 0px 150px', marginTop: 80, textAlign: 'center', minHeight: '90vh',
-        }}
-        >
-          <div>
-            <Row style={{ justifyContent: 'center', textAlign: 'left' }}>
-              <Col span={12}>
-                <p>
-                  Yay! We are excited that you are interested to volunteer with us.
-                  (information to help the users make a decision)
-                  Please be reminded that there is a minimum commitment of 3 months
-                  (serving a minimum of 3 sessions a month) in order to have direction
-                  interaction with our learning community (aged 6 to 16 years old).
-                  We have this policy for a number of reasons:
-                  <ul>
+  const VolunteerType = (props) => (
+    <Layout>
+      <Content style={{
+        padding: '80px 150px 0px 150px', marginTop: 80, textAlign: 'center', minHeight: '90vh',
+      }}
+      >
+        <div>
+          <Row style={{ justifyContent: 'center', textAlign: 'left' }}>
+            <Col span={12}>
+              <p>
+                Yay! We are excited that you are interested to volunteer with us.
+                (information to help the users make a decision)
+                Please be reminded that there is a minimum commitment of 3 months
+                (serving a minimum of 3 sessions a month) in order to have direction
+                interaction with our learning community (aged 6 to 16 years old).
+                We have this policy for a number of reasons:
+                <ul>
                     <li>
                       Limit the emotional trauma in our children that occurs
                       when volunteers come for a few sessions and leave
@@ -171,149 +170,146 @@ const Signup: FC<SignupProps> = ({
                       and guided by some incredible WCA Captains on the team.
                     </li>
                   </ul>
-                </p>
+              </p>
+            </Col>
+          </Row>
+        </div>
+        <div>
+          <Row style={{ justifyContent: 'center' }}>
+            <Col span={12}>
+              <Divider style={{ borderColor: '#D0DE39', borderWidth: 3 }}>
+                Sign Up As
+              </Divider>
+            </Col>
+          </Row>
+          <div style={{ padding: 24 }}>
+            <Row gutter={24} style={{ justifyContent: 'center' }}>
+              <Col span={6}>
+                <Card hoverable title="Ad-hoc Volunteer" headStyle={{ background: '#D0DE39', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectAdhoc}>
+                  You are only intending to volunteer one-off at Blessings in a Bag
+                  </Card>
+              </Col>
+              <Col span={6}>
+                <Card hoverable title="Regular Volunteer" headStyle={{ background: '#00BADC', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectCommitted}>
+                  You are able to commit to a minimum of 3 months at Blessings in a Bag
+                  </Card>
               </Col>
             </Row>
           </div>
-          <div>
-            <Row style={{ justifyContent: 'center' }}>
-              <Col span={12}>
-                <Divider style={{ borderColor: '#D0DE39', borderWidth: 3 }}>
-                  Sign Up As
-                </Divider>
-              </Col>
-            </Row>
-            <div style={{ padding: 24 }}>
-              <Row gutter={24} style={{ justifyContent: 'center' }}>
-                <Col span={6}>
-                  <Card hoverable title="Ad-hoc Volunteer" headStyle={{ background: '#D0DE39', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectAdhoc}>
-                    You are only intending to volunteer one-off at Blessings in a Bag
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card hoverable title="Regular Volunteer" headStyle={{ background: '#00BADC', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectCommitted}>
-                    You are able to commit to a minimum of 3 months at Blessings in a Bag
-                  </Card>
-                </Col>
-              </Row>
-            </div>
-          </div>
-  
-          <div className="section">
-            Already have an account?
-            {' '}
-            <br />
-            <Link href="/auth/login">
-              Log in
-            </Link>
-          </div>
-        </Content>
-      </Layout>
-    );
-  }
+        </div>
 
-  const InvalidCredentials = props => {
+        <div className="section">
+          Already have an account?
+          {' '}
+          <br />
+          <Link href="/auth/login">
+            Log in
+          </Link>
+        </div>
+      </Content>
+    </Layout>
+  );
+
+  const InvalidCredentials = (props) => {
     if (invalid) {
-      return <Typography className={classes.invalidText}>Email address already exists</Typography>
-    } else {
-      return <React.Fragment />
+      return <Typography className={classes.invalidText}>Email address already exists</Typography>;
     }
-  }
+    return <></>;
+  };
 
-  const VolunteerInfo = props => {
-    return (
-      <>
+  const VolunteerInfo = (props) => (
+    <>
       <Box>
         <Box className={classes.volunteerInfo}>
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
               <Button className={classes.backButton} onClick={prevStep}>Back</Button>
               <Typography className={classes.pageHeader}>Registration</Typography>
-                <form className={classes.form} onSubmit={handleSubmit}>
-                  <Typography className={classes.header}> Name </Typography>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
+              <form className={classes.form} onSubmit={handleSubmit}>
+                <Typography className={classes.header}> Name </Typography>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
                     // required
-                    fullWidth
-                    id='name'
-                    label="e.g. John Doe"
-                    name='name'
-                    autoComplete='name'
-                  />
-                  <Typography className={classes.header}> Email </Typography>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
+                  fullWidth
+                  id="name"
+                  label="e.g. John Doe"
+                  name="name"
+                  autoComplete="name"
+                />
+                <Typography className={classes.header}> Email </Typography>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
                     // required
-                    fullWidth
-                    id='email'
-                    label="e.g. username@gmail.com"
-                    name='email'
-                    autoComplete='email'
-                  />
-                  <Typography className={classes.header}> Password </Typography>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
+                  fullWidth
+                  id="email"
+                  label="e.g. username@gmail.com"
+                  name="email"
+                  autoComplete="email"
+                />
+                <Typography className={classes.header}> Password </Typography>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
                     // required
-                    fullWidth
-                    name='password'
-                    type='password'
-                    id='password'
-                    autoComplete='current-password'
-                  />
-                  <Typography className={classes.header}> Date of Birth </Typography>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
+                  fullWidth
+                  name="password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                />
+                <Typography className={classes.header}> Date of Birth </Typography>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
                     // required
-                    fullWidth
-                    id='birthday'
-                    name='birthday'
-                    type='date'
-                    InputLabelProps={{
+                  fullWidth
+                  id="birthday"
+                  name="birthday"
+                  type="date"
+                  InputLabelProps={{
                       shrink: true,
                     }}
-                  />
-                  <Typography className={classes.header}> Comments </Typography>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
+                />
+                <Typography className={classes.header}> Comments </Typography>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
                     // required
-                    fullWidth
-                    multiline
-                    id='comments'
-                    label="e.g. This is a long multiline answer"
-                    name='comments'
-                  />
-                  <div className="section">
-                    <div>
+                  fullWidth
+                  multiline
+                  id="comments"
+                  label="e.g. This is a long multiline answer"
+                  name="comments"
+                />
+                <div className="section">
+                  <div>
                       <span>
-                        By signing up, I agree to the&nbsp;
-                        <Link href="/">
+                      By signing up, I agree to the&nbsp;
+                      <Link href="/">
                         Privacy
-                        </Link>
-                        &nbsp;and&nbsp;
-                        <Link href="/">
+                      </Link>
+                      &nbsp;and&nbsp;
+                      <Link href="/">
                         Terms of Service
-                        </Link>
-                        &nbsp;of Blessings in a Bag
-                      </span>
+                      </Link>
+                      &nbsp;of Blessings in a Bag
+                    </span>
                     </div>
-                  </div>
-                  <Grid className={classes.loginButtonContainer}>
-                    <InvalidCredentials />
-                    <Button
+                </div>
+                <Grid className={classes.loginButtonContainer}>
+                  <InvalidCredentials />
+                  <Button
                       color="primary"
                       type="submit"
                       disabled={isFormDisabled}
                       className={classes.loginButton}
                       size="large"
                     >
-                      Sign Up
+                    Sign Up
                     </Button>
-                  </Grid>
+                </Grid>
               </form>
               <div className="section">
                 Already have an account?
@@ -329,28 +325,25 @@ const Signup: FC<SignupProps> = ({
         </Box>
       </Box>
     </>
-    )
-  }
+  );
 
-  const VolunteerSignup = props => {
+  const VolunteerSignup = (props) => {
     if (currentStep == 0) {
-      return <VolunteerType />
-    } else {
-      return <VolunteerInfo />
+      return <VolunteerType />;
     }
-  }
+    return <VolunteerInfo />;
+  };
 
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>Signup</title>
       </Head>
       <NavBar userData={null} />
       <VolunteerSignup />
       <Footer />
-    </React.Fragment>
-  )
-}
-
+    </>
+  );
+};
 
 export default Signup;

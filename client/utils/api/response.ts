@@ -1,5 +1,5 @@
-import {EventData} from "@type/event";
-import {VolunteerData, VOLUNTEER_TYPE} from "@type/volunteer";
+import { EventData } from '@type/event';
+import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
 export type SignupResponse = {
 
