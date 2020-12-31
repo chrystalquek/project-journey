@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import {
   Grid, Typography, Avatar, useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
+import { VolunteerData, VOLUNTEER_STATUS } from '@type/volunteer';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -27,7 +28,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfileHeader({ user }) {
+type props = {
+  user: VolunteerData
+}
+
+const ProfileHeader: FC<props> = ({ user }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -46,9 +51,7 @@ export default function ProfileHeader({ user }) {
 
       {/* Avatar icon */}
       <Grid item xs={12} sm="auto">
-        <Avatar className={classes.avatar}>
-          <PersonOutlineIcon className={classes.personIcon} />
-        </Avatar>
+        <Avatar alt={user.name} className={classes.avatar} src={user.photoUrl} />
       </Grid>
 
       {/* User details */}
@@ -58,8 +61,10 @@ export default function ProfileHeader({ user }) {
           <strong>Volunteer Status: </strong>
           {user.status}
         </Typography>
-        { user.status === 'ad-hoc volunteer' && <BecomeCommitedDialog /> }
+        { user.status === VOLUNTEER_STATUS['ad-hoc'] && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );
 }
+
+export default ProfileHeader
