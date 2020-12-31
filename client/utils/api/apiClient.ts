@@ -21,9 +21,7 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
-  private toURLParams = (query: QueryParams) => {
-    return "?" + new URLSearchParams(query).toString();
-  }
+  private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
 
   // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {

@@ -15,36 +15,36 @@ export default function DiscardSaveButtons({ show, onSave, onDiscard }) {
   const classes = useStyles();
 
   return show && (
-      <Grid item container spacing={2}>
+  <Grid item container spacing={2}>
 
-        {/* SAVE button */}
-        <Grid item>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={onSave}
-            size="small"
-            disableElevation
-          >
-            <Typography variant="body2" className={classes.save}>
-              Save
-            </Typography>
-          </Button>
-        </Grid>
+    {/* SAVE button */}
+    <Grid item>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={onSave}
+        size="small"
+        disableElevation
+      >
+        <Typography variant="body2" className={classes.save}>
+          Save
+        </Typography>
+      </Button>
+    </Grid>
 
-        {/* DISCARD button */}
-        <Grid item>
-          <Button
-            color="secondary"
-            onClick={onDiscard}
-            size="small"
-            disableElevation
-          >
-            <Typography variant="body2" className={classes.discard}>
-              Discard
-            </Typography>
-          </Button>
-        </Grid>
-      </Grid>
-    );
+    {/* DISCARD button */}
+    <Grid item>
+      <Button
+        color="secondary"
+        onClick={onDiscard}
+        size="small"
+        disableElevation
+      >
+        <Typography variant="body2" className={classes.discard}>
+          Discard
+        </Typography>
+      </Button>
+    </Grid>
+  </Grid>
+  );
 }
