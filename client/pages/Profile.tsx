@@ -5,6 +5,7 @@ import Remarks from '@components/profile/Remarks';
 import ContactInformation from '@components/profile/ContactInformation';
 import SignUpInformation from '@components/profile/SignUpInformation';
 import EventCount from '@components/profile/EventCount';
+import NavBar from '@components/common/NavBar'
 
 const defaultUser = {
   name: 'Benjamin Lim',
@@ -26,7 +27,7 @@ const defaultUser = {
 const Profile = () => (
   <Grid container direction="column">
     <Grid item>
-      <AppBar />
+      <NavBar userData={null} />
     </Grid>
     <Grid item container>
       <Grid item md={2} />
