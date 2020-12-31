@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { MONTHS } from '@constants/dateMappings';
-import {EventData, EventFilterOptions, EventFilters} from '@type/event';
+import {MONTHS} from '@constants/dateMappings';
+import {Event, EventData, EventFilterOptions, EventFilters, EventType, Volunteer, VolunteerType} from '@type/event';
 
 // Contains helper functions for everything related to the events page.
 
@@ -43,9 +43,9 @@ export function getVacancies(data: EventData) {
 // Filters events based on event type and volunteer type given some filter options
 export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
   return events.filter((e: EventData) => {
-    const date = getDate(e);
-
-    return false
+    return getDate(e) === getDateFilter(filters) &&
+      getEventFilters(filters).includes(getEventType(e)) &&
+      getVolunteerFilters(filters).includes(getVolunteerType(e));
   })
 }
 
@@ -54,10 +54,42 @@ function getDate(e: EventData): dayjs.Dayjs {
   return dayjs(e.start_date);
 }
 
-function getEventType(e: EventData) {
-  return e.event_type;
+function getEventType(e: EventData): EventType {
+  return <Event.Volunteering | Event.Workshop | Event.Hangout>e.event_type; // type assertion
 }
 
-function getVolunteerType(e: EventData) {
-  return e.volunteer_type;
+function getVolunteerType(e: EventData): VolunteerType {
+  return <Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin>e.volunteer_type;
+}
+
+// may be null
+function getDateFilter(f: EventFilterOptions): dayjs.Dayjs {
+  return f[EventFilters.DATE];
+}
+
+function getEventFilters(f: EventFilterOptions): Array<EventType> {
+  const ret: Array<EventType> = [];
+  const eFilters = f[EventFilters.EVENTTYPE];
+  if (eFilters[EventFilters.VOLUNTEERING]) {
+    ret.push(Event.Volunteering);
+  }
+  if (eFilters[EventFilters.WORKSHOPS]) {
+    ret.push(Event.Workshop);
+  }
+  if (eFilters[EventFilters.HANGOUTS]) {
+    ret.push(Event.Hangout);
+  }
+  return ret;
+}
+
+function getVolunteerFilters(f: EventFilterOptions): Array<VolunteerType> {
+  const ret: Array<VolunteerType> = [];
+  const vFilters = f[EventFilters.VOLUNTEERTYPE];
+  if (vFilters[EventFilters.ADHOC]) {
+    ret.push(Volunteer.Adhoc);
+  }
+  if (vFilters[EventFilters.COMMITTED]) {
+    ret.push(Volunteer.Committed);
+  }
+  return ret;
 }

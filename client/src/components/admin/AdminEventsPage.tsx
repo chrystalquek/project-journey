@@ -17,6 +17,7 @@ import AdminEvent from '@components/admin/AdminEvent';
 import AdminEventsFilter from '@components/admin/AdminEventsFilter';
 
 import dayjs from 'dayjs';
+import {withFilters} from "@utils/helpers/AdminEventsPage";
 
 type AdminEventsPageProps = {
   events: Array<EventData>,
@@ -69,6 +70,7 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const filteredEvents = withFilters(events, filters);
 
   useEffect(() => {
     getAdminEvents();
@@ -104,7 +106,7 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
             </Grid>
           </Grid>
           <Grid container spacing={4}>
-            {events?.map((event) => (
+            {filteredEvents?.map((event) => (
               <Grid item className={classes.card} sm={6} md={4}>
                 <AdminEvent key={event.name + event.description} event={event} />
               </Grid>
@@ -137,7 +139,7 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
             </Box>
           </Grid>
           <Grid item container sm={12} spacing={2}>
-            {events?.map((event) => (
+            {filteredEvents?.map((event) => (
               <Grid key={JSON.stringify(event)} item className={classes.card} sm={6} md={4}>
                 <AdminEvent key={JSON.stringify(event)} event={event} />
               </Grid>
