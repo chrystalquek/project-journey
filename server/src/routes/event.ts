@@ -17,7 +17,7 @@ protectedRouter.get('/single/:id', eventController.readEvent);
 // @access  Private
 protectedRouter.get('/multiple/:eventType', eventController.readEvents);
 
-// @route   GET /event/:userId/:eventType
+// @route   GET /signup/:userId/:eventType
 // @desc    Get either all, upcoming, or past signed up events
 // @access  Private
 protectedRouter.get('/signup/:userId/:eventType', eventController.readSignedUpEvents);
@@ -35,9 +35,8 @@ protectedRouter.put('/:id', authorize(['admin']), eventController.updateEvent);
 // @route   POST /event
 // @desc    Post a new event
 // @access  Private
-protectedRouter.post(
+router.post(
   '/',
-  authorize(['admin']),
   validate(eventController.getValidations('createEvent')),
   eventController.createEvent,
 );

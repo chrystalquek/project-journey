@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { EventSearchType, EventData } from '../types';
+import { QueryParams, EventSearchType, EventData } from '../types';
 
 import Event from '../models/Event';
 
@@ -8,19 +8,20 @@ const createEvent = async (eventData: EventData): Promise<void> => {
     const eventSchemaData: mongoose.Document = new Event({
       _id: new mongoose.Types.ObjectId(),
       name: eventData.name,
-      created_at: Date.now(),
-      description: eventData.description,
-      content_url: eventData.contentUrl,
-      content_type: eventData.contentType,
-      facilitator_name: eventData.facilitatorName,
-      facilitator_description: eventData.facilitatorDescription,
+      eventType: eventData.eventType,
+      volunteerType: eventData.volunteerType,
       start_date: eventData.startDate,
       end_date: eventData.endDate,
-      location: eventData.location,
       deadline: eventData.deadline,
-      additional_information: eventData.additionalInformation,
-      capacity: eventData.capacity,
-      volunteers: eventData.volunteers,
+      created_at: Date.now(),
+      vacancies: eventData.vacancies,
+      description: eventData.description,
+      facilitator_name: eventData.facilitatorName,
+      facilitator_description: eventData.facilitatorDescription,
+      roles: eventData.roles,
+      content_url: eventData.contentUrl,
+      content_type: eventData.contentType,
+      location: eventData.location,
     });
     await eventSchemaData.save();
   } catch (err) {
@@ -91,18 +92,19 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEvents = async (eventType: EventSearchType): Promise<EventData[]> => {
+const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
   try {
     let events: EventData[];
-    switch (eventType) {
+
+    switch (eventType.searchType) {
       case 'all':
-        events = await Event.find({});
+        events = await Event.find({}).skip(eventType.skip).limit(eventType.limit);
         break;
       case 'past':
-        events = await Event.find({ start_date: { $lt: new Date() } });
+        events = await Event.find({ start_date: { $lt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
         break;
       case 'upcoming':
-        events = await Event.find({ start_date: { $gt: new Date() } });
+        events = await Event.find({ start_date: { $gt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
         break;
       default: throw new Error('Event type is invalid');
     }

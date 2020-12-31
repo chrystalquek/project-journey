@@ -1,20 +1,20 @@
 import express from 'express';
 import { body } from 'express-validator';
+import { signUpStatusValidator } from '../helpers/validation';
 import signUpService from '../services/signUp';
-import { SIGN_UP_STATUS } from '../models/SignUp';
-import { EventSearchType, SignUpData, SignUpIdType } from '../types';
+import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
-import { stringEnumValidator } from '../helpers/validation';
 
-export type SignUpValidatorMethod = 'createSignUp';
+export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
 
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
-    case 'createSignUp': {
+    case 'createSignUp':
+    case 'updateSignUp': {
       return [
         body('eventId', 'event id does not exist').isString(),
         body('userId', 'user id does not exist').isString(),
-        body('status', 'status does not exist').custom((statusText: string) => stringEnumValidator(SIGN_UP_STATUS, 'Status', statusText)),
+        body('status').custom((status: SignUpStatus) => signUpStatusValidator(status)),
         body('preferences', 'preferences does not exist').isArray().notEmpty(),
         body('isRestricted', 'is restricted does not exist').isBoolean(),
       ];
@@ -59,7 +59,26 @@ const readSignUps = async (
       id, idType as SignUpIdType,
     );
 
-    res.status(HTTP_CODES.OK).json(userSignUpDetails);
+    res.status(HTTP_CODES.OK).json({ data: userSignUpDetails });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+};
+
+/**
+ * Retrieves sign ups with that are pending approval
+ * @return number of pending sign ups
+ */
+const readPendingSignUps = async (
+  req: express.Request,
+  res: express.Response,
+): Promise<void> => {
+  try {
+    const pendingSignUpsCount = await signUpService.readPendingSignUps();
+
+    res.status(HTTP_CODES.OK).json({ count: pendingSignUpsCount });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -108,6 +127,7 @@ const deleteSignUp = async (req: express.Request, res: express.Response) => {
 export default {
   createSignUp,
   readSignUps,
+  readPendingSignUps,
   updateSignUp,
   deleteSignUp,
   getValidations,

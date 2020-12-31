@@ -1,10 +1,13 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { EventSearchType, EventData } from '../types';
-
+import jwt from 'express-jwt';
+import signUpService, { checkIfAccepted } from '../services/signUp';
+import { roleCapacityValidator } from '../helpers/validation';
+import {
+  EventSearchType, EventData, RoleData, QueryParams,
+} from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
-import signUpService from '../services/signUp';
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -14,9 +17,9 @@ const getValidations = (method: EventValidatorMethod) => {
       return [
         body('name', 'name does not exist').exists(),
         body('description', 'description does not exist').exists(),
-        body('contentUrl', 'content url is invalid').isURL(),
-        body('facilitatorName', 'facilitator name does not exist').exists(),
-        body('facilitatorDescription', 'facilitator description does not exist').exists(),
+        body('contentUrl', 'content url is invalid').optional({ checkFalsy: true }).isURL(),
+        body('facilitatorName', 'facilitator name does not exist').optional({ checkFalsy: true }).isString(),
+        body('facilitatorDescription', 'facilitator description is not a string').optional({ checkFalsy: true }).isString(),
         body('startDate', 'start date does not exist').exists(),
         body('startDate', 'start date is after end date').custom((value, { req }) => value <= req.body.endDate),
         body('startDate', 'start date is of wrong date format').isISO8601(),
@@ -24,8 +27,8 @@ const getValidations = (method: EventValidatorMethod) => {
         body('endDate', 'end date is of wrong date format').isISO8601(),
         body('deadline', 'deadline does not exist').exists(),
         body('deadline', 'deadline is of wrong date format').isISO8601(),
-        body('volunteers', 'volunteers does not exist').exists(),
-        body('volunteers', 'number of volunteers exceeds capacity').custom((value, { req }) => req.body.capacity == null || value.length <= req.body.capacity),
+        body('roles', 'roles is not an array').optional({ checkFalsy: true }).isArray(),
+        body('roles', 'number of volunteers exceeds role capacity').custom((roles: RoleData[]) => roleCapacityValidator(roles)),
       ];
     }
     default: {
@@ -73,10 +76,19 @@ const readEvent = async (
  */
 const readEvents = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const events = await eventService.readEvents(req.params.eventType as EventSearchType);
+    const searchType = req.params.eventType as EventSearchType;
+    const pageNo = Number(req.query.pageNo);
+    const size = Number(req.query.size);
+    const query: QueryParams = { searchType, skip: 0, limit: 0 };
 
+    if (pageNo < 0) {
+      throw new Error('Invalid page number, should start with 0');
+    }
+    query.skip = size * pageNo;
+    query.limit = size;
+    const events = await eventService.readEvents(query);
     res.status(HTTP_CODES.OK).json({
-      events,
+      data: events,
     });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -98,8 +110,9 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     const signUps = await signUpService.readSignUps(userId, 'userId');
 
     /** For past events, filter sign ups with accepted status */
+    /** status is an array if the sign up is accepted i.e. ["accepted", string] */
     const filteredSignUps = eventType === 'past'
-      ? signUps.filter((signUp) => signUp.status === 'accepted')
+      ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
       : signUps;
 
     const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);
@@ -107,7 +120,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
 
-    res.status(HTTP_CODES.OK).json({ signedUpEvents });
+    res.status(HTTP_CODES.OK).json({ data: signedUpEvents });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

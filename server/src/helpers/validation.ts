@@ -1,12 +1,14 @@
 import _ from 'lodash';
 import { body, validationResult, ValidationChain } from 'express-validator';
 import express from 'express';
+import { checkIfAccepted } from '../services/signUp';
 import {
   CITIZENSHIP_TYPES, GENDER_TYPES, LEADERSHIP_INTEREST_TYPES,
   PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS, VOLUNTEER_TYPE
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
+import { RoleData, SignUpStatus } from '../types';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
@@ -19,6 +21,31 @@ const LENGTH_MINIMUM_PASSWORD = 8;
 export const stringEnumValidator = (enumTypes: Array<string>, enumName: string, value: string) => {
   if (!_.includes(enumTypes, value)) {
     throw new Error(`${enumName}: "${value}" must be either ${enumTypes.join(', ')}`);
+  }
+  return true;
+};
+
+const checkIfStatusValid = (value: SignUpStatus) => {
+  const isPending = value === 'pending';
+  const isRejected = value === 'rejected';
+  const isAccepted = checkIfAccepted(value);
+
+  return isPending || isRejected || isAccepted;
+};
+
+export const signUpStatusValidator = (value: SignUpStatus) => {
+  if (checkIfStatusValid(value)) {
+    return true;
+  }
+  throw new Error('status must be either "pending", "rejected", or ["accepted": <acceptedRole>]');
+};
+
+export const roleCapacityValidator = (roles: Array<RoleData>) => {
+  for (let i = 0; i < roles.length; i += 1) {
+    const currRole = roles[i];
+    if (currRole.capacity < currRole.volunteers.length) {
+      return false;
+    }
   }
   return true;
 };
