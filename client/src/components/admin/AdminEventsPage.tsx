@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex'
   },
-  button: {
+  createEventBtn: {
     backgroundColor: theme.palette.primary.main,
     borderRadius: '16px',
     textTransform: 'none',
@@ -44,7 +44,14 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       backgroundColor: theme.palette.secondary.main
     },
-    marginBottom: '2rem',
+  },
+  filterResultsBtn: {
+    background: 'none',
+    textTransform: 'none',
+    color: theme.palette.secondary.main,
+  },
+  drawer: {
+    padding: '16px'
   }
 }))
 
@@ -53,7 +60,6 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
   const classes = useStyles();
   const screenSmall = useMediaQuery(theme.breakpoints.only('sm'));
 
-  // Event filters
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: dayjs(new Date()),
     [EventFilters.VOLUNTEERTYPE]: {
@@ -67,6 +73,7 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
     }
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     getAdminEvents()
@@ -75,22 +82,40 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
   if (screenSmall) {
     return (
       <Container fixed>
-        <AdminBreadCrumbs />
-        <SearchBar />
-        <Button variant="contained">Click me!</Button>
-        <Box className={classes.box} fontWeight='bold'>
-          <Typography display='inline' color='secondary'>{
-            events ? events.length : 0}
-          </Typography> Upcoming Events
-        </Box>
-        <Grid container spacing={4}>
-          {events?.map((event) => (
-            <Grid item className={classes.card} sm={6} md={4}>
-              <AdminEvent key={event.name+event.description} event={event} />
+        <Grid container>
+          <Grid item sm={12}><SearchBar /></Grid>
+          <Grid item container sm={12} direction='row' justify='center' alignItems='center'>
+              <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
+          </Grid>
+          <Grid item container sm={12} justify='space-between'>
+            <Grid item>
+              <Box className={classes.box} fontWeight='bold'>
+                <Typography display='inline' color='secondary'>{
+                  events ? events.length : 0}
+                </Typography> Upcoming Events
+              </Box>
             </Grid>
-          ))}
+            <Grid item>
+              <Button className={classes.filterResultsBtn}
+                      onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+              >
+                Filter Results
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid container spacing={4}>
+            {events?.map((event) => (
+              <Grid item className={classes.card} sm={6} md={4}>
+                <AdminEvent key={event.name+event.description} event={event} />
+              </Grid>
+            ))}
+          </Grid>
+          <Drawer anchor='right' open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+            <Box m={8}>
+              <AdminEventsFilter filters={filters} setFilters={setFilters} />
+            </Box>
+          </Drawer>
         </Grid>
-        {/*// TODO: The pull out drawer*/}
       </Container>
     )
   } else {
@@ -116,11 +141,12 @@ const AdminEventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =
             </Grid>
           </Grid>
           <Grid item sm={3}>
-            <Button disableRipple className={classes.button}>Create new event</Button>
+            <Box mb={4}>
+              <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
+            </Box>
             <AdminEventsFilter filters={filters} setFilters={setFilters} />
           </Grid>
         </Grid>
-
       </Container>
     );
   }
