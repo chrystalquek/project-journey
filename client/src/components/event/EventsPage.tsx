@@ -52,7 +52,8 @@ const useStyles = makeStyles((theme) => ({
 const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   const theme = useTheme();
   const classes = useStyles();
-  const screenSmall = useMediaQuery(theme.breakpoints.only('sm'));
+  const screenXs = useMediaQuery(theme.breakpoints.only('xs'));
+  const screenSm = useMediaQuery(theme.breakpoints.only('sm'));
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,
@@ -74,15 +75,15 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
     getAdminEvents();
   }, []);
 
-  if (screenSmall) {
+  if (screenXs || screenSm) {
     return (
       <Container fixed>
         <Grid container>
-          <Grid item sm={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
-          <Grid item container sm={12} direction="row" justify="center" alignItems="center">
+          <Grid item xs={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
+          <Grid item container xs={12} direction="row" justify="center" alignItems="center">
             <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
           </Grid>
-          <Grid item container sm={12} justify="space-between">
+          <Grid item container xs={12} justify="space-between">
             <Grid item>
               <Box className={classes.box} fontWeight="bold">
                 <Typography display="inline" color="secondary">
@@ -103,19 +104,19 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
               </Button>
             </Grid>
           </Grid>
-          <Grid container spacing={4}>
+          <Grid container xs={12} spacing={4}>
             {filteredEvents?.map((event) => (
               <Grid item className={classes.card} sm={6} md={4}>
                 <Event key={event.name + event.description} event={event} />
               </Grid>
             ))}
           </Grid>
-          <Drawer anchor="right" open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-            <Box m={8}>
-              <EventsFilter filters={filters} setFilters={setFilters} />
-            </Box>
-          </Drawer>
         </Grid>
+        <Drawer anchor="right" open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+          <Box m={8}>
+            <EventsFilter filters={filters} setFilters={setFilters} />
+          </Box>
+        </Drawer>
       </Container>
     );
   }
