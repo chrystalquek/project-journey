@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
+
 *,
 *:before,
 *:after {
@@ -200,14 +202,14 @@ body {
   background-color: #fff;
 }
 
-h1{
+h1 {
   font-size: 32;
 }
 
-h2{
+h2 {
   font-size: 24;
 }
 
-p{
+p {
   font-size: 16;
 }

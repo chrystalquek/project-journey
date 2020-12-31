@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 const footer: CSSProperties = {
   textAlign: 'center',
   bottom: 0,
-  position: 'fixed',
+  position: 'relative',
   width: '100%',
 };
 

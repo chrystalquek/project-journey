@@ -1,7 +1,9 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export type EventData = {
   name: string;
+  event_type: string;
+  volunteer_type: string;
   description: string;
   content_url: string;
   content_type: string;
