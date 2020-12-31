@@ -60,10 +60,6 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
       password,
     };
     const response = await apiClient.login(request) as LoginResponse;
-<<<<<<< HEAD
-    localStorage.setItem('token', JSON.stringify(response.token));
-=======
->>>>>>> origin/master
     return response;
   },
 );
