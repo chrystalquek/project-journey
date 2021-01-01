@@ -9,10 +9,26 @@ import NavBar from '@components/common/NavBar';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import dummyUser from '@utils/constants/dummyUser';
+import { Redirect } from 'react-router-dom';
+import ErrorPage from 'next/error'
+import { useRouter } from 'next/router'
+import { VOLUNTEER_TYPE } from '@type/volunteer';
 
 const Profile = () => {
-  let userData = useSelector((state: StoreState) => state.user);
-  userData = userData.user === null ? dummyUser : userData;
+  const router = useRouter()
+
+  // secret sample page
+  const isDummyPage = (router.query.volunteer_id === dummyUser.user._id) 
+  const userData = isDummyPage ? dummyUser : useSelector((state: StoreState) => state.user);
+
+  if (userData.user === null) {
+    return <ErrorPage statusCode={404} />
+  }
+
+  if (userData.user.volunteerType !== VOLUNTEER_TYPE.ADMIN &&
+    userData.user._id !== router.query.volunteer_id) {
+    return <ErrorPage statusCode={404} />
+  }
 
   return (
     <Grid container direction="column">
