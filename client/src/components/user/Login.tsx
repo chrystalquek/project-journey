@@ -2,7 +2,6 @@ import { Box, Grid, Button, Typography, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
-import { useForm } from "antd/lib/form/Form";
 import Head from "next/head";
 import { useRouter } from "next/dist/client/router";
 import { Formik, Form, Field } from "formik";
@@ -12,7 +11,6 @@ import NavBar from "@components/common/NavBar";
 import Footer from "@components/common/Footer";
 import { LoginArgs } from "@redux/actions/user";
 import { UserState } from "@redux/reducers/user";
-import { LoginResponse } from "@utils/api/response";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -66,13 +64,9 @@ type LoginProps = {
 };
 
 const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
-  const [form] = useForm();
   const router = useRouter();
   const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
-  const isFormDisabled =
-    !form.isFieldsTouched(true) ||
-    !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
   useEffect(() => {
     if (user.token) {
@@ -112,13 +106,12 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
 
   const validate = (values) => {
     const errors: Partial<LoginArgs> = {};
-    console.log(values.email);
-    console.log(values.password);
+
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
     if (!values.email) {
       errors.email = "Required";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
+    } else if (!emailRegex.test(values.email)) {
       errors.email = "Invalid email address";
     }
 
