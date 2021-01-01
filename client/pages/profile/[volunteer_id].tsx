@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, AppBar } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import ProfileHeader from '@components/profile/ProfileHeader';
 import Remarks from '@components/profile/Remarks';
 import ContactInformation from '@components/profile/ContactInformation';
@@ -9,25 +9,24 @@ import NavBar from '@components/common/NavBar';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import dummyUser from '@utils/constants/dummyUser';
-import { Redirect } from 'react-router-dom';
-import ErrorPage from 'next/error'
-import { useRouter } from 'next/router'
+import ErrorPage from 'next/error';
+import { useRouter } from 'next/router';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 
 const Profile = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   // secret sample page
-  const isDummyPage = (router.query.volunteer_id === dummyUser.user._id) 
+  const isDummyPage = (router.query.volunteer_id === dummyUser.user._id);
   const userData = isDummyPage ? dummyUser : useSelector((state: StoreState) => state.user);
 
   if (userData.user === null) {
-    return <ErrorPage statusCode={404} />
+    return <ErrorPage statusCode={404} />;
   }
 
-  if (userData.user.volunteerType !== VOLUNTEER_TYPE.ADMIN &&
-    userData.user._id !== router.query.volunteer_id) {
-    return <ErrorPage statusCode={404} />
+  if (userData.user.volunteerType !== VOLUNTEER_TYPE.ADMIN
+    && userData.user._id !== router.query.volunteer_id) {
+    return <ErrorPage statusCode={404} />;
   }
 
   return (
