@@ -110,7 +110,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
               <TableRow key={vol.email}>
                 <TableCell><b>{vol.name}</b></TableCell>
                 <TableCell>{vol.volunteerType}</TableCell>
-                <TableCell>{vol.created_at.toLocaleDateString()}</TableCell>
+                <TableCell>{vol.createdAt.toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>
