@@ -124,7 +124,8 @@ const Signup: FC<SignupProps> = ({
       volunteerType,
     };
     const response = await handleFormSubmit(signupArgs);
-    if (response.type == 'volunteer//fulfilled') {
+    // @ts-ignore
+    if (response?.type == 'volunteer//fulfilled') {
       router.push('/login');
     } else {
       setInvalid(true);
@@ -148,28 +149,28 @@ const Signup: FC<SignupProps> = ({
                 interaction with our learning community (aged 6 to 16 years old).
                 We have this policy for a number of reasons:
                 <ul>
-                    <li>
-                      Limit the emotional trauma in our children that occurs
-                      when volunteers come for a few sessions and leave
-                    </li>
-                    <li>
-                      It takes time for children to warm up to
-                      new faces and it won&apos;t happen instantly.
-                    </li>
-                    <li>
-                      3 months provides you with the opportunity to witness the progression
-                      and impact you&apos;re making (in yourself and in our children)
-                    </li>
-                    <li>
-                      You&apos;ll be journeying with other individuals who share
-                      a commitment and passion for our program.  There are opportunities
-                      to meet new people and develop friendships.
-                    </li>
-                    <li>
-                      Allows you time to be on-boarded, mentored
-                      and guided by some incredible WCA Captains on the team.
-                    </li>
-                  </ul>
+                  <li>
+                    Limit the emotional trauma in our children that occurs
+                    when volunteers come for a few sessions and leave
+                  </li>
+                  <li>
+                    It takes time for children to warm up to
+                    new faces and it won&apos;t happen instantly.
+                  </li>
+                  <li>
+                    3 months provides you with the opportunity to witness the progression
+                    and impact you&apos;re making (in yourself and in our children)
+                  </li>
+                  <li>
+                    You&apos;ll be journeying with other individuals who share
+                    a commitment and passion for our program.  There are opportunities
+                    to meet new people and develop friendships.
+                  </li>
+                  <li>
+                    Allows you time to be on-boarded, mentored
+                    and guided by some incredible WCA Captains on the team.
+                  </li>
+                </ul>
               </p>
             </Col>
           </Row>
@@ -187,12 +188,12 @@ const Signup: FC<SignupProps> = ({
               <Col span={6}>
                 <Card hoverable title="Ad-hoc Volunteer" headStyle={{ background: '#D0DE39', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectAdhoc}>
                   You are only intending to volunteer one-off at Blessings in a Bag
-                  </Card>
+                </Card>
               </Col>
               <Col span={6}>
                 <Card hoverable title="Regular Volunteer" headStyle={{ background: '#00BADC', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectCommitted}>
                   You are able to commit to a minimum of 3 months at Blessings in a Bag
-                  </Card>
+                </Card>
               </Col>
             </Row>
           </div>
@@ -269,8 +270,8 @@ const Signup: FC<SignupProps> = ({
                   name="birthday"
                   type="date"
                   InputLabelProps={{
-                      shrink: true,
-                    }}
+                    shrink: true,
+                  }}
                 />
                 <Typography className={classes.header}> Comments </Typography>
                 <TextField
@@ -285,7 +286,7 @@ const Signup: FC<SignupProps> = ({
                 />
                 <div className="section">
                   <div>
-                      <span>
+                    <span>
                       By signing up, I agree to the&nbsp;
                       <Link href="/">
                         Privacy
@@ -296,19 +297,19 @@ const Signup: FC<SignupProps> = ({
                       </Link>
                       &nbsp;of Blessings in a Bag
                     </span>
-                    </div>
+                  </div>
                 </div>
                 <Grid className={classes.loginButtonContainer}>
                   <InvalidCredentials />
                   <Button
-                      color="primary"
-                      type="submit"
-                      disabled={isFormDisabled}
-                      className={classes.loginButton}
-                      size="large"
-                    >
+                    color="primary"
+                    type="submit"
+                    disabled={isFormDisabled}
+                    className={classes.loginButton}
+                    size="large"
+                  >
                     Sign Up
-                    </Button>
+                  </Button>
                 </Grid>
               </form>
               <div className="section">

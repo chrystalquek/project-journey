@@ -1,8 +1,6 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
-import 'antd/dist/antd.css';
-import '@styles/vars.css';
-import '@styles/globals.css';
+import '@styles/app.css';
 import { Provider } from 'react-redux';
 import configureStore from '@redux/store';
 import { PersistGate } from 'redux-persist/integration/react';

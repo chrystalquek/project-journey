@@ -64,4 +64,3 @@ export enum Volunteer {
   Admin = 'admin'
 }
 export type VolunteerType = Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin;
-

@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
-import {MONTHS} from '@constants/dateMappings';
-import {Event, EventData, EventFilterOptions, EventFilters, EventType, Volunteer, VolunteerType} from '@type/event';
+import { MONTHS } from '@constants/dateMappings';
+import {
+  Event, EventData, EventFilterOptions, EventFilters, EventType, Volunteer, VolunteerType,
+} from '@type/event';
 
 // Contains helper functions for everything related to the events page.
 
@@ -42,11 +44,9 @@ export function getVacancies(data: EventData) {
 
 // Filters events based on event type and volunteer type given some filter options
 export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
-  return events.filter((e: EventData) => {
-    return getDate(e) === getDateFilter(filters) &&
-      getEventFilters(filters).includes(getEventType(e)) &&
-      getVolunteerFilters(filters).includes(getVolunteerType(e));
-  })
+  return events.filter((e: EventData) => getDate(e) === getDateFilter(filters)
+      && getEventFilters(filters).includes(getEventType(e))
+      && getVolunteerFilters(filters).includes(getVolunteerType(e)));
 }
 
 // Getters for events, to future-proof changes to event structure
