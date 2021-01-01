@@ -1,10 +1,7 @@
 import {
-  Box, Grid, Button, TextField, Typography, Divider as Divider1
+  Box, Grid, Button, TextField, Typography, Divider, Card, CardContent, CardHeader, CardActionArea
 } from '@material-ui/core'
 import React, { FC, useEffect, useState } from 'react';
-import {
- Divider, Card,
-} from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
 import { useRouter } from 'next/dist/client/router';
@@ -66,6 +63,19 @@ const useStyles = makeStyles((theme) => ({
   dividerText: {
     fontSize: 16,
     fontWeight: 500
+  },
+  card: {
+    borderRadius: '10px'
+  },
+  cardHeaderAdhoc: {
+    background: '#D0DE39',
+    color: '#fff',
+    borderRadius: '10px 10px 0px 0px'
+  },
+  cardHeaderRegular: {
+    background: '#00BADC',
+    color: '#fff',
+    borderRadius: '10px 10px 0px 0px'
   }
 }));
 
@@ -136,9 +146,9 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
   const TextDivider = ({ children }) => {
     return (
       <Grid container>
-        <Grid item xs={4} ><Divider1 className ={classes.dividerLine}/></Grid>
+        <Grid item xs={4} ><Divider className ={classes.dividerLine}/></Grid>
         <Grid item xs={4} className ={classes.dividerText}>{children}</Grid>
-        <Grid item xs={4} className ={classes.dividerLine}><Divider1 /></Grid>
+        <Grid item xs={4} className ={classes.dividerLine}><Divider /></Grid>
       </Grid>
     );
   };
@@ -198,13 +208,23 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
             <div style={{ padding: 24 }}>
               <Grid container spacing={6} style={{ justifyContent: 'center' }}>
                 <Grid item xs={3}>
-                  <Card hoverable title="Ad-hoc Volunteer" headStyle={{ background: '#D0DE39', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectAdhoc}>
-                    You are only intending to volunteer one-off at Blessings in a Bag
+                  <Card className={classes.card} onClick={selectCommitted}>
+                    <CardActionArea>
+                      <CardHeader title="Ad-hoc Volunteer" className={classes.cardHeaderAdhoc}/>
+                      <CardContent>
+                        You are only intending to volunteer one-off at Blessings in a Bag
+                      </CardContent>
+                    </CardActionArea>
                   </Card>
                 </Grid>
                 <Grid item xs={3}>
-                  <Card hoverable title="Regular Volunteer" headStyle={{ background: '#00BADC', color: '#fff', borderRadius: '10px 10px 0px 0px' }} bordered={false} style={{ borderRadius: '10px' }} onClick={selectCommitted}>
-                    You are able to commit to a minimum of 3 months at Blessings in a Bag
+                  <Card className={classes.card} onClick={selectCommitted}>
+                    <CardActionArea>
+                      <CardHeader title="Regular Volunteer" className={classes.cardHeaderRegular}/>
+                      <CardContent>
+                        You are able to commit to a minimum of 3 months at Blessings in a Bag
+                      </CardContent>
+                    </CardActionArea>
                   </Card>
                 </Grid>
               </Grid>
