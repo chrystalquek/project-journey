@@ -124,7 +124,8 @@ const Signup: FC<SignupProps> = ({
       volunteerType,
     };
     const response = await handleFormSubmit(signupArgs);
-    if (response.type == 'volunteer//fulfilled') {
+    // @ts-ignore
+    if (response?.type == 'volunteer//fulfilled') {
       router.push('/login');
     } else {
       setInvalid(true);
