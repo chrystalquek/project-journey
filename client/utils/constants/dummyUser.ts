@@ -50,6 +50,7 @@ const dummyData : VolunteerData = {
 
 const dummyUser : UserState = {
   token: 'whatevertoken',
+  status: '',
   user: dummyData,
 };
 
