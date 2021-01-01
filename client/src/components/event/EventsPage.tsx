@@ -15,7 +15,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import Event from '@components/event/Event';
 import EventsFilter from '@components/event/EventsFilter';
-import {withFilters} from "@utils/helpers/EventsPage";
+import { withFilters } from '@utils/helpers/EventsPage';
 
 type AdminEventsPageProps = {
   events: Array<EventData>,
@@ -68,7 +68,7 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const filteredEvents = withFilters(events ? events : [], filters);
+  const filteredEvents = withFilters(events || [], filters);
 
   useEffect(() => {
     getAdminEvents();

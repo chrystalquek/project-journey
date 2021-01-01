@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
 
 type props = {
   show: boolean,
-  onSave(): void,
-  onDiscard(): void
+  onSave: () => void,
+  onDiscard: () => void
 }
 
 const DiscardSaveButtons: FC<props> = ({ show, onSave, onDiscard }) => {

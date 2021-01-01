@@ -8,9 +8,9 @@ type props = {
   value: string,
   label: string,
   show: boolean,
-  onChange(event: any): void,
-  onSave(): void,
-  onDiscard(): void,
+  onChange: (event: any) => void,
+  onSave: () => void,
+  onDiscard: () => void,
 }
 
 const RemarksTextField: FC<props> = ({

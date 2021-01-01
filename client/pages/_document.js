@@ -3,16 +3,12 @@ import Document, {
   Html, Head, Main, NextScript,
 } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/core/styles';
-import theme from '@styles/theme';
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>
-          <meta name="theme-color" content={theme.palette.primary.main} />
-          <link rel="stylesheet" />
-        </Head>
+        <Head />
         <body>
           <Main />
           <NextScript />
