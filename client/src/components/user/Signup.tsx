@@ -47,11 +47,6 @@ const useStyles = makeStyles((theme) => ({
   formContainer: {
     padding: "20px",
   },
-  volunteerInfo: {
-    padding: "80px 150px 0px 150px",
-    textAlign: "center",
-    minHeight: "90vh",
-  },
   invalidText: {
     marginBottom: "10px",
     color: "#e60026"
@@ -76,6 +71,16 @@ const useStyles = makeStyles((theme) => ({
     background: '#00BADC',
     color: '#fff',
     borderRadius: '10px 10px 0px 0px'
+  },
+  signupInstructions: {
+    justifyContent: 'center',
+    textAlign: 'left'
+  },
+  centerContent: {
+    justifyContent: 'center'
+  },
+  cardContainer: {
+    padding: 24
   }
 }));
 
@@ -156,12 +161,9 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
   const VolunteerType = props => {
     return (
       <Box>
-        <Box style={{
-          padding: '80px 150px 0px 150px', marginTop: 80, textAlign: 'center', minHeight: '90vh',
-        }}
-        >
+        <Box style={styles.content}>
           <div>
-            <Grid container style={{ justifyContent: 'center', textAlign: 'left' }}>
+            <Grid container className={classes.signupInstructions}>
               <Grid item xs={6}>
                 <p>
                   Yay! We are excited that you are interested to volunteer with us.
@@ -198,17 +200,17 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
             </Grid>
           </div>
           <div>
-            <Grid container style={{ justifyContent: 'center' }}>
+            <Grid container className={classes.centerContent}>
               <Grid item xs={6}>
                 <TextDivider>
                   Sign  Up   As
                 </TextDivider>
               </Grid>
             </Grid>
-            <div style={{ padding: 24 }}>
-              <Grid container spacing={6} style={{ justifyContent: 'center' }}>
+            <div className={classes.cardContainer}>
+              <Grid container spacing={6} className={classes.centerContent}>
                 <Grid item xs={3}>
-                  <Card className={classes.card} onClick={selectCommitted}>
+                  <Card className={classes.card} onClick={selectAdhoc}>
                     <CardActionArea>
                       <CardHeader title="Ad-hoc Volunteer" className={classes.cardHeaderAdhoc}/>
                       <CardContent>
@@ -266,7 +268,7 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
   const VolunteerInfo = (props) => (
     <>
       <Box>
-        <Box className={classes.volunteerInfo}>
+        <Box style={styles.content}>
           <Grid container style={styles.rowContent}>
             <Grid item xs={4}>
               <Button className={classes.backButton} onClick={prevStep}>
