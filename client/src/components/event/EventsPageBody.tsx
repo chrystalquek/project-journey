@@ -13,9 +13,10 @@ import { EventData, EventFilterOptions, EventFilters } from '@type/event';
 import { FC, useEffect, useState } from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import Event from '@components/event/Event';
+import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
-import {withFilters} from "@utils/helpers/EventsPage";
+import {withFilters} from "@utils/helpers/EventsPageBody";
+import {useRouter} from "next/router";
 
 type AdminEventsPageProps = {
   events: Array<EventData>,
@@ -49,8 +50,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
+const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   const theme = useTheme();
+  const router = useRouter();
   const classes = useStyles();
   const screenXs = useMediaQuery(theme.breakpoints.only('xs'));
   const screenSm = useMediaQuery(theme.breakpoints.only('sm'));
@@ -58,13 +60,13 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,
     [EventFilters.VOLUNTEERTYPE]: {
-      [EventFilters.ADHOC]: false,
-      [EventFilters.COMMITTED]: false,
+      [EventFilters.ADHOC]: true,
+      [EventFilters.COMMITTED]: true,
     },
     [EventFilters.EVENTTYPE]: {
-      [EventFilters.HANGOUTS]: false,
-      [EventFilters.WORKSHOPS]: false,
-      [EventFilters.VOLUNTEERING]: false,
+      [EventFilters.HANGOUTS]: true,
+      [EventFilters.WORKSHOPS]: true,
+      [EventFilters.VOLUNTEERING]: true,
     },
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
@@ -106,8 +108,11 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
           </Grid>
           <Grid container xs={12} spacing={4}>
             {filteredEvents?.map((event) => (
-              <Grid item className={classes.card} sm={6} md={4}>
-                <Event key={event.name + event.description} event={event} />
+              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
+                <EventCard key={event._id}
+                           event={event}
+                           onCardClick={() => router.push(`/event/${event._id}`)}
+                />
               </Grid>
             ))}
           </Grid>
@@ -139,8 +144,11 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
           </Grid>
           <Grid item container sm={12} spacing={2}>
             {filteredEvents?.map((event) => (
-              <Grid key={JSON.stringify(event)} item className={classes.card} sm={6} md={4}>
-                <Event key={JSON.stringify(event)} event={event} />
+              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
+                <EventCard key={event._id}
+                           event={event}
+                           onCardClick={() => router.push(`/event/${event._id}`)}
+                />
               </Grid>
             ))}
           </Grid>
@@ -156,4 +164,4 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   );
 };
 
-export default EventsPage;
+export default EventsPageBody;

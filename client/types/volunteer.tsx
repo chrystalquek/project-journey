@@ -52,9 +52,13 @@ export enum VOLUNTEER_ROLE {
     'editor', 'admin', 'lead'
 }
 
-export enum VOLUNTEER_TYPE {
-    'ad-hoc', 'committed', 'lead', 'admin'
+export enum Volunteer {
+  Adhoc = 'ad-hoc',
+  Committed = 'committed',
+  Lead = 'lead',
+  Admin = 'admin'
 }
+export type VOLUNTEER_TYPE = Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin;
 
 export type VolunteerData = {
     _id: string,

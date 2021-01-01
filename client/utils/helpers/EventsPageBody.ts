@@ -42,11 +42,14 @@ export function getVacancies(data: EventData) {
 
 // Filters events based on event type and volunteer type given some filter options
 export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
+  // default calendar value is null
+  const allowAllDates = getDateFilter(filters) === null;
+
   return events.filter((e: EventData) => {
-    return getDate(e) === getDateFilter(filters) &&
+    return (allowAllDates ? true : getDateFilter(filters) === getDate(e)) &&
       getEventFilters(filters).includes(getEventType(e)) &&
       getVolunteerFilters(filters).includes(getVolunteerType(e));
-  })
+  });
 }
 
 // Getters for events, to future-proof changes to event structure

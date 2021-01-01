@@ -10,7 +10,7 @@ export type LoginResponse = {
 }
 
 export type GetAllEventsResponse = {
-  events: Array<EventData>
+  data: Array<EventData>
 }
 
 export type GetVolunteersResponse = {

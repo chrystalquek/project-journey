@@ -1,19 +1,19 @@
 import Head from '@components/common/Header';
 import NavBar from '@components/common/NavBar';
-import AdminEventsPage from '@containers/event/EventsPage';
+import EventsPageBody from '@containers/event/EventsPageBody';
 import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
 
-const AdminEvents = () => {
+const EventsPage = () => {
   const userData = useSelector((state: StoreState) => state.user);
 
   return (
     <>
       <Head title="Blessings in a Bag" />
       <NavBar userData={userData.user} />
-      <AdminEventsPage />
+      <EventsPageBody />
     </>
   );
 };
 
-export default AdminEvents;
+export default EventsPage;

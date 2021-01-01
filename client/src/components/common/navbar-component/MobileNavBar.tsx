@@ -161,7 +161,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             className={classes.listButton}
             onClick={toggleEventMenu}
           >
-            <ListItemText disableTypography primary="Event" />
+            <ListItemText disableTypography primary="EventCard" />
             {openEventMenu ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openEventMenu} timeout="auto" unmountOnExit>

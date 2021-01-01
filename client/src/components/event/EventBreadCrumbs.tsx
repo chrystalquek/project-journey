@@ -11,6 +11,7 @@ const useStyles = makeStyles({
 const EventBreadCrumbs = () => {
   const classes = useStyles();
 
+  // TODO: Update this to dynamically retrieve routes
   return (
     <Breadcrumbs separator=">" className={classes.linkColor} aria-label="breadcrumb">
       {/* There isn't any admin/events page, so no <Link> is actually needed... */}

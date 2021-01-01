@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
+import {VOLUNTEER_TYPE} from "@type/volunteer";
 
 export type EventData = {
+  _id: string;
   name: string;
-  event_type: string;
-  volunteer_type: string;
+  event_type: EventType;
+  volunteer_type: VOLUNTEER_TYPE;
   description: string;
   content_url: string;
   content_type: string;
@@ -15,9 +17,9 @@ export type EventData = {
   deadline: Date;
   additional_information: string;
   capacity: number;
-  volunteers: Array<any>;
+  volunteers: Array<string>;
   roles: Array<{
-    volunteers: Array<any>,
+    volunteers: Array<string>,
     name: string,
     description: string,
     capacity: number,
@@ -56,12 +58,4 @@ export enum Event {
   Hangout = 'hangout'
 }
 export type EventType = Event.Volunteering | Event.Workshop | Event.Hangout;
-
-export enum Volunteer {
-  Adhoc = 'ad-hoc',
-  Committed = 'committed',
-  Lead = 'lead',
-  Admin = 'admin'
-}
-export type VolunteerType = Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin;
 
