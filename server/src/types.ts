@@ -132,7 +132,7 @@ export type AnswerData = {
     questionId: string;
     userId: string;
     content: string;
-    formId: string;
+    formId?: string;
 }
 
 export interface CreateFormQuestionsRequest {
@@ -141,7 +141,7 @@ export interface CreateFormQuestionsRequest {
 }
 
 export interface AnswerFormQuestionsRequest {
-    eventId: string
+    formId: string
     answers: Array<AnswerData>
 }
 

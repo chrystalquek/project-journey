@@ -8,7 +8,9 @@ import {
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
-import { QuestionsOptionsRequestData, RoleData, SignUpStatus } from '../types';
+import {
+  AnswerData, QuestionsOptionsRequestData, RoleData, SignUpStatus,
+} from '../types';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
@@ -59,6 +61,16 @@ const questionValidator = (questions: Array<QuestionsOptionsRequestData>) => {
       throw new Error('Question Options data is not as expected');
     }
   });
+  return true;
+};
+
+const answersValidator = (answers: Array<AnswerData>) => {
+  answers.forEach((answer) => {
+    if (!answer.questionId || !answer.content || !answer.userId) {
+      throw new Error('Answers form data is not as expected');
+    }
+  });
+
   return true;
 };
 
@@ -168,4 +180,5 @@ export default {
   volunteerRemark,
   administratorRemarks,
   questionValidator,
+  answersValidator,
 };

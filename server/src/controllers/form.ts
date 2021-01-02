@@ -7,7 +7,12 @@ import formService from '../services/forms/form';
 import optionsService from '../services/forms/option';
 import questionService from '../services/forms/question';
 import answerService from '../services/forms/answer';
-import { AnswerFormQuestionsRequest, CreateFormQuestionsRequest, QuestionsOptionsRequestData } from '../types';
+import {
+  AnswerData,
+  AnswerFormQuestionsRequest,
+  CreateFormQuestionsRequest,
+  QuestionsOptionsRequestData,
+} from '../types';
 import validation from '../helpers/validation';
 
 export type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
@@ -28,7 +33,8 @@ const getValidations = (method: FormValidatorMethod) => {
     }
     case 'answerForm': {
       return [
-
+        body('formId', 'formId was not provided').isString(),
+        body('answers', 'answers parameter format is incorrect').custom((answers: Array<AnswerData>) => validation.answersValidator(answers)),
       ];
     }
     default: {
