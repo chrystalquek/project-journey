@@ -1,7 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LoginRequest, PostEventRequest, QueryParams } from './request';
 import {
-  GetAllEventsResponse, GetVolunteersResponse, LoginResponse, PostEventResponse,
+  LoginRequest, PostEventRequest, QueryParams, SignupRequest,
+} from './request';
+import {
+  GetAllEventsResponse, GetVolunteersResponse, LoginResponse, PostEventResponse, SignupResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -25,6 +27,11 @@ class AxiosApiClient implements ApiClient {
   }
 
   private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+
+  // create user
+  async signup(request: SignupRequest): Promise<SignupResponse> {
+    return this.send(request, 'volunteer', 'post');
+  }
 
   // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {

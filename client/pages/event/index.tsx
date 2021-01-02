@@ -1,18 +1,19 @@
 import Head from '@components/common/Header';
+import NavBar from '@components/common/NavBar';
+import AdminEventsPage from '@containers/event/EventsPage';
 import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
-import NavBar from '../src/components/common/NavBar';
 
-const Home = () => {
+const AdminEvents = () => {
   const userData = useSelector((state: StoreState) => state.user);
+
   return (
     <>
       <Head title="Blessings in a Bag" />
       <NavBar userData={userData.user} />
-      <p>Homepage goes here</p>
-      <p>Footer goes here</p>
+      <AdminEventsPage />
     </>
   );
 };
 
-export default Home;
+export default AdminEvents;

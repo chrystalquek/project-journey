@@ -12,13 +12,21 @@ import {
   ListItemText,
   ListItemIcon,
   Collapse,
+  Popper,
+  Fade,
+  ClickAwayListener,
+  Paper,
+  MenuList,
+  MenuItem,
 } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { VolunteerData } from 'types/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { useDispatch } from 'react-redux';
+import { resetUser } from '@redux/reducers/user';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   headerContainer: {
@@ -61,14 +69,19 @@ type NavBarProps = {
 
 export default function MobileNavBar({ userData }: NavBarProps) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const classes = useStyles();
+
   const [drawer, setDrawer] = useState<boolean>(false);
   const [openEventMenu, setOpenEventMenu] = useState<boolean>(false);
   const [openVolunteerMenu, setOpenVolunteerMenu] = useState<boolean>(false);
+  const [openLogout, setOpenLogout] = useState<boolean>(false);
+
+  const logoutRef = useRef<HTMLButtonElement>(null);
 
   const eventMenuArray = !userData
     ? ['Upcoming Events']
-    : userData.volunteerType.toString().toLowerCase() === 'admin'
+    : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
       ? ['Browse Events', 'Past Events']
       : ['Browse Events', 'My Upcoming Events', 'My Past Events'];
 
@@ -86,6 +99,18 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const toggleVolunteerMenu = () => {
     setOpenVolunteerMenu((prevOpen) => !prevOpen);
+  };
+
+  const toggleLogoutMenu = () => {
+    setOpenLogout((prevOpen) => !prevOpen);
+  };
+
+  const closeLogoutMenu = () => {
+    setOpenLogout(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(resetUser());
   };
 
   const navigationRender = () => {
@@ -155,7 +180,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             </List>
           </Collapse>
           {userData
-            && userData.volunteerType.toString().toLowerCase() === 'admin'
+            && userData.volunteerType === VOLUNTEER_TYPE.ADMIN
             && volunteerMenu}
         </List>
         <div className={classes.drawerWhitespace} />
@@ -188,10 +213,36 @@ export default function MobileNavBar({ userData }: NavBarProps) {
   };
 
   const loggedInRender = () => {
-    if (!userData || !userData.photoUrl) {
+    if (!userData) {
       return <AccountCircleIcon className={classes.iconSize} color="primary" />;
     }
-    return <Avatar alt={userData.name} src={userData.photoUrl} />;
+
+    const profileIcon = !userData.photoUrl ? (
+      <AccountCircleIcon className={classes.iconSize} color="primary" />
+    ) : (
+      <Avatar alt={userData.name} src={userData.photoUrl} />
+    );
+
+    return (
+      <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
+        {profileIcon}
+        <Popper open={openLogout} anchorEl={logoutRef.current} transition>
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={400}>
+              <Paper>
+                <ClickAwayListener onClickAway={closeLogoutMenu}>
+                  <MenuList>
+                    <MenuItem dense onClick={handleLogout}>
+                      Logout
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Fade>
+          )}
+        </Popper>
+      </IconButton>
+    );
   };
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  AppBar, Toolbar, useMediaQuery, useTheme,
+  AppBar, Divider, Toolbar, useMediaQuery, useTheme,
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { VolunteerData } from 'types/volunteer';
@@ -10,6 +10,10 @@ import MobileNavBar from './navbar-component/MobileNavBar';
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     flexGrow: 1,
+    paddingBottom: 40,
+    [theme.breakpoints.down('sm')]: {
+      paddingBottom: 0,
+    },
   },
 }));
 
@@ -24,7 +28,7 @@ function NavBar({ userData }: NavBarProps) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar elevation={0} position="static" color="transparent">
         <Toolbar>
           {isSmallScreen ? (
             <MobileNavBar userData={userData} />
@@ -33,6 +37,7 @@ function NavBar({ userData }: NavBarProps) {
           )}
         </Toolbar>
       </AppBar>
+      <Divider />
     </div>
   );
 }

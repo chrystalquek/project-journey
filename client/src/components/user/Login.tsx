@@ -1,90 +1,127 @@
-import {
-  Box, Grid, Button, TextField, Typography, Paper,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React, { FC, useEffect } from 'react';
-import Link from 'next/link';
-import { useForm } from 'antd/lib/form/Form';
-import Head from 'next/head';
-import { useRouter } from 'next/dist/client/router';
-import styles from '@styles/auth/login.styles';
+import { Box, Grid, Button, Typography, Paper } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { FC, useEffect, useState } from "react";
+import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/dist/client/router";
+import { Formik, Form, Field } from "formik";
+import { TextField } from "formik-material-ui";
 
-import NavBar from '@components/common/NavBar';
-import Footer from '@components/common/Footer';
-import { LoginArgs } from '@redux/actions/user';
-import { UserState } from '@redux/reducers/user';
+import NavBar from "@components/common/NavBar";
+import Footer from "@components/common/Footer";
+import { LoginArgs } from "@redux/actions/user";
+import { UserState } from "@redux/reducers/user";
 
 const useStyles = makeStyles((theme) => ({
+  content: {
+    padding: "80px auto 0px auto",
+    marginTop: 80,
+    textAlign: "center",
+    minHeight: "90vh",
+  },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
-    color: 'black',
-    textTransform: 'none',
-    padding: '5px 50px',
+    color: "black",
+    textTransform: "none",
+    padding: "5px 50px",
     borderRadius: 20,
-
   },
   pageHeader: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    marginBottom: '40px',
+    fontSize: "32px",
+    fontWeight: "bold",
+    marginBottom: "40px",
   },
   loginButtonContainer: {
-    padding: '20px 0px 20px 0px',
+    padding: "20px 0px 20px 0px",
   },
-  form: {
-
-  },
+  form: {},
   header: {
-    textAlign: 'left',
-    marginTop: '10px',
-    fontWeight: 'bold',
-    fontSize: '14px',
+    textAlign: "left",
+    marginTop: "10px",
+    fontWeight: "bold",
+    fontSize: "14px",
   },
   formContainer: {
-    padding: '20px',
+    minWidth: "400px",
+    maxWidth: "500px",
+    width: "50%",
+    padding: "20px",
+    margin: "auto",
+  },
+  signupText: {
+    fontWeight: "bold",
+    color: "#000",
+  },
+  invalidText: {
+    marginBottom: "10px",
+    color: "#e60026",
   },
 }));
 
 type LoginProps = {
-  user: UserState
-  handleFormSubmit: (formData: LoginArgs) => Promise<void>
-}
+  user: UserState;
+  handleFormSubmit: (formData: LoginArgs) => Promise<void>;
+};
 
-const Login: FC<LoginProps> = ({
-  user,
-  handleFormSubmit,
-}: LoginProps) => {
-  const [form] = useForm();
+const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
   const router = useRouter();
-
+  const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
-  const isFormDisabled = !form.isFieldsTouched(true)
-    || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
   useEffect(() => {
     if (user.token) {
-      router.push('/');
+      router.push("/");
     }
   }, [user]);
 
   useEffect(() => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        router.push('/');
-      }
-    } catch (e) {
-      console.error(e);
+    if (user.status === "rejected") {
+      alert("Login failed");
+    } else if (user.status === "fulfilled") {
+      router.push("/");
     }
-  }, []);
+  }, [user.status]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     const loginArgs: LoginArgs = {
-      email: e.target.email.value,
-      password: e.target.password.value,
+      email: values.email,
+      password: values.password,
     };
-    handleFormSubmit(loginArgs);
+    const response = await handleFormSubmit(loginArgs);
+    // @ts-ignore type exists
+    if (response?.type === "user/login/rejected") {
+      setInvalid(true);
+    }
+  };
+  const InvalidCredentials = (props) => {
+    if (invalid) {
+      return (
+        <Typography className={classes.invalidText}>
+          Invalid email &absp; password
+        </Typography>
+      );
+    }
+    return <></>;
+  };
+
+  const validate = (values) => {
+    const errors: Partial<LoginArgs> = {};
+
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
+    if (!values.email) {
+      errors.email = "Required";
+    } else if (!emailRegex.test(values.email)) {
+      errors.email = "Invalid email address";
+    }
+
+    if (!values.password) {
+      errors.password = "Required";
+    } else if (values.password.length < 8) {
+      errors.password = "Password must contain at least 8 characters";
+    }
+
+    return errors;
   };
 
   return (
@@ -94,60 +131,68 @@ const Login: FC<LoginProps> = ({
       </Head>
       <Box>
         <NavBar userData={null} />
-        <Box style={styles.content}>
-          <Grid container style={styles.rowContent}>
-            <Grid item xs={4}>
-              <Typography className={classes.pageHeader}>Login</Typography>
-              <Paper className={classes.formContainer}>
-                <form className={classes.form} onSubmit={handleSubmit}>
+        <Box className={classes.content}>
+          <Typography className={classes.pageHeader}>Login</Typography>
+          <Paper className={classes.formContainer}>
+            <Formik
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              validate={validate}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting }) => (
+                <Form>
                   <Typography className={classes.header}> Email </Typography>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
+                  <Field
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
                     // required
                     fullWidth
-                    id="email"
-                    label="e.g. username@gmail.com"
-                    name="email"
-                    autoComplete="email"
+                    id='email'
+                    placeholder='e.g. username@gmail.com'
+                    name='email'
+                    autoComplete='email'
                   />
                   <Typography className={classes.header}> Password </Typography>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
+                  <Field
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
                     // required
                     fullWidth
-                    name="password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
+                    name='password'
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
                   />
                   <Grid className={classes.loginButtonContainer}>
+                    <InvalidCredentials />
                     <Button
-                      color="primary"
-                      type="submit"
-                      disabled={isFormDisabled}
+                      color='primary'
+                      type='submit'
+                      disabled={isSubmitting}
                       className={classes.loginButton}
-                      size="large"
+                      size='large'
                     >
                       Log In
                     </Button>
                   </Grid>
-                </form>
-              </Paper>
+                </Form>
+              )}
+            </Formik>
+          </Paper>
 
-              <div className="section">
-                <div>
-                  <span>
-                    Don&apos;t have an account?
-                  </span>
-                </div>
-                <Link href="/auth/signup">
-                  Sign up
-                </Link>
-              </div>
-            </Grid>
-          </Grid>
+          <div className='section'>
+            <div>
+              <Typography>Don&apos;t have an account?</Typography>
+            </div>
+            <Link href='/auth/signup'>
+              <Typography className={classes.signupText}>Sign up</Typography>
+            </Link>
+          </div>
         </Box>
         <Footer />
       </Box>

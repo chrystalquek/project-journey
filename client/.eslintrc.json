@@ -25,6 +25,8 @@
   ],
   "root": true,
   "rules": {
+    // https://github.com/yannickcr/eslint-plugin-react/issues/2353
+    "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",

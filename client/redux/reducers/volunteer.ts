@@ -43,7 +43,7 @@ const volunteerSlice = createSlice({
       payload.data.forEach((volunteer) => state.data[volunteer._id] = {
         ...volunteer,
         birthday: new Date(volunteer.birthday),
-        created_at: new Date(volunteer.created_at),
+        createdAt: new Date(volunteer.createdAt),
       });
       state.meta.currentPageIds = payload.data.map((volunteer) => volunteer._id);
       state.meta.count = payload.count;

@@ -49,7 +49,7 @@ const AccordionDetails = withStyles({
   },
 })(MuiAccordionDetails);
 
-const AdminEventsFilter: FC<AdminEventsFilterProps> = ({ filters, setFilters }
+const EventsFilter: FC<AdminEventsFilterProps> = ({ filters, setFilters }
   : AdminEventsFilterProps) => {
   const [dateExpanded, setDateExpanded] = useState(false);
   const [eventTypeExpanded, setEventTypeExpanded] = useState(false);
@@ -193,4 +193,4 @@ const AdminEventsFilter: FC<AdminEventsFilterProps> = ({ filters, setFilters }
   );
 };
 
-export default AdminEventsFilter;
+export default EventsFilter;
