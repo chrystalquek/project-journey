@@ -7,7 +7,7 @@ import formService from '../services/forms/form';
 import optionsService from '../services/forms/option';
 import questionService from '../services/forms/question';
 import answerService from '../services/forms/answer';
-import { CreateFormQuestionsRequest, QuestionsOptionsRequestData } from '../types';
+import { AnswerFormQuestionsRequest, CreateFormQuestionsRequest, QuestionsOptionsRequestData } from '../types';
 import validation from '../helpers/validation';
 
 export type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
@@ -103,9 +103,15 @@ const getEventFormDetails = async (req: express.Request, res: express.Response) 
 };
 
 const answerFormQuestions = async (req: express.Request, res: express.Response) => {
-  const {
+  let {
+    formId,
     answers,
-  } = req.body;
+  } = req.body as AnswerFormQuestionsRequest;
+
+  answers = answers.map((answer) => ({
+    ...answer,
+    formId,
+  }));
 
   try {
     await answerService.bulkInsertAnswers(answers);

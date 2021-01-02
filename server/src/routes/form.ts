@@ -8,5 +8,6 @@ const protectedRouter = createProtectedRouter(router);
 
 router.post('/', validate(formController.getValidations('createForm')), formController.createForm);
 router.get('/:eventId', validate(formController.getValidations('getFormDetails')), formController.getEventFormDetails);
+router.post('/answer', validate(formController.getValidations('answerForm')), formController.answerFormQuestions);
 
 export default router;

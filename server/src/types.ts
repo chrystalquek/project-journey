@@ -127,9 +127,22 @@ export type QuestionsOptionsRequestData = {
     isRequired: boolean;
     options: Array<{ content: string }>
 }
+
+export type AnswerData = {
+    questionId: string;
+    userId: string;
+    content: string;
+    formId: string;
+}
+
 export interface CreateFormQuestionsRequest {
     eventId: string,
     questions: Array<QuestionsOptionsRequestData>
+}
+
+export interface AnswerFormQuestionsRequest {
+    eventId: string
+    answers: Array<AnswerData>
 }
 
 export type EventData = {
@@ -179,13 +192,6 @@ export type OptionData = {
     id: string
     questionId: string;
     text: string;
-}
-
-export type AnswerData = {
-    questionId: string;
-    userId: string;
-    content: string;
-    formId: string;
 }
 
 /**
