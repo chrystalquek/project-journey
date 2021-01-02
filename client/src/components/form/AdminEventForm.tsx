@@ -55,12 +55,8 @@ const useStyles = makeStyles(() => ({
  * @param time string representing time
  */
 const getDateAndTimeIsoString = (dateDayJs: dayjs.Dayjs, time: string): string => {
-  const date = dateDayJs.toDate();
-  const day = date.getDate();
-  const month = date.getMonth();
-  const year = date.getFullYear();
-  const dateString = `${month}/${day}/${year}`;
-  return new Date(`${dateString} ${time}`).toISOString();
+  const dateDayJsWithoutTime = dateDayJs.format('YYYY-MM-DD');
+  return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
 };
 
 type AdminEventFormProps = {}
