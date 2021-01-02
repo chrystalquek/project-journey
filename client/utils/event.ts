@@ -3,7 +3,7 @@ import { MONTHS } from '@constants/dateMappings';
 import { EventData } from '@type/event';
 
 // Takes a start and end date, parses to human-readable form
-export function parseDate(startDate: Date, endDate: Date) {
+export function parseDate(startDate: string, endDate: string) {
   if (startDate === null || endDate === null) {
     return { date: null, time: null };
   }

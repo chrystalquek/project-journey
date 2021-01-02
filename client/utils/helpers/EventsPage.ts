@@ -7,7 +7,7 @@ import {
 // Contains helper functions for everything related to the events page.
 
 // Takes a start and end date, parses to human-readable form
-export function parseDate(startDate: Date, endDate: Date) {
+export function parseDate(startDate: string, endDate: string) {
   if (startDate === null || endDate === null) {
     return { date: null, time: null };
   }
@@ -51,15 +51,15 @@ export function withFilters(events: Array<EventData>, filters: EventFilterOption
 
 // Getters for events, to future-proof changes to event structure
 function getDate(e: EventData): dayjs.Dayjs {
-  return dayjs(e.start_date);
+  return dayjs(e.startDate);
 }
 
 function getEventType(e: EventData): EventType {
-  return <Event.Volunteering | Event.Workshop | Event.Hangout>e.event_type; // type assertion
+  return <Event.Volunteering | Event.Workshop | Event.Hangout>e.eventType; // type assertion
 }
 
 function getVolunteerType(e: EventData): VolunteerType {
-  return <Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin>e.volunteer_type;
+  return <Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin>e.volunteerType;
 }
 
 // may be null

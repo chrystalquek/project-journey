@@ -1,4 +1,4 @@
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
 export type SignupResponse = {
 

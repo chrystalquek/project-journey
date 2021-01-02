@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 const Event: FC<AdminEventProps> = ({ event }) => {
   const classes = useStyles();
   const { filled, total } = getVacancies(event);
-  const { date, time } = parseDate(event.start_date, event.end_date);
+  const { date, time } = parseDate(event.startDate, event.endDate);
 
   return (
     <Card>

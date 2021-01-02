@@ -1,3 +1,5 @@
+import { EventData } from '@type/event';
+
 export type SignupRequest = {
   name: string
   email: string
@@ -26,3 +28,5 @@ export type QueryParams = {
   size?: number
   [field: string]: any
 }
+
+export type CreateEventRequest = EventData;
