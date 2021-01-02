@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core';
 import Head from '@components/common/Header';
 import NavBar from '@components/common/NavBar';
 import { useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
 
 const AdminCreateEvent = () => {
   const userData = useSelector((state: StoreState) => state.user);
