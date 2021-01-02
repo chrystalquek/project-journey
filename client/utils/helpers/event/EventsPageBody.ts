@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {MONTHS} from '@constants/dateMappings';
 import {Event, EventData, EventFilterOptions, EventFilters, EventType} from '@type/event';
-import {Volunteer, VOLUNTEER_TYPE} from "@type/volunteer";
+import {VOLUNTEER_TYPE} from "@type/volunteer";
 
 // Contains helper functions for everything related to the events page.
 
@@ -63,7 +63,7 @@ function getEventType(e: EventData): EventType {
 }
 
 function getVolunteerType(e: EventData): VOLUNTEER_TYPE {
-  return <Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin>e.volunteer_type;
+  return <VOLUNTEER_TYPE.ADHOC | VOLUNTEER_TYPE.COMMITED | VOLUNTEER_TYPE.ADMIN>e.volunteer_type;
 }
 
 // may be null
@@ -90,10 +90,10 @@ function getVolunteerFilters(f: EventFilterOptions): Array<VOLUNTEER_TYPE> {
   const ret: Array<VOLUNTEER_TYPE> = [];
   const vFilters = f[EventFilters.VOLUNTEERTYPE];
   if (vFilters[EventFilters.ADHOC]) {
-    ret.push(Volunteer.Adhoc);
+    ret.push(VOLUNTEER_TYPE.ADHOC);
   }
   if (vFilters[EventFilters.COMMITTED]) {
-    ret.push(Volunteer.Committed);
+    ret.push(VOLUNTEER_TYPE.COMMITED);
   }
   return ret;
 }

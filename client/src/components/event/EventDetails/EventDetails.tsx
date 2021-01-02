@@ -1,6 +1,6 @@
 import {EventData} from "@type/event";
 import React, {FC} from "react";
-import {Volunteer, VOLUNTEER_TYPE, VolunteerData} from "@type/volunteer";
+import {VOLUNTEER_TYPE, VolunteerData} from "@type/volunteer";
 import EventDetailsUnregistered from "@components/event/EventDetails/EventDetailsUnregistered";
 import EventDetailsCommitted from "@components/event/EventDetails/EventDetailsCommitted";
 import EventDetailsAdhoc from "@components/event/EventDetails/EventDetailsAdhoc";
@@ -14,10 +14,10 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const renderDetails = (volunteerType: VOLUNTEER_TYPE): React.ReactNode => {
     console.log(volunteerType)
     switch (volunteerType) {
-      case Volunteer.Adhoc:
+      case VOLUNTEER_TYPE.ADHOC:
         return <EventDetailsAdhoc event={event} user={user} />
-      case Volunteer.Committed:
-      case Volunteer.Admin:
+      case VOLUNTEER_TYPE.COMMITED:
+      case VOLUNTEER_TYPE.ADMIN:
         return <EventDetailsCommitted event={event} user={user} />
       default:
         // unregistered

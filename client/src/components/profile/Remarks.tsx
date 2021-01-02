@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
+import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
-export default function Remarks({ user }) {
+type props = {
+  user: VolunteerData
+}
+const Remarks: FC<props> = ({ user }) => {
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(user.volunteerRemarks);
   const [adminRemarks, setAdminRemarks] = useState<string>(user.adminRemarks);
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
@@ -61,7 +65,7 @@ export default function Remarks({ user }) {
         />
 
         {/* Admin remarks (only renders for admin) */}
-        {user.status === 'admin' && (
+        {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
         <RemarksTextField
           value={adminRemarks}
           onChange={handleAdminRemarks}
@@ -74,4 +78,6 @@ export default function Remarks({ user }) {
       </Grid>
     </PaddedGrid>
   );
-}
+};
+
+export default Remarks;

@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { FC } from 'react';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import {
   Grid, Typography, Avatar, useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
+import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: theme.palette.primary.main,
-    height: '70px',
-    width: '70px',
+    height: '100px',
+    width: '100px',
   },
   header: {
     textAlign: 'left',
@@ -20,14 +21,18 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     backgroundColor: theme.palette.secondary.light,
-    padding: '12px',
+    padding: '20px',
   },
   personIcon: {
-    fontSize: 40,
+    fontSize: 60,
   },
 }));
 
-export default function ProfileHeader({ user }) {
+type props = {
+  user: VolunteerData
+}
+
+const ProfileHeader: FC<props> = ({ user }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -46,20 +51,20 @@ export default function ProfileHeader({ user }) {
 
       {/* Avatar icon */}
       <Grid item xs={12} sm="auto">
-        <Avatar className={classes.avatar}>
-          <PersonOutlineIcon className={classes.personIcon} />
-        </Avatar>
+        <Avatar alt={user.name} className={classes.avatar} src={user.photoUrl} />
       </Grid>
 
       {/* User details */}
       <Grid item xs={12} sm="auto">
         <Typography variant="h2" className={classes.header}>{user.name}</Typography>
         <Typography className={classes.header}>
-          <strong>Volunteer Status: </strong>
-          {user.status}
+          <strong>Volunteer Type: </strong>
+          {user.volunteerType.toString()}
         </Typography>
-        { user.status === 'ad-hoc volunteer' && <BecomeCommitedDialog /> }
+        { user.volunteerType === VOLUNTEER_TYPE.ADHOC && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );
-}
+};
+
+export default ProfileHeader;

@@ -24,13 +24,13 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { VolunteerState } from '@redux/reducers/volunteer';
-import {Volunteer} from '@type/volunteer';
 import { QueryParams } from '@utils/api/request';
 import {getEnumValues} from '@utils/helpers/TableOptions';
 import RightDrawer from '@components/common/RightDrawer';
 import { UserState } from '@redux/reducers/user';
 import Footer from '../common/Footer';
 import NavBar from '../common/NavBar';
+import {VOLUNTEER_TYPE} from "@type/volunteer";
 
 type VolunteerProfileProps = {
   volunteers: VolunteerState
@@ -74,7 +74,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
   }, []);
 
   // get array of strings from enum
-  const volunteerTypeValues = getEnumValues(Volunteer);
+  const volunteerTypeValues = getEnumValues(VOLUNTEER_TYPE);
 
   const handleFilterVolunteerTypeChange = (event) => {
     getVolunteers({
@@ -110,7 +110,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
               <TableRow key={vol.email}>
                 <TableCell><b>{vol.name}</b></TableCell>
                 <TableCell>{vol.volunteerType}</TableCell>
-                <TableCell>{vol.created_at.toLocaleDateString()}</TableCell>
+                <TableCell>{vol.createdAt.toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>

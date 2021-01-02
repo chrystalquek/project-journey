@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import {
   Button, TextField, Dialog, DialogActions, DialogContent,
   DialogTitle, Link, Typography, Checkbox, useMediaQuery,
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BecomeCommited() {
+const BecomeCommited: FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
   const classes = useStyles();
@@ -162,4 +162,6 @@ export default function BecomeCommited() {
       </Dialog>
     </div>
   );
-}
+};
+
+export default BecomeCommited;

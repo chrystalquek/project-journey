@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,7 +11,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DiscardSaveButtons({ show, onSave, onDiscard }) {
+type props = {
+  show: boolean,
+  onSave: () => void,
+  onDiscard: () => void
+}
+
+const DiscardSaveButtons: FC<props> = ({ show, onSave, onDiscard }) => {
   const classes = useStyles();
 
   return show && (
@@ -47,4 +53,6 @@ export default function DiscardSaveButtons({ show, onSave, onDiscard }) {
     </Grid>
   </Grid>
   );
-}
+};
+
+export default DiscardSaveButtons;

@@ -3,7 +3,7 @@ import {EventData} from "@type/event";
 import {VolunteerData} from "@type/volunteer";
 import {useTheme} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import {Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {Box, Grid} from "@material-ui/core";
 import {testEventImage1} from "@constants/imagePaths";
 import EventInformation from "@components/event/EventDetails/EventInformation";
 import VolunteerRoles from "@components/event/EventDetails/VolunteerRoles";

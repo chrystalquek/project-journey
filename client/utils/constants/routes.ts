@@ -1,1 +1,1 @@
-export const EVENTS_ROUTE = '/event'
+export const EVENTS_ROUTE = '/event';

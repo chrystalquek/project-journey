@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {EventData, VolunteerRole} from "@type/event";
+import {EventData} from "@type/event";
 import {
   Select,
   Box,
