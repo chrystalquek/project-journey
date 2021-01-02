@@ -28,10 +28,10 @@ const DropZoneCard = (prop) => {
         <Card className={classes.root}>
           <Grid item xs={12} container direction="column" alignItems="center" justify="center">
             {/** Padding */}
-            <Grid item xs={prop.isBig === true ? 4 : 3} />
+            <Grid item xs={prop.isBig ? 4 : 3} />
 
             {/** Content */}
-            <Grid item xs={prop.isBig === true ? 4 : 6} container direction="row" alignItems="center" justify="center">
+            <Grid item xs={prop.isBig ? 4 : 6} container direction="row" alignItems="center" justify="center">
               <Grid item container>
                 <Grid item container direction="row" justify="center" xs={12}>
                   <AddAPhotoIcon className={classes.icon} />
@@ -50,7 +50,7 @@ const DropZoneCard = (prop) => {
             </Grid>
 
             {/** Padding */}
-            <Grid item xs={prop.isBig === true ? 4 : 3} />
+            <Grid item xs={prop.isBig ? 4 : 3} />
 
           </Grid>
 

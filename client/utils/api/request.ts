@@ -1,3 +1,5 @@
+import { EventData } from '@type/event';
+
 export type SignupRequest = {
   name: string
   email: string
