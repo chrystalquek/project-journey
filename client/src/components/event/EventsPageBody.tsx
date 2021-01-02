@@ -1,4 +1,3 @@
-import Container from '@material-ui/core/Container';
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import SearchBar from '@components/common/SearchBar';
 import {
@@ -15,7 +14,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
-import {withFilters} from "@utils/helpers/EventsPageBody";
+import {withFilters} from "@utils/helpers/event/EventsPageBody";
 import {useRouter} from "next/router";
 
 type AdminEventsPageProps = {
@@ -79,7 +78,7 @@ const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =>
 
   if (screenXs || screenSm) {
     return (
-      <Container fixed>
+      <>
         <Grid container>
           <Grid item xs={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
           <Grid item container xs={12} direction="row" justify="center" alignItems="center">
@@ -122,11 +121,11 @@ const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =>
             <EventsFilter filters={filters} setFilters={setFilters} />
           </Box>
         </Drawer>
-      </Container>
+      </>
     );
   }
   return (
-    <Container fixed>
+    <>
       <Grid container spacing={2}>
         <Grid item sm={12}><EventBreadCrumbs /></Grid>
         <Grid item container sm={9}>
@@ -160,7 +159,7 @@ const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =>
           <EventsFilter filters={filters} setFilters={setFilters} />
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 };
 

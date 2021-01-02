@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import {VolunteerData, VOLUNTEER_TYPE, Volunteer} from 'types/volunteer';
 import { getVolunteers } from '@redux/actions/volunteer';
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
 
@@ -22,7 +22,7 @@ const initialState: VolunteerState = {
     pageNo: 0,
     count: 0,
     filters: {
-      volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
+      volunteerType: initializeFilterObject(Volunteer),
     },
   },
 };

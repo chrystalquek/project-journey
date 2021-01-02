@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {MONTHS} from '@constants/dateMappings';
-import {Event, EventData, EventFilterOptions, EventFilters, EventType, Volunteer, VolunteerType} from '@type/event';
+import {Event, EventData, EventFilterOptions, EventFilters, EventType} from '@type/event';
+import {Volunteer, VOLUNTEER_TYPE} from "@type/volunteer";
 
 // Contains helper functions for everything related to the events page.
 
@@ -26,18 +27,18 @@ export function parseDate(startDate: Date, endDate: Date) {
   return { date: null, time: null };
 }
 
-// Returns a tuple of (filled vacancies, total vacancies) for an event.
-export function getVacancies(data: EventData) {
+// Returns an object of (filled vacancies, total vacancies) for an event.
+export function getEventVacancies(data: EventData): { filled: number, total: number, remaining: number } {
   if (!data || !data.roles) {
-    return { filled: 0, total: 0 };
+    return { filled: 0, total: 0, remaining: 0 };
   }
-  let total = 0; let
-    filled = 0;
+  let total = 0;
+  let filled = 0;
   data.roles.forEach((o) => {
     total += o.capacity ? o.capacity : 0;
     filled += o.volunteers ? o.volunteers.length : 0;
   });
-  return { filled, total };
+  return { filled, total, remaining: total-filled };
 }
 
 // Filters events based on event type and volunteer type given some filter options
@@ -61,7 +62,7 @@ function getEventType(e: EventData): EventType {
   return <Event.Volunteering | Event.Workshop | Event.Hangout>e.event_type; // type assertion
 }
 
-function getVolunteerType(e: EventData): VolunteerType {
+function getVolunteerType(e: EventData): VOLUNTEER_TYPE {
   return <Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin>e.volunteer_type;
 }
 
@@ -85,8 +86,8 @@ function getEventFilters(f: EventFilterOptions): Array<EventType> {
   return ret;
 }
 
-function getVolunteerFilters(f: EventFilterOptions): Array<VolunteerType> {
-  const ret: Array<VolunteerType> = [];
+function getVolunteerFilters(f: EventFilterOptions): Array<VOLUNTEER_TYPE> {
+  const ret: Array<VOLUNTEER_TYPE> = [];
   const vFilters = f[EventFilters.VOLUNTEERTYPE];
   if (vFilters[EventFilters.ADHOC]) {
     ret.push(Volunteer.Adhoc);

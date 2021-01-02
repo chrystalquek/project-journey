@@ -5,6 +5,7 @@ export type EventData = {
   _id: string;
   name: string;
   event_type: EventType;
+  created_at: Date;
   volunteer_type: VOLUNTEER_TYPE;
   description: string;
   content_url: string;
@@ -17,13 +18,15 @@ export type EventData = {
   deadline: Date;
   additional_information: string;
   capacity: number;
-  volunteers: Array<string>;
-  roles: Array<{
-    volunteers: Array<string>,
-    name: string,
-    description: string,
-    capacity: number,
-  }>
+  roles: Array<VolunteerRole>
+}
+
+export type VolunteerRole = {
+  _id: string,
+  volunteers: Array<string>,
+  name: string,
+  description: string,
+  capacity: number,
 }
 
 // Used in filtering component
@@ -57,5 +60,6 @@ export enum Event {
   Workshop = 'workshop',
   Hangout = 'hangout'
 }
+
 export type EventType = Event.Volunteering | Event.Workshop | Event.Hangout;
 
