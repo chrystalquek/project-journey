@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box';
 import { EventData, EventFilterOptions, EventFilters } from '@type/event';
 import { FC, useEffect, useState } from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useRouter } from 'next/router';
 import { useTheme } from '@material-ui/core/styles';
 import Event from '@components/event/Event';
 import EventsFilter from '@components/event/EventsFilter';
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   const theme = useTheme();
   const classes = useStyles();
+  const router = useRouter();
   const screenSmall = useMediaQuery(theme.breakpoints.only('sm'));
 
   const eventFilters: EventFilterOptions = {
@@ -80,7 +82,7 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
         <Grid container>
           <Grid item sm={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
           <Grid item container sm={12} direction="row" justify="center" alignItems="center">
-            <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
+            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/admin/create-event')}>Create new event</Button>
           </Grid>
           <Grid item container sm={12} justify="space-between">
             <Grid item>
@@ -146,7 +148,7 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
         </Grid>
         <Grid item sm={3}>
           <Box mb={4}>
-            <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
+            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/admin/create-event')}>Create new event</Button>
           </Box>
           <EventsFilter filters={filters} setFilters={setFilters} />
         </Grid>
