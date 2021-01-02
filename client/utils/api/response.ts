@@ -1,5 +1,5 @@
-import { EventData } from '@type/event';
-import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { EventData } from '@types/event';
+import { VolunteerData, VOLUNTEER_TYPE } from '@types/volunteer';
 
 export type LoginResponse = {
   token: string
