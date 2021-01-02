@@ -113,6 +113,9 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
     };
 
     dispatch(createEvent(formToSend));
+    // TODO: Confirm with designers what happens?
+    // I think this should redirect on success to the Event Details page
+    alert('Event Created!');
   };
 
   const handleChange = (event) => {
