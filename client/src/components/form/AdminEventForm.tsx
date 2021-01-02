@@ -81,7 +81,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
     name: '',
     coverImage: '',
     eventType: 'Workshop',
-    volunteerType: 'Committed Only',
+    volunteerType: 'Committed',
     deadline: dayjs(),
     vacancies: 0,
     description: '',
