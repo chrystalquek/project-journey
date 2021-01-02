@@ -1,15 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { PostEventRequest } from '@utils/api/request';
-import { PostEventResponse } from '@utils/api/response';
+import { CreateEventRequest } from '@utils/api/request';
+import { CreateEventResponse } from '@utils/api/response';
 
 import apiClient from '@utils/api/apiClient';
 
-export const postEvent = createAsyncThunk<PostEventResponse, PostEventRequest, {state}>(
+export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequest, {state}>(
   'event',
-  async (data: PostEventRequest) => {
-    const response = await apiClient.postEvent(data) as PostEventResponse;
+  async (data: CreateEventRequest) => {
+    const response = await apiClient.createEvent(data) as CreateEventResponse;
     return response;
   },
 );
 
-export default postEvent;
+export default createEvent;

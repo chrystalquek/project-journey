@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { postEvent } from '@redux/actions/event';
+import { createEvent } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
 
@@ -16,15 +16,15 @@ const eventSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(postEvent.pending, (state) => {
+    builder.addCase(createEvent.pending, (state) => {
       // set loading
     });
 
-    builder.addCase(postEvent.fulfilled, (state, action) => {
+    builder.addCase(createEvent.fulfilled, (state, action) => {
 
     });
 
-    builder.addCase(postEvent.rejected, (state) => {});
+    builder.addCase(createEvent.rejected, (state) => {});
   },
 });
 

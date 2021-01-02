@@ -9,7 +9,7 @@ import {
 import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
 import { useDispatch } from 'react-redux';
-import { postEvent } from '@redux/actions/event';
+import { createEvent } from '@redux/actions/event';
 import dayjs from 'dayjs';
 
 const eventTypes = [
@@ -112,7 +112,7 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
       endDate: getDateAndTimeIsoString(toDate, toTime),
     };
 
-    dispatch(postEvent(formToSend));
+    dispatch(createEvent(formToSend));
   };
 
   const handleChange = (event) => {

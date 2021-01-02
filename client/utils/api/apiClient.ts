@@ -1,16 +1,16 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, PostEventRequest, QueryParams, SignupRequest,
+  LoginRequest, CreateEventRequest, QueryParams, SignupRequest,
 } from './request';
 import {
-  GetAllEventsResponse, GetVolunteersResponse, LoginResponse, PostEventResponse, SignupResponse,
+  GetAllEventsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse, SignupResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
-  postEvent(request: PostEventRequest): Promise<PostEventResponse>
+  createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
   getAllEvents(): Promise<GetAllEventsResponse>
 }
@@ -48,7 +48,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   // admin post event
-  async postEvent(request: PostEventRequest): Promise<{}> {
+  async createEvent(request: CreateEventRequest): Promise<{}> {
     return this.send(request, 'event', 'post');
   }
 

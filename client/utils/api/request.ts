@@ -29,4 +29,4 @@ export type QueryParams = {
   [field: string]: any
 }
 
-export type PostEventRequest = EventData;
+export type CreateEventRequest = EventData;

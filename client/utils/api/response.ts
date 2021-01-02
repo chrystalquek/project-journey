@@ -21,4 +21,4 @@ export type GetVolunteersResponse = {
     volunteerType: Record<VOLUNTEER_TYPE, boolean>
   }
 }
-export type PostEventResponse = {}
+export type CreateEventResponse = {}
