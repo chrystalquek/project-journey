@@ -1,5 +1,5 @@
 import {
-  Box, Grid, Button, TextField, Typography, Divider, Card, CardContent, CardHeader, CardActionArea
+  Box, Grid, Button, TextField, Typography, Divider, Card, CardContent, CardHeader, CardActionArea, useMediaQuery, useTheme
 } from '@material-ui/core'
 import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'antd/lib/form/Form';
@@ -7,13 +7,26 @@ import Head from 'next/head';
 import { useRouter } from 'next/dist/client/router';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
-import styles from '@styles/auth/login.styles';
 import NavBar from '@components/common/NavBar';
 import Footer from '@components/common/Footer';
 import { SignupArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 
 const useStyles = makeStyles((theme) => ({
+  content: {
+    marginTop: 80,
+    textAlign: 'center',
+    minHeight: '90vh',
+    [theme.breakpoints.down('sm')]: {
+      padding: '80px 50px 0px 50px',
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: '80px 100px 0px 100px',
+    }
+  },
+  rowContent: {
+    justifyContent: 'center',
+  },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
     color: "black",
@@ -149,22 +162,32 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
   };
 
   const TextDivider = ({ children }) => {
-    return (
-      <Grid container>
-        <Grid item xs={4} ><Divider className ={classes.dividerLine}/></Grid>
-        <Grid item xs={4} className ={classes.dividerText}>{children}</Grid>
-        <Grid item xs={4} className ={classes.dividerLine}><Divider /></Grid>
-      </Grid>
-    );
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
+    if (isMobile) {
+      return (
+        <Grid container>
+          <Grid item className ={classes.dividerText}>{children}</Grid>
+        </Grid>
+      );
+    } else {
+      return (
+        <Grid container>
+          <Grid item xs={4} ><Divider className ={classes.dividerLine}/></Grid>
+          <Grid item xs={4} className ={classes.dividerText}>{children}</Grid>
+          <Grid item xs={4} className ={classes.dividerLine}><Divider /></Grid>
+        </Grid>
+      );
+    }
   };
 
   const VolunteerType = props => {
     return (
       <Box>
-        <Box style={styles.content}>
+        <Box className={classes.content}>
           <div>
             <Grid container className={classes.signupInstructions}>
-              <Grid item xs={6}>
+              <Grid item md={6}>
                 <p>
                   Yay! We are excited that you are interested to volunteer with us.
                   (information to help the users make a decision)
@@ -201,15 +224,15 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
           </div>
           <div>
             <Grid container className={classes.centerContent}>
-              <Grid item xs={6}>
+              <Grid item sm={6}>
                 <TextDivider>
-                  Sign  Up   As
+                  Sign Up As
                 </TextDivider>
               </Grid>
             </Grid>
             <div className={classes.cardContainer}>
               <Grid container spacing={6} className={classes.centerContent}>
-                <Grid item xs={3}>
+                <Grid item md={3}>
                   <Card className={classes.card} onClick={selectAdhoc}>
                     <CardActionArea>
                       <CardHeader title="Ad-hoc Volunteer" className={classes.cardHeaderAdhoc}/>
@@ -219,7 +242,7 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
                     </CardActionArea>
                   </Card>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item md={3}>
                   <Card className={classes.card} onClick={selectCommitted}>
                     <CardActionArea>
                       <CardHeader title="Regular Volunteer" className={classes.cardHeaderRegular}/>
@@ -246,14 +269,6 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
     );
   }
 
-        <div className="section">
-          Already have an account? <br />
-          <Link href="/auth/login">Log in</Link>
-        </div>
-      </Content>
-    </Layout>
-  );
-
   const InvalidCredentials = (props) => {
     if (invalid) {
       return (
@@ -268,87 +283,84 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
   const VolunteerInfo = (props) => (
     <>
       <Box>
-        <Box style={styles.content}>
-          <Grid container style={styles.rowContent}>
-            <Grid item xs={4}>
-              <Button className={classes.backButton} onClick={prevStep}>
-                Back
-              </Button>
-              <Typography className={classes.pageHeader}>
-                Registration
-              </Typography>
-              <form className={classes.form} onSubmit={handleSubmit}>
-                <Typography className={classes.header}> Name </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  id="name"
-                  label="e.g. John Doe"
-                  name="name"
-                  autoComplete="name"
-                />
-                <Typography className={classes.header}> Email </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  id="email"
-                  label="e.g. username@gmail.com"
-                  name="email"
-                  autoComplete="email"
-                />
-                <Typography className={classes.header}> Password </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  name="password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-                <Typography className={classes.header}>
-                  {" "}
-                  Date of Birth{" "}
-                </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  id="birthday"
-                  name="birthday"
-                  type="date"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <Typography className={classes.header}> Comments </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  multiline
-                  id="comments"
-                  label="e.g. This is a long multiline answer"
-                  name="comments"
-                />
-                <div className="section">
-                  <div>
-                    <span>
-                      By signing up, I agree to the&nbsp;
-                      <Link href="/">Privacy</Link>
-                      &nbsp;and&nbsp;
-                      <Link href="/">Terms of Service</Link>
-                      &nbsp;of Blessings in a Bag
-                    </span>
+        <Box className={classes.content}>
+          <Grid container className={classes.rowContent}>
+            <Grid item lg={6}>
+              <Button className={classes.backButton} onClick={prevStep}>Back</Button>
+              <Typography className={classes.pageHeader}>Registration</Typography>
+                <form className={classes.form} onSubmit={handleSubmit}>
+                  <Typography className={classes.header}> Name </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    id='name'
+                    label="e.g. John Doe"
+                    name='name'
+                    autoComplete='name'
+                  />
+                  <Typography className={classes.header}> Email </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    id='email'
+                    label="e.g. username@gmail.com"
+                    name='email'
+                    autoComplete='email'
+                  />
+                  <Typography className={classes.header}> Password </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    name='password'
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
+                  />
+                  <Typography className={classes.header}> Date of Birth </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    id='birthday'
+                    name='birthday'
+                    type='date'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  <Typography className={classes.header}> Comments </Typography>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    // required
+                    fullWidth
+                    multiline
+                    id='comments'
+                    label="e.g. Additional Comments"
+                    name='comments'
+                  />
+                  <div className="section">
+                    <div>
+                      <span>
+                        By signing up, I agree to the&nbsp;
+                        <Link href="/">
+                        Privacy
+                        </Link>
+                        &nbsp;and&nbsp;
+                        <Link href="/">
+                        Terms of Service
+                        </Link>
+                        &nbsp;of Blessings in a Bag
+                      </span>
+                    </div>
                   </div>
-                </div>
                 <Grid className={classes.loginButtonContainer}>
                   <InvalidCredentials />
                   <Button
