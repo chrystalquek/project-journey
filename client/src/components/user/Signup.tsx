@@ -1,31 +1,43 @@
 import {
-  Box, Grid, Button, TextField, Typography, Divider, Card, CardContent, CardHeader, CardActionArea, useMediaQuery, useTheme
-} from '@material-ui/core'
-import React, { FC, useEffect, useState } from 'react';
-import { useForm } from 'antd/lib/form/Form';
-import Head from 'next/head';
-import { useRouter } from 'next/dist/client/router';
-import { makeStyles } from '@material-ui/core/styles';
-import Link from 'next/link';
-import NavBar from '@components/common/NavBar';
-import Footer from '@components/common/Footer';
-import { SignupArgs } from '@redux/actions/user';
-import { UserState } from '@redux/reducers/user';
+  Box,
+  Grid,
+  Button,
+  TextField,
+  Typography,
+  Divider,
+  Card,
+  CardContent,
+  CardHeader,
+  CardActionArea,
+  useMediaQuery,
+  useTheme,
+} from "@material-ui/core";
+import React, { FC, useEffect, useState } from "react";
+import { useForm } from "antd/lib/form/Form";
+import Head from "next/head";
+import { useRouter } from "next/dist/client/router";
+import { makeStyles } from "@material-ui/core/styles";
+import Link from "next/link";
+import NavBar from "@components/common/NavBar";
+import Footer from "@components/common/Footer";
+import { SignupArgs } from "@redux/actions/user";
+import { UserState } from "@redux/reducers/user";
+import SignUpForm from "@components/form/SignUpForm";
 
 const useStyles = makeStyles((theme) => ({
   content: {
     marginTop: 80,
-    textAlign: 'center',
-    minHeight: '90vh',
-    [theme.breakpoints.down('sm')]: {
-      padding: '80px 50px 0px 50px',
+    textAlign: "center",
+    minHeight: "90vh",
+    [theme.breakpoints.down("sm")]: {
+      padding: "80px 50px 0px 50px",
     },
-    [theme.breakpoints.up('md')]: {
-      padding: '80px 100px 0px 100px',
-    }
+    [theme.breakpoints.up("md")]: {
+      padding: "80px 100px 0px 100px",
+    },
   },
   rowContent: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
@@ -62,39 +74,39 @@ const useStyles = makeStyles((theme) => ({
   },
   invalidText: {
     marginBottom: "10px",
-    color: "#e60026"
+    color: "#e60026",
   },
   dividerLine: {
-    backgroundColor: '#D0DE39',
-    height: 1
+    backgroundColor: "#D0DE39",
+    height: 1,
   },
   dividerText: {
     fontSize: 16,
-    fontWeight: 500
+    fontWeight: 500,
   },
   card: {
-    borderRadius: '10px'
+    borderRadius: "10px",
   },
   cardHeaderAdhoc: {
-    background: '#D0DE39',
-    color: '#fff',
-    borderRadius: '10px 10px 0px 0px'
+    background: "#D0DE39",
+    color: "#fff",
+    borderRadius: "10px 10px 0px 0px",
   },
   cardHeaderRegular: {
-    background: '#00BADC',
-    color: '#fff',
-    borderRadius: '10px 10px 0px 0px'
+    background: "#00BADC",
+    color: "#fff",
+    borderRadius: "10px 10px 0px 0px",
   },
   signupInstructions: {
-    justifyContent: 'center',
-    textAlign: 'left'
+    justifyContent: "center",
+    textAlign: "left",
   },
   centerContent: {
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   cardContainer: {
-    padding: 24
-  }
+    padding: 24,
+  },
 }));
 
 type SignupProps = {
@@ -163,25 +175,33 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
 
   const TextDivider = ({ children }) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
+    const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
     if (isMobile) {
       return (
         <Grid container>
-          <Grid item className ={classes.dividerText}>{children}</Grid>
+          <Grid item className={classes.dividerText}>
+            {children}
+          </Grid>
         </Grid>
       );
     } else {
       return (
         <Grid container>
-          <Grid item xs={4} ><Divider className ={classes.dividerLine}/></Grid>
-          <Grid item xs={4} className ={classes.dividerText}>{children}</Grid>
-          <Grid item xs={4} className ={classes.dividerLine}><Divider /></Grid>
+          <Grid item xs={4}>
+            <Divider className={classes.dividerLine} />
+          </Grid>
+          <Grid item xs={4} className={classes.dividerText}>
+            {children}
+          </Grid>
+          <Grid item xs={4} className={classes.dividerLine}>
+            <Divider />
+          </Grid>
         </Grid>
       );
     }
   };
 
-  const VolunteerType = props => {
+  const VolunteerType = (props) => {
     return (
       <Box>
         <Box className={classes.content}>
@@ -189,33 +209,34 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
             <Grid container className={classes.signupInstructions}>
               <Grid item md={6}>
                 <p>
-                  Yay! We are excited that you are interested to volunteer with us.
-                  (information to help the users make a decision)
-                  Please be reminded that there is a minimum commitment of 3 months
-                  (serving a minimum of 3 sessions a month) in order to have direction
-                  interaction with our learning community (aged 6 to 16 years old).
-                  We have this policy for a number of reasons:
+                  Yay! We are excited that you are interested to volunteer with
+                  us. (information to help the users make a decision) Please be
+                  reminded that there is a minimum commitment of 3 months
+                  (serving a minimum of 3 sessions a month) in order to have
+                  direction interaction with our learning community (aged 6 to
+                  16 years old). We have this policy for a number of reasons:
                   <ul>
                     <li>
                       Limit the emotional trauma in our children that occurs
                       when volunteers come for a few sessions and leave
                     </li>
                     <li>
-                      It takes time for children to warm up to
-                      new faces and it won&apos;t happen instantly.
+                      It takes time for children to warm up to new faces and it
+                      won&apos;t happen instantly.
                     </li>
                     <li>
-                      3 months provides you with the opportunity to witness the progression
-                      and impact you&apos;re making (in yourself and in our children)
+                      3 months provides you with the opportunity to witness the
+                      progression and impact you&apos;re making (in yourself and
+                      in our children)
                     </li>
                     <li>
                       You&apos;ll be journeying with other individuals who share
-                      a commitment and passion for our program.  There are opportunities
-                      to meet new people and develop friendships.
+                      a commitment and passion for our program. There are
+                      opportunities to meet new people and develop friendships.
                     </li>
                     <li>
-                      Allows you time to be on-boarded, mentored
-                      and guided by some incredible WCA Captains on the team.
+                      Allows you time to be on-boarded, mentored and guided by
+                      some incredible WCA Captains on the team.
                     </li>
                   </ul>
                 </p>
@@ -225,9 +246,7 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
           <div>
             <Grid container className={classes.centerContent}>
               <Grid item sm={6}>
-                <TextDivider>
-                  Sign Up As
-                </TextDivider>
+                <TextDivider>Sign Up As</TextDivider>
               </Grid>
             </Grid>
             <div className={classes.cardContainer}>
@@ -235,9 +254,13 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
                 <Grid item md={3}>
                   <Card className={classes.card} onClick={selectAdhoc}>
                     <CardActionArea>
-                      <CardHeader title="Ad-hoc Volunteer" className={classes.cardHeaderAdhoc}/>
+                      <CardHeader
+                        title='Ad-hoc Volunteer'
+                        className={classes.cardHeaderAdhoc}
+                      />
                       <CardContent>
-                        You are only intending to volunteer one-off at Blessings in a Bag
+                        You are only intending to volunteer one-off at Blessings
+                        in a Bag
                       </CardContent>
                     </CardActionArea>
                   </Card>
@@ -245,9 +268,13 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
                 <Grid item md={3}>
                   <Card className={classes.card} onClick={selectCommitted}>
                     <CardActionArea>
-                      <CardHeader title="Regular Volunteer" className={classes.cardHeaderRegular}/>
+                      <CardHeader
+                        title='Regular Volunteer'
+                        className={classes.cardHeaderRegular}
+                      />
                       <CardContent>
-                        You are able to commit to a minimum of 3 months at Blessings in a Bag
+                        You are able to commit to a minimum of 3 months at
+                        Blessings in a Bag
                       </CardContent>
                     </CardActionArea>
                   </Card>
@@ -255,19 +282,15 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
               </Grid>
             </div>
           </div>
-  
-          <div className="section">
-            Already have an account?
-            {' '}
-            <br />
-            <Link href="/auth/login">
-              Log in
-            </Link>
+
+          <div className='section'>
+            Already have an account? <br />
+            <Link href='/auth/login'>Log in</Link>
           </div>
         </Box>
       </Box>
     );
-  }
+  };
 
   const InvalidCredentials = (props) => {
     if (invalid) {
@@ -286,9 +309,14 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
         <Box className={classes.content}>
           <Grid container className={classes.rowContent}>
             <Grid item lg={6}>
-              <Button className={classes.backButton} onClick={prevStep}>Back</Button>
-              <Typography className={classes.pageHeader}>Registration</Typography>
-                <form className={classes.form} onSubmit={handleSubmit}>
+              <Button className={classes.backButton} onClick={prevStep}>
+                Back
+              </Button>
+              <Typography className={classes.pageHeader}>
+                Registration
+              </Typography>
+              <SignUpForm />
+              {/* <form className={classes.form} onSubmit={handleSubmit}>
                   <Typography className={classes.header}> Name </Typography>
                   <TextField
                     variant='outlined'
@@ -373,10 +401,10 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
                     Sign Up
                   </Button>
                 </Grid>
-              </form>
-              <div className="section">
+              </form> */}
+              <div className='section'>
                 Already have an account? <br />
-                <Link href="/auth/login">Log in</Link>
+                <Link href='/auth/login'>Log in</Link>
               </div>
               <br />
             </Grid>
@@ -388,9 +416,13 @@ const Signup: FC<SignupProps> = ({ user, handleFormSubmit }: SignupProps) => {
 
   const VolunteerSignup = (props) => {
     if (currentStep == 0) {
-      return <div><VolunteerType /></div>
+      return (
+        <div>
+          <VolunteerType />
+        </div>
+      );
     } else {
-      return <VolunteerInfo />
+      return <VolunteerInfo />;
     }
     return <VolunteerInfo />;
   };
