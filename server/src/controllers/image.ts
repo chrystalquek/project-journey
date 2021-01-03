@@ -1,12 +1,17 @@
 import express from 'express';
+import {ImageData} from '../types';
 import imageService from '../services/image';
-import { ImageData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 
 const uploadImage = async (req, res: express.Response) => {
   try {
-    await imageService.uploadImage(req);
+    const imageData: ImageData = {
+      email: req.body.email,
+      imageName: req.file.filename,
+      created_at: new Date(Date.now())
+    }
+    await imageService.uploadImage(imageData as ImageData);
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({

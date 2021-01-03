@@ -3,25 +3,26 @@ import { ImageData } from '../types';
 import Image from '../models/Image';
 import { Storage } from '@google-cloud/storage';
 
-const storage = new Storage({
-  keyFilename: "/Users/akhilvuputuri/journey/server/journey-288113-eab6b12d2e1b.json",
-  projectId: "journey-288113"
-})
+const storage = new Storage()
 
-const uploadImage = async (req): Promise<void> => {
+const uploadImage = async (imageData: ImageData): Promise<void> => {
   try {
-    // 1. Upload to GCS Bucket
-    console.log("Path is " + "./uploads/" + req.file.filename);
-    console.log("Current dir is" + __dirname);
-    const filepath = "./uploads/" + req.file.filename
+    // 1. GCS Storage
+    const filepath = "./uploads/" + imageData.imageName
     await storage.bucket('journey-storage').upload(filepath, {
       gzip: true,
       metadata: {
         cacheControl: 'no-cache',
       },
-
-      // 2. Save image address in bucket in MongoDB
     });
+
+    // 2. MongoDB
+    const imageSchemaData = new Image({
+      _id: new mongoose.Types.ObjectId(),
+      email: imageData.email,
+      imageName: imageData.imageName,
+    });
+    await imageSchemaData.save().then(created => console.info(`Created ${created}`));
   } catch (err) {
     throw new Error(err.msg);
   }
