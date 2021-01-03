@@ -73,7 +73,8 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
   const filteredEvents = withFilters(events || [], filters);
 
   useEffect(() => {
-    getAdminEvents();
+    getAdminEvents(); // TODO need to put volunteerType
+    // http://localhost:5000/volunteer/?pageNo=0&size=10&volunteerType=%2Cad-hoc%2Ccommitted%2Clead%2Cadmin
   }, []);
 
   if (screenSmall) {
@@ -89,8 +90,8 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
               <Box className={classes.box} fontWeight="bold">
                 <Typography display="inline" color="secondary">
                   {
-                  events ? events.length : 0
-}
+                    events ? events.length : 0
+                  }
                 </Typography>
                 {' '}
                 Upcoming Events
@@ -132,7 +133,7 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
               <Typography display="inline" color="secondary">
                 {
                   events ? events.length : 0
-}
+                }
               </Typography>
               {' '}
               Upcoming Events

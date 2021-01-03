@@ -1,7 +1,7 @@
 import { keysToCamel } from '@utils/helpers/converter';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, QueryParams, SignupRequest,
+  LoginRequest, CreateEventRequest, QueryParams, SignUpRequest,
 } from './request';
 import {
   GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse, SignUpResponse,
@@ -34,7 +34,7 @@ class AxiosApiClient implements ApiClient {
   private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
 
   // create user
-  async signup(request: SignupRequest): Promise<SignUpResponse> {
+  async signUp(request: SignUpRequest): Promise<SignUpResponse> {
     return this.send(request, 'volunteer', 'post');
   }
 

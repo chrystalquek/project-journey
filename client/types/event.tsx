@@ -1,5 +1,24 @@
 import dayjs from 'dayjs';
 
+export type EventPostData = {
+  name: string;
+  coverImage?: string; // TODO: change to appropriate type
+  eventType: string;
+  volunteerType: string;
+  startDate: string;
+  endDate: string;
+  deadline: string;
+  vacancies: number;
+  description: string;
+  facilitatorName?: string;
+  facilitatorPhoto?: string;
+  facilitatorDescription?: string;
+  roles?: Array<RoleData>;
+  contentUrl?: string;
+  contentType?: string;
+  location: string;
+}
+
 export type EventData = {
   _id: string,
   name: string;

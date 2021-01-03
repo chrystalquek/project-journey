@@ -1,9 +1,9 @@
 import { rowsPerPage } from '@components/volunteer/VolunteerProfile';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { QueryParams } from '@utils/api/request';
 import { convertFilterObjectToQueryString } from '@utils/helpers/TableOptions';
-import { QueryParams } from 'api/request';
-import { GetCountResponse, GetVolunteersResponse } from 'api/response';
-import apiClient from '../../api/apiClient';
+import { GetCountResponse, GetVolunteersResponse } from '@utils/api/response';
+import apiClient from '@utils/api/apiClient';
 
 export const getVolunteers = createAsyncThunk<GetVolunteersResponse, QueryParams, { state }>(
   'volunteer/getVolunteers',
@@ -13,7 +13,7 @@ export const getVolunteers = createAsyncThunk<GetVolunteersResponse, QueryParams
   },
 );
 
-export const getPendingVolunteers = createAsyncThunk<GetCountResponse, void, { state }>(
+export const getPendingVolunteersPendingApproval = createAsyncThunk<GetCountResponse, void, { state }>(
   'volunteer/getPendingVolunteers',
   async () => {
     const response = await apiClient.getPendingVolunteers();

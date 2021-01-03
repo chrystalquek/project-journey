@@ -1,6 +1,9 @@
 import { makeStyles, Grid, Card, CardContent, Typography } from '@material-ui/core';
-import { GetCountResponse } from 'api/response';
+import { StoreState } from '@redux/store';
 import React, { FC, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPendingSignUpsPendingApproval } from '@redux/actions/signUp';
+import { getPendingVolunteersPendingApproval } from '@redux/actions/volunteer';
 
 const useStyles = makeStyles((theme) => ({
     shapeCircle: {
@@ -17,25 +20,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type PendingApprovalProps = {
-    getPendingSignUps: () => Promise<{ payload: GetCountResponse }>,
-    getPendingVolunteers: () => Promise<{ payload: GetCountResponse }>
-}
-
-const PendingApproval: FC<PendingApprovalProps> = ({
-    getPendingSignUps,
-    getPendingVolunteers
-}: PendingApprovalProps) => {
+const PendingApproval: FC<{}> = ({
+}) => {
     const classes = useStyles();
+
+    const dispatch = useDispatch();
 
     // Only load on initial render to prevent infinite loop
     useEffect(() => {
-        getPendingSignUps().then((resp) => setPendingSignUpCount(resp.payload.count));
-        getPendingVolunteers().then((resp) => setPendingVolunteerCount(resp.payload.count));
+        dispatch(getPendingSignUpsPendingApproval());
+        dispatch(getPendingVolunteersPendingApproval())
     }, []);
 
-    const [pendingSignUpCount, setPendingSignUpCount] = React.useState(0);
-    const [pendingVolunteerCount, setPendingVolunteerCount] = React.useState(0);
+    const pendingSignUpCount = useSelector((state: StoreState) => state.signUp).pendingApproval.pendingSignUpCount;
+    const pendingVolunteerCount = useSelector((state: StoreState) => state.volunteer).pendingApproval.pendingVolunteerCount;
 
     return (<Card><CardContent>
         <Grid container direction="row">

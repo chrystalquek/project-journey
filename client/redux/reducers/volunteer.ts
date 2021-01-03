@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
-import { getVolunteers } from '@redux/actions/volunteer';
+import { getPendingVolunteersPendingApproval, getVolunteers } from '@redux/actions/volunteer';
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
 
 export type VolunteerState = {
   data: Record<string, VolunteerData>;
+  pendingApproval: {
+    pendingVolunteerCount: number
+  }
   meta: {
     currentPageIds: Array<string>
     pageNo: number,
@@ -17,6 +20,9 @@ export type VolunteerState = {
 
 const initialState: VolunteerState = {
   data: {},
+  pendingApproval: {
+    pendingVolunteerCount: 0
+  },
   meta: {
     currentPageIds: [],
     pageNo: 0,
@@ -53,6 +59,12 @@ const volunteerSlice = createSlice({
     builder.addCase(getVolunteers.rejected, (state) => {
       state.meta.currentPageIds = [];
     });
+
+    builder.addCase(getPendingVolunteersPendingApproval.fulfilled, (state, action) => {
+      const { payload } = action;
+      state.pendingApproval.pendingVolunteerCount = payload.count
+    });
+
   },
 });
 

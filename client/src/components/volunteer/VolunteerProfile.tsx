@@ -26,7 +26,6 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { VolunteerState } from '@redux/reducers/volunteer';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 import { QueryParams } from '@utils/api/request';
-import { getEnumKeys } from '@utils/helpers/TableOptions';
 import RightDrawer from '@components/common/RightDrawer';
 import { UserState } from '@redux/reducers/user';
 import Footer from '../common/Footer';
@@ -134,7 +133,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       {openFilter
         && (
           <FormGroup>
-            {getEnumKeys(VOLUNTEER_TYPE).map((volunteerType) => (
+            {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
               <FormControlLabel
                 control={<Checkbox checked={volunteers.meta.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
                 label={capitalize(volunteerType)}

@@ -1,29 +1,28 @@
 import Head from '@components/common/Header';
 import NavBar from '@components/common/NavBar';
 import PaddedGrid from '@components/common/PaddedGrid';
-import PendingApproval from '@containers/home/PendingApproval';
-import UpcomingEvent from '@containers/home/UpcomingEvent';
+import PendingApproval from '@components/home/PendingApproval';
+import UpcomingEvent from '@components/home/UpcomingEvent';
 import { Grid, useMediaQuery, useTheme } from '@material-ui/core';
 import { Footer } from 'antd/lib/layout/layout';
 import React, { FC } from 'react';
-import { UserState } from '@redux/reducers/user';
 import { isAdmin } from '@utils/helpers/auth';
+import { StoreState } from '@redux/store';
+import { useSelector } from 'react-redux';
 
-type HomeProps = {
-    user: UserState
-}
 
-const Home: FC<HomeProps> = ({
-    user
-}: HomeProps) => {
+const Home: FC<{}> = ({
+}) => {
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
+    const user = useSelector((state: StoreState) => state.user);
+
     return (
         <>
             <Head title="Blessings in a Bag" />
-            <NavBar />
+            <NavBar userData={user.user} />
 
             <PaddedGrid>
                 {isMobile ?

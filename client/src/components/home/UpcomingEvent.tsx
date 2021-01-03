@@ -1,12 +1,13 @@
 import { makeStyles, Grid, Card, CardContent, Typography } from '@material-ui/core';
-import { EventState } from '@redux/reducers/event';
-import { SignUpState } from '@redux/reducers/signUp';
-import { UserState } from '@redux/reducers/user';
 import { isAdmin } from '@utils/helpers/auth';
-import { QueryParams } from 'api/request';
-import { GetSignUpsResponse, GetEventsResponse } from 'api/response';
 import React, { FC, useEffect } from 'react';
 import { EventData } from 'types/event';
+import { StoreState } from '@redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
+import { getSignUpsUpcomingEvent } from '@redux/actions/signUp';
+import { MONTHS, formatAMPM, formatDateStartEndTime } from '@utils/helpers/date';
+import dummyUser from '@constants/dummyUser';
 
 const useStyles = makeStyles((theme) => ({
     pane: {
@@ -27,68 +28,46 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-type UpcomingEventProps = {
-    user: UserState,
-    events: EventState,
-    signUps: SignUpState,
-    getSignUps: (query: QueryParams) => Promise<{ payload: GetSignUpsResponse }>,
-    getSignedUpEvents: (query: QueryParams) => Promise<{ payload: GetEventsResponse }>,
-    getEvents: (query: QueryParams) => Promise<{ payload: GetEventsResponse }>,
-}
 
+const UpcomingEvent: FC<{}> = ({
 
-const UpcomingEvent: FC<UpcomingEventProps> = ({
-    user,
-    events,
-    signUps,
-    getSignUps,
-    getSignedUpEvents,
-    getEvents,
-}: UpcomingEventProps) => {
+}: {}) => {
     const classes = useStyles();
+    const dispatch = useDispatch()
+
+    const user = useSelector((state: StoreState) => state.user);
 
     useEffect(() => {
         if (isAdmin(user)) {
-            getEvents({ eventType: 'upcoming' }).then((resp) => setEventIds(resp.payload.data.map(event => event._id)));
+            dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }))
         } else {
-            getSignedUpEvents({ eventType: 'upcoming', userId: user.user._id }).then((resp) => setEventIds(resp.payload.data.map(event => event._id)));
-            getSignUps({ id: user.user._id, idType: 'userId' }).then((resp) => setSignUpIds(resp.payload.data.map(signUp => signUp._id)));
+            dispatch(getSignedUpEventsUpcomingEvent({ eventType: 'upcoming', userId: user.user?._id }))
+            dispatch(getSignUpsUpcomingEvent({ id: user.user?._id, idType: 'userId' }))
         }
     }, []);
 
-    const [eventIds, setEventIds] = React.useState([]); // event list for both admin and volunteer
+    const events = useSelector((state: StoreState) => state.event)
+    const signUps = useSelector((state: StoreState) => state.signUp)
 
-    const upcomingEvents = eventIds.map(id => events.data[id]);
+    const upcomingEventsIds = events.upcomingEvent.ids;
+    const upcomingSignUpsIds = signUps.upcomingEvent.ids;
 
-
-    const [signUpIds, setSignUpIds] = React.useState([]);
-    const upcomingSignUps = signUpIds.map(id => signUps.data[id]);
-
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"];
-
-    function formatAMPM(date) {
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        var strTime = hours + ':' + minutes + ' ' + ampm;
-        return strTime;
-    }
+    const upcomingEvents = upcomingEventsIds.map(id => events.data[id])
+    const upcomingSignUps = upcomingSignUpsIds.map(id => signUps.data[id])
 
     const generateNotification = (event: EventData) => {
         if (isAdmin(user)) {
             const moreVolunteersCount = event.roles.map(role => role.capacity - role.volunteers.length).reduce((a, b) => a + b, 0);
             return <Typography className={(moreVolunteersCount > 0) ? classes.greenText : classes.orangeText}>{moreVolunteersCount} more volunteers needed</Typography>;
         } else {
-            const status = upcomingSignUps.find(signUp => signUp.eventId == event._id).status; // will definitely be found in signUps
+            const status = upcomingSignUps.find(signUp => signUp.eventId == event._id)?.status || 'unknown';
             switch (status) {
                 case 'pending':
                     return <Typography><i>Sign-up pending</i></Typography>
                 case 'rejected':
                     return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>
+                case 'unknown':
+                    return <Typography>-</Typography>
                 default:
                     const roleAssigned = status[1];
                     return <Typography className={classes.greenText}>Volunteer role assigned - {roleAssigned}</Typography>;
@@ -97,12 +76,12 @@ const UpcomingEvent: FC<UpcomingEventProps> = ({
         }
     }
 
-    return (<Grid className={classes.pane}><Typography className={classes.header} variant='h4' align="center">{isAdmin(user) ? "" : "My"}Upcoming Events</Typography>
+    return (<Grid className={classes.pane}><Typography className={classes.header} variant='h4' align="center">{isAdmin(user) ? "" : "My "}Upcoming Events</Typography>
         {upcomingEvents.map(event =>
             <Card className={classes.card} key={event._id}><CardContent>
-                <Typography>{event.startDate.getDate() + " " + monthNames[event.startDate.getMonth()] + " " + event.startDate.getFullYear()}</Typography>
+                <Typography>{formatDateStartEndTime(event.startDate, event.endDate).date}</Typography>
                 <Typography variant='h4'>{event.name}</Typography>
-                <Typography>Time: {formatAMPM(event.startDate)} - {formatAMPM(event.endDate)}</Typography>
+                <Typography>Time: {formatDateStartEndTime(event.startDate, event.endDate).time}</Typography>
                 {generateNotification(event)}
             </CardContent></Card>)}</Grid>);
 }
