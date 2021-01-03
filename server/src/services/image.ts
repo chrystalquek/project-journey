@@ -7,22 +7,25 @@ const storage = new Storage()
 
 const uploadImage = async (imageData: ImageData): Promise<void> => {
   try {
-    // 1. GCS Storage
     const filepath = "./uploads/" + imageData.imageName
-    await storage.bucket('journey-storage').upload(filepath, {
+    const returnVal = await storage.bucket('journey-storage').upload(filepath, {
       gzip: true,
       metadata: {
         cacheControl: 'no-cache',
       },
     });
-
-    // 2. MongoDB
-    const imageSchemaData = new Image({
+    try {
+      const url = returnVal[1].mediaLink;
+      const imageSchemaData = new Image({
       _id: new mongoose.Types.ObjectId(),
       email: imageData.email,
       imageName: imageData.imageName,
+      url: url
     });
     await imageSchemaData.save().then(created => console.info(`Created ${created}`));
+    } catch (err) {
+      throw new Error(err.msg)
+    }
   } catch (err) {
     throw new Error(err.msg);
   }
