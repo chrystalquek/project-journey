@@ -189,7 +189,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     {/* Requires changes for the router */}
                     <MenuItem
                       onClick={() => {
-                        router.push('/volunteer');
+                        router.push('/volunteer/volunteerprofiles');
                       }}
                     >
                       Volunteer Profiles
