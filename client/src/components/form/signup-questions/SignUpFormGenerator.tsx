@@ -42,10 +42,12 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
           />
         );
       case 'shortAnswer':
+      case 'password':
         return (
           <Field
             component={TextField}
             variant="outlined"
+            type={formType === 'password' ? formType : 'text'}
             name={name}
             fullWidth
           />
@@ -119,10 +121,21 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
                   : null;
 
                 return (
-                  <Fragment key={questionItem.displayText}>
-                    <Typography>{displayText}</Typography>
+                  <div
+                    key={questionItem.displayText}
+                    style={{
+                      marginBottom: '32px',
+                    }}
+                  >
+                    <Typography style={{
+                      marginBottom: '16px',
+                    }}
+                    >
+                      {displayText}
+
+                    </Typography>
                     <FormQuestionMapper formType={type} name={name} options={options} />
-                  </Fragment>
+                  </div>
                 );
               })}
               <Button

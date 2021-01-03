@@ -1,9 +1,10 @@
 export type InputType =
-  | "shortAnswer"
-  | "longAnswer"
-  | "checkboxes"
-  | "date"
-  | "mcq";
+  | 'shortAnswer'
+  | 'longAnswer'
+  | 'checkboxes'
+  | 'date'
+  | 'mcq'
+  | 'password';
 
 export type OptionType = { value: string; label: string };
 
