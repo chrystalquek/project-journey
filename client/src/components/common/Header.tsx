@@ -1,8 +1,13 @@
 import Head from 'next/head';
-import { favicon } from '@utils/constants/imagePaths';
+import { favicon } from '@constants/imagePaths';
+import { FC } from 'react';
+
+type HeaderProps = {
+  title: string,
+};
 
 // https://nextjs.org/docs/api-reference/next/head
-const Header = ({ title }) => (
+const Header: FC<HeaderProps> = ({ title }) => (
   <Head>
     <title>{title}</title>
     <link rel="icon" href={favicon} />

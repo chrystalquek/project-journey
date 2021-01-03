@@ -1,7 +1,7 @@
-import { TextField } from "@material-ui/core";
-import React, { FC, useCallback, useState } from "react";
-import SearchIcon from "@material-ui/icons/Search";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import { TextField } from '@material-ui/core';
+import React, { FC, useCallback, useState } from 'react';
+import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 // Pass the function that updates the 'filter' value to filter your content
 type SearchBarProps = {
@@ -13,7 +13,7 @@ function SearchBar({ setFilterFunction }: SearchBarProps) {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setFilterFunction(e.target.value);
     },
-    []
+    [],
   );
 
   return (

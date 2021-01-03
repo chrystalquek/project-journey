@@ -1,12 +1,17 @@
 import { keysToCamel } from '@utils/helpers/converter';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LoginRequest, QueryParams } from './request';
-import { GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse } from './response';
+import {
+  LoginRequest, CreateEventRequest, QueryParams, SignupRequest,
+} from './request';
+import {
+  GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse, SignUpResponse,
+} from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
+  createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
   getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
   getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
@@ -26,8 +31,11 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
-  private toURLParams = (query: QueryParams) => {
-    return "?" + new URLSearchParams(query).toString();
+  private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+
+  // create user
+  async signup(request: SignupRequest): Promise<SignUpResponse> {
+    return this.send(request, 'volunteer', 'post');
   }
 
   // user auth
@@ -40,22 +48,30 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
+  // sign up
   async getSignUps(query: QueryParams): Promise<GetSignUpsResponse> {
     return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
-  }
-
-  async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
-    return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
-  }
-
-  async getEvents(query: QueryParams): Promise<GetEventsResponse> {
-    return this.send({}, `event/multiple/${query.eventType}`, 'get');
   }
 
   async getPendingSignUps(): Promise<GetCountResponse> {
     return this.send({}, `signup/pending`, 'get');
   }
 
+  // event
+  async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
+    return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
+  }
+
+  // admin post event
+  async createEvent(request: CreateEventRequest): Promise<{}> {
+    return this.send(request, 'event', 'post');
+  }
+
+  async getEvents(query: QueryParams): Promise<GetEventsResponse> {
+    return this.send({}, `event/multiple/${query.eventType}`, 'get');
+  }
+
+  // volunteer
   async getPendingVolunteers(): Promise<GetCountResponse> {
     return this.send({}, `volunteer/pending`, 'get');
   }

@@ -25,6 +25,8 @@
   ],
   "root": true,
   "rules": {
+    // https://github.com/yannickcr/eslint-plugin-react/issues/2353
+    "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
@@ -37,6 +39,7 @@
     "no-param-reassign": 0,
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     // https://stackoverflow.com/questions/35637770/how-to-avoid-no-param-reassign-when-setting-a-property-on-a-dom-object
+    "linebreak-style": 0,
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -50,6 +53,19 @@
   },
   "settings": {
     "import/resolver": {
+      // https://stackoverflow.com/questions/56548928/eslint-resolve-error-on-imports-using-with-path-mapping-configured-jsconfig-json
+      "alias": {
+        "map" : [
+          ["@components", "./src/components/"],
+          ["@containers", "./src/containers/"],
+          ["@constants", "./utils/constants/"],
+          ["@redux", "./redux/"],
+          ["@utils", "./utils/"],
+          ["@public", "./public/"],
+          ["@type", "./types/"]
+        ],
+        "extensions": [".js",".jsx",".ts",".tsx"]
+      },
       "node": {
         "extensions": [".js",".jsx",".ts",".tsx"]
       }

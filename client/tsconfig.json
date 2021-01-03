@@ -4,9 +4,11 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@containers/*": ["src/containers/*"],
-      "@utils/*": ["utils/*"],
+      "@constants/*": ["utils/constants/*"],
       "@redux/*": ["redux/*"],
+      "@utils/*": ["utils/*"],
       "@public/*": ["public/*"],
+      "@type/*": ["types/*"],
       "@styles/*": ["styles/*"]
     },
     "target": "es5",

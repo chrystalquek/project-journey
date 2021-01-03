@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { QueryParams } from 'api/request';
-import { GetEventsResponse } from 'api/response';
-import apiClient from '../../api/apiClient';
+import { CreateEventRequest, QueryParams } from '@utils/api/request';
+import { CreateEventResponse, GetEventsResponse } from '@utils/api/response';
+import apiClient from '@utils/api/apiClient';
 
 export const getSignedUpEvents = createAsyncThunk<GetEventsResponse, QueryParams, { state }>(
   'event/getSignedUpEvents',
@@ -18,3 +18,13 @@ export const getEvents = createAsyncThunk<GetEventsResponse, QueryParams, { stat
     return response;
   }
 )
+
+export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequest, { state }>(
+  'event',
+  async (data: CreateEventRequest) => {
+    const response = await apiClient.createEvent(data) as CreateEventResponse;
+    return response;
+  },
+);
+
+export default createEvent;

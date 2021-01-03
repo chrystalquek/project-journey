@@ -2,6 +2,10 @@ import { EventData } from "types/event"
 import { SignUpData } from "types/signUp"
 import { VolunteerData, VOLUNTEER_TYPE } from "types/volunteer"
 
+export type SignupResponse = {
+
+}
+
 export type LoginResponse = {
   token: string
 }

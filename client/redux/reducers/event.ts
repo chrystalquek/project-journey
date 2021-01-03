@@ -1,5 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { getEvents, getSignedUpEvents } from '@redux/actions/event';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createEvent, getEvents, getSignedUpEvents } from '@redux/actions/event';
+
 import { EventData } from 'types/event';
 
 export type EventState = {
@@ -49,6 +50,15 @@ const eventSlice = createSlice({
     builder.addCase(getSignedUpEvents.rejected, (state) => {
     });
 
+    builder.addCase(createEvent.pending, (state) => {
+      // set loading
+    });
+
+    builder.addCase(createEvent.fulfilled, (state, action) => {
+
+    });
+
+    builder.addCase(createEvent.rejected, (state) => { });
   },
 });
 
