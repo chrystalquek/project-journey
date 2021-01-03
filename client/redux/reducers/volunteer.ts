@@ -8,8 +8,8 @@ export type VolunteerState = {
   pendingApproval: {
     pendingVolunteerCount: number
   }
-  meta: {
-    currentPageIds: Array<string>
+  volunteerProfile: {
+    ids: Array<string>
     pageNo: number,
     count: number
     filters: {
@@ -23,8 +23,8 @@ const initialState: VolunteerState = {
   pendingApproval: {
     pendingVolunteerCount: 0
   },
-  meta: {
-    currentPageIds: [],
+  volunteerProfile: {
+    ids: [],
     pageNo: 0,
     count: 0,
     filters: {
@@ -32,6 +32,15 @@ const initialState: VolunteerState = {
     },
   },
 };
+
+// parse all Dates etc before saving to store
+const addToData = (volunteers: Array<VolunteerData>, state: VolunteerState) => {
+  volunteers.forEach((volunteer) => state.data[volunteer._id] = {
+    ...volunteer,
+    birthday: new Date(volunteer.birthday),
+    createdAt: new Date(volunteer.createdAt),
+  });
+}
 
 const volunteerSlice = createSlice({
   name: 'volunteer',
@@ -41,23 +50,18 @@ const volunteerSlice = createSlice({
     // Simplify immutable updates with redux toolkit
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getVolunteers.pending, (state) => {
-      state.meta.currentPageIds = [];
+      state.volunteerProfile.ids = [];
     });
     builder.addCase(getVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
-      // normalize from array to object structure
-      payload.data.forEach((volunteer) => state.data[volunteer._id] = {
-        ...volunteer,
-        birthday: new Date(volunteer.birthday),
-        createdAt: new Date(volunteer.createdAt),
-      });
-      state.meta.currentPageIds = payload.data.map((volunteer) => volunteer._id);
-      state.meta.count = payload.count;
-      state.meta.pageNo = payload.pageNo;
-      state.meta.filters.volunteerType = payload.filters.volunteerType;
+      addToData(payload.data, state)
+      state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
+      state.volunteerProfile.count = payload.count;
+      state.volunteerProfile.pageNo = payload.pageNo;
+      state.volunteerProfile.filters.volunteerType = payload.filters.volunteerType;
     });
     builder.addCase(getVolunteers.rejected, (state) => {
-      state.meta.currentPageIds = [];
+      state.volunteerProfile.ids = [];
     });
 
     builder.addCase(getPendingVolunteersPendingApproval.fulfilled, (state, action) => {

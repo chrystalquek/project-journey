@@ -22,6 +22,13 @@ const initialState: SignUpState = {
   }
 };
 
+// parse all Dates etc before saving to store
+const addToData = (signUps: Array<SignUpData>, state: SignUpState) => {
+  signUps.forEach(signUp => state.data[signUp._id] = {
+    ...signUp,
+  });
+}
+
 const signUpSlice = createSlice({
   name: 'signUp',
   initialState,
@@ -31,8 +38,7 @@ const signUpSlice = createSlice({
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
-      // normalize from array to object structure
-      payload.data.forEach(signUp => state.data[signUp._id] = signUp)
+      addToData(payload.data, state)
     });
     builder.addCase(getPendingSignUpsPendingApproval.fulfilled, (state, action) => {
       const { payload } = action;

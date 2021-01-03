@@ -18,6 +18,16 @@ const initialState: EventState = {
   }
 };
 
+// parse all Dates etc before saving to store
+const addToData = (events: Array<EventData>, state: EventState) => {
+  events.forEach(event => state.data[event._id] = {
+    ...event,
+    startDate: new Date(event.startDate),
+    endDate: new Date(event.endDate),
+    deadline: new Date(event.deadline),
+  });
+}
+
 const eventSlice = createSlice({
   name: 'event',
   initialState,
@@ -27,24 +37,12 @@ const eventSlice = createSlice({
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getEventsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
-      // normalize from array to object structure
-      payload.data.forEach(event => state.data[event._id] = {
-        ...event,
-        startDate: new Date(event.startDate),
-        endDate: new Date(event.endDate),
-        deadline: new Date(event.deadline),
-      });
+      addToData(payload.data, state);
       state.upcomingEvent.ids = payload.data.map(event => event._id)
     });
     builder.addCase(getSignedUpEventsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
-      // normalize from array to object structure
-      payload.data.forEach(event => state.data[event._id] = {
-        ...event,
-        startDate: new Date(event.startDate),
-        endDate: new Date(event.endDate),
-        deadline: new Date(event.deadline),
-      });
+      addToData(payload.data, state);
       state.upcomingEvent.ids = payload.data.map(event => event._id)
     });
 

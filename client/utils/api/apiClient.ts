@@ -1,4 +1,3 @@
-import { keysToCamel } from '@utils/helpers/converter';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
   LoginRequest, CreateEventRequest, QueryParams, SignUpRequest,
@@ -89,7 +88,7 @@ class AxiosApiClient implements ApiClient {
 
     switch (method) {
       case 'get':
-        return keysToCamel((await this.axiosInstance.get(path, config)).data);
+        return (await this.axiosInstance.get(path, config)).data;
       case 'post':
         return (await this.axiosInstance.post(path, request, config)).data;
       case 'put':

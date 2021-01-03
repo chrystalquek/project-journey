@@ -14,7 +14,7 @@ export const getVolunteers = createAsyncThunk<GetVolunteersResponse, QueryParams
 );
 
 export const getPendingVolunteersPendingApproval = createAsyncThunk<GetCountResponse, void, { state }>(
-  'volunteer/getPendingVolunteers',
+  'volunteer/getPendingVolunteersPendingApproval',
   async () => {
     const response = await apiClient.getPendingVolunteers();
     return response;

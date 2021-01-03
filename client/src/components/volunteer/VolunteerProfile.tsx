@@ -65,7 +65,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const { volunteerType } = volunteers.meta.filters; // get filter object
+  const { volunteerType } = volunteers.volunteerProfile.filters; // get filter object
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
@@ -88,7 +88,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
     getVolunteers({ pageNo: newPage, volunteerType });
   };
 
-  const currentPageVolunteers = volunteers.meta.currentPageIds.map((id) => volunteers.data[id]);
+  const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
 
   const volunteerTable = (
     <>
@@ -115,9 +115,9 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       <TablePagination
         rowsPerPageOptions={[rowsPerPage]}
         component="div"
-        count={volunteers.meta.count}
+        count={volunteers.volunteerProfile.count}
         rowsPerPage={rowsPerPage}
-        page={volunteers.meta.pageNo}
+        page={volunteers.volunteerProfile.pageNo}
         onChangePage={handleChangePage}
       />
     </>
@@ -135,7 +135,7 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
           <FormGroup>
             {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
               <FormControlLabel
-                control={<Checkbox checked={volunteers.meta.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
+                control={<Checkbox checked={volunteers.volunteerProfile.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
                 label={capitalize(volunteerType)}
               />
             ))}
