@@ -2,14 +2,19 @@ import express from 'express';
 import imageController from '../controllers/image';
 import { validate } from '../helpers/validation';
 import multer from 'multer'
+import fs from 'fs'
 
 const router = express.Router();
 
+var imageDir = './uploads'
+if (!fs.existsSync(imageDir)){
+  fs.mkdirSync(imageDir);
+}
 
 const storage = multer.diskStorage({
   // where you want to store the file; creates the dir
   destination: function(req, file, cb) {
-    cb(null, './uploads');
+    cb(null, imageDir);
   },
 });
 
