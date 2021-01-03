@@ -1,3 +1,5 @@
 node_modules
 build
 .env
+uploads/*
+journey-288113-eab6b12d2e1b.json
