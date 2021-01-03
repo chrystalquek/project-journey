@@ -23,19 +23,13 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { VolunteerState } from '@redux/reducers/volunteer';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
-import { QueryParams } from '@utils/api/request';
 import RightDrawer from '@components/common/RightDrawer';
-import { UserState } from '@redux/reducers/user';
 import Footer from '../common/Footer';
 import NavBar from '../common/NavBar';
-
-type VolunteerProfileProps = {
-  volunteers: VolunteerState
-  userData: UserState
-  getVolunteers: (query: QueryParams) => Promise<void>
-}
+import { StoreState } from '@redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -55,37 +49,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VolunteerProfile: FC<VolunteerProfileProps> = ({
-  volunteers,
-  userData,
-  getVolunteers,
-}: VolunteerProfileProps) => {
+const VolunteerProfile: FC<{}> = ({
+
+}) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+
+  const userData = useSelector((state: StoreState) => state.user);
+
+  const volunteers = useSelector((state: StoreState) => state.volunteer);
 
   const { volunteerType } = volunteers.volunteerProfile.filters; // get filter object
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    getVolunteers({ volunteerType });
+    dispatch(getVolunteersVolunteerProfile({ volunteerType }));
   }, []);
 
   const handleFilterVolunteerTypeChange = (event) => {
-    getVolunteers({
+    dispatch(getVolunteersVolunteerProfile({
       volunteerType: {
         ...volunteerType,
         [event.target.name]: !volunteerType[event.target.name],
       }, // change boolean for checkbox that changed
-    });
+    }));
   };
 
   // for opening filter menu
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
   const handleChangePage = (event, newPage: number) => {
-    getVolunteers({ pageNo: newPage, volunteerType });
+    dispatch(getVolunteersVolunteerProfile({ pageNo: newPage, volunteerType }));
   };
 
   const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);

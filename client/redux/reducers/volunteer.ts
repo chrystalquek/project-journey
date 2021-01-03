@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
-import { getPendingVolunteersPendingApproval, getVolunteers } from '@redux/actions/volunteer';
+import { getPendingVolunteersPendingApproval, getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
 
 export type VolunteerState = {
@@ -49,10 +49,10 @@ const volunteerSlice = createSlice({
   extraReducers: (builder) => {
     // Simplify immutable updates with redux toolkit
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
-    builder.addCase(getVolunteers.pending, (state) => {
+    builder.addCase(getVolunteersVolunteerProfile.pending, (state) => {
       state.volunteerProfile.ids = [];
     });
-    builder.addCase(getVolunteers.fulfilled, (state, action) => {
+    builder.addCase(getVolunteersVolunteerProfile.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state)
       state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
@@ -60,7 +60,7 @@ const volunteerSlice = createSlice({
       state.volunteerProfile.pageNo = payload.pageNo;
       state.volunteerProfile.filters.volunteerType = payload.filters.volunteerType;
     });
-    builder.addCase(getVolunteers.rejected, (state) => {
+    builder.addCase(getVolunteersVolunteerProfile.rejected, (state) => {
       state.volunteerProfile.ids = [];
     });
 

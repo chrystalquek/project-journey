@@ -1,1 +1,1 @@
-export { default } from '@containers/volunteer/VolunteerProfile';
+export { default } from '@components/volunteer/VolunteerProfile';
