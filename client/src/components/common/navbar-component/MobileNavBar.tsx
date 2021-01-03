@@ -27,6 +27,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
+import {EVENTS_ROUTE} from "@constants/routes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   headerContainer: {
@@ -172,7 +173,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                   button
                   className={classes.nested}
                   key={index}
-                  onClick={() => router.push('/admin/events')}
+                  onClick={() => router.push(EVENTS_ROUTE)}
                 >
                   <ListItemText primary={eventMenu} />
                 </ListItem>
