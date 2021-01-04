@@ -111,6 +111,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
+    router.push('/')
   };
 
   const navigationRender = () => {

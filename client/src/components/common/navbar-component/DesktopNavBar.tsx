@@ -125,6 +125,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
+    router.push('/')
   };
 
   const navigationRender = () => {
