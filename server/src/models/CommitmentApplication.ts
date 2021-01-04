@@ -5,13 +5,11 @@ export type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Do
 
 const CommitmentApplicationSchema = new Schema({
   _id: mongoose.Types.ObjectId,
-  volunteerData: {
+  volunteer_data: {
     type: mongoose.Types.ObjectId,
     ref: 'Volunteer'
   },
-  createdAt: {
-    type: Date
-  }
+  created_at: Date
 })
 
 export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema)

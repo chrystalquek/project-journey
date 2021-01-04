@@ -8,16 +8,17 @@ const createCommitmentApplication = async (
   ): Promise<void> => {
   const commitmentApplicationSchemaData: mongoose.Document = new CommitmentApplication({
     _id: new mongoose.Types.ObjectId(),
-    volunteerData: commitmentApplicationData.volunteerData,
-    createdAt: commitmentApplicationData.createdAt
+    volunteer_data: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId),
+    created_at: Date.now()
+    // TODO: @matt setup timestamp
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save()
   // debugging purpose
-  console.log(JSON.stringify(savedCommitmentApplication))
+  console.log(`Saved: ${JSON.stringify(savedCommitmentApplication)}`)
 }
 
 const readCommitmentApplications = async (): Promise<CommitmentApplicationData[]> => {
-  const commitmentApplications = await CommitmentApplication.find({}).populate('volunteers')
+  const commitmentApplications = await CommitmentApplication.find({}).populate('volunteer_data')
   return commitmentApplications
 }
 

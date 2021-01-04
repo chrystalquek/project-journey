@@ -198,8 +198,7 @@ export type MongooseSaveError = {
 }
 
 export type CommitmentApplicationData = {
-    volunteerData: VolunteerData
-    createdAt: Date,
+    volunteerId: string,
 
     // List of questions in the application form
     // yet to be determined, waiting for BD team
