@@ -22,6 +22,9 @@ export type GetVolunteersResponse = {
   }
 }
 
+export type EditEventResponse = {}
+
+export type GetEventResponse = EventData;
 export type GetSignUpsResponse = {
   data: Array<SignUpData>
 }

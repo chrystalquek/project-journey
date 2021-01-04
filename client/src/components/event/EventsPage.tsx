@@ -83,7 +83,7 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
         <Grid container>
           <Grid item sm={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
           <Grid item container sm={12} direction="row" justify="center" alignItems="center">
-            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/admin/create-event')}>Create new event</Button>
+            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/form')}>Create new event</Button>
           </Grid>
           <Grid item container sm={12} justify="space-between">
             <Grid item>

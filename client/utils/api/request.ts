@@ -30,3 +30,10 @@ export type QueryParams = {
 }
 
 export type CreateEventRequest = EventPostData;
+
+export type EditEventRequest = {
+  id: string,
+  data: EventPostData
+}
+
+export type GetEventParams = string;
