@@ -11,8 +11,8 @@ export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, Quer
   }
 )
 
-export const getPendingSignUpsPendingApproval = createAsyncThunk<GetCountResponse, void, { state }>(
-  'signUp/getPendingSignUpsPendingApproval',
+export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { state }>(
+  'signUp/getPendingSignUps',
   async () => {
     const response = await apiClient.getPendingSignUps();
     return response;

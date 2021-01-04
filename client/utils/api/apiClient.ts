@@ -18,7 +18,7 @@ export interface ApiClient {
   getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
   getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
   getEvents(query: QueryParams): Promise<GetEventsResponse>
-  getPendingSignUps(): Promise<GetCountResponse>
+  getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetCountResponse>
 }
 
@@ -55,7 +55,7 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
   }
 
-  async getPendingSignUps(): Promise<GetCountResponse> {
+  async getPendingSignUps(): Promise<GetSignUpsResponse> {
     return this.send({}, 'signup/pending', 'get');
   }
 

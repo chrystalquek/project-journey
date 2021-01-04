@@ -2,7 +2,7 @@ import { makeStyles, Grid, Card, CardContent, Typography } from '@material-ui/co
 import { StoreState } from '@redux/store';
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPendingSignUpsPendingApproval } from '@redux/actions/signUp';
+import { getPendingSignUps } from '@redux/actions/signUp';
 import { getPendingVolunteersPendingApproval } from '@redux/actions/volunteer';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,11 +27,11 @@ const PendingApproval: FC<{}> = ({ }) => {
 
     // Only load on initial render to prevent infinite loop
     useEffect(() => {
-        dispatch(getPendingSignUpsPendingApproval());
+        dispatch(getPendingSignUps());
         dispatch(getPendingVolunteersPendingApproval())
     }, []);
 
-    const pendingSignUpCount = useSelector((state: StoreState) => state.signUp).pendingApproval.pendingSignUpCount;
+    const pendingSignUpCount = useSelector((state: StoreState) => state.signUp).pendingSignUps.ids.length;
     const pendingVolunteerCount = useSelector((state: StoreState) => state.volunteer).pendingApproval.pendingVolunteerCount;
 
     return (<Card><CardContent>

@@ -8,7 +8,7 @@ export type VolunteerState = {
   pendingApproval: {
     pendingVolunteerCount: number
   }
-  volunteerProfile: {
+  volunteerProfile: { // volunteer > volunteer-profile
     ids: Array<string>
     pageNo: number,
     count: number

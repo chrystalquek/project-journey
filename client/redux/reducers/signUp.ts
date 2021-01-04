@@ -1,23 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getPendingSignUpsPendingApproval, getSignUpsUpcomingEvent } from '@redux/actions/signUp';
+import { getPendingSignUps, getSignUpsUpcomingEvent } from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
 
 export type SignUpState = {
   data: Record<string, SignUpData>;
-  pendingApproval: {
-    pendingSignUpCount: number
-  },
-  upcomingEvent: {
+  volunteerSignUpsForUpcomingEvent: { // signups for a volunteer's upcoming events // used for dashboard
     ids: Array<string> // signed up events
+  },
+  pendingSignUps: { // pending sign ups // used for events > pending requests
+    ids: Array<string>
   }
 }
 
 const initialState: SignUpState = {
   data: {},
-  pendingApproval: {
-    pendingSignUpCount: 0
+  volunteerSignUpsForUpcomingEvent: {
+    ids: []
   },
-  upcomingEvent: {
+  pendingSignUps: {
     ids: []
   }
 };
@@ -39,10 +39,12 @@ const signUpSlice = createSlice({
     builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state)
+      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map(signUp => signUp._id)
     });
-    builder.addCase(getPendingSignUpsPendingApproval.fulfilled, (state, action) => {
+    builder.addCase(getPendingSignUps.fulfilled, (state, action) => {
       const { payload } = action;
-      state.pendingApproval.pendingSignUpCount = payload.count
+      addToData(payload.data, state)
+      state.pendingSignUps.ids = payload.data.map(signUp => signUp._id)
     });
   },
 });
