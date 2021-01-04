@@ -12,6 +12,7 @@ export type VolunteerModel = VolunteerData & mongoose.Document;
 // should we declare as enums instead?
 // enum strings can be all caps, snakecase?
 // same for client
+// TODO: UPDATE ENUMS TO FOLLOW THE FE
 export const GENDER_TYPES = ['male', 'female'];
 export const CITIZENSHIP_TYPES = ['singapore', 'permanent_resident', 'foreigner'];
 export const RACE_TYPES = ['chinese', 'malay', 'indian', 'caucasian', 'other'];

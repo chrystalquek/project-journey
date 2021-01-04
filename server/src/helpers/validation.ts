@@ -4,11 +4,13 @@ import express from 'express';
 import { checkIfAccepted } from '../services/signUp';
 import {
   CITIZENSHIP_TYPES, GENDER_TYPES, LEADERSHIP_INTEREST_TYPES,
-  PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS, VOLUNTEER_TYPE
+  PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS, VOLUNTEER_TYPE,
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
-import { RoleData, SignUpStatus } from '../types';
+import {
+  AnswerData, QuestionsOptionsRequestData, RoleData, SignUpStatus,
+} from '../types';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
@@ -47,6 +49,28 @@ export const roleCapacityValidator = (roles: Array<RoleData>) => {
       return false;
     }
   }
+  return true;
+};
+
+const questionValidator = (questions: Array<QuestionsOptionsRequestData>) => {
+  // eslint-disable-next-line no-restricted-syntax
+  questions.forEach((question) => {
+    if (question.isRequired === undefined
+      || question.text?.length === 0
+      || question.type?.length === 0) {
+      throw new Error('Question Options data is not as expected');
+    }
+  });
+  return true;
+};
+
+const answersValidator = (answers: Array<AnswerData>) => {
+  answers.forEach((answer) => {
+    if (!answer.questionId || !answer.content || !answer.userId) {
+      throw new Error('Answers form data is not as expected');
+    }
+  });
+
   return true;
 };
 
@@ -155,4 +179,6 @@ export default {
   volunteerType,
   volunteerRemark,
   administratorRemarks,
+  questionValidator,
+  answersValidator,
 };
