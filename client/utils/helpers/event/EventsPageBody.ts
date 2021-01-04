@@ -51,6 +51,7 @@ export function withFilters(events: Array<EventData>, filters: EventFilterOption
     const allowEvent = getEventType(e) === undefined;
     const allowVol = getVolunteerType(e) === undefined;
 
+    // TODO: fix date filtering
     return (allowAllDates ? true : getDateFilter(filters) === getDate(e)) &&
       (allowEvent || getEventFilters(filters).includes(getEventType(e))) &&
       (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)));
@@ -63,7 +64,7 @@ function getDate(e: EventData): dayjs.Dayjs {
 }
 
 function getEventType(e: EventData): EventType {
-  return <Event.Volunteering | Event.Workshop | Event.Hangout>e.eventType; // type assertion
+  return e.eventType as EventType; // type assertion
 }
 
 function getVolunteerType(e: EventData): VOLUNTEER_TYPE {

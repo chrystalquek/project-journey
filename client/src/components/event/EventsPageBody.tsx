@@ -71,7 +71,6 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const filteredEvents = withFilters(events ? events : [], filters);
-  console.log(filteredEvents);
 
   useEffect(() => {
     getAllEvents();
