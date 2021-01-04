@@ -1,14 +1,15 @@
+import { DataRow } from '@components/common/DataRow';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createEvent } from '@redux/actions/event';
+import { getEvent } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
 
 export type EventState = {
-  data: Record<string, EventData>;
+  data: EventData | null;
 }
 
 const initialState: EventState = {
-  data: {},
+  data: null,
 };
 
 const eventSlice = createSlice({
@@ -16,15 +17,17 @@ const eventSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createEvent.pending, (state) => {
-      // set loading
+    builder.addCase(getEvent.pending, (state) => {
+      state.data = null;
     });
 
-    builder.addCase(createEvent.fulfilled, (state, action) => {
-
+    builder.addCase(getEvent.fulfilled, (state, action) => {
+      const { payload } = action;
+      state.data = payload;
     });
-
-    builder.addCase(createEvent.rejected, (state) => {});
+    builder.addCase(getEvent.rejected, (state) => {
+      state.data = null;
+    });
   },
 });
 

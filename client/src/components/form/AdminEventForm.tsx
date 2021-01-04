@@ -2,38 +2,42 @@ import React, { FC, useEffect, useState } from 'react';
 import {
   TextField, makeStyles, MenuItem, Typography, Grid, Button,
 } from '@material-ui/core';
-import {
-  KeyboardDatePicker,
-  KeyboardDateTimePicker,
-} from '@material-ui/pickers';
+import { KeyboardDatePicker, KeyboardDateTimePicker } from '@material-ui/pickers';
 import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
-import { useDispatch } from 'react-redux';
-import { createEvent } from '@redux/actions/event';
+import { useDispatch, useSelector } from 'react-redux';
+import { createEvent, getEvent } from '@redux/actions/event';
 import dayjs from 'dayjs';
+import _ from 'lodash';
+import { GetEventParams } from '@utils/api/request';
+import { StoreState } from '@redux/store';
+
+type AdminEventFormProps = {
+  id: string
+}
 
 const eventTypes = [
-  { value: 'Workshop', label: 'Workshop' },
-  { value: 'Hangout', label: 'Hangout' },
-  { value: 'Volunteering', label: 'Volunteering' },
+  { value: 'workshop', label: 'Workshop' },
+  { value: 'hangout', label: 'Hangout' },
+  { value: 'volunteering', label: 'Volunteering' },
 ];
 
-// TODO: update types
 const volunteerTypes = [
-  { value: 'Committed', label: 'Committed' },
-  { value: 'Ad-hoc', label: 'Ad-hoc' },
-  { value: 'Lead', label: 'Lead' },
-  { value: 'Admin', label: 'Admin' },
+  { value: 'committed', label: 'Committed' },
+  { value: 'ad-hoc', label: 'Ad-hoc' },
+  { value: 'lead', label: 'Lead' },
+  { value: 'admin', label: 'Admin' },
 ];
 
 const getEventTypePlaceholder = (eventType) => {
   switch (eventType) {
-    case 'Workshop': return 'eg. Workshop: Facilitation 101';
-    case 'Hangout': return 'eg. Hangout Session';
-    case 'Volunteering': return 'eg. Volunteering: Session 4';
+    case 'workshop': return 'eg. Workshop: Facilitation 101';
+    case 'hangout': return 'eg. Hangout Session';
+    case 'volunteering': return 'eg. Volunteering: Session 4';
     default: throw new Error();
   }
 };
+
 const useStyles = makeStyles(() => ({
   coverImage: {
     width: '1010px',
@@ -49,6 +53,31 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const toCamel = (str) => str.replace(/([-_][a-z])/ig, ($1) => $1.toUpperCase()
+  .replace('-', '')
+  .replace('_', ''));
+
+const isObject = function (obj) {
+  return obj === Object(obj) && !Array.isArray(obj) && typeof obj !== 'function';
+};
+
+const keysToCamel = function (obj) {
+  if (isObject(obj)) {
+    const n = {};
+
+    Object.keys(obj)
+      .forEach((k) => {
+        n[toCamel(k)] = keysToCamel(obj[k]);
+      });
+
+    return n;
+  } if (Array.isArray(obj)) {
+    return obj.map((i) => keysToCamel(i));
+  }
+
+  return obj;
+};
+
 /**
  * Combine date and time as JSON string
  * @param date Date object representing date
@@ -59,12 +88,11 @@ const getDateAndTimeIsoString = (dateDayJs: dayjs.Dayjs, time: string): string =
   return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
 };
 
-type AdminEventFormProps = {}
-
-const AdminEventForm: FC<AdminEventFormProps> = () => {
+const AdminEventForm: FC<AdminEventFormProps> = ({ id }) => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
+
+  const eventForm = useSelector((state: StoreState) => state.event.data);
 
   const [dateAndTime, setDateAndTime] = useState({
     fromDate: dayjs(),
@@ -76,8 +104,8 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
   const [formData, setFormData] = useState({
     name: '',
     coverImage: '',
-    eventType: 'Workshop',
-    volunteerType: 'Committed',
+    eventType: 'workshop',
+    volunteerType: 'committed',
     deadline: dayjs(),
     vacancies: 0,
     description: '',
@@ -89,6 +117,45 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
     contentType: 'pdf', // TODO: fix this
     location: '',
   });
+
+  useEffect(() => {
+    if (id !== 'new') {
+      dispatch(getEvent(id));
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (eventForm) {
+      const camelCaseEventForm = keysToCamel(eventForm);
+      const newFormData = {
+        name: camelCaseEventForm.name,
+        coverImage: camelCaseEventForm.coverImage,
+        eventType: camelCaseEventForm.eventType,
+        volunteerType: camelCaseEventForm.volunteerType,
+        deadline: dayjs(camelCaseEventForm.deadline),
+        vacancies: camelCaseEventForm.vacancies,
+        description: camelCaseEventForm.description,
+        facilitatorName: camelCaseEventForm.facilitatorName,
+        facilitatorPhoto: camelCaseEventForm.facilitatorPhoto,
+        facilitatorDescription: camelCaseEventForm.facilitatorDescription,
+        roles: camelCaseEventForm.roles,
+        contentUrl: camelCaseEventForm.contentUrl,
+        contentType: camelCaseEventForm.contentType,
+        location: camelCaseEventForm.location,
+      };
+
+      const camelCaseDateAndTime = keysToCamel(dateAndTime);
+      const newDateAndTime = {
+        fromDate: dayjs(),
+        toDate: dayjs(),
+        fromTime: '00:00',
+        toTime: '00:00',
+      };
+
+      setFormData(newDateAndTime);
+      setFormData(newFormData);
+    }
+  }, [eventForm]);
 
   const {
     name, coverImage, eventType, volunteerType, deadline,
@@ -105,8 +172,6 @@ const AdminEventForm: FC<AdminEventFormProps> = () => {
 
     const formToSend = {
       ...formData,
-      eventType: eventType.toLowerCase(),
-      volunteerType: volunteerType.toLowerCase(),
       deadline: deadline.toISOString(),
       startDate: getDateAndTimeIsoString(fromDate, fromTime),
       endDate: getDateAndTimeIsoString(toDate, toTime),

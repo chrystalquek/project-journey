@@ -30,3 +30,7 @@ export type QueryParams = {
 }
 
 export type CreateEventRequest = EventData;
+
+export type EditEventRequest = EventData;
+
+export type GetEventParams = string;
