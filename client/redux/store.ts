@@ -14,17 +14,20 @@ import {
   REGISTER
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import signUpReducer, { SignUpState } from './reducers/signUp';
 
 export type StoreState = {
   user: UserState
   event: EventState
   volunteer: VolunteerState
+  signUp: SignUpState
 }
 
 const reducers = combineReducers({
   user: userReducer,
   event: EventReducer,
   volunteer: volunteerReducer,
+  signUp: signUpReducer,
 });
 
 const persistConfig = {

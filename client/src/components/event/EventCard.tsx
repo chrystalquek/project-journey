@@ -24,7 +24,7 @@ const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
   const classes = useStyles();
   const { total, remaining } = getEventVacancies(event);
   const vacancies = `${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} left`;
-  const { date, time } = parseDate(event.start_date, event.end_date);
+  const { date, time } = parseDate(event.startDate, event.endDate);
 
   return (
     <Card onClick={onCardClick}>

@@ -8,7 +8,7 @@ const mapStateToProps = (state: StoreState) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getAdminEvents: () => dispatch(getAllEvents()),
+  getAllEvents: () => dispatch(getAllEvents()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsPageBody);

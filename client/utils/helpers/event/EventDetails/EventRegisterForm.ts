@@ -1,4 +1,4 @@
-import { VolunteerRole} from "@type/event";
+import { RoleData} from "@type/event";
 
 export type FormSelectRow = {
   id: string,
@@ -7,7 +7,7 @@ export type FormSelectRow = {
   isDisabled: boolean
 }
 
-export function parseRoles(roles: Array<VolunteerRole>): Array<FormSelectRow> {
+export function parseRoles(roles: Array<RoleData>): Array<FormSelectRow> {
   // most vacancies come first
   //roles.sort((a, b) => b.volunteers.length - a.volunteers.length);
   return roles.map((role) => {
@@ -21,7 +21,7 @@ export function parseRoles(roles: Array<VolunteerRole>): Array<FormSelectRow> {
   });
 }
 
-export function getRoleVacancies(role: VolunteerRole): { remaining: number, filled: number, total: number } {
+export function getRoleVacancies(role: RoleData): { remaining: number, filled: number, total: number } {
   if (!role || !role.volunteers) {
     return { filled: 0, total: 0, remaining: 0 };
   }

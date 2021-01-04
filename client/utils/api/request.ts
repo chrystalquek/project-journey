@@ -1,4 +1,6 @@
-export type SignupRequest = {
+import { EventPostData } from '@type/event';
+
+export type SignUpRequest = {
   name: string
   email: string
   password: string
@@ -26,3 +28,12 @@ export type QueryParams = {
   size?: number
   [field: string]: any
 }
+
+export type CreateEventRequest = EventPostData;
+
+export type EditEventRequest = {
+  id: string,
+  data: EventPostData
+}
+
+export type GetEventParams = string;

@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import {MONTHS} from '@constants/dateMappings';
 import {Event, EventData, EventFilterOptions, EventFilters, EventType} from '@type/event';
 import {VOLUNTEER_TYPE} from "@type/volunteer";
+import {getEvent} from "@redux/actions/event";
 
 // Contains helper functions for everything related to the events page.
 
@@ -47,23 +48,26 @@ export function withFilters(events: Array<EventData>, filters: EventFilterOption
   const allowAllDates = getDateFilter(filters) === null;
 
   return events.filter((e: EventData) => {
+    const allowEvent = getEventType(e) === undefined;
+    const allowVol = getVolunteerType(e) === undefined;
+
     return (allowAllDates ? true : getDateFilter(filters) === getDate(e)) &&
-      getEventFilters(filters).includes(getEventType(e)) &&
-      getVolunteerFilters(filters).includes(getVolunteerType(e));
+      (allowEvent || getEventFilters(filters).includes(getEventType(e))) &&
+      (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)));
   });
 }
 
 // Getters for events, to future-proof changes to event structure
 function getDate(e: EventData): dayjs.Dayjs {
-  return dayjs(e.start_date);
+  return dayjs(e.startDate);
 }
 
 function getEventType(e: EventData): EventType {
-  return <Event.Volunteering | Event.Workshop | Event.Hangout>e.event_type; // type assertion
+  return <Event.Volunteering | Event.Workshop | Event.Hangout>e.eventType; // type assertion
 }
 
 function getVolunteerType(e: EventData): VOLUNTEER_TYPE {
-  return <VOLUNTEER_TYPE.ADHOC | VOLUNTEER_TYPE.COMMITED | VOLUNTEER_TYPE.ADMIN>e.volunteer_type;
+  return e.volunteerType as VOLUNTEER_TYPE;
 }
 
 // may be null

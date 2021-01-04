@@ -1,32 +1,52 @@
 import dayjs from 'dayjs';
 import {VOLUNTEER_TYPE} from "@type/volunteer";
 
-export type EventData = {
-  _id: string;
+export type EventPostData = {
   name: string;
-  event_type: EventType;
-  created_at: Date;
-  volunteer_type: VOLUNTEER_TYPE;
+  coverImage?: string; // TODO: change to appropriate type
+  eventType: string;
+  volunteerType: string;
+  startDate: string;
+  endDate: string;
+  deadline: string;
+  vacancies: number;
   description: string;
-  content_url: string;
-  content_type: string;
-  facilitator_name: string;
-  facilitator_description: string;
-  start_date: Date;
-  end_date: Date;
+  facilitatorName?: string;
+  facilitatorPhoto?: string;
+  facilitatorDescription?: string;
+  roles?: Array<RoleData>;
+  contentUrl?: string;
+  contentType?: string;
   location: string;
-  deadline: Date;
-  additional_information: string;
-  capacity: number;
-  roles: Array<VolunteerRole>
 }
 
-export type VolunteerRole = {
+export type EventData = {
+  _id: string,
+  name: string;
+  eventType: EventType;
+  createdAt: Date;
+  coverImage?: string; // TODO: change to appropriate type
+  volunteerType: VOLUNTEER_TYPE;
+  startDate: Date;
+  endDate: Date;
+  deadline: Date;
+  vacancies: number;
+  description: string;
+  facilitatorName?: string;
+  facilitatorPhoto?: string;
+  facilitatorDescription?: string;
+  roles?: Array<RoleData>;
+  contentUrl?: string;
+  contentType?: string;
+  location: string;
+}
+
+export interface RoleData {
   _id: string,
   volunteers: Array<string>,
-  name: string,
-  description: string,
-  capacity: number,
+  name: string;
+  description: string;
+  capacity: number;
 }
 
 // Used in filtering component
@@ -43,15 +63,15 @@ export enum EventFilters {
 
 export type EventFilterOptions = {
   [EventFilters.DATE]: dayjs.Dayjs,
+  [EventFilters.VOLUNTEERTYPE]: {
+    [EventFilters.ADHOC]: boolean,
+    [EventFilters.COMMITTED]: boolean
+  }
   [EventFilters.EVENTTYPE]: {
     [EventFilters.VOLUNTEERING]: boolean,
     [EventFilters.WORKSHOPS]: boolean,
     [EventFilters.HANGOUTS]: boolean
   },
-  [EventFilters.VOLUNTEERTYPE]: {
-    [EventFilters.ADHOC]: boolean,
-    [EventFilters.COMMITTED]: boolean
-  }
 }
 
 // Used when filtering actual events

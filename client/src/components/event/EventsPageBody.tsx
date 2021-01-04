@@ -17,9 +17,9 @@ import EventsFilter from '@components/event/EventsFilter';
 import {withFilters} from "@utils/helpers/event/EventsPageBody";
 import {useRouter} from "next/router";
 
-type AdminEventsPageProps = {
+type EventsPageBodyProps = {
   events: Array<EventData>,
-  getAdminEvents: () => any,
+  getAllEvents: () => any,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
+const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
@@ -71,9 +71,10 @@ const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =>
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const filteredEvents = withFilters(events ? events : [], filters);
+  console.log(filteredEvents);
 
   useEffect(() => {
-    getAdminEvents();
+    getAllEvents();
   }, []);
 
   if (screenXs || screenSm) {
@@ -89,8 +90,8 @@ const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =>
               <Box className={classes.box} fontWeight="bold">
                 <Typography display="inline" color="secondary">
                   {
-                  events ? events.length : 0
-}
+                    events ? events.length : 0
+                  }
                 </Typography>
                 {' '}
                 Upcoming Events
@@ -135,7 +136,7 @@ const EventsPageBody: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) =>
               <Typography display="inline" color="secondary">
                 {
                   events ? events.length : 0
-}
+                }
               </Typography>
               {' '}
               Upcoming Events

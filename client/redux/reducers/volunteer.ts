@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {VolunteerData, VOLUNTEER_TYPE} from 'types/volunteer';
-import { getVolunteers } from '@redux/actions/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { getPendingVolunteersPendingApproval, getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
 
 export type VolunteerState = {
   data: Record<string, VolunteerData>;
-  meta: {
-    currentPageIds: Array<string>
+  pendingApproval: {
+    pendingVolunteerCount: number
+  }
+  volunteerProfile: {
+    ids: Array<string>
     pageNo: number,
     count: number
     filters: {
@@ -17,8 +20,11 @@ export type VolunteerState = {
 
 const initialState: VolunteerState = {
   data: {},
-  meta: {
-    currentPageIds: [],
+  pendingApproval: {
+    pendingVolunteerCount: 0
+  },
+  volunteerProfile: {
+    ids: [],
     pageNo: 0,
     count: 0,
     filters: {
@@ -27,6 +33,15 @@ const initialState: VolunteerState = {
   },
 };
 
+// parse all Dates etc before saving to store
+const addToData = (volunteers: Array<VolunteerData>, state: VolunteerState) => {
+  volunteers.forEach((volunteer) => state.data[volunteer._id] = {
+    ...volunteer,
+    birthday: new Date(volunteer.birthday),
+    createdAt: new Date(volunteer.createdAt),
+  });
+}
+
 const volunteerSlice = createSlice({
   name: 'volunteer',
   initialState,
@@ -34,25 +49,26 @@ const volunteerSlice = createSlice({
   extraReducers: (builder) => {
     // Simplify immutable updates with redux toolkit
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
-    builder.addCase(getVolunteers.pending, (state) => {
-      state.meta.currentPageIds = [];
+    builder.addCase(getVolunteersVolunteerProfile.pending, (state) => {
+      state.volunteerProfile.ids = [];
     });
-    builder.addCase(getVolunteers.fulfilled, (state, action) => {
+    builder.addCase(getVolunteersVolunteerProfile.fulfilled, (state, action) => {
       const { payload } = action;
-      // normalize from array to object structure
-      payload.data.forEach((volunteer) => state.data[volunteer._id] = {
-        ...volunteer,
-        birthday: new Date(volunteer.birthday),
-        createdAt: new Date(volunteer.createdAt),
-      });
-      state.meta.currentPageIds = payload.data.map((volunteer) => volunteer._id);
-      state.meta.count = payload.count;
-      state.meta.pageNo = payload.pageNo;
-      state.meta.filters.volunteerType = payload.filters.volunteerType;
+      addToData(payload.data, state)
+      state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
+      state.volunteerProfile.count = payload.count;
+      state.volunteerProfile.pageNo = payload.pageNo;
+      state.volunteerProfile.filters.volunteerType = payload.filters.volunteerType;
     });
-    builder.addCase(getVolunteers.rejected, (state) => {
-      state.meta.currentPageIds = [];
+    builder.addCase(getVolunteersVolunteerProfile.rejected, (state) => {
+      state.volunteerProfile.ids = [];
     });
+
+    builder.addCase(getPendingVolunteersPendingApproval.fulfilled, (state, action) => {
+      const { payload } = action;
+      state.pendingApproval.pendingVolunteerCount = payload.count
+    });
+
   },
 });
 

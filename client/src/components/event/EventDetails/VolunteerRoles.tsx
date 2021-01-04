@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {EventData, VolunteerRole} from "@type/event";
+import {EventData, RoleData} from "@type/event";
 import {Box} from "@material-ui/core";
 
 type VolunteerRolesProps = {
@@ -14,7 +14,7 @@ const VolunteerRoles: FC<VolunteerRolesProps> = ({ event }) => {
       <Box fontWeight="bold" fontSize="h3.fontSize">
         Volunteer Roles
       </Box>
-      {volunteerRoles.map((role: VolunteerRole) => (
+      {volunteerRoles.map((role: RoleData) => (
         <div key={role.name}>
           <div><strong>{role.name}</strong></div>
           <p>{role.description}</p>

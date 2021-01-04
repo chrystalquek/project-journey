@@ -23,20 +23,13 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { VolunteerState } from '@redux/reducers/volunteer';
-import { QueryParams } from '@utils/api/request';
-import {getEnumValues} from '@utils/helpers/TableOptions';
+import { VOLUNTEER_TYPE } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
-import { UserState } from '@redux/reducers/user';
 import Footer from '../common/Footer';
 import NavBar from '../common/NavBar';
-import {VOLUNTEER_TYPE} from "@type/volunteer";
-
-type VolunteerProfileProps = {
-  volunteers: VolunteerState
-  userData: UserState
-  getVolunteers: (query: QueryParams) => Promise<void>
-}
+import { StoreState } from '@redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -56,43 +49,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VolunteerProfile: FC<VolunteerProfileProps> = ({
-  volunteers,
-  userData,
-  getVolunteers,
-}: VolunteerProfileProps) => {
+const VolunteerProfile: FC<{}> = ({ }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const { volunteerType } = volunteers.meta.filters; // get filter object
+  const userData = useSelector((state: StoreState) => state.user);
+
+  const volunteers = useSelector((state: StoreState) => state.volunteer);
+
+  const { volunteerType } = volunteers.volunteerProfile.filters; // get filter object
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    getVolunteers({ volunteerType });
+    dispatch(getVolunteersVolunteerProfile({ volunteerType }));
   }, []);
 
-  // get array of strings from enum
-  const volunteerTypeValues = getEnumValues(VOLUNTEER_TYPE);
-
   const handleFilterVolunteerTypeChange = (event) => {
-    getVolunteers({
+    dispatch(getVolunteersVolunteerProfile({
       volunteerType: {
         ...volunteerType,
         [event.target.name]: !volunteerType[event.target.name],
       }, // change boolean for checkbox that changed
-    });
+    }));
   };
 
   // for opening filter menu
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
   const handleChangePage = (event, newPage: number) => {
-    getVolunteers({ pageNo: newPage, volunteerType });
+    dispatch(getVolunteersVolunteerProfile({ pageNo: newPage, volunteerType }));
   };
 
-  const currentPageVolunteers = volunteers.meta.currentPageIds.map((id) => volunteers.data[id]);
+  const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
 
   const volunteerTable = (
     <>
@@ -119,9 +110,9 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       <TablePagination
         rowsPerPageOptions={[rowsPerPage]}
         component="div"
-        count={volunteers.meta.count}
+        count={volunteers.volunteerProfile.count}
         rowsPerPage={rowsPerPage}
-        page={volunteers.meta.pageNo}
+        page={volunteers.volunteerProfile.pageNo}
         onChangePage={handleChangePage}
       />
     </>
@@ -135,16 +126,16 @@ const VolunteerProfile: FC<VolunteerProfileProps> = ({
       {' '}
       <IconButton size="small" className={classes.rightButton} onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon /> : <AddIcon />}</IconButton>
       {openFilter
-      && (
-      <FormGroup>
-        {volunteerTypeValues.map((volunteerType) => (
-          <FormControlLabel
-            control={<Checkbox checked={volunteers.meta.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
-            label={capitalize(volunteerType)}
-          />
-        ))}
-      </FormGroup>
-      )}
+        && (
+          <FormGroup>
+            {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
+              <FormControlLabel
+                control={<Checkbox checked={volunteers.volunteerProfile.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
+                label={capitalize(volunteerType)}
+              />
+            ))}
+          </FormGroup>
+        )}
       <Divider />
     </Grid>
   );
