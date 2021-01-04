@@ -21,10 +21,12 @@ const uploadImage = async (req, res: express.Response) => {
 
 const getImage = async (req: express.Request, res: express.Response) => {
   try {
-    const imageUrl = await imageService.getImage(req.params.email)
-    res.status(HTTP_CODES.OK).json({
-      imageUrl: imageUrl
-    });
+    if (typeof req.query.email !== 'string') {
+      throw new Error("Email field is not string");
+    }
+    const email = req.query.email as string;
+    const imageResponse: ImageResponse = await imageService.getImage(email)
+    res.status(HTTP_CODES.OK).json(imageResponse);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       ...error,

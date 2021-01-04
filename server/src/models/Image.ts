@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { ImageData } from '../types';
+import { ImageResponse } from '../types';
 
 const { Schema } = mongoose;
 
-export type ImageModel = ImageData & mongoose.Document;
+export type ImageModel = ImageResponse & mongoose.Document;
 
 const ImageSchema = new Schema({
   _id: mongoose.Types.ObjectId,

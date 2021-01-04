@@ -55,7 +55,13 @@ const getImage = async (email: string) => {
 
   console.log(JSON.stringify(image))
 
-  return "hello";
+  const imageResponse: ImageResponse = {
+    email: image.email,
+    imageName: image.imageName,
+    url: image.url
+  };
+
+  return imageResponse;
 };
 
 export default {
