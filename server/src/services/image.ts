@@ -53,8 +53,6 @@ const getImage = async (email: string) => {
     throw new Error(`Image with email: ${email} not found`);
   }
 
-  console.log(JSON.stringify(image))
-
   const imageResponse: ImageResponse = {
     email: image.email,
     imageName: image.imageName,
