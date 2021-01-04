@@ -1,12 +1,13 @@
 import express from 'express';
 import { body } from 'express-validator';
+import jwt from 'express-jwt';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import { roleCapacityValidator } from '../helpers/validation';
-import { EventSearchType, EventData, RoleData, QueryParams} from '../types';
-import jwt from 'express-jwt';
+import {
+  EventSearchType, EventData, RoleData, QueryParams,
+} from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
-
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -16,9 +17,9 @@ const getValidations = (method: EventValidatorMethod) => {
       return [
         body('name', 'name does not exist').exists(),
         body('description', 'description does not exist').exists(),
-        body('contentUrl', 'content url is invalid').isURL(),
-        body('facilitatorName', 'facilitator name does not exist').exists(),
-        body('facilitatorDescription', 'facilitator description does not exist').exists(),
+        body('contentUrl', 'content url is invalid').optional({ checkFalsy: true }).isURL(),
+        body('facilitatorName', 'facilitator name does not exist').optional({ checkFalsy: true }).isString(),
+        body('facilitatorDescription', 'facilitator description is not a string').optional({ checkFalsy: true }).isString(),
         body('startDate', 'start date does not exist').exists(),
         body('startDate', 'start date is after end date').custom((value, { req }) => value <= req.body.endDate),
         body('startDate', 'start date is of wrong date format').isISO8601(),
@@ -26,7 +27,7 @@ const getValidations = (method: EventValidatorMethod) => {
         body('endDate', 'end date is of wrong date format').isISO8601(),
         body('deadline', 'deadline does not exist').exists(),
         body('deadline', 'deadline is of wrong date format').isISO8601(),
-        body('roles', 'roles does not exist').exists(),
+        body('roles', 'roles is not an array').optional({ checkFalsy: true }).isArray(),
         body('roles', 'number of volunteers exceeds role capacity').custom((roles: RoleData[]) => roleCapacityValidator(roles)),
       ];
     }
@@ -56,7 +57,6 @@ const readEvent = async (
 ): Promise<void> => {
   try {
     const event = await eventService.readEvent(req.params.id);
-    
 
     // to access volunteers by Id
     // const volunteers = Volunteer.find(
@@ -76,22 +76,20 @@ const readEvent = async (
  */
 const readEvents = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-
     const searchType = req.params.eventType as EventSearchType;
     const pageNo = Number(req.query.pageNo);
     const size = Number(req.query.size);
     const query: QueryParams = { searchType, skip: 0, limit: 0 };
 
-    if (pageNo < 0){
-      throw new Error ('Invalid page number, should start with 0');
+    if (pageNo < 0) {
+      throw new Error('Invalid page number, should start with 0');
     }
     query.skip = size * pageNo;
     query.limit = size;
     const events = await eventService.readEvents(query);
     res.status(HTTP_CODES.OK).json({
-      events
+      data: events,
     });
-
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -122,7 +120,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
 
-    res.status(HTTP_CODES.OK).json({ signedUpEvents });
+    res.status(HTTP_CODES.OK).json({ data: signedUpEvents });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

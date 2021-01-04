@@ -1,13 +1,18 @@
 import nodemailer, { TransportOptions } from 'nodemailer';
 import { google } from 'googleapis';
 import ejs from 'ejs';
-import { VolunteerData } from '../types';
+import { EventData, VolunteerData } from '../types';
 
 const { OAuth2 } = google.auth;
 
-type EmailTemplate = 'WELCOME' | 'ACTIVATION';
+type EmailTemplate = 'WELCOME' | 'FEEDBACK' | 'EVENT_SIGN_UP_CONFIRMATION' | 'WAITLIST_TO_CONFIRMED';
 
 const EMAIL_TYPE_INVALID = 'Email type is invalid';
+
+const FEEDBACK_TEMPLATE_FILE = 'src/views/feedback.ejs';
+const WAITLIST_TO_CONFIRMED_TEMPLATE_FILE = 'src/views/waitlist-to-confirmed.ejs';
+const EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE = 'src/views/event-sign-up-confirmation.ejs';
+const WELCOME_TEMPLATE_FILE = 'src/views/welcome.ejs';
 
 const getSmtpTransport = async () => {
   const oauth2Client = new OAuth2(
@@ -83,19 +88,100 @@ const welcomeEmailHelper = async (user: VolunteerData) => {
   const templateData = {
     name: user.name,
   };
-  const templateFile = 'src/views/welcome.ejs';
+
+  const templateFile = WELCOME_TEMPLATE_FILE;
 
   return {
     to, cc, bcc, subject, templateFile, templateData,
   };
 };
 
-const sendEmail = async (user: VolunteerData, emailType: EmailTemplate) => {
+const eventSignUpConfirmationEmailHelper = async (user: VolunteerData, event: EventData) => {
+  const to = user.email;
+  const cc = [];
+  const bcc = [];
+  const subject = 'Event Confirmation';
+
+  const templateData = {
+    name: user.name,
+    event_title: event.name,
+    date: event.startDate,
+    time_start: event.startDate,
+    time_end: event.endDate,
+    location_details: event.location,
+    event_information: event.description,
+    POC_name: event.facilitatorName,
+    POC_mobile_number: event.facilitatorDescription,
+  };
+
+  const templateFile = EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE;
+  return {
+    to, cc, bcc, subject, templateFile, templateData,
+  };
+};
+
+const feedbackEmailHelper = async (user: VolunteerData, event: EventData) => {
+  const to = user.email;
+  const cc = [];
+  const bcc = [];
+  const subject = 'Event Feedback';
+
+  const templateData = {
+    name: user.name,
+    event_title: event.name,
+  };
+
+  const templateFile = FEEDBACK_TEMPLATE_FILE;
+
+  return {
+    to, cc, bcc, subject, templateFile, templateData,
+  };
+};
+
+const waitlistToConfirmedEmailHelper = async (user: VolunteerData, event: EventData) => {
+  const to = user.email;
+  const cc = [];
+  const bcc = [];
+  const subject = 'Waitlisted to Confirmed';
+
+  const templateData = {
+    name: user.name,
+    event_title: event.name,
+    date: event.startDate,
+    time_start: event.startDate,
+    time_end: event.endDate,
+    location_details: event.location,
+    event_information: event.description,
+    POC_name: event.facilitatorName,
+    POC_mobile_number: event.facilitatorDescription,
+  };
+
+  const templateFile = WAITLIST_TO_CONFIRMED_TEMPLATE_FILE;
+
+  return {
+    to, cc, bcc, subject, templateFile, templateData,
+  };
+};
+
+const sendEmail = async (emailType: EmailTemplate, user: VolunteerData, ...otherData) => {
   let helperObject;
 
   switch (emailType) {
     case 'WELCOME':
-      helperObject = await welcomeEmailHelper(user);
+      helperObject = await welcomeEmailHelper(user as VolunteerData);
+      break;
+    case 'EVENT_SIGN_UP_CONFIRMATION':
+      helperObject = await eventSignUpConfirmationEmailHelper(
+        user as VolunteerData, otherData[0] as EventData,
+      );
+      break;
+    case 'FEEDBACK':
+      helperObject = await feedbackEmailHelper(user as VolunteerData, otherData[0] as EventData);
+      break;
+    case 'WAITLIST_TO_CONFIRMED':
+      helperObject = await waitlistToConfirmedEmailHelper(
+        user as VolunteerData, otherData[0] as EventData,
+      );
       break;
     default:
       throw new Error(EMAIL_TYPE_INVALID);

@@ -1,6 +1,6 @@
 import express from 'express';
 import volunteerSchemaController from '../controllers/volunteerSchema';
-import { validate } from "../helpers/validation";
+import { validate } from '../helpers/validation';
 
 const router = express.Router();
 

@@ -13,6 +13,8 @@ export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
 export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
+export type EventType = 'workshop' | 'hangout' | 'volunteering'
+
 export interface RoleData {
     name: string;
     description: string;
@@ -144,20 +146,39 @@ export interface AnswerFormQuestionsRequest {
     formId: string
     answers: Array<AnswerData>
 }
+// TODO: delete if we are following FE
+// export type EventData = {
+//     name: string;
+//     description: string;
+//     contentUrl: string;
+//     contentType: string;
+//     facilitatorName: string;
+//     facilitatorDescription: string;
+//     startDate: Date;
+//     endDate: Date;
+//     location: string;
+//     deadline: Date;
+//     additionalInformation: string;
+//     roles: Array<RoleData>;
+// }
 
 export type EventData = {
     name: string;
-    description: string;
-    contentUrl: string;
-    contentType: string;
-    facilitatorName: string;
-    facilitatorDescription: string;
+    coverImage?: string; // TODO: change to appropriate type
+    eventType: EventType;
+    volunteerType: string;
     startDate: Date;
     endDate: Date;
-    location: string;
     deadline: Date;
-    additionalInformation: string;
-    roles: Array<RoleData>;
+    vacancies: number;
+    description: string;
+    facilitatorName?: string;
+    facilitatorPhoto?: string;
+    facilitatorDescription?: string;
+    roles?: Array<RoleData>;
+    contentUrl?: string;
+    contentType?: string;
+    location: string;
 }
 
 export type OpportunityData = EventData & {
@@ -219,4 +240,11 @@ export interface MongooseSaveSubError {
 export type MongooseSaveError = {
     errors: Record<string, MongooseSaveSubError>
     _message: string
+}
+
+export type CommitmentApplicationData = {
+    volunteerId: string,
+
+    // List of questions in the application form
+    // yet to be determined, waiting for BD team
 }

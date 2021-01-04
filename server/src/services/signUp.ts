@@ -47,6 +47,14 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
   }
 };
 
+const readPendingSignUps = async () => {
+  try {
+    return SignUp.countDocuments({ status: 'pending' });
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
 /**
  * Checks if the SignUpStatus is of type ['accepted', acceptedRole]
  * @param status either 'pending', 'rejected', or ['accepted', acceptedRole]
@@ -106,7 +114,7 @@ const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleNam
     const unupdatedEvent = await Event.findById(eventId);
     let eventRoles;
 
-    if (unupdatedEvent != null) {
+    if (unupdatedEvent != null && unupdatedEvent.roles) {
       switch (actionType) {
         case 'add':
           eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName as string, volunteerId);
@@ -216,6 +224,7 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
 export default {
   createSignUp,
   readSignUps,
+  readPendingSignUps,
   updateSignUp,
   deleteSignUp,
 };
