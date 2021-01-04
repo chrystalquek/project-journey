@@ -10,8 +10,8 @@ type props = {
 }
 
 const SignUpInformation: FC<props> = ({ user }) => {
-  const birthday = user.birthday.toLocaleDateString('en-US');
-  const createdAt = user.createdAt.toLocaleDateString('en-US');
+  const birthday = new Date(user?.birthday).toLocaleDateString('en-US');
+  const createdAt = new Date(user?.createdAt).toLocaleDateString('en-US');
   return (
     <PaddedGrid>
       <Grid item>

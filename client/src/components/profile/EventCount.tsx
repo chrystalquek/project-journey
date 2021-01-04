@@ -27,9 +27,9 @@ const EventCount: FC<props> = ({ user }) => {
       <Grid item>
         <ProfileDivider />
       </Grid>
-      <DataRow header="Volunteering Sessions" data={user.volunteeringSessionsCount.toString()} xs1={11} xs2={1} />
-      <DataRow header="Workshops" data={user.workshopsCount.toString()} xs1={11} xs2={1} />
-      <DataRow header="Hangouts" data={user.hangoutsCount.toString()} xs1={11} xs2={1} />
+      <DataRow header="Volunteering Sessions" data={user.volunteeringSessionsCount?.toString()} xs1={11} xs2={1} />
+      <DataRow header="Workshops" data={user.workshopsCount?.toString()} xs1={11} xs2={1} />
+      <DataRow header="Hangouts" data={user.hangoutsCount?.toString()} xs1={11} xs2={1} />
       <Grid item>
         <Typography className={classes.link}><u>View past events</u></Typography>
       </Grid>
