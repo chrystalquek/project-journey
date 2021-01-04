@@ -125,6 +125,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
+    router.push('/');
   };
 
   const navigationRender = () => {
@@ -154,7 +155,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {eventMenuArray.map((menuName) => (
                     <MenuItem
                       key={menuName}
-                      onClick={() => router.push('/admin/events')}
+                      onClick={() => router.push('/event')}
                     >
                       {menuName}
                     </MenuItem>
@@ -254,8 +255,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-        <Avatar alt={userData.name} src={userData.photoUrl} />
-      );
+      <Avatar alt={userData.name} src={userData.photoUrl} />
+    );
 
     return (
       <>

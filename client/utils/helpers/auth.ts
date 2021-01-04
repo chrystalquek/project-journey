@@ -1,3 +1,3 @@
-import { UserState } from "@redux/reducers/user";
+import { UserState } from '@redux/reducers/user';
 
-export const isAdmin = (user: UserState) => (user.user?.volunteerType == "admin");
+export const isAdmin = (user: UserState) => (user.user?.volunteerType == 'admin');

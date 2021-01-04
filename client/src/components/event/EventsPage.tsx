@@ -93,8 +93,10 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
                     events ? events.length : 0
                   }
                 </Typography>
-                {' '}
-                Upcoming Events
+                <Typography display='inline' variant='body2'>
+                  {' '}
+                  Upcoming Events
+                </Typography>
               </Box>
             </Grid>
             <Grid item>
@@ -135,8 +137,10 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
                   events ? events.length : 0
                 }
               </Typography>
-              {' '}
-              Upcoming Events
+              <Typography display='inline' variant='body2'>
+                {' '}
+                Upcoming Events
+              </Typography>
             </Box>
           </Grid>
           <Grid item container sm={12} spacing={2}>
