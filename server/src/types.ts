@@ -12,6 +12,7 @@ type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
+export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
 export type EventType = 'workshop' | 'hangout' | 'volunteering'
 
 export interface RoleData {
@@ -82,6 +83,7 @@ export type ResourceData = {
     type: string;
 };
 
+// TODO: Remove this
 export type VolunteerSchemaData = {
     name: string,
     field_type: string,
@@ -121,6 +123,29 @@ export interface UpdateVolunteerFieldResponse extends ResponseJSON {
 export interface DeleteVolunteerFieldResponse extends ResponseJSON {
 }
 
+export type QuestionsOptionsRequestData = {
+    text: string;
+    type: FormQuestionType;
+    isRequired: boolean;
+    options: Array<{ content: string }>
+}
+
+export type AnswerData = {
+    questionId: string;
+    userId: string;
+    content: string;
+    formId?: string;
+}
+
+export interface CreateFormQuestionsRequest {
+    eventId: string,
+    questions: Array<QuestionsOptionsRequestData>
+}
+
+export interface AnswerFormQuestionsRequest {
+    formId: string
+    answers: Array<AnswerData>
+}
 // TODO: delete if we are following FE
 // export type EventData = {
 //     name: string;
@@ -168,6 +193,26 @@ export type SignUpData = {
     status: SignUpStatus,
     preferences: Array<string>,
     isRestricted: boolean,
+}
+
+export type FormData = {
+    name: string;
+    description: string;
+    eventId: string;
+}
+
+export type QuestionData = {
+    id: string;
+    text: string;
+    type: FormQuestionType;
+    formId: string;
+    isRequired: boolean;
+}
+
+export type OptionData = {
+    id: string
+    questionId: string;
+    text: string;
 }
 
 /**

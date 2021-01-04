@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { OpportunityData } from '../types';
-import Event from '../models/Event';
+import Event from './Event';
 
 const { Schema } = mongoose;
 
