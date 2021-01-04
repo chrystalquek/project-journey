@@ -81,7 +81,9 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({ filters, setFilters }
   return (
     <>
       <Box marginBottom="4px" fontWeight="bold">
-        Filter By
+        <Typography variant='body2'>
+          Filter By
+        </Typography>
       </Box>
       <Accordion
         expanded={dateExpanded}
