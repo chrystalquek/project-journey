@@ -104,7 +104,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
     if (invalid) {
       return (
         <Typography className={classes.invalidText}>
-          Invalid email &absp; password
+          Invalid email & password
         </Typography>
       );
     }
