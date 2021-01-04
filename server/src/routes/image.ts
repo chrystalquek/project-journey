@@ -36,7 +36,7 @@ const upload = multer({
 
 router.get(
   '/:email',
-  imageController.getImage
+  imageController.getImageWithEmail
 );
 
 router.post(
@@ -46,7 +46,7 @@ router.post(
 );
 router.delete(
   '/:email',
-  imageController.deleteImage,
+  imageController.deleteImageWithEmail,
 );
 
 export default router;

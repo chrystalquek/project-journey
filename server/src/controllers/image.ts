@@ -19,7 +19,7 @@ const uploadImage = async (req, res: express.Response) => {
   }
 };
 
-const getImage = async (req: express.Request, res: express.Response) => {
+const getImageWithEmail = async (req: express.Request, res: express.Response) => {
   try {
     // if (typeof req.query.email !== 'string') {
     //   throw new Error("Email field is not string");
@@ -34,7 +34,7 @@ const getImage = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const deleteImage = async (req: express.Request, res: express.Response) => {
+const deleteImageWithEmail = async (req: express.Request, res: express.Response) => {
   try {
     // if (typeof req.query.email !== 'string') {
     //   throw new Error("Email field is not string");
@@ -50,7 +50,7 @@ const deleteImage = async (req: express.Request, res: express.Response) => {
 };
 
 export default {
-  getImage,
+  getImageWithEmail,
   uploadImage,
-  deleteImage
+  deleteImageWithEmail
 };
