@@ -126,11 +126,10 @@ export default function MobileNavBar({ userData }: NavBarProps) {
         </ListItem>
         <Collapse in={openVolunteerMenu} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {/* Requires changes for the router */}
             <ListItem
               button
               className={classes.nested}
-              onClick={() => router.push('/volunteer')}
+              onClick={() => router.push('/volunteer/volunteerprofiles')}
             >
               <ListItemText primary="Volunteer Profiles" />
             </ListItem>
@@ -220,8 +219,8 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     const profileIcon = !userData.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
     return (
       <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>

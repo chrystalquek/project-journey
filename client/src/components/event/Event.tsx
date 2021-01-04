@@ -7,7 +7,8 @@ import { testEventImage3 } from '@constants/imagePaths';
 import { makeStyles } from '@material-ui/core';
 import { FC } from 'react';
 import { EventData } from '@type/event';
-import { getVacancies, parseDate } from '@utils/helpers/EventsPage';
+import { getVacancies } from '@utils/helpers/EventsPage';
+import { formatDateStartEndTime } from '@utils/helpers/date';
 
 type AdminEventProps = {
   event: EventData,
@@ -22,7 +23,7 @@ const useStyles = makeStyles({
 const Event: FC<AdminEventProps> = ({ event }) => {
   const classes = useStyles();
   const { filled, total } = getVacancies(event);
-  const { date, time } = parseDate(event.startDate, event.endDate);
+  const { date, time } = formatDateStartEndTime(event.startDate, event.endDate);
 
   return (
     <Card>

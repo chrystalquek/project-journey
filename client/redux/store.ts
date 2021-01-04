@@ -6,12 +6,14 @@ import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer';
 import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import eventReducer, { EventState } from './reducers/event';
+import signUpReducer, { SignUpState } from './reducers/signUp';
 
 export type StoreState = {
   user: UserState
   admin: AdminState
   volunteer: VolunteerState
   event: EventState
+  signUp: SignUpState
 }
 
 const reducers = combineReducers({
@@ -19,6 +21,7 @@ const reducers = combineReducers({
   admin: AdminReducer,
   volunteer: volunteerReducer,
   event: eventReducer,
+  signUp: signUpReducer,
 });
 
 const persistConfig = {

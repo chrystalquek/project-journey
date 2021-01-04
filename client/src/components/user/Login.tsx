@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   formContainer: {
     padding: "20px",
   },
-  signupText: {
+  signUpText: {
     fontWeight: "bold",
     color: "#000",
   },
@@ -199,7 +199,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
                   <Typography>Don&apos;t have an account?</Typography>
                 </div>
                 <Link href='/auth/signup'>
-                  <Typography className={classes.signupText}>Sign up</Typography>
+                  <Typography className={classes.signUpText}>Sign up</Typography>
                 </Link>
               </div>
             </Grid>

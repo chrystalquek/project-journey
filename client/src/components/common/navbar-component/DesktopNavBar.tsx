@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     marginRight: theme.spacing(2),
   },
-  signupButtonContainer: {
+  signUpButtonContainer: {
     display: 'flex',
     alignItems: 'center',
   },
@@ -189,7 +189,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     {/* Requires changes for the router */}
                     <MenuItem
                       onClick={() => {
-                        router.push('/volunteer');
+                        router.push('/volunteer/volunteerprofiles');
                       }}
                     >
                       Volunteer Profiles
@@ -237,7 +237,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
               Login
             </Button>
           </div>
-          <div className={classes.signupButtonContainer}>
+          <div className={classes.signUpButtonContainer}>
             <PersonIcon className={classes.iconSize24} color="primary" />
             <Button
               className={classes.buttonRight}
@@ -254,8 +254,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
     return (
       <>

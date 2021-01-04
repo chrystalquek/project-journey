@@ -19,8 +19,7 @@ const adminSlice = createSlice({
       state.adminEvents = [];
     });
     builder.addCase(getAdminEvents.fulfilled, (state, action) => {
-      console.log(action.payload.events);
-      state.adminEvents = action.payload.events;
+      state.adminEvents = action.payload.data;
     });
     builder.addCase(getAdminEvents.rejected, (state) => {
       state.adminEvents = [];
