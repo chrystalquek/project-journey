@@ -35,17 +35,17 @@ const upload = multer({
 });
 
 router.get(
-  '/',
+  '/:email',
   imageController.getImage
 );
 
 router.post(
-  '/upload',
+  '/',
   upload.single('image'),
   imageController.uploadImage,
 );
-router.post(
-  '/delete',
+router.delete(
+  '/:email',
   imageController.deleteImage,
 );
 

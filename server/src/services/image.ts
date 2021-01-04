@@ -64,7 +64,16 @@ const getImage = async (email: string) => {
   return imageResponse;
 };
 
+const deleteImage = async (email: string) => {
+  await Image.deleteMany({
+    email: email
+  })
+
+  return `Image with email ${email} is deleted`;
+};
+
 export default {
   uploadImage,
-  getImage
+  getImage,
+  deleteImage
 };
