@@ -1,10 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignupRequest,
+  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
 } from './request';
 import {
-  GetAllEventsResponse, GetVolunteersResponse, LoginResponse,
-  CreateEventResponse, EditEventResponse, GetEventResponse, SignupResponse,
+  GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
+  EditEventResponse, GetEventResponse, SignUpResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -15,7 +15,11 @@ export interface ApiClient {
   getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
   getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
-  getAllEvents(): Promise<GetAllEventsResponse>
+  getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
+  getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
+  getEvents(query: QueryParams): Promise<GetEventsResponse>
+  getPendingSignUps(): Promise<GetCountResponse>
+  getPendingVolunteers(): Promise<GetCountResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -32,7 +36,7 @@ class AxiosApiClient implements ApiClient {
   private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
 
   // create user
-  async signup(request: SignupRequest): Promise<SignupResponse> {
+  async signUp(request: SignUpRequest): Promise<SignUpResponse> {
     return this.send(request, 'volunteer', 'post');
   }
 
@@ -46,8 +50,18 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
-  async getAllEvents(): Promise<GetAllEventsResponse> {
-    return this.send({}, 'event/multiple/all', 'get');
+  // sign up
+  async getSignUps(query: QueryParams): Promise<GetSignUpsResponse> {
+    return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
+  }
+
+  async getPendingSignUps(): Promise<GetCountResponse> {
+    return this.send({}, 'signup/pending', 'get');
+  }
+
+  // event
+  async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
+    return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
   }
 
   // admin post event
@@ -61,6 +75,15 @@ class AxiosApiClient implements ApiClient {
 
   async editEvent({ id, data }: EditEventRequest): Promise<EditEventResponse> {
     return this.send(data, `event/${id}`, 'put');
+  }
+
+  async getEvents(query: QueryParams): Promise<GetEventsResponse> {
+    return this.send({}, `event/multiple/${query.eventType}`, 'get');
+  }
+
+  // volunteer
+  async getPendingVolunteers(): Promise<GetCountResponse> {
+    return this.send({}, 'volunteer/pending', 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {

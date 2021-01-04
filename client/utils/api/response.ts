@@ -1,16 +1,16 @@
 import { EventData } from '@type/event';
+import { SignUpData } from '@type/signUp';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
-export type SignupResponse = {
-
+export type SignUpResponse = {
 }
 
 export type LoginResponse = {
   token: string
 }
 
-export type GetAllEventsResponse = {
-  events: Array<EventData>
+export type GetEventsResponse = {
+  data: Array<EventData>
 }
 
 export type GetVolunteersResponse = {
@@ -22,8 +22,16 @@ export type GetVolunteersResponse = {
   }
 }
 
-export type CreateEventResponse = {}
-
 export type EditEventResponse = {}
 
 export type GetEventResponse = EventData;
+export type GetSignUpsResponse = {
+  data: Array<SignUpData>
+}
+
+export type CreateEventResponse = {}
+
+// general response just to get a number
+export type GetCountResponse = {
+  count: number
+}

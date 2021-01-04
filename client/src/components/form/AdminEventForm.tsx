@@ -91,7 +91,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const eventForm = useSelector((state: StoreState) => state.event.data);
+  const eventForm = useSelector((state: StoreState) => state.event.form);
 
   const [dateAndTime, setDateAndTime] = useState({
     fromDate: dayjs(),

@@ -3,7 +3,7 @@ import apiClient from '@utils/api/apiClient';
 
 const getAdminEvents = createAsyncThunk(
   'admin/getEvents',
-  async () => await apiClient.getAllEvents(),
+  async () => await apiClient.getEvents({}), // TODO: ignored this in merge
 );
 
 export { getAdminEvents };

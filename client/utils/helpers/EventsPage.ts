@@ -1,32 +1,9 @@
 import dayjs from 'dayjs';
-import { MONTHS } from '@constants/dateMappings';
 import {
   Event, EventData, EventFilterOptions, EventFilters, EventType, Volunteer, VolunteerType,
 } from '@type/event';
 
 // Contains helper functions for everything related to the events page.
-
-// Takes a start and end date, parses to human-readable form
-export function parseDate(startDate: string, endDate: string) {
-  if (startDate === null || endDate === null) {
-    return { date: null, time: null };
-  }
-  const s = dayjs(startDate);
-  const e = dayjs(endDate);
-  const sMinutePadded = `${s.minute()}`.padStart(2, '0');
-  const eMinutePadded = `${e.minute()}`.padStart(2, '0');
-  const startTime = s.hour() > 13 ? `${s.hour() - 12}.${sMinutePadded}pm` : `${s.hour()}.${sMinutePadded}am`;
-  const endTime = e.hour() > 13 ? `${e.hour() - 12}.${eMinutePadded}pm` : `${e.hour()}.${eMinutePadded}am`;
-  // Same year, month, day -> format as <DD Month YYYY 1pm - 2pm>
-  if (s.year() === e.year() && s.month() === e.month() && s.day() === e.day()) {
-    return {
-      date: `${e.date()} ${MONTHS[e.month()]} ${e.year()}`,
-      time: `${startTime} - ${endTime}`,
-    };
-  }
-  // For now, there are no multiple-date events
-  return { date: null, time: null };
-}
 
 // Returns a tuple of (filled vacancies, total vacancies) for an event.
 export function getVacancies(data: EventData) {
@@ -45,8 +22,8 @@ export function getVacancies(data: EventData) {
 // Filters events based on event type and volunteer type given some filter options
 export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
   return events.filter((e: EventData) => getDate(e) === getDateFilter(filters)
-      && getEventFilters(filters).includes(getEventType(e))
-      && getVolunteerFilters(filters).includes(getVolunteerType(e)));
+    && getEventFilters(filters).includes(getEventType(e))
+    && getVolunteerFilters(filters).includes(getVolunteerType(e)));
 }
 
 // Getters for events, to future-proof changes to event structure

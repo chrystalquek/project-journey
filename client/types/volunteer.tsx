@@ -107,6 +107,5 @@ export type VolunteerData = {
     workshopsCount: number,
     hangoutsCount: number
 
-    createdAt: Date, // used for member since // is snake case not camel case
-    // is there a way to parse strings into dates automatically when the strings are just fetched via api?
+    createdAt: Date, // used for member since
 }
