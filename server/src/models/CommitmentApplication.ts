@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose'
-import { CommitmentApplicationData } from '../types'
+import mongoose, { Schema } from 'mongoose';
+import { CommitmentApplicationData } from '../types';
 
 export type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document;
 
@@ -7,9 +7,9 @@ const CommitmentApplicationSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   volunteer_data: {
     type: mongoose.Types.ObjectId,
-    ref: 'Volunteer'
+    ref: 'Volunteer',
   },
-  created_at: Date
-})
+  created_at: Date,
+});
 
-export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema)
+export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema);

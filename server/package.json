@@ -9,6 +9,8 @@
     "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "npm run build && gcloud app deploy",
+    "lint-fix": "eslint --fix . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prod": "npm run build && npm run start",
     "create-env": "printenv > .env"
   },

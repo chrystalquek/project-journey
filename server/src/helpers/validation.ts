@@ -4,7 +4,7 @@ import express from 'express';
 import { checkIfAccepted } from '../services/signUp';
 import {
   CITIZENSHIP_TYPES, GENDER_TYPES, LEADERSHIP_INTEREST_TYPES,
-  PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS, VOLUNTEER_TYPE
+  PERSONALITY_TYPES, RACE_TYPES, SOCIAL_MEDIA_PLATFORMS, VOLUNTEER_TYPE,
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';

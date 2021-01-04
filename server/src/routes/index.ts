@@ -5,8 +5,8 @@ import resourceRouter from './resource';
 import userRouter from './user';
 import volunteerRouter from './volunteer';
 import opportunityRouter from './opportunity';
-import signUpRouter from "./signUp";
-import commitmentApplicationRouter from './commitmentApplication'
+import signUpRouter from './signUp';
+import commitmentApplicationRouter from './commitmentApplication';
 
 const router = express.Router();
 
