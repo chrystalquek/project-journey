@@ -10,44 +10,47 @@ import { isAdmin } from '@utils/helpers/auth';
 import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
 
-
 const Home: FC<{}> = ({ }) => {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-    const user = useSelector((state: StoreState) => state.user);
+  const user = useSelector((state: StoreState) => state.user);
 
-    return (
-        <>
-            <Head title="Blessings in a Bag" />
-            <NavBar userData={user.user} />
+  return (
+    <>
+      <Head title="Blessings in a Bag" />
+      <NavBar userData={user.user} />
 
-            <PaddedGrid>
-                {isMobile ?
-                    <Grid container spacing={5} >
-                        <Grid item>
-                            {isAdmin(user) &&
-                                <PendingApproval />}
-                        </Grid>
-                        <Grid item>
+      <PaddedGrid>
+        {isMobile
+          ? (
+            <Grid container spacing={5}>
+              <Grid item>
+                {isAdmin(user)
+                                && <PendingApproval />}
+              </Grid>
+              <Grid item>
 
-                            <UpcomingEvent />
-                        </Grid>
-                    </Grid>
-                    : <Grid container direction="row" spacing={5} >
-                        <Grid item xs={9}>
-                            <UpcomingEvent />
-                        </Grid>
-                        <Grid item xs={3}>
-                            {isAdmin(user) &&
-                                <PendingApproval />}
-                        </Grid>
-                    </Grid>}
+                <UpcomingEvent />
+              </Grid>
+            </Grid>
+          )
+          : (
+            <Grid container direction="row" spacing={5}>
+              <Grid item xs={9}>
+                <UpcomingEvent />
+              </Grid>
+              <Grid item xs={3}>
+                {isAdmin(user)
+                                && <PendingApproval />}
+              </Grid>
+            </Grid>
+          )}
 
-            </PaddedGrid>
-            <Footer />
-        </>
-    );
-}
+      </PaddedGrid>
+      <Footer />
+    </>
+  );
+};
 
 export default Home;

@@ -18,5 +18,5 @@ export const getPendingVolunteersPendingApproval = createAsyncThunk<GetCountResp
   async () => {
     const response = await apiClient.getPendingVolunteers();
     return response;
-  }
-)
+  },
+);

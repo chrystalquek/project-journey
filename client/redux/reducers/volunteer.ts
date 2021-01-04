@@ -21,7 +21,7 @@ export type VolunteerState = {
 const initialState: VolunteerState = {
   data: {},
   pendingApproval: {
-    pendingVolunteerCount: 0
+    pendingVolunteerCount: 0,
   },
   volunteerProfile: {
     ids: [],
@@ -40,7 +40,7 @@ const addToData = (volunteers: Array<VolunteerData>, state: VolunteerState) => {
     birthday: new Date(volunteer.birthday),
     createdAt: new Date(volunteer.createdAt),
   });
-}
+};
 
 const volunteerSlice = createSlice({
   name: 'volunteer',
@@ -54,7 +54,7 @@ const volunteerSlice = createSlice({
     });
     builder.addCase(getVolunteersVolunteerProfile.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state)
+      addToData(payload.data, state);
       state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
       state.volunteerProfile.count = payload.count;
       state.volunteerProfile.pageNo = payload.pageNo;
@@ -66,9 +66,8 @@ const volunteerSlice = createSlice({
 
     builder.addCase(getPendingVolunteersPendingApproval.fulfilled, (state, action) => {
       const { payload } = action;
-      state.pendingApproval.pendingVolunteerCount = payload.count
+      state.pendingApproval.pendingVolunteerCount = payload.count;
     });
-
   },
 });
 

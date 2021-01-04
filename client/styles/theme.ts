@@ -41,11 +41,11 @@ const theme = createMuiTheme({
     },
     text: {
       primary: '#000',
-      secondary: '#8d9a01'
+      secondary: '#8d9a01',
     },
     warning: {
-      main: '#d98f01' // orange
-    }
+      main: '#d98f01', // orange
+    },
   },
   spacing: [0, 4, 8, 12, 16, 20, 24, 28, 32, 48, 64], // padding & margins
 });

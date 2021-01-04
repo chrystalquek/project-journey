@@ -93,8 +93,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
                     events ? events.length : 0
                   }
                 </Typography>
-                {' '}
-                Upcoming Events
+                <Typography display='inline' variant='body2'>
+                  {' '}
+                  Upcoming Events
+                </Typography>
               </Box>
             </Grid>
             <Grid item>
@@ -138,8 +140,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
                   events ? events.length : 0
                 }
               </Typography>
-              {' '}
-              Upcoming Events
+              <Typography display='inline' variant='body2'>
+                {' '}
+                Upcoming Events
+              </Typography>
             </Box>
           </Grid>
           <Grid item container sm={12} spacing={2}>
