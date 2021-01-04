@@ -217,8 +217,13 @@ export type OptionData = {
 
 export type ImageData = {
     email: String,
+    imageName: String
+}
+
+export type ImageResponse = {
+    email: String,
     imageName: String,
-    created_at: Date
+    url: String
 }
 
 /**

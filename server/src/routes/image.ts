@@ -34,6 +34,11 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
+router.get(
+  '/',
+  imageController.getImage
+);
+
 router.post(
   '/upload',
   upload.single('image'),
