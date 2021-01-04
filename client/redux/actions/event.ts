@@ -14,8 +14,8 @@ export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequ
 
 export const editEvent = createAsyncThunk<EditEventResponse, EditEventRequest, {state}>(
   'event/editEvent',
-  async (data: EditEventRequest) => {
-    const response = await apiClient.editEvent(data) as EditEventResponse;
+  async (request: EditEventRequest) => {
+    const response = await apiClient.editEvent(request) as EditEventResponse;
     return response;
   },
 );

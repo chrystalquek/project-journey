@@ -10,9 +10,8 @@ import { useState } from 'react';
 const AdminEventFormPage = () => {
   const userData = useSelector((state: StoreState) => state.user);
   const router = useRouter();
-  const { event_id } = router.query;
+  const eventId = router.query.event_id as string;
 
-  console.log(event_id);
   return (
     <Grid container direction="column" spacing={6}>
       <Grid item>
@@ -22,7 +21,7 @@ const AdminEventFormPage = () => {
       <Grid item container>
         <Grid item md={2} />
         <Grid item container direction="column" xs={12} md={8}>
-          <AdminEventForm id={event_id} />
+          <AdminEventForm id={eventId} isNew={eventId === 'new'} />
           <Grid item md={2} />
         </Grid>
       </Grid>

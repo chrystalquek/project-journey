@@ -12,9 +12,9 @@ type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
   createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
-  getEvent(request: GetEventParams): Promise<GetEventParams>
+  getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
-getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
+  getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
   getAllEvents(): Promise<GetAllEventsResponse>
 }
 
@@ -59,8 +59,8 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `event/single/${query}`, 'get');
   }
 
-  async editEvent(request: EditEventRequest): Promise<EditEventResponse> {
-    return this.send(request, 'event', 'put');
+  async editEvent({ id, data }: EditEventRequest): Promise<EditEventResponse> {
+    return this.send(data, `event/${id}`, 'put');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {

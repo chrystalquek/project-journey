@@ -6,14 +6,13 @@ import { KeyboardDatePicker, KeyboardDateTimePicker } from '@material-ui/pickers
 import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { createEvent, getEvent } from '@redux/actions/event';
+import { createEvent, getEvent, editEvent } from '@redux/actions/event';
 import dayjs from 'dayjs';
-import _ from 'lodash';
-import { GetEventParams } from '@utils/api/request';
 import { StoreState } from '@redux/store';
 
 type AdminEventFormProps = {
-  id: string
+  id: string,
+  isNew: boolean,
 }
 
 const eventTypes = [
@@ -88,7 +87,7 @@ const getDateAndTimeIsoString = (dateDayJs: dayjs.Dayjs, time: string): string =
   return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
 };
 
-const AdminEventForm: FC<AdminEventFormProps> = ({ id }) => {
+const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -151,8 +150,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id }) => {
         toTime: dayjs(camelCaseEventForm.endDate).format('HH:mm'),
       };
 
-      console.log(newDateAndTime);
-
       setDateAndTime(newDateAndTime);
       setFormData(newFormData);
     }
@@ -178,10 +175,15 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id }) => {
       endDate: getDateAndTimeIsoString(toDate, toTime),
     };
 
-    dispatch(createEvent(formToSend));
+    if (isNew) {
+      dispatch(createEvent(formToSend));
+      alert('Event Created!');
+    } else {
+      dispatch(editEvent({ data: formToSend, id }));
+      alert('Event Edited!');
+    }
     // TODO: Confirm with designers what happens?
     // I think this should redirect on success to the Event Details page
-    alert('Event Created!');
   };
 
   const handleChange = (event) => {
@@ -204,7 +206,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id }) => {
       <PaddedGrid>
         <Grid container direction="column" spacing={2}>
           <Grid item>
-            <Typography variant="h1">Create Event</Typography>
+            <Typography variant="h1">{isNew ? 'Create Event' : 'Edit Event'}</Typography>
           </Grid>
           {/* Type of event */}
           <Grid item container>
@@ -508,7 +510,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id }) => {
               className={classes.button}
               onClick={handleSubmit}
             >
-              <Typography variant="body1"> Create Event</Typography>
+              <Typography variant="body1">{isNew ? 'Create Event' : 'Edit Event'}</Typography>
             </Button>
           </Grid>
         </Grid>

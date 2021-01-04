@@ -1,5 +1,4 @@
-import { DataRow } from '@components/common/DataRow';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { getEvent } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
