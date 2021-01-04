@@ -34,7 +34,7 @@ const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
         url: url
       };
 
-    await imageSchemaData.save().then(created => console.info(`Created ${created}`));
+    await imageSchemaData.save();
     return imageResponse;
     } catch (err) {
       throw new Error(err.msg)
