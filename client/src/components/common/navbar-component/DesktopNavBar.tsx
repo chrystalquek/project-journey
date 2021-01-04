@@ -125,7 +125,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/')
+    router.push('/');
   };
 
   const navigationRender = () => {
@@ -255,8 +255,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-        <Avatar alt={userData.name} src={userData.photoUrl} />
-      );
+      <Avatar alt={userData.name} src={userData.photoUrl} />
+    );
 
     return (
       <>

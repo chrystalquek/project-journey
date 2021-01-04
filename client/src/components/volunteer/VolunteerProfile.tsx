@@ -25,11 +25,11 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
-import Footer from '../common/Footer';
-import NavBar from '../common/NavBar';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
+import NavBar from '../common/NavBar';
+import Footer from '../common/Footer';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10

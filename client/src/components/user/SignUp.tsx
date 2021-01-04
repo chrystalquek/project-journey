@@ -1,6 +1,6 @@
 import {
-  Box, Grid, Button, TextField, Typography, Divider, Card, CardContent, CardHeader, CardActionArea, useMediaQuery, useTheme
-} from '@material-ui/core'
+  Box, Grid, Button, TextField, Typography, Divider, Card, CardContent, CardHeader, CardActionArea, useMediaQuery, useTheme,
+} from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
@@ -22,79 +22,79 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up('md')]: {
       padding: '80px 100px 0px 100px',
-    }
+    },
   },
   rowContent: {
     justifyContent: 'center',
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
-    color: "black",
-    textTransform: "none",
-    padding: "5px 50px 5px 50px",
+    color: 'black',
+    textTransform: 'none',
+    padding: '5px 50px 5px 50px',
     borderRadius: 20,
   },
   backButton: {
     backgroundColor: theme.palette.secondary.main,
-    color: "black",
-    textTransform: "none",
-    padding: "5px 50px 5px 50px",
+    color: 'black',
+    textTransform: 'none',
+    padding: '5px 50px 5px 50px',
     borderRadius: 20,
-    marginBottom: "20px",
+    marginBottom: '20px',
   },
   pageHeader: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    marginBottom: "40px",
+    fontSize: '32px',
+    fontWeight: 'bold',
+    marginBottom: '40px',
   },
   loginButtonContainer: {
-    padding: "20px 0px 20px 0px",
+    padding: '20px 0px 20px 0px',
   },
   form: {},
   header: {
-    textAlign: "left",
-    marginTop: "10px",
-    fontWeight: "bold",
-    fontSize: "14px",
+    textAlign: 'left',
+    marginTop: '10px',
+    fontWeight: 'bold',
+    fontSize: '14px',
   },
   formContainer: {
-    padding: "20px",
+    padding: '20px',
   },
   invalidText: {
-    marginBottom: "10px",
-    color: "#e60026"
+    marginBottom: '10px',
+    color: '#e60026',
   },
   dividerLine: {
     backgroundColor: '#D0DE39',
-    height: 1
+    height: 1,
   },
   dividerText: {
     fontSize: 16,
-    fontWeight: 500
+    fontWeight: 500,
   },
   card: {
-    borderRadius: '10px'
+    borderRadius: '10px',
   },
   cardHeaderAdhoc: {
     background: '#D0DE39',
     color: '#fff',
-    borderRadius: '10px 10px 0px 0px'
+    borderRadius: '10px 10px 0px 0px',
   },
   cardHeaderRegular: {
     background: '#00BADC',
     color: '#fff',
-    borderRadius: '10px 10px 0px 0px'
+    borderRadius: '10px 10px 0px 0px',
   },
   signUpInstructions: {
     justifyContent: 'center',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   centerContent: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   cardContainer: {
-    padding: 24
-  }
+    padding: 24,
+  },
 }));
 
 type SignUpProps = {
@@ -104,14 +104,13 @@ type SignUpProps = {
 
 const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [volunteerType, setVolunteerType] = useState("ad-hoc"); // default set as ad-hoc
+  const [volunteerType, setVolunteerType] = useState('ad-hoc'); // default set as ad-hoc
   const [invalid, setInvalid] = useState(false);
   const [form] = useForm();
   const router = useRouter();
   const classes = useStyles();
-  const isFormDisabled =
-    !form.isFieldsTouched(true) ||
-    !!form.getFieldsError().filter(({ errors }) => errors.length).length;
+  const isFormDisabled = !form.isFieldsTouched(true)
+    || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
   // Proceed to next step
   const nextStep = () => {
@@ -124,12 +123,12 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   };
 
   const selectAdhoc = () => {
-    setVolunteerType("ad-hoc");
+    setVolunteerType('ad-hoc');
     nextStep();
   };
 
   const selectCommitted = () => {
-    setVolunteerType("committed");
+    setVolunteerType('committed');
     nextStep();
   };
 
@@ -140,22 +139,22 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
       email: e.target.email.value,
       password: e.target.password.value,
       birthday: e.target.birthday.value,
-      gender: "male",
-      citizenship: "singapore",
-      race: "other",
+      gender: 'male',
+      citizenship: 'singapore',
+      race: 'other',
       hasVolunteered: true,
       hasChildrenExperience: true,
       hasExternalVolunteerExperience: true,
       hasFirstAidCertification: true,
       volunteerFrequency: 1,
-      volunteerReason: "Want to",
-      volunteerContribution: "string",
+      volunteerReason: 'Want to',
+      volunteerContribution: 'string',
       volunteerType,
     };
     const response = await handleFormSubmit(signUpArgs);
     // @ts-ignore
-    if (response?.type == "volunteer//fulfilled") {
-      router.push("/login");
+    if (response?.type == 'volunteer//fulfilled') {
+      router.push('/login');
     } else {
       setInvalid(true);
     }
@@ -163,40 +162,38 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
 
   const TextDivider = ({ children }) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
+    const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
     if (isMobile) {
       return (
         <Grid container>
           <Grid item className={classes.dividerText}>{children}</Grid>
         </Grid>
       );
-    } else {
-      return (
-        <Grid container>
-          <Grid item xs={4} ><Divider className={classes.dividerLine} /></Grid>
-          <Grid item xs={4} className={classes.dividerText}>{children}</Grid>
-          <Grid item xs={4} className={classes.dividerLine}><Divider /></Grid>
-        </Grid>
-      );
     }
+    return (
+      <Grid container>
+        <Grid item xs={4}><Divider className={classes.dividerLine} /></Grid>
+        <Grid item xs={4} className={classes.dividerText}>{children}</Grid>
+        <Grid item xs={4} className={classes.dividerLine}><Divider /></Grid>
+      </Grid>
+    );
   };
 
-  const VolunteerType = props => {
-    return (
-      <Box>
-        <Box className={classes.content}>
-          <div>
-            <Grid container className={classes.signUpInstructions}>
-              <Grid item md={6}>
-                <Typography variant='body1'>
-                  <p>
-                    Yay! We are excited that you are interested to volunteer with us.
-                    (information to help the users make a decision)
-                    Please be reminded that there is a minimum commitment of 3 months
-                    (serving a minimum of 3 sessions a month) in order to have direction
-                    interaction with our learning community (aged 6 to 16 years old).
-                    We have this policy for a number of reasons:
-                    <ul>
+  const VolunteerType = (props) => (
+    <Box>
+      <Box className={classes.content}>
+        <div>
+          <Grid container className={classes.signUpInstructions}>
+            <Grid item md={6}>
+              <Typography variant="body1">
+                <p>
+                  Yay! We are excited that you are interested to volunteer with us.
+                  (information to help the users make a decision)
+                  Please be reminded that there is a minimum commitment of 3 months
+                  (serving a minimum of 3 sessions a month) in order to have direction
+                  interaction with our learning community (aged 6 to 16 years old).
+                  We have this policy for a number of reasons:
+                  <ul>
                       <li>
                         Limit the emotional trauma in our children that occurs
                         when volunteers come for a few sessions and leave
@@ -219,65 +216,64 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
                         and guided by some incredible WCA Captains on the team.
                       </li>
                     </ul>
-                  </p>
+                </p>
+              </Typography>
+            </Grid>
+          </Grid>
+        </div>
+        <div>
+          <Grid container className={classes.centerContent}>
+            <Grid item sm={6}>
+              <TextDivider>
+                <Typography variant="body1">
+                  Sign Up As
                 </Typography>
-              </Grid>
+              </TextDivider>
             </Grid>
-          </div>
-          <div>
-            <Grid container className={classes.centerContent}>
-              <Grid item sm={6}>
-                <TextDivider>
-                  <Typography variant='body1'>
-                    Sign Up As
-                  </Typography>
-                </TextDivider>
-              </Grid>
-            </Grid>
-            <div className={classes.cardContainer}>
-              <Grid container spacing={6} className={classes.centerContent}>
-                <Grid item md={3}>
-                  <Card className={classes.card} onClick={selectAdhoc}>
-                    <CardActionArea>
-                      <CardHeader title="Ad-hoc Volunteer" className={classes.cardHeaderAdhoc} />
-                      <CardContent>
-                        <Typography variant='body2'>
+          </Grid>
+          <div className={classes.cardContainer}>
+            <Grid container spacing={6} className={classes.centerContent}>
+              <Grid item md={3}>
+                <Card className={classes.card} onClick={selectAdhoc}>
+                  <CardActionArea>
+                    <CardHeader title="Ad-hoc Volunteer" className={classes.cardHeaderAdhoc} />
+                    <CardContent>
+                        <Typography variant="body2">
                           You are only intending to volunteer one-off at Blessings in a Bag
                         </Typography>
                       </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-                <Grid item md={3}>
-                  <Card className={classes.card} onClick={selectCommitted}>
-                    <CardActionArea>
-                      <CardHeader title="Regular Volunteer" className={classes.cardHeaderRegular} />
-                      <CardContent>
-                        <Typography variant='body2'>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+              <Grid item md={3}>
+                <Card className={classes.card} onClick={selectCommitted}>
+                  <CardActionArea>
+                    <CardHeader title="Regular Volunteer" className={classes.cardHeaderRegular} />
+                    <CardContent>
+                        <Typography variant="body2">
                           You are able to commit to a minimum of 3 months at Blessings in a Bag
                         </Typography>
                       </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
+                  </CardActionArea>
+                </Card>
               </Grid>
-            </div>
+            </Grid>
           </div>
+        </div>
 
-          <div className="section">
-            <Typography variant='body2'>
-              Already have an account?
-              {' '}
-              <br />
-              <Link href="/auth/login">
-                Log in
-              </Link>             
-            </Typography>
-          </div>
-        </Box>
+        <div className="section">
+          <Typography variant="body2">
+            Already have an account?
+            {' '}
+            <br />
+            <Link href="/auth/login">
+              Log in
+            </Link>
+          </Typography>
+        </div>
       </Box>
-    );
-  }
+    </Box>
+  );
 
   const InvalidCredentials = (props) => {
     if (invalid) {
@@ -301,76 +297,76 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
               <form className={classes.form} onSubmit={handleSubmit}>
                 <Typography className={classes.header}> Name </Typography>
                 <TextField
-                  variant='outlined'
-                  margin='normal'
+                  variant="outlined"
+                  margin="normal"
                   // required
                   fullWidth
-                  id='name'
+                  id="name"
                   label="e.g. John Doe"
-                  name='name'
-                  autoComplete='name'
+                  name="name"
+                  autoComplete="name"
                 />
                 <Typography className={classes.header}> Email </Typography>
                 <TextField
-                  variant='outlined'
-                  margin='normal'
+                  variant="outlined"
+                  margin="normal"
                   // required
                   fullWidth
-                  id='email'
+                  id="email"
                   label="e.g. username@gmail.com"
-                  name='email'
-                  autoComplete='email'
+                  name="email"
+                  autoComplete="email"
                 />
                 <Typography className={classes.header}> Password </Typography>
                 <TextField
-                  variant='outlined'
-                  margin='normal'
+                  variant="outlined"
+                  margin="normal"
                   // required
                   fullWidth
-                  name='password'
-                  type='password'
-                  id='password'
-                  autoComplete='current-password'
+                  name="password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
                 />
                 <Typography className={classes.header}> Date of Birth </Typography>
                 <TextField
-                  variant='outlined'
-                  margin='normal'
+                  variant="outlined"
+                  margin="normal"
                   // required
                   fullWidth
-                  id='birthday'
-                  name='birthday'
-                  type='date'
+                  id="birthday"
+                  name="birthday"
+                  type="date"
                   InputLabelProps={{
                     shrink: true,
                   }}
                 />
                 <Typography className={classes.header}> Comments </Typography>
                 <TextField
-                  variant='outlined'
-                  margin='normal'
+                  variant="outlined"
+                  margin="normal"
                   // required
                   fullWidth
                   multiline
-                  id='comments'
+                  id="comments"
                   label="e.g. Additional Comments"
-                  name='comments'
+                  name="comments"
                 />
                 <div className="section">
                   <div>
                     <span>
-                      <Typography variant='body2'>
+                      <Typography variant="body2">
                         By signing up, I agree to the&nbsp;
-                          <Link href="/">
+                        <Link href="/">
                           Privacy
-                          </Link>
-                          &nbsp;and&nbsp;
-                          <Link href="/">
+                        </Link>
+                        &nbsp;and&nbsp;
+                        <Link href="/">
                           Terms of Service
-                          </Link>
-                          &nbsp;of Blessings in a Bag
+                        </Link>
+                        &nbsp;of Blessings in a Bag
                       </Typography>
-                      </span>
+                    </span>
                   </div>
                 </div>
                 <Grid className={classes.loginButtonContainer}>
@@ -387,8 +383,10 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
                 </Grid>
               </form>
               <div className="section">
-                <Typography variant='body2'>
-                  Already have an account? <br />
+                <Typography variant="body2">
+                  Already have an account?
+                  {' '}
+                  <br />
                   <Link href="/auth/login">Log in</Link>
                 </Typography>
               </div>
@@ -402,10 +400,10 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
 
   const VolunteerSignUp = (props) => {
     if (currentStep == 0) {
-      return <div><VolunteerType /></div>
-    } else {
-      return <VolunteerInfo />
+      return <div><VolunteerType /></div>;
     }
+    return <VolunteerInfo />;
+
     return <VolunteerInfo />;
   };
 

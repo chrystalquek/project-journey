@@ -1,16 +1,18 @@
-import { Box, Grid, Button, Typography, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import React, { FC, useEffect, useState } from "react";
-import Link from "next/link";
-import Head from "next/head";
-import { useRouter } from "next/dist/client/router";
-import { Formik, Form, Field } from "formik";
-import { TextField } from "formik-material-ui";
+import {
+  Box, Grid, Button, Typography, Paper,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { FC, useEffect, useState } from 'react';
+import Link from 'next/link';
+import Head from 'next/head';
+import { useRouter } from 'next/dist/client/router';
+import { Formik, Form, Field } from 'formik';
+import { TextField } from 'formik-material-ui';
 
-import NavBar from "@components/common/NavBar";
-import Footer from "@components/common/Footer";
-import { LoginArgs } from "@redux/actions/user";
-import { UserState } from "@redux/reducers/user";
+import NavBar from '@components/common/NavBar';
+import Footer from '@components/common/Footer';
+import { LoginArgs } from '@redux/actions/user';
+import { UserState } from '@redux/reducers/user';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -22,47 +24,47 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up('md')]: {
       padding: '80px 100px 0px 100px',
-    }
+    },
   },
   rowContent: {
     justifyContent: 'center',
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
-    color: "black",
-    textTransform: "none",
-    padding: "5px 50px",
+    color: 'black',
+    textTransform: 'none',
+    padding: '5px 50px',
     borderRadius: 20,
   },
   pageHeader: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    marginBottom: "40px",
+    fontSize: '32px',
+    fontWeight: 'bold',
+    marginBottom: '40px',
   },
   loginButtonContainer: {
-    padding: "20px 0px 20px 0px",
+    padding: '20px 0px 20px 0px',
   },
   form: {},
   header: {
-    textAlign: "left",
-    marginTop: "10px",
-    fontWeight: "bold",
-    fontSize: "14px",
+    textAlign: 'left',
+    marginTop: '10px',
+    fontWeight: 'bold',
+    fontSize: '14px',
   },
   formContainer: {
-    padding: "20px",
+    padding: '20px',
   },
   signUpText: {
-    fontWeight: "bold",
-    color: "#000",
+    fontWeight: 'bold',
+    color: '#000',
   },
   invalidText: {
-    marginBottom: "10px",
-    color: "#e60026",
+    marginBottom: '10px',
+    color: '#e60026',
   },
   section: {
-    margin: "20px"
-  }
+    margin: '20px',
+  },
 }));
 
 type LoginProps = {
@@ -77,15 +79,15 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
 
   useEffect(() => {
     if (user.token) {
-      router.push("/");
+      router.push('/');
     }
   }, [user]);
 
   useEffect(() => {
-    if (user.status === "rejected") {
-      alert("Login failed");
-    } else if (user.status === "fulfilled") {
-      router.push("/");
+    if (user.status === 'rejected') {
+      alert('Login failed');
+    } else if (user.status === 'fulfilled') {
+      router.push('/');
     }
   }, [user.status]);
 
@@ -96,7 +98,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
     };
     const response = await handleFormSubmit(loginArgs);
     // @ts-ignore type exists
-    if (response?.type === "user/login/rejected") {
+    if (response?.type === 'user/login/rejected') {
       setInvalid(true);
     }
   };
@@ -117,15 +119,15 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
     if (!values.email) {
-      errors.email = "Required";
+      errors.email = 'Required';
     } else if (!emailRegex.test(values.email)) {
-      errors.email = "Invalid email address";
+      errors.email = 'Invalid email address';
     }
 
     if (!values.password) {
-      errors.password = "Required";
+      errors.password = 'Required';
     } else if (values.password.length < 8) {
-      errors.password = "Password must contain at least 8 characters";
+      errors.password = 'Password must contain at least 8 characters';
     }
 
     return errors;
@@ -145,8 +147,8 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
               <Paper className={classes.formContainer}>
                 <Formik
                   initialValues={{
-                    email: "",
-                    password: "",
+                    email: '',
+                    password: '',
                   }}
                   validate={validate}
                   onSubmit={handleSubmit}
@@ -156,8 +158,8 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
                       <Typography className={classes.header}> Email </Typography>
                       <Field
                         component={TextField}
-                        variant='outlined'
-                        margin='normal'
+                        variant="outlined"
+                        margin="normal"
                         // required
                         fullWidth
                         id="email"
@@ -168,23 +170,23 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
                       <Typography className={classes.header}> Password </Typography>
                       <Field
                         component={TextField}
-                        variant='outlined'
-                        margin='normal'
+                        variant="outlined"
+                        margin="normal"
                         // required
                         fullWidth
-                        name='password'
-                        type='password'
-                        id='password'
-                        autoComplete='current-password'
+                        name="password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
                       />
                       <Grid className={classes.loginButtonContainer}>
                         <InvalidCredentials />
                         <Button
-                          color='primary'
-                          type='submit'
+                          color="primary"
+                          type="submit"
                           disabled={isSubmitting}
                           className={classes.loginButton}
-                          size='large'
+                          size="large"
                         >
                           Log In
                         </Button>
@@ -198,7 +200,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
                 <div>
                   <Typography>Don&apos;t have an account?</Typography>
                 </div>
-                <Link href='/auth/signup'>
+                <Link href="/auth/signup">
                   <Typography className={classes.signUpText}>Sign up</Typography>
                 </Link>
               </div>

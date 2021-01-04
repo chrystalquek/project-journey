@@ -9,7 +9,7 @@ const { Footer } = Layout;
 
 const FooterComponent: FC = () => (
   <Footer style={styles.footer}>
-    <Typography variant='body2'>Journey © 2021 Created by DSC NUS</Typography>
+    <Typography variant="body2">Journey © 2021 Created by DSC NUS</Typography>
   </Footer>
 );
 

@@ -5,7 +5,7 @@ const footer: CSSProperties = {
   bottom: 0,
   position: 'relative',
   width: '100%',
-  paddingBottom: 20
+  paddingBottom: 20,
 };
 
 export default {

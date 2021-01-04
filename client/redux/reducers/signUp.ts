@@ -15,19 +15,19 @@ export type SignUpState = {
 const initialState: SignUpState = {
   data: {},
   pendingApproval: {
-    pendingSignUpCount: 0
+    pendingSignUpCount: 0,
   },
   upcomingEvent: {
-    ids: []
-  }
+    ids: [],
+  },
 };
 
 // parse all Dates etc before saving to store
 const addToData = (signUps: Array<SignUpData>, state: SignUpState) => {
-  signUps.forEach(signUp => state.data[signUp._id] = {
+  signUps.forEach((signUp) => state.data[signUp._id] = {
     ...signUp,
   });
-}
+};
 
 const signUpSlice = createSlice({
   name: 'signUp',
@@ -38,11 +38,11 @@ const signUpSlice = createSlice({
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state)
+      addToData(payload.data, state);
     });
     builder.addCase(getPendingSignUpsPendingApproval.fulfilled, (state, action) => {
       const { payload } = action;
-      state.pendingApproval.pendingSignUpCount = payload.count
+      state.pendingApproval.pendingSignUpCount = payload.count;
     });
   },
 });
