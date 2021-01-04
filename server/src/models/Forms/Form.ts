@@ -9,7 +9,10 @@ const FormSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   name: String,
   description: String,
-  event_id: mongoose.Types.ObjectId,
+  event_id: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Event',
+  },
 });
 
 export default mongoose.model<FormModel>('Form', FormSchema);

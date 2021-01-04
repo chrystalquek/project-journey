@@ -7,7 +7,10 @@ export type OptionModel = OptionData & mongoose.Document
 
 const OptionSchema = new Schema({
   _id: mongoose.Types.ObjectId,
-  question_id: mongoose.Types.ObjectId,
+  question_id: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Question',
+  },
   text: String,
 });
 

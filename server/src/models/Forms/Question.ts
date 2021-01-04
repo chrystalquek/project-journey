@@ -7,7 +7,10 @@ export type QuestionModel = QuestionData & mongoose.Document
 
 const QuestionSchema = new Schema({
   _id: mongoose.Types.ObjectId,
-  form_id: mongoose.Types.ObjectId,
+  form_id: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Form',
+  },
   text: String,
   is_required: Boolean,
 });
