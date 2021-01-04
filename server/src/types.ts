@@ -215,6 +215,17 @@ export type OptionData = {
     text: string;
 }
 
+export type ImageData = {
+    email: String,
+    imageName: String
+}
+
+export type ImageResponse = {
+    email: String,
+    imageName: String,
+    url: String
+}
+
 /**
  * Individual error type for saving in DB
  * Error type is at per field level
