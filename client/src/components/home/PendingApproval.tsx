@@ -20,8 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const PendingApproval: FC<{}> = ({
-}) => {
+const PendingApproval: FC<{}> = ({ }) => {
     const classes = useStyles();
 
     const dispatch = useDispatch();

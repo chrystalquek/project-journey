@@ -11,9 +11,7 @@ import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
 
 
-const Home: FC<{}> = ({
-}) => {
-
+const Home: FC<{}> = ({ }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 

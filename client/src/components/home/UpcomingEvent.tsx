@@ -29,9 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const UpcomingEvent: FC<{}> = ({
-
-}: {}) => {
+const UpcomingEvent: FC<{}> = ({ }) => {
     const classes = useStyles();
     const dispatch = useDispatch()
 

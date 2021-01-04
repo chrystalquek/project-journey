@@ -49,9 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VolunteerProfile: FC<{}> = ({
-
-}) => {
+const VolunteerProfile: FC<{}> = ({ }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
