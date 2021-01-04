@@ -155,7 +155,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {eventMenuArray.map((menuName) => (
                     <MenuItem
                       key={menuName}
-                      onClick={() => router.push('/admin/events')}
+                      onClick={() => router.push('/event')}
                     >
                       {menuName}
                     </MenuItem>
