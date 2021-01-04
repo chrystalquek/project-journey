@@ -196,3 +196,10 @@ export type MongooseSaveError = {
     errors: Record<string, MongooseSaveSubError>
     _message: string
 }
+
+export type CommitmentApplicationData = {
+    volunteerId: string,
+
+    // List of questions in the application form
+    // yet to be determined, waiting for BD team
+}
