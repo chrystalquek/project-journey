@@ -283,7 +283,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
-            onClick={() => router.push('/volunteer/Profile')}
+            onClick={() => router.push(`/profile/${userData._id}`)}
             disableRipple
           >
             <Typography className={classes.editProfileText}>
