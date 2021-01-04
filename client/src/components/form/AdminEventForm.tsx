@@ -144,15 +144,16 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id }) => {
         location: camelCaseEventForm.location,
       };
 
-      const camelCaseDateAndTime = keysToCamel(dateAndTime);
       const newDateAndTime = {
-        fromDate: dayjs(),
-        toDate: dayjs(),
-        fromTime: '00:00',
-        toTime: '00:00',
+        fromDate: dayjs(camelCaseEventForm.startDate),
+        toDate: dayjs(camelCaseEventForm.endDate),
+        fromTime: dayjs(camelCaseEventForm.startDate).format('HH:mm'),
+        toTime: dayjs(camelCaseEventForm.endDate).format('HH:mm'),
       };
 
-      setFormData(newDateAndTime);
+      console.log(newDateAndTime);
+
+      setDateAndTime(newDateAndTime);
       setFormData(newFormData);
     }
   }, [eventForm]);
