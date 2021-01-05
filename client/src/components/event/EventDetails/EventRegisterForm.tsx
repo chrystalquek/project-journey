@@ -111,7 +111,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event, isDisabled }) => {
                    disabled={isDisabled}
         />
 
-        <Button className={classes.button} type="submit">Register</Button>
+        <Button disabled={isDisabled} className={classes.button} type="submit">Register</Button>
       </form>
     </>
   )
