@@ -1,14 +1,13 @@
 import React, {FC} from "react";
 import {EventData} from "@type/event";
 import {VolunteerData} from "@type/volunteer";
-import {useTheme} from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {Box, Grid} from "@material-ui/core";
 import {testEventImage1} from "@constants/imagePaths";
 import EventInformation from "@components/event/EventDetails/EventInformation";
 import VolunteerRoles from "@components/event/EventDetails/VolunteerRoles";
 import EventRegisterForm from "@components/event/EventDetails/EventRegisterForm";
 import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
+import {getEventVacancies} from "@utils/helpers/event/EventsPageBody";
 
 type EventDetailsCommittedProps = {
   event: EventData,
@@ -16,11 +15,9 @@ type EventDetailsCommittedProps = {
 }
 
 const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ event, user }) => {
-  const theme = useTheme();
-  const screenXs = useMediaQuery(theme.breakpoints.only('xs'));
-  const screenSm = useMediaQuery(theme.breakpoints.only('sm'));
+  const { remaining } = getEventVacancies(event);
+  const isFull = remaining === 0;
 
-  // Mobile view
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -46,7 +43,7 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ event, user }) 
       </Grid>
 
       <Grid item xs={12}>
-        <EventRegisterForm event={event} />
+        <EventRegisterForm isDisabled={isFull} event={event} />
       </Grid>
     </Grid>
   )

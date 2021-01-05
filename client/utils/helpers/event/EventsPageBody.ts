@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import {MONTHS} from '@constants/dateMappings';
 import {Event, EventData, EventFilterOptions, EventFilters, EventType} from '@type/event';
 import {VOLUNTEER_TYPE} from "@type/volunteer";
-import {getEvent} from "@redux/actions/event";
 
 // Contains helper functions for everything related to the events page.
 
@@ -44,6 +43,7 @@ export function getEventVacancies(data: EventData): { filled: number, total: num
 
 // Filters events based on event type and volunteer type given some filter options
 export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
+  // TODO: sort by increasing remaining slots left
   // default calendar value is null
   const allowAllDates = getDateFilter(filters) === null;
 

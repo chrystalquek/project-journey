@@ -15,6 +15,7 @@ import {FormSelectRow, parseRoles} from "@utils/helpers/event/EventDetails/Event
 
 type EventRegisterProps = {
   event: EventData
+  isDisabled: boolean // true when no vacancies left in event
 }
 
 type FormState = {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
+const EventRegisterForm: FC<EventRegisterProps> = ({ event, isDisabled }) => {
   const classes = useStyles();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
@@ -59,7 +60,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
         <Box fontWeight="bold" fontSize="h3.fontSize">Register Here</Box>
         <Box fontWeight="bold">Position Interested:</Box>
         <Box>First Choice:</Box>
-        <FormControl fullWidth variant="outlined">
+        <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="first-choice">Select Position</InputLabel>
           <Select
             required fullWidth
@@ -73,7 +74,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
           </Select>
         </FormControl>
         <Box>Second Choice: <Box component="span" color="text.secondary">(optional)</Box></Box>
-        <FormControl fullWidth variant="outlined">
+        <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="second-choice">Select Position</InputLabel>
           <Select
             fullWidth labelId="second-choice"
@@ -87,7 +88,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
           </Select>
         </FormControl>
         <Box>Third Choice: <Box component="span" color="text.secondary">(optional)</Box></Box>
-        <FormControl fullWidth variant="outlined">
+        <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="third-choice">Select Position</InputLabel>
           <Select
             fullWidth labelId="third-choice"
@@ -102,10 +103,12 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
         </FormControl>
         <Box fontWeight="bold">Anything you would like us to know?</Box>
         <TextField id="additionalInfo" name="additionalInfo"
-                   fullWidth multiline rows={4}
+                   fullWidth multiline
+                   rows={4}
                    label="Type something here..."
-                   onChange={handleChange}
                    variant="outlined"
+                   onChange={handleChange}
+                   disabled={isDisabled}
         />
 
         <Button className={classes.button} type="submit">Register</Button>
