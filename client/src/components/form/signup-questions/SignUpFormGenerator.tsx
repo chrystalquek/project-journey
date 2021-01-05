@@ -1,10 +1,6 @@
 import { Fragment, useCallback } from 'react';
-import {
-  Paper, Typography, MenuItem, Button,
-} from '@material-ui/core';
-import {
-  Formik, Field, Form, ErrorMessage,
-} from 'formik';
+import { Paper, Typography, MenuItem, Button } from '@material-ui/core';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
 import { QuestionList, OptionType, InputType } from '@type/questions';
@@ -13,9 +9,9 @@ import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
 
 type FormGeneratorProps = {
-  questionList: QuestionList
-  handleSignUp: (formValues: Record<string, any>) => void
-}
+  questionList: QuestionList;
+  handleSignUp: (formValues: Record<string, any>) => void;
+};
 
 const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
   const initialValues: Record<string, any> = {};
@@ -24,9 +20,12 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;
   });
 
-  const handleSubmit = useCallback((values: Record<string, any>) => {
-    handleSignUp(values);
-  }, [questionList]);
+  const handleSubmit = useCallback(
+    (values: Record<string, any>) => {
+      handleSignUp(values);
+    },
+    [questionList]
+  );
 
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
@@ -39,28 +38,35 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
       is: (val: string) => val && val.length > 0,
       then: Yup.string().oneOf(
         [Yup.ref('password')],
-        'Confirm Password need to be the same as Password fields',
+        'Confirm Password need to be the same as Password fields'
       ),
     }),
-    mobileNumber: Yup.string().matches(phoneRegExp, 'Mobile phone is not valid').required(),
+    mobileNumber: Yup.string()
+      .matches(phoneRegExp, 'Mobile phone is not valid')
+      .required(),
     institutionName: Yup.string().required(),
     position: Yup.string().required(),
   });
 
-  const FormQuestionMapper = ({ formType, name, options }: {
-    formType: InputType,
-    name: string,
-    options: OptionType[] | null
+  const FormQuestionMapper = ({
+    formType,
+    name,
+    options,
+  }: {
+    formType: InputType;
+    name: string;
+    options: OptionType[] | null;
   }) => {
     switch (formType) {
       case 'date':
         return (
           <Field
             component={DatePicker}
-            inputVariant="outlined"
-            format="dd/MM/yyyy"
+            inputVariant='outlined'
+            format='dd/MM/yyyy'
             name={name}
             fullWidth
+            margin='dense'
           />
         );
       case 'shortAnswer':
@@ -68,67 +74,75 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
         return (
           <Field
             component={TextField}
-            variant="outlined"
+            variant='outlined'
             type={formType === 'password' ? formType : 'text'}
             name={name}
             fullWidth
+            margin='dense'
           />
         );
       case 'longAnswer':
         return (
           <Field
             component={TextField}
-            variant="outlined"
+            variant='outlined'
             name={name}
             fullWidth
             multiline
+            margin='dense'
           />
         );
       case 'mcq':
         return (
           <Field
             component={TextField}
-            variant="outlined"
+            variant='outlined'
             name={name}
             fullWidth
             select
             InputLabelProps={{
               shrink: true,
             }}
+            margin='dense'
           >
-            {(options as Array<OptionType>).map(
-              ({ value, label }) => (
-                <MenuItem key={value} value={value}>
-                  {label}
-                </MenuItem>
-              ),
-            )}
+            {(options as Array<OptionType>).map(({ value, label }) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
           </Field>
         );
       case 'checkboxes':
       default:
         return (
-          <>
-            {(options as Array<OptionType>).map(
-              ({ value, label }) => (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {(options as Array<OptionType>).map(({ value, label }) => (
+              <div style={{ flex: 1 }}>
                 <Field
                   component={CheckboxWithLabel}
                   name={name}
                   key={value}
                   value={value}
                   Label={{ label }}
-                  color="primary"
-                  type="checkbox"
+                  color='primary'
+                  type='checkbox'
                 />
-              ),
-            )}
-          </>
+              </div>
+            ))}
+          </div>
         );
     }
   };
 
   return (
-    <Paper style={{ width: '500px', margin: 'auto', padding: '30px' }}>
+    <Paper
+      style={{
+        width: '500px',
+        margin: 'auto',
+        padding: '30px',
+        textAlign: 'left',
+      }}
+    >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={initialValues}
@@ -136,43 +150,55 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
           validationSchema={SignUpSchema}
           validateOnChange={false}
         >
-          {({
-            isSubmitting,
-            touched,
-            values,
-            errors,
-          }) => (
-
+          {({ isSubmitting, touched, values, errors }) => (
             <Form>
               {questionList.map((questionItem) => {
                 const { name, displayText, type } = questionItem;
-                const options = type === 'mcq' || type === 'checkboxes'
-                  ? questionItem.options
-                  : null;
+                const options =
+                  type === 'mcq' || type === 'checkboxes'
+                    ? questionItem.options
+                    : null;
 
                 return (
                   <div
-                    key={questionItem.displayText}
+                    key={questionItem.displayText[0]}
                     style={{
                       marginBottom: '32px',
                     }}
                   >
-                    <Typography style={{
-                      marginBottom: '16px',
-                    }}
-                    >
-                      {displayText}
-                    </Typography>
-                    <FormQuestionMapper formType={type} name={name} options={options} />
+                    {displayText.map((text) => {
+                      return (
+                        <Typography
+                          key={text}
+                          style={{
+                            marginBottom: '16px',
+                            fontWeight: '600',
+                          }}
+                        >
+                          {text}
+                        </Typography>
+                      );
+                    })}
+                    <FormQuestionMapper
+                      formType={type}
+                      name={name}
+                      options={options}
+                    />
                   </div>
                 );
               })}
               <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={isSubmitting}
-                size="large"
+                variant='contained'
+                color='primary'
+                type='submit'
+                disabled={
+                  isSubmitting ||
+                  values.permissionEmailCollection === 'no' ||
+                  values.personalInformationConsent === 'no' ||
+                  values.acknowledgeTnC === 'no' ||
+                  values.informedConsent === 'no'
+                }
+                size='large'
               >
                 Submit
               </Button>
