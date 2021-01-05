@@ -21,6 +21,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
+import {EVENTS_ROUTE} from "@constants/routes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -125,7 +126,6 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/');
   };
 
   const navigationRender = () => {
@@ -155,7 +155,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {eventMenuArray.map((menuName) => (
                     <MenuItem
                       key={menuName}
-                      onClick={() => router.push('/event')}
+                      onClick={() => router.push(EVENTS_ROUTE)}
                     >
                       {menuName}
                     </MenuItem>
@@ -255,8 +255,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
     return (
       <>

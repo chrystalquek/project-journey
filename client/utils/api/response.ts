@@ -9,6 +9,10 @@ export type LoginResponse = {
   token: string
 }
 
+export type GetAllEventsResponse = {
+  data: Array<EventData>
+}
+
 export type GetEventsResponse = {
   data: Array<EventData>
 }

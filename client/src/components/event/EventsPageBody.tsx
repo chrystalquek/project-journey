@@ -1,4 +1,3 @@
-import Container from '@material-ui/core/Container';
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import SearchBar from '@components/common/SearchBar';
 import {
@@ -12,15 +11,15 @@ import Box from '@material-ui/core/Box';
 import { EventData, EventFilterOptions, EventFilters } from '@type/event';
 import { FC, useEffect, useState } from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useRouter } from 'next/router';
 import { useTheme } from '@material-ui/core/styles';
-import Event from '@components/event/Event';
+import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
-import { withFilters } from '@utils/helpers/EventsPage';
+import {withFilters} from "@utils/helpers/event/EventsPageBody";
+import {useRouter} from "next/router";
 
-type AdminEventsPageProps = {
+type EventsPageBodyProps = {
   events: Array<EventData>,
-  getAdminEvents: () => any,
+  getAllEvents: () => any,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -50,42 +49,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
+const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   const theme = useTheme();
-  const classes = useStyles();
   const router = useRouter();
-  const screenSmall = useMediaQuery(theme.breakpoints.only('sm'));
+  const classes = useStyles();
+  const screenXs = useMediaQuery(theme.breakpoints.only('xs'));
+  const screenSm = useMediaQuery(theme.breakpoints.only('sm'));
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,
     [EventFilters.VOLUNTEERTYPE]: {
-      [EventFilters.ADHOC]: false,
-      [EventFilters.COMMITTED]: false,
+      [EventFilters.ADHOC]: true,
+      [EventFilters.COMMITTED]: true,
     },
     [EventFilters.EVENTTYPE]: {
-      [EventFilters.HANGOUTS]: false,
-      [EventFilters.WORKSHOPS]: false,
-      [EventFilters.VOLUNTEERING]: false,
+      [EventFilters.HANGOUTS]: true,
+      [EventFilters.WORKSHOPS]: true,
+      [EventFilters.VOLUNTEERING]: true,
     },
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const filteredEvents = withFilters(events || [], filters);
+  const filteredEvents = withFilters(events ? events : [], filters);
 
   useEffect(() => {
-    getAdminEvents(); // TODO need to put volunteerType
-    // http://localhost:5000/volunteer/?pageNo=0&size=10&volunteerType=%2Cad-hoc%2Ccommitted%2Clead%2Cadmin
+    getAllEvents();
   }, []);
 
-  if (screenSmall) {
+  if (screenXs || screenSm) {
     return (
-      <Container fixed>
+      <>
         <Grid container>
-          <Grid item sm={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
-          <Grid item container sm={12} direction="row" justify="center" alignItems="center">
-            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/form')}>Create new event</Button>
+          <Grid item xs={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
+          <Grid item container xs={12} direction="row" justify="center" alignItems="center">
+            <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
           </Grid>
-          <Grid item container sm={12} justify="space-between">
+          <Grid item container xs={12} justify="space-between">
             <Grid item>
               <Box className={classes.box} fontWeight="bold">
                 <Typography display="inline" color="secondary">
@@ -108,24 +107,27 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
               </Button>
             </Grid>
           </Grid>
-          <Grid container spacing={4}>
+          <Grid container xs={12} spacing={4}>
             {filteredEvents?.map((event) => (
-              <Grid item className={classes.card} sm={6} md={4}>
-                <Event key={event.name + event.description} event={event} />
+              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
+                <EventCard key={event._id}
+                           event={event}
+                           onCardClick={() => router.push(`/event/${event._id}`)}
+                />
               </Grid>
             ))}
           </Grid>
-          <Drawer anchor="right" open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-            <Box m={8}>
-              <EventsFilter filters={filters} setFilters={setFilters} />
-            </Box>
-          </Drawer>
         </Grid>
-      </Container>
+        <Drawer anchor="right" open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+          <Box m={8}>
+            <EventsFilter filters={filters} setFilters={setFilters} />
+          </Box>
+        </Drawer>
+      </>
     );
   }
   return (
-    <Container fixed>
+    <>
       <Grid container spacing={2}>
         <Grid item sm={12}><EventBreadCrumbs /></Grid>
         <Grid item container sm={9}>
@@ -145,21 +147,24 @@ const EventsPage: FC<AdminEventsPageProps> = ({ events, getAdminEvents }) => {
           </Grid>
           <Grid item container sm={12} spacing={2}>
             {filteredEvents?.map((event) => (
-              <Grid key={JSON.stringify(event)} item className={classes.card} sm={6} md={4}>
-                <Event key={JSON.stringify(event)} event={event} />
+              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
+                <EventCard key={event._id}
+                           event={event}
+                           onCardClick={() => router.push(`/event/${event._id}`)}
+                />
               </Grid>
             ))}
           </Grid>
         </Grid>
         <Grid item sm={3}>
           <Box mb={4}>
-            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/admin/create-event')}>Create new event</Button>
+            <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
           </Box>
           <EventsFilter filters={filters} setFilters={setFilters} />
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 };
 
-export default EventsPage;
+export default EventsPageBody;
