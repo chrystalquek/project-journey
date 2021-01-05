@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from '@type/volunteer';
 import jwt from 'jsonwebtoken';
-import user from '../actions/user';
+import user, { updateVolunteerRemarks } from '../actions/user';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
@@ -46,6 +46,9 @@ const userSlice = createSlice({
     builder.addCase(user.rejected, (state) => {
       state.token = '';
       state.status = 'rejected';
+    });
+    builder.addCase(updateVolunteerRemarks.pending, (state, { meta }) => {
+      state.user.volunteerRemarks = meta.arg.volunteerRemarks;
     });
   },
 });

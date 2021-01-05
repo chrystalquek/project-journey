@@ -86,6 +86,11 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
+  async updateVolunteerRemarks({ email, volunteerRemarks }:
+    { email: string, volunteerRemarks: string }): Promise<void> {
+    return this.send({ email, volunteerRemarks }, 'volunteer', 'put');
+  }
+
   protected async send(request: any, path: string, method: HttpMethod) {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',

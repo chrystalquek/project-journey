@@ -4,11 +4,15 @@ import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { useDispatch } from 'react-redux';
+import { updateVolunteerRemarks } from '@redux/actions/user';
 
 type props = {
   user: VolunteerData
 }
 const Remarks: FC<props> = ({ user }) => {
+  const dispatch = useDispatch();
+
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(user.volunteerRemarks);
   const [adminRemarks, setAdminRemarks] = useState<string>(user.adminRemarks);
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
@@ -26,6 +30,13 @@ const Remarks: FC<props> = ({ user }) => {
 
   const saveVolunteerRemarks = () => {
     // TODO: sync database
+    dispatch(
+      updateVolunteerRemarks({
+        email: user.email,
+        volunteerRemarks,
+      }),
+    );
+
     user.volunteerRemarks = volunteerRemarks;
     setVolunteerRemarksChanged(false);
   };
