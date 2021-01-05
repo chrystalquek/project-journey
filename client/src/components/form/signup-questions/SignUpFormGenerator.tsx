@@ -199,6 +199,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
                   values.informedConsent === 'no'
                 }
                 size='large'
+                style={{ margin: 'auto', display: 'block' }}
               >
                 Submit
               </Button>
