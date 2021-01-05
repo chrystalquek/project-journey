@@ -1,28 +1,23 @@
-import { makeStyles, Grid, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import { isAdmin } from '@utils/helpers/auth';
+import { makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button } from '@material-ui/core';
+import CancelIcon from '@material-ui/icons/Cancel';
 import React, { FC, useEffect } from 'react';
-import { EventData } from 'types/event';
+import { VolunteerData } from 'types/volunteer';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
-import { getPendingSignUps, getSignUpsUpcomingEvent } from '@redux/actions/signUp';
-import { MONTHS, formatAMPM, formatDateStartEndTime } from '@utils/helpers/date';
-import dummyUser from '@constants/dummyUser';
-import { SignUpData } from '@type/signUp';
 import NavBar from '@components/common/NavBar';
 import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
+import { getCommitmentApplications, updateCommitmentApplication } from '@redux/actions/commitmentApplication';
+import { getPendingVolunteers } from '@redux/actions/volunteer';
+import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 
 const useStyles = makeStyles((theme) => ({
     shapeCircle: {
         backgroundColor: theme.palette.primary.main,
-        width: 40,
-        height: 40,
-        borderRadius: '50%',
-        textAlign: 'center',
-        fontSize: 'large',
+        height: 30,
+        borderRadius: '5em',
+        fontSize: 'small',
         color: 'white',
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -36,32 +31,32 @@ const PendingRequests: FC<{}> = ({ }) => {
     const user = useSelector((state: StoreState) => state.user);
 
     useEffect(() => {
-        dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }))
-        dispatch(getPendingSignUps())
+        dispatch(getPendingVolunteers());
+        dispatch(getCommitmentApplications({ status: "pending" }))
     }, []);
 
-    const events = useSelector((state: StoreState) => state.event)
-    const signUps = useSelector((state: StoreState) => state.signUp)
+    const volunteers = useSelector((state: StoreState) => state.volunteer)
+    const commitmentApplications = useSelector((state: StoreState) => state.commitmentApplication)
 
-    const upcomingEventsIds = events.upcomingEvent.ids;
-    const upcomingSignUpsIds = signUps.pendingSignUps.ids;
+    const upcomingVolunteersIds = volunteers.pendingVolunteers.ids
+    const upcomingCommitmentApplicationsIds = commitmentApplications.pendingCommitmentApplications.ids;
 
-    const upcomingEvents = upcomingEventsIds.map(id => events.data[id])
-    const upcomingSignUps = upcomingSignUpsIds.map(id => signUps.data[id])
+    const upcomingVolunteers = upcomingVolunteersIds.map(id => volunteers.data[id])
+    const upcomingCommitmentApplications = upcomingCommitmentApplicationsIds.map(id => commitmentApplications.data[id])
 
-    const pendingRequestsForEvent = (event: EventData) => {
-        let result = 0
-        upcomingSignUps.forEach((signUp: SignUpData) => {
-            if (signUp.eventId == event._id && signUp.status == 'pending')
-                result++
-        })
-        return <div className={classes.shapeCircle}>{result}</div>
+    const getApproveRejectButtons = (volunteer: VolunteerData) => {
+        const commitmentApplication = upcomingCommitmentApplications.find(commitmentApplications => commitmentApplications.volunteerId == volunteer._id)
+        const approveCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Accepted }
+        const approveButton = <Button className={classes.shapeCircle} onClick={() => dispatch(updateCommitmentApplication(approveCommitmentApplication))}>  APPROVE  </Button>
+        const rejectCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Rejected }
+        const rejectButton = <Button onClick={() => dispatch(updateCommitmentApplication(rejectCommitmentApplication))}><CancelIcon color='error' fontSize='large' /></Button>
+        return <Grid direction="row">{approveButton}{rejectButton}</Grid>
     }
 
     return (
         <>
             <Head>
-                <title>Event Pending Requests</title>
+                <title>Volunteer Pending Requests</title>
             </Head>
             <NavBar userData={user.user} />
             <Grid container alignItems="center" justify="center">
@@ -70,17 +65,19 @@ const PendingRequests: FC<{}> = ({ }) => {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell><b>Event Name</b></TableCell>
-                                    <TableCell><b>Date of Event</b></TableCell>
+                                    <TableCell><b>Name</b></TableCell>
+                                    <TableCell><b>Date of Registration</b></TableCell>
+                                    <TableCell><b>Status</b></TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {upcomingEvents.map((event) => (
-                                    <TableRow key={event._id}>
-                                        <TableCell><b>{event.name}</b></TableCell>
-                                        <TableCell>{event.startDate.toLocaleDateString()}</TableCell>
-                                        <TableCell>{pendingRequestsForEvent(event)}</TableCell>
+                                {upcomingVolunteers.map((volunteer) => (
+                                    <TableRow key={volunteer._id}>
+                                        <TableCell><b>{volunteer.name}</b></TableCell>
+                                        <TableCell>{volunteer.createdAt.toLocaleDateString()}</TableCell>
+                                        <TableCell>{volunteer.volunteerType}</TableCell>
+                                        <TableCell>{getApproveRejectButtons(volunteer)}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

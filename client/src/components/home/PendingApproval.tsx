@@ -3,7 +3,7 @@ import { StoreState } from '@redux/store';
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPendingSignUps } from '@redux/actions/signUp';
-import { getPendingVolunteersPendingApproval } from '@redux/actions/volunteer';
+import { getPendingVolunteers } from '@redux/actions/volunteer';
 
 const useStyles = makeStyles((theme) => ({
     shapeCircle: {
@@ -28,11 +28,11 @@ const PendingApproval: FC<{}> = ({ }) => {
     // Only load on initial render to prevent infinite loop
     useEffect(() => {
         dispatch(getPendingSignUps());
-        dispatch(getPendingVolunteersPendingApproval())
+        dispatch(getPendingVolunteers())
     }, []);
 
     const pendingSignUpCount = useSelector((state: StoreState) => state.signUp).pendingSignUps.ids.length;
-    const pendingVolunteerCount = useSelector((state: StoreState) => state.volunteer).pendingApproval.pendingVolunteerCount;
+    const pendingVolunteerCount = useSelector((state: StoreState) => state.volunteer).pendingVolunteers.ids.length;
 
     return (<Card><CardContent>
         <Grid container direction="row">
