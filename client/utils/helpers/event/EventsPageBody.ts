@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {MONTHS} from '@constants/dateMappings';
+import {MONTHS} from '@constants/index';
 import {Event, EventData, EventFilterOptions, EventFilters, EventType} from '@type/event';
 import {VOLUNTEER_TYPE} from "@type/volunteer";
 
