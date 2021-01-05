@@ -14,9 +14,9 @@ export function createTblData(title: string, description: string, isHighlight: b
 
 // Extracts date, time, location, vacancies, singup deadline
 export function getEventInfo(event: EventData) {
-  const date = dayjs(event.start_date).format('ddd, DD MMMM YYYY');
-  const startTime = dayjs(event.start_date).format('h.mma');
-  const endTime = dayjs(event.end_date).format('h.mma');
+  const date = dayjs(event.startDate).format('ddd, DD MMMM YYYY');
+  const startTime = dayjs(event.startDate).format('h.mma');
+  const endTime = dayjs(event.startDate).format('h.mma');
   const { remaining, total } = getEventVacancies(event);
   const vacancies = `${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} left`;
   const deadline = dayjs(event.deadline).format('DD MMMM YYYY hh:mmA');
