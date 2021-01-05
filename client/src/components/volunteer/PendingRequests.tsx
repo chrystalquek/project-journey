@@ -9,7 +9,8 @@ import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { getCommitmentApplications, updateCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
-import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { CommitmentApplicationData, CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { ActionableDialog } from '@components/common/ActionableDialog';
 
 const useStyles = makeStyles((theme) => ({
     shapeCircle: {
@@ -44,13 +45,25 @@ const PendingRequests: FC<{}> = ({ }) => {
     const upcomingVolunteers = upcomingVolunteersIds.map(id => volunteers.data[id])
     const upcomingCommitmentApplications = upcomingCommitmentApplicationsIds.map(id => commitmentApplications.data[id])
 
+    const [openApprove, setOpenApprove] = React.useState(false);
+
+    const [openReject, setOpenReject] = React.useState(false);
+
+    const onApproveReject = (commitmentApplication: CommitmentApplicationData) => {
+        dispatch(updateCommitmentApplication(commitmentApplication))
+        setOpenApprove(false)
+    }
+
     const getApproveRejectButtons = (volunteer: VolunteerData) => {
         const commitmentApplication = upcomingCommitmentApplications.find(commitmentApplications => commitmentApplications.volunteerId == volunteer._id)
         const approveCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Accepted }
-        const approveButton = <Button className={classes.shapeCircle} onClick={() => dispatch(updateCommitmentApplication(approveCommitmentApplication))}>  APPROVE  </Button>
+        const approveButton = <Button className={classes.shapeCircle} onClick={() => setOpenApprove(true)}>  APPROVE  </Button>
         const rejectCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Rejected }
-        const rejectButton = <Button onClick={() => dispatch(updateCommitmentApplication(rejectCommitmentApplication))}><CancelIcon color='error' fontSize='large' /></Button>
-        return <Grid direction="row">{approveButton}{rejectButton}</Grid>
+        const rejectButton = <Button onClick={() => setOpenReject(true)}><CancelIcon color='error' fontSize='large' /></Button>
+        return <Grid direction="row">
+            {approveButton} <ActionableDialog open={openApprove} onClose={() => setOpenApprove(false)} content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`} buttonTitle="Approve" buttonOnClick={() => onApproveReject(approveCommitmentApplication)} />
+            {rejectButton} <ActionableDialog open={openReject} onClose={() => setOpenReject(false)} content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`} buttonTitle="Reject" buttonOnClick={() => onApproveReject(approveCommitmentApplication)} />
+        </Grid>
     }
 
     return (
