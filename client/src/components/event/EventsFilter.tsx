@@ -61,7 +61,7 @@ const AccordionSummary = withStyles({
 
 const AccordionDetails = withStyles({
   root: {
-    padding: '8px 0',
+    padding: '0',
   },
 })(MuiAccordionDetails);
 
@@ -116,13 +116,18 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
           >
             <Typography>Date</Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails
+            style={{ justifyContent: 'center', paddingBottom: '15px' }}
+          >
             <KeyboardDatePicker
               value={filters.date}
               variant='inline'
               onChange={(date) => handleDateChange(date)}
               minDate={dayjs(new Date())}
               format='MM/DD/YYYY'
+              inputVariant='outlined'
+              margin='dense'
+              placeholder='dd/MM/yyyy'
             />
           </AccordionDetails>
         </Accordion>
@@ -197,6 +202,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                     checked={filters.volunteerType.adhoc}
                     onChange={handleCheckboxChange}
                     name={EventFilters.ADHOC}
+                    size='small'
                   />
                 }
                 label={EventFilters.ADHOC}
@@ -207,6 +213,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                     checked={filters.volunteerType.committed}
                     onChange={handleCheckboxChange}
                     name={EventFilters.COMMITTED}
+                    size='small'
                   />
                 }
                 label={EventFilters.COMMITTED}
