@@ -55,7 +55,13 @@ const eventSlice = createSlice({
     builder.addCase(createEvent.pending, (state) => {
       // set loading
     });
+    builder.addCase(createEvent.rejected, (state) => {
+      // do nothing
+    });
 
+    builder.addCase(getEvent.pending, (state) => {
+      state.form = null;
+    });
     builder.addCase(getEvent.fulfilled, (state, action) => {
       const { payload } = action;
       state.form = payload;
@@ -63,12 +69,7 @@ const eventSlice = createSlice({
     builder.addCase(getEvent.rejected, (state) => {
       state.form = null;
     });
-    builder.addCase(getEvent.pending, (state) => {
-      state.form = null;
-    });
-    builder.addCase(createEvent.rejected, (state) => {
-      // do nothing
-    });
+
     builder.addCase(getAllEvents.pending, (state) => {
       state.events = [];
     });

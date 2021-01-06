@@ -5,20 +5,25 @@ import {Box, Chip, Grid} from "@material-ui/core";
 import {testEventImage1} from "@constants/imagePaths";
 import EventInformation from "@components/event/EventDetails/EventInformation";
 import VolunteerRoles from "@components/event/EventDetails/VolunteerRoles";
-import EventRegisterForm from "@components/event/EventDetails/EventRegisterForm";
+import EventRegisterForm, {FormState} from "@components/event/EventDetails/EventRegisterForm";
 import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
-import {getEventVacancies} from "@utils/helpers/event/EventsPageBody";
 import {COMMITTED_VOLUNTEER_TAG} from "@constants/index";
+import {FormDisabledReason} from "@utils/helpers/event/EventDetails/EventDetails";
 
 type EventDetailsCommittedProps = {
   event: EventData,
-  user: VolunteerData
+  user: VolunteerData,
+  formStatus: {
+    disabled: boolean,
+    reason: FormDisabledReason,
+  },
+  formHandlers: {
+    signUpAndAccept: (uid: string, eid: string, form: FormState) => void,
+    signUpOnly: (uid: string, eid: string, form: FormState) => void
+  }
 }
 
-const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ event, user }) => {
-  const { remaining } = getEventVacancies(event);
-  const isFull = remaining === 0;
-
+const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ formStatus, formHandlers, event, user }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -39,6 +44,16 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ event, user }) 
         <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
       </Grid>
 
+      {/*TODO: Style*/}
+      {formStatus.reason === FormDisabledReason.SIGNUP_PENDING
+        ? <h1>Sign-up Pending.</h1>
+        : null
+      }
+      {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
+        ? <h1>Successful registration!</h1>
+        : null
+      }
+
       <Grid item xs={12}>
         <EventInformation event={event} />
       </Grid>
@@ -48,7 +63,11 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ event, user }) 
       </Grid>
 
       <Grid item xs={12}>
-        <EventRegisterForm isDisabled={isFull} event={event} />
+        <EventRegisterForm isDisabled={formStatus.disabled}
+                           event={event}
+                           user={user}
+                           formHandlers={formHandlers}
+        />
       </Grid>
     </Grid>
   )

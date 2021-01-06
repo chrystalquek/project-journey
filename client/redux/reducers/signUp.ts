@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getPendingSignUpsPendingApproval, getSignUpsUpcomingEvent } from '@redux/actions/signUp';
+import {
+  createAndAcceptSignUp, createSignUp,
+  getPendingSignUpsPendingApproval, getSignUps,
+  getSignUpsUpcomingEvent,
+  updateSignUp
+} from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
 
 export type SignUpState = {
@@ -9,6 +14,9 @@ export type SignUpState = {
   },
   upcomingEvent: {
     ids: Array<string> // signed up events
+  },
+  getSignUps: {
+    currSignUps: Array<SignUpData> // signups from getSignUps action
   }
 }
 
@@ -20,6 +28,9 @@ const initialState: SignUpState = {
   upcomingEvent: {
     ids: [],
   },
+  getSignUps: {
+    currSignUps: [],
+  }
 };
 
 // parse all Dates etc before saving to store
@@ -44,6 +55,39 @@ const signUpSlice = createSlice({
       const { payload } = action;
       state.pendingApproval.pendingSignUpCount = payload.count;
     });
+    builder.addCase(getSignUps.fulfilled, (state, action) => {
+      const { payload } = action;
+      state.getSignUps.currSignUps = payload.data;
+    });
+
+    // Using redux for logging purposes
+    builder.addCase(createAndAcceptSignUp.pending, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createAndAcceptSignUp.fulfilled, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createAndAcceptSignUp.rejected, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createSignUp.pending, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createSignUp.fulfilled, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createSignUp.rejected, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(updateSignUp.pending, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(updateSignUp.fulfilled, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(updateSignUp.rejected, (state, action) => {
+      // do nothing yet
+    })
   },
 });
 

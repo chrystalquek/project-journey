@@ -1,5 +1,5 @@
-import React, {FC, useState} from "react";
-import {EventData} from "@type/event";
+import React, {FC, useEffect, useState} from "react";
+import {EventData, Event} from "@type/event";
 import {
   Select,
   Box,
@@ -12,13 +12,24 @@ import {
   makeStyles
 } from "@material-ui/core";
 import {FormSelectRow, parseRoles} from "@utils/helpers/event/EventDetails/EventRegisterForm";
+import {VolunteerData} from "@type/volunteer";
+import {useRouter} from "next/router";
+import {useDispatch, useSelector} from "react-redux";
+import {getSignUps} from "@redux/actions/signUp";
+import {SignUpIdType, SignUpStatus} from "@type/signUp";
+import {StoreState} from "@redux/store";
 
 type EventRegisterProps = {
   event: EventData
+  user: VolunteerData
   isDisabled: boolean // true when no vacancies left in event
+  formHandlers: {
+    signUpAndAccept: (uid: string, eid: string, form: FormState) => void,
+    signUpOnly: (uid: string, eid: string, form: FormState) => void
+  }
 }
 
-type FormState = {
+export type FormState = {
   firstChoice: string,
   secondChoice: string,
   thirdChoice: string,
@@ -37,8 +48,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const EventRegisterForm: FC<EventRegisterProps> = ({ event, isDisabled }) => {
+const EventRegisterForm: FC<EventRegisterProps> = ({ formHandlers, event, user, isDisabled }) => {
   const classes = useStyles();
+  const router = useRouter();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
   const defaultForm: FormState = {
@@ -49,14 +61,27 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event, isDisabled }) => {
   }
   const [formState, setFormState] = useState(defaultForm);
   const handleChange = (event) => {
-    console.log({ ...formState, [event.target.name]: event.target.value })
-    console.log(event.target)
     setFormState({ ...formState, [event.target.name]: event.target.value });
+  }
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    switch (event.eventType) {
+      case Event.Volunteering:
+        formHandlers.signUpOnly(user._id, event._id, formState);
+        break;
+      case Event.Hangout:
+      case Event.Workshop:
+        formHandlers.signUpAndAccept(user._id, event._id, formState);
+        break;
+      default:
+        console.error("You shouldn't be here!")
+    }
+    router.reload();
   }
 
   return (
     <>
-      <form>
+      <form onSubmit={onFormSubmit}>
         <Box fontWeight="bold" fontSize="h3.fontSize">Register Here</Box>
         <Box fontWeight="bold">Position Interested:</Box>
         <Box>First Choice:</Box>
@@ -111,7 +136,10 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event, isDisabled }) => {
                    disabled={isDisabled}
         />
 
-        <Button disabled={isDisabled} className={classes.button} type="submit">Register</Button>
+        <Button onSubmit={onFormSubmit}
+                disabled={isDisabled}
+                className={classes.button}
+                type="submit">Register</Button>
       </form>
     </>
   )

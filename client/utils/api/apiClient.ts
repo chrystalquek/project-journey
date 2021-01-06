@@ -1,11 +1,18 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
-} from './request';
+  LoginRequest,
+  CreateEventRequest,
+  EditEventRequest,
+  GetEventParams,
+  QueryParams,
+  SignUpRequest,
+  CreateSignUpRequest,
+  UpdateSignUpRequest, SignUpQueryParams,
+} from '@utils/api/request';
 import {
   GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse,
-} from './response';
+  EditEventResponse, GetEventResponse, SignUpResponse, CreateSignUpResponse, UpdateSignUpResponse,
+} from '@utils/api/response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -57,6 +64,14 @@ class AxiosApiClient implements ApiClient {
 
   async getPendingSignUps(): Promise<GetCountResponse> {
     return this.send({}, 'signup/pending', 'get');
+  }
+
+  async createSignUp(request: CreateSignUpRequest): Promise<CreateSignUpResponse> {
+    return this.send(request, 'signup', 'post');
+  }
+
+  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest): Promise<UpdateSignUpResponse> {
+    return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
   // event

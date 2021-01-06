@@ -1,4 +1,5 @@
 import { EventPostData } from '@type/event';
+import {SignUpIdType, SignUpStatus} from "@type/signUp";
 
 export type SignUpRequest = {
   name: string
@@ -37,3 +38,19 @@ export type EditEventRequest = {
 }
 
 export type GetEventParams = string;
+
+// SIGN-UPS
+export type SignUpQueryParams = {
+  id: string, // id to match against once idType is known
+  idType: SignUpIdType,
+}
+
+export type CreateSignUpRequest = {
+  eventId: string,
+  userId: string,
+  status: SignUpStatus,
+  preferences: Array<string>,
+  isRestricted: boolean,
+}
+
+export type UpdateSignUpRequest = CreateSignUpRequest;
