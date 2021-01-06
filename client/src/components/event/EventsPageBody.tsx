@@ -79,7 +79,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   if (screenSm) {
     return (
       <>
-        <Grid container>
+        <Grid container spacing={4}>
           <Grid item xs={12}>
             <SearchBar setFilterFunction={() => console.log('TODO')} />
           </Grid>
