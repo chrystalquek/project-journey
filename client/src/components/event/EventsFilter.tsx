@@ -154,7 +154,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                     size='small'
                   />
                 }
-                label={EventFilters.VOLUNTEERING}
+                label='Volunteering'
               />
               <FormControlLabel
                 control={
@@ -165,7 +165,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                     size='small'
                   />
                 }
-                label={EventFilters.WORKSHOPS}
+                label='Workshops'
               />
               <FormControlLabel
                 control={
@@ -177,7 +177,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                     size='small'
                   />
                 }
-                label={EventFilters.HANGOUTS}
+                label='Hangouts'
               />
             </FormGroup>
           </AccordionDetails>
@@ -205,7 +205,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                     size='small'
                   />
                 }
-                label={EventFilters.ADHOC}
+                label='Adhoc'
               />
               <FormControlLabel
                 control={
@@ -216,7 +216,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                     size='small'
                   />
                 }
-                label={EventFilters.COMMITTED}
+                label='Committed'
               />
             </FormGroup>
           </AccordionDetails>
