@@ -9,11 +9,13 @@ const EventsPage = () => {
   const userData = useSelector((state: StoreState) => state.user);
 
   return (
-    <Container fixed>
-      <Head title="Blessings in a Bag" />
+    <>
+      <Head title='Blessings in a Bag' />
       <NavBar userData={userData.user} />
-      <EventsPageBody />
-    </Container>
+      <Container fixed>
+        <EventsPageBody />
+      </Container>
+    </>
   );
 };
 
