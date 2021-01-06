@@ -47,8 +47,8 @@ export type VolunteerData = {
     position?: string;
     race: Race;
 
-    languages: Array<string>
-    referralSources: Array<string>
+    languages: Array<string> | string;
+    referralSources: Array<string>;
 
     hasVolunteered: boolean;
     biabVolunteeringDuration?: number; // Number of months
@@ -64,7 +64,7 @@ export type VolunteerData = {
 
     hasFirstAidCertification?: boolean;
     leadershipInterest?: string;
-    interests?: Array<string>; // short-ans
+    interests?: string; // short-ans
 
     skills?: Array<string>;
 
