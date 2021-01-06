@@ -47,7 +47,7 @@ export type VolunteerData = {
     position?: string;
     race: Race;
 
-    languages: Array<string> | string;
+    languages: Array<string>;
     referralSources: Array<string>;
 
     hasVolunteered: boolean;

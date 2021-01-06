@@ -13,7 +13,7 @@ export const doesUserEmailExist = async (email: string) => {
 };
 
 /**
- *
+ * Creates new volunteer for both ad-hoc/committed
  * @param volunteerData new volunteer data
  */
 export const addNewVolunteer = async (volunteerData: VolunteerData) => {
