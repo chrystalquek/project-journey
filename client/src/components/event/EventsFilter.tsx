@@ -7,7 +7,12 @@ import Box from '@material-ui/core/Box';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import {
-  Checkbox, FormControl, FormControlLabel, FormGroup, makeStyles, Typography,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import { EventFilterOptions, EventFilters } from '@type/event';
 
@@ -15,9 +20,9 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 
 type AdminEventsFilterProps = {
-  filters: EventFilterOptions
-  setFilters: (options: EventFilterOptions) => void
-}
+  filters: EventFilterOptions;
+  setFilters: (options: EventFilterOptions) => void;
+};
 
 // TODO: Switch to makeStyles; seemsthat withStyles isn't overriding
 const Accordion = withStyles({
@@ -26,10 +31,11 @@ const Accordion = withStyles({
     boxShadow: 'none',
     background: 'none',
     padding: '0',
+    '&$expanded': {
+      margin: 'auto',
+    },
   },
-  expanded: {
-    margin: '0',
-  },
+  expanded: {},
 })(MuiAccordion);
 
 const AccordionSummary = withStyles({
@@ -37,9 +43,19 @@ const AccordionSummary = withStyles({
     background: 'none',
     padding: '0',
     margin: '0',
+    minHeight: '54px',
+    '&$expanded': {
+      minHeight: '54px',
+    },
+  },
+  content: {
+    margin: '12px 0',
+    '&$expanded': {
+      margin: '12px 0',
+    },
   },
   expanded: {
-    margin: '0',
+    // margin: '0',
   },
 })(MuiAccordionSummary);
 
@@ -49,8 +65,10 @@ const AccordionDetails = withStyles({
   },
 })(MuiAccordionDetails);
 
-const EventsFilter: FC<AdminEventsFilterProps> = ({ filters, setFilters }
-  : AdminEventsFilterProps) => {
+const EventsFilter: FC<AdminEventsFilterProps> = ({
+  filters,
+  setFilters,
+}: AdminEventsFilterProps) => {
   const [dateExpanded, setDateExpanded] = useState(false);
   const [eventTypeExpanded, setEventTypeExpanded] = useState(false);
   const [volTypeExpanded, setVolTypeExpanded] = useState(false);
@@ -65,132 +83,138 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({ filters, setFilters }
     switch (event.target.name) {
       case EventFilters.ADHOC:
       case EventFilters.COMMITTED:
-        newFilters[EventFilters.VOLUNTEERTYPE][event.target.name] = event.target.checked;
+        newFilters[EventFilters.VOLUNTEERTYPE][event.target.name] =
+          event.target.checked;
         break;
       case EventFilters.HANGOUTS:
       case EventFilters.VOLUNTEERING:
       case EventFilters.WORKSHOPS:
-        newFilters[EventFilters.EVENTTYPE][event.target.name] = event.target.checked;
+        newFilters[EventFilters.EVENTTYPE][event.target.name] =
+          event.target.checked;
         break;
       default:
-        // do nothing
+      // do nothing
     }
     setFilters(newFilters);
   };
 
   return (
     <>
-      <Box marginBottom="4px" fontWeight="bold">
-        <Typography variant='body2'>
-          Filter By
-        </Typography>
+      <Box marginBottom='4px' fontWeight='bold'>
+        <Typography variant='body2'>Filter By</Typography>
       </Box>
-      <Accordion
-        expanded={dateExpanded}
-        onChange={() => setDateExpanded(!dateExpanded)}
-        square
-      >
-        <AccordionSummary
-          expandIcon={dateExpanded ? <RemoveIcon /> : <AddIcon />}
-          aria-controls="panel-date"
-          id="panel-date"
+      <div style={{ width: '100%' }}>
+        <Accordion
+          expanded={dateExpanded}
+          onChange={() => setDateExpanded(!dateExpanded)}
+          square
         >
-          <Typography>Date</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <KeyboardDatePicker
-            value={filters.date}
-            variant="inline"
-            onChange={(date) => handleDateChange(date)}
-            minDate={dayjs(new Date())}
-            format="MM/DD/YYYY"
-          />
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={eventTypeExpanded}
-        onChange={() => setEventTypeExpanded(!eventTypeExpanded)}
-        square
-      >
-        <AccordionSummary
-          expandIcon={eventTypeExpanded ? <RemoveIcon /> : <AddIcon />}
-          aria-controls="panel-eventType"
-          id="panel-eventType"
+          <AccordionSummary
+            expandIcon={dateExpanded ? <RemoveIcon /> : <AddIcon />}
+            aria-controls='panel-date'
+            id='panel-date'
+          >
+            <Typography>Date</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <KeyboardDatePicker
+              value={filters.date}
+              variant='inline'
+              onChange={(date) => handleDateChange(date)}
+              minDate={dayjs(new Date())}
+              format='MM/DD/YYYY'
+            />
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={eventTypeExpanded}
+          onChange={() => setEventTypeExpanded(!eventTypeExpanded)}
+          square
         >
-          <Typography>Event Type</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={filters.eventType.volunteering}
-                  onChange={handleCheckboxChange}
-                  name={EventFilters.VOLUNTEERING}
-                />
-)}
-              label={EventFilters.VOLUNTEERING}
-            />
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={filters.eventType.workshops}
-                  onChange={handleCheckboxChange}
-                  name={EventFilters.WORKSHOPS}
-                />
-)}
-              label={EventFilters.WORKSHOPS}
-            />
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={filters.eventType.hangouts}
-                  onChange={handleCheckboxChange}
-                  name={EventFilters.HANGOUTS}
-                />
-)}
-              label={EventFilters.HANGOUTS}
-            />
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={volTypeExpanded}
-        onChange={() => setVolTypeExpanded(!volTypeExpanded)}
-        square
-      >
-        <AccordionSummary
-          expandIcon={volTypeExpanded ? <RemoveIcon /> : <AddIcon />}
-          aria-controls="panel-volType"
-          id="panel-volType"
+          <AccordionSummary
+            expandIcon={eventTypeExpanded ? <RemoveIcon /> : <AddIcon />}
+            aria-controls='panel-eventType'
+            id='panel-eventType'
+          >
+            <Typography>Event Type</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters.eventType.volunteering}
+                    onChange={handleCheckboxChange}
+                    name={EventFilters.VOLUNTEERING}
+                    size='small'
+                  />
+                }
+                label={EventFilters.VOLUNTEERING}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters.eventType.workshops}
+                    onChange={handleCheckboxChange}
+                    name={EventFilters.WORKSHOPS}
+                    size='small'
+                  />
+                }
+                label={EventFilters.WORKSHOPS}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters.eventType.hangouts}
+                    onChange={handleCheckboxChange}
+                    name={EventFilters.HANGOUTS}
+                    disableRipple
+                    size='small'
+                  />
+                }
+                label={EventFilters.HANGOUTS}
+              />
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={volTypeExpanded}
+          onChange={() => setVolTypeExpanded(!volTypeExpanded)}
+          square
         >
-          <Typography>Volunteer Type</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={filters.volunteerType.adhoc}
-                  onChange={handleCheckboxChange}
-                  name={EventFilters.ADHOC}
-                />
-)}
-              label={EventFilters.ADHOC}
-            />
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={filters.volunteerType.committed}
-                  onChange={handleCheckboxChange}
-                  name={EventFilters.COMMITTED}
-                />
-)}
-              label={EventFilters.COMMITTED}
-            />
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
+          <AccordionSummary
+            expandIcon={volTypeExpanded ? <RemoveIcon /> : <AddIcon />}
+            aria-controls='panel-volType'
+            id='panel-volType'
+          >
+            <Typography>Volunteer Type</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters.volunteerType.adhoc}
+                    onChange={handleCheckboxChange}
+                    name={EventFilters.ADHOC}
+                  />
+                }
+                label={EventFilters.ADHOC}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters.volunteerType.committed}
+                    onChange={handleCheckboxChange}
+                    name={EventFilters.COMMITTED}
+                  />
+                }
+                label={EventFilters.COMMITTED}
+              />
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </div>
     </>
   );
 };
