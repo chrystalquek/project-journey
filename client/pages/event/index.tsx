@@ -12,9 +12,9 @@ const EventsPage = () => {
     <>
       <Head title='Blessings in a Bag' />
       <NavBar userData={userData.user} />
-      <Container fixed>
+      <div style={{ width: '80vw', margin: 'auto' }}>
         <EventsPageBody />
-      </Container>
+      </div>
     </>
   );
 };
