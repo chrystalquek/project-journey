@@ -83,14 +83,6 @@ export type ResourceData = {
     type: string;
 };
 
-// TODO: Remove this
-export type VolunteerSchemaData = {
-    name: string,
-    field_type: string,
-    created_at: Date,
-    modified_at: Date,
-}
-
 export type EnvironmentConstants = {
     port: number,
     env: string
