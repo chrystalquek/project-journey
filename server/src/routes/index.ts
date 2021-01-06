@@ -8,7 +8,7 @@ import opportunityRouter from './opportunity';
 import signUpRouter from './signUp';
 import formRouter from './form';
 import commitmentApplicationRouter from './commitmentApplication';
-import imageRouter from "./image";
+import imageRouter from './image';
 
 const router = express.Router();
 
@@ -21,6 +21,6 @@ router.use('/opportunity', opportunityRouter);
 router.use('/volunteer-form', volunteerSchema);
 router.use('/form', formRouter);
 router.use('/commitment-application', commitmentApplicationRouter);
-router.use('/image', imageRouter)
+router.use('/image', imageRouter);
 
 export default router;
