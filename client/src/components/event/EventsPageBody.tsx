@@ -53,8 +53,8 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
-  const screenXs = useMediaQuery(theme.breakpoints.only('xs'));
-  const screenSm = useMediaQuery(theme.breakpoints.only('sm'));
+  // const screenXs = useMediaQuery(theme.breakpoints.down('xs'));
+  const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,
@@ -76,7 +76,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
     getAllEvents();
   }, []);
 
-  if (screenXs || screenSm) {
+  if (screenSm) {
     return (
       <>
         <Grid container>
