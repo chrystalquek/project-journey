@@ -10,22 +10,25 @@ import { updateVolunteerRemarks } from '@redux/actions/user';
 type props = {
   user: VolunteerData
 }
+
 const Remarks: FC<props> = ({ user }) => {
   const dispatch = useDispatch();
+  let originalVolunteerRemarks = user.volunteerRemarks
+  let originalAdministratorRemarks = user.administratorRemarks
 
-  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(user.volunteerRemarks);
-  const [administratorRemarks, setAdministratorRemarks] = useState<string>(user.administratorRemarks);
+  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
+  const [administratorRemarks, setAdministratorRemarks] = useState<string>(originalAdministratorRemarks);
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
   const [administratorRemarksChanged, setAdministratorRemarksChanged] = useState<boolean>(false);
 
   const handleVolunteerRemarks = (event) => {
     setVolunteerRemarks(event.target.value);
-    setVolunteerRemarksChanged(event.target.value !== user.volunteerRemarks);
+    setVolunteerRemarksChanged(event.target.value !== originalVolunteerRemarks);
   };
 
   const handleAdministratorRemarks = (event) => {
     setAdministratorRemarks(event.target.value);
-    setAdministratorRemarksChanged(event.target.value !== user.administratorRemarks);
+    setAdministratorRemarksChanged(event.target.value !== originalAdministratorRemarks);
   };
 
   const saveVolunteerRemarks = () => {
@@ -33,11 +36,11 @@ const Remarks: FC<props> = ({ user }) => {
     dispatch(
       updateVolunteerRemarks({
         email: user.email,
-        volunteerRemarks,
+        volunteerRemarks: volunteerRemarks,
       }),
     );
 
-    user.volunteerRemarks = volunteerRemarks;
+    originalVolunteerRemarks = volunteerRemarks;
     setVolunteerRemarksChanged(false);
   };
   const saveAdministratorRemarks = () => {

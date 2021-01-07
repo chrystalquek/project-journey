@@ -37,3 +37,8 @@ export type EditEventRequest = {
 }
 
 export type GetEventParams = string;
+
+export type UpdateVolunteerRemarksRequest = {
+  email: string,
+  volunteerRemarks: string
+}
