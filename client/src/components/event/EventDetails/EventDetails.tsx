@@ -1,35 +1,31 @@
-import {EventData} from "@type/event";
-import React, {FC} from "react";
-import {VOLUNTEER_TYPE, VolunteerData} from "@type/volunteer";
-import EventDetailsUnregistered from "@components/event/EventDetails/EventDetailsUnregistered";
-import EventDetailsCommitted from "@components/event/EventDetails/EventDetailsCommitted";
-import EventDetailsAdhoc from "@components/event/EventDetails/EventDetailsAdhoc";
+import { EventData } from '@type/event';
+import React, { FC } from 'react';
+import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
+import EventDetailsUnregistered from '@components/event/EventDetails/EventDetailsUnregistered';
+import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsCommitted';
+import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsAdhoc';
 
 type EventDetailsProps = {
-  event: EventData,
-  user: VolunteerData
-}
+  event: EventData;
+  user: VolunteerData;
+};
 
 const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const renderDetails = (volunteerType: VOLUNTEER_TYPE): React.ReactNode => {
-    console.log(volunteerType)
+    console.log(volunteerType);
     switch (volunteerType) {
       case VOLUNTEER_TYPE.ADHOC:
-        return <EventDetailsAdhoc event={event} user={user} />
+        return <EventDetailsAdhoc event={event} user={user} />;
       case VOLUNTEER_TYPE.COMMITED:
       case VOLUNTEER_TYPE.ADMIN:
-        return <EventDetailsCommitted event={event} user={user} />
+        return <EventDetailsCommitted event={event} user={user} />;
       default:
         // unregistered
-        return <EventDetailsUnregistered event={event} user={user} />
+        return <EventDetailsUnregistered event={event} user={user} />;
     }
-  }
+  };
 
-  return (
-    <>
-      {renderDetails(user.volunteerType)}
-    </>
-  )
+  return <>{renderDetails(user.volunteerType)}</>;
 };
 
 export default EventDetails;
