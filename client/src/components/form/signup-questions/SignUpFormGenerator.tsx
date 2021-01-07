@@ -17,6 +17,92 @@ type FormGeneratorProps = {
   handleSignUp: (formValues: Record<string, any>) => void;
 };
 
+export const FormQuestionMapper = ({
+  formType,
+  name,
+  options,
+}: {
+    formType: InputType;
+    name: string;
+    options: OptionType[] | null;
+  }) => {
+  switch (formType) {
+    case 'date':
+      return (
+        <Field
+          component={DatePicker}
+          inputVariant="outlined"
+          format="dd/MM/yyyy"
+          name={name}
+          fullWidth
+          margin="dense"
+        />
+      );
+    case 'shortAnswer':
+    case 'password':
+      return (
+        <Field
+          component={TextField}
+          variant="outlined"
+          type={formType === 'password' ? formType : 'text'}
+          name={name}
+          fullWidth
+          margin="dense"
+        />
+      );
+    case 'longAnswer':
+      return (
+        <Field
+          component={TextField}
+          variant="outlined"
+          name={name}
+          fullWidth
+          multiline
+          margin="dense"
+        />
+      );
+    case 'mcq':
+      return (
+        <Field
+          component={TextField}
+          variant="outlined"
+          name={name}
+          fullWidth
+          select
+          InputLabelProps={{
+            shrink: true,
+          }}
+          margin="dense"
+        >
+          {(options as Array<OptionType>).map(({ value, label }) => (
+            <MenuItem key={value} value={value}>
+              {label}
+            </MenuItem>
+          ))}
+        </Field>
+      );
+    case 'checkboxes':
+    default:
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {(options as Array<OptionType>).map(({ value, label }) => (
+            <div style={{ flex: 1 }}>
+              <Field
+                component={CheckboxWithLabel}
+                name={name}
+                key={value}
+                value={value}
+                Label={{ label }}
+                color="primary"
+                type="checkbox"
+              />
+            </div>
+          ))}
+        </div>
+      );
+  }
+};
+
 const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
   const initialValues: Record<string, any> = {};
 
@@ -52,92 +138,6 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
     position: Yup.string().required(),
   });
 
-  const FormQuestionMapper = ({
-    formType,
-    name,
-    options,
-  }: {
-    formType: InputType;
-    name: string;
-    options: OptionType[] | null;
-  }) => {
-    switch (formType) {
-      case 'date':
-        return (
-          <Field
-            component={DatePicker}
-            inputVariant="outlined"
-            format="dd/MM/yyyy"
-            name={name}
-            fullWidth
-            margin="dense"
-          />
-        );
-      case 'shortAnswer':
-      case 'password':
-        return (
-          <Field
-            component={TextField}
-            variant="outlined"
-            type={formType === 'password' ? formType : 'text'}
-            name={name}
-            fullWidth
-            margin="dense"
-          />
-        );
-      case 'longAnswer':
-        return (
-          <Field
-            component={TextField}
-            variant="outlined"
-            name={name}
-            fullWidth
-            multiline
-            margin="dense"
-          />
-        );
-      case 'mcq':
-        return (
-          <Field
-            component={TextField}
-            variant="outlined"
-            name={name}
-            fullWidth
-            select
-            InputLabelProps={{
-              shrink: true,
-            }}
-            margin="dense"
-          >
-            {(options as Array<OptionType>).map(({ value, label }) => (
-              <MenuItem key={value} value={value}>
-                {label}
-              </MenuItem>
-            ))}
-          </Field>
-        );
-      case 'checkboxes':
-      default:
-        return (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {(options as Array<OptionType>).map(({ value, label }) => (
-              <div style={{ flex: 1 }}>
-                <Field
-                  component={CheckboxWithLabel}
-                  name={name}
-                  key={value}
-                  value={value}
-                  Label={{ label }}
-                  color="primary"
-                  type="checkbox"
-                />
-              </div>
-            ))}
-          </div>
-        );
-    }
-  };
-
   return (
     <Paper
       style={{
@@ -155,7 +155,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
           validateOnChange={false}
         >
           {({
-            isSubmitting, touched, values, errors,
+            isSubmitting, values,
           }) => (
             <Form>
               {questionList.map((questionItem) => {

@@ -5,7 +5,6 @@ import NavBar from '@components/common/NavBar';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { StoreState } from '@redux/store';
-import { useState } from 'react';
 
 const AdminEventFormPage = () => {
   const userData = useSelector((state: StoreState) => state.user);
