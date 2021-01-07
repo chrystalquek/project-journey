@@ -37,3 +37,7 @@ export type EditEventRequest = {
 }
 
 export type GetEventParams = string;
+
+export type GetEventFeedbackFormQuestionsRequest = {
+  eventId: string
+}

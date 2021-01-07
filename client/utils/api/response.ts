@@ -1,4 +1,5 @@
 import { EventData } from '@type/event';
+import { QuestionWithOptions } from '@type/form';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
@@ -39,3 +40,5 @@ export type CreateEventResponse = {}
 export type GetCountResponse = {
   count: number
 }
+
+export type GetEventFeedbackQuestionsResponse = Array<QuestionWithOptions>

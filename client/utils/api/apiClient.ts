@@ -1,10 +1,21 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
+  LoginRequest,
+  CreateEventRequest,
+  EditEventRequest, GetEventParams, QueryParams,
+  SignUpRequest,
 } from './request';
 import {
-  GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse,
+  GetCountResponse,
+  GetEventsResponse,
+  GetSignUpsResponse,
+  GetVolunteersResponse,
+  LoginResponse,
+  CreateEventResponse,
+  EditEventResponse,
+  GetEventResponse,
+  SignUpResponse,
+  GetEventFeedbackQuestionsResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -20,6 +31,7 @@ export interface ApiClient {
   getEvents(query: QueryParams): Promise<GetEventsResponse>
   getPendingSignUps(): Promise<GetCountResponse>
   getPendingVolunteers(): Promise<GetCountResponse>
+  getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -84,6 +96,10 @@ class AxiosApiClient implements ApiClient {
   // volunteer
   async getPendingVolunteers(): Promise<GetCountResponse> {
     return this.send({}, 'volunteer/pending', 'get');
+  }
+
+  async getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse> {
+    return this.send({}, `form/${eventId}`, 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {

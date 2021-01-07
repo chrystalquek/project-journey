@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createEvent, getEvent, editEvent } from '@redux/actions/event';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
+import { Formik, FormikProvider, useFormik } from 'formik';
+import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
 
 type AdminEventFormProps = {
   id: string,
@@ -90,6 +92,9 @@ const getDateAndTimeIsoString = (dateDayJs: dayjs.Dayjs, time: string): string =
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const formik = useFormik({
+    initialValues: {},
+  });
 
   const eventForm = useSelector((state: StoreState) => state.event.form);
 
@@ -502,6 +507,29 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </>
           )}
 
+          {/* Feedback form generator based on redux state */}
+          <FormikProvider value={formik}>
+            <Typography
+              key="question"
+              style={{
+                marginBottom: '16px',
+                fontWeight: 500,
+              }}
+            >
+              Question
+            </Typography>
+            <FormQuestionMapper
+              formType="mcq"
+              name="question"
+              options={[{
+                value: 'male',
+                label: 'male',
+              }, {
+                value: 'female',
+                label: 'female',
+              }]}
+            />
+          </FormikProvider>
           {/* Create Event Button */}
           <Grid item container direction="row" justify="flex-end">
             <Button
