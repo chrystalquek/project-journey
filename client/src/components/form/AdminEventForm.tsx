@@ -7,6 +7,7 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { createEvent, getEvent, editEvent } from '@redux/actions/event';
+import { uploadImage } from '@redux/actions/image';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
 import { useFormik } from 'formik';
@@ -204,6 +205,22 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     enableReinitialize: true,
   });
 
+  const onUploadImage = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await dispatch(uploadImage(formData));
+  };
+
+  const onChangeImage = (isCoverImage) => (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const image = e.target.files[0];
+      setFieldValue(isCoverImage ? 'coverImage' : 'facilitatorPhoto', image);
+      return URL.createObjectURL(image);
+    }
+  };
+
   const {
     name, coverImage, eventType, volunteerType, deadline,
     vacancies, description, facilitatorName, facilitatorPhoto,
@@ -250,7 +267,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Cover Image */}
           <Grid item container>
             <div className={classes.coverImage}>
-              <DropZoneCard isBig />
+              <DropZoneCard onChangeImage={onChangeImage(true)} />
             </div>
           </Grid>
 
@@ -506,7 +523,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
             <Grid item container>
               <div className={classes.facilPhotograph}>
-                <DropZoneCard isBig={false} onUploadImage={null} />
+                <DropZoneCard isBig={false} onChangeImage={onChangeImage(false)} />
               </div>
             </Grid>
             <Grid item container>
