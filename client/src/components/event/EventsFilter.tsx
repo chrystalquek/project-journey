@@ -54,9 +54,7 @@ const AccordionSummary = withStyles({
       margin: '12px 0',
     },
   },
-  expanded: {
-    // margin: '0',
-  },
+  expanded: {},
 })(MuiAccordionSummary);
 
 const AccordionDetails = withStyles({

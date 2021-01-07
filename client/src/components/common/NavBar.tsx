@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      paddingBottom: 40,
+      paddingBottom: theme.spacing(8),
       [theme.breakpoints.down('sm')]: {
         paddingBottom: 0,
       },

@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 
 type EventsPageBodyProps = {
   events: Array<EventData>;
-  getAllEvents: () => any;
+  getAllEvents: () => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +53,6 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
-  // const screenXs = useMediaQuery(theme.breakpoints.down('xs'));
   const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
 
   const eventFilters: EventFilterOptions = {
