@@ -115,7 +115,7 @@ const validate = ({
   }
 
   if (!vacancies) {
-    errors.deadline = 'Vacancies is required';
+    errors.vacancies = 'Vacancies is required';
   }
 
   if (!description) {
@@ -142,7 +142,7 @@ const validate = ({
 
   if (!endDate) {
     errors.endDate = 'End date is required';
-  } else if (startDate < endDate) {
+  } else if (endDate < startDate) {
     errors.endDate = 'End date should be later than start date';
   }
 
@@ -161,7 +161,7 @@ const emptyForm = {
   eventType: 'workshop',
   volunteerType: 'committed',
   deadline: dayjs().toISOString(),
-  vacancies: 0,
+  vacancies: '',
   description: '',
   facilitatorName: '',
   facilitatorPhoto: '',
@@ -186,6 +186,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   }, [id]);
 
   const onSubmit = (values) => {
+    console.log('here');
     const response = dispatch(isNew ? createEvent(values) : editEvent(values));
 
     // @ts-ignore type exists
@@ -505,7 +506,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
             <Grid item container>
               <div className={classes.facilPhotograph}>
-                <DropZoneCard isBig={false} onUploadImage={console.log('TODO')} />
+                <DropZoneCard isBig={false} onUploadImage={null} />
               </div>
             </Grid>
             <Grid item container>
@@ -538,8 +539,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           <Grid item container direction="row" justify="flex-end">
             <Button
               variant="contained"
-              disabled={isSubmitting}
               type="submit"
+              disabled={isSubmitting}
               color="primary"
               className={classes.button}
             >
