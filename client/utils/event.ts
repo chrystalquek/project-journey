@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { MONTHS } from '@constants/dateMappings';
+import { MONTHS } from '@utils/helpers/date';
 import { EventData } from '@type/event';
 
 // Takes a start and end date, parses to human-readable form

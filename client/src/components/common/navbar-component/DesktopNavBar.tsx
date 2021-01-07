@@ -21,6 +21,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
+import {EVENTS_ROUTE} from "@constants/routes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     marginRight: theme.spacing(2),
   },
-  signupButtonContainer: {
+  signUpButtonContainer: {
     display: 'flex',
     alignItems: 'center',
   },
@@ -154,7 +155,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {eventMenuArray.map((menuName) => (
                     <MenuItem
                       key={menuName}
-                      onClick={() => router.push('/admin/events')}
+                      onClick={() => router.push(EVENTS_ROUTE)}
                     >
                       {menuName}
                     </MenuItem>
@@ -189,7 +190,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     {/* Requires changes for the router */}
                     <MenuItem
                       onClick={() => {
-                        router.push('/volunteer');
+                        router.push('/volunteer/volunteerprofiles');
                       }}
                     >
                       Volunteer Profiles
@@ -237,7 +238,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
               Login
             </Button>
           </div>
-          <div className={classes.signupButtonContainer}>
+          <div className={classes.signUpButtonContainer}>
             <PersonIcon className={classes.iconSize24} color="primary" />
             <Button
               className={classes.buttonRight}
@@ -254,8 +255,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
     return (
       <>
@@ -283,7 +284,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
-            onClick={() => router.push('/volunteer/Profile')}
+            onClick={() => router.push(`/profile/${userData._id}`)}
             disableRipple
           >
             <Typography className={classes.editProfileText}>

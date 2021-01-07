@@ -6,13 +6,13 @@ import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsCo
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsAdhoc';
 
 type EventDetailsProps = {
-  event: EventData,
-  user: VolunteerData
-}
+  event: EventData;
+  user: VolunteerData;
+};
 
 const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
-  console.log('user', user);
   const renderDetails = (volunteerType: VOLUNTEER_TYPE): React.ReactNode => {
+    console.log(volunteerType);
     switch (volunteerType) {
       case VOLUNTEER_TYPE.ADHOC:
         return <EventDetailsAdhoc event={event} user={user} />;
@@ -25,11 +25,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     }
   };
 
-  return (
-    <>
-      {renderDetails(user.volunteer_type)}
-    </>
-  );
+  return <>{renderDetails(user.volunteerType)}</>;
 };
 
 export default EventDetails;

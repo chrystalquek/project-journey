@@ -7,10 +7,11 @@ import { testEventImage3 } from '@constants/imagePaths';
 import { makeStyles } from '@material-ui/core';
 import { FC } from 'react';
 import { EventData } from '@type/event';
-import { getVacancies, parseDate } from '@utils/helpers/EventsPage';
+import { getEventVacancies, parseDate } from '@utils/helpers/event/EventsPageBody';
 
-type AdminEventProps = {
+type EventCardProps = {
   event: EventData,
+  onCardClick: () => void
 }
 
 const useStyles = makeStyles({
@@ -19,21 +20,22 @@ const useStyles = makeStyles({
   },
 });
 
-const Event: FC<AdminEventProps> = ({ event }) => {
+const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
   const classes = useStyles();
-  const { filled, total } = getVacancies(event);
+  const { total, remaining } = getEventVacancies(event);
+  const vacancies = `${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} left`;
   const { date, time } = parseDate(event.startDate, event.endDate);
 
   return (
-    <Card>
+    <Card onClick={onCardClick}>
       <CardActionArea>
         {/* How to specify height for responsive images? */}
         <CardMedia
           component="img"
-          alt="Event"
+          alt="EventCard"
           height="100%"
           image={testEventImage3}
-          title={event && event.name ? event.name : 'Event'}
+          title={event && event.name ? event.name : 'EventCard'}
         />
         <CardContent>
           <Typography gutterBottom className={classes.bold}>
@@ -46,13 +48,7 @@ const Event: FC<AdminEventProps> = ({ event }) => {
             {time || 'No time provided'}
           </Typography>
           <Typography color="primary" gutterBottom className={classes.bold}>
-            {filled}
-            /
-            {total}
-            {' '}
-            {filled == 1 ? 'vacancy' : 'vacancies'}
-            {' '}
-            left
+            {vacancies}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -60,4 +56,4 @@ const Event: FC<AdminEventProps> = ({ event }) => {
   );
 };
 
-export default Event;
+export default EventCard;

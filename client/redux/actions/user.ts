@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { SignupRequest, LoginRequest } from '@utils/api/request';
-import { SignupResponse, LoginResponse } from '@utils/api/response';
+import { SignUpRequest, LoginRequest } from '@utils/api/request';
+import { SignUpResponse, LoginResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 
-export type SignupArgs = {
+export type SignUpArgs = {
   name: string
   email: string
   password: string
@@ -26,12 +26,12 @@ export type LoginArgs = {
   password: string
 }
 
-export const signup = createAsyncThunk<SignupResponse, SignupArgs, { state }>(
+export const signUp = createAsyncThunk<SignUpResponse, SignUpArgs, { state }>(
   'volunteer/',
   async ({
     name, email, password, gender, citizenship, race, hasVolunteered, hasChildrenExperience, hasExternalVolunteerExperience, hasFirstAidCertification, volunteerFrequency, volunteerReason, volunteerContribution, birthday, volunteerType,
   }) => {
-    const request: SignupRequest = {
+    const request: SignUpRequest = {
       name,
       email,
       password,
@@ -49,7 +49,7 @@ export const signup = createAsyncThunk<SignupResponse, SignupArgs, { state }>(
       volunteerType,
     };
 
-    const response = await apiClient.signup(request) as SignupResponse;
+    const response = await apiClient.signUp(request) as SignUpResponse;
     return response;
   },
 );

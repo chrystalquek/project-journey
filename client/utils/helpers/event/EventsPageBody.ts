@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
-import { MONTHS } from '@constants/dateMappings';
-import {
-  Event, EventData, EventFilterOptions, EventFilters, EventType, Volunteer, VolunteerType,
-} from '@type/event';
+import {MONTHS} from '@constants/dateMappings';
+import {Event, EventData, EventFilterOptions, EventFilters, EventType} from '@type/event';
+import {VOLUNTEER_TYPE} from "@type/volunteer";
+import {getEvent} from "@redux/actions/event";
 
 // Contains helper functions for everything related to the events page.
 
 // Takes a start and end date, parses to human-readable form
-export function parseDate(startDate: string, endDate: string) {
+export function parseDate(startDate: Date, endDate: Date) {
   if (startDate === null || endDate === null) {
     return { date: null, time: null };
   }
@@ -28,25 +28,34 @@ export function parseDate(startDate: string, endDate: string) {
   return { date: null, time: null };
 }
 
-// Returns a tuple of (filled vacancies, total vacancies) for an event.
-export function getVacancies(data: EventData) {
+// Returns an object of (filled vacancies, total vacancies) for an event.
+export function getEventVacancies(data: EventData): { filled: number, total: number, remaining: number } {
   if (!data || !data.roles) {
-    return { filled: 0, total: 0 };
+    return { filled: 0, total: 0, remaining: 0 };
   }
-  let total = 0; let
-    filled = 0;
+  let total = 0;
+  let filled = 0;
   data.roles.forEach((o) => {
     total += o.capacity ? o.capacity : 0;
     filled += o.volunteers ? o.volunteers.length : 0;
   });
-  return { filled, total };
+  return { filled, total, remaining: total-filled };
 }
 
 // Filters events based on event type and volunteer type given some filter options
 export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
-  return events.filter((e: EventData) => getDate(e) === getDateFilter(filters)
-      && getEventFilters(filters).includes(getEventType(e))
-      && getVolunteerFilters(filters).includes(getVolunteerType(e)));
+  // default calendar value is null
+  const allowAllDates = getDateFilter(filters) === null;
+
+  return events.filter((e: EventData) => {
+    const allowEvent = getEventType(e) === undefined;
+    const allowVol = getVolunteerType(e) === undefined;
+
+    // TODO: fix date filtering
+    return (allowAllDates ? true : getDateFilter(filters) === getDate(e)) &&
+      (allowEvent || getEventFilters(filters).includes(getEventType(e))) &&
+      (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)));
+  });
 }
 
 // Getters for events, to future-proof changes to event structure
@@ -55,11 +64,11 @@ function getDate(e: EventData): dayjs.Dayjs {
 }
 
 function getEventType(e: EventData): EventType {
-  return <Event.Volunteering | Event.Workshop | Event.Hangout>e.eventType; // type assertion
+  return e.eventType as EventType; // type assertion
 }
 
-function getVolunteerType(e: EventData): VolunteerType {
-  return <Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin>e.volunteerType;
+function getVolunteerType(e: EventData): VOLUNTEER_TYPE {
+  return e.volunteerType as VOLUNTEER_TYPE;
 }
 
 // may be null
@@ -82,14 +91,14 @@ function getEventFilters(f: EventFilterOptions): Array<EventType> {
   return ret;
 }
 
-function getVolunteerFilters(f: EventFilterOptions): Array<VolunteerType> {
-  const ret: Array<VolunteerType> = [];
+function getVolunteerFilters(f: EventFilterOptions): Array<VOLUNTEER_TYPE> {
+  const ret: Array<VOLUNTEER_TYPE> = [];
   const vFilters = f[EventFilters.VOLUNTEERTYPE];
   if (vFilters[EventFilters.ADHOC]) {
-    ret.push(Volunteer.Adhoc);
+    ret.push(VOLUNTEER_TYPE.ADHOC);
   }
   if (vFilters[EventFilters.COMMITTED]) {
-    ret.push(Volunteer.Committed);
+    ret.push(VOLUNTEER_TYPE.COMMITED);
   }
   return ret;
 }

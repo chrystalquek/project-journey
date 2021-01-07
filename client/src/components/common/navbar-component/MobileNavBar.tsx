@@ -27,6 +27,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
+import {EVENTS_ROUTE} from "@constants/routes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   headerContainer: {
@@ -126,11 +127,10 @@ export default function MobileNavBar({ userData }: NavBarProps) {
         </ListItem>
         <Collapse in={openVolunteerMenu} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {/* Requires changes for the router */}
             <ListItem
               button
               className={classes.nested}
-              onClick={() => router.push('/volunteer')}
+              onClick={() => router.push('/volunteer/volunteerprofiles')}
             >
               <ListItemText primary="Volunteer Profiles" />
             </ListItem>
@@ -161,7 +161,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             className={classes.listButton}
             onClick={toggleEventMenu}
           >
-            <ListItemText disableTypography primary="Event" />
+            <ListItemText disableTypography primary="EventCard" />
             {openEventMenu ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openEventMenu} timeout="auto" unmountOnExit>
@@ -172,7 +172,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                   button
                   className={classes.nested}
                   key={index}
-                  onClick={() => router.push('/admin/events')}
+                  onClick={() => router.push(EVENTS_ROUTE)}
                 >
                   <ListItemText primary={eventMenu} />
                 </ListItem>
@@ -220,8 +220,8 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     const profileIcon = !userData.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
     return (
       <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
