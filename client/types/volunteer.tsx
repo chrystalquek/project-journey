@@ -66,46 +66,76 @@ export enum VOLUNTEER_TYPE {
 }
 
 export type VolunteerData = {
-    _id: string,
-    name: string,
-    address: string,
-    mobileNumber: string,
-    birthday: Date,
-    email: string,
-    socialMediaPlatform: SOCIAL_MEDIA_PLATFORMS,
-    nickname: string,
-    photoUrl: string,
-    matchedVolunteer: number,
-    gender: GENDER,
-    citizenship: CITIZENSHIP,
-    race: RACE,
-    orgnanization: string,
-    position: string,
-    volunteerType: VOLUNTEER_TYPE,
-    referral: string,
+    _id: string;
 
-    hasVolunteered: boolean,
-    hasChildrenExperience: boolean,
-    hasVolunteeredExternally: boolean,
-    hasFirstAidCertification: boolean,
+    name: string;
+    volunteerType: VOLUNTEER_TYPE
 
-    leadershipInterest: LEADERSHIP_INTEREST,
-    description: string,
-    interests: string[],
-    personality: PERSONALITY,
-    skills: string[],
-    volunteerReason: string,
-    volunteerContribution: string,
-    volunteerFrequency: number,
+    nickname: string;
+    gender: GENDER;
+    citizenship: CITIZENSHIP;
+    birthday: Date;
+    address: string;
+    mobileNumber: string;
+    photoUrl: string;
+    email: string;
+
+    socialMediaPlatform: SOCIAL_MEDIA_PLATFORMS;
+    instagramHandle?: string;
+
+    organization?: string;
+    position?: string;
+    race?: RACE;
+
+    languages: Array<string>;
+    referralSources: Array<string>;
+
+    hasVolunteered: boolean;
+    biabVolunteeringDuration?: number; // Number of months
+
+    hasVolunteeredExternally: boolean;
+    volunteeringExperience?: string;
+
+    hasChildrenExperience: boolean;
+    childrenExperience?: string;
+
+    sessionsPerMonth?: number
+    sessionPreference?: string // pre-defined session committment
+
+    hasFirstAidCertification?: boolean;
+    leadershipInterest?: string;
+    interests?: string; // short-ans
+
+    skills?: Array<string>;
+
+    personality?: string; // Myers-Briggs
+    strengths?: Array<string>;
+    volunteeringOpportunityInterest?: string;
+
+    volunteerReason: string; // Essay
+    volunteerContribution?: string
+
+    // WCA Registration: Medical Information
+    hasMedicalNeeds: boolean
+    medicalNeeds?: string
+    hasAllergies: boolean
+    allergies?: string
+    hasMedicationDuringDay: boolean
+
+    // WCA Registration: Emergency Contact
+    emergencyContactName: string
+    emergencyContactNumber: string
+    emergencyContactEmail: string
+    emergencyContactRelationship: string
 
     // Remarks
-    volunteerRemarks: string,
-    adminRemarks: string,
+    volunteerRemarks: string;
+    administratorRemarks: string;
 
     // Event count
-    volunteeringSessionsCount: number,
-    workshopsCount: number,
-    hangoutsCount: number
+    volunteeringSessionsCount: number;
+    workshopsCount: number;
+    hangoutsCount: number;
 
     createdAt: Date, // used for member since
 }

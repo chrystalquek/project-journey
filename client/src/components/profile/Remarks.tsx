@@ -10,7 +10,7 @@ type props = {
 }
 const Remarks: FC<props> = ({ user }) => {
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(user.volunteerRemarks);
-  const [adminRemarks, setAdminRemarks] = useState<string>(user.adminRemarks);
+  const [adminRemarks, setAdminRemarks] = useState<string>(user.administratorRemarks);
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
   const [adminRemarksChanged, setAdminRemarksChanged] = useState<boolean>(false);
 
@@ -21,7 +21,7 @@ const Remarks: FC<props> = ({ user }) => {
 
   const handleAdminRemarks = (event) => {
     setAdminRemarks(event.target.value);
-    setAdminRemarksChanged(event.target.value !== user.adminRemarks);
+    setAdminRemarksChanged(event.target.value !== user.administratorRemarks);
   };
 
   const saveVolunteerRemarks = () => {
@@ -31,7 +31,7 @@ const Remarks: FC<props> = ({ user }) => {
   };
   const saveAdminRemarks = () => {
     // TODO: sync database
-    user.adminRemarks = adminRemarks;
+    user.administratorRemarks = adminRemarks;
     setAdminRemarksChanged(false);
   };
 
@@ -40,7 +40,7 @@ const Remarks: FC<props> = ({ user }) => {
     setVolunteerRemarksChanged(false);
   };
   const discardAdminRemarks = () => {
-    setAdminRemarks(user.adminRemarks);
+    setAdminRemarks(user.administratorRemarks);
     setAdminRemarksChanged(false);
   };
 
