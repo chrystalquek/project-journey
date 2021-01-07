@@ -35,10 +35,12 @@ const initialState: VolunteerState = {
 
 // parse all Dates etc before saving to store
 const addToData = (volunteers: Array<VolunteerData>, state: VolunteerState) => {
-  volunteers.forEach((volunteer) => state.data[volunteer._id] = {
-    ...volunteer,
-    birthday: new Date(volunteer.birthday),
-    createdAt: new Date(volunteer.createdAt),
+  volunteers.forEach((volunteer) => {
+    state.data[volunteer._id] = {
+      ...volunteer,
+      birthday: new Date(volunteer.birthday),
+      createdAt: new Date(volunteer.createdAt),
+    };
   });
 };
 

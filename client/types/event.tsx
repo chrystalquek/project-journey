@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {VOLUNTEER_TYPE} from "@type/volunteer";
 
 export type EventPostData = {
   name: string;
@@ -22,9 +23,10 @@ export type EventPostData = {
 export type EventData = {
   _id: string,
   name: string;
+  eventType: EventType;
+  createdAt: Date;
   coverImage?: string; // TODO: change to appropriate type
-  eventType: string;
-  volunteerType: string;
+  volunteerType: VOLUNTEER_TYPE;
   startDate: Date;
   endDate: Date;
   deadline: Date;
@@ -40,12 +42,14 @@ export type EventData = {
 }
 
 export interface RoleData {
+  _id: string,
+  volunteers: Array<string>,
   name: string;
   description: string;
   capacity: number;
-  volunteers: Array<string>;
 }
 
+// Used in filtering component
 export enum EventFilters {
   DATE = 'date',
   EVENTTYPE = 'eventType',
@@ -59,15 +63,15 @@ export enum EventFilters {
 
 export type EventFilterOptions = {
   [EventFilters.DATE]: dayjs.Dayjs,
+  [EventFilters.VOLUNTEERTYPE]: {
+    [EventFilters.ADHOC]: boolean,
+    [EventFilters.COMMITTED]: boolean
+  }
   [EventFilters.EVENTTYPE]: {
     [EventFilters.VOLUNTEERING]: boolean,
     [EventFilters.WORKSHOPS]: boolean,
     [EventFilters.HANGOUTS]: boolean
   },
-  [EventFilters.VOLUNTEERTYPE]: {
-    [EventFilters.ADHOC]: boolean,
-    [EventFilters.COMMITTED]: boolean
-  }
 }
 
 // Used when filtering actual events
@@ -76,12 +80,6 @@ export enum Event {
   Workshop = 'workshop',
   Hangout = 'hangout'
 }
+
 export type EventType = Event.Volunteering | Event.Workshop | Event.Hangout;
 
-export enum Volunteer {
-  Adhoc = 'ad-hoc',
-  Committed = 'committed',
-  Lead = 'lead',
-  Admin = 'admin'
-}
-export type VolunteerType = Volunteer.Adhoc | Volunteer.Committed | Volunteer.Admin;

@@ -27,6 +27,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
+import {EVENTS_ROUTE} from "@constants/routes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   headerContainer: {
@@ -111,7 +112,6 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/');
   };
 
   const navigationRender = () => {
@@ -161,7 +161,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             className={classes.listButton}
             onClick={toggleEventMenu}
           >
-            <ListItemText disableTypography primary="Event" />
+            <ListItemText disableTypography primary="EventCard" />
             {openEventMenu ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openEventMenu} timeout="auto" unmountOnExit>
@@ -172,7 +172,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                   button
                   className={classes.nested}
                   key={index}
-                  onClick={() => router.push('/event')}
+                  onClick={() => router.push(EVENTS_ROUTE)}
                 >
                   <ListItemText primary={eventMenu} />
                 </ListItem>
@@ -220,8 +220,8 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     const profileIcon = !userData.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
     return (
       <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
