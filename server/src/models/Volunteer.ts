@@ -43,31 +43,24 @@ export const PERSONALITY_TYPES = [
   'ESFP_A',
 ];
 export const SOCIAL_MEDIA_PLATFORMS = ['instagram', 'facebook', 'snapchat', 'email', 'other'];
-export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'lead', 'admin'];
+export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'admin'];
 
-export const VolunteerSchemaDefinition = {
+export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
   _id: mongoose.Types.ObjectId,
+  volunteerType: {
+    type: String,
+    enum: VOLUNTEER_TYPE,
+  },
   name: String,
   password: {
     type: String,
     required: true,
     set: setPassword,
   },
-  identificationNumber: String, // TODO: Confirm do we need to store this? (sensitive data)
-  address: String,
-  mobileNumber: String,
-  birthday: Date,
-  email: String,
-  socialMediaPlatform: {
-    type: String,
-    enum: SOCIAL_MEDIA_PLATFORMS,
-  },
   nickname: {
     type: String,
     default: '',
   },
-  photoUrl: String, // Process on server side - not immediately available
-  matchedVolunteer: Number, // (nullable) -> support later phase
   gender: {
     type: String,
     enum: GENDER_TYPES,
@@ -76,55 +69,116 @@ export const VolunteerSchemaDefinition = {
     type: String,
     enum: CITIZENSHIP_TYPES,
   },
+  birthday: Date,
+  address: String,
+  mobileNumber: String,
+  photoUrl: String, // Process on server side - not immediately available
+  email: String,
+
+  socialMediaPlatform: {
+    type: String,
+    enum: SOCIAL_MEDIA_PLATFORMS,
+  },
+  instagramHandle: {
+    type: String,
+    default: '',
+  },
+  orgnanization: {
+    type: String,
+    default: '',
+  },
+  position: {
+    type: String,
+    default: '',
+  },
   race: {
     type: String,
     enum: RACE_TYPES,
   },
-  orgnanization: String,
-  position: String,
-  status: {
-    type: String,
-    enum: ['pending', 'verified'],
-  },
-  role: {
-    type: String,
-    enum: ['editor', 'admin', 'lead'],
-  },
-  referral: String, // TODO: Confirm the existence of this field
-
+  languages: [String],
+  referralSources: [String],
   hasVolunteered: Boolean,
-  hasChildrenExperience: Boolean,
+  biabVolunteeringDuration: {
+    type: Number,
+    default: 0,
+  },
   hasVolunteeredExternally: Boolean,
+  volunteeringExperience: {
+    type: String,
+    default: '',
+  },
+  hasChildrenExperience: Boolean,
+  childrenExperience: {
+    type: String,
+    default: '',
+  },
   hasFirstAidCertification: Boolean,
-
   leadershipInterest: {
     type: String,
     enum: LEADERSHIP_INTEREST_TYPES,
-  },
-  description: {
-    type: String,
+    default: '',
   },
   interests: {
+    type: String,
+    default: '',
+  },
+  skills: {
     type: [String],
+    default: [],
   },
   personality: {
     type: String,
     enum: PERSONALITY_TYPES,
   },
-  skills: {
+  strengths: {
     type: [String],
+  },
+  volunteeringOpportunityInterest: {
+    type: String,
+    default: '',
   },
   volunteerReason: String,
   volunteerContribution: String,
-  volunteerFrequency: Number,
-  volunteerType: {
-    type: String,
-    enum: VOLUNTEER_TYPE,
-  },
 
+  // WCA Registration: Medical Information
+  hasMedicalNeeds: Boolean,
+  medicalNeeds: {
+    type: String,
+    default: '',
+  },
+  hasAllergies: Boolean,
+  allergies: {
+    type: String,
+    default: '',
+  },
+  hasMedicationDuringDay: Boolean,
+
+  // WCA Registration: Emergency Contact
+  emergencyContactName: {
+    type: String,
+    default: '',
+  },
+  emergencyContactNumber: {
+    type: String,
+    default: '',
+  },
+  emergencyContactEmail: {
+    type: String,
+    default: '',
+  },
+  emergencyContactRelationship: {
+    type: String,
+    default: '',
+  },
   // Remarks
-  volunteerRemarks: String,
-  administratorRemarks: String,
+  volunteerRemarks: {
+    type: String,
+    default: '',
+  },
+  administratorRemarks: {
+    type: String,
+    default: '',
+  },
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {

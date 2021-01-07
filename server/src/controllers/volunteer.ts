@@ -25,34 +25,63 @@ const getValidations = (method: VolunteerValidatorMethod) => {
 
         // Personal details
         VALIDATOR.name,
-        VALIDATOR.address,
-        VALIDATOR.mobile,
-        VALIDATOR.birthday,
-        VALIDATOR.socialMediaPlatform,
+        VALIDATOR.nickname,
         VALIDATOR.gender,
         VALIDATOR.citizenship,
-        VALIDATOR.race,
+        VALIDATOR.birthday,
+        VALIDATOR.address,
+        VALIDATOR.mobileNumber,
+
+        VALIDATOR.socialMediaPlatform,
+        VALIDATOR.instagramHandle,
+
         VALIDATOR.organization,
         VALIDATOR.position,
+        VALIDATOR.race,
+
+        VALIDATOR.referralSources,
+        VALIDATOR.languages,
+
         VALIDATOR.volunteerType,
 
         // Boolean responses
         VALIDATOR.hasVolunteered,
+        VALIDATOR.biabVolunteeringDuration,
+
         VALIDATOR.hasChildrenExperience,
-        VALIDATOR.hasExternalVolunteerExperience,
+        VALIDATOR.childrenExperience,
+
+        VALIDATOR.hasVolunteeredExternally,
+        VALIDATOR.volunteeringExperience,
+
         VALIDATOR.hasFirstAidCertification,
 
         // Enum responses
         VALIDATOR.leadershipInterest,
         VALIDATOR.description,
         VALIDATOR.interests,
-        VALIDATOR.personalityType,
+        VALIDATOR.personality,
         VALIDATOR.skills,
+        VALIDATOR.strengths,
+        VALIDATOR.volunteeringOpportunityInterest,
 
         // Volunteering related
         VALIDATOR.volunteerReason, // Categorize answers
         VALIDATOR.volunteerFrequency, // Frequency per month
         VALIDATOR.volunteerContribution,
+
+        // Medical Information
+        VALIDATOR.hasMedicalNeeds,
+        VALIDATOR.medicalNeeds,
+        VALIDATOR.hasAllergies,
+        VALIDATOR.allergies,
+        VALIDATOR.hasMedicationDuringDay,
+
+        // Emergency Contact
+        VALIDATOR.emergencyContactEmail,
+        VALIDATOR.emergencyContactName,
+        VALIDATOR.emergencyContactNumber,
+        VALIDATOR.emergencyContactRelationship,
 
         // Remarks
         VALIDATOR.volunteerRemark,
@@ -74,7 +103,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.password.optional(),
         VALIDATOR.name.optional(),
         VALIDATOR.address.optional(),
-        VALIDATOR.mobile.optional(),
+        VALIDATOR.mobileNumber.optional(),
 
         VALIDATOR.socialMediaPlatform.optional(),
         VALIDATOR.organization.optional(),
@@ -82,11 +111,11 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.leadershipInterest.optional(),
         VALIDATOR.volunteerType.optional(),
 
-        VALIDATOR.description.optional(),
         VALIDATOR.interests.optional(),
-        VALIDATOR.personalityType.optional(),
+        VALIDATOR.personality.optional(),
         VALIDATOR.skills.optional(),
         VALIDATOR.administratorRemarks.optional(),
+        VALIDATOR.volunteerRemark.optional(),
       ];
     }
     default:

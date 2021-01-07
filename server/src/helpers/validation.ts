@@ -97,44 +97,72 @@ const newPassword = body('newPassword').isString().isLength({
 const name = body('name').isString();
 
 const address = body('address').isString();
-
-const mobile = body('mobileNumber').isString().isMobilePhone('en-SG');
+const nickname = body('nickname').isString().optional();
+const mobileNumber = body('mobileNumber').isString().isMobilePhone('en-SG');
 const birthday = body('birthday').isISO8601().toDate();
 const socialMediaPlatform = body('socialMediaPlatform').isString().custom(
   (socialMedia: string) => stringEnumValidator(SOCIAL_MEDIA_PLATFORMS, 'Social Media Platform', socialMedia),
 );
+const instagramHandle = body('').isString().optional();
 const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER_TYPES, 'Gender', genderText));
 const citizenship = body('citizenship').custom(
   (citizenshipType: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenshipType),
 );
 const race = body('race').custom((raceType: string) => stringEnumValidator(RACE_TYPES, 'Race', raceType));
-const organization = body('organization').isString();
-const position = body('position').isString();
+const organization = body('organization').isString().optional();
+const position = body('position').isString().optional();
+const referralSources = body('referral').isArray();
+
 const hasVolunteered = body('hasVolunteered').isBoolean();
+const biabVolunteeringDuration = body('biabVolunteeringDuration').isString().optional();
+
 const hasChildrenExperience = body('hasChildrenExperience').isBoolean();
-const hasExternalVolunteerExperience = body('hasExternalVolunteerExperience').isBoolean();
-const hasFirstAidCertification = body('hasFirstAidCertification').isBoolean();
+const childrenExperience = body('childrenExperience').isString().optional();
+
+const hasVolunteeredExternally = body('hasVolunteeredExternally').isBoolean();
+const volunteeringExperience = body('volunteeringExperience').isString().optional();
+
+const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
+const sessionPreference = body('sessionPreference').isString().optional();
+
+const hasFirstAidCertification = body('hasFirstAidCertification').isBoolean().optional();
 
 const leadershipInterest = body('leadershipInterest').isString().custom(
   (leadershipInterestType: string) => stringEnumValidator(
     LEADERSHIP_INTEREST_TYPES, 'Leadership Interest', leadershipInterestType,
   ),
-);
+).optional();
 
 const description = body('description').isString();
-const interests = body('interests').isArray();
-const personalityType = body('personality').isString().custom(
-  (personality: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personality),
-);
-const skills = body('skills').isArray();
+const interests = body('interests').isString().optional();
+const personality = body('personality').isString().custom(
+  (personalityType: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personalityType),
+).optional();
+const strengths = body('strengths').isArray().optional();
+const languages = body('languages').isArray();
+const skills = body('skills').isArray().optional();
 
 const volunteerReason = body('volunteerReason').isString();
 const volunteerFrequency = body('volunteerFrequency').isNumeric();
-const volunteerContribution = body('volunteerContribution').isString();
+const volunteerContribution = body('volunteerContribution').isString().optional();
 const volunteerRemark = body('volunteerRemark').isString().optional();
 const volunteerType = body('volunteerType').isString().custom(
-  (volunteerType: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', volunteerType),
+  (type: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', type),
 );
+const volunteeringOpportunityInterest = body('volunteeringOpportunityInterest').isString().optional();
+
+// Medical Information
+const hasMedicalNeeds = body('hasMedicalNeeds').isBoolean();
+const medicalNeeds = body('medicalNeeds').isString().optional();
+const hasAllergies = body('hasAllergies').isBoolean();
+const allergies = body('allergies').isString().optional();
+const hasMedicationDuringDay = body('hasMedicationDuringDay').isBoolean();
+
+// Emergency contact
+const emergencyContactName = body('emergencyContactName').isString();
+const emergencyContactNumber = body('emergencyContactNumber').isString();
+const emergencyContactEmail = body('emergencyContactEmail').isString();
+const emergencyContactRelationship = body('emergencyContactRelationship').isString();
 
 const administratorRemarks = body('administratorRemarks');
 
@@ -155,8 +183,24 @@ export default {
   password,
   newPassword,
   name,
+  nickname,
   address,
-  mobile,
+  mobileNumber,
+  instagramHandle,
+  languages,
+  referralSources,
+  biabVolunteeringDuration,
+  sessionsPerMonth,
+  sessionPreference,
+  hasMedicalNeeds,
+  medicalNeeds,
+  hasAllergies,
+  allergies,
+  hasMedicationDuringDay,
+  emergencyContactName,
+  emergencyContactNumber,
+  emergencyContactEmail,
+  emergencyContactRelationship,
   birthday,
   socialMediaPlatform,
   gender,
@@ -166,12 +210,16 @@ export default {
   position,
   hasVolunteered,
   hasChildrenExperience,
-  hasExternalVolunteerExperience,
+  hasVolunteeredExternally,
+  volunteeringExperience,
+  childrenExperience,
   hasFirstAidCertification,
   leadershipInterest,
   description,
   interests,
-  personalityType,
+  personality,
+  strengths,
+  volunteeringOpportunityInterest,
   skills,
   volunteerReason,
   volunteerFrequency,

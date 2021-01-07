@@ -1,11 +1,11 @@
 import jwt from 'express-jwt';
-import { VolunteerRole } from '../types';
+import { VolunteerType } from '../types';
 
 import { accessTokenSecret } from '../helpers/auth';
 import HTTP_CODES from '../constants/httpCodes';
 import config from '../config';
 
-const authorize = (roles: Array<VolunteerRole> = []) => {
+const authorize = (roles: Array<VolunteerType> = []) => {
   if (config.disableAuthentication && config.env !== 'production') {
     return [];
   }
