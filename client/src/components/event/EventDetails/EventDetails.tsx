@@ -6,9 +6,9 @@ import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsCo
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsAdhoc';
 
 type EventDetailsProps = {
-  event: EventData,
-  user: VolunteerData
-}
+  event: EventData;
+  user: VolunteerData;
+};
 
 const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const renderDetails = (volunteerType: VOLUNTEER_TYPE): React.ReactNode => {
@@ -24,11 +24,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     }
   };
 
-  return (
-    <>
-      {renderDetails(user.volunteerType)}
-    </>
-  );
+  return <>{renderDetails(user.volunteerType)}</>;
 };
 
 export default EventDetails;

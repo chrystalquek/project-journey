@@ -1,5 +1,16 @@
 import {
-  Box, Grid, Button, TextField, Typography, Divider, Card, CardContent, CardHeader, CardActionArea, useMediaQuery, useTheme,
+  Box,
+  Grid,
+  Button,
+  TextField,
+  Typography,
+  Divider,
+  Card,
+  CardContent,
+  CardHeader,
+  CardActionArea,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'antd/lib/form/Form';
@@ -11,6 +22,7 @@ import NavBar from '@components/common/NavBar';
 import Footer from '@components/common/Footer';
 import { SignUpArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
+import SignUpForm from '@components/form/SignUpForm';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -109,8 +121,9 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   const [form] = useForm();
   const router = useRouter();
   const classes = useStyles();
-  const isFormDisabled = !form.isFieldsTouched(true)
-    || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
+  const isFormDisabled =
+    !form.isFieldsTouched(true) ||
+    !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
   // Proceed to next step
   const nextStep = () => {
@@ -166,15 +179,23 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
     if (isMobile) {
       return (
         <Grid container>
-          <Grid item className={classes.dividerText}>{children}</Grid>
+          <Grid item className={classes.dividerText}>
+            {children}
+          </Grid>
         </Grid>
       );
     }
     return (
       <Grid container>
-        <Grid item xs={4}><Divider className={classes.dividerLine} /></Grid>
-        <Grid item xs={4} className={classes.dividerText}>{children}</Grid>
-        <Grid item xs={4} className={classes.dividerLine}><Divider /></Grid>
+        <Grid item xs={4}>
+          <Divider className={classes.dividerLine} />
+        </Grid>
+        <Grid item xs={4} className={classes.dividerText}>
+          {children}
+        </Grid>
+        <Grid item xs={4} className={classes.dividerLine}>
+          <Divider />
+        </Grid>
       </Grid>
     );
   };
@@ -185,37 +206,38 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
         <div>
           <Grid container className={classes.signUpInstructions}>
             <Grid item md={6}>
-              <Typography variant="body1">
+              <Typography variant='body1'>
                 <p>
-                  Yay! We are excited that you are interested to volunteer with us.
-                  (information to help the users make a decision)
-                  Please be reminded that there is a minimum commitment of 3 months
-                  (serving a minimum of 3 sessions a month) in order to have direction
-                  interaction with our learning community (aged 6 to 16 years old).
-                  We have this policy for a number of reasons:
+                  Yay! We are excited that you are interested to volunteer with
+                  us. (information to help the users make a decision) Please be
+                  reminded that there is a minimum commitment of 3 months
+                  (serving a minimum of 3 sessions a month) in order to have
+                  direction interaction with our learning community (aged 6 to
+                  16 years old). We have this policy for a number of reasons:
                   <ul>
-                      <li>
-                        Limit the emotional trauma in our children that occurs
-                        when volunteers come for a few sessions and leave
-                      </li>
-                      <li>
-                        It takes time for children to warm up to
-                        new faces and it won&apos;t happen instantly.
-                      </li>
-                      <li>
-                        3 months provides you with the opportunity to witness the progression
-                        and impact you&apos;re making (in yourself and in our children)
-                      </li>
-                      <li>
-                        You&apos;ll be journeying with other individuals who share
-                        a commitment and passion for our program.  There are opportunities
-                        to meet new people and develop friendships.
-                      </li>
-                      <li>
-                        Allows you time to be on-boarded, mentored
-                        and guided by some incredible WCA Captains on the team.
-                      </li>
-                    </ul>
+                    <li>
+                      Limit the emotional trauma in our children that occurs
+                      when volunteers come for a few sessions and leave
+                    </li>
+                    <li>
+                      It takes time for children to warm up to new faces and it
+                      won&apos;t happen instantly.
+                    </li>
+                    <li>
+                      3 months provides you with the opportunity to witness the
+                      progression and impact you&apos;re making (in yourself and
+                      in our children)
+                    </li>
+                    <li>
+                      You&apos;ll be journeying with other individuals who share
+                      a commitment and passion for our program. There are
+                      opportunities to meet new people and develop friendships.
+                    </li>
+                    <li>
+                      Allows you time to be on-boarded, mentored and guided by
+                      some incredible WCA Captains on the team.
+                    </li>
+                  </ul>
                 </p>
               </Typography>
             </Grid>
@@ -225,9 +247,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
           <Grid container className={classes.centerContent}>
             <Grid item sm={6}>
               <TextDivider>
-                <Typography variant="body1">
-                  Sign Up As
-                </Typography>
+                <Typography variant='body1'>Sign Up As</Typography>
               </TextDivider>
             </Grid>
           </Grid>
@@ -236,24 +256,32 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
               <Grid item md={3}>
                 <Card className={classes.card} onClick={selectAdhoc}>
                   <CardActionArea>
-                    <CardHeader title="Ad-hoc Volunteer" className={classes.cardHeaderAdhoc} />
+                    <CardHeader
+                      title='Ad-hoc Volunteer'
+                      className={classes.cardHeaderAdhoc}
+                    />
                     <CardContent>
-                        <Typography variant="body2">
-                          You are only intending to volunteer one-off at Blessings in a Bag
-                        </Typography>
-                      </CardContent>
+                      <Typography variant='body2'>
+                        You are only intending to volunteer one-off at Blessings
+                        in a Bag
+                      </Typography>
+                    </CardContent>
                   </CardActionArea>
                 </Card>
               </Grid>
               <Grid item md={3}>
                 <Card className={classes.card} onClick={selectCommitted}>
                   <CardActionArea>
-                    <CardHeader title="Regular Volunteer" className={classes.cardHeaderRegular} />
+                    <CardHeader
+                      title='Regular Volunteer'
+                      className={classes.cardHeaderRegular}
+                    />
                     <CardContent>
-                        <Typography variant="body2">
-                          You are able to commit to a minimum of 3 months at Blessings in a Bag
-                        </Typography>
-                      </CardContent>
+                      <Typography variant='body2'>
+                        You are able to commit to a minimum of 3 months at
+                        Blessings in a Bag
+                      </Typography>
+                    </CardContent>
                   </CardActionArea>
                 </Card>
               </Grid>
@@ -261,14 +289,10 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
           </div>
         </div>
 
-        <div className="section">
-          <Typography variant="body2">
-            Already have an account?
-            {' '}
-            <br />
-            <Link href="/auth/login">
-              Log in
-            </Link>
+        <div className='section'>
+          <Typography variant='body2'>
+            Already have an account? <br />
+            <Link href='/auth/login'>Log in</Link>
           </Typography>
         </div>
       </Box>
@@ -292,102 +316,17 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
         <Box className={classes.content}>
           <Grid container className={classes.rowContent}>
             <Grid item lg={6}>
-              <Button className={classes.backButton} onClick={prevStep}>Back</Button>
-              <Typography className={classes.pageHeader}>Registration</Typography>
-              <form className={classes.form} onSubmit={handleSubmit}>
-                <Typography className={classes.header}> Name </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  id="name"
-                  label="e.g. John Doe"
-                  name="name"
-                  autoComplete="name"
-                />
-                <Typography className={classes.header}> Email </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  id="email"
-                  label="e.g. username@gmail.com"
-                  name="email"
-                  autoComplete="email"
-                />
-                <Typography className={classes.header}> Password </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  name="password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-                <Typography className={classes.header}> Date of Birth </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  id="birthday"
-                  name="birthday"
-                  type="date"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <Typography className={classes.header}> Comments </Typography>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  // required
-                  fullWidth
-                  multiline
-                  id="comments"
-                  label="e.g. Additional Comments"
-                  name="comments"
-                />
-                <div className="section">
-                  <div>
-                    <span>
-                      <Typography variant="body2">
-                        By signing up, I agree to the&nbsp;
-                        <Link href="/">
-                          Privacy
-                        </Link>
-                        &nbsp;and&nbsp;
-                        <Link href="/">
-                          Terms of Service
-                        </Link>
-                        &nbsp;of Blessings in a Bag
-                      </Typography>
-                    </span>
-                  </div>
-                </div>
-                <Grid className={classes.loginButtonContainer}>
-                  <InvalidCredentials />
-                  <Button
-                    color="primary"
-                    type="submit"
-                    disabled={isFormDisabled}
-                    className={classes.loginButton}
-                    size="large"
-                  >
-                    Sign Up
-                  </Button>
-                </Grid>
-              </form>
-              <div className="section">
-                <Typography variant="body2">
-                  Already have an account?
-                  {' '}
-                  <br />
-                  <Link href="/auth/login">Log in</Link>
+              <Button className={classes.backButton} onClick={prevStep}>
+                Back
+              </Button>
+              <Typography className={classes.pageHeader}>
+                Registration
+              </Typography>
+              <SignUpForm />
+              <div className='section'>
+                <Typography variant='body2'>
+                  Already have an account? <br />
+                  <Link href='/auth/login'>Log in</Link>
                 </Typography>
               </div>
               <br />
@@ -400,7 +339,11 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
 
   const VolunteerSignUp = (props) => {
     if (currentStep == 0) {
-      return <div><VolunteerType /></div>;
+      return (
+        <div>
+          <VolunteerType />
+        </div>
+      );
     }
     return <VolunteerInfo />;
 
