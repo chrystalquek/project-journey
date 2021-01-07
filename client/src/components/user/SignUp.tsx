@@ -2,7 +2,6 @@ import {
   Box,
   Grid,
   Button,
-  TextField,
   Typography,
   Divider,
   Card,
@@ -12,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
 import { useRouter } from 'next/dist/client/router';
@@ -115,15 +114,14 @@ type SignUpProps = {
 };
 
 const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [volunteerType, setVolunteerType] = useState('ad-hoc'); // default set as ad-hoc
-  const [invalid, setInvalid] = useState(false);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [volunteerType, setVolunteerType] = useState<string>('ad-hoc'); // default set as ad-hoc
+  const [invalid, setInvalid] = useState<boolean>(false);
   const [form] = useForm();
   const router = useRouter();
   const classes = useStyles();
-  const isFormDisabled =
-    !form.isFieldsTouched(true) ||
-    !!form.getFieldsError().filter(({ errors }) => errors.length).length;
+  const isFormDisabled = !form.isFieldsTouched(true)
+    || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
   // Proceed to next step
   const nextStep = () => {
@@ -206,7 +204,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
         <div>
           <Grid container className={classes.signUpInstructions}>
             <Grid item md={6}>
-              <Typography variant='body1'>
+              <Typography variant="body1">
                 <p>
                   Yay! We are excited that you are interested to volunteer with
                   us. (information to help the users make a decision) Please be
@@ -247,7 +245,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
           <Grid container className={classes.centerContent}>
             <Grid item sm={6}>
               <TextDivider>
-                <Typography variant='body1'>Sign Up As</Typography>
+                <Typography variant="body1">Sign Up As</Typography>
               </TextDivider>
             </Grid>
           </Grid>
@@ -257,11 +255,11 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
                 <Card className={classes.card} onClick={selectAdhoc}>
                   <CardActionArea>
                     <CardHeader
-                      title='Ad-hoc Volunteer'
+                      title="Ad-hoc Volunteer"
                       className={classes.cardHeaderAdhoc}
                     />
                     <CardContent>
-                      <Typography variant='body2'>
+                      <Typography variant="body2">
                         You are only intending to volunteer one-off at Blessings
                         in a Bag
                       </Typography>
@@ -273,11 +271,11 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
                 <Card className={classes.card} onClick={selectCommitted}>
                   <CardActionArea>
                     <CardHeader
-                      title='Regular Volunteer'
+                      title="Regular Volunteer"
                       className={classes.cardHeaderRegular}
                     />
                     <CardContent>
-                      <Typography variant='body2'>
+                      <Typography variant="body2">
                         You are able to commit to a minimum of 3 months at
                         Blessings in a Bag
                       </Typography>
@@ -289,10 +287,11 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
           </div>
         </div>
 
-        <div className='section'>
-          <Typography variant='body2'>
-            Already have an account? <br />
-            <Link href='/auth/login'>Log in</Link>
+        <div className="section">
+          <Typography variant="body2">
+            Already have an account?
+            <br />
+            <Link href="/auth/login">Log in</Link>
           </Typography>
         </div>
       </Box>
@@ -323,10 +322,12 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
                 Registration
               </Typography>
               <SignUpForm />
-              <div className='section'>
-                <Typography variant='body2'>
-                  Already have an account? <br />
-                  <Link href='/auth/login'>Log in</Link>
+              <div className="section">
+                <Typography variant="body2">
+                  Already have an account?
+                  {' '}
+                  <br />
+                  <Link href="/auth/login">Log in</Link>
                 </Typography>
               </div>
               <br />
@@ -338,15 +339,13 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   );
 
   const VolunteerSignUp = (props) => {
-    if (currentStep == 0) {
+    if (currentStep === 0) {
       return (
         <div>
           <VolunteerType />
         </div>
       );
     }
-    return <VolunteerInfo />;
-
     return <VolunteerInfo />;
   };
 
@@ -355,7 +354,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
       <Head>
         <title>Signup</title>
       </Head>
-      <NavBar userData={null} />
+      <NavBar userData={user.user} />
       <VolunteerSignUp />
       <Footer />
     </>
