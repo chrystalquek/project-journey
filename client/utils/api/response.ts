@@ -39,3 +39,9 @@ export type CreateEventResponse = {}
 export type GetCountResponse = {
   count: number
 }
+
+export type UploadImageResponse = {
+  email: string,
+  imageName: string,
+  url: string
+}

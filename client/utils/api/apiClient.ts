@@ -1,10 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
+  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, UploadImageRequest,
 } from './request';
 import {
-  GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse,
+  GetCountResponse, GetEventsResponse, GetSignUpsResponse,
+  GetVolunteersResponse, LoginResponse, CreateEventResponse,
+  EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -86,9 +87,15 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
-  protected async send(request: any, path: string, method: HttpMethod) {
+  // upload image
+  async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
+    return this.send(request, 'image', 'post', true);
+  }
+
+  protected async send(request: any, path: string, method: HttpMethod,
+    isImageUpload: boolean = false) {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      'Content-Type': isImageUpload ? 'multipart/form-data' : 'application/json',
     };
 
     if (process.env.NODE_ENV === 'development') {
