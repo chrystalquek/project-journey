@@ -172,7 +172,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
                           key={text}
                           style={{
                             marginBottom: '16px',
-                            fontWeight: '600',
+                            fontWeight: 500,
                           }}
                         >
                           {text}
