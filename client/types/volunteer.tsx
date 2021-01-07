@@ -79,6 +79,7 @@ export type VolunteerData = {
     mobileNumber: string;
     photoUrl: string;
     email: string;
+    description?: string;
 
     socialMediaPlatform: SOCIAL_MEDIA_PLATFORMS;
     instagramHandle?: string;
