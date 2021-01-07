@@ -1,14 +1,14 @@
-import React, {FC} from "react";
-import {EventData} from "@type/event";
-import {VolunteerData} from "@type/volunteer";
-import {useTheme} from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import {Box, Grid} from "@material-ui/core";
-import {testEventImage1} from "@constants/imagePaths";
-import EventInformation from "@components/event/EventDetails/EventInformation";
-import VolunteerRoles from "@components/event/EventDetails/VolunteerRoles";
-import EventRegisterForm from "@components/event/EventDetails/EventRegisterForm";
-import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
+import React, { FC } from 'react';
+import { EventData } from '@type/event';
+import { VolunteerData } from '@type/volunteer';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Box, Grid } from '@material-ui/core';
+import { testEventImage1 } from '@constants/imagePaths';
+import EventInformation from '@components/event/EventDetails/EventInformation';
+import VolunteerRoles from '@components/event/EventDetails/VolunteerRoles';
+import EventRegisterForm from '@components/event/EventDetails/EventRegisterForm';
+import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 
 type EventDetailsCommittedProps = {
   event: EventData,
@@ -27,13 +27,13 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ event, user }) 
         <EventBreadCrumbs eid={event._id} />
       </Grid>
       <Grid item xs={12}>
-        <Box fontWeight='bold' fontSize="h1.fontSize">
+        <Box fontWeight="bold" fontSize="h1.fontSize">
           {event.name}
         </Box>
       </Grid>
 
       <Grid item xs={12}>
-        {/*TODO: Replace with actual image*/}
+        {/* TODO: Replace with actual image */}
         <img src={testEventImage1} alt={event.name} />
       </Grid>
 
@@ -49,7 +49,7 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ event, user }) 
         <EventRegisterForm event={event} />
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
 export default EventDetailsCommitted;

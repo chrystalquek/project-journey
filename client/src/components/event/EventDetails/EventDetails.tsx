@@ -12,7 +12,6 @@ type EventDetailsProps = {
 
 const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const renderDetails = (volunteerType: VOLUNTEER_TYPE): React.ReactNode => {
-    console.log(volunteerType);
     switch (volunteerType) {
       case VOLUNTEER_TYPE.ADHOC:
         return <EventDetailsAdhoc event={event} user={user} />;
