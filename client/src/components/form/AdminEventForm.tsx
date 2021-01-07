@@ -80,6 +80,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const isError = (error) => (error !== undefined);
+
 /**
  * Combine date and time as JSON string
  * @param date Date object representing date
@@ -149,6 +151,27 @@ const validate = ({
   } else if (roles.length <= 0) {
     errors.roles = 'Roles should be greater than 0.';
   }
+
+  return errors;
+};
+
+const emptyForm = {
+  name: '',
+  coverImage: '',
+  eventType: 'workshop',
+  volunteerType: 'committed',
+  deadline: dayjs().toISOString(),
+  vacancies: 0,
+  description: '',
+  facilitatorName: '',
+  facilitatorPhoto: '',
+  facilitatorDescription: '',
+  roles: [],
+  contentUrl: '',
+  contentType: 'pdf',
+  location: '',
+  startDate: dayjs().toISOString(),
+  endDate: dayjs().toISOString(),
 };
 
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
@@ -162,53 +185,23 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     }
   }, [id]);
 
-  const [initialValues, setInitialValues] = useState({
-    name: '',
-    coverImage: '',
-    eventType: 'workshop',
-    volunteerType: 'committed',
-    deadline: dayjs().toISOString(),
-    vacancies: 0,
-    description: '',
-    facilitatorName: '',
-    facilitatorPhoto: '',
-    facilitatorDescription: '',
-    roles: [],
-    contentUrl: '',
-    contentType: 'pdf',
-    location: '',
-    startDate: dayjs().toISOString(),
-    endDate: dayjs().toISOString(),
-  });
-
-  useEffect(() => {
-    if (eventForm) {
-      const camelCaseEventForm = keysToCamel(eventForm);
-      const newFormData = {
-        ...camelCaseEventForm,
-        deadline: camelCaseEventForm.deadline,
-        startDate: camelCaseEventForm.startDate,
-        endDate: camelCaseEventForm.endDate,
-      };
-      setInitialValues(newFormData);
-    }
-  }, [eventForm]);
-
   const onSubmit = (values) => {
-    if (isNew) {
-      dispatch(createEvent(values));
-      alert('Event Created!');
-    } else {
-      dispatch(editEvent({ data: values, id }));
-      alert('Event Edited!');
+    const response = dispatch(isNew ? createEvent(values) : editEvent(values));
+
+    // @ts-ignore type exists
+    if (response?.type === 'event/createEvent/fulfilled' || response?.type === 'event/editEvent/fulfilled') {
+      alert('Success');
     }
-    // TODO: Confirm with designers what happens?
-    // I think this should redirect on success to the Event Details page
   };
 
   const {
     errors, handleChange, handleSubmit, isSubmitting, setFieldValue, setValues, values,
-  } = useFormik({ initialValues, validate, onSubmit });
+  } = useFormik({
+    initialValues: eventForm ? keysToCamel(eventForm) : emptyForm,
+    validate,
+    onSubmit,
+    enableReinitialize: true,
+  });
 
   const {
     name, coverImage, eventType, volunteerType, deadline,
@@ -242,6 +235,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={eventType}
                 onChange={handleChange}
                 helperText={errors.eventType}
+                error={errors.eventType !== undefined}
               >
                 {eventTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -277,6 +271,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={name}
                 onChange={handleChange}
                 helperText={errors.name}
+                error={errors.name !== undefined}
               />
             </Grid>
           </Grid>
@@ -299,6 +294,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={volunteerType}
                 onChange={handleChange}
                 helperText={errors.volunteerType}
+                error={isError(errors.volunteerType)}
               >
                 {volunteerTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -332,6 +328,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   'aria-label': 'change date',
                 }}
                 color="secondary"
+                helperText={errors.startDate}
+                error={isError(errors.startDate)}
               />
             </Grid>
             <Grid item>
@@ -349,6 +347,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(endDate)}
                 onChange={(date) => setFieldValue('endDate', getCombinedDateAndTimeString(date, dayjs(endDate).format('HH:mm')))}
                 color="secondary"
+                helperText={errors.endDate}
+                error={isError(errors.endDate)}
               />
             </Grid>
           </Grid>
@@ -378,6 +378,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   step: 300, // 5 min
                 }}
                 color="secondary"
+                helperText={errors.startDate}
+                error={isError(errors.startDate)}
               />
             </Grid>
             <Grid item>
@@ -400,6 +402,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   step: 300, // 5 min
                 }}
                 color="secondary"
+                helperText={errors.endDate}
+                error={isError(errors.endDate)}
               />
             </Grid>
           </Grid>
@@ -416,11 +420,13 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 inputVariant="outlined"
                 ampm={false}
                 margin="dense"
-                value={deadline}
-                onChange={handleChange}
+                value={dayjs(deadline)}
+                onChange={(date) => setFieldValue('deadline', date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
                 color="secondary"
+                helperText={errors.deadline}
+                error={isError(errors.deadline)}
               />
             </Grid>
           </Grid>
@@ -442,6 +448,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 name="vacancies"
                 value={vacancies}
                 onChange={handleChange}
+                helperText={errors.vacancies}
+                error={isError(errors.vacancies)}
               />
             </Grid>
           </Grid>
@@ -465,6 +473,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 onChange={handleChange}
                 multiline
                 rows={15}
+                helperText={errors.description}
+                error={isError(errors.description)}
               />
             </Grid>
           </Grid>
@@ -487,6 +497,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   name="facilitatorName"
                   value={facilitatorName}
                   onChange={handleChange}
+                  helperText={errors.facilitatorName}
+                  error={isError(errors.facilitatorName)}
                 />
               </Grid>
             </Grid>
@@ -514,6 +526,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   onChange={handleChange}
                   multiline
                   rows={15}
+                  helperText={errors.facilitatorDescription}
+                  error={isError(errors.facilitatorDescription)}
                 />
               </Grid>
             </Grid>
