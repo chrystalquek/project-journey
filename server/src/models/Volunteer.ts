@@ -171,8 +171,14 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     default: '',
   },
   // Remarks
-  volunteerRemarks: String,
-  administratorRemarks: String,
+  volunteerRemarks: {
+    type: String,
+    default: '',
+  },
+  administratorRemarks: {
+    type: String,
+    default: '',
+  },
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {
