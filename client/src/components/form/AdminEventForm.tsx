@@ -10,6 +10,7 @@ import { createEvent, getEvent, editEvent } from '@redux/actions/event';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 
 /** TO BE REPLACED - START */
 const toCamel = (str) => str.replace(/([-_][a-z])/ig, ($1) => $1.toUpperCase()
@@ -94,7 +95,7 @@ const getCombinedDateAndTimeString = (dateDayJs: dayjs.Dayjs, time: string): str
 
 const validate = ({
   name, eventType, volunteerType, deadline, vacancies, description, facilitatorName,
-  facilitatorPhoto, facilitatorDescription, roles, startDate, endDate,
+  facilitatorDescription, roles, startDate, endDate,
 }) => {
   const errors: any = {};
 
@@ -122,20 +123,6 @@ const validate = ({
     errors.description = 'Description is required';
   }
 
-  if (eventType !== 'volunteering') {
-    if (!facilitatorName) {
-      errors.facilitatorName = 'Facilitator name is required';
-    }
-
-    if (!facilitatorDescription) {
-      errors.facilitatorDescription = 'Facilitator description is required';
-    }
-
-    if (!facilitatorPhoto) {
-      errors.facilitatorPhoto = 'Facilitator photo is required';
-    }
-  }
-
   if (!startDate) {
     errors.startDate = 'Start date is required';
   }
@@ -146,10 +133,22 @@ const validate = ({
     errors.endDate = 'End date should be later than start date';
   }
 
-  if (eventType === 'volunteering' && !roles) {
-    errors.roles = 'Roles is required';
-  } else if (roles.length <= 0) {
-    errors.roles = 'Roles should be greater than 0.';
+  if (eventType !== 'volunteering') {
+    if (!facilitatorName) {
+      errors.facilitatorName = 'Facilitator name is required';
+    }
+
+    if (!facilitatorDescription) {
+      errors.facilitatorDescription = 'Facilitator description is required';
+    }
+  }
+
+  if (eventType === 'volunteering') {
+    if (!roles) {
+      errors.roles = 'Roles is required';
+    } else if (roles.length <= 0) {
+      errors.roles = 'Roles should be greater than 0. ';
+    }
   }
 
   return errors;
@@ -178,6 +177,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const eventForm = useSelector((state: StoreState) => state.event.form);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     if (id !== 'new') {
@@ -185,13 +185,13 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     }
   }, [id]);
 
-  const onSubmit = (values) => {
-    console.log('here');
-    const response = dispatch(isNew ? createEvent(values) : editEvent(values));
+  const onSubmit = async (values) => {
+    const response = await dispatch(isNew ? createEvent(values) : editEvent(values));
 
     // @ts-ignore type exists
     if (response?.type === 'event/createEvent/fulfilled' || response?.type === 'event/editEvent/fulfilled') {
       alert('Success');
+      router.push('/event');
     }
   };
 
