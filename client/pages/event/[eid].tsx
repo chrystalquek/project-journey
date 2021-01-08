@@ -25,7 +25,7 @@ const EventsDetailPage = () => {
     <Container fixed>
       {eventData && userData
         ? <EventDetails user={userData} event={eventData} />
-        : <ErrorPage statusCode={500} />}
+        : <ErrorPage statusCode={401} />}
     </Container>
   );
 };

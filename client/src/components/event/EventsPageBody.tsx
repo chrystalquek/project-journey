@@ -9,16 +9,20 @@ import {
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { EventData, EventFilterOptions, EventFilters } from '@type/event';
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, useCallback, useEffect, useState,
+} from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
+import { VolunteerData } from '@type/volunteer';
 
 type EventsPageBodyProps = {
   events: Array<EventData>;
+  user: VolunteerData;
   getAllEvents: () => void;
 };
 
@@ -49,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
+const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents }) => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
@@ -69,11 +73,19 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const filteredEvents = withFilters(events ? events : [], filters);
+  const filteredEvents = withFilters(events || [], filters);
 
   useEffect(() => {
     getAllEvents();
   }, []);
+
+  const handleCardClick = useCallback((eventId: string) => {
+    if (user) {
+      router.push(`/event/${eventId}`);
+    } else {
+      router.push('/login');
+    }
+  }, [user]);
 
   if (screenSm) {
     return (
@@ -86,21 +98,21 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
             item
             container
             xs={12}
-            direction='row'
-            justify='center'
-            alignItems='center'
+            direction="row"
+            justify="center"
+            alignItems="center"
           >
             <Button disableRipple className={classes.createEventBtn}>
               Create new event
             </Button>
           </Grid>
-          <Grid item container xs={12} justify='space-between'>
+          <Grid item container xs={12} justify="space-between">
             <Grid item>
-              <Box className={classes.box} fontWeight='bold'>
-                <Typography display='inline' color='secondary'>
+              <Box className={classes.box} fontWeight="bold">
+                <Typography display="inline" color="secondary">
                   {events ? events.length : 0}
                 </Typography>
-                <Typography display='inline' variant='body2'>
+                <Typography display="inline" variant="body2">
                   {' '}
                   Upcoming Events
                 </Typography>
@@ -121,14 +133,14 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
                 <EventCard
                   key={event._id}
                   event={event}
-                  onCardClick={() => router.push(`/event/${event._id}`)}
+                  onCardClick={() => handleCardClick(event._id)}
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
         <Drawer
-          anchor='right'
+          anchor="right"
           open={isDrawerOpen}
           onClose={() => setIsDrawerOpen(false)}
         >
@@ -145,7 +157,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
         <Grid item sm={12}>
           <EventBreadCrumbs />
         </Grid>
-        <Grid item container sm={12} alignItems='center' spacing={4}>
+        <Grid item container sm={12} alignItems="center" spacing={4}>
           <Grid item sm={9}>
             <SearchBar setFilterFunction={() => console.log('TODO')} />
           </Grid>
@@ -157,11 +169,11 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
         </Grid>
         <Grid item container sm={9} spacing={4}>
           <Grid item sm={12}>
-            <Box className={classes.box} fontWeight='bold'>
-              <Typography display='inline' color='secondary'>
+            <Box className={classes.box} fontWeight="bold">
+              <Typography display="inline" color="secondary">
                 {events ? events.length : 0}
               </Typography>
-              <Typography display='inline' variant='body2'>
+              <Typography display="inline" variant="body2">
                 {' '}
                 Upcoming Events
               </Typography>
