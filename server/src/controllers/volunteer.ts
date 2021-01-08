@@ -84,7 +84,16 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.emergencyContactRelationship,
 
         // Remarks
-        VALIDATOR.volunteerRemark,
+        VALIDATOR.volunteerRemarks,
+        VALIDATOR.administratorRemarks,
+
+        // Event Count
+        VALIDATOR.volunteeringSessionsCount,
+        VALIDATOR.workshopsCount,
+        VALIDATOR.hangoutsCount,
+
+        // Past Events
+        VALIDATOR.pastEventIds
       ];
     }
     case 'getVolunteer': {
@@ -115,7 +124,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.personality.optional(),
         VALIDATOR.skills.optional(),
         VALIDATOR.administratorRemarks.optional(),
-        VALIDATOR.volunteerRemark.optional(),
+        VALIDATOR.volunteerRemarks.optional(),
       ];
     }
     default:
