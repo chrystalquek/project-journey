@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { QueryParams } from '@utils/api/request';
-import { GetCountResponse, GetSignUpsResponse } from '@utils/api/response';
+import { GetSignUpsResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 
 export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, QueryParams, { state }>(
@@ -11,8 +11,8 @@ export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, Quer
   },
 );
 
-export const getPendingSignUpsPendingApproval = createAsyncThunk<GetCountResponse, void, { state }>(
-  'signUp/getPendingSignUpsPendingApproval',
+export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { state }>(
+  'signUp/getPendingSignUps',
   async () => {
     const response = await apiClient.getPendingSignUps();
     return response;
