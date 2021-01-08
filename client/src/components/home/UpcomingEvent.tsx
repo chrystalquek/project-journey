@@ -63,23 +63,25 @@ const UpcomingEvent: FC<{}> = ({ }) => {
           more volunteers needed
         </Typography>
       );
-    }
-    const status = upcomingSignUps.find((signUp) => signUp.eventId == event._id)?.status || 'unknown';
-    switch (status) {
-      case 'pending':
-        return <Typography><i>Sign-up pending</i></Typography>;
-      case 'rejected':
-        return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>;
-      case 'unknown':
-        return <Typography>-</Typography>;
-      default:
-        const roleAssigned = status[1];
-        return (
-          <Typography className={classes.greenText}>
-            Volunteer role assigned -
-            {roleAssigned}
-          </Typography>
-        );
+    } else {
+      // is volunteer
+      const status = upcomingSignUps.find((signUp) => signUp.eventId == event._id)?.status || 'unknown';
+      switch (status) {
+        case 'pending':
+          return <Typography><i>Sign-up pending</i></Typography>;
+        case 'rejected':
+          return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>;
+        case 'unknown':
+          return <Typography>-</Typography>;
+        default:
+          const roleAssigned = status[1];
+          return (
+            <Typography className={classes.greenText}>
+              Volunteer role assigned -
+              {roleAssigned}
+            </Typography>
+          );
+      }
     }
   };
 
