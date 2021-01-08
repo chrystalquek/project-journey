@@ -205,14 +205,14 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       const form = formValues;
 
       // Upload and get cover image URL
-      if (formValues.coverImage) {
+      if (formValues.coverImage && typeof formValues.coverImage !== 'string') {
         const res = await onUploadImage(formValues.coverImage);
         // @ts-ignore type exists
         form.coverImage = res?.payload.url;
       }
 
       // Upload and get facilitator photo URL
-      if (formValues.facilitatorPhoto) {
+      if (formValues.facilitatorPhoto && typeof formValues.facilitatorPhoto !== 'string') {
         const res = await onUploadImage(formValues.facilitatorPhoto);
         // @ts-ignore type exists
         form.facilitatorPhoto = res?.payload.url;
