@@ -1,6 +1,6 @@
 import express from 'express';
 import commitmentApplicationService from '../services/commitmentApplication';
-import { CommitmentApplicationData, CommitmentApplicationStatus, VolunteerData } from '../types';
+import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import VALIDATOR from '../helpers/validation';
 import volunteerService from '../services/volunteer';
@@ -55,7 +55,7 @@ const readCommitmentApplications = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    const status = req.query.status ? req.query.status as CommitmentApplicationStatus : undefined;
+    const status = req.query.status as CommitmentApplicationStatus ?? undefined;
     const commitmentApplications = await commitmentApplicationService
       .readCommitmentApplications(status);
     res.status(HTTP_CODES.OK).json({
@@ -84,8 +84,6 @@ const updateCommitmentApplication = async (req: express.Request, res: express.Re
         volunteer.email as string, { volunteerType: 'committed' },
       );
     }
-
-    // what happens to volunteerType when rejected? remain ad-hoc?
 
     res.status(HTTP_CODES.OK).send('Commitment Application and Volunteer updated');
   } catch (err) {
