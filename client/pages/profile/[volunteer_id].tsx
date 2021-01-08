@@ -20,7 +20,7 @@ const Profile = () => {
   const isDummyPage = (router.query.volunteer_id === dummyUser.user._id);
   const userData = isDummyPage ? dummyUser : useSelector((state: StoreState) => state.user);
 
-  if (userData.user === null 
+  if (userData.user === null
     || userData.user.volunteerType !== VOLUNTEER_TYPE.ADMIN
     && userData.user._id !== router.query.volunteer_id) {
     return <ErrorPage statusCode={404} />;

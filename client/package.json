@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf ./build && NODE_ENV=production next build",
+    "build": "cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
     "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "gcp-predeploy": "find ./build -name '\\[...*' -exec bash -c 'mv \"$1\" \"${1/.../@@@}\"' -- {} \\;",
@@ -21,23 +21,25 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.2.10",
     "@reduxjs/toolkit": "^1.5.0",
+    "@types/yup": "^0.29.11",
     "antd": "^4.9.1",
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
-    "cross-env": "^7.0.3",
     "dayjs": "^1.9.7",
     "fontsource-roboto": "^3.0.3",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
+    "formik-material-ui-pickers": "^0.0.12",
     "jsonwebtoken": "^8.5.1",
-    "next": "^10.0.3",
+    "next": "^10.0.5",
     "next-redux-wrapper": "^6.0.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "yup": "^0.32.8"
   },
   "devDependencies": {
     "@types/node": "^14.6.4",
@@ -45,6 +47,7 @@
     "@types/react-redux": "^7.1.14",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.9.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -52,6 +55,7 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.21.0",
     "eslint-plugin-react-hooks": "^4.1.2",
+    "shx": "^0.3.3",
     "typescript": "^4.0.2"
   }
 }

@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getEvent, createEvent, getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent,
+  getAllEvents, getEvent, createEvent, getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent,
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
 
 export type EventState = {
+  events: Array<EventData>; // TODO resolve this
   data: Record<string, EventData>;
   upcomingEvent: { // part of dashboard and events > pending requests
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
@@ -14,6 +15,7 @@ export type EventState = {
 }
 
 const initialState: EventState = {
+  events: [],
   data: {},
   upcomingEvent: {
     ids: [],
@@ -28,7 +30,7 @@ const addToData = (events: Array<EventData>, state: EventState) => {
     startDate: new Date(event.startDate),
     endDate: new Date(event.endDate),
     deadline: new Date(event.deadline),
-  });
+  })
 };
 
 const eventSlice = createSlice({
@@ -63,7 +65,18 @@ const eventSlice = createSlice({
     builder.addCase(getEvent.pending, (state) => {
       state.form = null;
     });
-    builder.addCase(createEvent.rejected, (state) => { });
+    builder.addCase(createEvent.rejected, (state) => {
+      // do nothing
+    });
+    builder.addCase(getAllEvents.pending, (state) => {
+      state.events = [];
+    });
+    builder.addCase(getAllEvents.fulfilled, (state, action) => {
+      state.events = action.payload.data;
+    });
+    builder.addCase(getAllEvents.rejected, (state) => {
+      state.events = [];
+    });
   },
 });
 

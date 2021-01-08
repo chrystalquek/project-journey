@@ -1,28 +1,34 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import userReducer, { UserState } from '@redux/reducers/user';
-import AdminReducer, { AdminState } from '@redux/reducers/admin';
+import EventReducer, { EventState } from '@redux/reducers/event';
 import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer';
-import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import eventReducer, { EventState } from './reducers/event';
 import signUpReducer, { SignUpState } from './reducers/signUp';
 import commitmentApplicationReducer, { CommitmentApplicationState } from './reducers/commitmentApplication';
 
 export type StoreState = {
   user: UserState
-  admin: AdminState
-  volunteer: VolunteerState
   event: EventState
+  volunteer: VolunteerState
   signUp: SignUpState
   commitmentApplication: CommitmentApplicationState
 }
 
 const reducers = combineReducers({
   user: userReducer,
-  admin: AdminReducer,
+  event: EventReducer,
   volunteer: volunteerReducer,
-  event: eventReducer,
   signUp: signUpReducer,
   commitmentApplication: commitmentApplicationReducer
 });
@@ -37,7 +43,11 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducers);
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+    }
+  }).concat(logger),
   devTools: process.env.NODE_ENV === 'development',
 });
 

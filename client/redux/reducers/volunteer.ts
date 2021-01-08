@@ -37,12 +37,14 @@ const initialState: VolunteerState = {
 
 // parse all Dates etc before saving to store
 const addToData = (volunteers: Array<VolunteerData>, state: VolunteerState) => {
-  volunteers.forEach((volunteer) => state.data[volunteer._id] = {
-    ...volunteer,
-    birthday: new Date(volunteer.birthday),
-    createdAt: new Date(volunteer.createdAt),
+  volunteers.forEach((volunteer) => {
+    state.data[volunteer._id] = {
+      ...volunteer,
+      birthday: new Date(volunteer.birthday),
+      createdAt: new Date(volunteer.createdAt),
+    };
   });
-}
+};
 
 const volunteerSlice = createSlice({
   name: 'volunteer',
@@ -56,7 +58,7 @@ const volunteerSlice = createSlice({
     });
     builder.addCase(getVolunteersVolunteerProfile.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state)
+      addToData(payload.data, state);
       state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
       state.volunteerProfile.count = payload.count;
       state.volunteerProfile.pageNo = payload.pageNo;
@@ -85,7 +87,6 @@ const volunteerSlice = createSlice({
       // no longer a pending request with either accept or reject
       state.pendingVolunteers.ids = state.pendingVolunteers.ids.filter((volunteerId) => volunteerId != payload.volunteerId)
     });
-
   },
 });
 

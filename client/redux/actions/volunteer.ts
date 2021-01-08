@@ -18,5 +18,5 @@ export const getPendingVolunteers = createAsyncThunk<GetVolunteersResponse, void
   async () => {
     const response = await apiClient.getPendingVolunteers();
     return response;
-  }
-)
+  },
+);
