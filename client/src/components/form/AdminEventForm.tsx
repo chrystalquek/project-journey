@@ -187,35 +187,49 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     }
   }, [id]);
 
-  const onSubmit = async (values) => {
-    const imageUploadResponse = await uploadAnImage(values.coverImage);
-    console.log(imageUploadResponse);
-    const response = await dispatch(isNew ? createEvent(values) : editEvent(values));
+  const onUploadImage = async (image) => {
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('email', user.user.email);
 
-    // @ts-ignore type exists
-    if (response?.type === 'event/createEvent/fulfilled' || response?.type === 'event/editEvent/fulfilled') {
-      alert('Success');
-      router.push('/event');
-    }
+    const response = await dispatch(uploadImage(formData));
+    return response;
   };
 
   const {
-    errors, handleChange, handleSubmit, isSubmitting, setFieldValue, setValues, values,
+    errors, handleChange, handleSubmit, isSubmitting, setFieldValue, values,
   } = useFormik({
     initialValues: eventForm ? keysToCamel(eventForm) : emptyForm,
     validate,
-    onSubmit,
+    onSubmit: async (formValues) => {
+      const form = formValues;
+
+      // Upload and get cover image URL
+      if (formValues.coverImage) {
+        const res = await onUploadImage(formValues.coverImage);
+        // @ts-ignore type exists
+        form.coverImage = res?.payload.url;
+      }
+
+      // Upload and get facilitator photo URL
+      if (formValues.facilitatorPhoto) {
+        const res = await onUploadImage(formValues.facilitatorPhoto);
+        // @ts-ignore type exists
+        form.facilitatorPhoto = res?.payload.url;
+      }
+
+      console.log(form);
+
+      const response = await dispatch(isNew ? createEvent(form) : editEvent(form));
+
+      // @ts-ignore type exists
+      if (response?.type === 'event/createEvent/fulfilled' || response?.type === 'event/editEvent/fulfilled') {
+        alert('Success');
+        router.push('/event');
+      }
+    },
     enableReinitialize: true,
   });
-
-  const uploadAnImage = async (image) => {
-    const formData = new FormData();
-    formData.append('file', image);
-    formData.append('email', user?.user.email);
-
-    const response = await dispatch(uploadImage(formData));
-    console.log(response);
-  };
 
   const onChangeImage = (isCoverImage) => (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -226,9 +240,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   };
 
   const {
-    name, coverImage, eventType, volunteerType, deadline,
-    vacancies, description, facilitatorName, facilitatorPhoto,
-    facilitatorDescription, roles, contentUrl, contentType, startDate, endDate,
+    name, eventType, volunteerType, deadline,
+    vacancies, description, facilitatorName, facilitatorDescription,
+    startDate, endDate,
   } = values;
 
   return (
@@ -271,7 +285,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Cover Image */}
           <Grid item container>
             <div className={classes.coverImage}>
-              <DropZoneCard onChangeImage={onChangeImage(true)} />
+              <DropZoneCard isBig onChangeImage={onChangeImage(true)} />
             </div>
           </Grid>
 
@@ -527,7 +541,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
             <Grid item container>
               <div className={classes.facilPhotograph}>
-                <DropZoneCard isBig={false} onChangeImage={onChangeImage(false)} />
+                <DropZoneCard
+                  isBig={false}
+                  onChangeImage={onChangeImage(false)}
+                />
               </div>
             </Grid>
             <Grid item container>
