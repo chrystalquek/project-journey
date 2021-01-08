@@ -91,6 +91,14 @@ export type VolunteerData = {
     // Remarks
     volunteerRemarks: string;
     administratorRemarks: string;
+
+    // Event count
+    volunteeringSessionsCount: number;
+    workshopsCount: number;
+    hangoutsCount: number; 
+
+    // Past Events
+    pastEventIds: Array<string>
 };
 
 export type VolunteerPublicData = Omit<

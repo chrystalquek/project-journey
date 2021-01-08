@@ -179,6 +179,24 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     type: String,
     default: '',
   },
+  volunteeringSessionsCount: {
+    type: Number,
+    default: 0,
+  },
+  workshopsCount: {
+    type: Number,
+    default: 0,
+  },
+  hangoutsCount: {
+    type: Number,
+    default: 0,
+  },
+  pastEventIds: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Event'
+    }
+  ]
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {

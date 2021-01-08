@@ -145,7 +145,6 @@ const skills = body('skills').isArray().optional();
 const volunteerReason = body('volunteerReason').isString();
 const volunteerFrequency = body('volunteerFrequency').isNumeric();
 const volunteerContribution = body('volunteerContribution').isString().optional();
-const volunteerRemark = body('volunteerRemark').isString().optional();
 const volunteerType = body('volunteerType').isString().custom(
   (type: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', type),
 );
@@ -164,7 +163,14 @@ const emergencyContactNumber = body('emergencyContactNumber').isString();
 const emergencyContactEmail = body('emergencyContactEmail').isString();
 const emergencyContactRelationship = body('emergencyContactRelationship').isString();
 
-const administratorRemarks = body('administratorRemarks');
+const volunteerRemarks = body('volunteerRemarks').isString();
+const administratorRemarks = body('administratorRemarks').isString();
+
+const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
+const workshopsCount = body('workshopsCount').isInt();
+const hangoutsCount = body('hangoutsCount').isInt();
+
+const pastEventIds = body('pastEventIds').isArray()
 
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request, res: express.Response, next: Function) => {
@@ -225,8 +231,12 @@ export default {
   volunteerFrequency,
   volunteerContribution,
   volunteerType,
-  volunteerRemark,
+  volunteerRemarks,
   administratorRemarks,
   questionValidator,
   answersValidator,
+  volunteeringSessionsCount,
+  workshopsCount,
+  hangoutsCount,
+  pastEventIds
 };
