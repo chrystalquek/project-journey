@@ -10,11 +10,10 @@ const authorize = (roles: Array<VolunteerType> = []) => {
     return [];
   }
   return [
-    // TODO disable for development mode
     jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
 
     (req, res, next) => {
-      if (roles.length && !roles.includes(req.user.role)) {
+      if (roles.length && !roles.includes(req.user.volunteerType)) {
         return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
       }
 

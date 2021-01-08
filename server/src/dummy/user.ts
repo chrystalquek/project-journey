@@ -31,11 +31,14 @@ const dummyUser: VolunteerData = {
   skills: ['string'],
   volunteerReason: 'string',
   volunteerRemarks: 'string',
-  administratorRemarks: 'string',
+  adminRemarks: 'string',
   hasVolunteered: true,
   hasChildrenExperience: true,
   hasFirstAidCertification: true,
   volunteerContribution: 'string',
+  volunteeringSessionsCount: 1,
+  workshopsCount: 1,
+  hangoutsCount: 1,
 };
 
 export default () => (dummyUser);

@@ -175,10 +175,14 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     type: String,
     default: '',
   },
-  administratorRemarks: {
+  adminRemarks: {
     type: String,
     default: '',
   },
+
+  volunteeringSessionsCount: Number,
+  workshopsCount: Number,
+  hangoutsCount: Number,
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {

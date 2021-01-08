@@ -11,6 +11,7 @@ import { doesUserEmailExist } from '../services/volunteer';
 import {
   AnswerData, QuestionsOptionsRequestData, RoleData, SignUpStatus,
 } from '../types';
+import { COMMITMENT_APPLICATION_STATUS } from '../models/CommitmentApplication';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
@@ -164,7 +165,11 @@ const emergencyContactNumber = body('emergencyContactNumber').isString();
 const emergencyContactEmail = body('emergencyContactEmail').isString();
 const emergencyContactRelationship = body('emergencyContactRelationship').isString();
 
-const administratorRemarks = body('administratorRemarks');
+const adminRemarks = body('adminRemarks');
+
+const commitmentApplicationStatus = body('status').isString().custom(
+  (status: string) => stringEnumValidator(COMMITMENT_APPLICATION_STATUS, 'Commitment Application Status', status),
+);
 
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request, res: express.Response, next: Function) => {
@@ -226,7 +231,8 @@ export default {
   volunteerContribution,
   volunteerType,
   volunteerRemark,
-  administratorRemarks,
+  adminRemarks,
+  commitmentApplicationStatus,
   questionValidator,
   answersValidator,
 };

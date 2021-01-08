@@ -4,6 +4,7 @@ import { body, param } from 'express-validator';
 import jwt from 'express-jwt';
 import { QueryParams, VolunteerData } from '../types';
 import volunteerService from '../services/volunteer';
+import commitmentApplicationService from '../services/commitmentApplication';
 import { accessTokenSecret } from '../helpers/auth';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -114,7 +115,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.interests.optional(),
         VALIDATOR.personality.optional(),
         VALIDATOR.skills.optional(),
-        VALIDATOR.administratorRemarks.optional(),
+        VALIDATOR.adminRemarks.optional(),
         VALIDATOR.volunteerRemark.optional(),
       ];
     }
@@ -176,7 +177,7 @@ const getAllVolunteerDetails = async (req: express.Request, res: express.Respons
 };
 
 /**
- * Retrieves sign ups with that are pending approval
+ * Retrieves sign ups that are pending approval
  * @return number of pending sign ups
  */
 const getPendingVolunteers = async (
@@ -184,9 +185,15 @@ const getPendingVolunteers = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    const pendingVolunteersCount = await volunteerService.getPendingVolunteers();
+    const pendingCommitmentApplications = await commitmentApplicationService
+      .readCommitmentApplications('pending');
 
-    res.status(HTTP_CODES.OK).json({ count: pendingVolunteersCount });
+    const pendingVolunteersIds = pendingCommitmentApplications
+      .map((commitmentApplication) => commitmentApplication.volunteerId);
+
+    const pendingVolunteers = await volunteerService.readVolunteersByIds(pendingVolunteersIds);
+
+    res.status(HTTP_CODES.OK).json({ data: pendingVolunteers });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -198,7 +205,7 @@ const checkUpdateRights = () => [
   jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
 
   (req, res, next) => {
-    if (req.body.administratorRemarks && req.user.role != 'admin') {
+    if (req.body.adminRemarks && req.user.volunteeerType != 'admin') {
       return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
     }
 

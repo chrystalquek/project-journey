@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-import commitmentApplication from '../controllers/commitmentApplication';
 import CommitmentApplication from '../models/CommitmentApplication';
-import { CommitmentApplicationData } from '../types';
+import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
 
 const createCommitmentApplication = async (
   commitmentApplicationData: CommitmentApplicationData,
@@ -17,12 +16,36 @@ const createCommitmentApplication = async (
   console.log(`Saved: ${JSON.stringify(savedCommitmentApplication)}`);
 };
 
-const readCommitmentApplications = async (): Promise<CommitmentApplicationData[]> => {
-  const commitmentApplications = await CommitmentApplication.find({}).populate('volunteer_data');
+const readCommitmentApplications = async (status?: CommitmentApplicationStatus):
+  Promise<CommitmentApplicationData[]> => {
+  const commitmentApplications = await (status
+    ? CommitmentApplication.find({ status })
+    : CommitmentApplication.find({}));
   return commitmentApplications;
+};
+
+const updateCommitmentApplication = async (
+  id: string,
+  updatedFields: CommitmentApplicationData,
+): Promise<CommitmentApplicationData> => {
+  try {
+    const commitmentApplication = await CommitmentApplication.findOneAndUpdate(
+      { _id: id },
+      { $set: updatedFields },
+      { new: true },
+    );
+    if (!commitmentApplication) {
+      throw new Error('Commitment Application is not found');
+    } else {
+      return commitmentApplication;
+    }
+  } catch (err) {
+    throw new Error(err.msg);
+  }
 };
 
 export default {
   createCommitmentApplication,
   readCommitmentApplications,
+  updateCommitmentApplication,
 };

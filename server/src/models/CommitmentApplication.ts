@@ -3,13 +3,22 @@ import { CommitmentApplicationData } from '../types';
 
 export type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document;
 
+export const COMMITMENT_APPLICATION_STATUS = ['pending', 'accepted', 'rejected'];
+
 const CommitmentApplicationSchema = new Schema({
   _id: mongoose.Types.ObjectId,
-  volunteer_data: {
+  volunteerId: {
     type: mongoose.Types.ObjectId,
     ref: 'Volunteer',
   },
-  created_at: Date,
+  status: {
+    type: String,
+    enum: COMMITMENT_APPLICATION_STATUS,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema);

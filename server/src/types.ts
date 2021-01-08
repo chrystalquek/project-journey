@@ -1,6 +1,6 @@
 export type QueryParams = {
-    skip: number,
-    limit: number,
+    skip?: number,
+    limit?: number,
     [field: string]: any
 } // query parameters for GET
 
@@ -90,7 +90,11 @@ export type VolunteerData = {
 
     // Remarks
     volunteerRemarks: string;
-    administratorRemarks: string;
+    adminRemarks: string;
+
+    volunteeringSessionsCount: Number,
+    workshopsCount: Number,
+    hangoutsCount: Number,
 };
 
 export type VolunteerPublicData = Omit<
@@ -98,7 +102,7 @@ export type VolunteerPublicData = Omit<
     'password' |
     '_id' |
     'identificationNumber' |
-    'administratorRemarks'
+    'adminRemarks'
 >
 
 export type ResourceData = {
@@ -182,7 +186,7 @@ export type EventData = {
     name: string;
     coverImage?: string; // TODO: change to appropriate type
     eventType: EventType;
-    volunteerType: string;
+    volunteerType: VolunteerType;
     startDate: Date;
     endDate: Date;
     deadline: Date;
@@ -269,8 +273,13 @@ export type MongooseSaveError = {
     _message: string
 }
 
+export type CommitmentApplicationStatus = 'pending' | 'accepted' | 'rejected'
+
 export type CommitmentApplicationData = {
-    volunteerId: string,
+    _id: string,
+    volunteerId: string
+    status: CommitmentApplicationStatus,
+    createdAt: Date,
 
     // List of questions in the application form
     // yet to be determined, waiting for BD team
