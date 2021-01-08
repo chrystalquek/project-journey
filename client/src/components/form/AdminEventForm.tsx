@@ -246,6 +246,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     startDate, endDate,
   } = values;
 
+  if (id !== 'new' && eventForm === null) { return <h1>Loading</h1>; }
   return (
     <form onSubmit={handleSubmit}>
       <PaddedGrid>
