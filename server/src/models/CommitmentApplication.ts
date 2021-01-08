@@ -14,6 +14,7 @@ const CommitmentApplicationSchema = new Schema({
   status: {
     type: String,
     enum: COMMITMENT_APPLICATION_STATUS,
+    default: 'pending'
   },
   createdAt: {
     type: Date,
