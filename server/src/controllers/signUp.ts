@@ -68,17 +68,17 @@ const readSignUps = async (
 };
 
 /**
- * Retrieves sign ups with that are pending approval
- * @return number of pending sign ups
+ * Retrieves sign ups that are pending approval
+ * @return sign ups that are pending approval
  */
 const readPendingSignUps = async (
   req: express.Request,
   res: express.Response,
 ): Promise<void> => {
   try {
-    const pendingSignUpsCount = await signUpService.readPendingSignUps();
+    const pendingSignUps = await signUpService.readPendingSignUps();
 
-    res.status(HTTP_CODES.OK).json({ count: pendingSignUpsCount });
+    res.status(HTTP_CODES.OK).json({ data: pendingSignUps });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

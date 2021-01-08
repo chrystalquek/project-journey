@@ -12,8 +12,6 @@ const dummyUser: VolunteerData = {
   gender: 'female',
   citizenship: 'singapore',
   race: 'chinese',
-  status: 'verified',
-  role: 'lead',
   volunteerType: 'lead',
   leadershipInterest: 'yes',
   description: 'string',
@@ -23,12 +21,15 @@ const dummyUser: VolunteerData = {
   volunteerReason: 'string',
   volunteerFrequency: 1,
   volunteerRemarks: 'string',
-  administratorRemarks: 'string',
+  adminRemarks: 'string',
   hasVolunteered: true,
   hasChildrenExperience: true,
   hasExternalVolunteerExperience: true,
   hasFirstAidCertification: true,
   volunteerContribution: 'string',
+  volunteeringSessionsCount: 1,
+  workshopsCount: 1,
+  hangoutsCount: 1,
 };
 
 export default () => (dummyUser);

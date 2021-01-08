@@ -82,14 +82,6 @@ export const VolunteerSchemaDefinition = {
   },
   orgnanization: String,
   position: String,
-  status: {
-    type: String,
-    enum: ['pending', 'verified'],
-  },
-  role: {
-    type: String,
-    enum: ['editor', 'admin', 'lead'],
-  },
   referral: String, // TODO: Confirm the existence of this field
 
   hasVolunteered: Boolean,
@@ -124,7 +116,11 @@ export const VolunteerSchemaDefinition = {
 
   // Remarks
   volunteerRemarks: String,
-  administratorRemarks: String,
+  adminRemarks: String,
+
+  volunteeringSessionsCount: Number,
+  workshopsCount: Number,
+  hangoutsCount: Number,
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {

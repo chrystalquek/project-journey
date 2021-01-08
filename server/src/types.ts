@@ -1,13 +1,12 @@
 export type QueryParams = {
-    skip: number,
-    limit: number,
+    skip?: number,
+    limit?: number,
     [field: string]: any
 } // query parameters for GET
 
+export type VolunteerType = 'ad-hoc' | 'committed' | 'lead' | 'admin'
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
-type VolunteerStatus = 'pending' | 'verified'
-export type VolunteerRole = 'editor' | 'admin' | 'lead'
 type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
@@ -39,14 +38,10 @@ export type VolunteerData = {
     gender: string;
     citizenship: CitizenshipStatus;
     race: Race;
-    volunteerType: string;
+    volunteerType: VolunteerType;
 
     organization?: string;
     position?: string;
-
-    // System data
-    status: VolunteerStatus;
-    role: VolunteerRole;
 
     referral?: string; // unsure why we have it here?
 
@@ -66,7 +61,11 @@ export type VolunteerData = {
     volunteerFrequency: number;
 
     volunteerRemarks: string;
-    administratorRemarks: string;
+    adminRemarks: string;
+
+    volunteeringSessionsCount: Number,
+    workshopsCount: Number,
+    hangoutsCount: Number,
 };
 
 export type VolunteerPublicData = Omit<
@@ -74,7 +73,7 @@ export type VolunteerPublicData = Omit<
     'password' |
     '_id' |
     'identificationNumber' |
-    'administratorRemarks'
+    'adminRemarks'
 >
 
 export type ResourceData = {
@@ -166,7 +165,7 @@ export type EventData = {
     name: string;
     coverImage?: string; // TODO: change to appropriate type
     eventType: EventType;
-    volunteerType: string;
+    volunteerType: VolunteerType;
     startDate: Date;
     endDate: Date;
     deadline: Date;
@@ -253,8 +252,13 @@ export type MongooseSaveError = {
     _message: string
 }
 
+export type CommitmentApplicationStatus = 'pending' | 'accepted' | 'rejected'
+
 export type CommitmentApplicationData = {
-    volunteerId: string,
+    _id: string,
+    volunteerId: string
+    status: CommitmentApplicationStatus,
+    createdAt: Date,
 
     // List of questions in the application form
     // yet to be determined, waiting for BD team
