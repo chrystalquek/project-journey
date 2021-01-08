@@ -43,7 +43,3 @@ export type GetSignUpsResponse = {
 
 export type CreateEventResponse = {}
 
-// general response just to get a number
-export type GetCountResponse = {
-  count: number
-}

@@ -15,8 +15,8 @@ export const getCommitmentApplications = createAsyncThunk<GetCommitmentApplicati
 export const updateCommitmentApplication = createAsyncThunk<CommitmentApplicationData, CommitmentApplicationData, { state }>(
   'commitmentApplication/updateCommitmentApplication',
   async (data: CommitmentApplicationData) => {
-    const response = await apiClient.updateCommitmentApplication(data);
-    return data; // TODO is server supposed to return updated commitment application?
+    await apiClient.updateCommitmentApplication(data);
+    return data;
   },
 );
 

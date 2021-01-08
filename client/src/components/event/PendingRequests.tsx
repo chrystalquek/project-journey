@@ -67,7 +67,7 @@ const PendingRequests: FC<{}> = ({ }) => {
     const tabs = [
         {
             label: "Volunteers (" + upcomingVolunteersIds.length + ")",
-            onClick: () => router.push("/volunteer/pending-requests") // not working: gives volunteer/volunteer/pending-requests
+            onClick: () => router.push("/volunteer/pending-requests")
         },
         {
             label: "Events (" + upcomingEventsIds.length + ")",
