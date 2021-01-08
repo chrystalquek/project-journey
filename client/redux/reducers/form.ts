@@ -15,6 +15,9 @@ const formState = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getEventFeedbackFormQuestions.pending, (state) => {
+      state.questions = [];
+    });
     builder.addCase(getEventFeedbackFormQuestions.fulfilled, (state, action) => {
       const { payload } = action;
       state.questions = payload;

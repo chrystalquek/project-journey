@@ -1,4 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, {
+  FC, useCallback, useEffect, useState,
+} from 'react';
 import {
   TextField, makeStyles, MenuItem, Typography, Grid, Button,
 } from '@material-ui/core';
@@ -39,7 +41,7 @@ const getEventTypePlaceholder = (eventType) => {
   }
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   coverImage: {
     width: '1010px',
     height: '369px',
@@ -48,9 +50,18 @@ const useStyles = makeStyles(() => ({
     width: '215px',
     height: '225px',
   },
-  button: {
+  submitButton: {
     borderRadius: '20px',
     textTransform: 'none',
+  },
+  addNewFieldButton: {
+    backgroundColor: 'white',
+    borderRadius: '16px',
+    textTransform: 'none',
+    color: theme.palette.secondary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    padding: '6px 16px',
+    width: '255px',
   },
 }));
 
@@ -89,14 +100,35 @@ const getDateAndTimeIsoString = (dateDayJs: dayjs.Dayjs, time: string): string =
   return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
 };
 
+type QuestionData = {
+  type: 'short-answer' | 'mcq' | 'check-box',
+  text: string
+  isRequired: boolean
+}
+
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const formik = useFormik({
-    initialValues: {},
-  });
 
   const eventForm = useSelector((state: StoreState) => state.event.form);
+
+  // Store feedback event form
+  const [feedbackFormEventQuestions, setFeedbackFormEventQuestions] = useState<
+    Array<QuestionData>
+    >([]);
+
+  const handleAddQuestion = useCallback(() => {
+    const newQuestion: QuestionData = {
+      type: 'short-answer',
+      isRequired: true,
+      text: `Question ${feedbackFormEventQuestions.length + 1}`,
+    };
+    setFeedbackFormEventQuestions([...feedbackFormEventQuestions, newQuestion]);
+  }, [feedbackFormEventQuestions]);
+
+  const handleRemoveQuestion = useCallback((index: number, text: string) => {
+
+  }, []);
 
   const [dateAndTime, setDateAndTime] = useState({
     fromDate: dayjs(),
@@ -506,36 +538,68 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               </Grid>
             </>
           )}
+          <Formik
+            initialValues={{}}
+            onSubmit={() => {}}
+            enableReinitialize
+          >
+            {({ isSubmitting, values }) => (
+              <>
+                <div>
+                  <Typography variant="h2">
+                    Volunteer Response Form
+                  </Typography>
+                </div>
 
-          {/* Feedback form generator based on redux state */}
-          <FormikProvider value={formik}>
-            <Typography
-              key="question"
-              style={{
-                marginBottom: '16px',
-                fontWeight: 500,
-              }}
-            >
-              Question
-            </Typography>
-            <FormQuestionMapper
-              formType="mcq"
-              name="question"
-              options={[{
-                value: 'male',
-                label: 'male',
-              }, {
-                value: 'female',
-                label: 'female',
-              }]}
-            />
-          </FormikProvider>
+                {/* Feedback form generator based on redux state */}
+                {
+              feedbackFormEventQuestions.map((question: QuestionData, index: number) => (
+                <div key={question.text + String(index)}>
+                  <Typography
+                    key="question"
+                    style={{
+                      fontWeight: 500,
+                    }}
+                  >
+                    {question.text}
+                  </Typography>
+                  <FormQuestionMapper
+                    formType={question.type}
+                    name={question.text + String(index)}
+                    options={[{
+                      value: 'male',
+                      label: 'male',
+                    }, {
+                      value: 'female',
+                      label: 'female',
+                    }]}
+                  />
+                  <FormQuestionMapper
+                    formType={question.type}
+                    name={question.text + String(index)}
+                    options={[{
+                      value: 'male',
+                      label: 'male',
+                    }, {
+                      value: 'female',
+                      label: 'female',
+                    }]}
+                  />
+                </div>
+              ))
+}
+                <Button className={classes.addNewFieldButton} onClick={handleAddQuestion}>
+                  + Add another question
+                </Button>
+              </>
+            )}
+          </Formik>
           {/* Create Event Button */}
           <Grid item container direction="row" justify="flex-end">
             <Button
               variant="contained"
               color="primary"
-              className={classes.button}
+              className={classes.submitButton}
               onClick={handleSubmit}
             >
               <Typography variant="body1">{isNew ? 'Create Event' : 'Edit Event'}</Typography>

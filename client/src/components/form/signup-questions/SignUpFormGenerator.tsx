@@ -39,6 +39,7 @@ export const FormQuestionMapper = ({
         />
       );
     case 'shortAnswer':
+    case 'short-answer':
     case 'password':
       return (
         <Field
@@ -82,6 +83,7 @@ export const FormQuestionMapper = ({
         </Field>
       );
     case 'checkboxes':
+    case 'check-box':
     default:
       return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
