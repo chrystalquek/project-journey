@@ -27,7 +27,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
-import {EVENTS_ROUTE} from "@constants/routes";
+import { EVENTS_ROUTE } from "@constants/routes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   headerContainer: {
@@ -130,16 +130,16 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             <ListItem
               button
               className={classes.nested}
-              onClick={() => router.push('/volunteer/volunteerprofiles')}
+              onClick={() => router.push('/volunteer/volunteer-profiles')}
             >
               <ListItemText primary="Volunteer Profiles" />
             </ListItem>
             <ListItem
               button
               className={classes.nested}
-              onClick={() => router.push('/volunteer')}
+              onClick={() => router.push('/volunteer/pending-requests')}
             >
-              <ListItemText primary="Pending Approvals" />
+              <ListItemText primary="Pending Requests" />
             </ListItem>
           </List>
         </Collapse>
@@ -177,6 +177,15 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                   <ListItemText primary={eventMenu} />
                 </ListItem>
               ))}
+              {userData.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={() => router.push('/event/pending-requests')}
+                >
+                  <ListItemText primary="Pending Requests" />
+                </ListItem>
+              }
             </List>
           </Collapse>
           {userData

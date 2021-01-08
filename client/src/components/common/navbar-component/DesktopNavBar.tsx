@@ -21,7 +21,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
-import {EVENTS_ROUTE} from "@constants/routes";
+import { EVENTS_ROUTE } from "@constants/routes";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -160,6 +160,12 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       {menuName}
                     </MenuItem>
                   ))}
+                  {userData.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+                    <MenuItem
+                      onClick={() => router.push('/event/pending-requests')}
+                    >
+                      Pending Requests
+                    </MenuItem>}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -190,17 +196,17 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     {/* Requires changes for the router */}
                     <MenuItem
                       onClick={() => {
-                        router.push('/volunteer/volunteerprofiles');
+                        router.push('/volunteer/volunteer-profiles');
                       }}
                     >
                       Volunteer Profiles
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        router.push('/volunteer');
+                        router.push('/volunteer/pending-requests');
                       }}
                     >
-                      Pending Approvals
+                      Pending Requests
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>

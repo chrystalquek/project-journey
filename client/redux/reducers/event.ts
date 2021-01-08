@@ -4,12 +4,11 @@ import {
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
-import UpcomingEvent from '@components/home/UpcomingEvent';
 
 export type EventState = {
   events: Array<EventData>; // TODO resolve this
   data: Record<string, EventData>;
-  upcomingEvent: {
+  upcomingEvent: { // part of dashboard and events > pending requests
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
   }
   form: EventData | null;

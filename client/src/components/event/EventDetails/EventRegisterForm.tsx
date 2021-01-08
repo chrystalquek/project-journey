@@ -1,5 +1,5 @@
-import React, {FC, useState} from "react";
-import {EventData} from "@type/event";
+import React, { FC, useState } from 'react';
+import { EventData } from '@type/event';
 import {
   Select,
   Box,
@@ -9,9 +9,9 @@ import {
   Typography,
   TextField,
   Button,
-  makeStyles
-} from "@material-ui/core";
-import {FormSelectRow, parseRoles} from "@utils/helpers/event/EventDetails/EventRegisterForm";
+  makeStyles,
+} from '@material-ui/core';
+import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
 
 type EventRegisterProps = {
   event: EventData
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.secondary.main,
     },
-  }
+  },
 }));
 
 const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
@@ -41,17 +41,17 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
   const defaultForm: FormState = {
-    firstChoice: "",
-    secondChoice: "",
-    thirdChoice: "",
-    additionalInfo: "",
-  }
+    firstChoice: '',
+    secondChoice: '',
+    thirdChoice: '',
+    additionalInfo: '',
+  };
   const [formState, setFormState] = useState(defaultForm);
   const handleChange = (event) => {
-    console.log({ ...formState, [event.target.name]: event.target.value })
-    console.log(event.target)
+    console.log({ ...formState, [event.target.name]: event.target.value });
+    console.log(event.target);
     setFormState({ ...formState, [event.target.name]: event.target.value });
-  }
+  };
 
   return (
     <>
@@ -62,9 +62,12 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
         <FormControl fullWidth variant="outlined">
           <InputLabel id="first-choice">Select Position</InputLabel>
           <Select
-            required fullWidth
-            labelId="first-choice" id="firstChoice"
-            name="firstChoice" value={formState.firstChoice}
+            required
+            fullWidth
+            labelId="first-choice"
+            id="firstChoice"
+            name="firstChoice"
+            value={formState.firstChoice}
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
@@ -72,12 +75,18 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
             ))}
           </Select>
         </FormControl>
-        <Box>Second Choice: <Box component="span" color="text.secondary">(optional)</Box></Box>
+        <Box>
+          Second Choice:
+          {' '}
+          <Box component="span" color="text.secondary">(optional)</Box>
+        </Box>
         <FormControl fullWidth variant="outlined">
           <InputLabel id="second-choice">Select Position</InputLabel>
           <Select
-            fullWidth labelId="second-choice"
-            id="secondChoice" name="secondChoice"
+            fullWidth
+            labelId="second-choice"
+            id="secondChoice"
+            name="secondChoice"
             value={formState.secondChoice}
             onChange={handleChange}
           >
@@ -86,12 +95,18 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
             ))}
           </Select>
         </FormControl>
-        <Box>Third Choice: <Box component="span" color="text.secondary">(optional)</Box></Box>
+        <Box>
+          Third Choice:
+          {' '}
+          <Box component="span" color="text.secondary">(optional)</Box>
+        </Box>
         <FormControl fullWidth variant="outlined">
           <InputLabel id="third-choice">Select Position</InputLabel>
           <Select
-            fullWidth labelId="third-choice"
-            id="thirdChoice" name="thirdChoice"
+            fullWidth
+            labelId="third-choice"
+            id="thirdChoice"
+            name="thirdChoice"
             value={formState.thirdChoice}
             onChange={handleChange}
           >
@@ -101,17 +116,21 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ event }) => {
           </Select>
         </FormControl>
         <Box fontWeight="bold">Anything you would like us to know?</Box>
-        <TextField id="additionalInfo" name="additionalInfo"
-                   fullWidth multiline rows={4}
-                   label="Type something here..."
-                   onChange={handleChange}
-                   variant="outlined"
+        <TextField
+          id="additionalInfo"
+          name="additionalInfo"
+          fullWidth
+          multiline
+          rows={4}
+          label="Type something here..."
+          onChange={handleChange}
+          variant="outlined"
         />
 
         <Button className={classes.button} type="submit">Register</Button>
       </form>
     </>
-  )
-}
+  );
+};
 
 export default EventRegisterForm;

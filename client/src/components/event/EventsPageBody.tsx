@@ -14,12 +14,14 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
-import {withFilters} from "@utils/helpers/event/EventsPageBody";
-import {useRouter} from "next/router";
+import { withFilters } from '@utils/helpers/event/EventsPageBody';
+import { useRouter } from 'next/router';
+import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
 type EventsPageBodyProps = {
-  events: Array<EventData>,
-  getAllEvents: () => any,
+  events: Array<EventData>;
+  user: VolunteerData
+  getAllEvents: () => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -49,12 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
+const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents }) => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
-  const screenXs = useMediaQuery(theme.breakpoints.only('xs'));
-  const screenSm = useMediaQuery(theme.breakpoints.only('sm'));
+  const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,
@@ -70,29 +71,40 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const filteredEvents = withFilters(events ? events : [], filters);
+  const filteredEvents = withFilters(events || [], filters);
 
   useEffect(() => {
     getAllEvents();
   }, []);
 
-  if (screenXs || screenSm) {
+  if (screenSm) {
     return (
       <>
-        <Grid container>
-          <Grid item xs={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
-          <Grid item container xs={12} direction="row" justify="center" alignItems="center">
-            <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <SearchBar setFilterFunction={() => console.log('TODO')} />
           </Grid>
+          {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+          <Grid
+            item
+            container
+            xs={12}
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            <Button disableRipple className={classes.createEventBtn}>
+              Create new event
+            </Button>
+          </Grid>
+          )}
           <Grid item container xs={12} justify="space-between">
             <Grid item>
               <Box className={classes.box} fontWeight="bold">
                 <Typography display="inline" color="secondary">
-                  {
-                    events ? events.length : 0
-                  }
+                  {events ? events.length : 0}
                 </Typography>
-                <Typography display='inline' variant='body2'>
+                <Typography display="inline" variant="body2">
                   {' '}
                   Upcoming Events
                 </Typography>
@@ -110,15 +122,20 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
           <Grid container xs={12} spacing={4}>
             {filteredEvents?.map((event) => (
               <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard key={event._id}
-                           event={event}
-                           onCardClick={() => router.push(`/event/${event._id}`)}
+                <EventCard
+                  key={event._id}
+                  event={event}
+                  onCardClick={() => router.push(`/event/${event._id}`)}
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
-        <Drawer anchor="right" open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+        <Drawer
+          anchor="right"
+          open={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+        >
           <Box m={8}>
             <EventsFilter filters={filters} setFilters={setFilters} />
           </Box>
@@ -128,18 +145,29 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
   }
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item sm={12}><EventBreadCrumbs /></Grid>
-        <Grid item container sm={9}>
-          <Grid item sm={12}><SearchBar setFilterFunction={() => console.log('TODO')} /></Grid>
+      <Grid container spacing={4}>
+        <Grid item sm={12}>
+          <EventBreadCrumbs />
+        </Grid>
+        <Grid item container sm={12} alignItems="center" spacing={4}>
+          <Grid item sm={9}>
+            <SearchBar setFilterFunction={() => console.log('TODO')} />
+          </Grid>
+          {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+          <Grid item sm={3} style={{ textAlign: 'center' }}>
+            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/event/new')}>
+              Create new event
+            </Button>
+          </Grid>
+          )}
+        </Grid>
+        <Grid item container sm={9} spacing={4}>
           <Grid item sm={12}>
             <Box className={classes.box} fontWeight="bold">
               <Typography display="inline" color="secondary">
-                {
-                  events ? events.length : 0
-                }
+                {events ? events.length : 0}
               </Typography>
-              <Typography display='inline' variant='body2'>
+              <Typography display="inline" variant="body2">
                 {' '}
                 Upcoming Events
               </Typography>
@@ -148,19 +176,19 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, getAllEvents }) => {
           <Grid item container sm={12} spacing={2}>
             {filteredEvents?.map((event) => (
               <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard key={event._id}
-                           event={event}
-                           onCardClick={() => router.push(`/event/${event._id}`)}
+                <EventCard
+                  key={event._id}
+                  event={event}
+                  onCardClick={() => router.push(`/event/${event._id}`)}
                 />
               </Grid>
             ))}
           </Grid>
         </Grid>
         <Grid item sm={3}>
-          <Box mb={4}>
-            <Button disableRipple className={classes.createEventBtn}>Create new event</Button>
-          </Box>
-          <EventsFilter filters={filters} setFilters={setFilters} />
+          <div style={{ width: '100%' }}>
+            <EventsFilter filters={filters} setFilters={setFilters} />
+          </div>
         </Grid>
       </Grid>
     </>
