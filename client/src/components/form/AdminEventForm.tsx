@@ -218,8 +218,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         form.facilitatorPhoto = res?.payload.url;
       }
 
-      console.log(form);
-
       const response = await dispatch(isNew ? createEvent(form) : editEvent({ data: form, id }));
 
       // @ts-ignore type exists
@@ -234,7 +232,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const onChangeImage = (e, fieldName) => {
     if (e.target.files && e.target.files[0]) {
       const image = e.target.files[0];
-      console.log(fieldName);
       setFieldValue(fieldName, image);
       return URL.createObjectURL(image);
     }

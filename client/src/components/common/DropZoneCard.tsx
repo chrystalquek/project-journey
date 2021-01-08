@@ -7,7 +7,7 @@ import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import ClearIcon from '@material-ui/icons/Clear';
 import { useSelector } from 'react-redux';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     boxShadow: 'none',
@@ -31,7 +31,23 @@ const useStyles = makeStyles({
     width: '100%',
     position: 'relative',
   },
-});
+  clearIcon: {
+    color: theme.palette.primary.main,
+  },
+  overlayIcon: {
+    position: 'absolute',
+    left: '50%',
+    top: '43%',
+    transform: 'translate(-50%, -50%)',
+  },
+  overlayText: {
+    position: 'absolute',
+    left: '50%',
+    top: '58%',
+    transform: 'translate(-50%, -50%)',
+    color: '#D8D8D8', // grey
+  },
+}));
 
 const DropZoneCard = ({
   id, initialUrl, isBig, onChangeImage,
@@ -47,53 +63,40 @@ const DropZoneCard = ({
   return (
     <>
       <label htmlFor={id}>
-        <Card className={classes.root}>
+        <div className={classes.root}>
           {!imageUrl
             ? (
-              <Grid item xs={12} container direction="column" alignItems="center" justify="center">
-                {/** Padding */}
-                <Grid item xs={isBig ? 4 : 3} />
-
-                <Grid item xs={isBig ? 4 : 6} container direction="row" alignItems="center" justify="center">
-                  <Grid item container>
-                    <>
-                      <Grid item container direction="row" justify="center" xs={12}>
-                        <AddAPhotoIcon className={classes.icon} />
-                      </Grid>
-                      <Grid item />
-                      <Grid item container direction="row" justify="center" xs={12}>
-                        <Typography variant="subtitle1" color="textSecondary" align="center">
-                          Browse file to
-                          <br />
-                          add
-                          {isBig ? ' cover ' : ' '}
-                          image
-                        </Typography>
-                      </Grid>
-                    </>
-                  </Grid>
-                </Grid>
-
-                {/** Padding */}
-                <Grid item xs={isBig ? 4 : 3} />
-
-              </Grid>
+              <div className={classes.container}>
+                <div className={classes.overlayIcon}>
+                  <AddAPhotoIcon className={classes.icon} />
+                </div>
+                <div className={classes.overlayText}>
+                  <Typography variant="subtitle1" align="center">
+                    Browse file to
+                    <br />
+                    add
+                    {isBig ? ' cover ' : ' '}
+                    image
+                  </Typography>
+                </div>
+              </div>
             ) : (
-              <Grid container direction="row" alignItems="flex-end" className={classes.container}>
-                <Grid item xs={11} className={classes.child}>
+              <div className={classes.container}>
+                <div className={classes.child}>
                   <img src={imageUrl} alt={imageUrl} style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
-                </Grid>
-                <h1>{imageUrl}</h1>
-                <Grid item className={classes.overlay}>
-                  <IconButton onClick={() => setImageUrl(null)}>
-                    <ClearIcon fontSize="small" />
+                </div>
+                <div className={classes.overlay}>
+                  <IconButton
+                    onClick={() => setImageUrl(null)}
+                    className={classes.clearIcon}
+                  >
+                    <ClearIcon fontSize="default" />
                   </IconButton>
-                </Grid>
-              </Grid>
-
+                </div>
+              </div>
             )}
 
-        </Card>
+        </div>
       </label>
       <input
         id={id}
