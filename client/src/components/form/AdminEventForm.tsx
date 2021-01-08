@@ -177,6 +177,7 @@ const emptyForm = {
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const eventForm = useSelector((state: StoreState) => state.event.form);
+  const user = useSelector((state:StoreState) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -187,6 +188,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   }, [id]);
 
   const onSubmit = async (values) => {
+    const imageUploadResponse = await uploadAnImage(values.coverImage);
+    console.log(imageUploadResponse);
     const response = await dispatch(isNew ? createEvent(values) : editEvent(values));
 
     // @ts-ignore type exists
@@ -205,12 +208,13 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     enableReinitialize: true,
   });
 
-  const onUploadImage = async (e) => {
-    const file = e.target.files[0];
+  const uploadAnImage = async (image) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', image);
+    formData.append('email', user?.user.email);
 
     const response = await dispatch(uploadImage(formData));
+    console.log(response);
   };
 
   const onChangeImage = (isCoverImage) => (e) => {
