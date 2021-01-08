@@ -39,6 +39,7 @@ const dummyUser: VolunteerData = {
   volunteeringSessionsCount: 1,
   workshopsCount: 1,
   hangoutsCount: 1,
+  pastEventIds: ['someeventid']
 };
 
 export default () => (dummyUser);
