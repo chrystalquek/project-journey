@@ -12,48 +12,14 @@ export const doesUserEmailExist = async (email: string) => {
   return !user;
 };
 
+/**
+ * Creates new volunteer for both ad-hoc/committed
+ * @param volunteerData new volunteer data
+ */
 export const addNewVolunteer = async (volunteerData: VolunteerData) => {
-  const {
-    name,
-    password,
-    identificationNumber,
-    address,
-    mobileNumber,
-    birthday,
-    email,
-    socialMediaPlatform,
-    nickname,
-    photoUrl,
-    gender,
-    citizenship,
-    organization,
-    position,
-    description,
-    interests,
-    personality,
-    volunteerRemarks,
-  } = volunteerData;
-
   const volunteerSchemaData = new Volunteer({
+    ...volunteerData,
     _id: new mongoose.Types.ObjectId(),
-    name,
-    password,
-    identificationNumber,
-    address,
-    mobileNumber,
-    birthday,
-    email,
-    socialMediaPlatform,
-    nickname,
-    photoUrl,
-    gender,
-    citizenship,
-    organization,
-    position,
-    description,
-    interests,
-    personality,
-    volunteerRemarks,
   });
 
   await volunteerSchemaData.save();

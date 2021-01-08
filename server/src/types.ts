@@ -4,15 +4,16 @@ export type QueryParams = {
     [field: string]: any
 } // query parameters for GET
 
-export type VolunteerType = 'ad-hoc' | 'committed' | 'lead' | 'admin'
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
-type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
+export type VolunteerType = 'ad-hoc' | 'committed' | 'admin'
+export type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
 export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
 export type EventType = 'workshop' | 'hangout' | 'volunteering'
+export type Gender = 'male' | 'female'
 
 export interface RoleData {
     name: string;
@@ -22,44 +23,72 @@ export interface RoleData {
 }
 
 export type VolunteerData = {
+    // System data
     _id: string;
+    volunteerType: VolunteerType;
+
     name: string;
     password: string;
-    identificationNumber?: string;
 
     // personal details
+    nickname?: string;
+    gender: Gender;
+    citizenship: CitizenshipStatus;
+    birthday: Date;
     address: string;
     mobileNumber: string;
-    birthday: Date;
+    photoUrl: string;
     email: string;
+
     socialMediaPlatform: SocialMediaPlatform;
-    nickname?: string;
-    photoUrl?: string;
-    gender: string;
-    citizenship: CitizenshipStatus;
-    race: Race;
-    volunteerType: VolunteerType;
+    instagramHandle?: string;
 
     organization?: string;
     position?: string;
+    race?: Race;
 
-    referral?: string; // unsure why we have it here?
+    languages: Array<string>;
+    referralSources: Array<string>;
 
-    hasVolunteered?: boolean;
-    hasChildrenExperience?: boolean;
-    hasExternalVolunteerExperience?: boolean;
+    hasVolunteered: boolean;
+    biabVolunteeringDuration?: number; // Number of months
+
+    hasVolunteeredExternally: boolean;
+    volunteeringExperience?: string;
+
+    hasChildrenExperience: boolean;
+    childrenExperience?: string;
+
+    sessionsPerMonth?: number
+    sessionPreference?: string // pre-defined session committment
+
     hasFirstAidCertification?: boolean;
+    leadershipInterest?: string;
+    interests?: string; // short-ans
 
-    leadershipInterest: string;
-    description: string;
-    interests: Array<string>;
-    personality: string;
-    skills: Array<string>
+    skills?: Array<string>;
 
-    volunteerContribution?: string;
-    volunteerReason: string;
-    volunteerFrequency: number;
+    personality?: string; // Myers-Briggs
+    strengths?: Array<string>;
+    volunteeringOpportunityInterest?: string;
 
+    volunteerReason: string; // Essay
+    volunteerContribution?: string
+
+    // WCA Registration: Medical Information
+    hasMedicalNeeds: boolean
+    medicalNeeds?: string
+    hasAllergies: boolean
+    allergies?: string
+    hasMedicationDuringDay: boolean
+
+    // WCA Registration: Emergency Contact
+    emergencyContactName: string
+    emergencyContactNumber: string
+    emergencyContactEmail: string
+    emergencyContactRelationship: string
+
+    // Remarks
     volunteerRemarks: string;
     adminRemarks: string;
 
@@ -81,14 +110,6 @@ export type ResourceData = {
     url: string;
     type: string;
 };
-
-// TODO: Remove this
-export type VolunteerSchemaData = {
-    name: string,
-    field_type: string,
-    created_at: Date,
-    modified_at: Date,
-}
 
 export type EnvironmentConstants = {
     port: number,

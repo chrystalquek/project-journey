@@ -5,7 +5,6 @@ import { accessTokenSecret } from '../helpers/auth';
 import HTTP_CODES from '../constants/httpCodes';
 import config from '../config';
 
-// TODO not sure how this function works... is this the correct modification?
 const authorize = (roles: Array<VolunteerType> = []) => {
   if (config.disableAuthentication && config.env !== 'production') {
     return [];
