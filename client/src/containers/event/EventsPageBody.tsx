@@ -9,6 +9,7 @@ https://react-redux.js.org/api/hooks
 */
 const mapStateToProps = (state: StoreState) => ({
   events: state.event.events,
+  user: state.user.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

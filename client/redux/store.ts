@@ -15,12 +15,14 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import signUpReducer, { SignUpState } from './reducers/signUp';
+import commitmentApplicationReducer, { CommitmentApplicationState } from './reducers/commitmentApplication';
 
 export type StoreState = {
   user: UserState
   event: EventState
   volunteer: VolunteerState
   signUp: SignUpState
+  commitmentApplication: CommitmentApplicationState
 }
 
 const reducers = combineReducers({
@@ -28,6 +30,7 @@ const reducers = combineReducers({
   event: EventReducer,
   volunteer: volunteerReducer,
   signUp: signUpReducer,
+  commitmentApplication: commitmentApplicationReducer
 });
 
 const persistConfig = {

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   createAndAcceptSignUp, createSignUp,
-  getPendingSignUpsPendingApproval, getSignUps,
+  getPendingSignUps, getSignUps,
   getSignUpsUpcomingEvent,
   updateSignUp
 } from '@redux/actions/signUp';
@@ -9,11 +9,11 @@ import { SignUpData } from 'types/signUp';
 
 export type SignUpState = {
   data: Record<string, SignUpData>;
-  pendingApproval: {
-    pendingSignUpCount: number
-  },
-  upcomingEvent: {
+  volunteerSignUpsForUpcomingEvent: { // signups for a volunteer's upcoming events // used for dashboard
     ids: Array<string> // signed up events
+  },
+  pendingSignUps: { // pending sign ups // used for events > pending requests
+    ids: Array<string>
   },
   getSignUps: {
     currSignUps: Array<SignUpData> // signups from getSignUps action
@@ -22,11 +22,11 @@ export type SignUpState = {
 
 const initialState: SignUpState = {
   data: {},
-  pendingApproval: {
-    pendingSignUpCount: 0,
+  volunteerSignUpsForUpcomingEvent: {
+    ids: []
   },
-  upcomingEvent: {
-    ids: [],
+  pendingSignUps: {
+    ids: []
   },
   getSignUps: {
     currSignUps: [],
@@ -49,12 +49,15 @@ const signUpSlice = createSlice({
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state);
+      addToData(payload.data, state)
+      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map(signUp => signUp._id)
     });
-    builder.addCase(getPendingSignUpsPendingApproval.fulfilled, (state, action) => {
+    builder.addCase(getPendingSignUps.fulfilled, (state, action) => {
       const { payload } = action;
-      state.pendingApproval.pendingSignUpCount = payload.count;
+      addToData(payload.data, state)
+      state.pendingSignUps.ids = payload.data.map(signUp => signUp._id)
     });
+
     builder.addCase(getSignUps.fulfilled, (state, action) => {
       const { payload } = action;
       state.getSignUps.currSignUps = payload.data;

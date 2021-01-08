@@ -1,3 +1,4 @@
+import { CommitmentApplicationData } from '@type/commitmentApplication';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
   LoginRequest,
@@ -10,8 +11,9 @@ import {
   UpdateSignUpRequest, SignUpQueryParams,
 } from '@utils/api/request';
 import {
-  GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
+  GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, CreateSignUpResponse, UpdateSignUpResponse,
+  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
 } from '@utils/api/response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -21,12 +23,13 @@ export interface ApiClient {
   createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
-  getVolunteers(query: QueryParams): Promise<GetVolunteersResponse>
+  getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse>
   getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
   getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
   getEvents(query: QueryParams): Promise<GetEventsResponse>
-  getPendingSignUps(): Promise<GetCountResponse>
-  getPendingVolunteers(): Promise<GetCountResponse>
+  getPendingSignUps(): Promise<GetSignUpsResponse>
+  getPendingVolunteers(): Promise<GetVolunteersResponse>
+  getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -52,17 +55,12 @@ class AxiosApiClient implements ApiClient {
     return this.send(request, 'user/login', 'post');
   }
 
-  // volunteer
-  async getVolunteers(query: QueryParams): Promise<GetVolunteersResponse> {
-    return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
-  }
-
   // sign up
   async getSignUps(query: QueryParams): Promise<GetSignUpsResponse> {
     return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
   }
 
-  async getPendingSignUps(): Promise<GetCountResponse> {
+  async getPendingSignUps(): Promise<GetSignUpsResponse> {
     return this.send({}, 'signup/pending', 'get');
   }
 
@@ -97,8 +95,21 @@ class AxiosApiClient implements ApiClient {
   }
 
   // volunteer
-  async getPendingVolunteers(): Promise<GetCountResponse> {
+  async getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse> {
+    return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
+  }
+
+  async getPendingVolunteers(): Promise<GetVolunteersResponse> {
     return this.send({}, 'volunteer/pending', 'get');
+  }
+
+  // commitment application
+  async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {
+    return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
+  }
+
+  async updateCommitmentApplication(data: CommitmentApplicationData): Promise<void> {
+    return this.send(data, `commitment-application/${data._id}`, 'put');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {
