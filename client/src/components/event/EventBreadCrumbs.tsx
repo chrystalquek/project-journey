@@ -26,7 +26,7 @@ const EventBreadCrumbs: FC<EventBreadCrumbsProps> = ({ eid}) => {
 
   return (
     <Breadcrumbs separator=">" className={classes.linkColor} aria-label="breadcrumb">
-      <Typography>Events</Typography>
+      <Link href={EVENTS_ROUTE}>Events</Link>
       <Typography>Search events</Typography>
       {event ? <Typography>{event.name}</Typography> : null}
     </Breadcrumbs>

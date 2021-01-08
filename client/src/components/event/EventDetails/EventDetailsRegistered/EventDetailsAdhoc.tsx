@@ -1,16 +1,18 @@
 import React, {FC} from "react";
 import {EventData} from "@type/event";
-import {VolunteerData} from "@type/volunteer";
-import {Box, Chip, Grid} from "@material-ui/core";
+import {VOLUNTEER_TYPE, VolunteerData} from "@type/volunteer";
+import {Box, Chip, Grid, Link} from "@material-ui/core";
+import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
 import {testEventImage1} from "@constants/imagePaths";
+import {COMMITTED_VOLUNTEER_TAG} from "@constants/index";
+import {FormDisabledReason} from "@utils/helpers/event/EventDetails/EventDetails";
 import EventInformation from "@components/event/EventDetails/EventInformation";
 import VolunteerRoles from "@components/event/EventDetails/VolunteerRoles";
 import EventRegisterForm, {FormState} from "@components/event/EventDetails/EventRegisterForm";
-import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
-import {COMMITTED_VOLUNTEER_TAG} from "@constants/index";
-import {FormDisabledReason} from "@utils/helpers/event/EventDetails/EventDetails";
+import FacilitatorInfo from "@components/event/EventDetails/FacilitatorInfo";
+import BecomeCommited from "@components/profile/BecomeCommitedDialog";
 
-type EventDetailsCommittedProps = {
+type EventDetailsAdhocProps = {
   event: EventData,
   user: VolunteerData,
   formStatus: {
@@ -23,7 +25,8 @@ type EventDetailsCommittedProps = {
   }
 }
 
-const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ formStatus, formHandlers, event, user }) => {
+const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({ event, user, formStatus, formHandlers }) => {
+  console.log(event)
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -40,9 +43,12 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ formStatus, for
         <img src={testEventImage1} alt={event.name} />
       </Grid>
 
-      <Grid item xs={12}>
-        <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
-      </Grid>
+      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+        ? <Grid item xs={12}>
+          <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+        </Grid>
+        : null
+      }
 
       {/*TODO: Style*/}
       {formStatus.reason === FormDisabledReason.SIGNUP_PENDING
@@ -55,11 +61,10 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ formStatus, for
       }
 
       <Grid item xs={12}>
-        <EventInformation event={event} />
-      </Grid>
-
-      <Grid item xs={12}>
-        <VolunteerRoles event={event} />
+        {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+          ? <VolunteerRoles event={event} />
+          : <FacilitatorInfo event={event} />
+        }
       </Grid>
 
       <Grid item xs={12}>
@@ -69,8 +74,16 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({ formStatus, for
                            formHandlers={formHandlers}
         />
       </Grid>
+
+      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+        ? <div>
+            <div>This event is only opened to committed volunteers.</div>
+            <BecomeCommited />
+          </div>
+        : null
+      }
     </Grid>
   )
 }
 
-export default EventDetailsCommitted;
+export default EventDetailsAdhoc;

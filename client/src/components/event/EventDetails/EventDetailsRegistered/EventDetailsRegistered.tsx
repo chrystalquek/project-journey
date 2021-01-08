@@ -1,11 +1,10 @@
 import {EventData} from "@type/event";
 import React, {FC, useEffect} from "react";
 import {VOLUNTEER_TYPE, VolunteerData} from "@type/volunteer";
-import EventDetailsUnregistered from "@components/event/EventDetails/EventDetailsUnregistered";
-import EventDetailsCommitted from "@components/event/EventDetails/EventDetailsCommitted";
-import EventDetailsAdhoc from "@components/event/EventDetails/EventDetailsAdhoc";
+import EventDetailsCommitted from "@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted";
+import EventDetailsAdhoc from "@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc";
 import {FormState} from "@components/event/EventDetails/EventRegisterForm";
-import {createAndAcceptSignUp, createSignUp, getSignUps} from "@redux/actions/signUp";
+import {createSignUp, getSignUps} from "@redux/actions/signUp";
 import {useDispatch, useSelector} from "react-redux";
 import {CreateSignUpRequest, UpdateSignUpRequest} from "@utils/api/request";
 import {FormDisabledReason, getFormData} from "@utils/helpers/event/EventDetails/EventDetails";
@@ -45,7 +44,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
     reason = "";
   }
   const formStatus = {
-    disabled: isEventFull || hasPendingSignUp || hasAcceptedSignUp,
+    disabled: isEventFull || hasPendingSignUp || hasAcceptedSignUp, // default disabled reasons
     reason: reason
   };
 
@@ -81,15 +80,19 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
   const renderDetails = (volunteerType: VOLUNTEER_TYPE): React.ReactNode => {
     switch (volunteerType) {
       case VOLUNTEER_TYPE.ADHOC:
-        return <EventDetailsAdhoc event={event} user={user} />
+        // adhoc volunteers can't register for events opened to committed volunteers
+        formStatus.disabled = event.volunteerType === VOLUNTEER_TYPE.COMMITED || formStatus.disabled;
+        return <EventDetailsAdhoc formStatus={formStatus}
+                                  formHandlers={formHandlers}
+                                  event={event} user={user} />
       case VOLUNTEER_TYPE.COMMITED:
       case VOLUNTEER_TYPE.ADMIN:
         return <EventDetailsCommitted formStatus={formStatus}
                                       formHandlers={formHandlers}
                                       event={event} user={user} />
       default:
-        // unregistered
-        return <EventDetailsUnregistered event={event} user={user} />
+        // this path shouldn't be reached
+        return null;
     }
   }
 

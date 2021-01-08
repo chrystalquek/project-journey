@@ -2,7 +2,7 @@ import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {StoreState} from "@redux/store";
 import {EventData} from "@type/event";
-import EventDetailsRegistered from "@components/event/EventDetails/EventDetailsRegistered";
+import EventDetailsRegistered from "@components/event/EventDetails/EventDetailsRegistered/EventDetailsRegistered";
 import {VolunteerData} from "@type/volunteer";
 import {Container} from "@material-ui/core";
 import React, {useEffect} from "react";
