@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import CommitmentApplication from '../models/CommitmentApplication';
-import { CommitmentApplicationData } from '../types';
+import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
 
 const createCommitmentApplication = async (
   commitmentApplicationData: CommitmentApplicationData,
@@ -16,7 +16,8 @@ const createCommitmentApplication = async (
   console.log(`Saved: ${JSON.stringify(savedCommitmentApplication)}`);
 };
 
-const readCommitmentApplications = async (status?): Promise<CommitmentApplicationData[]> => {
+const readCommitmentApplications = async (status?: CommitmentApplicationStatus):
+  Promise<CommitmentApplicationData[]> => {
   const commitmentApplications = await (status
     ? CommitmentApplication.find({ status })
     : CommitmentApplication.find({}));

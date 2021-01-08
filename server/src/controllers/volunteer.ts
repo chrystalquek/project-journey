@@ -188,7 +188,8 @@ const getPendingVolunteers = async (
     const pendingCommitmentApplications = await commitmentApplicationService
       .readCommitmentApplications('pending');
 
-    const pendingVolunteersIds = pendingCommitmentApplications.map((app) => app.volunteerId);
+    const pendingVolunteersIds = pendingCommitmentApplications
+      .map((commitmentApplication) => commitmentApplication.volunteerId);
 
     const pendingVolunteers = await volunteerService.readVolunteersByIds(pendingVolunteersIds);
 

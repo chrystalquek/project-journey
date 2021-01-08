@@ -70,9 +70,9 @@ export const getAllVolunteers = async (query: QueryParams) => {
 };
 
 /**
- * Retrieves either volunteers from the specified volunteers ids.
+ * Retrieves volunteers from the specified volunteers ids.
  * A helper function for getPendingVolunteers and updateCommitmentApplication
- * @param ids array of event ids
+ * @param ids array of volunteer ids
  * @return corresponding volunteers
  */
 const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {

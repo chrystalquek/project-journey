@@ -33,9 +33,13 @@ const createCommitmentApplication = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    // defensive prgming: ensure volunteer is only ad-hoc before being able to submit a commitment application
-    // const volunteer = (await volunteerService
-    //   .readVolunteersByIds([commitmentApplication.volunteerId]))[0];
+    // ensure volunteer is only ad-hoc before being able to submit a commitment application
+    const volunteer = (await volunteerService
+      .readVolunteersByIds([req.body.volunteerId]))[0];
+
+    if (volunteer.volunteerType !== 'ad-hoc') {
+      throw new Error(`Volunteer is a ${volunteer.volunteerType}, cannot create Commitment Application`);
+    }
 
     await commitmentApplicationService.createCommitmentApplication(req.body as CommitmentApplicationData);
     res.status(HTTP_CODES.OK).send('Commitment Application created');
@@ -51,7 +55,9 @@ const readCommitmentApplications = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    const commitmentApplications = await commitmentApplicationService.readCommitmentApplications(req.query.status);
+    const status = req.query.status ? req.query.status as CommitmentApplicationStatus : undefined;
+    const commitmentApplications = await commitmentApplicationService
+      .readCommitmentApplications(status);
     res.status(HTTP_CODES.OK).json({
       data: commitmentApplications,
     });
@@ -79,7 +85,7 @@ const updateCommitmentApplication = async (req: express.Request, res: express.Re
       );
     }
 
-    // TODO what happens to volunteerType when rejected?
+    // what happens to volunteerType when rejected? remain ad-hoc?
 
     res.status(HTTP_CODES.OK).send('Commitment Application and Volunteer updated');
   } catch (err) {
