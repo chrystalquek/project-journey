@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
-import { getPendingVolunteersPendingApproval, getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
+import { getPendingVolunteers, getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
+import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
+import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 
 export type VolunteerState = {
   data: Record<string, VolunteerData>;
-  pendingApproval: {
-    pendingVolunteerCount: number
+  pendingVolunteers: { // used for dashboard and volunteer > pending requests
+    ids: Array<string> // ie volunteers with committment applications that are state pending
   }
-  volunteerProfile: {
+  volunteerProfile: { // volunteer > volunteer-profile
     ids: Array<string>
     pageNo: number,
     count: number
@@ -20,8 +22,8 @@ export type VolunteerState = {
 
 const initialState: VolunteerState = {
   data: {},
-  pendingApproval: {
-    pendingVolunteerCount: 0,
+  pendingVolunteers: {
+    ids: [],
   },
   volunteerProfile: {
     ids: [],
@@ -66,9 +68,24 @@ const volunteerSlice = createSlice({
       state.volunteerProfile.ids = [];
     });
 
-    builder.addCase(getPendingVolunteersPendingApproval.fulfilled, (state, action) => {
+    builder.addCase(getPendingVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
-      state.pendingApproval.pendingVolunteerCount = payload.count;
+      addToData(payload.data, state)
+      state.pendingVolunteers.ids = payload.data.map((volunteer) => volunteer._id);
+    });
+
+    builder.addCase(updateCommitmentApplication.fulfilled, (state, action) => {
+      const { payload } = action;
+      // update that volunteer's status
+      const volunteer = state.data[payload.volunteerId];
+      if (payload.status == CommitmentApplicationStatus.Accepted) {
+        state.data[payload.volunteerId] = {
+          ...volunteer,
+          volunteerType: VOLUNTEER_TYPE.COMMITED
+        }
+      }
+      // no longer a pending request with either accept or reject
+      state.pendingVolunteers.ids = state.pendingVolunteers.ids.filter((volunteerId) => volunteerId != payload.volunteerId)
     });
   },
 });
