@@ -260,7 +260,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Type of Event</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={6} md={2}>
               <TextField
                 select
                 variant="outlined"
@@ -324,7 +324,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Volunteer Type</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={6} md={2}>
               <TextField
                 select
                 variant="outlined"
@@ -353,10 +353,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Date</Typography>
             </Grid>
-            <Grid item>
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">From</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
@@ -375,10 +375,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 error={isError(errors.startDate)}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs={12} md="auto" />
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">To</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
@@ -401,10 +402,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Time</Typography>
             </Grid>
-            <Grid item>
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">From</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <TextField
                 id="time"
                 variant="outlined"
@@ -425,10 +426,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 error={isError(errors.startDate)}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs={12} md="auto" />
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">To</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <TextField
                 id="time"
                 variant="outlined"
