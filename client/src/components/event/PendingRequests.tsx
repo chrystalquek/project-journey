@@ -1,17 +1,17 @@
-import { makeStyles, Grid, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import { isAdmin } from '@utils/helpers/auth';
+import { makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { FC, useEffect } from 'react';
 import { EventData } from 'types/event';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
-import { getPendingSignUps, getSignUpsUpcomingEvent } from '@redux/actions/signUp';
-import { MONTHS, formatAMPM, formatDateStartEndTime } from '@utils/helpers/date';
-import dummyUser from '@constants/dummyUser';
+import { getEventsUpcomingEvent } from '@redux/actions/event';
+import { getPendingSignUps } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
 import NavBar from '@components/common/NavBar';
 import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { getPendingVolunteers } from '@redux/actions/volunteer';
+import { Tabs } from '@components/common/Tabs';
 
 const useStyles = makeStyles((theme) => ({
     shapeCircle: {
@@ -36,6 +36,7 @@ const PendingRequests: FC<{}> = ({ }) => {
     const user = useSelector((state: StoreState) => state.user);
 
     useEffect(() => {
+        dispatch(getPendingVolunteers()); // just to load number in tab
         dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }))
         dispatch(getPendingSignUps())
     }, []);
@@ -58,6 +59,22 @@ const PendingRequests: FC<{}> = ({ }) => {
         return <div className={classes.shapeCircle}>{result}</div>
     }
 
+    // to make tabs
+    const router = useRouter();
+
+    const upcomingVolunteersIds = useSelector((state: StoreState) => state.volunteer).pendingVolunteers.ids
+
+    const tabs = [
+        {
+            label: "Volunteers (" + upcomingVolunteersIds.length + ")",
+            onClick: () => router.push("volunteer/pending-requests") // not working: gives volunteer/volunteer/pending-requests
+        },
+        {
+            label: "Events (" + upcomingEventsIds.length + ")",
+            onClick: () => router.push("event/pending-requests")
+        }
+    ]
+
     return (
         <>
             <Head>
@@ -66,6 +83,7 @@ const PendingRequests: FC<{}> = ({ }) => {
             <NavBar userData={user.user} />
             <Grid container alignItems="center" justify="center">
                 <Grid item xs={8}>
+                    <Tabs tabs={tabs} clickedOn={1} />
                     <TableContainer>
                         <Table>
                             <TableHead>

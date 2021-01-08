@@ -11,6 +11,9 @@ import { getCommitmentApplications, updateCommitmentApplication } from '@redux/a
 import { getPendingVolunteers } from '@redux/actions/volunteer';
 import { CommitmentApplicationData, CommitmentApplicationStatus } from '@type/commitmentApplication';
 import { ActionableDialog } from '@components/common/ActionableDialog';
+import { Tabs } from '@components/common/Tabs';
+import { useRouter } from 'next/dist/client/router';
+import { getEventsUpcomingEvent } from '@redux/actions/event';
 
 const useStyles = makeStyles((theme) => ({
     shapeCircle: {
@@ -32,6 +35,7 @@ const PendingRequests: FC<{}> = ({ }) => {
     const user = useSelector((state: StoreState) => state.user);
 
     useEffect(() => {
+        dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })) // just to load number in tab
         dispatch(getPendingVolunteers());
         dispatch(getCommitmentApplications({ status: "pending" }))
     }, []);
@@ -52,6 +56,7 @@ const PendingRequests: FC<{}> = ({ }) => {
     const onApproveReject = (commitmentApplication: CommitmentApplicationData) => {
         dispatch(updateCommitmentApplication(commitmentApplication))
         setOpenApprove(false)
+        setOpenReject(false)
     }
 
     const getApproveRejectButtons = (volunteer: VolunteerData) => {
@@ -62,9 +67,25 @@ const PendingRequests: FC<{}> = ({ }) => {
         const rejectButton = <Button onClick={() => setOpenReject(true)}><CancelIcon color='error' fontSize='large' /></Button>
         return <Grid direction="row">
             {approveButton} <ActionableDialog open={openApprove} onClose={() => setOpenApprove(false)} content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`} buttonTitle="Approve" buttonOnClick={() => onApproveReject(approveCommitmentApplication)} />
-            {rejectButton} <ActionableDialog open={openReject} onClose={() => setOpenReject(false)} content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`} buttonTitle="Reject" buttonOnClick={() => onApproveReject(approveCommitmentApplication)} />
+            {rejectButton} <ActionableDialog open={openReject} onClose={() => setOpenReject(false)} content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`} buttonTitle="Reject" buttonOnClick={() => onApproveReject(rejectCommitmentApplication)} />
         </Grid>
     }
+
+    // to make tabs
+    const router = useRouter();
+
+    const upcomingEventsIds = useSelector((state: StoreState) => state.event).upcomingEvent.ids;
+
+    const tabs = [
+        {
+            label: "Volunteers (" + upcomingVolunteersIds.length + ")",
+            onClick: () => router.push("volunteer/pending-requests") // not working: gives volunteer/volunteer/pending-requests
+        },
+        {
+            label: "Events (" + upcomingEventsIds.length + ")",
+            onClick: () => router.push("event/pending-requests")
+        }
+    ]
 
     return (
         <>
@@ -74,6 +95,7 @@ const PendingRequests: FC<{}> = ({ }) => {
             <NavBar userData={user.user} />
             <Grid container alignItems="center" justify="center">
                 <Grid item xs={8}>
+                    <Tabs tabs={tabs} clickedOn={0} />
                     <TableContainer>
                         <Table>
                             <TableHead>
