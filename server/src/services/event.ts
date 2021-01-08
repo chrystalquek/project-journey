@@ -96,17 +96,32 @@ const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
   try {
     let events: EventData[];
 
-    switch (eventType.searchType) {
-      case 'all':
-        events = await Event.find({}).skip(eventType.skip).limit(eventType.limit);
-        break;
-      case 'past':
-        events = await Event.find({ start_date: { $lt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
-        break;
-      case 'upcoming':
-        events = await Event.find({ start_date: { $gt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
-        break;
-      default: throw new Error('Event type is invalid');
+    if (eventType.limit && eventType.skip) {
+      switch (eventType.searchType) {
+        case 'all':
+          events = await Event.find({}).skip(eventType.skip).limit(eventType.limit);
+          break;
+        case 'past':
+          events = await Event.find({ start_date: { $lt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
+          break;
+        case 'upcoming':
+          events = await Event.find({ start_date: { $gt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
+          break;
+        default: throw new Error('Event type is invalid');
+      }
+    } else {
+      switch (eventType.searchType) {
+        case 'all':
+          events = await Event.find({});
+          break;
+        case 'past':
+          events = await Event.find({ start_date: { $lt: new Date() } });
+          break;
+        case 'upcoming':
+          events = await Event.find({ start_date: { $gt: new Date() } });
+          break;
+        default: throw new Error('Event type is invalid');
+      }
     }
     return events;
   } catch (err) {
@@ -121,7 +136,7 @@ const updateEvent = async (
   try {
     await Event.findOneAndUpdate(
       { _id: id },
-      { $set: updatedFields }, // must map camelCase to snake-case, should we use https://github.com/bendrucker/snakecase-keys
+      { $set: updatedFields },
       { new: true },
     );
   } catch (err) {

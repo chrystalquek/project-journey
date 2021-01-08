@@ -36,6 +36,9 @@ const dummyUser: VolunteerData = {
   hasChildrenExperience: true,
   hasFirstAidCertification: true,
   volunteerContribution: 'string',
+  volunteeringSessionsCount: 1,
+  workshopsCount: 1,
+  hangoutsCount: 1,
 };
 
 export default () => (dummyUser);
