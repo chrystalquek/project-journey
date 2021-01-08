@@ -40,7 +40,7 @@ const UpcomingEvent: FC<{}> = ({ }) => {
       dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }))
     } else {
       dispatch(getSignedUpEventsUpcomingEvent({ eventType: 'upcoming', userId: user.user?._id }))
-      dispatch(getSignUpsUpcomingEvent({ id: user.user._id, idType: 'userId' }))
+      dispatch(getSignUpsUpcomingEvent({ id: user.user?._id, idType: 'userId' }))
     }
   }, []);
 
