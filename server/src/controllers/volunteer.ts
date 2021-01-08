@@ -208,10 +208,10 @@ const checkUpdateRights = () => [
 
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
-    await volunteerService.updateVolunteerDetails(
+    const savedVolunteerData = await volunteerService.updateVolunteerDetails(
       req.body.email as string, req.body as Partial<VolunteerData>,
     );
-    res.status(HTTP_CODES.OK).send();
+    res.status(HTTP_CODES.OK).json({ savedVolunteerData: savedVolunteerData });
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,

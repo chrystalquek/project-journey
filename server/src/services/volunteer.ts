@@ -74,9 +74,10 @@ export const getPendingVolunteers = async () => Volunteer.countDocuments({ statu
  */
 export const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
   await getVolunteer(email);
-  await Volunteer.findOneAndUpdate({
+  const savedVolunteerData = await Volunteer.findOneAndUpdate({
     email,
-  }, updatedVolunteerData);
+  }, updatedVolunteerData, { new: true });
+  return savedVolunteerData
 };
 
 /**
