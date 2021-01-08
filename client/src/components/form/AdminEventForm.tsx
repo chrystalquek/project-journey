@@ -176,7 +176,8 @@ const emptyForm = {
 
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
-  const eventForm = useSelector((state: StoreState) => state.event.form);
+  const eventForm: any = useSelector((state: StoreState) => state.event.form);
+  // TODO: remove any typing after all is changed to camel
   const user = useSelector((state:StoreState) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
