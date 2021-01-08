@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Card, Grid, IconButton, Typography,
 } from '@material-ui/core';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import ClearIcon from '@material-ui/icons/Clear';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
   root: {
@@ -32,9 +33,11 @@ const useStyles = makeStyles({
   },
 });
 
-const DropZoneCard = ({ isBig, onChangeImage }) => {
+const DropZoneCard = ({
+  id, initialUrl, isBig, onChangeImage,
+}) => {
   const classes = useStyles();
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(initialUrl);
 
   const handleChange = (e) => {
     const newImageUrl = onChangeImage(e);
@@ -43,7 +46,7 @@ const DropZoneCard = ({ isBig, onChangeImage }) => {
 
   return (
     <>
-      <label htmlFor="image">
+      <label htmlFor={id}>
         <Card className={classes.root}>
           {!imageUrl
             ? (
@@ -80,7 +83,7 @@ const DropZoneCard = ({ isBig, onChangeImage }) => {
                 <Grid item xs={11} className={classes.child}>
                   <img src={imageUrl} alt={imageUrl} style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
                 </Grid>
-
+                <h1>{imageUrl}</h1>
                 <Grid item className={classes.overlay}>
                   <IconButton onClick={() => setImageUrl(null)}>
                     <ClearIcon fontSize="small" />
@@ -93,7 +96,7 @@ const DropZoneCard = ({ isBig, onChangeImage }) => {
         </Card>
       </label>
       <input
-        id="image"
+        id={id}
         type="file"
         accept="image/*"
         style={{ display: 'none' }}

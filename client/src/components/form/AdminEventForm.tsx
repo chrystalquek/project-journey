@@ -220,7 +220,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       console.log(form);
 
-      const response = await dispatch(isNew ? createEvent(form) : editEvent(form));
+      const response = await dispatch(isNew ? createEvent(form) : editEvent({ data: form, id }));
 
       // @ts-ignore type exists
       if (response?.type === 'event/createEvent/fulfilled' || response?.type === 'event/editEvent/fulfilled') {
@@ -231,10 +231,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     enableReinitialize: true,
   });
 
-  const onChangeImage = (isCoverImage) => (e) => {
+  const onChangeImage = (e, fieldName) => {
     if (e.target.files && e.target.files[0]) {
       const image = e.target.files[0];
-      setFieldValue(isCoverImage ? 'coverImage' : 'facilitatorPhoto', image);
+      console.log(fieldName);
+      setFieldValue(fieldName, image);
       return URL.createObjectURL(image);
     }
   };
@@ -285,7 +286,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Cover Image */}
           <Grid item container>
             <div className={classes.coverImage}>
-              <DropZoneCard isBig onChangeImage={onChangeImage(true)} />
+              <DropZoneCard
+                id="coverImage"
+                initialUrl={eventForm?.cover_image}
+                isBig
+                onChangeImage={(e) => onChangeImage(e, 'coverImage')}
+              />
             </div>
           </Grid>
 
@@ -542,8 +548,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item container>
               <div className={classes.facilPhotograph}>
                 <DropZoneCard
+                  id="facilitatorPhoto"
+                  initialUrl={eventForm?.facilitator_photo}
                   isBig={false}
-                  onChangeImage={onChangeImage(false)}
+                  onChangeImage={(e) => onChangeImage(e, 'facilitatorPhoto')}
                 />
               </div>
             </Grid>
