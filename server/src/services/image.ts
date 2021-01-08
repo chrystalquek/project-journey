@@ -7,7 +7,7 @@ const storage = new Storage()
 
 const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
   try {
-    const filepath = "./uploads/" + imageData.imageName
+    const filepath = "./tmp/" + imageData.imageName
     const returnVal = await storage.bucket('journey-storage').upload(filepath, {
       gzip: true,
       metadata: {

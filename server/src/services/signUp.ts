@@ -49,7 +49,7 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
 
 const readPendingSignUps = async () => {
   try {
-    return SignUp.countDocuments({ status: 'pending' });
+    return SignUp.find({ status: 'pending' });
   } catch (err) {
     throw new Error(err.msg);
   }

@@ -1,19 +1,19 @@
 export type QueryParams = {
-    skip: number,
-    limit: number,
+    skip?: number,
+    limit?: number,
     [field: string]: any
 } // query parameters for GET
 
 type SocialMediaPlatform = 'instagram' | 'facebook' | 'snapchat' | 'email' | 'other'
 type CitizenshipStatus = 'singapore' | 'permanent_resident' | 'foreigner'
-type VolunteerStatus = 'pending' | 'verified'
-export type VolunteerRole = 'editor' | 'admin' | 'lead'
-type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
+export type VolunteerType = 'ad-hoc' | 'committed' | 'admin'
+export type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
 export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
 export type EventType = 'workshop' | 'hangout' | 'volunteering'
+export type Gender = 'male' | 'female'
 
 export interface RoleData {
     name: string;
@@ -23,50 +23,78 @@ export interface RoleData {
 }
 
 export type VolunteerData = {
+    // System data
     _id: string;
+    volunteerType: VolunteerType;
+
     name: string;
     password: string;
-    identificationNumber?: string;
 
     // personal details
+    nickname?: string;
+    gender: Gender;
+    citizenship: CitizenshipStatus;
+    birthday: Date;
     address: string;
     mobileNumber: string;
-    birthday: Date;
+    photoUrl: string;
     email: string;
+
     socialMediaPlatform: SocialMediaPlatform;
-    nickname?: string;
-    photoUrl?: string;
-    gender: string;
-    citizenship: CitizenshipStatus;
-    race: Race;
-    volunteerType: string;
+    instagramHandle?: string;
 
     organization?: string;
     position?: string;
+    race?: Race;
 
-    // System data
-    status: VolunteerStatus;
-    role: VolunteerRole;
+    languages: Array<string>;
+    referralSources: Array<string>;
 
-    referral?: string; // unsure why we have it here?
+    hasVolunteered: boolean;
+    biabVolunteeringDuration?: number; // Number of months
 
-    hasVolunteered?: boolean;
-    hasChildrenExperience?: boolean;
-    hasExternalVolunteerExperience?: boolean;
+    hasVolunteeredExternally: boolean;
+    volunteeringExperience?: string;
+
+    hasChildrenExperience: boolean;
+    childrenExperience?: string;
+
+    sessionsPerMonth?: number
+    sessionPreference?: string // pre-defined session committment
+
     hasFirstAidCertification?: boolean;
+    leadershipInterest?: string;
+    interests?: string; // short-ans
 
-    leadershipInterest: string;
-    description: string;
-    interests: Array<string>;
-    personality: string;
-    skills: Array<string>
+    skills?: Array<string>;
 
-    volunteerContribution?: string;
-    volunteerReason: string;
-    volunteerFrequency: number;
+    personality?: string; // Myers-Briggs
+    strengths?: Array<string>;
+    volunteeringOpportunityInterest?: string;
 
+    volunteerReason: string; // Essay
+    volunteerContribution?: string
+
+    // WCA Registration: Medical Information
+    hasMedicalNeeds: boolean
+    medicalNeeds?: string
+    hasAllergies: boolean
+    allergies?: string
+    hasMedicationDuringDay: boolean
+
+    // WCA Registration: Emergency Contact
+    emergencyContactName: string
+    emergencyContactNumber: string
+    emergencyContactEmail: string
+    emergencyContactRelationship: string
+
+    // Remarks
     volunteerRemarks: string;
-    administratorRemarks: string;
+    adminRemarks: string;
+
+    volunteeringSessionsCount: Number,
+    workshopsCount: Number,
+    hangoutsCount: Number,
 };
 
 export type VolunteerPublicData = Omit<
@@ -74,7 +102,7 @@ export type VolunteerPublicData = Omit<
     'password' |
     '_id' |
     'identificationNumber' |
-    'administratorRemarks'
+    'adminRemarks'
 >
 
 export type ResourceData = {
@@ -82,14 +110,6 @@ export type ResourceData = {
     url: string;
     type: string;
 };
-
-// TODO: Remove this
-export type VolunteerSchemaData = {
-    name: string,
-    field_type: string,
-    created_at: Date,
-    modified_at: Date,
-}
 
 export type EnvironmentConstants = {
     port: number,
@@ -166,7 +186,7 @@ export type EventData = {
     name: string;
     coverImage?: string; // TODO: change to appropriate type
     eventType: EventType;
-    volunteerType: string;
+    volunteerType: VolunteerType;
     startDate: Date;
     endDate: Date;
     deadline: Date;
@@ -253,8 +273,13 @@ export type MongooseSaveError = {
     _message: string
 }
 
+export type CommitmentApplicationStatus = 'pending' | 'accepted' | 'rejected'
+
 export type CommitmentApplicationData = {
-    volunteerId: string,
+    _id: string,
+    volunteerId: string
+    status: CommitmentApplicationStatus,
+    createdAt: Date,
 
     // List of questions in the application form
     // yet to be determined, waiting for BD team

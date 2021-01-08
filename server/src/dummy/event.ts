@@ -3,7 +3,7 @@ import { EventData } from '../types';
 const dummyEvent: EventData = {
   name: 'Volunteering: Regular Session [Committed]',
   eventType: 'workshop',
-  volunteerType: 'Committed Only',
+  volunteerType: 'committed',
   description: 'event1',
   contentUrl: 'www.event1.com',
   contentType: 'pdf',
