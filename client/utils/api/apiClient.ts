@@ -1,7 +1,7 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
+  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, CreateCommitmentApplicationRequest,
 } from './request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
@@ -88,6 +88,10 @@ class AxiosApiClient implements ApiClient {
   }
 
   // commitment application
+  async createCommitmentApplication(request: CreateCommitmentApplicationRequest): Promise<CommitmentApplicationData> {
+    return this.send(request, 'commitment-application', 'post')
+  }
+
   async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {
     return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
   }
