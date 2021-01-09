@@ -1,5 +1,5 @@
 import { EventPostData } from '@type/event';
-import {SignUpIdType, SignUpStatus} from "@type/signUp";
+import {SignUpData, SignUpIdType, SignUpStatus} from "@type/signUp";
 
 export type SignUpRequest = {
   name: string
@@ -45,12 +45,6 @@ export type SignUpQueryParams = {
   idType: SignUpIdType,
 }
 
-export type CreateSignUpRequest = {
-  eventId: string,
-  userId: string,
-  status: SignUpStatus,
-  preferences: Array<string>,
-  isRestricted: boolean,
-}
+export type CreateSignUpRequest = Omit<SignUpData, "_id" | "signUpId">;
 
-export type UpdateSignUpRequest = CreateSignUpRequest;
+export type UpdateSignUpRequest = Omit<SignUpData, "_id" | "signUpId">;
