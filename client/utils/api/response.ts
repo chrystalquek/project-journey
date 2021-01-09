@@ -42,4 +42,3 @@ export type GetSignUpsResponse = {
 }
 
 export type CreateEventResponse = {}
-

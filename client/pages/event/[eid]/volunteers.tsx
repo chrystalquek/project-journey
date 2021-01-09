@@ -1,11 +1,8 @@
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
-import { EventData } from '@type/event';
-import ErrorPage from 'next/error';
-import EventDetails from '@components/event/EventDetails/EventDetails';
-import { VolunteerData } from '@type/volunteer';
 import { Container } from '@material-ui/core';
+import Head from '@components/common/Header';
+import NavBar from '@components/common/NavBar';
+import Container from '@material-ui/core/Container';
 
 // Handles checking that user is logged in and event detail validity
 const EventVolunteersPage = () => {
@@ -23,6 +20,8 @@ const EventVolunteersPage = () => {
 
   return (
     <Container fixed>
+      <Head title="Blessings in a Bag" />
+      <NavBar userData={userData.user} />
       {/* {eventData && userData
         ? <EventDetails user={userData} event={eventData} />
         : <ErrorPage statusCode={500} />} */}
