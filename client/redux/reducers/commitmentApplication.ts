@@ -1,4 +1,4 @@
-import { getCommitmentApplications, updateCommitmentApplication } from '@redux/actions/commitmentApplication';
+import { getCommitmentApplications, updateCommitmentApplication, createCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { createSlice } from '@reduxjs/toolkit';
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 
@@ -39,7 +39,12 @@ const commitmentApplicationSlice = createSlice({
       addToData([payload], state)
       state.pendingCommitmentApplications.ids = state.pendingCommitmentApplications.ids.filter((commitmentApplicationId) => commitmentApplicationId != payload._id)
     });
-
+    builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
+      const { payload } = action
+      const newCommitmentApplication = { ...payload, createdAt: new Date(payload.createdAt)} as CommitmentApplicationData
+      state.data[newCommitmentApplication._id] = newCommitmentApplication
+      state.pendingCommitmentApplications.ids.push(newCommitmentApplication._id)
+    })
   },
 });
 
