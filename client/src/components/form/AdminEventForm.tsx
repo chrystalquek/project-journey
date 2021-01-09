@@ -67,67 +67,6 @@ const getCombinedDateAndTimeString = (dateDayJs: dayjs.Dayjs, time: string): str
   return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
 };
 
-const validate = ({
-  name, eventType, volunteerType, deadline, vacancies, description, facilitatorName,
-  facilitatorDescription, roles, startDate, endDate,
-}) => {
-  const errors: any = {};
-
-  if (!name) {
-    errors.name = 'Name is required';
-  }
-
-  if (!eventType) {
-    errors.eventType = 'Event type is required';
-  }
-
-  if (!volunteerType) {
-    errors.volunteerType = 'Volunteer type is required';
-  }
-
-  if (!deadline) {
-    errors.deadline = 'Deadline is required';
-  }
-
-  if (!vacancies) {
-    errors.vacancies = 'Vacancies is required';
-  }
-
-  if (!description) {
-    errors.description = 'Description is required';
-  }
-
-  if (!startDate) {
-    errors.startDate = 'Start date is required';
-  }
-
-  if (!endDate) {
-    errors.endDate = 'End date is required';
-  } else if (endDate < startDate) {
-    errors.endDate = 'End date should be later than start date';
-  }
-
-  if (eventType !== 'volunteering') {
-    if (!facilitatorName) {
-      errors.facilitatorName = 'Facilitator name is required';
-    }
-
-    if (!facilitatorDescription) {
-      errors.facilitatorDescription = 'Facilitator description is required';
-    }
-  }
-
-  if (eventType === 'volunteering') {
-    if (!roles) {
-      errors.roles = 'Roles is required';
-    } else if (roles.length <= 0) {
-      errors.roles = 'Roles should be greater than 0. ';
-    }
-  }
-
-  return errors;
-};
-
 const validationSchema = yup.object({
   eventType: yup
     .string()
@@ -141,8 +80,39 @@ const validationSchema = yup.object({
   deadline: yup
     .date()
     .required('Deadline is required'),
-
+  vacancies: yup
+    .number()
+    .required('Vacancies is required'),
+  description: yup
+    .string()
+    .required('Description is required'),
+  startDate: yup
+    .date()
+    .required('Start date is required'),
+  endDate: yup
+    .date()
+    .required('Start date is required')
+    .when('startDate', (startDate, schema) => startDate && schema.min(startDate, 'End date should be later than start date')),
+  facilitatorName: yup
+    .string()
+    .when('eventType', {
+      is: 'volunteering',
+      then: yup.string().required('Facilitator name is required'),
+    }),
+  facilitatorDescription: yup
+    .string()
+    .when('eventType', {
+      is: 'volunteering',
+      then: yup.string().required('Facilitator description is required'),
+    }),
+  roles: yup
+    .array()
+    .when('eventType', {
+      is: 'volunteering',
+      then: yup.array().required('Roles is required'),
+    }),
 });
+
 const emptyForm = {
   name: '',
   coverImage: '',
@@ -264,7 +234,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={eventType}
                 onChange={handleChange}
                 helperText={errors.eventType}
-                error={!errors.eventType}
+                error={touched.eventType && Boolean(errors.eventType)}
               >
                 {eventTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -328,7 +298,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={volunteerType}
                 onChange={handleChange}
                 helperText={errors.volunteerType}
-                error={!errors.volunteerType}
+                error={touched.volunteerType && Boolean(errors.volunteerType)}
               >
                 {volunteerTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -363,7 +333,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 }}
                 color="secondary"
                 helperText={errors.startDate}
-                error={!errors.startDate}
+                error={touched.startDate && Boolean(errors.startDate)}
               />
             </Grid>
             <Grid item xs={12} md="auto" />
@@ -383,7 +353,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 onChange={(date) => setFieldValue('endDate', getCombinedDateAndTimeString(date, dayjs(endDate).format('HH:mm')))}
                 color="secondary"
                 helperText={errors.endDate}
-                error={!errors.endDate}
+                error={touched.endDate && Boolean(errors.endDate)}
               />
             </Grid>
           </Grid>
@@ -414,7 +384,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 }}
                 color="secondary"
                 helperText={errors.startDate}
-                error={!errors.startDate}
+                error={touched.startDate && Boolean(errors.startDate)}
               />
             </Grid>
             <Grid item xs={12} md="auto" />
@@ -439,7 +409,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 }}
                 color="secondary"
                 helperText={errors.endDate}
-                error={!errors.endDate}
+                error={touched.endDate && Boolean(errors.endDate)}
               />
             </Grid>
           </Grid>
@@ -462,7 +432,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 format="DD/MM/YYYY HH:mm"
                 color="secondary"
                 helperText={errors.deadline}
-                error={!errors.deadline}
+                error={touched.deadline && Boolean(errors.deadline)}
               />
             </Grid>
           </Grid>
@@ -485,7 +455,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={vacancies}
                 onChange={handleChange}
                 helperText={errors.vacancies}
-                error={!errors.vacancies}
+                error={touched.vacancies && Boolean(errors.vacancies)}
               />
             </Grid>
           </Grid>
@@ -510,7 +480,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 multiline
                 rows={15}
                 helperText={errors.description}
-                error={!errors.description}
+                error={touched.description && Boolean(errors.description)}
               />
             </Grid>
           </Grid>
@@ -534,7 +504,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   value={facilitatorName}
                   onChange={handleChange}
                   helperText={errors.facilitatorName}
-                  error={!errors.facilitatorName}
+                  error={touched.facilitatorName && Boolean(errors.facilitatorName)}
                 />
               </Grid>
             </Grid>
@@ -568,7 +538,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   multiline
                   rows={15}
                   helperText={errors.facilitatorDescription}
-                  error={!errors.facilitatorDescription}
+                  error={touched.facilitatorDescription && Boolean(errors.facilitatorDescription)}
                 />
               </Grid>
             </Grid>
