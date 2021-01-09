@@ -5,6 +5,9 @@ import {
   FormControlLabel, Grid,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
+import { useDispatch, useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -21,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BecomeCommited: FC = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: StoreState) => state.user)
+
   const [open, setOpen] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
   const classes = useStyles();
@@ -70,6 +76,12 @@ const BecomeCommited: FC = () => {
   const handleCheck = useCallback(() => {
     setChecked(!checked);
   }, [checked]);
+
+  const handleSubmit = useCallback(() => {
+    setOpen(false)
+    setChecked(false)
+    dispatch(createCommitmentApplication({ volunteerId: user.user._id }))
+  }, [open, checked])
 
   return (
     <div>
