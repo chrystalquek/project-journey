@@ -4,7 +4,7 @@ import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types
 
 const createCommitmentApplication = async (
   commitmentApplicationData: CommitmentApplicationData,
-): Promise<void> => {
+): Promise<CommitmentApplicationData> => {
   const commitmentApplicationSchemaData: mongoose.Document = new CommitmentApplication({
     _id: new mongoose.Types.ObjectId(),
     volunteer_data: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId),
@@ -12,8 +12,7 @@ const createCommitmentApplication = async (
     // TODO: @matt setup timestamp
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
-  // debugging purpose
-  console.log(`Saved: ${JSON.stringify(savedCommitmentApplication)}`);
+  return savedCommitmentApplication.toObject()
 };
 
 const readCommitmentApplications = async (status?: CommitmentApplicationStatus):
