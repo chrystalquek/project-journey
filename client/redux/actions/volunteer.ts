@@ -1,4 +1,4 @@
-import { rowsPerPage } from '@components/volunteer/VolunteerProfile';
+import { rowsPerPage, VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { VolunteerPaginatedQueryParams } from '@utils/api/request';
 import { GetVolunteersPaginatedResponse, GetVolunteersResponse } from '@utils/api/response';
@@ -10,17 +10,18 @@ type GetVolunteersVolunteerProfileParams = {
   pageNo?: number,
   volunteerType: Record<VOLUNTEER_TYPE, boolean>,
   name: string
+  sort: VolunteerSortFieldsType
 }
 
 export const getVolunteersVolunteerProfile = createAsyncThunk<GetVolunteersPaginatedResponse, GetVolunteersVolunteerProfileParams, { state }>(
   'volunteer/getVolunteersVolunteerProfile',
-  async ({ pageNo, volunteerType, name }) => {
-    const apiQueryParams: VolunteerPaginatedQueryParams = { pageNo: pageNo || 0, size: rowsPerPage, volunteerType: convertFilterObjectToQueryString(volunteerType) }
+  async ({ pageNo, volunteerType, name, sort }) => {
+    const apiQueryParams: VolunteerPaginatedQueryParams = { pageNo: pageNo || 0, size: rowsPerPage, volunteerType: convertFilterObjectToQueryString(volunteerType), sort }
     if (name) {
       apiQueryParams.name = name
     }
     const response = await apiClient.getVolunteers(apiQueryParams); // fill in default values if necessary
-    return { ...response, pageNo: pageNo || 0, filters: { volunteerType }, search: name };
+    return { ...response, pageNo: pageNo || 0, filters: { volunteerType }, search: name, sort };
   },
 );
 

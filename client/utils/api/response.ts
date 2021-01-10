@@ -1,3 +1,4 @@
+import { VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile';
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import { EventData } from '@type/event';
 import { SignUpData } from '@type/signUp';
@@ -28,6 +29,8 @@ export type GetVolunteersPaginatedResponse = GetVolunteersResponse & {
   filters: {
     volunteerType: Record<VOLUNTEER_TYPE, boolean>
   }
+  search: string | null
+  sort: VolunteerSortFieldsType
 }
 
 export type GetCommitmentApplicationResponse = {

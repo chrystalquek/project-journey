@@ -4,6 +4,7 @@ import { getPendingVolunteers, getVolunteersVolunteerProfile } from '@redux/acti
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
 import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile';
 
 export type VolunteerState = {
   data: Record<string, VolunteerData>;
@@ -18,6 +19,7 @@ export type VolunteerState = {
       volunteerType: Record<VOLUNTEER_TYPE, boolean>
     }
     search: string | null,
+    sort: VolunteerSortFieldsType
   }
 }
 
@@ -33,7 +35,8 @@ const initialState: VolunteerState = {
     filters: {
       volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
     },
-    search: null
+    search: null,
+    sort: 'name'
   },
 };
 
@@ -61,10 +64,15 @@ const volunteerSlice = createSlice({
     builder.addCase(getVolunteersVolunteerProfile.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state);
+      state.volunteerProfile = {
+        ...state.volunteerProfile,
+        count: payload.count,
+        pageNo: payload.pageNo,
+        filters: payload.filters,
+        search: payload.search,
+        sort: payload.sort
+      }
       state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
-      state.volunteerProfile.count = payload.count;
-      state.volunteerProfile.pageNo = payload.pageNo;
-      state.volunteerProfile.filters.volunteerType = payload.filters.volunteerType;
     });
     builder.addCase(getVolunteersVolunteerProfile.rejected, (state) => {
       state.volunteerProfile.ids = [];
