@@ -178,7 +178,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                   <ListItemText primary={eventMenu} />
                 </ListItem>
               ))}
-              {userData.volunteerType === VOLUNTEER_TYPE.ADMIN
+              {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN
                 && (
                 <ListItem
                   button
