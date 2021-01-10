@@ -42,6 +42,16 @@ const createCommitmentApplication = async (
     }
 
     const savedCommitmentApplication = await commitmentApplicationService.createCommitmentApplication(req.body as CommitmentApplicationData);
+
+    // Add the commitment application id to the volunteer data
+    const updatedVolunteerData = {
+      ...volunteer, 
+      commitmentApplicationIds: volunteer.commitmentApplicationIds
+        .concat(savedCommitmentApplication._id)
+    }
+
+    await volunteerService.updateVolunteerDetails(updatedVolunteerData.email, updatedVolunteerData)
+    
     res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
