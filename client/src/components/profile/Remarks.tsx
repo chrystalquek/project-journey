@@ -5,7 +5,7 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 import { useDispatch } from 'react-redux';
-import { updateVolunteerRemarks } from '@redux/actions/user';
+import { updateVolunteer } from '@redux/actions/user';
 
 type props = {
   user: VolunteerData
@@ -34,9 +34,11 @@ const Remarks: FC<props> = ({ user }) => {
   const saveVolunteerRemarks = () => {
     // TODO: sync database
     dispatch(
-      updateVolunteerRemarks({
+      updateVolunteer({
         email: user.email,
-        volunteerRemarks: volunteerRemarks,
+        updatedVolunteerData: {
+          volunteerRemarks: volunteerRemarks,
+        }
       }),
     );
 

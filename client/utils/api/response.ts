@@ -47,7 +47,3 @@ export type CreateEventResponse = {}
 export type GetCountResponse = {
   count: number
 }
-
-export type UpdateVolunteerRemarksResponse = {
-  volunteerRemarks: string
-}

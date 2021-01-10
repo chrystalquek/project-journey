@@ -1,7 +1,8 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
+import { VolunteerData } from '@type/volunteer';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, CreateCommitmentApplicationRequest, UpdateVolunteerRemarksRequest,
+  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, CreateCommitmentApplicationRequest, UpdateVolunteerRemarksRequest, UpdateVolunteerRequest,
 } from './request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
@@ -22,7 +23,7 @@ export interface ApiClient {
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
-  updateVolunteerRemarks(request: UpdateVolunteerRemarksRequest): Promise<UpdateVolunteerRemarksResponse>
+  updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -87,8 +88,8 @@ class AxiosApiClient implements ApiClient {
   async getPendingVolunteers(): Promise<GetVolunteersResponse> {
     return this.send({}, 'volunteer/pending', 'get');
   }
-
-  async updateVolunteerRemarks(request : UpdateVolunteerRemarksRequest): Promise<UpdateVolunteerRemarksResponse> {
+  
+  async updateVolunteer(request : UpdateVolunteerRequest): Promise<VolunteerData> {
     return this.send(request, 'volunteer', 'put');
   }
 

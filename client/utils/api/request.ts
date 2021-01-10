@@ -1,4 +1,5 @@
 import { EventPostData } from '@type/event';
+import { VolunteerData } from '@type/volunteer';
 
 export type SignUpRequest = {
   name: string
@@ -42,7 +43,7 @@ export type CreateCommitmentApplicationRequest = {
   volunteerId: string
 }
 
-export type UpdateVolunteerRemarksRequest = {
+export type UpdateVolunteerRequest = {
   email: string,
-  volunteerRemarks: string
+  updatedVolunteerData: Partial<VolunteerData>
 }
