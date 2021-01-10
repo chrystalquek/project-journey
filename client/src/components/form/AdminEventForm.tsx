@@ -14,7 +14,7 @@ import { StoreState } from '@redux/store';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
-import keysToCamel from '@utils/helpers/keysToCamel';
+import { keysToCamel, keysToSnake } from '@utils/helpers/keysToCamel';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 type AdminEventFormProps = {
@@ -142,7 +142,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const user = useSelector((state:StoreState) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
-  const imageState = useSelector((state: StoreState) => state.image);
 
   useEffect(() => {
     if (id && id !== 'new') {
@@ -160,14 +159,14 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     }
   }, [event.status]);
 
-  const onUploadImage = (imageFile, name) => {
+  const onUploadImage = async (imageFile, name) => {
     const form = new FormData();
     form.append('image', imageFile);
     form.append('email', user.user.email);
 
-    return dispatch(uploadImage({ name, form }))
     // @ts-ignore type exists
-      .then(unwrapResult);
+    const response = await dispatch(uploadImage({ name, form })).then(unwrapResult);
+    return response;
   };
 
   const {
@@ -177,6 +176,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     validationSchema,
     onSubmit: async (formValues) => {
       const form = formValues;
+
       // Upload and get cover image URL
       if (formValues.coverImage && typeof formValues.coverImage !== 'string') {
         const result = await onUploadImage(formValues.coverImage, 'coverImage');
@@ -189,15 +189,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         form.facilitatorPhoto = result.url;
       }
 
-      dispatch(isNew ? createEvent(form) : editEvent({ data: form, id }));
+      await dispatch(isNew ? createEvent(form) : editEvent({ data: keysToSnake(form), id }));
     },
     enableReinitialize: true,
   });
-
-  useEffect(() => {
-    setFieldValue('coverImage', imageState.coverImage);
-    setFieldValue('facilitatorPhoto', imageState.facilitatorPhoto);
-  }, [imageState]);
 
   const onChangeImage = (e, fieldName) => {
     if (e.target.files && e.target.files[0]) {
