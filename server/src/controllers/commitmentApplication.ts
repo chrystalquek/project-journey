@@ -41,8 +41,8 @@ const createCommitmentApplication = async (
       throw new Error(`Volunteer is a ${volunteer.volunteerType}, cannot create Commitment Application`);
     }
 
-    await commitmentApplicationService.createCommitmentApplication(req.body as CommitmentApplicationData);
-    res.status(HTTP_CODES.OK).send('Commitment Application created');
+    const savedCommitmentApplication = await commitmentApplicationService.createCommitmentApplication(req.body as CommitmentApplicationData);
+    res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

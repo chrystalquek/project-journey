@@ -7,8 +7,8 @@ const createCommitmentApplication = async (
 ): Promise<CommitmentApplicationData> => {
   const commitmentApplicationSchemaData: mongoose.Document = new CommitmentApplication({
     _id: new mongoose.Types.ObjectId(),
-    volunteer_data: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId),
-    created_at: Date.now(),
+    volunteerId: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId),
+    createdAt: Date.now(),
     // TODO: @matt setup timestamp
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
