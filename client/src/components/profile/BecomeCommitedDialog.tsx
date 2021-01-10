@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       textAlign: 'center',
     },
+    cursor: 'pointer'
   },
 }));
 
