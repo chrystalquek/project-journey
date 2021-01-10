@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { QueryParams } from '@utils/api/request';
+import { CommitmentApplicationQueryParams } from '@utils/api/request';
 import { GetCommitmentApplicationResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 
-export const getCommitmentApplications = createAsyncThunk<GetCommitmentApplicationResponse, QueryParams, { state }>(
+export const getCommitmentApplications = createAsyncThunk<GetCommitmentApplicationResponse, CommitmentApplicationQueryParams, { state }>(
   'commitmentApplication/getCommitmentApplication',
   async ({ status }) => {
     const response = await apiClient.getCommitmentApplications({ status });

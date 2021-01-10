@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  CreateEventRequest, EditEventRequest, GetEventParams, QueryParams,
+  CreateEventRequest, EditEventRequest, GetEventParams, EventQueryParams,
 } from '@utils/api/request';
 import {
   CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse,
@@ -8,7 +8,7 @@ import {
 import apiClient from '@utils/api/apiClient';
 
 export const getSignedUpEventsUpcomingEvent = createAsyncThunk<GetEventsResponse,
-  QueryParams, { state }>(
+  EventQueryParams, { state }>(
     'event/getSignedUpEventsUpcomingEvent',
     async ({ userId, eventType }) => {
       const response = await apiClient.getSignedUpEvents({ userId, eventType });
@@ -16,7 +16,7 @@ export const getSignedUpEventsUpcomingEvent = createAsyncThunk<GetEventsResponse
     },
   );
 
-export const getEventsUpcomingEvent = createAsyncThunk<GetEventsResponse, QueryParams, { state }>(
+export const getEventsUpcomingEvent = createAsyncThunk<GetEventsResponse, EventQueryParams, { state }>(
   'event/getEventsUpcomingEvent',
   async ({ eventType }) => {
     const response = await apiClient.getEvents({ eventType });
@@ -32,7 +32,7 @@ export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequ
   },
 );
 
-export const editEvent = createAsyncThunk<EditEventResponse, EditEventRequest, {state}>(
+export const editEvent = createAsyncThunk<EditEventResponse, EditEventRequest, { state }>(
   'event/editEvent',
   async (request: EditEventRequest) => {
     const response = await apiClient.editEvent(request) as EditEventResponse;
@@ -40,7 +40,7 @@ export const editEvent = createAsyncThunk<EditEventResponse, EditEventRequest, {
   },
 );
 
-export const getEvent = createAsyncThunk<GetEventResponse, GetEventParams, {state}>(
+export const getEvent = createAsyncThunk<GetEventResponse, GetEventParams, { state }>(
   'event/getEvent',
   async (params: GetEventParams) => {
     const response = await apiClient.getEvent(params) as GetEventResponse;

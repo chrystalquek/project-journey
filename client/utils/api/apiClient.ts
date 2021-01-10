@@ -1,7 +1,7 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
+  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, SignUpRequest, CommitmentApplicationQueryParams, EventQueryParams, SignUpQueryParams, VolunteerPaginatedQueryParams,
 } from './request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
@@ -15,13 +15,13 @@ export interface ApiClient {
   createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
-  getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse>
-  getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
-  getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
-  getEvents(query: QueryParams): Promise<GetEventsResponse>
+  getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse>
+  getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
+  getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse>
+  getEvents(query: EventQueryParams): Promise<GetEventsResponse>
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
-  getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
+  getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -35,7 +35,7 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
-  private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+  private toURLParams = (query) => `?${new URLSearchParams(query).toString()}`
 
   // create user
   async signUp(request: SignUpRequest): Promise<SignUpResponse> {
@@ -48,7 +48,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   // sign up
-  async getSignUps(query: QueryParams): Promise<GetSignUpsResponse> {
+  async getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse> {
     return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
   }
 
@@ -57,7 +57,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   // event
-  async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
+  async getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse> {
     return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
   }
 
@@ -74,12 +74,12 @@ class AxiosApiClient implements ApiClient {
     return this.send(data, `event/${id}`, 'put');
   }
 
-  async getEvents(query: QueryParams): Promise<GetEventsResponse> {
+  async getEvents(query: EventQueryParams): Promise<GetEventsResponse> {
     return this.send({}, `event/multiple/${query.eventType}`, 'get');
   }
 
   // volunteer
-  async getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse> {
+  async getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
@@ -88,7 +88,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   // commitment application
-  async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {
+  async getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse> {
     return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
   }
 

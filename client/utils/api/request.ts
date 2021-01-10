@@ -1,4 +1,6 @@
-import { EventPostData } from '@type/event';
+import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { EventPostData, EventSearchType } from '@type/event';
+import { SignUpIdType } from '@type/signUp';
 
 export type SignUpRequest = {
   name: string
@@ -23,10 +25,25 @@ export type LoginRequest = {
   password: string
 }
 
-export type QueryParams = {
-  pageNo?: number
-  size?: number
-  [field: string]: any
+export type SignUpQueryParams = {
+  id: string,
+  idType: SignUpIdType
+}
+
+export type VolunteerPaginatedQueryParams = {
+  pageNo: number,
+  size: number
+  volunteerType: string,
+  name?: string
+}
+
+export type EventQueryParams = {
+  userId?: string
+  eventType: EventSearchType
+}
+
+export type CommitmentApplicationQueryParams = {
+  status: CommitmentApplicationStatus
 }
 
 export type CreateEventRequest = EventPostData;

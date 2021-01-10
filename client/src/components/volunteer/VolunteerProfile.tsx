@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react';
 import Head from 'next/head';
 
 import {
+  Button,
   capitalize,
   Checkbox,
   Divider,
@@ -30,6 +31,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
+import SearchBar from '@components/common/SearchBar';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -43,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   rightButton: {
     float: 'right',
+    padding: 1,
   },
   border: {
     padding: theme.spacing(2),
@@ -61,10 +64,11 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   const volunteers = useSelector((state: StoreState) => state.volunteer);
 
   const { volunteerType } = volunteers.volunteerProfile.filters; // get filter object
+  const name = volunteers.volunteerProfile.search;
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getVolunteersVolunteerProfile({ volunteerType }));
+    dispatch(getVolunteersVolunteerProfile({ volunteerType, name }));
   }, []);
 
   const handleFilterVolunteerTypeChange = (event) => {
@@ -73,6 +77,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
         ...volunteerType,
         [event.target.name]: !volunteerType[event.target.name],
       }, // change boolean for checkbox that changed
+      name
     }));
   };
 
@@ -80,7 +85,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
   const handleChangePage = (event, newPage: number) => {
-    dispatch(getVolunteersVolunteerProfile({ pageNo: newPage, volunteerType }));
+    dispatch(getVolunteersVolunteerProfile({ pageNo: newPage, volunteerType, name }));
   };
 
   const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
@@ -119,26 +124,37 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   );
 
   const filterOptions = (
-    <Grid>
-      <Typography variant="h4">Filter By</Typography>
-      <Divider />
-      Volunteer Type
-      {' '}
-      <IconButton size="small" className={classes.rightButton} onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon /> : <AddIcon />}</IconButton>
-      {openFilter
-        && (
-          <FormGroup>
-            {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
-              <FormControlLabel
-                control={<Checkbox checked={volunteers.volunteerProfile.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
-                label={capitalize(volunteerType)}
-              />
-            ))}
-          </FormGroup>
-        )}
-      <Divider />
-    </Grid>
+    <TableContainer>
+      <Table>
+        <TableRow>
+          <TableCell>
+            <b>Filter By</b>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            Volunteer Type
+          <Button className={classes.rightButton} size="small" onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon fontSize="small" /> : <AddIcon fontSize="small" />}</Button>
+            {openFilter
+              && (
+                <FormGroup>
+                  {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
+                    <FormControlLabel
+                      control={<Checkbox checked={volunteers.volunteerProfile.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
+                      label={capitalize(volunteerType)}
+                    />
+                  ))}
+                </FormGroup>
+              )}
+          </TableCell>
+        </TableRow>
+      </Table>
+    </TableContainer>
+
   );
+
+  const filterFunction = (name: string) => dispatch(getVolunteersVolunteerProfile({ volunteerType, name }));
+  const searchBar = <SearchBar setFilterFunction={filterFunction}></SearchBar>
 
   return (
     <>
@@ -149,12 +165,31 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
       {!isMobile
         ? (
-          <Grid container direction="row" spacing={3} justify="center">
-            <Grid item xs={7}>
-              {volunteerTable}
+          <Grid>
+            <Grid direction="row" container>
+              <Grid item xs={2}>
+              </Grid>
+              <Grid item xs={4}>
+                {searchBar}
+              </Grid>
+              <Grid item xs={3}>
+                Sort By:
+              </Grid>
+              <Grid item xs={3}>
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              {filterOptions}
+
+
+
+            <Grid direction="row" container>
+              <Grid item xs={2}>
+              </Grid>
+              <Grid item xs={7}>
+                {volunteerTable}
+              </Grid>
+              <Grid item xs={3}>
+                {filterOptions}
+              </Grid>
             </Grid>
           </Grid>
         )

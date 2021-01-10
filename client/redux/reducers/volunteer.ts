@@ -17,6 +17,7 @@ export type VolunteerState = {
     filters: {
       volunteerType: Record<VOLUNTEER_TYPE, boolean>
     }
+    search: string | null,
   }
 }
 
@@ -32,6 +33,7 @@ const initialState: VolunteerState = {
     filters: {
       volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
     },
+    search: null
   },
 };
 

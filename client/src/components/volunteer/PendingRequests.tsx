@@ -37,7 +37,7 @@ const PendingRequests: FC<{}> = ({ }) => {
     useEffect(() => {
         dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })) // just to load number in tab
         dispatch(getPendingVolunteers());
-        dispatch(getCommitmentApplications({ status: "pending" }))
+        dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }))
     }, []);
 
     const volunteers = useSelector((state: StoreState) => state.volunteer)
