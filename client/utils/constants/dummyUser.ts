@@ -50,6 +50,12 @@ const dummyData : VolunteerData = {
   workshopsCount: 32,
   hangoutsCount: 3,
 
+  // Record of past events
+  pastEventIds: ['somepasteventid'],
+  
+  // Record of commitment applications
+  commitmentApplicationIds: ['somecommitmentapplicationid'],
+
   hasMedicalNeeds: true,
   hasAllergies: true,
 
