@@ -165,7 +165,7 @@ const BecomeCommited: FC = () => {
         <DialogActions className={classes.centralize}>
           <Button
             variant="contained"
-            onClick={handleClose}
+            onClick={handleSubmit}
             color="primary"
             disabled={!checked}
           >
