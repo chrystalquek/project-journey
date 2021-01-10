@@ -36,22 +36,18 @@ const createCommitmentApplication = async (
     // ensure volunteer is only ad-hoc before being able to submit a commitment application
     const volunteer = (await volunteerService
       .readVolunteersByIds([req.body.volunteerId]))[0];
-
+    
     if (volunteer.volunteerType !== 'ad-hoc') {
       throw new Error(`Volunteer is a ${volunteer.volunteerType}, cannot create Commitment Application`);
     }
 
     const savedCommitmentApplication = await commitmentApplicationService.createCommitmentApplication(req.body as CommitmentApplicationData);
-
     // Add the commitment application id to the volunteer data
-    const updatedVolunteerData = {
-      ...volunteer, 
-      commitmentApplicationIds: volunteer.commitmentApplicationIds
-        .concat(savedCommitmentApplication._id)
-    }
+    await volunteerService.updateVolunteerDetails(
+      volunteer.email, 
+      {commitmentApplicationIds: volunteer.commitmentApplicationIds
+      .concat(savedCommitmentApplication._id)})
 
-    await volunteerService.updateVolunteerDetails(updatedVolunteerData.email, updatedVolunteerData)
-    
     res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
