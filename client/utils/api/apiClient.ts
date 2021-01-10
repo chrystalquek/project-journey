@@ -2,11 +2,11 @@ import { CommitmentApplicationData } from '@type/commitmentApplication';
 import { VolunteerData } from '@type/volunteer';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, CreateCommitmentApplicationRequest, UpdateVolunteerRemarksRequest, UpdateVolunteerRequest,
+  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, CreateCommitmentApplicationRequest, UpdateVolunteerRequest,
 } from './request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse, GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, UpdateVolunteerRemarksResponse,
+  EditEventResponse, GetEventResponse, SignUpResponse, GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
