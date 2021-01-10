@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
 const BecomeCommited: FC = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: StoreState) => state.user);
+  // TODO: a better implementation to check pending application
+  // this is just a quick fix, it's by no mean a correct flag
+  const isPending : boolean = user.user.commitmentApplicationIds.length > 0
 
   const [open, setOpen] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
@@ -88,9 +91,13 @@ const BecomeCommited: FC = () => {
     <div>
       {/* Link to open the dialog */}
       <Typography className={classes.header}>
-        <Link color="secondary" onClick={handleClickOpen}>
-          <u>Become a committed volunteer</u>
-        </Link>
+        {
+          isPending 
+            ? ( <Typography variant='body2'> Your application is pending </Typography>)
+            : ( <Link color="secondary" onClick={handleClickOpen}>
+                  <u>Become a committed volunteer</u>
+                </Link> )
+        }
       </Typography>
 
       {/* Dialog */}
