@@ -92,9 +92,10 @@ const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
  */
 export const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
   await getVolunteer(email);
-  const savedVolunteerData = await Volunteer.findOneAndUpdate({
-    email,
-  }, updatedVolunteerData, { new: true });
+  const savedVolunteerData = await Volunteer.findOneAndUpdate(
+    { email }, 
+    updatedVolunteerData, 
+    { new: true });
   return savedVolunteerData
 };
 
