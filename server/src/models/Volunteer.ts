@@ -191,18 +191,24 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     type: Number,
     default: 0,
   },
-  pastEventIds: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'Event'
-    }
-  ],
-  commitmentApplicationIds: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'CommitmentApplication'
-    }
-  ]
+  pastEventIds: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Event'
+      }
+    ],
+    default: []
+  },
+  commitmentApplicationIds: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'CommitmentApplication'
+      }
+    ],
+    default: []
+  }
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {
