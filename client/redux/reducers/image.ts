@@ -4,34 +4,39 @@ import { uploadImage } from '@redux/actions/image';
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
 export type ImageState = {
-    url: string;
+    coverImage: string;
+    facilitatorPhoto: string;
     status: FetchStatus;
 };
 
 const initialState: ImageState = {
-  url: '',
+  coverImage: '',
+  facilitatorPhoto: '',
   status: '',
 };
 
 const imageSlice = createSlice({
   name: 'image',
   initialState,
-  reducers: {},
+  reducers: {
+    resetImages(state) {
+      state.coverImage = '';
+      state.facilitatorPhoto = '';
+      state.status = '';
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(uploadImage.pending, (state) => {
-      state.url = '';
       state.status = 'fetching';
     });
     builder.addCase(uploadImage.fulfilled, (state, action) => {
       const { payload } = action;
-      state.url = payload.url;
-      state.status = 'fulfilled';
+      state[payload.name] = payload.url;
     });
     builder.addCase(uploadImage.rejected, (state) => {
-      state.url = '';
       state.status = 'rejected';
     });
   },
 });
-
+export const { resetImages } = imageSlice.actions;
 export default imageSlice.reducer;

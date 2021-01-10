@@ -3,11 +3,11 @@ import { UploadImageRequest } from '@utils/api/request';
 import { UploadImageResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 
-export const uploadImage = createAsyncThunk<UploadImageResponse, UploadImageRequest, { state }>(
+export const uploadImage = createAsyncThunk<any, any, { state }>(
   'image/uploadImage',
-  async (data: UploadImageRequest) => {
-    const response = await apiClient.uploadImage(data) as UploadImageResponse;
-    return response;
+  async ({ name, form }) => {
+    const response = await apiClient.uploadImage(form as FormData) as UploadImageResponse;
+    return { name, url: response.url };
   },
 );
 

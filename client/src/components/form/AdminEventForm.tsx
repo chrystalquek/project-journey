@@ -7,13 +7,15 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { createEvent, getEvent, editEvent } from '@redux/actions/event';
-import { uploadImage } from '@redux/actions/image';
+import image, { uploadImage } from '@redux/actions/image';
+import { resetImages } from '@redux/reducers/image';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
 import keysToCamel from '@utils/helpers/keysToCamel';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 type AdminEventFormProps = {
   id: string,
@@ -134,6 +136,7 @@ const emptyForm = {
 
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
+  const event = useSelector((state: StoreState) => state.event);
   const eventForm: any = useSelector((state: StoreState) => state.event.form);
   // TODO: remove any typing after all is changed to camel
   const user = useSelector((state:StoreState) => state.user);
@@ -142,22 +145,29 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const imageState = useSelector((state: StoreState) => state.image);
 
   useEffect(() => {
-    if (id !== 'new') {
+    if (id && id !== 'new') {
       dispatch(getEvent(id));
     }
   }, [id]);
 
   useEffect(() => {
+    if (event.status === 'rejected') {
+      alert('Form submission failed');
+    } else if (event.status === 'fulfilled') {
+      alert('Form submission successful');
+      router.push('/event');
+      dispatch(resetImages());
+    }
+  }, [event.status]);
 
-  }, [imageState]);
+  const onUploadImage = (imageFile, name) => {
+    const form = new FormData();
+    form.append('image', imageFile);
+    form.append('email', user.user.email);
 
-  const onUploadImage = async (image) => {
-    const formData = new FormData();
-    formData.append('image', image);
-    formData.append('email', user.user.email);
-
-    const response = await dispatch(uploadImage(formData));
-    return response;
+    return dispatch(uploadImage({ name, form }))
+    // @ts-ignore type exists
+      .then(unwrapResult);
   };
 
   const {
@@ -167,37 +177,33 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     validationSchema,
     onSubmit: async (formValues) => {
       const form = formValues;
-
       // Upload and get cover image URL
       if (formValues.coverImage && typeof formValues.coverImage !== 'string') {
-        const res = await onUploadImage(formValues.coverImage);
-        // @ts-ignore type exists
-        form.coverImage = res?.payload.url;
+        const result = await onUploadImage(formValues.coverImage, 'coverImage');
+        form.coverImage = result.url;
       }
 
       // Upload and get facilitator photo URL
       if (formValues.facilitatorPhoto && typeof formValues.facilitatorPhoto !== 'string') {
-        const res = await onUploadImage(formValues.facilitatorPhoto);
-        // @ts-ignore type exists
-        form.facilitatorPhoto = res?.payload.url;
+        const result = await onUploadImage(formValues.facilitatorPhoto, 'facilitatorPhoto');
+        form.facilitatorPhoto = result.url;
       }
 
-      const response = await dispatch(isNew ? createEvent(form) : editEvent({ data: form, id }));
-
-      // @ts-ignore type exists
-      if (response?.type === 'event/createEvent/fulfilled' || response?.type === 'event/editEvent/fulfilled') {
-        alert('Success');
-        router.push('/event');
-      }
+      dispatch(isNew ? createEvent(form) : editEvent({ data: form, id }));
     },
     enableReinitialize: true,
   });
 
+  useEffect(() => {
+    setFieldValue('coverImage', imageState.coverImage);
+    setFieldValue('facilitatorPhoto', imageState.facilitatorPhoto);
+  }, [imageState]);
+
   const onChangeImage = (e, fieldName) => {
     if (e.target.files && e.target.files[0]) {
-      const image = e.target.files[0];
-      setFieldValue(fieldName, image);
-      return URL.createObjectURL(image);
+      const imageFile = e.target.files[0];
+      setFieldValue(fieldName, imageFile);
+      return URL.createObjectURL(imageFile);
     }
   };
 
