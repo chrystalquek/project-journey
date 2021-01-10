@@ -26,16 +26,16 @@ const imageSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(uploadImage.pending, (state) => {
-      state.status = 'fetching';
-    });
+    builder.addCase(uploadImage.pending, (state) => (
+      { ...state, status: 'fetching' }
+    ));
     builder.addCase(uploadImage.fulfilled, (state, action) => {
       const { payload } = action;
-      state[payload.name] = payload.url;
+      return { ...state, status: 'fulfilled', [payload.name]: payload.url };
     });
-    builder.addCase(uploadImage.rejected, (state) => {
-      state.status = 'rejected';
-    });
+    builder.addCase(uploadImage.rejected, (state) => (
+      { ...state, status: 'rejected' }
+    ));
   },
 });
 export const { resetImages } = imageSlice.actions;

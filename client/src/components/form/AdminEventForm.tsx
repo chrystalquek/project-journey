@@ -7,7 +7,7 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { createEvent, getEvent, editEvent } from '@redux/actions/event';
-import image, { uploadImage } from '@redux/actions/image';
+import { uploadImage } from '@redux/actions/image';
 import { resetImages } from '@redux/reducers/image';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
@@ -94,7 +94,8 @@ const validationSchema = yup.object({
   endDate: yup
     .date()
     .required('Start date is required')
-    .when('startDate', (startDate, schema) => startDate && schema.min(startDate, 'End date should be later than start date')),
+    .when('startDate', (startDate, schema) => startDate
+    && schema.min(startDate, 'End date should be later than start date')),
   facilitatorName: yup
     .string()
     .when('eventType', {
@@ -138,7 +139,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const event = useSelector((state: StoreState) => state.event);
   const eventForm: any = useSelector((state: StoreState) => state.event.form);
-  // TODO: remove any typing after all is changed to camel
   const user = useSelector((state:StoreState) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -159,14 +159,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     }
   }, [event.status]);
 
-  const onUploadImage = async (imageFile, name) => {
+  const onUploadImage = (imageFile, name) => {
     const form = new FormData();
     form.append('image', imageFile);
     form.append('email', user.user.email);
 
-    // @ts-ignore type exists
-    const response = await dispatch(uploadImage({ name, form })).then(unwrapResult);
-    return response;
+    return dispatch(uploadImage({ name, form }));
   };
 
   const {
@@ -179,17 +177,20 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       // Upload and get cover image URL
       if (formValues.coverImage && typeof formValues.coverImage !== 'string') {
-        const result = await onUploadImage(formValues.coverImage, 'coverImage');
-        form.coverImage = result.url;
+        // @ts-ignore type exists
+        await onUploadImage(formValues.coverImage, 'coverImage').then(unwrapResult)
+          .then((result) => { form.coverImage = result.url; });
       }
 
       // Upload and get facilitator photo URL
       if (formValues.facilitatorPhoto && typeof formValues.facilitatorPhoto !== 'string') {
-        const result = await onUploadImage(formValues.facilitatorPhoto, 'facilitatorPhoto');
-        form.facilitatorPhoto = result.url;
+        // @ts-ignore type exists
+        await onUploadImage(formValues.facilitatorPhoto, 'facilitatorPhoto').then(unwrapResult)
+          .then((result) => { form.facilitatorPhoto = result.url; });
       }
 
-      await dispatch(isNew ? createEvent(form) : editEvent({ data: keysToSnake(form), id }));
+      dispatch(isNew
+        ? createEvent(form) : editEvent({ data: keysToSnake(form), id }));
     },
     enableReinitialize: true,
   });

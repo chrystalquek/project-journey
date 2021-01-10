@@ -73,8 +73,6 @@ class AxiosApiClient implements ApiClient {
   }
 
   async editEvent({ id, data }: EditEventRequest): Promise<EditEventResponse> {
-    console.log(data);
-    console.log('thats the data');
     return this.send(data, `event/${id}`, 'put');
   }
 
