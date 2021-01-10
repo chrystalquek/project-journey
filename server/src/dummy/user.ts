@@ -1,3 +1,4 @@
+import commitmentApplication from '../services/commitmentApplication';
 import { VolunteerData } from '../types';
 
 const dummyUser: VolunteerData = {
@@ -39,7 +40,8 @@ const dummyUser: VolunteerData = {
   volunteeringSessionsCount: 1,
   workshopsCount: 1,
   hangoutsCount: 1,
-  pastEventIds: ['someeventid']
+  pastEventIds: ['someeventid'],
+  commitmentApplicationIds: ['somecommitmentapplicationid']
 };
 
 export default () => (dummyUser);

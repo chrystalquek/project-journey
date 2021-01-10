@@ -99,6 +99,9 @@ export type VolunteerData = {
 
     // Past Events
     pastEventIds: Array<string>
+
+    // Submitted Commitment Application
+    commitmentApplicationIds: Array<string>
 };
 
 export type VolunteerPublicData = Omit<
