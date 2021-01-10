@@ -26,11 +26,12 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
       handleSignUp({
         name: values.firstName + ' ' + values.lastName,
         volunteerType: VOLUNTEER_TYPE.ADHOC,
+        password: values.password,
 
         nickname: values.nickname,
         gender: values.gender,
         citizenship: values.citizenship,
-        birthday: values.birthday,
+        birthday: values.birthday.toISOString(),
         mobileNumber: values.mobileNumber,
         // photoUrl: values.photoUrl, // Need help
         email: values.email,
@@ -40,7 +41,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
         organization: values.organization,
         position: values.position,
 
-        languages: values.languages, // Clarify? not array of strings
+        languages: values.languages.split(','), // Clarify? not array of strings
         referralSources: values.referralSources,
 
         hasVolunteered: values.hasVolunteered,

@@ -9,6 +9,7 @@ import {
 
 export type SignUpRequest = {
   name: string;
+  password?: string;
   volunteerType: VOLUNTEER_TYPE;
 
   nickname: string;

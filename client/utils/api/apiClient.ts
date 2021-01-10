@@ -1,41 +1,55 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
+  LoginRequest,
+  CreateEventRequest,
+  EditEventRequest,
+  GetEventParams,
+  QueryParams,
+  SignUpRequest,
 } from './request';
 import {
-  GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse, GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
+  GetEventsResponse,
+  GetSignUpsResponse,
+  GetVolunteersResponse,
+  LoginResponse,
+  CreateEventResponse,
+  EditEventResponse,
+  GetEventResponse,
+  SignUpResponse,
+  GetVolunteersPaginatedResponse,
+  GetCommitmentApplicationResponse,
 } from './response';
 
-type HttpMethod = 'get' | 'post' | 'put' | 'delete'
+type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
 export interface ApiClient {
-  login(request: LoginRequest): Promise<LoginResponse>
-  createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
-  getEvent(request: GetEventParams): Promise<GetEventResponse>
-  editEvent(request: EditEventRequest): Promise<EditEventResponse>
-  getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse>
-  getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
-  getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
-  getEvents(query: QueryParams): Promise<GetEventsResponse>
-  getPendingSignUps(): Promise<GetSignUpsResponse>
-  getPendingVolunteers(): Promise<GetVolunteersResponse>
-  getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
+  login(request: LoginRequest): Promise<LoginResponse>;
+  createEvent(request: CreateEventRequest): Promise<CreateEventResponse>;
+  getEvent(request: GetEventParams): Promise<GetEventResponse>;
+  editEvent(request: EditEventRequest): Promise<EditEventResponse>;
+  getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse>;
+  getSignUps(query: QueryParams): Promise<GetSignUpsResponse>;
+  getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>;
+  getEvents(query: QueryParams): Promise<GetEventsResponse>;
+  getPendingSignUps(): Promise<GetSignUpsResponse>;
+  getPendingVolunteers(): Promise<GetVolunteersResponse>;
+  getCommitmentApplications(
+    query: QueryParams
+  ): Promise<GetCommitmentApplicationResponse>;
 }
 
 class AxiosApiClient implements ApiClient {
-  private axiosInstance: AxiosInstance
+  private axiosInstance: AxiosInstance;
 
-  constructor(
-    endpoint: string,
-  ) {
+  constructor(endpoint: string) {
     this.axiosInstance = axios.create({
       baseURL: endpoint,
     });
   }
 
-  private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+  private toURLParams = (query: QueryParams) =>
+    `?${new URLSearchParams(query).toString()}`;
 
   // create user
   async signUp(request: SignUpRequest): Promise<SignUpResponse> {
@@ -58,7 +72,11 @@ class AxiosApiClient implements ApiClient {
 
   // event
   async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
-    return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
+    return this.send(
+      {},
+      `event/signup/${query.userId}/${query.eventType}`,
+      'get'
+    );
   }
 
   // admin post event
@@ -79,7 +97,9 @@ class AxiosApiClient implements ApiClient {
   }
 
   // volunteer
-  async getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse> {
+  async getVolunteers(
+    query: QueryParams
+  ): Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
@@ -88,11 +108,19 @@ class AxiosApiClient implements ApiClient {
   }
 
   // commitment application
-  async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {
-    return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
+  async getCommitmentApplications(
+    query: QueryParams
+  ): Promise<GetCommitmentApplicationResponse> {
+    return this.send(
+      {},
+      `commitment-application/${this.toURLParams(query)}`,
+      'get'
+    );
   }
 
-  async updateCommitmentApplication(data: CommitmentApplicationData): Promise<void> {
+  async updateCommitmentApplication(
+    data: CommitmentApplicationData
+  ): Promise<void> {
     return this.send(data, `commitment-application/${data._id}`, 'put');
   }
 
@@ -122,6 +150,6 @@ class AxiosApiClient implements ApiClient {
   }
 }
 
-const urlBaseEndpoint = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://api-dot-journey-288113.et.r.appspot.com/';
+const urlBaseEndpoint = 'http://localhost:5000';
 const sharedClient: AxiosApiClient = new AxiosApiClient(urlBaseEndpoint);
 export default sharedClient;

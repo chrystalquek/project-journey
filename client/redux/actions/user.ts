@@ -12,6 +12,8 @@ import {
 
 export type SignUpArgs = {
   name: string;
+  password?: string;
+
   volunteerType: VOLUNTEER_TYPE;
 
   nickname: string;
@@ -82,6 +84,7 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpArgs, { state }>(
   'volunteer/',
   async ({
     name,
+    password,
     volunteerType,
     nickname,
     gender,
@@ -143,6 +146,7 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpArgs, { state }>(
   }) => {
     const request: SignUpRequest = {
       name,
+      password,
       volunteerType,
       nickname,
       gender,
