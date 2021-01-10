@@ -48,7 +48,7 @@ const userSlice = createSlice({
       state.status = 'rejected';
     });
     builder.addCase(updateVolunteer.pending, (state, action) => {
-      state.user = action.payload
+      state.user = action.payload;
     });
   },
 });

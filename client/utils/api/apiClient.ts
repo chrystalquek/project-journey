@@ -88,14 +88,14 @@ class AxiosApiClient implements ApiClient {
   async getPendingVolunteers(): Promise<GetVolunteersResponse> {
     return this.send({}, 'volunteer/pending', 'get');
   }
-  
+
   async updateVolunteer(request : UpdateVolunteerRequest): Promise<VolunteerData> {
     return this.send(request, 'volunteer', 'put');
   }
 
   // commitment application
   async createCommitmentApplication(request: CreateCommitmentApplicationRequest): Promise<CommitmentApplicationData> {
-    return this.send(request, 'commitment-application', 'post')
+    return this.send(request, 'commitment-application', 'post');
   }
 
   async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {

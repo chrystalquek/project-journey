@@ -1,18 +1,16 @@
-import {FC} from "react";
-import {EventData} from "@type/event";
-import {VolunteerData} from "@type/volunteer";
+import { FC } from 'react';
+import { EventData } from '@type/event';
+import { VolunteerData } from '@type/volunteer';
 
 type EventDetailsUnregisteredProps = {
   event: EventData,
   user: VolunteerData
 }
 
-const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = () => {
-  return (
-    <div>
-      HELLO WORLD!
-    </div>
-  )
-}
+const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = () => (
+  <div>
+    HELLO WORLD!
+  </div>
+);
 
 export default EventDetailsUnregistered;

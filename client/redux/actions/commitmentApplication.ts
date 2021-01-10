@@ -3,16 +3,15 @@ import { CreateCommitmentApplicationRequest, QueryParams } from '@utils/api/requ
 import { GetCommitmentApplicationResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 import { CommitmentApplicationData } from '@type/commitmentApplication';
+import { updateVolunteer } from './user';
 
 export const createCommitmentApplication = createAsyncThunk<CommitmentApplicationData, CreateCommitmentApplicationRequest, { state }>(
   'commitmentApplication/createCommitmentApplication',
   async (data: CreateCommitmentApplicationRequest) => {
     const response = await apiClient.createCommitmentApplication(data);
-    console.log("CREATED")
-    console.log(response)
-    return response
-  }
-)
+    return response;
+  },
+);
 
 export const getCommitmentApplications = createAsyncThunk<GetCommitmentApplicationResponse, QueryParams, { state }>(
   'commitmentApplication/getCommitmentApplication',
@@ -29,4 +28,3 @@ export const updateCommitmentApplication = createAsyncThunk<CommitmentApplicatio
     return data;
   },
 );
-

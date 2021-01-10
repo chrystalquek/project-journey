@@ -37,15 +37,15 @@ const UpcomingEvent: FC<{}> = ({ }) => {
 
   useEffect(() => {
     if (isAdmin(user)) {
-      dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }))
+      dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
     } else {
-      dispatch(getSignedUpEventsUpcomingEvent({ eventType: 'upcoming', userId: user.user?._id }))
-      dispatch(getSignUpsUpcomingEvent({ id: user.user?._id, idType: 'userId' }))
+      dispatch(getSignedUpEventsUpcomingEvent({ eventType: 'upcoming', userId: user.user?._id }));
+      dispatch(getSignUpsUpcomingEvent({ id: user.user?._id, idType: 'userId' }));
     }
   }, []);
 
-  const events = useSelector((state: StoreState) => state.event)
-  const signUps = useSelector((state: StoreState) => state.signUp) // only relevant if user is volunteer
+  const events = useSelector((state: StoreState) => state.event);
+  const signUps = useSelector((state: StoreState) => state.signUp); // only relevant if user is volunteer
 
   const upcomingEventsIds = events.upcomingEvent.ids;
   const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;
@@ -63,25 +63,24 @@ const UpcomingEvent: FC<{}> = ({ }) => {
           more volunteers needed
         </Typography>
       );
-    } else {
-      // is volunteer
-      const status = upcomingSignUps.find((signUp) => signUp.eventId == event._id)?.status || 'unknown';
-      switch (status) {
-        case 'pending':
-          return <Typography><i>Sign-up pending</i></Typography>;
-        case 'rejected':
-          return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>;
-        case 'unknown':
-          return <Typography>-</Typography>;
-        default:
-          const roleAssigned = status[1];
-          return (
-            <Typography className={classes.greenText}>
-              Volunteer role assigned -
-              {roleAssigned}
-            </Typography>
-          );
-      }
+    }
+    // is volunteer
+    const status = upcomingSignUps.find((signUp) => signUp.eventId == event._id)?.status || 'unknown';
+    switch (status) {
+      case 'pending':
+        return <Typography><i>Sign-up pending</i></Typography>;
+      case 'rejected':
+        return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>;
+      case 'unknown':
+        return <Typography>-</Typography>;
+      default:
+        const roleAssigned = status[1];
+        return (
+          <Typography className={classes.greenText}>
+            Volunteer role assigned -
+            {roleAssigned}
+          </Typography>
+        );
     }
   };
 

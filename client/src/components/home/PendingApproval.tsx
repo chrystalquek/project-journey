@@ -30,7 +30,7 @@ const PendingApproval: FC<{}> = ({ }) => {
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
     dispatch(getPendingSignUps());
-    dispatch(getPendingVolunteers())
+    dispatch(getPendingVolunteers());
   }, []);
 
   const pendingSignUpCount = useSelector((state: StoreState) => state.signUp).pendingSignUps.ids.length;

@@ -30,7 +30,7 @@ const addToData = (events: Array<EventData>, state: EventState) => {
     startDate: new Date(event.startDate),
     endDate: new Date(event.endDate),
     deadline: new Date(event.deadline),
-  })
+  });
 };
 
 const eventSlice = createSlice({

@@ -1,11 +1,11 @@
-import {useRouter} from "next/router";
-import {useSelector} from "react-redux";
-import {StoreState} from "@redux/store";
-import {EventData} from "@type/event";
-import ErrorPage from "next/error";
-import EventDetails from "@components/event/EventDetails/EventDetails";
-import {VolunteerData} from "@type/volunteer";
-import {Container} from "@material-ui/core";
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
+import { EventData } from '@type/event';
+import ErrorPage from 'next/error';
+import EventDetails from '@components/event/EventDetails/EventDetails';
+import { VolunteerData } from '@type/volunteer';
+import { Container } from '@material-ui/core';
 
 // Handles checking that user is logged in and event detail validity
 const EventsDetailPage = () => {
@@ -24,10 +24,10 @@ const EventsDetailPage = () => {
   return (
     <Container fixed>
       {eventData && userData
-        ? <EventDetails user={userData} event={eventData}/>
+        ? <EventDetails user={userData} event={eventData} />
         : <ErrorPage statusCode={500} />}
     </Container>
-  )
-}
+  );
+};
 
 export default EventsDetailPage;

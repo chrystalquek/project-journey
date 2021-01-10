@@ -15,11 +15,11 @@ export type SignUpState = {
 const initialState: SignUpState = {
   data: {},
   volunteerSignUpsForUpcomingEvent: {
-    ids: []
+    ids: [],
   },
   pendingSignUps: {
-    ids: []
-  }
+    ids: [],
+  },
 };
 
 // parse all Dates etc before saving to store
@@ -38,13 +38,13 @@ const signUpSlice = createSlice({
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
     builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state)
-      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map(signUp => signUp._id)
+      addToData(payload.data, state);
+      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map((signUp) => signUp._id);
     });
     builder.addCase(getPendingSignUps.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state)
-      state.pendingSignUps.ids = payload.data.map(signUp => signUp._id)
+      addToData(payload.data, state);
+      state.pendingSignUps.ids = payload.data.map((signUp) => signUp._id);
     });
   },
 });

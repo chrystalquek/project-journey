@@ -20,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       textAlign: 'center',
     },
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
 }));
 
 const BecomeCommited: FC = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: StoreState) => state.user)
+  const user = useSelector((state: StoreState) => state.user);
 
   const [open, setOpen] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
@@ -79,10 +79,10 @@ const BecomeCommited: FC = () => {
   }, [checked]);
 
   const handleSubmit = useCallback(() => {
-    setOpen(false)
-    setChecked(false)
-    dispatch(createCommitmentApplication({ volunteerId: user.user._id }))
-  }, [open, checked])
+    setOpen(false);
+    setChecked(false);
+    dispatch(createCommitmentApplication({ volunteerId: user.user._id }));
+  }, [open, checked]);
 
   return (
     <div>

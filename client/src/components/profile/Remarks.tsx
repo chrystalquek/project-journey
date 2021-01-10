@@ -13,8 +13,8 @@ type props = {
 
 const Remarks: FC<props> = ({ user }) => {
   const dispatch = useDispatch();
-  let originalVolunteerRemarks = user.volunteerRemarks
-  let originalAdministratorRemarks = user.administratorRemarks
+  let originalVolunteerRemarks = user.volunteerRemarks;
+  const originalAdministratorRemarks = user.administratorRemarks;
 
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
   const [administratorRemarks, setAdministratorRemarks] = useState<string>(originalAdministratorRemarks);
@@ -37,8 +37,8 @@ const Remarks: FC<props> = ({ user }) => {
       updateVolunteer({
         email: user.email,
         updatedVolunteerData: {
-          volunteerRemarks: volunteerRemarks,
-        }
+          volunteerRemarks,
+        },
       }),
     );
 

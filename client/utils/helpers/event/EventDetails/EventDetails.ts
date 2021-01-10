@@ -1,6 +1,6 @@
-import {EventData} from "@type/event";
-import dayjs from "dayjs";
-import {getEventVacancies} from "@utils/helpers/event/EventsPageBody";
+import { EventData } from '@type/event';
+import dayjs from 'dayjs';
+import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 
 export type TableData = {
   title: string,
@@ -9,7 +9,7 @@ export type TableData = {
 }
 
 export function createTblData(title: string, description: string, isHighlight: boolean): TableData {
-  return { title, description, isHighlight }
+  return { title, description, isHighlight };
 }
 
 // Extracts date, time, location, vacancies, singup deadline
@@ -22,10 +22,10 @@ export function getEventInfo(event: EventData) {
   const deadline = dayjs(event.deadline).format('DD MMMM YYYY hh:mmA');
 
   return [
-    createTblData("Date:", date,false),
-    createTblData("Time:", `${startTime} to ${endTime}`, false),
-    createTblData("Location:", event.location, false),
-    createTblData("Vacancies:", vacancies, false),
-    createTblData("Sign-up deadline", deadline, true),
-  ]
+    createTblData('Date:', date, false),
+    createTblData('Time:', `${startTime} to ${endTime}`, false),
+    createTblData('Location:', event.location, false),
+    createTblData('Vacancies:', vacancies, false),
+    createTblData('Sign-up deadline', deadline, true),
+  ];
 }

@@ -52,7 +52,7 @@ const dummyData : VolunteerData = {
 
   // Record of past events
   pastEventIds: ['somepasteventid'],
-  
+
   // Record of commitment applications
   commitmentApplicationIds: ['somecommitmentapplicationid'],
 

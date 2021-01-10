@@ -68,7 +68,7 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
 );
 
 type UpdateVolunteerArgs = {
-  email: string, 
+  email: string,
   updatedVolunteerData: Partial<VolunteerData>
 }
 
@@ -77,12 +77,12 @@ export const updateVolunteer = createAsyncThunk<VolunteerData, UpdateVolunteerAr
   async ({ email, updatedVolunteerData }) => {
     const request = {
       email,
-      updatedVolunteerData
-    }
+      updatedVolunteerData,
+    };
 
     const response = await apiClient.updateVolunteer(request);
-    return response
-  }
-)
+    return response;
+  },
+);
 
 export default login;
