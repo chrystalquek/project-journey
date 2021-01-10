@@ -111,7 +111,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
                 <FormGroup>
                   {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
                     <FormControlLabel
-                      control={<Checkbox size="small" checked={volunteers.volunteerProfile.filters[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
+                      control={<Checkbox size="small" checked={volunteers.volunteerProfile.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
                       label={<Typography variant="body1">{capitalize(volunteerType)}</Typography>}
                     />
                   ))}

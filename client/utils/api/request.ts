@@ -35,6 +35,7 @@ export type VolunteerPaginatedQueryParams = {
   size: number
   volunteerType: string,
   name?: string
+  sort: string
 }
 
 export type EventQueryParams = {
