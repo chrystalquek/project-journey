@@ -286,9 +286,11 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           </Popper>
         </IconButton>
         <div className={classes.nameContainer}>
-          <Typography className={classes.nameStyle}>
-            <Box fontWeight={700}>{userData.name}</Box>
-          </Typography>
+          <Box fontWeight={700}>
+            <Typography className={classes.nameStyle}>
+              {userData.name}
+            </Typography>
+          </Box>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
             onClick={() => router.push(`/profile/${userData._id}`)}

@@ -41,3 +41,8 @@ export type GetEventParams = string;
 export type CreateCommitmentApplicationRequest = {
   volunteerId: string
 }
+
+export type UpdateVolunteerRemarksRequest = {
+  email: string,
+  volunteerRemarks: string
+}

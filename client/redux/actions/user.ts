@@ -66,4 +66,21 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
   },
 );
 
+type UpdateVolunteerRemarksArgs = {
+   email: string, volunteerRemarks: string
+}
+
+export const updateVolunteerRemarks = createAsyncThunk<{}, UpdateVolunteerRemarksArgs>(
+  'user/updateVolunteerRemarks',
+  async ({ email, volunteerRemarks }) => {
+    const request = {
+      email,
+      volunteerRemarks,
+    };
+
+    const response = await apiClient.updateVolunteerRemarks(request);
+    return response;
+  },
+);
+
 export default login;

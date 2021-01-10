@@ -1,11 +1,19 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
+<<<<<<< HEAD
   LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, CreateCommitmentApplicationRequest,
 } from './request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
+=======
+  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest, UpdateVolunteerRemarksRequest
+} from './request';
+import {
+  GetCountResponse, GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
+  EditEventResponse, GetEventResponse, SignUpResponse, UpdateVolunteerRemarksResponse,
+>>>>>>> andyrobert3/feature/redux-volunteer-remarks
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -19,9 +27,15 @@ export interface ApiClient {
   getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
   getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
   getEvents(query: QueryParams): Promise<GetEventsResponse>
+<<<<<<< HEAD
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
+=======
+  getPendingSignUps(): Promise<GetCountResponse>
+  getPendingVolunteers(): Promise<GetCountResponse>
+  updateVolunteerRemarks(request: UpdateVolunteerRemarksRequest): Promise<UpdateVolunteerRemarksResponse>
+>>>>>>> andyrobert3/feature/redux-volunteer-remarks
 }
 
 class AxiosApiClient implements ApiClient {
@@ -85,6 +99,10 @@ class AxiosApiClient implements ApiClient {
 
   async getPendingVolunteers(): Promise<GetVolunteersResponse> {
     return this.send({}, 'volunteer/pending', 'get');
+  }
+
+  async updateVolunteerRemarks(request : UpdateVolunteerRemarksRequest): Promise<UpdateVolunteerRemarksResponse> {
+    return this.send(request, 'volunteer', 'put');
   }
 
   // commitment application
