@@ -2,56 +2,210 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SignUpRequest, LoginRequest } from '@utils/api/request';
 import { SignUpResponse, LoginResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
+import {
+  VOLUNTEER_TYPE,
+  GENDER,
+  CITIZENSHIP,
+  SOCIAL_MEDIA_PLATFORMS,
+  RACE,
+} from '@type/volunteer';
 
 export type SignUpArgs = {
-  name: string
-  email: string
-  password: string
-  gender: string
-  citizenship: string
-  race: string
-  hasVolunteered: boolean
-  hasChildrenExperience: boolean
-  hasExternalVolunteerExperience: boolean
-  hasFirstAidCertification: boolean
-  volunteerFrequency: number
-  volunteerReason: string
-  volunteerContribution: string
-  birthday: Date
-  volunteerType: string
-}
+  name: string;
+  volunteerType: VOLUNTEER_TYPE;
+
+  nickname: string;
+  gender: GENDER;
+  citizenship: CITIZENSHIP;
+  birthday: Date;
+  address?: string;
+  mobileNumber: string;
+  photoUrl: string;
+  email: string;
+  description?: string;
+
+  socialMediaPlatform?: SOCIAL_MEDIA_PLATFORMS;
+  instagramHandle?: string;
+
+  organization?: string;
+  position?: string;
+  race?: RACE;
+
+  languages: Array<string>; // Clarify
+  referralSources: Array<string>;
+
+  hasVolunteered: boolean;
+  biabVolunteeringDuration?: number; // Number of months
+
+  hasVolunteeredExternally?: boolean;
+  volunteeringExperience?: string;
+
+  hasChildrenExperience?: boolean;
+  childrenExperience?: string;
+
+  sessionsPerMonth?: number;
+  sessionPreference?: string; // pre-defined session committment
+
+  hasFirstAidCertification?: boolean;
+  leadershipInterest?: string;
+  interests?: string; // short-ans
+
+  skills?: Array<string>;
+
+  personality?: string; // Myers-Briggs
+  strengths?: Array<string>;
+  volunteeringOpportunityInterest?: string;
+
+  volunteerReason: string; // Essay
+  volunteerContribution?: string;
+
+  // WCA Registration: Medical Information
+  hasMedicalNeeds: boolean;
+  medicalNeeds?: string;
+  hasAllergies: boolean;
+  allergies?: string;
+  hasMedicationDuringDay: boolean;
+
+  // WCA Registration: Emergency Contact
+  emergencyContactName: string;
+  emergencyContactNumber: string;
+  emergencyContactEmail: string;
+  emergencyContactRelationship: string;
+};
 
 export type LoginArgs = {
-  email: string,
-  password: string
-}
+  email: string;
+  password: string;
+};
 
 export const signUp = createAsyncThunk<SignUpResponse, SignUpArgs, { state }>(
   'volunteer/',
   async ({
-    name, email, password, gender, citizenship, race, hasVolunteered, hasChildrenExperience, hasExternalVolunteerExperience, hasFirstAidCertification, volunteerFrequency, volunteerReason, volunteerContribution, birthday, volunteerType,
+    name,
+    volunteerType,
+    nickname,
+    gender,
+    citizenship,
+    birthday,
+    address,
+    mobileNumber,
+    photoUrl,
+    email,
+    description,
+
+    socialMediaPlatform,
+    instagramHandle,
+
+    organization,
+    position,
+    race,
+
+    languages,
+    referralSources,
+
+    hasVolunteered,
+    biabVolunteeringDuration,
+
+    hasVolunteeredExternally,
+    volunteeringExperience,
+
+    hasChildrenExperience,
+    childrenExperience,
+
+    sessionsPerMonth,
+    sessionPreference,
+
+    hasFirstAidCertification,
+    leadershipInterest,
+    interests, // short-ans
+
+    skills,
+
+    personality, // Myers-Briggs
+    strengths,
+    volunteeringOpportunityInterest,
+
+    volunteerReason, // Essay
+    volunteerContribution,
+
+    // WCA Registration: Medical Information
+    hasMedicalNeeds,
+    medicalNeeds,
+    hasAllergies,
+    allergies,
+    hasMedicationDuringDay,
+
+    // WCA Registration: Emergency Contact
+    emergencyContactName,
+    emergencyContactNumber,
+    emergencyContactEmail,
+    emergencyContactRelationship,
   }) => {
     const request: SignUpRequest = {
       name,
-      email,
-      password,
+      volunteerType,
+      nickname,
       gender,
       citizenship,
-      race,
-      hasVolunteered,
-      hasChildrenExperience,
-      hasExternalVolunteerExperience,
-      hasFirstAidCertification,
-      volunteerFrequency,
-      volunteerReason,
-      volunteerContribution,
       birthday,
-      volunteerType,
+      address,
+      mobileNumber,
+      photoUrl,
+      email,
+      description,
+
+      socialMediaPlatform,
+      instagramHandle,
+
+      organization,
+      position,
+      race,
+
+      languages,
+      referralSources,
+
+      hasVolunteered,
+      biabVolunteeringDuration,
+
+      hasVolunteeredExternally,
+      volunteeringExperience,
+
+      hasChildrenExperience,
+      childrenExperience,
+
+      sessionsPerMonth,
+      sessionPreference,
+
+      hasFirstAidCertification,
+      leadershipInterest,
+      interests, // short-ans
+
+      skills,
+
+      personality, // Myers-Briggs
+      strengths,
+      volunteeringOpportunityInterest,
+
+      volunteerReason, // Essay
+      volunteerContribution,
+
+      // WCA Registration: Medical Information
+      hasMedicalNeeds,
+      medicalNeeds,
+      hasAllergies,
+      allergies,
+      hasMedicationDuringDay,
+
+      // WCA Registration: Emergency Contact
+      emergencyContactName,
+      emergencyContactNumber,
+      emergencyContactEmail,
+      emergencyContactRelationship,
     };
 
-    const response = await apiClient.signUp(request) as SignUpResponse;
+    const response = (await apiClient.signUp(request)) as SignUpResponse;
     return response;
-  },
+  }
 );
 
 const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
@@ -61,9 +215,9 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
       email,
       password,
     };
-    const response = await apiClient.login(request) as LoginResponse;
+    const response = (await apiClient.login(request)) as LoginResponse;
     return response;
-  },
+  }
 );
 
 export default login;

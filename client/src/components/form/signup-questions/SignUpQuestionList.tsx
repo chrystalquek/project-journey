@@ -1,4 +1,5 @@
 import { QuestionList } from '@type/questions';
+import { CITIZENSHIP, GENDER, RACE } from '@type/volunteer';
 
 export const questions: QuestionList = [
   {
@@ -6,30 +7,35 @@ export const questions: QuestionList = [
     displayText: ['First Name'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
   },
   {
     name: 'lastName',
     displayText: ['Last Name (Family Name)'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
   },
   {
     name: 'email',
     displayText: ['Email'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
   },
   {
     name: 'password',
     displayText: ['Password'],
     type: 'password',
     initialValue: '',
+    isRequired: true,
   },
   {
     name: 'confirmPassword',
     displayText: ['Confirm password'],
     type: 'password',
     initialValue: '',
+    isRequired: true,
   },
   {
     name: 'nickname',
@@ -38,16 +44,18 @@ export const questions: QuestionList = [
     ],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: false,
   },
   {
     name: 'gender',
     displayText: ['Gender'],
     type: 'mcq',
-    initialValue: 'male',
+    initialValue: GENDER.MALE,
     options: [
-      { value: 'male', label: 'Male' },
-      { value: 'female', label: 'Female' },
+      { value: GENDER.MALE, label: 'Male' },
+      { value: GENDER.FEMALE, label: 'Female' },
     ],
+    isRequired: true,
   },
   {
     name: 'citizenship',
@@ -55,74 +63,61 @@ export const questions: QuestionList = [
     type: 'mcq',
     initialValue: 'singapore',
     options: [
-      { value: 'singapore', label: 'Singapore Citizen' },
-      { value: 'permanent_resident', label: 'Singapore Permanent Resident' },
+      { value: CITIZENSHIP.SINGAPORE, label: 'Singapore Citizen' },
+      { value: CITIZENSHIP.PR, label: 'Singapore Permanent Resident' },
       {
-        value: 'foreigner',
+        value: CITIZENSHIP.FOREIGNER,
         label: 'Foreigner requiring work pass to work in Singapore',
       },
     ],
+    isRequired: true,
   },
   {
     name: 'birthday',
     displayText: ['Date of Birth'],
     type: 'date',
     initialValue: new Date(),
+    isRequired: true,
   },
   {
     name: 'mobileNumber',
     displayText: ['Mobile Number'],
     type: 'shortAnswer',
     initialValue: '',
-  },
-  {
-    name: 'email',
-    displayText: ['Email Address'],
-    type: 'shortAnswer',
-    initialValue: '',
+    isRequired: true,
   },
   {
     name: 'instagramHandle',
     displayText: ['What is your instagram handle?'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: false,
   },
   {
-    name: 'institutionName',
+    name: 'organization',
     displayText: ['School / company name'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: false,
   },
   {
     name: 'position',
     displayText: ['Year Level / Position'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
   },
   {
-    name: 'race',
-    displayText: ['Race / Ethnicity'],
-    type: 'mcq',
-    options: [
-      { value: 'chinese', label: 'Chinese' },
-      { value: 'malay', label: 'Malay' },
-      { value: 'indian', label: 'Indian' },
-      { value: 'caucasian', label: 'Caucasian' },
-      { value: 'other', label: 'Other' },
-    ],
-    initialValue: 'other',
-  },
-  {
-    name: 'language',
+    name: 'languages',
     displayText: [
       'What languages do you speak (please put your first language at the start of your response)',
     ],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: false,
   },
   {
-    // Any other name suggestion?
-    name: 'howKnow',
+    name: 'referralSources',
     displayText: ['How did you hear about us/Beyond Awesome?'],
     type: 'checkboxes',
     initialValue: [],
@@ -141,83 +136,119 @@ export const questions: QuestionList = [
       { value: 'giving_sg', label: 'Giving SG' },
       { value: 'other', label: 'Other' },
     ],
+    isRequired: true,
   },
   {
-    name: 'volunteeredBefore',
+    name: 'hasVolunteered',
     displayText: [
       'Have you volunteered with us before? (eg ad-hoc volunteer or other event)',
     ],
     type: 'mcq',
-    initialValue: 'yes',
+    initialValue: true,
     options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
     ],
+    isRequired: true,
   },
   {
-    name: 'whyInterested',
+    name: 'volunteerReason',
     displayText: [
       "Please tell us why you're interested in volunteering with our program",
     ],
     type: 'longAnswer',
     initialValue: '',
+    isRequired: true,
   },
 
   // Medical Information
   {
-    name: 'medicalNeeds',
+    name: 'hasMedicalNeeds',
     displayText: [
-      'Do you have medical needs we should be aware of (e.g., heart conditions, asthma, seizures, diabetes, hearing or sight loss, etc.)?\nIf yes, please explain',
+      'Do you have medical needs we should be aware of (e.g., heart conditions, asthma, seizures, diabetes, hearing or sight loss, etc.)?',
     ],
+    type: 'mcq',
+    initialValue: false,
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: false,
+  },
+  {
+    name: 'medicalNeeds',
+    displayText: ['If yes, please explain'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: false,
+  },
+  {
+    name: 'hasAllergies',
+    displayText: ['Do you have any allergies (medications, foods, materials)?'],
+    type: 'mcq',
+    initialValue: false,
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: false,
   },
   {
     name: 'allergies',
-    displayText: [
-      'Do you have any allergies (medications, foods, materials)?\nIf yes, please explain',
-    ],
+    displayText: ['If yes, please explain'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: false,
   },
   {
-    // Any better name suggestion?
-    name: 'medicalAwareness',
+    name: 'hasMedicalDuringDay',
     displayText: [
       'Do you take any medication during the day that we should be aware of?',
     ],
     type: 'mcq',
-    initialValue: 'no',
+    initialValue: false,
     options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
     ],
+    isRequired: false,
   },
 
   // Emergency Contact Information
   {
-    name: 'emergencyContactNo',
+    name: 'emergencyContactName',
+    displayText: ['Emergency Contact Full Name #1'],
+    type: 'shortAnswer',
+    initialValue: '',
+    isRequired: true,
+  },
+  {
+    name: 'emergencyContactNumber',
     displayText: ['Emergency Contact Mobile Number #1'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
   },
   {
     name: 'emergencyContactEmail',
     displayText: ['Emergency Contact Email Address #1'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
   },
   {
-    name: 'emergencyContactRelation',
+    name: 'emergencyContactRelationship',
     displayText: ['Emergency Contact Relationship'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
   },
   {
     name: 'emergencyContactOther',
     displayText: ['If Other, please specify'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: false,
   },
 
   // Permission for Email Collection and Communication
@@ -227,11 +258,12 @@ export const questions: QuestionList = [
       'I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein.',
     ],
     type: 'mcq',
-    initialValue: 'no',
+    initialValue: false,
     options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
     ],
+    isRequired: true,
   },
 
   // Acknowledgements
@@ -241,11 +273,12 @@ export const questions: QuestionList = [
       'I give Beyond Awesome (A program by Blessings in a Bag Limited) to communicate my personal information to volunteer mentors in order to support my experience, development and journey with the program',
     ],
     type: 'mcq',
-    initialValue: 'no',
+    initialValue: false,
     options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
     ],
+    isRequired: true,
   },
   {
     name: 'acknowledgeTnC',
@@ -253,11 +286,12 @@ export const questions: QuestionList = [
       'I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein',
     ],
     type: 'mcq',
-    initialValue: 'no',
+    initialValue: false,
     options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
     ],
+    isRequired: true,
   },
 
   // Informed Consent and License Agreement
@@ -275,10 +309,11 @@ export const questions: QuestionList = [
       `Please note that although participation in Beyond Awesome (of Blessings in a Bag Limited) programs is voluntary, once this agreement is signed, it cannot be withdrawn and remains in effect even after the individual is no longer participating in any Beyond Awesome (of Blessings in a Bag Limited) programming. "`,
     ],
     type: 'mcq',
-    initialValue: 'no',
+    initialValue: false,
     options: [
-      { value: 'yes', label: 'Yes' },
-      { value: 'no', label: 'No' },
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
     ],
+    isRequired: true,
   },
 ];
