@@ -6,7 +6,7 @@ import fs from 'fs'
 
 const router = express.Router();
 
-var imageDir = './tmp'
+var imageDir = '/tmp'
 if (!fs.existsSync(imageDir)){
   fs.mkdirSync(imageDir);
 }
