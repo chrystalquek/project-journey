@@ -29,6 +29,8 @@ app.use(bodyParser.json());
 if (config.env === 'development') {
   console.log("Using cors middleware")
   app.use(cors({ origin: '*' }))
+} else {
+  app.use(cors({ origin: 'https://journey-288113.et.r.appspot.com'}))
 }
 
 // Test route for deployment
