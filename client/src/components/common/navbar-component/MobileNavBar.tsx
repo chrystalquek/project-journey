@@ -177,7 +177,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             onClick={toggleEventMenu}
           >
             <ListItemText
-              primary='Event Card'
+              primary='Events'
               primaryTypographyProps={{ className: classes.primaryTextStyle }}
             />
             {openEventMenu ? <ExpandLess /> : <ExpandMore />}
