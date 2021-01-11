@@ -3,7 +3,7 @@ import {
   createAndAcceptSignUp, createSignUp,
   getPendingSignUps, getSignUps,
   getSignUpsUpcomingEvent,
-  updateSignUp
+  updateSignUp,
 } from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
 
@@ -26,11 +26,11 @@ const initialState: SignUpState = {
     ids: [],
   },
   pendingSignUps: {
-    ids: []
+    ids: [],
   },
   getSignUps: {
     currSignUps: [],
-  }
+  },
 };
 
 // parse all Dates etc before saving to store
@@ -66,31 +66,31 @@ const signUpSlice = createSlice({
     // Using redux for logging purposes
     builder.addCase(createAndAcceptSignUp.pending, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(createAndAcceptSignUp.fulfilled, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(createAndAcceptSignUp.rejected, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(createSignUp.pending, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(createSignUp.fulfilled, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(createSignUp.rejected, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(updateSignUp.pending, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(updateSignUp.fulfilled, (state, action) => {
       // do nothing yet
-    })
+    });
     builder.addCase(updateSignUp.rejected, (state, action) => {
       // do nothing yet
-    })
+    });
   },
 });
 

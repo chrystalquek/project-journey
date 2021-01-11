@@ -17,7 +17,7 @@ import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
-import {EventButton} from "@components/common/event/EventButton";
+import { EventButton } from '@components/common/event/EventButton';
 
 type EventsPageBodyProps = {
   events: Array<EventData>;

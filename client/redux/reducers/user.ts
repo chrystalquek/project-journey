@@ -52,8 +52,8 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
-      state.user.commitmentApplicationIds.push(action.payload._id)
-    })
+      state.user.commitmentApplicationIds.push(action.payload._id);
+    });
   },
 });
 

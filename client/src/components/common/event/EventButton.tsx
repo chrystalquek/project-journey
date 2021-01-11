@@ -1,5 +1,5 @@
-import {Button, makeStyles, Theme} from "@material-ui/core";
-import {FC} from "react";
+import { Button, makeStyles, Theme } from '@material-ui/core';
+import { FC } from 'react';
 
 type EventButtonProps = {
   disableRipple?: boolean,
@@ -25,7 +25,7 @@ const EventButton: FC<EventButtonProps> = ({ children, onClick }) => {
     <Button className={classes.root}>
       {children}
     </Button>
-  )
+  );
 };
 
 export { EventButton };

@@ -1,6 +1,6 @@
-import React, {FC} from "react";
-import {EventData} from "@type/event";
-import {getEventInfo, TableData} from "@utils/helpers/event/EventDetails/EventDetails";
+import React, { FC } from 'react';
+import { EventData } from '@type/event';
+import { getEventInfo, TableData } from '@utils/helpers/event/EventDetails/EventDetails';
 import {
   Box,
   makeStyles,
@@ -10,15 +10,15 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Typography
-} from "@material-ui/core";
-import {EventTypography} from "@components/common/event/EventTypography";
+  Typography,
+} from '@material-ui/core';
+import { EventTypography } from '@components/common/event/EventTypography';
 
 type EventInformationProps = {
   event: EventData
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: 'none',
     borderBottom: 'none',
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   highlight: {
     color: theme.palette.text.secondary,
-  }
+  },
 }));
 
 const EventInformation: FC<EventInformationProps> = ({ event }) => {
@@ -37,9 +37,9 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
 
   return (
     <>
-      <EventTypography fontSize='h3' fontBold borderBottom gutterBottom text='Event Information' />
+      <EventTypography fontSize="h3" fontBold borderBottom gutterBottom text="Event Information" />
       <TableContainer className={classes.gutterBottom}>
-        <Table aria-label='event information table'>
+        <Table aria-label="event information table">
           <TableBody>
             {rows.map((row: TableData) => (
               <TableRow key={row.title}>
@@ -56,9 +56,9 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <EventTypography text={event.description || "No event description."} />
+      <EventTypography text={event.description || 'No event description.'} />
     </>
-  )
-}
+  );
+};
 
 export default EventInformation;

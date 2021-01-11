@@ -1,5 +1,7 @@
-import React, {FC} from "react";
-import {makeStyles, Typography, Theme, Box, useTheme} from "@material-ui/core";
+import React, { FC } from 'react';
+import {
+  makeStyles, Typography, Theme, Box, useTheme,
+} from '@material-ui/core';
 
 type SectionTitleProps = {
   text: string,
@@ -18,8 +20,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: props.gutterBottom ? '0.35em' : '0',
     borderTop: props.borderTop ? '2px solid #CECECE' : 'none',
     borderBottom: props.borderBottom ? '2px solid #CECECE' : 'none',
-    fontWeight: props.fontBold ? 'bold' : 'normal'
-  })
+    fontWeight: props.fontBold ? 'bold' : 'normal',
+  }),
 }));
 
 const EventTypography: FC<SectionTitleProps> = (props) => {
@@ -35,7 +37,7 @@ const EventTypography: FC<SectionTitleProps> = (props) => {
     >
       {props.text}
     </Box>
-  )
-}
+  );
+};
 
 export { EventTypography };

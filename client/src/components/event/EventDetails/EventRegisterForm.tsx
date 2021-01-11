@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useState} from "react";
-import {EventData, Event} from "@type/event";
+import React, { FC, useEffect, useState } from 'react';
+import { EventData, Event } from '@type/event';
 import {
   Select,
   Box,
@@ -9,15 +9,15 @@ import {
   Typography,
   TextField,
   Button,
-  makeStyles
-} from "@material-ui/core";
-import {FormSelectRow, parseRoles} from "@utils/helpers/event/EventDetails/EventRegisterForm";
-import {VolunteerData} from "@type/volunteer";
-import {useRouter} from "next/router";
-import {useDispatch, useSelector} from "react-redux";
-import {getSignUps} from "@redux/actions/signUp";
-import {SignUpIdType, SignUpStatus} from "@type/signUp";
-import {StoreState} from "@redux/store";
+  makeStyles,
+} from '@material-ui/core';
+import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
+import { VolunteerData } from '@type/volunteer';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSignUps } from '@redux/actions/signUp';
+import { SignUpIdType, SignUpStatus } from '@type/signUp';
+import { StoreState } from '@redux/store';
 
 type EventRegisterProps = {
   event: EventData
@@ -45,24 +45,26 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.secondary.main,
     },
-  }
+  },
 }));
 
-const EventRegisterForm: FC<EventRegisterProps> = ({ formHandlers, event, user, isDisabled }) => {
+const EventRegisterForm: FC<EventRegisterProps> = ({
+  formHandlers, event, user, isDisabled,
+}) => {
   const classes = useStyles();
   const router = useRouter();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
   const defaultForm: FormState = {
-    firstChoice: "",
-    secondChoice: "",
-    thirdChoice: "",
-    additionalInfo: "",
-  }
+    firstChoice: '',
+    secondChoice: '',
+    thirdChoice: '',
+    additionalInfo: '',
+  };
   const [formState, setFormState] = useState(defaultForm);
   const handleChange = (event) => {
     setFormState({ ...formState, [event.target.name]: event.target.value });
-  }
+  };
   const onFormSubmit = (e) => {
     e.preventDefault();
     switch (event.eventType) {
@@ -74,10 +76,10 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ formHandlers, event, user, 
         formHandlers.signUpAndAccept(user._id, event._id, formState);
         break;
       default:
-        console.error("You shouldn't be here!")
+        console.error("You shouldn't be here!");
     }
     router.reload();
-  }
+  };
 
   return (
     <>
@@ -88,9 +90,12 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ formHandlers, event, user, 
         <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="first-choice">Select Position</InputLabel>
           <Select
-            required fullWidth
-            labelId="first-choice" id="firstChoice"
-            name="firstChoice" value={formState.firstChoice}
+            required
+            fullWidth
+            labelId="first-choice"
+            id="firstChoice"
+            name="firstChoice"
+            value={formState.firstChoice}
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
@@ -98,12 +103,17 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ formHandlers, event, user, 
             ))}
           </Select>
         </FormControl>
-        <Box>Second Choice: <Box component="span" color="text.secondary">(optional)</Box></Box>
+        <Box>
+          Second Choice:
+          <Box component="span" color="text.secondary">(optional)</Box>
+        </Box>
         <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="second-choice">Select Position</InputLabel>
           <Select
-            fullWidth labelId="second-choice"
-            id="secondChoice" name="secondChoice"
+            fullWidth
+            labelId="second-choice"
+            id="secondChoice"
+            name="secondChoice"
             value={formState.secondChoice}
             onChange={handleChange}
           >
@@ -112,12 +122,17 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ formHandlers, event, user, 
             ))}
           </Select>
         </FormControl>
-        <Box>Third Choice: <Box component="span" color="text.secondary">(optional)</Box></Box>
+        <Box>
+          Third Choice:
+          <Box component="span" color="text.secondary">(optional)</Box>
+        </Box>
         <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="third-choice">Select Position</InputLabel>
           <Select
-            fullWidth labelId="third-choice"
-            id="thirdChoice" name="thirdChoice"
+            fullWidth
+            labelId="third-choice"
+            id="thirdChoice"
+            name="thirdChoice"
             value={formState.thirdChoice}
             onChange={handleChange}
           >
@@ -127,22 +142,29 @@ const EventRegisterForm: FC<EventRegisterProps> = ({ formHandlers, event, user, 
           </Select>
         </FormControl>
         <Box fontWeight="bold">Anything you would like us to know?</Box>
-        <TextField id="additionalInfo" name="additionalInfo"
-                   fullWidth multiline
-                   rows={4}
-                   label="Type something here..."
-                   variant="outlined"
-                   onChange={handleChange}
-                   disabled={isDisabled}
+        <TextField
+          id="additionalInfo"
+          name="additionalInfo"
+          fullWidth
+          multiline
+          rows={4}
+          label="Type something here..."
+          variant="outlined"
+          onChange={handleChange}
+          disabled={isDisabled}
         />
 
-        <Button onSubmit={onFormSubmit}
-                disabled={isDisabled}
-                className={classes.button}
-                type="submit">Register</Button>
+        <Button
+          onSubmit={onFormSubmit}
+          disabled={isDisabled}
+          className={classes.button}
+          type="submit"
+        >
+          Register
+        </Button>
       </form>
     </>
-  )
-}
+  );
+};
 
 export default EventRegisterForm;
