@@ -20,6 +20,11 @@ protectedRouter.get(
 );
 
 router.get(
+  '/ids',
+  volunteerController.readVolunteersByIds,
+);
+
+router.get(
   '/:email',
   validate(volunteerController.getValidations('getVolunteer')),
   volunteerController.getVolunteerDetails,
