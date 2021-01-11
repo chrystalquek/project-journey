@@ -145,34 +145,6 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
     nextStep();
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const signUpArgs: SignUpArgs = {
-  //     name: e.target.name.value,
-  //     email: e.target.email.value,
-  //     password: e.target.password.value,
-  //     birthday: e.target.birthday.value,
-  //     gender: 'male',
-  //     citizenship: 'singapore',
-  //     race: 'other',
-  //     hasVolunteered: true,
-  //     hasChildrenExperience: true,
-  //     hasExternalVolunteerExperience: true,
-  //     hasFirstAidCertification: true,
-  //     volunteerFrequency: 1,
-  //     volunteerReason: 'Want to',
-  //     volunteerContribution: 'string',
-  //     volunteerType,
-  //   };
-  //   const response = await handleFormSubmit(signUpArgs);
-  //   // @ts-ignore
-  //   if (response?.type == 'volunteer//fulfilled') {
-  //     router.push('/login');
-  //   } else {
-  //     setInvalid(true);
-  //   }
-  // };
-
   const TextDivider = ({ children }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
