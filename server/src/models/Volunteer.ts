@@ -184,14 +184,40 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     type: String,
     default: '',
   },
-  adminRemarks: {
+  administratorRemarks: {
     type: String,
     default: '',
   },
-
-  volunteeringSessionsCount: Number,
-  workshopsCount: Number,
-  hangoutsCount: Number,
+  volunteeringSessionsCount: {
+    type: Number,
+    default: 0,
+  },
+  workshopsCount: {
+    type: Number,
+    default: 0,
+  },
+  hangoutsCount: {
+    type: Number,
+    default: 0,
+  },
+  pastEventIds: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Event'
+      }
+    ],
+    default: []
+  },
+  commitmentApplicationIds: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'CommitmentApplication'
+      }
+    ],
+    default: []
+  }
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {

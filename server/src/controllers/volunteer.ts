@@ -75,7 +75,16 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.emergencyContactNumber,
         VALIDATOR.emergencyContactRelationship,
         // Remarks
-        VALIDATOR.volunteerRemark,
+        VALIDATOR.volunteerRemarks,
+        VALIDATOR.administratorRemarks,
+
+        // Event Count
+        VALIDATOR.volunteeringSessionsCount,
+        VALIDATOR.workshopsCount,
+        VALIDATOR.hangoutsCount,
+
+        // Past Events
+        VALIDATOR.pastEventIds
       ];
     }
     case 'getVolunteer': {
@@ -101,8 +110,8 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.interests.optional(),
         VALIDATOR.personality.optional(),
         VALIDATOR.skills.optional(),
-        VALIDATOR.adminRemarks.optional(),
-        VALIDATOR.volunteerRemark.optional(),
+        VALIDATOR.administratorRemarks.optional(),
+        VALIDATOR.volunteerRemarks.optional(),
       ];
     }
     default:
@@ -209,10 +218,8 @@ const checkUpdateRights = () => [
   jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
 
   (req, res, next) => {
-    if (req.body.adminRemarks && req.user.volunteeerType != 'admin') {
-      return res
-        .status(HTTP_CODES.UNAUTHENTICATED)
-        .json({ message: 'Unauthorized' });
+    if (req.body.administratorRemarks && req.user.volunteeerType != 'admin') {
+      return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
     }
 
     next();
@@ -221,11 +228,10 @@ const checkUpdateRights = () => [
 
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
-    await volunteerService.updateVolunteerDetails(
-      req.body.email as string,
-      req.body as Partial<VolunteerData>
+    const savedVolunteerData = await volunteerService.updateVolunteerDetails(
+      req.body.email as string, req.body.updatedVolunteerData as Partial<VolunteerData>,
     );
-    res.status(HTTP_CODES.OK).send();
+    res.status(HTTP_CODES.OK).json(savedVolunteerData);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,

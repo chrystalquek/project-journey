@@ -90,11 +90,18 @@ export type VolunteerData = {
 
     // Remarks
     volunteerRemarks: string;
-    adminRemarks: string;
+    administratorRemarks: string;
 
-    volunteeringSessionsCount: Number,
-    workshopsCount: Number,
-    hangoutsCount: Number,
+    // Event count
+    volunteeringSessionsCount: number;
+    workshopsCount: number;
+    hangoutsCount: number; 
+
+    // Past Events
+    pastEventIds: Array<string>
+
+    // Submitted Commitment Application
+    commitmentApplicationIds: Array<string>
 };
 
 export type VolunteerPublicData = Omit<
@@ -102,7 +109,7 @@ export type VolunteerPublicData = Omit<
     'password' |
     '_id' |
     'identificationNumber' |
-    'adminRemarks'
+    'administratorRemarks'
 >
 
 export type ResourceData = {

@@ -197,19 +197,12 @@ const skills = body('skills').isArray().optional();
 const referralSources = body('referralSources').isArray();
 
 const volunteerReason = body('volunteerReason').isString();
-const volunteerFrequency = body('volunteerFrequency').isNumeric().optional();
-const volunteerContribution = body('volunteerContribution')
-  .isString()
-  .optional();
-const volunteerRemark = body('volunteerRemark').isString().optional();
-const volunteerType = body('volunteerType')
-  .isString()
-  .custom((type: string) =>
-    stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', type)
-  );
-const volunteeringOpportunityInterest = body('volunteeringOpportunityInterest')
-  .isString()
-  .optional();
+const volunteerFrequency = body('volunteerFrequency').isNumeric();
+const volunteerContribution = body('volunteerContribution').isString().optional();
+const volunteerType = body('volunteerType').isString().custom(
+  (type: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', type),
+);
+const volunteeringOpportunityInterest = body('volunteeringOpportunityInterest').isString().optional();
 
 // Medical Information
 const hasMedicalNeeds = body('hasMedicalNeeds').isBoolean();
@@ -226,7 +219,15 @@ const emergencyContactRelationship = body(
   'emergencyContactRelationship'
 ).isString();
 
-const adminRemarks = body('adminRemarks');
+
+const volunteerRemarks = body('volunteerRemarks').isString();
+const administratorRemarks = body('administratorRemarks').isString();
+
+const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
+const workshopsCount = body('workshopsCount').isInt();
+const hangoutsCount = body('hangoutsCount').isInt();
+
+const pastEventIds = body('pastEventIds').isArray()
 
 const commitmentApplicationStatus = body('status')
   .isString()
@@ -304,9 +305,13 @@ export default {
   volunteerFrequency,
   volunteerContribution,
   volunteerType,
-  volunteerRemark,
-  adminRemarks,
+  volunteerRemarks,
+  administratorRemarks,
   commitmentApplicationStatus,
   questionValidator,
   answersValidator,
+  volunteeringSessionsCount,
+  workshopsCount,
+  hangoutsCount,
+  pastEventIds
 };
