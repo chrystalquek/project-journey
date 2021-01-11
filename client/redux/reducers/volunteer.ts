@@ -70,7 +70,7 @@ const volunteerSlice = createSlice({
 
     builder.addCase(getPendingVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state)
+      addToData(payload.data, state);
       state.pendingVolunteers.ids = payload.data.map((volunteer) => volunteer._id);
     });
 
@@ -81,11 +81,11 @@ const volunteerSlice = createSlice({
       if (payload.status == CommitmentApplicationStatus.Accepted) {
         state.data[payload.volunteerId] = {
           ...volunteer,
-          volunteerType: VOLUNTEER_TYPE.COMMITED
-        }
+          volunteerType: VOLUNTEER_TYPE.COMMITED,
+        };
       }
       // no longer a pending request with either accept or reject
-      state.pendingVolunteers.ids = state.pendingVolunteers.ids.filter((volunteerId) => volunteerId != payload.volunteerId)
+      state.pendingVolunteers.ids = state.pendingVolunteers.ids.filter((volunteerId) => volunteerId != payload.volunteerId);
     });
   },
 });

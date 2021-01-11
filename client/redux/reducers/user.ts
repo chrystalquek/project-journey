@@ -1,7 +1,8 @@
+import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from '@type/volunteer';
 import jwt from 'jsonwebtoken';
-import user from '../actions/user';
+import user, { updateVolunteer } from '../actions/user';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
@@ -47,6 +48,12 @@ const userSlice = createSlice({
       state.token = '';
       state.status = 'rejected';
     });
+    builder.addCase(updateVolunteer.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+    builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
+      state.user.commitmentApplicationIds.push(action.payload._id)
+    })
   },
 });
 

@@ -1,6 +1,6 @@
-import React, {FC} from "react";
-import {EventData, RoleData} from "@type/event";
-import {Box} from "@material-ui/core";
+import React, { FC } from 'react';
+import { EventData, RoleData } from '@type/event';
+import { Box } from '@material-ui/core';
 
 type VolunteerRolesProps = {
   event: EventData
@@ -21,7 +21,7 @@ const VolunteerRoles: FC<VolunteerRolesProps> = ({ event }) => {
         </div>
       ))}
     </>
-  )
-}
+  );
+};
 
 export default VolunteerRoles;

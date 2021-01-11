@@ -4,29 +4,45 @@ import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { useDispatch } from 'react-redux';
+import { updateVolunteer } from '@redux/actions/user';
 
 type props = {
   user: VolunteerData
 }
+
 const Remarks: FC<props> = ({ user }) => {
-  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(user.volunteerRemarks);
-  const [administratorRemarks, setAdministratorRemarks] = useState<string>(user.administratorRemarks);
+  const dispatch = useDispatch();
+  let originalVolunteerRemarks = user.volunteerRemarks;
+  const originalAdministratorRemarks = user.administratorRemarks;
+
+  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
+  const [administratorRemarks, setAdministratorRemarks] = useState<string>(originalAdministratorRemarks);
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
   const [administratorRemarksChanged, setAdministratorRemarksChanged] = useState<boolean>(false);
 
   const handleVolunteerRemarks = (event) => {
     setVolunteerRemarks(event.target.value);
-    setVolunteerRemarksChanged(event.target.value !== user.volunteerRemarks);
+    setVolunteerRemarksChanged(event.target.value !== originalVolunteerRemarks);
   };
 
   const handleAdministratorRemarks = (event) => {
     setAdministratorRemarks(event.target.value);
-    setAdministratorRemarksChanged(event.target.value !== user.administratorRemarks);
+    setAdministratorRemarksChanged(event.target.value !== originalAdministratorRemarks);
   };
 
   const saveVolunteerRemarks = () => {
     // TODO: sync database
-    user.volunteerRemarks = volunteerRemarks;
+    dispatch(
+      updateVolunteer({
+        email: user.email,
+        updatedVolunteerData: {
+          volunteerRemarks,
+        },
+      }),
+    );
+
+    originalVolunteerRemarks = volunteerRemarks;
     setVolunteerRemarksChanged(false);
   };
   const saveAdministratorRemarks = () => {

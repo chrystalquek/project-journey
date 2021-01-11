@@ -1,14 +1,24 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
+import { VolunteerData } from '@type/volunteer';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams,
-  SignUpRequest, UploadImageRequest,
-} from './request';
+  LoginRequest,
+  CreateEventRequest,
+  EditEventRequest,
+  GetEventParams,
+  QueryParams,
+  SignUpRequest,
+  UploadImageRequest,
+  CreateSignUpRequest,
+  UpdateSignUpRequest, SignUpQueryParams, UpdateVolunteerRequest,
+  CreateCommitmentApplicationRequest,
+} from '@utils/api/request';
 import {
-  GetEventsResponse, GetSignUpsResponse, GetVolunteersPaginatedResponse,
-  GetCommitmentApplicationResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
+  GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
-} from './response';
+  CreateSignUpResponse, UpdateSignUpResponse,
+  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
+} from '@utils/api/response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -24,6 +34,7 @@ export interface ApiClient {
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
+  updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -58,6 +69,14 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'signup/pending', 'get');
   }
 
+  async createSignUp(request: CreateSignUpRequest): Promise<CreateSignUpResponse> {
+    return this.send(request, 'signup', 'post');
+  }
+
+  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest): Promise<UpdateSignUpResponse> {
+    return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
+  }
+
   // event
   async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
     return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
@@ -89,7 +108,15 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
+  async updateVolunteer(request : UpdateVolunteerRequest): Promise<VolunteerData> {
+    return this.send(request, 'volunteer', 'put');
+  }
+
   // commitment application
+  async createCommitmentApplication(request: CreateCommitmentApplicationRequest): Promise<CommitmentApplicationData> {
+    return this.send(request, 'commitment-application', 'post');
+  }
+
   async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {
     return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
   }

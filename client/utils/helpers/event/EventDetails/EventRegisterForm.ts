@@ -1,4 +1,4 @@
-import { RoleData} from "@type/event";
+import { RoleData } from '@type/event';
 
 export type FormSelectRow = {
   id: string,
@@ -9,15 +9,15 @@ export type FormSelectRow = {
 
 export function parseRoles(roles: Array<RoleData>): Array<FormSelectRow> {
   // most vacancies come first
-  //roles.sort((a, b) => b.volunteers.length - a.volunteers.length);
+  // roles.sort((a, b) => b.volunteers.length - a.volunteers.length);
   return roles.map((role) => {
     const { remaining, total } = getRoleVacancies(role);
     return {
       id: role._id,
       value: role.name,
       description: `${role.name} (${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} available)`,
-      isDisabled: remaining === 0
-    }
+      isDisabled: remaining === 0,
+    };
   });
 }
 

@@ -6,7 +6,6 @@ export enum CommitmentApplicationStatus {
 
 export type CommitmentApplicationStatusType = CommitmentApplicationStatus.Pending | CommitmentApplicationStatus.Accepted | CommitmentApplicationStatus.Rejected
 
-
 export type CommitmentApplicationData = {
     _id: string,
     volunteerId: string

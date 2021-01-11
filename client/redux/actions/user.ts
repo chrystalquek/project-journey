@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SignUpRequest, LoginRequest } from '@utils/api/request';
 import { SignUpResponse, LoginResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
+import { VolunteerData } from '@type/volunteer';
 
 export type SignUpArgs = {
   name: string
@@ -62,6 +63,24 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
       password,
     };
     const response = await apiClient.login(request) as LoginResponse;
+    return response;
+  },
+);
+
+type UpdateVolunteerArgs = {
+  email: string,
+  updatedVolunteerData: Partial<VolunteerData>
+}
+
+export const updateVolunteer = createAsyncThunk<VolunteerData, UpdateVolunteerArgs>(
+  'user/updateVolunteer',
+  async ({ email, updatedVolunteerData }) => {
+    const request = {
+      email,
+      updatedVolunteerData,
+    };
+
+    const response = await apiClient.updateVolunteer(request);
     return response;
   },
 );

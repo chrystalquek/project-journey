@@ -21,7 +21,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
-import { EVENTS_ROUTE } from "@constants/routes";
+import { EVENTS_ROUTE } from '@constants/routes';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -126,6 +126,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
+    router.push('/');
   };
 
   const navigationRender = () => {
@@ -160,12 +161,13 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       {menuName}
                     </MenuItem>
                   ))}
-                  {userData.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+                  {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN &&
                     <MenuItem
                       onClick={() => router.push('/event/pending-requests')}
                     >
                       Pending Requests
-                    </MenuItem>}
+                    </MenuItem>
+                    }
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -261,7 +263,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-        <Avatar alt={userData.name} src={userData.photoUrl} />
+        <Avatar alt={userData?.name} src={userData?.photoUrl} />
       );
 
     return (
@@ -286,7 +288,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         </IconButton>
         <div className={classes.nameContainer}>
           <Typography className={classes.nameStyle}>
-            <Box fontWeight={700}>{userData.name}</Box>
+            <Box fontWeight={700}>{userData?.name}</Box>
           </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
