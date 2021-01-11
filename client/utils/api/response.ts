@@ -47,3 +47,11 @@ export type CreateEventResponse = {}
 export type GetCountResponse = {
   count: number
 }
+
+export type CreateSignUpResponse = {
+  signUpId: string
+}
+
+export type UpdateSignUpResponse = {
+  // nothing yet
+}

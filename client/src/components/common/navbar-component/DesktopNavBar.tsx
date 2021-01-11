@@ -161,14 +161,13 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       {menuName}
                     </MenuItem>
                   ))}
-                  {userData.volunteerType === VOLUNTEER_TYPE.ADMIN
-                    && (
+                  {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN &&
                     <MenuItem
                       onClick={() => router.push('/event/pending-requests')}
                     >
                       Pending Requests
                     </MenuItem>
-                    )}
+                    }
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -264,8 +263,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData?.name} src={userData?.photoUrl} />
+      );
 
     return (
       <>
@@ -288,11 +287,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           </Popper>
         </IconButton>
         <div className={classes.nameContainer}>
-          <Box fontWeight={700}>
-            <Typography className={classes.nameStyle}>
-              {userData.name}
-            </Typography>
-          </Box>
+          <Typography className={classes.nameStyle}>
+            <Box fontWeight={700}>{userData?.name}</Box>
+          </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}
             onClick={() => router.push(`/profile/${userData._id}`)}
