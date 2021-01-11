@@ -11,7 +11,7 @@ import {
   PAUSE,
   PERSIST,
   PURGE,
-  REGISTER
+  REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import signUpReducer, { SignUpState } from './reducers/signUp';
@@ -30,7 +30,7 @@ const reducers = combineReducers({
   event: EventReducer,
   volunteer: volunteerReducer,
   signUp: signUpReducer,
-  commitmentApplication: commitmentApplicationReducer
+  commitmentApplication: commitmentApplicationReducer,
 });
 
 const persistConfig = {
@@ -45,8 +45,8 @@ const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-    }
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
   }).concat(logger),
   devTools: process.env.NODE_ENV === 'development',
 });

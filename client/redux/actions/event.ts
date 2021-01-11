@@ -53,4 +53,6 @@ export const getAllEvents = createAsyncThunk(
   async () => await apiClient.getEvents({ eventType: 'all' }),
 );
 
-export default { createEvent, editEvent, getEvent, getAllEvents };
+export default {
+  createEvent, editEvent, getEvent, getAllEvents,
+};

@@ -38,7 +38,7 @@ export function getEventVacancies(data: EventData): { filled: number, total: num
     total += o.capacity ? o.capacity : 0;
     filled += o.volunteers ? o.volunteers.length : 0;
   });
-  return { filled, total, remaining: total-filled };
+  return { filled, total, remaining: total - filled };
 }
 
 // Filters events based on event type and volunteer type given some filter options
@@ -52,9 +52,9 @@ export function withFilters(events: Array<EventData>, filters: EventFilterOption
     const allowVol = getVolunteerType(e) === undefined;
 
     // TODO: fix date filtering
-    return (allowAllDates ? true : getDateFilter(filters) === getDate(e)) &&
-      (allowEvent || getEventFilters(filters).includes(getEventType(e))) &&
-      (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)));
+    return (allowAllDates ? true : getDateFilter(filters) === getDate(e))
+      && (allowEvent || getEventFilters(filters).includes(getEventType(e)))
+      && (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)));
   });
 }
 

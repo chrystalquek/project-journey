@@ -36,7 +36,7 @@ const EventsDetailPage = () => {
     <Container fixed>
       {body}
     </Container>
-  )
-}
+  );
+};
 
 export default EventsDetailPage;

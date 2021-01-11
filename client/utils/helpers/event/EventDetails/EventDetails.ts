@@ -18,7 +18,7 @@ export enum FormDisabledReason {
 }
 
 export function createTblData(title: string, description: string, isHighlight: boolean): TableData {
-  return { title, description, isHighlight }
+  return { title, description, isHighlight };
 }
 
 // Extracts date, time, location, vacancies, singup deadline

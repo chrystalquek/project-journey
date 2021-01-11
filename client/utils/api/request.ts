@@ -1,4 +1,5 @@
 import { EventPostData } from '@type/event';
+import { VolunteerData } from '@type/volunteer';
 import {SignUpData, SignUpIdType, SignUpStatus} from "@type/signUp";
 
 export type SignUpRequest = {
@@ -39,6 +40,14 @@ export type EditEventRequest = {
 
 export type GetEventParams = string;
 
+export type CreateCommitmentApplicationRequest = {
+  volunteerId: string
+}
+
+export type UpdateVolunteerRequest = {
+  email: string,
+  updatedVolunteerData: Partial<VolunteerData>
+}
 // SIGN-UPS
 export type SignUpQueryParams = {
   id: string, // id to match against once idType is known
