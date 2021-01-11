@@ -23,7 +23,6 @@ export interface ApiClient {
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
-  getVolunteerData(request: any): Promise<any>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -56,6 +55,10 @@ class AxiosApiClient implements ApiClient {
 
   async getPendingSignUps(): Promise<GetSignUpsResponse> {
     return this.send({}, 'signup/pending', 'get');
+  }
+
+  async updateSignUp({ signUpId, data }): Promise<GetSignUpsResponse> {
+    return this.send(data, `signup/${signUpId}/signUpId`, 'put');
   }
 
   // event
@@ -99,7 +102,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async getVolunteersById(ids) {
-    return this.send({ ids }, 'volunteer/ids', 'get');
+    return this.send({ ids }, 'volunteer/ids', 'post');
   }
 
   async getSignUpsByEventId(eid) {
@@ -119,7 +122,7 @@ class AxiosApiClient implements ApiClient {
 
     switch (method) {
       case 'get':
-        return (await this.axiosInstance.get(path, config)).data;
+        return (await this.axiosInstance.get(path, request, config)).data;
       case 'post':
         return (await this.axiosInstance.post(path, request, config)).data;
       case 'put':

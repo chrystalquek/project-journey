@@ -4,6 +4,7 @@ import Head from '@components/common/Header';
 import NavBar from '@components/common/NavBar';
 import EventVolunteers from '@components/event/EventVolunteers/EventVolunteers';
 import { useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
 
 // Handles checking that user is logged in and event detail validity
 const EventVolunteersPage = () => {
@@ -21,6 +22,8 @@ const EventVolunteersPage = () => {
 
   return (
     <Container fixed>
+      <Head title="Blessings in a Bag" />
+      <NavBar userData={userData.user} />
       <EventVolunteers eid={eid} />
     </Container>
   );
