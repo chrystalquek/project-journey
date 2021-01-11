@@ -164,6 +164,9 @@ const getAllVolunteerDetails = async (
     if (req.query.volunteerType) {
       query.volunteerType = (req.query.volunteerType as string).split(',');
     }
+    if (req.query.sort) {
+      query.sort = req.query.sort;
+    }
     const volunteersDetails = await volunteerService.getAllVolunteers(query);
     res.status(HTTP_CODES.OK).json(volunteersDetails);
   } catch (error) {
