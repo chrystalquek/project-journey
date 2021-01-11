@@ -160,7 +160,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       {menuName}
                     </MenuItem>
                   ))}
-                  {userData.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+                  {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN &&
                     <MenuItem
                       onClick={() => router.push('/event/pending-requests')}
                     >
@@ -261,7 +261,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-        <Avatar alt={userData.name} src={userData.photoUrl} />
+        <Avatar alt={userData?.name} src={userData?.photoUrl} />
       );
 
     return (
@@ -286,7 +286,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         </IconButton>
         <div className={classes.nameContainer}>
           <Typography className={classes.nameStyle}>
-            <Box fontWeight={700}>{userData.name}</Box>
+            <Box fontWeight={700}>{userData?.name}</Box>
           </Typography>
           <Button
             className={`${classes.button} ${classes.editProfileButton}`}

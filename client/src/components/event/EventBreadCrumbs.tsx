@@ -24,7 +24,6 @@ const EventBreadCrumbs: FC<EventBreadCrumbsProps> = ({ eid}) => {
     return events.length === 1 ? events[0] : null;
   }));
 
-  // TODO: Update this to dynamically retrieve routes
   return (
     <Breadcrumbs separator=">" className={classes.linkColor} aria-label="breadcrumb">
       <Link href={EVENTS_ROUTE}>Events</Link>

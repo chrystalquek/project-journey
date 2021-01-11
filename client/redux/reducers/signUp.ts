@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getPendingSignUps, getSignUpsUpcomingEvent } from '@redux/actions/signUp';
+import {
+  createAndAcceptSignUp, createSignUp,
+  getPendingSignUps, getSignUps,
+  getSignUpsUpcomingEvent,
+  updateSignUp
+} from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
 
 export type SignUpState = {
@@ -9,6 +14,9 @@ export type SignUpState = {
   },
   pendingSignUps: { // pending sign ups // used for events > pending requests
     ids: Array<string>
+  },
+  getSignUps: {
+    currSignUps: Array<SignUpData> // signups from getSignUps action
   }
 }
 
@@ -19,6 +27,9 @@ const initialState: SignUpState = {
   },
   pendingSignUps: {
     ids: []
+  },
+  getSignUps: {
+    currSignUps: [],
   }
 };
 
@@ -46,6 +57,40 @@ const signUpSlice = createSlice({
       addToData(payload.data, state)
       state.pendingSignUps.ids = payload.data.map(signUp => signUp._id)
     });
+
+    builder.addCase(getSignUps.fulfilled, (state, action) => {
+      const { payload } = action;
+      state.getSignUps.currSignUps = payload.data;
+    });
+
+    // Using redux for logging purposes
+    builder.addCase(createAndAcceptSignUp.pending, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createAndAcceptSignUp.fulfilled, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createAndAcceptSignUp.rejected, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createSignUp.pending, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createSignUp.fulfilled, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(createSignUp.rejected, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(updateSignUp.pending, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(updateSignUp.fulfilled, (state, action) => {
+      // do nothing yet
+    })
+    builder.addCase(updateSignUp.rejected, (state, action) => {
+      // do nothing yet
+    })
   },
 });
 

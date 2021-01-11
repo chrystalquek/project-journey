@@ -43,3 +43,10 @@ export type GetSignUpsResponse = {
 
 export type CreateEventResponse = {}
 
+export type CreateSignUpResponse = {
+  signUpId: string
+}
+
+export type UpdateSignUpResponse = {
+  // nothing yet
+}
