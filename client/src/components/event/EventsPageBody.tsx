@@ -157,7 +157,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
           </Grid>
           {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
           <Grid item sm={3} style={{ textAlign: 'center' }}>
-            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/event/new')}>
+            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/form/new')}>
               Create new event
             </Button>
           </Grid>
