@@ -10,7 +10,11 @@ import { accessTokenSecret } from '../helpers/auth';
 import HTTP_CODES from '../constants/httpCodes';
 import VALIDATOR from '../helpers/validation';
 
-export type VolunteerValidatorMethod = 'createVolunteer' | 'getVolunteer' | 'deleteVolunteer' | 'updateVolunteer'
+export type VolunteerValidatorMethod =
+  | 'createVolunteer'
+  | 'getVolunteer'
+  | 'deleteVolunteer'
+  | 'updateVolunteer';
 
 /**
  * Handles route request validation for controllers
@@ -23,7 +27,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         // Login details
         VALIDATOR.email(true),
         VALIDATOR.password,
-
         // Personal details
         VALIDATOR.name,
         VALIDATOR.nickname,
@@ -32,31 +35,22 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.birthday,
         VALIDATOR.address,
         VALIDATOR.mobileNumber,
-
         VALIDATOR.socialMediaPlatform,
         VALIDATOR.instagramHandle,
-
         VALIDATOR.organization,
         VALIDATOR.position,
         VALIDATOR.race,
-
         VALIDATOR.referralSources,
         VALIDATOR.languages,
-
         VALIDATOR.volunteerType,
-
         // Boolean responses
         VALIDATOR.hasVolunteered,
         VALIDATOR.biabVolunteeringDuration,
-
         VALIDATOR.hasChildrenExperience,
         VALIDATOR.childrenExperience,
-
         VALIDATOR.hasVolunteeredExternally,
         VALIDATOR.volunteeringExperience,
-
         VALIDATOR.hasFirstAidCertification,
-
         // Enum responses
         VALIDATOR.leadershipInterest,
         VALIDATOR.description,
@@ -65,38 +59,30 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.skills,
         VALIDATOR.strengths,
         VALIDATOR.volunteeringOpportunityInterest,
-
         // Volunteering related
         VALIDATOR.volunteerReason, // Categorize answers
         VALIDATOR.volunteerFrequency, // Frequency per month
         VALIDATOR.volunteerContribution,
-
         // Medical Information
         VALIDATOR.hasMedicalNeeds,
         VALIDATOR.medicalNeeds,
         VALIDATOR.hasAllergies,
         VALIDATOR.allergies,
         VALIDATOR.hasMedicationDuringDay,
-
         // Emergency Contact
         VALIDATOR.emergencyContactEmail,
         VALIDATOR.emergencyContactName,
         VALIDATOR.emergencyContactNumber,
         VALIDATOR.emergencyContactRelationship,
-
         // Remarks
         VALIDATOR.volunteerRemark,
       ];
     }
     case 'getVolunteer': {
-      return [
-        param('email').isEmail(),
-      ];
+      return [param('email').isEmail()];
     }
     case 'deleteVolunteer': {
-      return [
-        body('email').isEmail(),
-      ];
+      return [body('email').isEmail()];
     }
     case 'updateVolunteer': {
       return [
@@ -124,7 +110,10 @@ const getValidations = (method: VolunteerValidatorMethod) => {
   }
 };
 
-const createNewVolunteer = async (req: express.Request, res: express.Response) => {
+const createNewVolunteer = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     await volunteerService.addNewVolunteer(req.body as VolunteerData);
     res.status(HTTP_CODES.OK).send();
@@ -135,9 +124,14 @@ const createNewVolunteer = async (req: express.Request, res: express.Response) =
   }
 };
 
-const getVolunteerDetails = async (req: express.Request, res: express.Response) => {
+const getVolunteerDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
-    const volunteerDetails = await volunteerService.getVolunteer(req.params.email);
+    const volunteerDetails = await volunteerService.getVolunteer(
+      req.params.email
+    );
     res.status(HTTP_CODES.OK).json({
       data: volunteerDetails,
     });
@@ -148,7 +142,10 @@ const getVolunteerDetails = async (req: express.Request, res: express.Response) 
   }
 };
 
-const getAllVolunteerDetails = async (req: express.Request, res: express.Response) => {
+const getAllVolunteerDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     // handles both searching volunteers and returning all volunteers
 
@@ -182,16 +179,20 @@ const getAllVolunteerDetails = async (req: express.Request, res: express.Respons
  */
 const getPendingVolunteers = async (
   req: express.Request,
-  res: express.Response,
+  res: express.Response
 ): Promise<void> => {
   try {
-    const pendingCommitmentApplications = await commitmentApplicationService
-      .readCommitmentApplications('pending');
+    const pendingCommitmentApplications = await commitmentApplicationService.readCommitmentApplications(
+      'pending'
+    );
 
-    const pendingVolunteersIds = pendingCommitmentApplications
-      .map((commitmentApplication) => commitmentApplication.volunteerId);
+    const pendingVolunteersIds = pendingCommitmentApplications.map(
+      (commitmentApplication) => commitmentApplication.volunteerId
+    );
 
-    const pendingVolunteers = await volunteerService.readVolunteersByIds(pendingVolunteersIds);
+    const pendingVolunteers = await volunteerService.readVolunteersByIds(
+      pendingVolunteersIds
+    );
 
     res.status(HTTP_CODES.OK).json({ data: pendingVolunteers });
   } catch (err) {
@@ -206,7 +207,9 @@ const checkUpdateRights = () => [
 
   (req, res, next) => {
     if (req.body.adminRemarks && req.user.volunteeerType != 'admin') {
-      return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return res
+        .status(HTTP_CODES.UNAUTHENTICATED)
+        .json({ message: 'Unauthorized' });
     }
 
     next();
@@ -216,7 +219,8 @@ const checkUpdateRights = () => [
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
     await volunteerService.updateVolunteerDetails(
-      req.body.email as string, req.body as Partial<VolunteerData>,
+      req.body.email as string,
+      req.body as Partial<VolunteerData>
     );
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
