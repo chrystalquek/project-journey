@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import mongoose from 'mongoose';
 import { QueryParams, VolunteerData } from '../types';
-import Volunteer, { VOLUNTEER_TYPE } from '../models/Volunteer';
+import Volunteer from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
 
 // Helper methods
@@ -48,19 +48,22 @@ export const getVolunteer = async (email: string) => {
 export const getAllVolunteers = async (query: QueryParams) => {
   // no of volunteers that match name (if any)
   const count = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find({}))
-    .find({ volunteerType: { $in: query.volunteerType || VOLUNTEER_TYPE } })
+    .find({ volunteerType: { $in: query.volunteerType || [] } })
     .countDocuments();
 
   // get only part of the collection cos of pagination
   let volunteers;
   if (query.skip && query.limit) {
     volunteers = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find({}))
-      .find({ volunteerType: { $in: query.volunteerType || VOLUNTEER_TYPE } })
-      .skip(query.skip).limit(query.limit).lean()
+      .find({ volunteerType: { $in: query.volunteerType || [] } })
+      .sort({ [query.sort]: 1 })
+      .skip(query.skip).limit(query.limit)
+      .lean()
       .exec();
   } else {
     volunteers = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find({}))
-      .find({ volunteerType: { $in: query.volunteerType || VOLUNTEER_TYPE } })
+      .find({ volunteerType: { $in: query.volunteerType || [] } })
+      .sort({ [query.sort]: 1 })
       .lean().exec();
   }
 
