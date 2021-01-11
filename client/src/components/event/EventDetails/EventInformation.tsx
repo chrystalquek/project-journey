@@ -18,15 +18,18 @@ type EventInformationProps = {
   event: EventData
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     background: 'none',
     borderBottom: 'none',
   },
   gutterBottom: {
     marginBottom: '0.35em',
+  },
+  highlight: {
+    color: theme.palette.text.secondary,
   }
-});
+}));
 
 const EventInformation: FC<EventInformationProps> = ({ event }) => {
   const classes = useStyles();
@@ -41,10 +44,12 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
             {rows.map((row: TableData) => (
               <TableRow key={row.title}>
                 <TableCell className={classes.root} padding="none" component="th" scope="row">
-                  {row.title}
+                  <strong>{row.title}</strong>
                 </TableCell>
                 <TableCell className={classes.root} padding="none" align="left">
-                  {row.isHighlight ? <strong>{row.description}</strong> : row.description}
+                  {row.isHighlight
+                    ? <strong className={classes.highlight}>{row.description}</strong>
+                    : <strong>{row.description}</strong>}
                 </TableCell>
               </TableRow>
             ))}
