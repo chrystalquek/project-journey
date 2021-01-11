@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: (props: SectionTitleProps) => ({
     textAlign: props.textCenter ? 'center' : 'initial',
     paddingBottom: '0.1rem',
-    marginBottom: props.gutterBottom ? '1rem' : '0',
+    marginBottom: props.gutterBottom ? '0.35em' : '0',
     borderTop: props.borderTop ? '2px solid #CECECE' : 'none',
     borderBottom: props.borderBottom ? '2px solid #CECECE' : 'none',
     fontWeight: props.fontBold ? 'bold' : 'normal'

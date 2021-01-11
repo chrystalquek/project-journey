@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {Box, Button} from "@material-ui/core";
+import {Box, Button, makeStyles} from "@material-ui/core";
 import {useRouter} from "next/router";
 import {LOGIN_ROUTE, SIGNUP_ROUTE} from "@constants/routes";
 import {EventTypography} from "@components/common/event/EventTypography";

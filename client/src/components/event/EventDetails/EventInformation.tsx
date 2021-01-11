@@ -51,9 +51,7 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Typography gutterBottom>
-        {event.description}
-      </Typography>
+      <EventTypography text={event.description || "No event description."} />
     </>
   )
 }
