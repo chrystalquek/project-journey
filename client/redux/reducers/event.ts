@@ -11,7 +11,7 @@ export type EventState = {
   upcomingEvent: { // part of dashboard and events > pending requests
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
   }
-  form: EventData | null;
+  form: Partial<EventData>,
 }
 
 const initialState: EventState = {
@@ -20,7 +20,7 @@ const initialState: EventState = {
   upcomingEvent: {
     ids: [],
   },
-  form: null,
+  form: {},
 };
 
 // parse all Dates etc before saving to store
@@ -30,7 +30,7 @@ const addToData = (events: Array<EventData>, state: EventState) => {
     startDate: new Date(event.startDate),
     endDate: new Date(event.endDate),
     deadline: new Date(event.deadline),
-  })
+  });
 };
 
 const eventSlice = createSlice({
@@ -60,10 +60,10 @@ const eventSlice = createSlice({
       state.form = payload;
     });
     builder.addCase(getEvent.rejected, (state) => {
-      state.form = null;
+      state.form = {};
     });
     builder.addCase(getEvent.pending, (state) => {
-      state.form = null;
+      state.form = {};
     });
     builder.addCase(createEvent.rejected, (state) => {
       // do nothing

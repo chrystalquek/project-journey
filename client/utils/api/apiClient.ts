@@ -1,5 +1,6 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AnyAaaaRecord } from 'dns';
 import {
   LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
 } from './request';
@@ -22,6 +23,7 @@ export interface ApiClient {
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
+  getVolunteerData(request: any): Promise<any>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -94,6 +96,14 @@ class AxiosApiClient implements ApiClient {
 
   async updateCommitmentApplication(data: CommitmentApplicationData): Promise<void> {
     return this.send(data, `commitment-application/${data._id}`, 'put');
+  }
+
+  async getVolunteersById(ids) {
+    return this.send({ ids }, 'volunteer/ids', 'get');
+  }
+
+  async getSignUpsByEventId(eid) {
+    return this.send({ eid }, `signup/${eid}/eventId`, 'get');
   }
 
   protected async send(request: any, path: string, method: HttpMethod) {
