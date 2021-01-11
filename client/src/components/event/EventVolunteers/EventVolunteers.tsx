@@ -1,5 +1,5 @@
 import {
-  makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button,
+  makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Popover,
 } from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
 import { EventData } from 'types/event';
@@ -21,17 +21,21 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 
 const useStyles = makeStyles((theme) => ({
-  shapeCircle: {
-    backgroundColor: theme.palette.primary.main,
-    width: 40,
-    height: 40,
-    borderRadius: '50%',
-    textAlign: 'center',
-    fontSize: 'large',
-    color: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+  // popUpButton: {
+  //   backgroundColor: theme.palette.primary.main,
+  //   width: 40,
+  //   height: 40,
+  //   borderRadius: '50%',
+  //   textAlign: 'center',
+  //   fontSize: 'large',
+  //   color: 'white',
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+  popUpButton: {
+    textTransform: 'none',
+    width: '100%',
   },
 }));
 
@@ -99,74 +103,172 @@ const EventVolunteers = ({ eid }) => {
   }, [signUps]);
   const router = useRouter();
 
-  const [openRemove, setOpenRemove] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const onUpdateRole = ({ data, signUpId }) => {
-    dispatch(updateSignUp({ signUpId, data }));
-    setOpenRemove(false);
-    setOpenEdit(false);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const getUpdateRoleButton = (signUp: SignUpData, volunteerName: string) => {
-    const removeVolunteerButton = (
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
+  const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
+  // const [isEditingRole, setIsEditingRole] = useState(false);
+
+  const onUpdateSignUp = ({ data, signUpId }) => {
+    dispatch(updateSignUp({ signUpId, data }));
+    setOpenRemoveDialog(false);
+  };
+
+  const getMoreButton = (signUp: SignUpData, volunteerName: string) => {
+    const removeButton = (
       <Button
-        onClick={() => setOpenRemove(true)}
+        className={classes.popUpButton}
+        onClick={() => {
+          setOpenRemoveDialog(true);
+        }}
       >
-        Remove Volunteer From Event
+        Remove Volunteer from Event
       </Button>
     );
-    const editRoleButton = (
-      <IconButton
-        onClick={() => setOpenEdit(true)}
-      >
-        Remove Volunteer From Event
-      </IconButton>
+
+    // const editRoleButton = (
+    //   <Button className={classes.popUpButton} onClick={() => setIsEditingRole(true)}>
+    //     Edit Role
+    //   </Button>
+    // );
+
+    const moreButton = (
+      <div>
+        <IconButton onClick={handleClick}>
+          <MoreVertIcon />
+        </IconButton>
+        <Popover
+          id={signUp.sign_up_id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: 'left',
+          }}
+        >
+          <Grid direction="row">
+            <Grid item>
+              {removeButton}
+              <ActionableDialog
+                open={openRemoveDialog}
+                onClose={() => setOpenRemoveDialog(false)}
+                content={`Are you sure you want to remove ${volunteerName} as a volunteer?`}
+                buttonTitle="Remove"
+                buttonOnClick={() => onUpdateSignUp({
+                  data: { status: 'pending' },
+                  signUpId: signUp.sign_up_id,
+                })}
+              />
+            </Grid>
+            {/* <Grid item>
+              {editRoleButton}
+            </Grid> */}
+          </Grid>
+        </Popover>
+      </div>
+
     );
-    return (
-      <Grid direction="row">
-        {removeVolunteerButton}
-        <ActionableDialog
-          open={openRemove}
-          onClose={() => setOpenRemove(false)}
-          content={`Are you sure you want to remove ${volunteerName} as a volunteer?`}
-          buttonTitle="Remove Volunteer From Event"
-          buttonOnClick={() => onUpdateRole(
-            {
-              data: { status: 'pending' },
-              signUpId: signUp.sign_up_id,
-            },
-          )}
-        />
-        {editRoleButton}
-        <ActionableDialog
-          open={openEdit}
-          onClose={() => setOpenEdit(false)}
-          content={`Are you sure you want to edit ${volunteerName}'s role?`}
-          buttonTitle="Edit Role"
-          buttonOnClick={() => onUpdateRole(
-            {
-              data: { status: ['accepted', 'EDITED'] },
-              signUpId: signUp.sign_up_id,
-            },
-          )}
-        />
-      </Grid>
-    );
+    return moreButton;
+
+    // const removeVolunteerButton = (
+    //   <Button
+    //     onClick={() => setOpenRemove(true)}
+    //   >
+    //     Remove Volunteer From Event
+    //   </Button>
+    // );
+    // const editRoleButton = (
+    //   <IconButton
+    //     onClick={() => setOpenEdit(true)}
+    //   >
+    //     Remove Volunteer From Event
+    //   </IconButton>
+    // );
+    // return (
+    //   <Grid direction="row">
+    //     {removeVolunteerButton}
+    //     <ActionableDialog
+    //       open={openRemove}
+    //       onClose={() => setOpenRemove(false)}
+    //       content={`Are you sure you want to remove ${volunteerName} as a volunteer?`}
+    //       buttonTitle="Remove Volunteer From Event"
+    //       buttonOnClick={() => onUpdateRole(
+    //         {
+    //           data: { status: 'pending' },
+    //           signUpId: signUp.sign_up_id,
+    //         },
+    //       )}
+    //     />
+    //     {editRoleButton}
+    //     <ActionableDialog
+    //       open={openEdit}
+    //       onClose={() => setOpenEdit(false)}
+    //       content={`Are you sure you want to edit ${volunteerName}'s role?`}
+    //       buttonTitle="Edit Role"
+    //       buttonOnClick={() => onUpdateRole(
+    //         {
+    //           data: { status: ['accepted', 'EDITED'] },
+    //           signUpId: signUp.sign_up_id,
+    //         },
+    //       )}
+    //     />
+    //   </Grid>
   };
+
+  const [isApprovedTab, setIsApprovedTab] = useState(true);
 
   const tabs = [
     {
       key: 'volunteers',
       label: `Volunteers (${approvedSignUps.length})`,
-      onClick: () => router.push(`/event/${eid}/volunteers`),
+      onClick: () => setIsApprovedTab(true),
     },
     {
       ley: 'pending-volunteers',
       label: `Pending (${nonApprovedSignUps.length})`,
-      onClick: () => router.push(`/event/${eid}/volunteers-pending`),
+      onClick: () => setIsApprovedTab(false),
     },
   ];
+
+  const getApprovedVolunteersTableBody = () => approvedSignUps.map((signUp) => {
+    const volunteer = allVolunteerData[signUp.user_id];
+    return (
+      <TableRow key={signUp?.sign_up_id}>
+        <TableCell><b>{volunteer?.name}</b></TableCell>
+        <TableCell>{volunteer?.mobile_number}</TableCell>
+        <TableCell>{signUp?.status[1]}</TableCell>
+        <TableCell>{getMoreButton(signUp, volunteer?.name)}</TableCell>
+      </TableRow>
+    );
+  });
+
+  const getNonApprovedSignUpsVolunteersTableBody = () => nonApprovedSignUps.map(
+    (signUp) => {
+      const volunteer = allVolunteerData[signUp.user_id];
+      return (
+        <TableRow key={signUp?.sign_up_id}>
+          <TableCell><b>{volunteer?.name}</b></TableCell>
+          <TableCell>{volunteer?.mobile_number}</TableCell>
+          <TableCell>{signUp?.status[1]}</TableCell>
+          <TableCell>{getMoreButton(signUp, volunteer?.name)}</TableCell>
+        </TableRow>
+      );
+    },
+  );
 
   return (
     <>
@@ -185,22 +287,9 @@ const EventVolunteers = ({ eid }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {approvedSignUps.length > 0
-                && approvedSignUps.map((signUp) => {
-                  const volunteer = allVolunteerData[signUp.user_id];
-                  return (
-                    <TableRow key={signUp?.sign_up_id}>
-                      <TableCell><b>{volunteer?.name}</b></TableCell>
-                      <TableCell>{volunteer?.mobile_number}</TableCell>
-                      <TableCell>{signUp?.status[1]}</TableCell>
-                      <TableCell>
-                        <IconButton onClick={() => getUpdateRoleButton(signUp, volunteer?.name)}>
-                          <MoreVertIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                { isApprovedTab
+                  ? getApprovedVolunteersTableBody()
+                  : getNonApprovedSignUpsVolunteersTableBody()}
               </TableBody>
             </Table>
           </TableContainer>
