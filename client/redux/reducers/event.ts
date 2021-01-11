@@ -1,9 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getAllEvents, getEvent, createEvent, getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent,
+  getAllEvents, getEvent, editEvent, createEvent, getEventsUpcomingEvent,
+  getSignedUpEventsUpcomingEvent,
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
+
+type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
 export type EventState = {
   events: Array<EventData>; // TODO resolve this
@@ -12,6 +15,7 @@ export type EventState = {
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
   }
   form: EventData | null;
+  status: FetchStatus
 }
 
 const initialState: EventState = {
@@ -21,6 +25,7 @@ const initialState: EventState = {
     ids: [],
   },
   form: null,
+  status: '',
 };
 
 // parse all Dates etc before saving to store
@@ -30,7 +35,7 @@ const addToData = (events: Array<EventData>, state: EventState) => {
     startDate: new Date(event.startDate),
     endDate: new Date(event.endDate),
     deadline: new Date(event.deadline),
-  })
+  });
 };
 
 const eventSlice = createSlice({
@@ -50,17 +55,6 @@ const eventSlice = createSlice({
       addToData(payload.data, state);
       state.upcomingEvent.ids = payload.data.map((event) => event._id);
     });
-
-    builder.addCase(createEvent.pending, (state) => {
-      // set loading
-    });
-    builder.addCase(createEvent.rejected, (state) => {
-      // do nothing
-    });
-
-    builder.addCase(getEvent.pending, (state) => {
-      state.form = null;
-    });
     builder.addCase(getEvent.fulfilled, (state, action) => {
       const { payload } = action;
       state.form = payload;
@@ -68,7 +62,27 @@ const eventSlice = createSlice({
     builder.addCase(getEvent.rejected, (state) => {
       state.form = null;
     });
-
+    builder.addCase(getEvent.pending, (state) => {
+      state.form = null;
+    });
+    builder.addCase(createEvent.rejected, (state) => {
+      state.status = 'rejected';
+    });
+    builder.addCase(createEvent.pending, (state) => {
+      state.status = 'fetching';
+    });
+    builder.addCase(createEvent.fulfilled, (state) => {
+      state.status = 'fulfilled';
+    });
+    builder.addCase(editEvent.rejected, (state) => {
+      state.status = 'rejected';
+    });
+    builder.addCase(editEvent.pending, (state) => {
+      state.status = 'fetching';
+    });
+    builder.addCase(editEvent.fulfilled, (state) => {
+      state.status = 'fulfilled';
+    });
     builder.addCase(getAllEvents.pending, (state) => {
       state.events = [];
     });

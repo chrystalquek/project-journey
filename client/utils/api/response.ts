@@ -43,6 +43,15 @@ export type GetSignUpsResponse = {
 
 export type CreateEventResponse = {}
 
+export type UploadImageResponse = {
+  name: string,
+  url: string
+}
+// general response just to get a number
+export type GetCountResponse = {
+  count: number
+}
+
 export type CreateSignUpResponse = {
   signUpId: string
 }

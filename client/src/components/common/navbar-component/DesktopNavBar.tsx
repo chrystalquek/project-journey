@@ -21,7 +21,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
-import { EVENTS_ROUTE } from "@constants/routes";
+import { EVENTS_ROUTE } from '@constants/routes';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -126,6 +126,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
+    router.push('/');
   };
 
   const navigationRender = () => {
@@ -165,7 +166,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       onClick={() => router.push('/event/pending-requests')}
                     >
                       Pending Requests
-                    </MenuItem>}
+                    </MenuItem>
+                    }
                 </MenuList>
               </ClickAwayListener>
             </Paper>

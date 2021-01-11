@@ -81,14 +81,12 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
     switch (event.target.name) {
       case EventFilters.ADHOC:
       case EventFilters.COMMITTED:
-        newFilters[EventFilters.VOLUNTEERTYPE][event.target.name] =
-          event.target.checked;
+        newFilters[EventFilters.VOLUNTEERTYPE][event.target.name] = event.target.checked;
         break;
       case EventFilters.HANGOUTS:
       case EventFilters.VOLUNTEERING:
       case EventFilters.WORKSHOPS:
-        newFilters[EventFilters.EVENTTYPE][event.target.name] =
-          event.target.checked;
+        newFilters[EventFilters.EVENTTYPE][event.target.name] = event.target.checked;
         break;
       default:
       // do nothing
@@ -98,8 +96,8 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
 
   return (
     <>
-      <Box marginBottom='4px' fontWeight='bold'>
-        <Typography variant='body2'>Filter By</Typography>
+      <Box marginBottom="4px" fontWeight="bold">
+        <Typography variant="body2">Filter By</Typography>
       </Box>
       <div style={{ width: '100%' }}>
         <Accordion
@@ -109,8 +107,8 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
         >
           <AccordionSummary
             expandIcon={dateExpanded ? <RemoveIcon /> : <AddIcon />}
-            aria-controls='panel-date'
-            id='panel-date'
+            aria-controls="panel-date"
+            id="panel-date"
           >
             <Typography>Date</Typography>
           </AccordionSummary>
@@ -119,13 +117,13 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
           >
             <KeyboardDatePicker
               value={filters.date}
-              variant='inline'
+              variant="inline"
               onChange={(date) => handleDateChange(date)}
               minDate={dayjs(new Date())}
-              format='MM/DD/YYYY'
-              inputVariant='outlined'
-              margin='dense'
-              placeholder='dd/MM/yyyy'
+              format="MM/DD/YYYY"
+              inputVariant="outlined"
+              margin="dense"
+              placeholder="dd/MM/yyyy"
             />
           </AccordionDetails>
         </Accordion>
@@ -136,46 +134,46 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
         >
           <AccordionSummary
             expandIcon={eventTypeExpanded ? <RemoveIcon /> : <AddIcon />}
-            aria-controls='panel-eventType'
-            id='panel-eventType'
+            aria-controls="panel-eventType"
+            id="panel-eventType"
           >
             <Typography>Event Type</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <FormGroup>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={filters.eventType.volunteering}
                     onChange={handleCheckboxChange}
                     name={EventFilters.VOLUNTEERING}
-                    size='small'
+                    size="small"
                   />
-                }
-                label='Volunteering'
+                )}
+                label="Volunteering"
               />
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={filters.eventType.workshops}
                     onChange={handleCheckboxChange}
                     name={EventFilters.WORKSHOPS}
-                    size='small'
+                    size="small"
                   />
-                }
-                label='Workshops'
+                )}
+                label="Workshops"
               />
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={filters.eventType.hangouts}
                     onChange={handleCheckboxChange}
                     name={EventFilters.HANGOUTS}
                     disableRipple
-                    size='small'
+                    size="small"
                   />
-                }
-                label='Hangouts'
+                )}
+                label="Hangouts"
               />
             </FormGroup>
           </AccordionDetails>
@@ -187,34 +185,34 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
         >
           <AccordionSummary
             expandIcon={volTypeExpanded ? <RemoveIcon /> : <AddIcon />}
-            aria-controls='panel-volType'
-            id='panel-volType'
+            aria-controls="panel-volType"
+            id="panel-volType"
           >
             <Typography>Volunteer Type</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <FormGroup>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={filters.volunteerType.adhoc}
                     onChange={handleCheckboxChange}
                     name={EventFilters.ADHOC}
-                    size='small'
+                    size="small"
                   />
-                }
-                label='Adhoc'
+                )}
+                label="Adhoc"
               />
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={filters.volunteerType.committed}
                     onChange={handleCheckboxChange}
                     name={EventFilters.COMMITTED}
-                    size='small'
+                    size="small"
                   />
-                }
-                label='Committed'
+                )}
+                label="Committed"
               />
             </FormGroup>
           </AccordionDetails>

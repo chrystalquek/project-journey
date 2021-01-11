@@ -1,6 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Dialog, Grid, Typography } from '@material-ui/core';
+import {
+  Button, Dialog, Grid, Typography,
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5em',
     fontSize: 'small',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   otherButton: {
     padding: theme.spacing(5),
@@ -25,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5em',
     fontSize: 'small',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 }));
 
 export interface ActionableDialogProps {
@@ -40,7 +42,9 @@ export interface ActionableDialogProps {
 // only for dialogs with a question + 2 buttons (cancel on left, some other button on right thats defined by props)
 export function ActionableDialog(props: ActionableDialogProps) {
   const classes = useStyles();
-  const { onClose, open, content, buttonTitle, buttonOnClick } = props;
+  const {
+    onClose, open, content, buttonTitle, buttonOnClick,
+  } = props;
 
   return (
     <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>

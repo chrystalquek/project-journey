@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {VOLUNTEER_TYPE} from "@type/volunteer";
+import { VOLUNTEER_TYPE } from '@type/volunteer';
 
 export type EventPostData = {
   name: string;
@@ -82,4 +82,3 @@ export enum Event {
 }
 
 export type EventType = Event.Volunteering | Event.Workshop | Event.Hangout;
-

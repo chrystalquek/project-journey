@@ -1,5 +1,6 @@
 import { EventPostData } from '@type/event';
-import {SignUpData, SignUpIdType, SignUpStatus} from "@type/signUp";
+import { VolunteerData } from '@type/volunteer';
+import { SignUpData, SignUpIdType, SignUpStatus } from '@type/signUp';
 
 export type SignUpRequest = {
   name: string
@@ -39,12 +40,26 @@ export type EditEventRequest = {
 
 export type GetEventParams = string;
 
+export type UploadImageRequest = FormData;
+
+export type UploadImageRequestWithField = {
+  name: string,
+  form: FormData,
+}
+export type CreateCommitmentApplicationRequest = {
+  volunteerId: string
+}
+
+export type UpdateVolunteerRequest = {
+  email: string,
+  updatedVolunteerData: Partial<VolunteerData>
+}
 // SIGN-UPS
 export type SignUpQueryParams = {
   id: string, // id to match against once idType is known
   idType: SignUpIdType,
 }
 
-export type CreateSignUpRequest = Omit<SignUpData, "_id" | "signUpId">;
+export type CreateSignUpRequest = Omit<SignUpData, '_id' | 'signUpId'>;
 
-export type UpdateSignUpRequest = Omit<SignUpData, "_id" | "signUpId">;
+export type UpdateSignUpRequest = Omit<SignUpData, '_id' | 'signUpId'>;
