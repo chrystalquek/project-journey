@@ -44,7 +44,6 @@ export type GetSignUpsResponse = {
 export type CreateEventResponse = {}
 
 export type UploadImageResponse = {
-  email: string,
-  imageName: string,
+  name: string,
   url: string
 }

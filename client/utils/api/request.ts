@@ -39,3 +39,8 @@ export type EditEventRequest = {
 export type GetEventParams = string;
 
 export type UploadImageRequest = FormData;
+
+export type UploadImageRequestWithField = {
+  name: string,
+  form: FormData,
+}
