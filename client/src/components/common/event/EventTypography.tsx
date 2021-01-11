@@ -3,6 +3,7 @@ import {makeStyles, Typography, Theme, Box, useTheme} from "@material-ui/core";
 
 type SectionTitleProps = {
   text: string,
+  fontSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'body1' | 'body2',
   textCenter?: boolean,
   fontBold?: boolean,
   gutterBottom?: boolean,
@@ -21,8 +22,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   })
 }));
 
-const EventHeader: FC<SectionTitleProps> = (props) => {
-  const { text } = props;
+const EventTypography: FC<SectionTitleProps> = (props) => {
+  const fontSize = props.fontSize || 'body1';
   const classes = useStyles(props);
   const theme = useTheme<Theme>();
 
@@ -30,11 +31,11 @@ const EventHeader: FC<SectionTitleProps> = (props) => {
     <Box
       className={classes.root}
       fontFamily={theme.typography.fontFamily}
-      fontSize={theme.typography.h3.fontSize}
+      fontSize={theme.typography[fontSize].fontSize}
     >
-      {text}
+      {props.text}
     </Box>
   )
 }
 
-export { EventHeader };
+export { EventTypography };

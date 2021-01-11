@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Box, Button} from "@material-ui/core";
 import {useRouter} from "next/router";
 import {LOGIN_ROUTE, SIGNUP_ROUTE} from "@constants/routes";
-import {EventHeader} from "@components/common/event/EventHeader";
+import {EventTypography} from "@components/common/event/EventTypography";
 
 type CreateAccountNoticeProps = {
   // nothing yet
@@ -13,7 +13,7 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
 
   return (
     <>
-      <EventHeader textCenter borderTop borderBottom gutterBottom fontBold text="Register Here" />
+      <EventTypography fontSize='h3' textCenter borderTop borderBottom gutterBottom fontBold text="Register Here" />
       <p>You need an account to register events.</p>
       <p>It takes less than 2mins to create one</p>
       <div>

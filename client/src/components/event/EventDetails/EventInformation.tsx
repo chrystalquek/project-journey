@@ -1,27 +1,49 @@
 import React, {FC} from "react";
 import {EventData} from "@type/event";
 import {getEventInfo, TableData} from "@utils/helpers/event/EventDetails/EventDetails";
-import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow} from "@material-ui/core";
-import {EventHeader} from "@components/common/event/EventHeader";
+import {
+  Box,
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography
+} from "@material-ui/core";
+import {EventTypography} from "@components/common/event/EventTypography";
 
 type EventInformationProps = {
   event: EventData
 }
 
+const useStyles = makeStyles({
+  root: {
+    background: 'none',
+    borderBottom: 'none',
+  },
+  gutterBottom: {
+    marginBottom: '0.35em',
+  }
+});
+
 const EventInformation: FC<EventInformationProps> = ({ event }) => {
+  const classes = useStyles();
   const rows: Array<TableData> = getEventInfo(event);
+
   return (
     <>
-      <EventHeader fontBold borderBottom gutterBottom text='Event Information' />
-      <TableContainer component={Paper}>
+      <EventTypography fontSize='h3' fontBold borderBottom gutterBottom text='Event Information' />
+      <TableContainer className={classes.gutterBottom}>
         <Table aria-label='event information table'>
           <TableBody>
             {rows.map((row: TableData) => (
               <TableRow key={row.title}>
-                <TableCell component="th" scope="row">
+                <TableCell className={classes.root} padding="none" component="th" scope="row">
                   {row.title}
                 </TableCell>
-                <TableCell align="left">
+                <TableCell className={classes.root} padding="none" align="left">
                   {row.isHighlight ? <strong>{row.description}</strong> : row.description}
                 </TableCell>
               </TableRow>
@@ -29,9 +51,9 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <p>
+      <Typography gutterBottom>
         {event.description}
-      </p>
+      </Typography>
     </>
   )
 }

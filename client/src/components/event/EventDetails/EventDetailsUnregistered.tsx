@@ -9,7 +9,7 @@ import EventInformation from "@components/event/EventDetails/EventInformation";
 import VolunteerRoles from "@components/event/EventDetails/VolunteerRoles";
 import FacilitatorInfo from "@components/event/EventDetails/FacilitatorInfo";
 import CreateAccountNotice from "@components/event/EventDetails/CreateAccountNotice";
-import {EventHeader} from "@components/common/event/EventHeader";
+import {EventTypography} from "@components/common/event/EventTypography";
 
 type EventDetailsUnregisteredProps = {
   event: EventData,
