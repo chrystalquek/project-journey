@@ -8,12 +8,15 @@ import {
   GetEventParams,
   QueryParams,
   SignUpRequest,
+  UploadImageRequest,
   CreateSignUpRequest,
-  UpdateSignUpRequest, SignUpQueryParams, UpdateVolunteerRequest, CreateCommitmentApplicationRequest,
+  UpdateSignUpRequest, SignUpQueryParams, UpdateVolunteerRequest,
+  CreateCommitmentApplicationRequest,
 } from '@utils/api/request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse, CreateSignUpResponse, UpdateSignUpResponse,
+  EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
+  CreateSignUpResponse, UpdateSignUpResponse,
   GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
 } from '@utils/api/response';
 
@@ -122,9 +125,15 @@ class AxiosApiClient implements ApiClient {
     return this.send(data, `commitment-application/${data._id}`, 'put');
   }
 
-  protected async send(request: any, path: string, method: HttpMethod) {
+  // upload image
+  async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
+    return this.send(request, 'image', 'post', true);
+  }
+
+  protected async send(request: any, path: string, method: HttpMethod,
+    isImageUpload: boolean = false) {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      'Content-Type': isImageUpload ? 'multipart/form-data' : 'application/json',
     };
 
     if (process.env.NODE_ENV === 'development') {

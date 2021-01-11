@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  CreateEventRequest, EditEventRequest, GetEventParams, QueryParams,
+  CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, UploadImageRequest,
 } from '@utils/api/request';
 import {
-  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse,
+  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse, UploadImageResponse,
 } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 
