@@ -142,7 +142,7 @@ const EventVolunteers = ({ eid }) => {
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
   // const [isEditingRole, setIsEditingRole] = useState(false);
 
-  const onUpdateSignUp = ({ request: UpdateSignUpRequest, query: SignUpQueryParams }) => {
+  const onUpdateSignUp = ({ request, query }) => {
     dispatch(updateSignUp({ request, query }));
     setOpenRemoveDialog(false);
   };
@@ -231,7 +231,7 @@ const EventVolunteers = ({ eid }) => {
     }));
   };
 
-  const getPendingTabButtons = (signUp, name) => {
+  const getPendingTabButtons = (signUp: SignUpData) => {
     const assignButton = (
       <Button
         className={classes.assignButton}

@@ -86,7 +86,8 @@ const signUpSlice = createSlice({
       // do nothing yet
     });
     builder.addCase(updateSignUp.fulfilled, (state, action) => {
-      // do nothing yet
+      const { payload } = action;
+      addToData(payload.data, state);
     });
     builder.addCase(updateSignUp.rejected, (state, action) => {
       // do nothing yet

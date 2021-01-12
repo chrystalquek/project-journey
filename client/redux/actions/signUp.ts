@@ -6,6 +6,7 @@ import { GetSignUpsResponse, UpdateSignUpResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 import { SignUpIdType } from '@type/signUp';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import { request } from 'http';
 
 export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, QueryParams, { state }>(
   'signUp/getSignUpsUpcomingEvent',
@@ -49,6 +50,12 @@ export const createSignUp = createAsyncThunk(
 
 export const updateSignUp = createAsyncThunk(
   'signUp/updateSignUp',
-  async (payloadCreator: {query: SignUpQueryParams, request: UpdateSignUpRequest}) => apiClient
-    .updateSignUp(payloadCreator.query, payloadCreator.request),
+  async (payloadCreator: {query: SignUpQueryParams, request: UpdateSignUpRequest}) => {
+    await apiClient
+      .updateSignUp(payloadCreator.query, payloadCreator.request);
+    const response = {
+      data: [payloadCreator.request],
+    };
+    return response;
+  },
 );

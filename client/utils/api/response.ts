@@ -57,5 +57,5 @@ export type CreateSignUpResponse = {
 }
 
 export type UpdateSignUpResponse = {
-  // nothing yet
+  data: SignUpData
 }
