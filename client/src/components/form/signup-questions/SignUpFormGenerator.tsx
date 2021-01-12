@@ -8,6 +8,10 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
+import DropZoneCard from '@components/common/DropZoneCard';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import { uploadImage } from '@redux/actions/image';
 
 type FormGeneratorProps = {
   questionList: QuestionList;
@@ -15,14 +19,33 @@ type FormGeneratorProps = {
 };
 
 const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
+  const dispatch = useDispatch();
+
   const initialValues: Record<string, any> = {};
 
   questionList.forEach(({ name, type, initialValue }) => {
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;
   });
 
+  const onUploadImage = (imageFile, name) => {
+    const form = new FormData();
+    form.append('image', imageFile);
+    form.append('email', 'dummy@dummy.com');
+
+    return dispatch(uploadImage({ name, form }));
+  };
+
   const handleSubmit = useCallback(
-    (values: Record<string, any>) => {
+    async (values: Record<string, any>) => {
+      // Upload and get cover image URL
+      if (values.photoUrl && typeof values.photoUrl !== 'string') {
+        // @ts-ignore type exists
+        await onUploadImage(values.photoUrl, 'photoUrl').then(unwrapResult)
+          .then((result) => {
+            values.photoUrl = result.url;
+          });
+      }
+
       handleSignUp({
         name: values.firstName + ' ' + values.lastName,
         volunteerType: VOLUNTEER_TYPE.ADHOC,
@@ -33,7 +56,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
         citizenship: values.citizenship,
         birthday: values.birthday.toISOString(),
         mobileNumber: values.mobileNumber,
-        // photoUrl: values.photoUrl, // Need help
+        photoUrl: values.photoUrl,
         email: values.email,
 
         instagramHandle: values.instagramHandle,
@@ -41,7 +64,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
         organization: values.organization,
         position: values.position,
 
-        languages: values.languages.split(','), // Clarify? not array of strings
+        languages: values.languages.split(',').trimStart().trimEnd(), // Delete whitespaces
         referralSources: values.referralSources,
 
         hasVolunteered: values.hasVolunteered,
@@ -99,14 +122,24 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
     referralSources: Yup.array().required('Required'),
   });
 
+  const onChangeImage = (e, fieldName, setFieldValue) => {
+    if (e.target.files && e.target.files[0]) {
+      const imageFile = e.target.files[0];
+      setFieldValue(fieldName, imageFile);
+      return URL.createObjectURL(imageFile);
+    }
+  };
+
   const FormQuestionMapper = ({
     formType,
     name,
     options,
+    setFieldValue,
   }: {
     formType: InputType;
     name: string;
     options: OptionType[] | null;
+    setFieldValue?: any; // Should be the same type as setFieldValue from Formik
   }) => {
     switch (formType) {
       case 'date':
@@ -163,6 +196,17 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
             ))}
           </Field>
         );
+      case 'photo':
+        return (
+          <div style={{ width: '100%', height: '200px' }}>
+            <DropZoneCard
+              id={name}
+              initialUrl={null}
+              isBig={false}
+              onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
+            />
+          </div>
+        );
       case 'checkboxes':
       default:
         return (
@@ -201,7 +245,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
           validationSchema={SignUpSchema}
           validateOnChange={false}
         >
-          {({ isSubmitting, touched, values, errors }) => (
+          {({ isSubmitting, touched, setFieldValue, values, errors }) => (
             <Form>
               {questionList.map((questionItem) => {
                 const { name, displayText, type, isRequired } = questionItem;
@@ -237,6 +281,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
                       formType={type}
                       name={name}
                       options={options}
+                      setFieldValue={setFieldValue}
                     />
                   </div>
                 );
