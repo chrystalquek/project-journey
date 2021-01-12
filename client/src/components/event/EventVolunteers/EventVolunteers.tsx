@@ -1,5 +1,5 @@
 import {
-  makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Popover, FormControl, InputLabel, Select, MenuItem,
+  makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Popover, FormControl, InputLabel, Select, MenuItem, Badge,
 } from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
 import { EventData } from 'types/event';
@@ -63,6 +63,7 @@ const EventVolunteers = ({ eid }) => {
   const user = useSelector((state: StoreState) => state.user);
   const signUps = useSelector((state: StoreState) => state.signUp);
   const event = useSelector((state: StoreState) => state.event.form);
+  const roles = event?.roles;
 
   const [allVolunteerIds, setAllVolunteerIds] = useState([]);
   const [allVolunteerData, setAllVolunteerData] = useState({});
@@ -239,6 +240,11 @@ const EventVolunteers = ({ eid }) => {
     );
   };
 
+  const getVacanciesForRole = (roleName:string): number => {
+    const targetRole = roles?.find((role) => role.name === roleName);
+    return targetRole?.capacity - targetRole?.volunteers.length;
+  };
+
   const handleSelectedRoleChange = (signUpId, event) => {
     setSelectedRoles({ ...selectedRoles, [signUpId]: event.target.value });
   };
@@ -254,7 +260,15 @@ const EventVolunteers = ({ eid }) => {
         </MenuItem>
         {signUp.preferences.map((preference, index) => (
           <MenuItem value={preference}>
-            {`${index + 1}. ${preference}`}
+            <Grid container direction="row" justify="flex-end">
+              <Grid item xs={11}>
+                {`${index + 1}. ${preference}`}
+              </Grid>
+              <Grid item xs={1}>
+                <Badge badgeContent={getVacanciesForRole(preference)} color="primary" />
+              </Grid>
+            </Grid>
+
           </MenuItem>
         ))}
       </Select>
