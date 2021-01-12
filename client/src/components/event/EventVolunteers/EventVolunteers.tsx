@@ -46,7 +46,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5em',
     color: 'white',
     width: '80%',
-
+  },
+  selectRole: {
+    minWidth: '100%',
+    borderRadius: '10px',
+    boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.25)',
   },
 }));
 
@@ -240,11 +244,14 @@ const EventVolunteers = ({ eid }) => {
   };
 
   const getRoleSelectMenu = (signUp) => (
-    <FormControl variant="outlined">
+    <FormControl variant="outlined" className={classes.selectRole}>
       <Select
         value={selectedRoles[signUp.sign_up_id]}
         onChange={(e) => handleSelectedRoleChange(signUp.sign_up_id, e)}
       >
+        <MenuItem value="" disabled>
+          Preferences
+        </MenuItem>
         {signUp.preferences.map((preference, index) => (
           <MenuItem value={preference}>
             {`${index + 1}. ${preference}`}
@@ -305,10 +312,10 @@ const EventVolunteers = ({ eid }) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell><b>Name</b></TableCell>
-                  <TableCell><b>Contact Number</b></TableCell>
-                  <TableCell><b>Role</b></TableCell>
-                  <TableCell />
+                  <TableCell width="22%"><b>Name</b></TableCell>
+                  <TableCell width="20%"><b>Contact Number</b></TableCell>
+                  <TableCell width="33%"><b>Role</b></TableCell>
+                  <TableCell width="25%" />
                 </TableRow>
               </TableHead>
               <TableBody>
