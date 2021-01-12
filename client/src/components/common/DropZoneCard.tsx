@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Card, Grid, Typography,
+  Card, Grid, IconButton, Typography,
 } from '@material-ui/core';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import ClearIcon from '@material-ui/icons/Clear';
+import { useSelector } from 'react-redux';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     boxShadow: 'none',
@@ -16,51 +18,92 @@ const useStyles = makeStyles({
   icon: {
     color: '#D8D8D8', // grey
   },
-});
+  child: {
+    height: '100%',
+  },
+  overlay: {
+    position: 'absolute',
+    top: '0',
+    right: '0',
+  },
+  container: {
+    height: '100%',
+    width: '100%',
+    position: 'relative',
+  },
+  clearIcon: {
+    color: theme.palette.primary.main,
+  },
+  overlayIcon: {
+    position: 'absolute',
+    left: '50%',
+    top: '43%',
+    transform: 'translate(-50%, -50%)',
+  },
+  overlayText: {
+    position: 'absolute',
+    left: '50%',
+    top: '58%',
+    transform: 'translate(-50%, -50%)',
+    color: '#D8D8D8', // grey
+  },
+}));
 
-const DropZoneCard = (prop) => {
+const DropZoneCard = ({
+  id, initialUrl, isBig, onChangeImage,
+}) => {
   const classes = useStyles();
+  const [imageUrl, setImageUrl] = useState(initialUrl);
+
+  const handleChange = (e) => {
+    const newImageUrl = onChangeImage(e);
+    setImageUrl(newImageUrl);
+  };
 
   return (
     <>
-      <label htmlFor="image">
-        <Card className={classes.root}>
-          <Grid item xs={12} container direction="column" alignItems="center" justify="center">
-            {/** Padding */}
-            <Grid item xs={prop.isBig ? 4 : 3} />
-
-            {/** Content */}
-            <Grid item xs={prop.isBig ? 4 : 6} container direction="row" alignItems="center" justify="center">
-              <Grid item container>
-                <Grid item container direction="row" justify="center" xs={12}>
+      <label htmlFor={id}>
+        <div className={classes.root}>
+          {!imageUrl
+            ? (
+              <div className={classes.container}>
+                <div className={classes.overlayIcon}>
                   <AddAPhotoIcon className={classes.icon} />
-                </Grid>
-                <Grid item />
-                <Grid item container direction="row" justify="center" xs={12}>
-                  <Typography variant="subtitle1" color="textSecondary" align="center">
+                </div>
+                <div className={classes.overlayText}>
+                  <Typography variant="subtitle1" align="center">
                     Browse file to
                     <br />
                     add
-                    {prop.isBig ? ' cover ' : ' '}
+                    {isBig ? ' cover ' : ' '}
                     image
                   </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
+                </div>
+              </div>
+            ) : (
+              <div className={classes.container}>
+                <div className={classes.child}>
+                  <img src={imageUrl} alt={imageUrl} style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
+                </div>
+                <div className={classes.overlay}>
+                  <IconButton
+                    onClick={() => setImageUrl(null)}
+                    className={classes.clearIcon}
+                  >
+                    <ClearIcon fontSize="default" />
+                  </IconButton>
+                </div>
+              </div>
+            )}
 
-            {/** Padding */}
-            <Grid item xs={prop.isBig ? 4 : 3} />
-
-          </Grid>
-
-        </Card>
+        </div>
       </label>
       <input
-        id="image"
+        id={id}
         type="file"
         accept="image/*"
         style={{ display: 'none' }}
-        onChange={prop.onUploadImage}
+        onChange={handleChange}
       />
     </>
   );

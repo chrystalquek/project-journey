@@ -1,4 +1,5 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
+import { VolunteerData } from '@type/volunteer';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
   LoginRequest,
@@ -7,7 +8,14 @@ import {
   GetEventParams,
   QueryParams,
   SignUpRequest,
-} from './request';
+  UploadImageRequest,
+  CreateSignUpRequest,
+  UpdateSignUpRequest,
+  SignUpQueryParams,
+  UpdateVolunteerRequest,
+  CreateCommitmentApplicationRequest,
+} from '@utils/api/request';
+
 import {
   GetEventsResponse,
   GetSignUpsResponse,
@@ -19,7 +27,10 @@ import {
   SignUpResponse,
   GetVolunteersPaginatedResponse,
   GetCommitmentApplicationResponse,
-} from './response';
+  UploadImageResponse,
+  CreateSignUpResponse,
+  UpdateSignUpResponse,
+} from '@utils/api/response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -37,10 +48,13 @@ export interface ApiClient {
   getCommitmentApplications(
     query: QueryParams
   ): Promise<GetCommitmentApplicationResponse>;
+  updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>;
 }
 
 class AxiosApiClient implements ApiClient {
   private axiosInstance: AxiosInstance;
+
+  private token: string = '';
 
   constructor(endpoint: string) {
     this.axiosInstance = axios.create({
@@ -50,6 +64,10 @@ class AxiosApiClient implements ApiClient {
 
   private toURLParams = (query: QueryParams) =>
     `?${new URLSearchParams(query).toString()}`;
+
+  public setAuthToken(token: string): void {
+    this.token = token;
+  }
 
   // create user
   async signUp(request: SignUpRequest): Promise<SignUpResponse> {
@@ -68,6 +86,19 @@ class AxiosApiClient implements ApiClient {
 
   async getPendingSignUps(): Promise<GetSignUpsResponse> {
     return this.send({}, 'signup/pending', 'get');
+  }
+
+  async createSignUp(
+    request: CreateSignUpRequest
+  ): Promise<CreateSignUpResponse> {
+    return this.send(request, 'signup', 'post');
+  }
+
+  async updateSignUp(
+    query: SignUpQueryParams,
+    request: UpdateSignUpRequest
+  ): Promise<UpdateSignUpResponse> {
+    return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
   // event
@@ -107,7 +138,19 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
+  async updateVolunteer(
+    request: UpdateVolunteerRequest
+  ): Promise<VolunteerData> {
+    return this.send(request, 'volunteer', 'put');
+  }
+
   // commitment application
+  async createCommitmentApplication(
+    request: CreateCommitmentApplicationRequest
+  ): Promise<CommitmentApplicationData> {
+    return this.send(request, 'commitment-application', 'post');
+  }
+
   async getCommitmentApplications(
     query: QueryParams
   ): Promise<GetCommitmentApplicationResponse> {
@@ -124,13 +167,29 @@ class AxiosApiClient implements ApiClient {
     return this.send(data, `commitment-application/${data._id}`, 'put');
   }
 
-  protected async send(request: any, path: string, method: HttpMethod) {
+  // upload image
+  async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
+    return this.send(request, 'image', 'post', true);
+  }
+
+  protected async send(
+    request: any,
+    path: string,
+    method: HttpMethod,
+    isImageUpload: boolean = false
+  ) {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      'Content-Type': isImageUpload
+        ? 'multipart/form-data'
+        : 'application/json',
     };
 
     if (process.env.NODE_ENV === 'development') {
       headers['Access-Control-Allow-Origin'] = '*';
+    }
+
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
     }
 
     const config: AxiosRequestConfig = { headers };

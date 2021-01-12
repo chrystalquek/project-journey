@@ -59,7 +59,7 @@ const ProfileHeader: FC<props> = ({ user }) => {
         <Typography variant="h2" className={classes.header}>{user.name}</Typography>
         <Typography className={classes.header}>
           <strong>Volunteer Type: </strong>
-          {user.volunteerType.toString()}
+          {user?.volunteerType?.toString()}
         </Typography>
         { user.volunteerType === VOLUNTEER_TYPE.ADHOC && <BecomeCommitedDialog /> }
       </Grid>

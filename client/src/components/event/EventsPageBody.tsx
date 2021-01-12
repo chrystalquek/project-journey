@@ -20,7 +20,7 @@ import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
 type EventsPageBodyProps = {
   events: Array<EventData>;
-  user: VolunteerData
+  user: VolunteerData | null; // if user isn't logged in
   getAllEvents: () => void;
 };
 
@@ -82,9 +82,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
       <>
         <Grid container spacing={4}>
           <Grid item xs={12}>
+            {/* TODO: Implement search function */}
             <SearchBar setFilterFunction={() => console.log('TODO')} />
           </Grid>
-          {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
           <Grid
             item
             container
@@ -151,11 +152,12 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
         </Grid>
         <Grid item container sm={12} alignItems="center" spacing={4}>
           <Grid item sm={9}>
+            {/* TODO: Implement search function */}
             <SearchBar setFilterFunction={() => console.log('TODO')} />
           </Grid>
-          {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
           <Grid item sm={3} style={{ textAlign: 'center' }}>
-            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/event/new')}>
+            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/form/new')}>
               Create new event
             </Button>
           </Grid>

@@ -8,6 +8,7 @@ import {
   CITIZENSHIP,
   SOCIAL_MEDIA_PLATFORMS,
   RACE,
+  VolunteerData,
 } from '@type/volunteer';
 
 export type SignUpArgs = {
@@ -223,5 +224,23 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
     return response;
   }
 );
+
+type UpdateVolunteerArgs = {
+  email: string;
+  updatedVolunteerData: Partial<VolunteerData>;
+};
+
+export const updateVolunteer = createAsyncThunk<
+  VolunteerData,
+  UpdateVolunteerArgs
+>('user/updateVolunteer', async ({ email, updatedVolunteerData }) => {
+  const request = {
+    email,
+    updatedVolunteerData,
+  };
+
+  const response = await apiClient.updateVolunteer(request);
+  return response;
+});
 
 export default login;
