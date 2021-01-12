@@ -20,6 +20,7 @@ import { NumberSchema } from 'yup';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import CloseIcon from '@material-ui/icons/Close';
+import { SignUpQueryParams, UpdateSignUpRequest } from '@utils/api/request';
 
 const useStyles = makeStyles((theme) => ({
   popUpButton: {
@@ -141,8 +142,8 @@ const EventVolunteers = ({ eid }) => {
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
   // const [isEditingRole, setIsEditingRole] = useState(false);
 
-  const onUpdateSignUp = ({ data, signUpId }) => {
-    // dispatch(updateSignUp({ signUpId, data }));
+  const onUpdateSignUp = ({ request: UpdateSignUpRequest, query: SignUpQueryParams }) => {
+    dispatch(updateSignUp({ request, query }));
     setOpenRemoveDialog(false);
   };
 
@@ -194,9 +195,12 @@ const EventVolunteers = ({ eid }) => {
                 content={`Are you sure you want to remove ${volunteerName} as a volunteer?`}
                 buttonTitle="Remove"
                 buttonOnClick={() => onUpdateSignUp({
-                  data: { status: 'pending' },
-                  // @ts-ignore TODO: snake -> camel
-                  signUpId: signUp.sign_up_id,
+                  request: { ...signUp, status: 'pending' },
+                  query: {
+                    // @ts-ignore TODO: snake -> camel
+                    id: signUp.sign_up_id,
+                    idType: 'signUpId',
+                  },
                 })}
               />
             </Grid>
@@ -215,10 +219,16 @@ const EventVolunteers = ({ eid }) => {
   const onAssignRole = (signUp) => {
     // @ts-ignore TODO: snake -> camel
     const selectedRole = selectedRoles[signUp.sign_up_id];
-    const updatedSignUp = { status: ['accepted', selectedRole] };
 
     // @ts-ignore TODO: snake -> camel
-    dispatch(updateSignUp({ data: updatedSignUp, signUpId: signUp.sign_up_id }));
+    dispatch(updateSignUp({
+      request: { ...signUp, status: ['accepted', selectedRole] },
+      query: {
+      // @ts-ignore TODO: snake -> camel
+        id: signUp.sign_up_id,
+        idType: 'signUpId',
+      },
+    }));
   };
 
   const getPendingTabButtons = (signUp, name) => {

@@ -73,13 +73,12 @@ class AxiosApiClient implements ApiClient {
     return this.send(request, 'signup', 'post');
   }
 
-  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest): Promise<UpdateSignUpResponse> {
+  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest):
+  Promise<UpdateSignUpResponse> {
+    console.log(`signup/${query.id}/${query.idType}`);
+    console.log(request);
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
-
-  // async updateSignUp(request: UpdateSignUpRequest): Promise<GetSignUpsResponse> {
-  //   return this.send(request, `signup/${request.signUpId}/signUpId`, 'put');
-  // }
 
   // event
   async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
@@ -117,7 +116,8 @@ class AxiosApiClient implements ApiClient {
   }
 
   // commitment application
-  async createCommitmentApplication(request: CreateCommitmentApplicationRequest): Promise<CommitmentApplicationData> {
+  async createCommitmentApplication(request: CreateCommitmentApplicationRequest):
+  Promise<CommitmentApplicationData> {
     return this.send(request, 'commitment-application', 'post');
   }
 
