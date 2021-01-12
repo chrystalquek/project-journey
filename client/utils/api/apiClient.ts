@@ -40,6 +40,8 @@ export interface ApiClient {
 class AxiosApiClient implements ApiClient {
   private axiosInstance: AxiosInstance
 
+  private token: string = ''
+
   constructor(
     endpoint: string,
   ) {
@@ -49,6 +51,10 @@ class AxiosApiClient implements ApiClient {
   }
 
   private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+
+  public setAuthToken(token: string): void {
+    this.token = token;
+  }
 
   // create user
   async signUp(request: SignUpRequest): Promise<SignUpResponse> {
@@ -138,6 +144,10 @@ class AxiosApiClient implements ApiClient {
 
     if (process.env.NODE_ENV === 'development') {
       headers['Access-Control-Allow-Origin'] = '*';
+    }
+
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
     }
 
     const config: AxiosRequestConfig = { headers };
