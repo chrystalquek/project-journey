@@ -84,6 +84,7 @@ const EventVolunteers = ({ eid }) => {
 
   useEffect(() => {
     const signUpsData = signUps.data;
+    // @ts-ignore TODO: snake -> camel
     const temp = Object.values(signUpsData).map((signUp) => signUp.user_id); // TODO: to camel
     setAllVolunteerIds(temp);
   }, [signUps]);
@@ -141,7 +142,7 @@ const EventVolunteers = ({ eid }) => {
   // const [isEditingRole, setIsEditingRole] = useState(false);
 
   const onUpdateSignUp = ({ data, signUpId }) => {
-    dispatch(updateSignUp({ signUpId, data }));
+    // dispatch(updateSignUp({ signUpId, data }));
     setOpenRemoveDialog(false);
   };
 
@@ -170,6 +171,7 @@ const EventVolunteers = ({ eid }) => {
           <MoreVertIcon />
         </IconButton>
         <Popover
+        // @ts-ignore TODO: snake -> camel
           id={signUp.sign_up_id}
           open={open}
           anchorEl={anchorEl}
@@ -193,6 +195,7 @@ const EventVolunteers = ({ eid }) => {
                 buttonTitle="Remove"
                 buttonOnClick={() => onUpdateSignUp({
                   data: { status: 'pending' },
+                  // @ts-ignore TODO: snake -> camel
                   signUpId: signUp.sign_up_id,
                 })}
               />
@@ -210,9 +213,11 @@ const EventVolunteers = ({ eid }) => {
   };
 
   const onAssignRole = (signUp) => {
+    // @ts-ignore TODO: snake -> camel
     const selectedRole = selectedRoles[signUp.sign_up_id];
     const updatedSignUp = { status: ['accepted', selectedRole] };
 
+    // @ts-ignore TODO: snake -> camel
     dispatch(updateSignUp({ data: updatedSignUp, signUpId: signUp.sign_up_id }));
   };
 

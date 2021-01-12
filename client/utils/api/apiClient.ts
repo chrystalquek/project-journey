@@ -1,14 +1,24 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
+import { VolunteerData } from '@type/volunteer';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest,
-  GetEventParams, QueryParams, SignUpRequest, UpdateSignUpRequest,
-} from './request';
+  LoginRequest,
+  CreateEventRequest,
+  EditEventRequest,
+  GetEventParams,
+  QueryParams,
+  SignUpRequest,
+  UploadImageRequest,
+  CreateSignUpRequest,
+  UpdateSignUpRequest, SignUpQueryParams, UpdateVolunteerRequest,
+  CreateCommitmentApplicationRequest,
+} from '@utils/api/request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse, GetVolunteersPaginatedResponse,
-  GetCommitmentApplicationResponse, UpdateSignUpResponse,
-} from './response';
+  EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
+  CreateSignUpResponse, UpdateSignUpResponse,
+  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
+} from '@utils/api/response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -24,6 +34,7 @@ export interface ApiClient {
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
+  updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -58,9 +69,17 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'signup/pending', 'get');
   }
 
-  async updateSignUp(request: UpdateSignUpRequest): Promise<GetSignUpsResponse> {
-    return this.send(request, `signup/${request.signUpId}/signUpId`, 'put');
+  async createSignUp(request: CreateSignUpRequest): Promise<CreateSignUpResponse> {
+    return this.send(request, 'signup', 'post');
   }
+
+  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest): Promise<UpdateSignUpResponse> {
+    return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
+  }
+
+  // async updateSignUp(request: UpdateSignUpRequest): Promise<GetSignUpsResponse> {
+  //   return this.send(request, `signup/${request.signUpId}/signUpId`, 'put');
+  // }
 
   // event
   async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
@@ -93,7 +112,15 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
+  async updateVolunteer(request : UpdateVolunteerRequest): Promise<VolunteerData> {
+    return this.send(request, 'volunteer', 'put');
+  }
+
   // commitment application
+  async createCommitmentApplication(request: CreateCommitmentApplicationRequest): Promise<CommitmentApplicationData> {
+    return this.send(request, 'commitment-application', 'post');
+  }
+
   async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {
     return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
   }
@@ -110,9 +137,14 @@ class AxiosApiClient implements ApiClient {
     return this.send({ eid }, `signup/${eid}/eventId`, 'get');
   }
 
-  protected async send(request: any, path: string, method: HttpMethod) {
+  async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
+    return this.send(request, 'image', 'post', true);
+  }
+
+  protected async send(request: any, path: string, method: HttpMethod,
+    isImageUpload: boolean = false) {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      'Content-Type': isImageUpload ? 'multipart/form-data' : 'application/json',
     };
 
     if (process.env.NODE_ENV === 'development') {
@@ -123,7 +155,7 @@ class AxiosApiClient implements ApiClient {
 
     switch (method) {
       case 'get':
-        return (await this.axiosInstance.get(path, request, config)).data;
+        return (await this.axiosInstance.get(path, config)).data;
       case 'post':
         return (await this.axiosInstance.post(path, request, config)).data;
       case 'put':
