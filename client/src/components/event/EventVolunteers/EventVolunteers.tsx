@@ -209,9 +209,20 @@ const EventVolunteers = ({ eid }) => {
     return moreButton;
   };
 
+  const onAssignRole = (signUp) => {
+    const selectedRole = selectedRoles[signUp.sign_up_id];
+    const updatedSignUp = { ...signUp, status: ['accepted', selectedRole] };
+
+    dispatch(updateSignUp(updatedSignUp));
+  };
+
   const getPendingTabButtons = (signUp, name) => {
     const assignButton = (
-      <Button className={classes.assignButton}>
+      <Button
+        className={classes.assignButton}
+        onClick={() => onAssignRole(signUp)}
+        disabled={!selectedRoles[signUp.sign_up_id]}
+      >
         Assign
       </Button>
     );
