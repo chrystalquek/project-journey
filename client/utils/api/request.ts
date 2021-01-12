@@ -1,4 +1,5 @@
 import { EventPostData } from '@type/event';
+import { SignUpData } from '@type/signUp';
 
 export type SignUpRequest = {
   name: string
@@ -37,3 +38,5 @@ export type EditEventRequest = {
 }
 
 export type GetEventParams = string;
+
+export type UpdateSignUpRequest = SignUpData;

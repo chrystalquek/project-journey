@@ -211,9 +211,9 @@ const EventVolunteers = ({ eid }) => {
 
   const onAssignRole = (signUp) => {
     const selectedRole = selectedRoles[signUp.sign_up_id];
-    const updatedSignUp = { ...signUp, status: ['accepted', selectedRole] };
+    const updatedSignUp = { status: ['accepted', selectedRole] };
 
-    dispatch(updateSignUp(updatedSignUp));
+    dispatch(updateSignUp({ data: updatedSignUp, signUpId: signUp.sign_up_id }));
   };
 
   const getPendingTabButtons = (signUp, name) => {

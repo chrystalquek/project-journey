@@ -42,3 +42,5 @@ export type GetSignUpsResponse = {
 }
 
 export type CreateEventResponse = {}
+
+export type UpdateSignUpResponse = {}

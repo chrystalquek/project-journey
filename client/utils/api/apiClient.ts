@@ -1,12 +1,13 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { AnyAaaaRecord } from 'dns';
 import {
-  LoginRequest, CreateEventRequest, EditEventRequest, GetEventParams, QueryParams, SignUpRequest,
+  LoginRequest, CreateEventRequest, EditEventRequest,
+  GetEventParams, QueryParams, SignUpRequest, UpdateSignUpRequest,
 } from './request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse, GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
+  EditEventResponse, GetEventResponse, SignUpResponse, GetVolunteersPaginatedResponse,
+  GetCommitmentApplicationResponse, UpdateSignUpResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -57,8 +58,8 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'signup/pending', 'get');
   }
 
-  async updateSignUp({ signUpId, data }): Promise<GetSignUpsResponse> {
-    return this.send(data, `signup/${signUpId}/signUpId`, 'put');
+  async updateSignUp(request: UpdateSignUpRequest): Promise<GetSignUpsResponse> {
+    return this.send(request, `signup/${request.signUpId}/signUpId`, 'put');
   }
 
   // event
