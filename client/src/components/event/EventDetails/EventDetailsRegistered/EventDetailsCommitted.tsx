@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
-import { Box, Chip, Grid } from '@material-ui/core';
+import {Box, Chip, CircularProgress, Grid, makeStyles} from '@material-ui/core';
 import { testEventImage1 } from '@constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventInformation';
 import VolunteerRoles from '@components/event/EventDetails/VolunteerRoles';
@@ -9,71 +9,88 @@ import EventRegisterForm, { FormState } from '@components/event/EventDetails/Eve
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { COMMITTED_VOLUNTEER_TAG } from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
+import {FormStatus} from "@type/event/common";
+import {EventPaper} from "@components/common/event/EventPaper";
+import {EventTypography} from "@components/common/event/EventTypography";
 
 type EventDetailsCommittedProps = {
   event: EventData,
   user: VolunteerData,
-  formStatus: {
-    disabled: boolean,
-    reason: FormDisabledReason,
-  },
+  formStatus: FormStatus,
   formHandlers: {
     signUpAndAccept: (uid: string, eid: string, form: FormState) => void,
     signUpOnly: (uid: string, eid: string, form: FormState) => void
   }
 }
 
+const useStyles = makeStyles({
+  gutterBottom: {
+    marginBottom: '0.7em',
+  },
+});
+
 const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
   formStatus, formHandlers, event, user,
-}) => (
-  <Grid container>
-    <Grid item xs={12}>
-      <EventBreadCrumbs eid={event._id} />
-    </Grid>
-    <Grid item xs={12}>
-      <Box fontWeight="bold" fontSize="h1.fontSize">
-        {event.name}
-      </Box>
-    </Grid>
+}) => {
+  const classes = useStyles();
 
-    <Grid item xs={12}>
-      {/* TODO: Replace with actual image */}
-      <img src={testEventImage1} alt={event.name} />
-    </Grid>
+  return (
+    <Grid container>
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <EventBreadCrumbs eid={event._id} />
+      </Grid>
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <EventTypography fontSize="h1" fontBold text={event.name} />
+      </Grid>
 
-    {event.volunteerType === VOLUNTEER_TYPE.COMMITED
-      ? (
-        <Grid item xs={12}>
-          <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+      <Grid className={classes.gutterBottom} item xs={12}>
+        {/* TODO: Replace with actual image */}
+        <img src={testEventImage1} alt={event.name} />
+      </Grid>
+
+      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+        ? (
+          <Grid className={classes.gutterBottom} item xs={12}>
+            <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+          </Grid>
+        )
+        : null}
+
+      {formStatus.reason === FormDisabledReason.SIGNUP_PENDING
+        ? <Grid className={classes.gutterBottom} item xs={12}>
+          <EventPaper>
+            <EventTypography gutterBottom fontBold text="Sign-up Pending." />
+            <EventTypography gutterBottom text="Pending approval by admin." />
+          </EventPaper>
         </Grid>
-      )
-      : null}
+        : null}
+      {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
+        ? <Grid className={classes.gutterBottom} item xs={12}>
+          <EventPaper>
+            <EventTypography gutterBottom fontBold text="Successful registration!" />
+            <EventTypography gutterBottom text={`Accepted role: ${formStatus?.details || "Error retrieving accepted role."}`} />
+          </EventPaper>
+        </Grid>
+        : null}
 
-    {/* TODO: Style */}
-    {formStatus.reason === FormDisabledReason.SIGNUP_PENDING
-      ? <h1>Sign-up Pending.</h1>
-      : null}
-    {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
-      ? <h1>Successful registration!</h1>
-      : null}
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <EventInformation event={event} />
+      </Grid>
 
-    <Grid item xs={12}>
-      <EventInformation event={event} />
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <VolunteerRoles event={event} />
+      </Grid>
+
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <EventRegisterForm
+          isDisabled={formStatus.disabled}
+          event={event}
+          user={user}
+          formHandlers={formHandlers}
+        />
+      </Grid>
     </Grid>
-
-    <Grid item xs={12}>
-      <VolunteerRoles event={event} />
-    </Grid>
-
-    <Grid item xs={12}>
-      <EventRegisterForm
-        isDisabled={formStatus.disabled}
-        event={event}
-        user={user}
-        formHandlers={formHandlers}
-      />
-    </Grid>
-  </Grid>
-);
+  );
+}
 
 export default EventDetailsCommitted;

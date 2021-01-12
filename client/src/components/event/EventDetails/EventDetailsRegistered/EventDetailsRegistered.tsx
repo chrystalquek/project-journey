@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CreateSignUpRequest, UpdateSignUpRequest } from '@utils/api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
 import { StoreState } from '@redux/store';
-import { SignUpIdType } from '@type/signUp';
+import {SignUpData, SignUpIdType} from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import apiClient from '@utils/api/apiClient';
 
@@ -26,7 +26,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
     dispatch(getSignUps({ id: user._id, idType: 'userId' as SignUpIdType }));
   }, []);
 
-  const signUpInfo = currSignUps.filter((signUp) => signUp.eventId === event._id);
+  const signUpInfo: Array<SignUpData> = currSignUps.filter((signUp) => signUp.eventId === event._id);
   const isEventFull = getEventVacancies(event).remaining === 0;
   const hasPendingSignUp = signUpInfo.length > 0
                             && signUpInfo[0].status === 'pending';
@@ -46,6 +46,9 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
   const formStatus = {
     disabled: isEventFull || hasPendingSignUp || hasAcceptedSignUp, // default disabled reasons
     reason,
+    details: {
+      acceptedSignUp: hasAcceptedSignUp ? signUpInfo : null,
+    }
   };
 
   const formHandlers = {

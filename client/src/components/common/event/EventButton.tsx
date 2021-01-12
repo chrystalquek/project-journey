@@ -1,10 +1,8 @@
 import { Button, makeStyles, Theme } from '@material-ui/core';
 import { FC } from 'react';
+import { ButtonProps } from "@material-ui/core";
 
-type EventButtonProps = {
-  disableRipple?: boolean,
-  onClick?: () => void,
-}
+type EventButtonProps = ButtonProps;
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -18,12 +16,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const EventButton: FC<EventButtonProps> = ({ children, onClick }) => {
+const EventButton: FC<EventButtonProps> = (props) => {
   const classes = useStyles();
 
   return (
-    <Button className={classes.root}>
-      {children}
+    <Button className={classes.root} {...props}>
+      {props.children}
     </Button>
   );
 };
