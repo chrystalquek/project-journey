@@ -52,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.25)',
   },
+  badge: {
+    color: 'white',
+    backgroundColor: theme.palette.primary.main,
+  },
 }));
 
 const isStatusApproved = (status: string | string[]) => typeof status !== 'string' && status[0] === 'accepted';
@@ -265,7 +269,10 @@ const EventVolunteers = ({ eid }) => {
                 {`${index + 1}. ${preference}`}
               </Grid>
               <Grid item xs={1}>
-                <Badge badgeContent={getVacanciesForRole(preference)} color="primary" />
+                <Badge
+                  badgeContent={getVacanciesForRole(preference)}
+                  classes={{ badge: classes.badge }}
+                />
               </Grid>
             </Grid>
 
