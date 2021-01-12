@@ -40,6 +40,8 @@ export interface ApiClient {
 class AxiosApiClient implements ApiClient {
   private axiosInstance: AxiosInstance
 
+  private token: string = ''
+
   constructor(
     endpoint: string,
   ) {
@@ -49,6 +51,10 @@ class AxiosApiClient implements ApiClient {
   }
 
   private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+
+  public setAuthToken(token: string): void {
+    this.token = token;
+  }
 
   // create user
   async signUp(request: SignUpRequest): Promise<SignUpResponse> {
@@ -140,6 +146,10 @@ class AxiosApiClient implements ApiClient {
       headers['Access-Control-Allow-Origin'] = '*';
     }
 
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
+    }
+
     const config: AxiosRequestConfig = { headers };
 
     switch (method) {
@@ -157,6 +167,6 @@ class AxiosApiClient implements ApiClient {
   }
 }
 
-const urlBaseEndpoint = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://api-dot-journey-288113.et.r.appspot.com/';
+const urlBaseEndpoint = process.env.NODE_ENV === 'production' ? 'http://localhost:5000' : 'https://api-dot-journey-288113.et.r.appspot.com/';
 const sharedClient: AxiosApiClient = new AxiosApiClient(urlBaseEndpoint);
 export default sharedClient;

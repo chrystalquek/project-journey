@@ -2,6 +2,7 @@ import { createCommitmentApplication } from '@redux/actions/commitmentApplicatio
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from '@type/volunteer';
 import jwt from 'jsonwebtoken';
+import apiClient from '@utils/api/apiClient';
 import user, { updateVolunteer } from '../actions/user';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
@@ -36,6 +37,9 @@ const userSlice = createSlice({
     builder.addCase(user.fulfilled, (state, action) => {
       const { payload } = action;
       state.token = payload.token;
+      // Sets auth token for authorized endpoints
+      apiClient.setAuthToken(payload.token);
+
       state.status = 'fulfilled';
       const userObj = jwt.decode(payload.token);
       state.user = {
@@ -52,8 +56,8 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
-      state.user.commitmentApplicationIds.push(action.payload._id)
-    })
+      state.user.commitmentApplicationIds.push(action.payload._id);
+    });
   },
 });
 
