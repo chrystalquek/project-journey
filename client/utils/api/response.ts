@@ -57,5 +57,9 @@ export type CreateSignUpResponse = {
 }
 
 export type UpdateSignUpResponse = {
-  // nothing yet
+  success: boolean,
+}
+
+export type CreateUpdateSignUpResponse = {
+  success: boolean,
 }

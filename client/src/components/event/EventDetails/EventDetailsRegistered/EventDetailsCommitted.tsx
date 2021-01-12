@@ -10,8 +10,8 @@ import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { COMMITTED_VOLUNTEER_TAG } from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
 import {FormStatus} from "@type/event/common";
-import {EventPaper} from "@components/common/event/EventPaper";
-import {EventTypography} from "@components/common/event/EventTypography";
+import {EventPaper} from '@components/common/event/EventPaper';
+import {EventTypography} from '@components/common/event/EventTypography';
 
 type EventDetailsCommittedProps = {
   event: EventData,

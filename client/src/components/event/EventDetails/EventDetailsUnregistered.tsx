@@ -11,7 +11,6 @@ import EventInformation from '@components/event/EventDetails/EventInformation';
 import FacilitatorInfo from '@components/event/EventDetails/FacilitatorInfo';
 import CreateAccountNotice from '@components/event/EventDetails/CreateAccountNotice';
 import { EventTypography } from '@components/common/event/EventTypography';
-import {EventDivider} from "@components/common/event/EventDivider";
 
 type EventDetailsUnregisteredProps = {
   event: EventData,

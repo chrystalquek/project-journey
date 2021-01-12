@@ -17,8 +17,9 @@ import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
   CreateSignUpResponse, UpdateSignUpResponse,
-  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
+  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse,
 } from '@utils/api/response';
+import {SignUpIdType} from "@type/signUp";
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -81,6 +82,21 @@ class AxiosApiClient implements ApiClient {
 
   async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest): Promise<UpdateSignUpResponse> {
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
+  }
+
+  async createAndUpdateSignUp(acceptedRole: string, request: CreateSignUpRequest): Promise<CreateUpdateSignUpResponse> {
+    return this.createSignUp(request)
+      .then((res) => {
+        const newRequest: UpdateSignUpRequest = {
+          ...request,
+          status: ['accepted', acceptedRole],
+        };
+        const newQuery = {
+          id: res["sign_up_id"], // TODO: This will break once we parse everything to camelCame
+          idType: "signUpId" as SignUpIdType,
+        }
+        return this.updateSignUp(newQuery, newRequest);
+      });
   }
 
   // event

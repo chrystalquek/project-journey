@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { EventData, Event } from '@type/event';
 import {
   Select,
@@ -6,21 +6,15 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Typography,
   TextField,
-  Button,
   makeStyles,
 } from '@material-ui/core';
 import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
 import { VolunteerData } from '@type/volunteer';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-import { getSignUps } from '@redux/actions/signUp';
-import { SignUpIdType, SignUpStatus } from '@type/signUp';
-import { StoreState } from '@redux/store';
-import {EventTypography} from "@components/common/event/EventTypography";
-import {EventDivider} from "@components/common/event/EventDivider";
-import {EventButton} from "@components/common/event/EventButton";
+import {EventTypography} from '@components/common/event/EventTypography';
+import {EventDivider} from '@components/common/event/EventDivider';
+import {EventButton} from '@components/common/event/EventButton';
 
 type EventRegisterProps = {
   event: EventData
@@ -81,7 +75,6 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
       default:
         console.error("You shouldn't be here!");
     }
-    router.reload();
   };
 
   return (

@@ -26,14 +26,7 @@ export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { st
 export const createAndAcceptSignUp = createAsyncThunk(
   'signUp/createAndAcceptSignUp',
   async (payloadCreator: {request: CreateSignUpRequest, form: FormState}, thunkAPI) => {
-    // TODO: snake case issues
-    const res = await apiClient.createSignUp(payloadCreator.request);
-    const query = { id: res['sign-up-id'], idType: 'signUpId' as SignUpIdType };
-    const newReq: UpdateSignUpRequest = {
-      ...payloadCreator.request,
-      status: ['accepted', payloadCreator.form.firstChoice],
-    };
-    return await apiClient.updateSignUp(query, newReq);
+    return await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request);
   },
 );
 
