@@ -70,7 +70,7 @@ const PendingRequests: FC<{}> = ({ }) => {
             onClick: () => router.push("/volunteer/pending-requests")
         },
         {
-            label: "Events (" + upcomingEventsIds.length + ")", // is this supposed to be the no of pending signups of no of events with pending signups?
+            label: "Events (" + upcomingEventsIds.length + ")",
             onClick: () => router.push("/event/pending-requests")
         }
     ]

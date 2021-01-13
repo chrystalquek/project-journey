@@ -25,12 +25,6 @@ export type GetVolunteersResponse = {
 
 export type GetVolunteersPaginatedResponse = GetVolunteersResponse & {
   count: number
-  pageNo: number
-  filters: {
-    volunteerType: Record<VOLUNTEER_TYPE, boolean>
-  }
-  search: string | null
-  sort: VolunteerSortFieldsType
 }
 
 export type GetCommitmentApplicationResponse = {

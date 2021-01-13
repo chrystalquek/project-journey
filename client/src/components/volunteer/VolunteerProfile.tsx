@@ -70,27 +70,40 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   const volunteers = useSelector((state: StoreState) => state.volunteer);
 
-  const volunteerType = volunteers.volunteerProfile.filters.volunteerType; // get filter object
-  const name = volunteers.volunteerProfile.search;
+  const volunteerType = volunteers.volunteerProfile.filters.volunteerType;
+  const name = volunteers.volunteerProfile.search.name;
   const sort = volunteers.volunteerProfile.sort;
+
+  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VOLUNTEER_TYPE, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => {
+    return {
+      pageNo: params.pageNo || 0,
+      filters: {
+        volunteerType: params.volunteerType || volunteerType
+      },
+      search: {
+        name: params.name || name
+      },
+      sort: params.sort || sort
+    }
+  }
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getVolunteersVolunteerProfile({ volunteerType, name, sort }));
+    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ volunteerType, name, sort })));
   }, []);
 
 
   // filter
   const handleFilterVolunteerTypeChange = (event) => {
-    dispatch(getVolunteersVolunteerProfile({
-      volunteerType: {
-        ...volunteerType,
-        [event.target.name]: !volunteerType[event.target.name],
-      }, // change boolean for checkbox that changed
-      name,
-      sort
-    }));
-  };
+    dispatch(getVolunteersVolunteerProfile(
+      fillOtherParams({
+        volunteerType: {
+          ...volunteerType,
+          [event.target.name]: !volunteerType[event.target.name],
+        }
+      })
+    ))
+  }
 
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
@@ -109,10 +122,10 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             {openFilter
               && (
                 <FormGroup>
-                  {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
+                  {Object.values(VOLUNTEER_TYPE).map((volType) => (
                     <FormControlLabel
-                      control={<Checkbox size="small" checked={volunteers.volunteerProfile.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
-                      label={<Typography variant="body1">{capitalize(volunteerType)}</Typography>}
+                      control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} />}
+                      label={<Typography variant="body1">{capitalize(volType)}</Typography>}
                     />
                   ))}
                 </FormGroup>
@@ -125,12 +138,12 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   );
 
   // search
-  const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile({ volunteerType, name, sort }));
+  const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile(fillOtherParams({ name })));
   const searchBar = <SearchBar setFilterFunction={onSearch}></SearchBar>
 
   // sort
   const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
-    dispatch(getVolunteersVolunteerProfile({ volunteerType, name, sort: event.target.value as VolunteerSortFieldsType }));
+    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ sort: event.target.value as VolunteerSortFieldsType })));
   };
 
   const sortMenu = <FormControl fullWidth variant="outlined" size="small" margin="dense">
@@ -149,7 +162,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   // change page
   const handleChangePage = (event, newPage: number) => {
-    dispatch(getVolunteersVolunteerProfile({ pageNo: newPage, volunteerType, name, sort }));
+    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ pageNo: newPage })));
   };
 
   // display table
@@ -170,7 +183,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             {currentPageVolunteers.map((vol) => (
               <TableRow key={vol.email}>
                 <TableCell><b>{vol.name}</b></TableCell>
-                <TableCell>{vol.volunteerType}</TableCell>
+                <TableCell>{capitalize(vol.volunteerType)}</TableCell>
                 <TableCell>{vol.createdAt.toLocaleDateString()}</TableCell>
               </TableRow>
             ))}

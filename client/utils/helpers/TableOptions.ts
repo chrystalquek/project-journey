@@ -11,4 +11,4 @@ export const initializeFilterObject = (enumObj: any) => {
 
 // takes in a filter object and returns a comma-separated string representation
 // e.g. {"a": true, "b": false, "c": true} => ",a,c"
-export const convertFilterObjectToQueryString: (filterObj: Record<string, boolean>) => string = (filterObj: any) => Object.keys(filterObj).reduce((a, b) => (filterObj[b] ? `${a},${b}` : a), '');
+export const convertFilterObjectToQueryString: (filterObj: Record<string, boolean>) => string = (filterObj: Record<string, boolean>) => Object.keys(filterObj).reduce((a, b) => (filterObj[b] ? `${a},${b}` : a), '');

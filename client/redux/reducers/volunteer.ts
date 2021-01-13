@@ -6,6 +6,17 @@ import { updateCommitmentApplication } from '@redux/actions/commitmentApplicatio
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 import { VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile';
 
+export type VolunteersMetaArgs = {
+  pageNo: number,
+  filters: {
+    volunteerType: Record<VOLUNTEER_TYPE, boolean>
+  },
+  search: {
+    name: string
+  },
+  sort: VolunteerSortFieldsType
+}
+
 export type VolunteerState = {
   data: Record<string, VolunteerData>;
   pendingVolunteers: { // used for dashboard and volunteer > pending requests
@@ -13,14 +24,8 @@ export type VolunteerState = {
   }
   volunteerProfile: { // volunteer > volunteer-profile
     ids: Array<string>
-    pageNo: number,
     count: number
-    filters: {
-      volunteerType: Record<VOLUNTEER_TYPE, boolean>
-    }
-    search: string | null,
-    sort: VolunteerSortFieldsType
-  }
+  } & VolunteersMetaArgs
 }
 
 const initialState: VolunteerState = {
@@ -35,7 +40,9 @@ const initialState: VolunteerState = {
     filters: {
       volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
     },
-    search: null,
+    search: {
+      name: null
+    },
     sort: 'name'
   },
 };
@@ -62,15 +69,15 @@ const volunteerSlice = createSlice({
       state.volunteerProfile.ids = [];
     });
     builder.addCase(getVolunteersVolunteerProfile.fulfilled, (state, action) => {
-      const { payload } = action;
+      const { payload, meta } = action;
       addToData(payload.data, state);
       state.volunteerProfile = {
         ...state.volunteerProfile,
         count: payload.count,
-        pageNo: payload.pageNo,
-        filters: payload.filters,
-        search: payload.search,
-        sort: payload.sort
+        pageNo: meta.arg.pageNo,
+        filters: meta.arg.filters,
+        search: meta.arg.search,
+        sort: meta.arg.sort
       }
       state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
     });
