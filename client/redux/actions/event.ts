@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  CreateEventRequest, EditEventRequest, GetEventParams, EventQueryParams,
+  CreateEventRequest, EditEventRequest, GetEventParams, EventQueryParams, UploadImageRequest,
 } from '@utils/api/request';
 import {
-  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse,
+  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse, UploadImageResponse,
 } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 
@@ -53,4 +53,6 @@ export const getAllEvents = createAsyncThunk(
   async () => await apiClient.getEvents({ eventType: 'all' }),
 );
 
-export default { createEvent, editEvent, getEvent, getAllEvents };
+export default {
+  createEvent, editEvent, getEvent, getAllEvents,
+};

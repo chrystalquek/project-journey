@@ -1,6 +1,9 @@
 import {EventData} from "@type/event";
 import dayjs from "dayjs";
 import {getEventVacancies} from "@utils/helpers/event/EventsPageBody";
+import {FormState} from "@components/event/EventDetails/EventRegisterForm";
+import {CreateSignUpRequest} from "@utils/api/request";
+import {SignUpStatus} from "@type/signUp";
 
 export type TableData = {
   title: string,
@@ -8,8 +11,14 @@ export type TableData = {
   isHighlight: boolean,
 }
 
+export enum FormDisabledReason {
+  EVENT_FULL = 'event_full',
+  SIGNUP_PENDING = 'signup_pending',
+  SIGNUP_ACCEPTED = 'signup_accepted'
+}
+
 export function createTblData(title: string, description: string, isHighlight: boolean): TableData {
-  return { title, description, isHighlight }
+  return { title, description, isHighlight };
 }
 
 // Extracts date, time, location, vacancies, singup deadline
@@ -28,4 +37,25 @@ export function getEventInfo(event: EventData) {
     createTblData("Vacancies:", vacancies, false),
     createTblData("Sign-up deadline", deadline, true),
   ]
+}
+
+// Extracts sign up data in a form suitable for API call
+export function getFormData(uid: string, eid: string, form: FormState): Omit<CreateSignUpRequest, 'status'> {
+  const preferences = []
+  if (form.firstChoice) {
+    preferences.push(form.firstChoice);
+  }
+  if (form.secondChoice) {
+    preferences.push(form.firstChoice);
+  }
+  if (form.thirdChoice) {
+    preferences.push(form.firstChoice);
+  }
+
+  return {
+    eventId: eid,
+    userId: uid,
+    preferences,
+    isRestricted: true,
+  }
 }

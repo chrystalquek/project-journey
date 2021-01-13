@@ -1,7 +1,10 @@
+import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from '@type/volunteer';
 import jwt from 'jsonwebtoken';
-import user from '../actions/user';
+import apiClient from '@utils/api/apiClient';
+import { REHYDRATE } from 'redux-persist';
+import user, { updateVolunteer } from '../actions/user';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
@@ -28,6 +31,12 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // Sets auth token from persisted state to runtime
+    builder.addCase(REHYDRATE, (_, action) => {
+      // @ts-ignore payload attribute not registered despite it available
+      const authToken = action?.payload?.user?.token;
+      if (authToken) { apiClient.setAuthToken(authToken); }
+    });
     builder.addCase(user.pending, (state) => {
       state.token = '';
       state.status = 'fetching';
@@ -35,6 +44,9 @@ const userSlice = createSlice({
     builder.addCase(user.fulfilled, (state, action) => {
       const { payload } = action;
       state.token = payload.token;
+      // Sets auth token for authorized endpoints
+      apiClient.setAuthToken(payload.token);
+
       state.status = 'fulfilled';
       const userObj = jwt.decode(payload.token);
       state.user = {
@@ -46,6 +58,12 @@ const userSlice = createSlice({
     builder.addCase(user.rejected, (state) => {
       state.token = '';
       state.status = 'rejected';
+    });
+    builder.addCase(updateVolunteer.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+    builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
+      state.user.commitmentApplicationIds.push(action.payload._id);
     });
   },
 });

@@ -7,8 +7,15 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { createEvent, getEvent, editEvent } from '@redux/actions/event';
+import { uploadImage } from '@redux/actions/image';
+import { resetImages } from '@redux/reducers/image';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
+import * as yup from 'yup';
+import { keysToCamel, keysToSnake } from '@utils/helpers/keysToCamel';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 type AdminEventFormProps = {
   id: string,
@@ -52,155 +59,157 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const toCamel = (str) => str.replace(/([-_][a-z])/ig, ($1) => $1.toUpperCase()
-  .replace('-', '')
-  .replace('_', ''));
-
-const isObject = function (obj) {
-  return obj === Object(obj) && !Array.isArray(obj) && typeof obj !== 'function';
-};
-
-const keysToCamel = function (obj) {
-  if (isObject(obj)) {
-    const n = {};
-
-    Object.keys(obj)
-      .forEach((k) => {
-        n[toCamel(k)] = keysToCamel(obj[k]);
-      });
-
-    return n;
-  } if (Array.isArray(obj)) {
-    return obj.map((i) => keysToCamel(i));
-  }
-
-  return obj;
-};
-
 /**
  * Combine date and time as JSON string
  * @param date Date object representing date
  * @param time string representing time
  */
-const getDateAndTimeIsoString = (dateDayJs: dayjs.Dayjs, time: string): string => {
+const getCombinedDateAndTimeString = (dateDayJs: dayjs.Dayjs, time: string): string => {
   const dateDayJsWithoutTime = dateDayJs.format('YYYY-MM-DD');
   return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
 };
 
+const validationSchema = yup.object({
+  eventType: yup
+    .string()
+    .required('Event type is required'),
+  name: yup
+    .string()
+    .required('Name is required'),
+  volunteerType: yup
+    .string()
+    .required('Volunteer type is required'),
+  deadline: yup
+    .date()
+    .required('Deadline is required'),
+  vacancies: yup
+    .number()
+    .required('Vacancies is required'),
+  description: yup
+    .string()
+    .required('Description is required'),
+  startDate: yup
+    .date()
+    .required('Start date is required'),
+  endDate: yup
+    .date()
+    .required('Start date is required')
+    .when('startDate', (startDate, schema) => startDate
+    && schema.min(startDate, 'End date should be later than start date')),
+  facilitatorName: yup
+    .string()
+    .when('eventType', {
+      is: 'volunteering',
+      then: yup.string().required('Facilitator name is required'),
+    }),
+  facilitatorDescription: yup
+    .string()
+    .when('eventType', {
+      is: 'volunteering',
+      then: yup.string().required('Facilitator description is required'),
+    }),
+  roles: yup
+    .array()
+    .when('eventType', {
+      is: 'volunteering',
+      then: yup.array().required('Roles is required'),
+    }),
+});
+
+const emptyForm = {
+  name: '',
+  coverImage: '',
+  eventType: 'workshop',
+  volunteerType: 'committed',
+  deadline: dayjs().toISOString(),
+  vacancies: '',
+  description: '',
+  facilitatorName: '',
+  facilitatorPhoto: '',
+  facilitatorDescription: '',
+  roles: [],
+  contentUrl: '',
+  contentType: 'pdf',
+  location: '',
+  startDate: dayjs().toISOString(),
+  endDate: dayjs().toISOString(),
+};
+
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
+  const event = useSelector((state: StoreState) => state.event);
+  const eventForm: any = useSelector((state: StoreState) => state.event.form);
+  const user = useSelector((state:StoreState) => state.user);
   const dispatch = useDispatch();
-
-  const eventForm = useSelector((state: StoreState) => state.event.form);
-
-  const [dateAndTime, setDateAndTime] = useState({
-    fromDate: dayjs(),
-    toDate: dayjs(),
-    fromTime: '00:00',
-    toTime: '00:00',
-  });
-
-  const [formData, setFormData] = useState({
-    name: '',
-    coverImage: '',
-    eventType: 'workshop',
-    volunteerType: 'committed',
-    deadline: dayjs(),
-    vacancies: 0,
-    description: '',
-    facilitatorName: '',
-    facilitatorPhoto: '',
-    facilitatorDescription: '',
-    roles: [],
-    contentUrl: null,
-    contentType: 'pdf', // TODO: fix this
-    location: '',
-  });
+  const router = useRouter();
 
   useEffect(() => {
-    if (id !== 'new') {
+    if (id && id !== 'new') {
       dispatch(getEvent(id));
     }
   }, [id]);
 
   useEffect(() => {
-    if (eventForm) {
-      const camelCaseEventForm = keysToCamel(eventForm);
-      const newFormData = {
-        name: camelCaseEventForm.name,
-        coverImage: camelCaseEventForm.coverImage,
-        eventType: camelCaseEventForm.eventType,
-        volunteerType: camelCaseEventForm.volunteerType,
-        deadline: dayjs(camelCaseEventForm.deadline),
-        vacancies: camelCaseEventForm.vacancies,
-        description: camelCaseEventForm.description,
-        facilitatorName: camelCaseEventForm.facilitatorName,
-        facilitatorPhoto: camelCaseEventForm.facilitatorPhoto,
-        facilitatorDescription: camelCaseEventForm.facilitatorDescription,
-        roles: camelCaseEventForm.roles,
-        contentUrl: camelCaseEventForm.contentUrl,
-        contentType: camelCaseEventForm.contentType,
-        location: camelCaseEventForm.location,
-      };
-
-      const newDateAndTime = {
-        fromDate: dayjs(camelCaseEventForm.startDate),
-        toDate: dayjs(camelCaseEventForm.endDate),
-        fromTime: dayjs(camelCaseEventForm.startDate).format('HH:mm'),
-        toTime: dayjs(camelCaseEventForm.endDate).format('HH:mm'),
-      };
-
-      setDateAndTime(newDateAndTime);
-      setFormData(newFormData);
+    if (event.status === 'rejected') {
+      alert('Form submission failed');
+    } else if (event.status === 'fulfilled') {
+      alert('Form submission successful');
+      router.push('/event');
+      dispatch(resetImages());
     }
-  }, [eventForm]);
+  }, [event.status]);
 
-  const {
-    name, coverImage, eventType, volunteerType, deadline,
-    vacancies, description, facilitatorName, facilitatorPhoto,
-    facilitatorDescription, roles, contentUrl, contentType,
-  } = formData;
-
-  const {
-    fromDate, toDate, fromTime, toTime,
-  } = dateAndTime;
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const formToSend = {
-      ...formData,
-      deadline: deadline.toISOString(),
-      startDate: getDateAndTimeIsoString(fromDate, fromTime),
-      endDate: getDateAndTimeIsoString(toDate, toTime),
-    };
-
-    if (isNew) {
-      dispatch(createEvent(formToSend));
-      alert('Event Created!');
-    } else {
-      dispatch(editEvent({ data: formToSend, id }));
-      alert('Event Edited!');
-    }
-    // TODO: Confirm with designers what happens?
-    // I think this should redirect on success to the Event Details page
-  };
-
-  const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
-
-  // TODO: connect with backend
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
+  const onUploadImage = (imageFile, name) => {
     const form = new FormData();
-    const config = {
-      header: { 'Content-Type': 'multipart/form-data' },
-    };
-    form.append('file', file);
-    // hit api
+    form.append('image', imageFile);
+    form.append('email', user.user.email);
+
+    return dispatch(uploadImage({ name, form }));
   };
 
+  const {
+    errors, touched, handleChange, handleSubmit, isSubmitting, setFieldValue, values,
+  } = useFormik({
+    initialValues: eventForm ? keysToCamel(eventForm) : emptyForm,
+    validationSchema,
+    onSubmit: async (formValues) => {
+      const form = formValues;
+
+      // Upload and get cover image URL
+      if (formValues.coverImage && typeof formValues.coverImage !== 'string') {
+        // @ts-ignore type exists
+        await onUploadImage(formValues.coverImage, 'coverImage').then(unwrapResult)
+          .then((result) => { form.coverImage = result.url; });
+      }
+
+      // Upload and get facilitator photo URL
+      if (formValues.facilitatorPhoto && typeof formValues.facilitatorPhoto !== 'string') {
+        // @ts-ignore type exists
+        await onUploadImage(formValues.facilitatorPhoto, 'facilitatorPhoto').then(unwrapResult)
+          .then((result) => { form.facilitatorPhoto = result.url; });
+      }
+
+      dispatch(isNew
+        ? createEvent(form) : editEvent({ data: keysToSnake(form), id }));
+    },
+    enableReinitialize: true,
+  });
+
+  const onChangeImage = (e, fieldName) => {
+    if (e.target.files && e.target.files[0]) {
+      const imageFile = e.target.files[0];
+      setFieldValue(fieldName, imageFile);
+      return URL.createObjectURL(imageFile);
+    }
+  };
+
+  const {
+    name, eventType, volunteerType, deadline,
+    vacancies, description, facilitatorName, facilitatorDescription,
+    startDate, endDate,
+  } = values;
+
+  if (id !== 'new' && eventForm === null) { return <h1>Loading</h1>; }
   return (
     <form onSubmit={handleSubmit}>
       <PaddedGrid>
@@ -208,12 +217,13 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           <Grid item>
             <Typography variant="h1">{isNew ? 'Create Event' : 'Edit Event'}</Typography>
           </Grid>
+
           {/* Type of event */}
           <Grid item container>
             <Grid item xs={12}>
               <Typography variant="h4">Type of Event</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={6} md={2}>
               <TextField
                 select
                 variant="outlined"
@@ -225,6 +235,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 name="eventType"
                 value={eventType}
                 onChange={handleChange}
+                helperText={errors.eventType}
+                error={touched.eventType && Boolean(errors.eventType)}
               >
                 {eventTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -238,7 +250,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Cover Image */}
           <Grid item container>
             <div className={classes.coverImage}>
-              <DropZoneCard isBig />
+              <DropZoneCard
+                id="coverImage"
+                initialUrl={eventForm?.cover_image}
+                isBig
+                onChangeImage={(e) => onChangeImage(e, 'coverImage')}
+              />
             </div>
           </Grid>
 
@@ -259,6 +276,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 name="name"
                 value={name}
                 onChange={handleChange}
+                helperText={errors.name}
+                error={touched.name && Boolean(errors.name)}
               />
             </Grid>
           </Grid>
@@ -268,7 +287,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Volunteer Type</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={6} md={2}>
               <TextField
                 select
                 variant="outlined"
@@ -280,6 +299,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 name="volunteerType"
                 value={volunteerType}
                 onChange={handleChange}
+                helperText={errors.volunteerType}
+                error={touched.volunteerType && Boolean(errors.volunteerType)}
               >
                 {volunteerTypes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -295,10 +316,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Date</Typography>
             </Grid>
-            <Grid item>
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">From</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
@@ -307,18 +328,21 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 margin="dense"
                 id="date-from"
                 name="fromDate"
-                value={dayjs(fromDate)}
-                onChange={(date) => setDateAndTime({ ...dateAndTime, fromDate: date })}
+                value={dayjs(startDate)}
+                onChange={(date) => setFieldValue('startDate', getCombinedDateAndTimeString(date, dayjs(startDate).format('HH:mm')))}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
                 color="secondary"
+                helperText={errors.startDate}
+                error={touched.startDate && Boolean(errors.startDate)}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs={12} md="auto" />
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">To</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
@@ -327,10 +351,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 margin="dense"
                 id="date-to"
                 name="toDate"
-                value={toDate}
-                onChange={(date) => setDateAndTime({ ...dateAndTime, toDate: date })}
-                minDate={dayjs(new Date())}
+                value={dayjs(endDate)}
+                onChange={(date) => setFieldValue('endDate', getCombinedDateAndTimeString(date, dayjs(endDate).format('HH:mm')))}
                 color="secondary"
+                helperText={errors.endDate}
+                error={touched.endDate && Boolean(errors.endDate)}
               />
             </Grid>
           </Grid>
@@ -340,18 +365,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Time</Typography>
             </Grid>
-            <Grid item>
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">From</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <TextField
                 id="time"
                 variant="outlined"
                 name="fromTime"
                 fullWidth
-                value={fromTime}
+                value={dayjs(startDate).format('HH:mm')}
                 margin="dense"
-                onChange={(e) => setDateAndTime({ ...dateAndTime, fromTime: e.target.value })}
+                onChange={(e) => setFieldValue('startDate', getCombinedDateAndTimeString(dayjs(startDate), e.target.value))}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -360,20 +385,23 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   step: 300, // 5 min
                 }}
                 color="secondary"
+                helperText={errors.startDate}
+                error={touched.startDate && Boolean(errors.startDate)}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs={12} md="auto" />
+            <Grid item xs={2} md="auto">
               <Typography variant="body1">To</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={8} md={2}>
               <TextField
                 id="time"
                 variant="outlined"
                 name="toTime"
                 fullWidth
-                value={toTime}
+                value={dayjs(endDate).format('HH:mm')}
                 margin="dense"
-                onChange={(e) => setDateAndTime({ ...dateAndTime, toTime: e.target.value })}
+                onChange={(e) => setFieldValue('endDate', getCombinedDateAndTimeString(dayjs(endDate), e.target.value))}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -382,6 +410,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   step: 300, // 5 min
                 }}
                 color="secondary"
+                helperText={errors.endDate}
+                error={touched.endDate && Boolean(errors.endDate)}
               />
             </Grid>
           </Grid>
@@ -398,11 +428,13 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 inputVariant="outlined"
                 ampm={false}
                 margin="dense"
-                value={deadline}
-                onChange={(date) => setFormData({ ...formData, deadline: date })}
+                value={dayjs(deadline)}
+                onChange={(date) => setFieldValue('deadline', date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
                 color="secondary"
+                helperText={errors.deadline}
+                error={touched.deadline && Boolean(errors.deadline)}
               />
             </Grid>
           </Grid>
@@ -424,6 +456,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 name="vacancies"
                 value={vacancies}
                 onChange={handleChange}
+                helperText={errors.vacancies}
+                error={touched.vacancies && Boolean(errors.vacancies)}
               />
             </Grid>
           </Grid>
@@ -447,68 +481,80 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 onChange={handleChange}
                 multiline
                 rows={15}
+                helperText={errors.description}
+                error={touched.description && Boolean(errors.description)}
               />
             </Grid>
           </Grid>
 
-          {eventType !== 'Volunteering' && (
-            <>
-              <Grid item container>
-                <Grid item xs={12}>
-                  <Typography variant="h4"> Name of Facilitator</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    margin="dense"
-                    id="type"
-                    placeholder="eg. Ms Anna Soh"
-                    type="text"
-                    fullWidth
-                    color="secondary"
-                    name="facilitatorName"
-                    value={facilitatorName}
-                    onChange={handleChange}
-                  />
-                </Grid>
+          {eventType !== 'volunteering' && (
+          <>
+            <Grid item container>
+              <Grid item xs={12}>
+                <Typography variant="h4"> Name of Facilitator</Typography>
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  id="type"
+                  placeholder="eg. Ms Anna Soh"
+                  type="text"
+                  fullWidth
+                  color="secondary"
+                  name="facilitatorName"
+                  value={facilitatorName}
+                  onChange={handleChange}
+                  helperText={errors.facilitatorName}
+                  error={touched.facilitatorName && Boolean(errors.facilitatorName)}
+                />
+              </Grid>
+            </Grid>
 
-              <Grid item container>
-                <div className={classes.facilPhotograph}>
-                  <DropZoneCard isBig={false} onUploadImage={handleImageUpload} />
-                </div>
+            <Grid item container>
+              <div className={classes.facilPhotograph}>
+                <DropZoneCard
+                  id="facilitatorPhoto"
+                  initialUrl={eventForm?.facilitator_photo}
+                  isBig={false}
+                  onChangeImage={(e) => onChangeImage(e, 'facilitatorPhoto')}
+                />
+              </div>
+            </Grid>
+            <Grid item container>
+              <Grid item xs={12}>
+                <Typography variant="h4">Description of Facilitator</Typography>
               </Grid>
-              <Grid item container>
-                <Grid item xs={12}>
-                  <Typography variant="h4">Description of Facilitator</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    margin="dense"
-                    id="type"
-                    placeholder="Type something here..."
-                    type="text"
-                    fullWidth
-                    color="secondary"
-                    name="facilitatorDescription"
-                    value={facilitatorDescription}
-                    onChange={handleChange}
-                    multiline
-                    rows={15}
-                  />
-                </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  id="type"
+                  placeholder="Type something here..."
+                  type="text"
+                  fullWidth
+                  color="secondary"
+                  name="facilitatorDescription"
+                  value={facilitatorDescription}
+                  onChange={handleChange}
+                  multiline
+                  rows={15}
+                  helperText={errors.facilitatorDescription}
+                  error={touched.facilitatorDescription && Boolean(errors.facilitatorDescription)}
+                />
               </Grid>
-            </>
+            </Grid>
+          </>
           )}
 
           {/* Create Event Button */}
           <Grid item container direction="row" justify="flex-end">
             <Button
               variant="contained"
+              type="submit"
+              disabled={isSubmitting}
               color="primary"
               className={classes.button}
-              onClick={handleSubmit}
             >
               <Typography variant="body1">{isNew ? 'Create Event' : 'Edit Event'}</Typography>
             </Button>
