@@ -36,9 +36,9 @@ const PendingRequests: FC<{}> = ({ }) => {
   const user = useSelector((state: StoreState) => state.user);
 
   useEffect(() => {
-    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })); // just to load number in tab
+    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })) // just to load number in tab
     dispatch(getPendingVolunteers());
-    dispatch(getCommitmentApplications({ status: 'pending' }));
+    dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }))
   }, []);
 
   const volunteers = useSelector((state: StoreState) => state.volunteer);
@@ -116,11 +116,11 @@ const PendingRequests: FC<{}> = ({ }) => {
               <TableBody>
                 {upcomingVolunteers.map((volunteer) => (
                   <TableRow key={volunteer._id}>
-                      <TableCell><b>{volunteer.name}</b></TableCell>
-                      <TableCell>{volunteer.createdAt.toLocaleDateString()}</TableCell>
-                      <TableCell>{volunteer.volunteerType}</TableCell>
-                      <TableCell>{getApproveRejectButtons(volunteer)}</TableCell>
-                    </TableRow>
+                    <TableCell><b>{volunteer.name}</b></TableCell>
+                    <TableCell>{volunteer.createdAt.toLocaleDateString()}</TableCell>
+                    <TableCell>{volunteer.volunteerType}</TableCell>
+                    <TableCell>{getApproveRejectButtons(volunteer)}</TableCell>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>

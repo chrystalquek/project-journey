@@ -1,3 +1,4 @@
+import { VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile';
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import { EventData } from '@type/event';
 import { SignUpData } from '@type/signUp';
@@ -24,10 +25,6 @@ export type GetVolunteersResponse = {
 
 export type GetVolunteersPaginatedResponse = GetVolunteersResponse & {
   count: number
-  pageNo: number
-  filters: {
-    volunteerType: Record<VOLUNTEER_TYPE, boolean>
-  }
 }
 
 export type GetCommitmentApplicationResponse = {
