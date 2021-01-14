@@ -223,7 +223,7 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updated_at',
+    updatedAt: 'updatedAt',
   },
   strict: true,
 });
