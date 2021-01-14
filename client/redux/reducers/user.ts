@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from '@type/volunteer';
 import jwt from 'jsonwebtoken';
 import apiClient from '@utils/api/apiClient';
+import { REHYDRATE } from 'redux-persist';
 import user, { updateVolunteer } from '../actions/user';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
@@ -30,6 +31,12 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // Sets auth token from persisted state to runtime
+    builder.addCase(REHYDRATE, (_, action) => {
+      // @ts-ignore payload attribute not registered despite it available
+      const authToken = action?.payload?.user?.token;
+      if (authToken) { apiClient.setAuthToken(authToken); }
+    });
     builder.addCase(user.pending, (state) => {
       state.token = '';
       state.status = 'fetching';
