@@ -48,8 +48,7 @@ const getVolunteer = async (email: string) => {
  * @param id User id to be searched
  */
 const getVolunteerById = async (id: string) => {
-  const volunteer = await Volunteer.findOne({id}).lean().exec();
-
+  const volunteer = await Volunteer.findById(id).lean().exec();
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }

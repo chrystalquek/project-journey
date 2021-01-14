@@ -133,6 +133,7 @@ const createNewVolunteer = async (
   }
 };
 
+// BY EMAIL
 const getVolunteerDetails = async (
   req: express.Request,
   res: express.Response
@@ -150,6 +151,25 @@ const getVolunteerDetails = async (
     });
   }
 };
+
+// BY ID
+const getVolunteerDetailsById = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const volunteerDetails = await volunteerService.getVolunteerById(
+      req.params.id
+    );
+    res.status(HTTP_CODES.OK).json({
+      data: volunteerDetails,
+    });
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      message: error,
+    });
+  }
+}
 
 const getAllVolunteerDetails = async (
   req: express.Request,
@@ -255,6 +275,7 @@ export default {
   getValidations,
   createNewVolunteer,
   getVolunteerDetails,
+  getVolunteerDetailsById,
   getAllVolunteerDetails,
   getPendingVolunteers,
   removeVolunteer,

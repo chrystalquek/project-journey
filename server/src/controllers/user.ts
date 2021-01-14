@@ -7,7 +7,7 @@ import { VolunteerData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
 import VALIDATOR from '../helpers/validation';
-import { updateVolunteerDetails } from '../services/volunteer';
+import volunteerService from '../services/volunteer';
 
 export type UserValidatorMethod = 'login' | 'updatePassword'
 
@@ -80,7 +80,7 @@ const updatePassword = async (req: express.Request, res: express.Response) => {
   try {
     const user = await getUser(email);
     if (bcrypt.compareSync(password, user.password)) {
-      await updateVolunteerDetails(email, { password: newPassword });
+      await volunteerService.updateVolunteerDetails(email, { password: newPassword });
       res.status(HTTP_CODES.OK).send();
     } else {
       res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
