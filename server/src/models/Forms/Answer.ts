@@ -7,15 +7,15 @@ export type AnswerModel = AnswerData & mongoose.Document
 
 const AnswerSchema = new Schema({
   _id: mongoose.Types.ObjectId,
-  question_id: {
+  questionId: {
     type: mongoose.Types.ObjectId,
     ref: 'Question',
   },
-  user_id: {
+  userId: {
     type: mongoose.Types.ObjectId,
     ref: 'Volunteer',
   },
-  form_id: {
+  formId: {
     type: mongoose.Types.ObjectId,
     ref: 'Form',
   },
