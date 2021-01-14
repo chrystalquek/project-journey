@@ -13,7 +13,7 @@ const ImageSchema = new Schema({
   created_at: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 export default mongoose.model<ImageModel>('Image', ImageSchema);

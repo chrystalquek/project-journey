@@ -12,7 +12,7 @@ const createCommitmentApplication = async (
     // TODO: @matt setup timestamp
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
-  return savedCommitmentApplication.toObject()
+  return savedCommitmentApplication.toObject();
 };
 
 const readCommitmentApplications = async (status?: CommitmentApplicationStatus):

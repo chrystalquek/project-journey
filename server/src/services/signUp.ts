@@ -11,7 +11,7 @@ type UpdateEventVolunteersAction = 'add' | 'remove' | 'replace'
 
 const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
   try {
-    const sid = uuidv4()
+    const sid = uuidv4();
     const signUpSchemaData = new SignUp({
       sign_up_id: sid,
       event_id: signUpData.eventId,

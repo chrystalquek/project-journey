@@ -27,8 +27,8 @@ router.get(
 
 router.get(
   '/id/:id',
-  volunteerController.getVolunteerDetailsById
-)
+  volunteerController.getVolunteerDetailsById,
+);
 
 router.get(
   '/',

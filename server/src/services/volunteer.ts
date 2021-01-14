@@ -53,8 +53,8 @@ const getVolunteerById = async (id: string) => {
     throw new Error(`Volunteer with id: ${id} not found`);
   }
 
-  return volunteerUtil.extractVolunteerDetails(volunteer)
-}
+  return volunteerUtil.extractVolunteerDetails(volunteer);
+};
 
 /**
  * Gets all volunteer details.
@@ -110,10 +110,11 @@ const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
 const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
   await getVolunteer(email);
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
-    { email }, 
-    updatedVolunteerData, 
-    { new: true });
-  return savedVolunteerData
+    { email },
+    updatedVolunteerData,
+    { new: true },
+  );
+  return savedVolunteerData;
 };
 
 /**

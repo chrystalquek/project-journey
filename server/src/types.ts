@@ -95,7 +95,7 @@ export type VolunteerData = {
     // Event count
     volunteeringSessionsCount: number;
     workshopsCount: number;
-    hangoutsCount: number; 
+    hangoutsCount: number;
 
     // Past Events
     pastEventIds: Array<string>

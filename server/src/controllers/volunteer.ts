@@ -84,7 +84,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.hangoutsCount,
 
         // Past Events
-        VALIDATOR.pastEventIds
+        VALIDATOR.pastEventIds,
       ];
     }
     case 'getVolunteer': {
@@ -121,7 +121,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
 
 const createNewVolunteer = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   try {
     await volunteerService.addNewVolunteer(req.body as VolunteerData);
@@ -136,11 +136,11 @@ const createNewVolunteer = async (
 // BY EMAIL
 const getVolunteerDetails = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   try {
     const volunteerDetails = await volunteerService.getVolunteer(
-      req.params.email
+      req.params.email,
     );
     res.status(HTTP_CODES.OK).json({
       data: volunteerDetails,
@@ -155,11 +155,11 @@ const getVolunteerDetails = async (
 // BY ID
 const getVolunteerDetailsById = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   try {
     const volunteerDetails = await volunteerService.getVolunteerById(
-      req.params.id
+      req.params.id,
     );
     res.status(HTTP_CODES.OK).json({
       data: volunteerDetails,
@@ -169,11 +169,11 @@ const getVolunteerDetailsById = async (
       message: error,
     });
   }
-}
+};
 
 const getAllVolunteerDetails = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   try {
     // handles both searching volunteers and returning all volunteers
@@ -211,19 +211,19 @@ const getAllVolunteerDetails = async (
  */
 const getPendingVolunteers = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<void> => {
   try {
     const pendingCommitmentApplications = await commitmentApplicationService.readCommitmentApplications(
-      'pending'
+      'pending',
     );
 
     const pendingVolunteersIds = pendingCommitmentApplications.map(
-      (commitmentApplication) => commitmentApplication.volunteerId
+      (commitmentApplication) => commitmentApplication.volunteerId,
     );
 
     const pendingVolunteers = await volunteerService.readVolunteersByIds(
-      pendingVolunteersIds
+      pendingVolunteersIds,
     );
 
     res.status(HTTP_CODES.OK).json({ data: pendingVolunteers });
