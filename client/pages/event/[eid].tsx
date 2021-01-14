@@ -35,11 +35,13 @@ const EventsDetailPage = () => {
   }
 
   return (
-    <Container fixed>
+    <>
       <Head title="Blessings in a Bag" />
       <NavBar userData={userData} />
-      {body}
-    </Container>
+      <Container fixed>
+        {body}
+      </Container>
+    </>
   );
 };
 
