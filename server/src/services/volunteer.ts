@@ -16,7 +16,7 @@ export const doesUserEmailExist = async (email: string) => {
  * Creates new volunteer for both ad-hoc/committed
  * @param volunteerData new volunteer data
  */
-export const addNewVolunteer = async (volunteerData: VolunteerData) => {
+const addNewVolunteer = async (volunteerData: VolunteerData) => {
   const volunteerSchemaData = new Volunteer({
     ...volunteerData,
     _id: new mongoose.Types.ObjectId(),
@@ -30,7 +30,7 @@ export const addNewVolunteer = async (volunteerData: VolunteerData) => {
  * Throws error if user doesn't exist
  * @param email User email to be searched
  */
-export const getVolunteer = async (email: string) => {
+const getVolunteer = async (email: string) => {
   const volunteer = await Volunteer.findOne({
     email,
   }).lean().exec();
@@ -47,7 +47,7 @@ export const getVolunteer = async (email: string) => {
  * Throws error if user doesn't exist
  * @param id User id to be searched
  */
-export const getVolunteerById = async (id: string) => {
+const getVolunteerById = async (id: string) => {
   const volunteer = await Volunteer.findOne({id}).lean().exec();
 
   if (!volunteer) {
@@ -60,7 +60,7 @@ export const getVolunteerById = async (id: string) => {
 /**
  * Gets all volunteer details.
  */
-export const getAllVolunteers = async (query: QueryParams) => {
+const getAllVolunteers = async (query: QueryParams) => {
   // no of volunteers that match name (if any)
   const count = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find({}))
     .find({ volunteerType: { $in: query.volunteerType || [] } })
@@ -108,7 +108,7 @@ const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
  * @param email
  * @param updatedVolunteerData
  */
-export const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
+const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
   await getVolunteer(email);
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
     { email }, 
@@ -121,7 +121,7 @@ export const updateVolunteerDetails = async (email: string, updatedVolunteerData
  * Removes volunteer from DB (hard delete)
  * @param email User email to be used to search
  */
-export const deleteVolunteer = async (email: string) => {
+const deleteVolunteer = async (email: string) => {
   await Volunteer.findOneAndDelete({
     email,
   });
