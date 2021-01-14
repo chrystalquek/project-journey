@@ -24,6 +24,7 @@ const createEvent = async (eventData: EventData): Promise<void> => {
       content_url: eventData.contentUrl,
       content_type: eventData.contentType,
       location: eventData.location,
+      isCancelled: eventData.isCancelled,
     });
     await eventSchemaData.save();
   } catch (err) {
