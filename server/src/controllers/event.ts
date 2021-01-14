@@ -42,6 +42,7 @@ const createEvent = async (
   res: express.Response,
 ): Promise<void> => {
   try {
+    req.body.isCancelled = false; // default
     await eventService.createEvent(req.body as EventData);
     res.status(HTTP_CODES.OK).send('Event data created');
   } catch (err) {
