@@ -43,6 +43,21 @@ export const getVolunteer = async (email: string) => {
 };
 
 /**
+ * Gets volunteer details for specific user.
+ * Throws error if user doesn't exist
+ * @param id User id to be searched
+ */
+export const getVolunteerById = async (id: string) => {
+  const volunteer = await Volunteer.findOne({id}).lean().exec();
+
+  if (!volunteer) {
+    throw new Error(`Volunteer with id: ${id} not found`);
+  }
+
+  return volunteerUtil.extractVolunteerDetails(volunteer)
+}
+
+/**
  * Gets all volunteer details.
  */
 export const getAllVolunteers = async (query: QueryParams) => {
@@ -113,5 +128,5 @@ export const deleteVolunteer = async (email: string) => {
 };
 
 export default {
-  addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, readVolunteersByIds, updateVolunteerDetails,
+  addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, getVolunteerById, readVolunteersByIds, updateVolunteerDetails,
 };
