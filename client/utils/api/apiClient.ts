@@ -108,6 +108,10 @@ class AxiosApiClient implements ApiClient {
   }
 
   // volunteer
+  async getVolunteerById(id: string): Promise<VolunteerData> {
+    return this.send({}, `volunteer/id/${id}`, 'get');
+  }
+
   async getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }

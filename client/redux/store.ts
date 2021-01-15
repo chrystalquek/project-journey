@@ -4,7 +4,7 @@ import userReducer, { UserState } from '@redux/reducers/user';
 import EventReducer, { EventState } from '@redux/reducers/event';
 import imageReducer, { ImageState } from '@redux/reducers/image';
 import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer';
-import profilePageDataReducer from '@redux/reducers/profilePageData'
+import profilePageReducer, { ProfilePageState } from '@redux/reducers/profilePage'
 import {
   persistStore,
   persistReducer,
@@ -18,7 +18,6 @@ import {
 import storage from 'redux-persist/lib/storage';
 import signUpReducer, { SignUpState } from './reducers/signUp';
 import commitmentApplicationReducer, { CommitmentApplicationState } from './reducers/commitmentApplication';
-import { VolunteerData } from '@type/volunteer';
 
 export type StoreState = {
   user: UserState
@@ -27,7 +26,7 @@ export type StoreState = {
   signUp: SignUpState
   commitmentApplication: CommitmentApplicationState,
   image: ImageState,
-  profilePageData: VolunteerData,
+  profilePage: ProfilePageState,
 }
 
 const reducers = combineReducers({
@@ -37,7 +36,7 @@ const reducers = combineReducers({
   signUp: signUpReducer,
   commitmentApplication: commitmentApplicationReducer,
   image: imageReducer,
-  profilePageData: profilePageDataReducer
+  profilePage: profilePageReducer
 });
 
 const persistConfig = {
