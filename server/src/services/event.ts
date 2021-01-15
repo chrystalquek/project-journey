@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { QueryParams, EventSearchType, EventData } from '../types';
 
 import Event from '../models/Event';
+import util from '../helpers/util';
 
 const createEvent = async (eventData: EventData): Promise<void> => {
   try {
@@ -63,25 +64,25 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
       case 'all':
         events = await Event.find({
           _id: { $in: ids },
-        });
+        }).lean().exec();
         break;
       case 'upcoming':
         events = await Event.find({
           _id: { $in: ids },
           start_date: { $gt: new Date() },
-        });
+        }).lean().exec();
         break;
       case 'past':
         events = await Event.find({
           _id: { $in: ids },
           start_date: { $lt: new Date() },
-        });
+        }).lean().exec();
         break;
       default:
         throw new Error('Event type is invalid');
     }
 
-    return events;
+    return events.map((event: EventData) => util.snakeToCamelCase(event));
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -101,31 +102,38 @@ const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
     if (eventType.limit && eventType.skip) {
       switch (eventType.searchType) {
         case 'all':
-          events = await Event.find({}).skip(eventType.skip).limit(eventType.limit);
+          events = await Event.find({}).skip(eventType.skip).limit(eventType.limit).lean()
+            .exec();
           break;
         case 'past':
-          events = await Event.find({ start_date: { $lt: new Date() } }).skip(eventType.skip).limit(eventType.limit);
+          events = await Event.find({ start_date: { $lt: new Date() } }).skip(eventType.skip)
+            .limit(eventType.limit).lean()
+            .exec();
           break;
         case 'upcoming':
-          events = await Event.find({ start_date: { $gt: new Date() } }).skip(eventType.skip).limit(eventType.limit).sort({ startDate: 1 });
+          events = await Event.find({ start_date: { $gt: new Date() } }).skip(eventType.skip)
+            .limit(eventType.limit).sort({ startDate: 1 })
+            .lean()
+            .exec();
           break;
         default: throw new Error('Event type is invalid');
       }
     } else {
       switch (eventType.searchType) {
         case 'all':
-          events = await Event.find({});
+          events = await Event.find({}).lean().exec();
           break;
         case 'past':
-          events = await Event.find({ start_date: { $lt: new Date() } });
+          events = await Event.find({ start_date: { $lt: new Date() } }).lean().exec();
           break;
         case 'upcoming':
-          events = await Event.find({ start_date: { $gt: new Date() } }).sort({ startDate: 1 });
+          events = await Event.find({ start_date: { $gt: new Date() } })
+            .sort({ startDate: 1 }).lean().exec();
           break;
         default: throw new Error('Event type is invalid');
       }
     }
-    return events;
+    return events.map((event) => util.snakeToCamelCase(event) as EventData);
   } catch (err) {
     throw new Error(err.msg);
   }
