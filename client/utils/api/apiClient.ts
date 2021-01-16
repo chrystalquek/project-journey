@@ -201,6 +201,6 @@ class AxiosApiClient implements ApiClient {
   }
 }
 
-const urlBaseEndpoint = 'http://localhost:5000';
+const urlBaseEndpoint = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://api-dot-journey-288113.et.r.appspot.com/';
 const sharedClient: AxiosApiClient = new AxiosApiClient(urlBaseEndpoint);
 export default sharedClient;

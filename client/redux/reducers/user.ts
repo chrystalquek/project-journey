@@ -29,9 +29,6 @@ const userSlice = createSlice({
       state.user = null;
       state.status = '';
     },
-    resetStatus(state) {
-      state.status = ''
-    }
   },
   extraReducers: (builder) => {
     // Sets auth token from persisted state to runtime
@@ -72,5 +69,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetUser, resetStatus } = userSlice.actions;
+export const { resetUser } = userSlice.actions;
 export default userSlice.reducer;

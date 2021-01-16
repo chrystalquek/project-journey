@@ -77,15 +77,6 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
   const router = useRouter();
   const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
-  
-  // Reset status when opening the page.
-  // useEffect(() => {
-  //   resetStatus();
-
-  //   return () => {
-  //     resetStatus();
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (user.token) {
