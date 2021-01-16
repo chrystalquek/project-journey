@@ -18,6 +18,8 @@ const profilePageDataSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getVolunteerById.fulfilled, (state, action) => {
       // @ts-ignore
+      // Typescript does not recognize action.payload.data as VolunteerData
+      // Eventhough it is VolunteerData
       state.data = action.payload.data;
     });
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
