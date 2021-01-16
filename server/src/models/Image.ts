@@ -10,10 +10,10 @@ const ImageSchema = new Schema({
   email: String,
   imageName: String,
   url: String,
-  created_at: {
+  createdAt: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 export default mongoose.model<ImageModel>('Image', ImageSchema);

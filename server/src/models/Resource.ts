@@ -9,7 +9,7 @@ const ResourceSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   name: String,
   url: String,
-  created_at: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },

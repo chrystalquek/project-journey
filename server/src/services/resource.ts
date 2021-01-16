@@ -11,7 +11,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
       _id: new mongoose.Types.ObjectId(),
       name: resourceData.name,
       url: resourceData.url,
-      created_at: Date.now(),
+      createdAt: Date.now(),
       type: resourceData.type,
     });
     await resourceSchemaData.save();

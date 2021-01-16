@@ -14,7 +14,11 @@ export type VolunteerModel = VolunteerData & mongoose.Document;
 // same for client
 // TODO: UPDATE ENUMS TO FOLLOW THE FE
 export const GENDER_TYPES = ['male', 'female'];
-export const CITIZENSHIP_TYPES = ['singapore', 'permanent_resident', 'foreigner'];
+export const CITIZENSHIP_TYPES = [
+  'singapore',
+  'permanent_resident',
+  'foreigner',
+];
 export const RACE_TYPES = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
 export const LEADERSHIP_INTEREST_TYPES = ['yes', 'no', 'maybe'];
 export const PERSONALITY_TYPES = [
@@ -42,7 +46,13 @@ export const PERSONALITY_TYPES = [
   'ESTP_T',
   'ESFP_A',
 ];
-export const SOCIAL_MEDIA_PLATFORMS = ['instagram', 'facebook', 'snapchat', 'email', 'other'];
+export const SOCIAL_MEDIA_PLATFORMS = [
+  'instagram',
+  'facebook',
+  'snapchat',
+  'email',
+  'other',
+];
 export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'admin'];
 
 export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
@@ -115,7 +125,6 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
   hasFirstAidCertification: Boolean,
   leadershipInterest: {
     type: String,
-    enum: LEADERSHIP_INTEREST_TYPES,
     default: '',
   },
   interests: {
@@ -175,20 +184,46 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     type: String,
     default: '',
   },
-  adminRemarks: {
+  administratorRemarks: {
     type: String,
     default: '',
   },
-
-  volunteeringSessionsCount: Number,
-  workshopsCount: Number,
-  hangoutsCount: Number,
+  volunteeringSessionsCount: {
+    type: Number,
+    default: 0,
+  },
+  workshopsCount: {
+    type: Number,
+    default: 0,
+  },
+  hangoutsCount: {
+    type: Number,
+    default: 0,
+  },
+  pastEventIds: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Event',
+      },
+    ],
+    default: [],
+  },
+  commitmentApplicationIds: {
+    type: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'CommitmentApplication',
+      },
+    ],
+    default: [],
+  },
 };
 
 const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {
   timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
   },
   strict: true,
 });
