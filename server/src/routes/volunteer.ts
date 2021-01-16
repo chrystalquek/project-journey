@@ -19,7 +19,7 @@ protectedRouter.get(
   volunteerController.getPendingVolunteers,
 );
 
-router.get(
+router.post(
   '/ids',
   volunteerController.readVolunteersByIds,
 );

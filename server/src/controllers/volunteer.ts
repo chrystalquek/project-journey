@@ -201,9 +201,14 @@ const getPendingVolunteers = async (
   }
 };
 
-const readVolunteersByIds = async (req, res) => {
+const readVolunteersByIds = async (
+  req: express.Request,
+  res: express.Response,
+): Promise<void> => {
   try {
-    const volunteers = await volunteerService.readVolunteersByIds(req.body.ids);
+    const { ids } = req.body;
+    const volunteers = await volunteerService.readVolunteersByIds(ids);
+
     res.status(HTTP_CODES.OK).json({ data: volunteers });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -211,6 +216,7 @@ const readVolunteersByIds = async (req, res) => {
     });
   }
 };
+
 const checkUpdateRights = () => [
   jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
 
