@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { EventData, Event } from '@type/event';
 import {
   Select,
@@ -6,18 +6,15 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Typography,
   TextField,
-  Button,
   makeStyles,
 } from '@material-ui/core';
 import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
 import { VolunteerData } from '@type/volunteer';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-import { getSignUps } from '@redux/actions/signUp';
-import { SignUpIdType, SignUpStatus } from '@type/signUp';
-import { StoreState } from '@redux/store';
+import {EventTypography} from '@components/common/event/EventTypography';
+import {EventDivider} from '@components/common/event/EventDivider';
+import {EventButton} from '@components/common/event/EventButton';
 
 type EventRegisterProps = {
   event: EventData
@@ -78,15 +75,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
       default:
         console.error("You shouldn't be here!");
     }
-    router.reload();
   };
 
   return (
     <>
       <form onSubmit={onFormSubmit}>
-        <Box fontWeight="bold" fontSize="h3.fontSize">Register Here</Box>
-        <Box fontWeight="bold">Position Interested:</Box>
-        <Box>First Choice:</Box>
+        <EventDivider fontBold gutterBottom>Register Here</EventDivider>
+        <EventTypography fontBold text="Position Interested:" />
+        <EventTypography text="First Choice:" />
         <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="first-choice">Select Position</InputLabel>
           <Select
@@ -103,10 +99,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             ))}
           </Select>
         </FormControl>
-        <Box>
-          Second Choice:
-          <Box component="span" color="text.secondary">(optional)</Box>
-        </Box>
+        <EventTypography text="Second Choice: (optional)" />
         <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="second-choice">Select Position</InputLabel>
           <Select
@@ -122,10 +115,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             ))}
           </Select>
         </FormControl>
-        <Box>
-          Third Choice:
-          <Box component="span" color="text.secondary">(optional)</Box>
-        </Box>
+        <EventTypography text="Third Choice: (optional)" />
         <FormControl fullWidth variant="outlined" disabled={isDisabled}>
           <InputLabel id="third-choice">Select Position</InputLabel>
           <Select
@@ -141,7 +131,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             ))}
           </Select>
         </FormControl>
-        <Box fontWeight="bold">Anything you would like us to know?</Box>
+        <EventTypography fontBold text="Anything you would like us to know?" />
         <TextField
           id="additionalInfo"
           name="additionalInfo"
@@ -153,15 +143,16 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
           onChange={handleChange}
           disabled={isDisabled}
         />
+        <Box margin={3} />
 
-        <Button
+        <EventButton
           onSubmit={onFormSubmit}
           disabled={isDisabled}
           className={classes.button}
           type="submit"
         >
           Register
-        </Button>
+        </EventButton>
       </form>
     </>
   );
