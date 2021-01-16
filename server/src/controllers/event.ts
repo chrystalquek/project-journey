@@ -144,6 +144,20 @@ const updateEvent = async (req: express.Request, res: express.Response) => {
   }
 };
 
+const cancelEvent = async (req: express.Request, res: express.Response) => {
+  try {
+    const { id } = req.params;
+
+    await eventService.cancelEvent(id);
+
+    res.status(HTTP_CODES.OK).send('Event cancelled');
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+};
+
 const deleteEvent = async (req: express.Request, res: express.Response) => {
   try {
     await eventService.deleteEvent(req.params.id);
@@ -161,6 +175,7 @@ export default {
   readEvents,
   readSignedUpEvents,
   updateEvent,
+  cancelEvent,
   deleteEvent,
   getValidations,
 };
