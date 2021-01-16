@@ -22,22 +22,6 @@ export const teamCreate = async (body: TeamData) => {
   }
 };
 
-/**
- * Returns the team with given id, or all teams if no id is given.
- * @param body.id the team id to retrieve.
- */
-export const teamRead = async (body: { id: string }): Promise<any> => {
-  const { id } = body;
-  try {
-    if (!id) {
-      return await teamReadAll();
-    }
-    return await teamReadOne(id);
-  } catch (err) {
-    console.error(`Error: ${err.message}`);
-  }
-};
-
 const teamReadAll = async (): Promise<any> => {
   const teams = Team.find({});
   if (!teams) {
@@ -73,6 +57,22 @@ export const teamUpdate = async (body: { id: string, members?: [string], leader?
       name: name || prev.name,
     };
     Team.findByIdAndUpdate(id, updated, (err, doc) => console.info(`Updated ${doc}`));
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+  }
+};
+
+/**
+ * Returns the team with given id, or all teams if no id is given.
+ * @param body.id the team id to retrieve.
+ */
+export const teamRead = async (body: { id: string }): Promise<any> => {
+  const { id } = body;
+  try {
+    if (!id) {
+      return await teamReadAll();
+    }
+    return await teamReadOne(id);
   } catch (err) {
     console.error(`Error: ${err.message}`);
   }

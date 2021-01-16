@@ -12,7 +12,7 @@ const createForm = async (formData: FormData): Promise<string> => {
     _id: formId,
     name: formData.name,
     description: formData.description,
-    event_id: formData.eventId,
+    eventId: formData.eventId,
   });
   await formSchemaData.save();
   return formId.toHexString();
@@ -24,7 +24,7 @@ const createForm = async (formData: FormData): Promise<string> => {
  */
 const getForm = async (eventId: string) => {
   const form = await Form.findOne({
-    event_id: eventId,
+    eventId,
   }).lean().exec();
 
   if (!form) {

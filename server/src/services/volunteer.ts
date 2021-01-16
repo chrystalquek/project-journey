@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { QueryParams, VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
+import util from '../helpers/util';
 
 // Helper methods
 export const doesUserEmailExist = async (email: string) => {
@@ -39,7 +40,7 @@ export const getVolunteer = async (email: string) => {
     throw new Error(`Volunteer with email: ${email} not found`);
   }
 
-  return volunteerUtil.extractVolunteerDetails(volunteer);
+  return util.snakeToCamelCase(volunteerUtil.extractVolunteerDetails(volunteer));
 };
 
 /**
@@ -67,7 +68,7 @@ export const getAllVolunteers = async (query: QueryParams) => {
       .lean().exec();
   }
 
-  const data = volunteers.map((volunteer) => volunteerUtil.extractVolunteerDetails(volunteer));
+  const data = volunteers.map((volunteer: VolunteerData) => util.snakeToCamelCase(volunteerUtil.extractVolunteerDetails(volunteer)));
 
   return { data, count };
 };
@@ -96,10 +97,11 @@ const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
 export const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
   await getVolunteer(email);
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
-    { email }, 
-    updatedVolunteerData, 
-    { new: true });
-  return savedVolunteerData
+    { email },
+    updatedVolunteerData,
+    { new: true },
+  );
+  return savedVolunteerData;
 };
 
 /**

@@ -13,8 +13,8 @@ const insertQuestions = async (questions: Array<Omit<QuestionData, 'id'>>): Prom
     questionIds.push(questionId.toHexString());
     return {
       _id: questionId,
-      form_id: question.formId,
-      is_required: question.isRequired,
+      formId: question.formId,
+      isRequired: question.isRequired,
       text: question.text,
       type: question.type,
     };
@@ -42,7 +42,7 @@ const updateQuestions = async (updatedQuestions: Array<Partial<QuestionData>>): 
  */
 const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
   const questions = await Question.find({
-    form_id: formId,
+    formId,
   }).lean().exec();
   return questions.map((question) => ({
     // eslint-disable-next-line no-underscore-dangle
