@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CircularProgress, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import ProfileHeader from '@components/profile/ProfileHeader';
 import Remarks from '@components/profile/Remarks';
 import ContactInformation from '@components/profile/ContactInformation';
@@ -12,6 +12,7 @@ import ErrorPage from 'next/error';
 import { useRouter } from 'next/router';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 import { getVolunteerById } from '@redux/actions/profilePage';
+import Loading from '@components/common/Loading';
 
 const Profile = () => {
   const router = useRouter();
@@ -20,9 +21,7 @@ const Profile = () => {
   const profilePageId = router.query.volunteer_id as string;
 
   const loggedInUser = useSelector((state: StoreState) => state.user);
-  // @ts-ignore need to fix the payload struct here on the reducer side
-  // TODO: @teddy
-  const profilePageData = useSelector((state: StoreState) => state.profilePage.data.data);
+  const profilePageData = useSelector((state: StoreState) => state.profilePage.data);
 
   // First time load page, send request to receive data
   useEffect(() => {
@@ -37,7 +36,7 @@ const Profile = () => {
     return <ErrorPage statusCode={404} />;
   }
 
-  return (profilePageData === null || profilePageData?._id !== profilePageId ? <CircularProgress />
+  return (profilePageData === null || profilePageData?._id !== profilePageId ? <Loading />
     : (
       <Grid container direction="column">
         <Grid item>

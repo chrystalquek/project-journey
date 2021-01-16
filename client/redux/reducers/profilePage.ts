@@ -17,7 +17,8 @@ const profilePageDataSlice = createSlice({
   reducers:{},
   extraReducers: (builder) => {
     builder.addCase(getVolunteerById.fulfilled, (state, action) => {
-      state.data = action.payload 
+      //@ts-ignore
+      state.data = action.payload.data
     })
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload
