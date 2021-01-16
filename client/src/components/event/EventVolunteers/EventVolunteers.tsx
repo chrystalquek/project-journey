@@ -1,26 +1,20 @@
 import {
   makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Popover, FormControl, InputLabel, Select, MenuItem, Badge,
 } from '@material-ui/core';
-import React, { FC, useEffect, useState } from 'react';
-import { EventData } from 'types/event';
+import React, { useEffect, useState } from 'react';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEventsUpcomingEvent, getEvent } from '@redux/actions/event';
 import { getVolunteersById } from '@redux/actions/volunteer';
-import { getPendingSignUps, getSignUpsUpcomingEvent, updateSignUp } from '@redux/actions/signUp';
+import { getSignUpsUpcomingEvent, updateSignUp } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
-import NavBar from '@components/common/NavBar';
 import { Footer } from 'antd/lib/layout/layout';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
 
 import { Tabs } from '@components/common/Tabs';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { NumberSchema } from 'yup';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import CloseIcon from '@material-ui/icons/Close';
-import { SignUpQueryParams, UpdateSignUpRequest } from '@utils/api/request';
+import { getEvent } from '@redux/actions/event';
 
 const useStyles = makeStyles((theme) => ({
   popUpButton: {
@@ -65,7 +59,6 @@ const EventVolunteers = ({ eid }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const user = useSelector((state: StoreState) => state.user);
   const signUps = useSelector((state: StoreState) => state.signUp);
   const event = useSelector((state: StoreState) => state.event.form);
   const roles = event?.roles;
@@ -75,6 +68,7 @@ const EventVolunteers = ({ eid }) => {
   const [approvedSignUps, setApprovedSignUps] = useState([]);
   const [nonApprovedSignUps, setNonApprovedSignUps] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState({});
+  const [roleVacancies, setRoleVacancies] = useState({});
 
   useEffect(() => {
     if (eid) {
@@ -85,8 +79,7 @@ const EventVolunteers = ({ eid }) => {
 
   useEffect(() => {
     const signUpsData = signUps.data;
-    // @ts-ignore TODO: snake -> camel
-    const temp = Object.values(signUpsData).map((signUp) => signUp.user_id); // TODO: to camel
+    const temp = Object.values(signUpsData).map((signUp) => signUp.userId);
     setAllVolunteerIds(temp);
   }, [signUps]);
 
@@ -112,6 +105,15 @@ const EventVolunteers = ({ eid }) => {
     if (allVolunteerIds.length) updateVolunteerData();
   }, [signUps, allVolunteerIds]);
 
+  const getVacanciesForAllRoles = () => {
+    const vacancies = {};
+    roles?.forEach((role) => { vacancies[role.name] = role.capacity - role.volunteers.length; });
+    return vacancies;
+  };
+  useEffect(() => {
+    setRoleVacancies(getVacanciesForAllRoles());
+  }, [event, roles]);
+
   useEffect(() => {
     const signUpData = signUps.data;
     const approved = [];
@@ -123,21 +125,24 @@ const EventVolunteers = ({ eid }) => {
         nonApproved.push(signUp);
       }
     });
+    dispatch(getEvent(eid));
     setApprovedSignUps(approved);
     setNonApprovedSignUps(nonApproved);
   }, [signUps]);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
+  const [openedPopoverId, setOpenedPopoverId] = useState(null);
+
+  const handleClick = (event, popoverId) => {
+    setOpenedPopoverId(popoverId);
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
+    setOpenedPopoverId(null);
     setAnchorEl(null);
   };
-
-  const open = Boolean(anchorEl);
 
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
   // const [isEditingRole, setIsEditingRole] = useState(false);
@@ -168,13 +173,12 @@ const EventVolunteers = ({ eid }) => {
 
     const moreButton = (
       <div>
-        <IconButton onClick={handleClick}>
+        <IconButton onClick={(e) => handleClick(e, signUp.signUpId)}>
           <MoreVertIcon />
         </IconButton>
         <Popover
-        // @ts-ignore TODO: snake -> camel
-          id={signUp.sign_up_id}
-          open={open}
+          id={signUp.signUpId}
+          open={openedPopoverId === signUp.signUpId}
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
@@ -198,7 +202,7 @@ const EventVolunteers = ({ eid }) => {
                   request: { ...signUp, status: 'pending' },
                   query: {
                     // @ts-ignore TODO: snake -> camel
-                    id: signUp.sign_up_id,
+                    id: signUp.signUpId,
                     idType: 'signUpId',
                   },
                 })}
@@ -217,15 +221,12 @@ const EventVolunteers = ({ eid }) => {
   };
 
   const onAssignRole = (signUp) => {
-    // @ts-ignore TODO: snake -> camel
-    const selectedRole = selectedRoles[signUp.sign_up_id];
+    const selectedRole = selectedRoles[signUp.signUpId];
 
-    // @ts-ignore TODO: snake -> camel
     dispatch(updateSignUp({
       request: { ...signUp, status: ['accepted', selectedRole] },
       query: {
-      // @ts-ignore TODO: snake -> camel
-        id: signUp.sign_up_id,
+        id: signUp.signUpId,
         idType: 'signUpId',
       },
     }));
@@ -236,7 +237,7 @@ const EventVolunteers = ({ eid }) => {
       <Button
         className={classes.assignButton}
         onClick={() => onAssignRole(signUp)}
-        disabled={!selectedRoles[signUp.sign_up_id]}
+        disabled={!selectedRoles[signUp.signUpId]}
       >
         Assign
       </Button>
@@ -270,11 +271,6 @@ const EventVolunteers = ({ eid }) => {
     );
   };
 
-  const getVacanciesForRole = (roleName:string): number => {
-    const targetRole = roles?.find((role) => role.name === roleName);
-    return targetRole?.capacity - targetRole?.volunteers.length;
-  };
-
   const handleSelectedRoleChange = (signUpId, event) => {
     setSelectedRoles({ ...selectedRoles, [signUpId]: event.target.value });
   };
@@ -282,13 +278,14 @@ const EventVolunteers = ({ eid }) => {
   const getRoleSelectMenu = (signUp) => (
     <FormControl variant="outlined" className={classes.selectRole}>
       <Select
-        value={selectedRoles[signUp.sign_up_id]}
-        onChange={(e) => handleSelectedRoleChange(signUp.sign_up_id, e)}
+        defaultValue=""
+        value={selectedRoles[signUp.signUpId]}
+        onChange={(e) => handleSelectedRoleChange(signUp.signUpId, e)}
       >
         <MenuItem value="" disabled>
           Preferences
         </MenuItem>
-        {signUp.preferences.map((preference, index) => (
+        {signUp?.preferences.map((preference, index) => (
           <MenuItem value={preference}>
             <Grid container direction="row" justify="flex-end">
               <Grid item xs={11}>
@@ -296,7 +293,7 @@ const EventVolunteers = ({ eid }) => {
               </Grid>
               <Grid item xs={1}>
                 <Badge
-                  badgeContent={getVacanciesForRole(preference)}
+                  badgeContent={roleVacancies[preference]}
                   classes={{ badge: classes.badge }}
                 />
               </Grid>
@@ -324,11 +321,11 @@ const EventVolunteers = ({ eid }) => {
   ];
 
   const getApprovedVolunteersTableBody = () => approvedSignUps.map((signUp) => {
-    const volunteer = allVolunteerData[signUp.user_id];
+    const volunteer = allVolunteerData[signUp.userId];
     return (
-      <TableRow key={signUp?.sign_up_id}>
+      <TableRow key={signUp.signUpId}>
         <TableCell><b>{volunteer?.name}</b></TableCell>
-        <TableCell>{volunteer?.mobile_number}</TableCell>
+        <TableCell>{volunteer?.mobileNumber}</TableCell>
         <TableCell>{signUp?.status[1]}</TableCell>
         <TableCell>{getMoreButton(signUp, volunteer?.name)}</TableCell>
       </TableRow>
@@ -337,13 +334,13 @@ const EventVolunteers = ({ eid }) => {
 
   const getNonApprovedSignUpsVolunteersTableBody = () => nonApprovedSignUps.map(
     (signUp) => {
-      const volunteer = allVolunteerData[signUp.user_id];
+      const volunteer = allVolunteerData[signUp.userId];
       return (
-        <TableRow key={signUp?.sign_up_id}>
+        <TableRow key={signUp.signUpId}>
           <TableCell><b>{volunteer?.name}</b></TableCell>
-          <TableCell>{volunteer?.mobile_number}</TableCell>
+          <TableCell>{volunteer?.mobileNumber}</TableCell>
           <TableCell>{getRoleSelectMenu(signUp)}</TableCell>
-          <TableCell>{getPendingTabButtons(signUp, volunteer?.name)}</TableCell>
+          <TableCell>{getPendingTabButtons(signUp)}</TableCell>
         </TableRow>
       );
     },
@@ -358,7 +355,7 @@ const EventVolunteers = ({ eid }) => {
           <TableContainer>
             <Table>
               <TableHead>
-                <TableRow>
+                <TableRow key={event?.name}>
                   <TableCell width="22%"><b>Name</b></TableCell>
                   <TableCell width="20%"><b>Contact Number</b></TableCell>
                   <TableCell width="33%"><b>Role</b></TableCell>

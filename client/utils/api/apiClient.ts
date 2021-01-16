@@ -75,8 +75,6 @@ class AxiosApiClient implements ApiClient {
 
   async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest):
   Promise<UpdateSignUpResponse> {
-    console.log(`signup/${query.id}/${query.idType}`);
-    console.log(request);
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
