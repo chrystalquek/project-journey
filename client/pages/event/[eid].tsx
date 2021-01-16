@@ -4,19 +4,12 @@ import { StoreState } from '@redux/store';
 import { EventData } from '@type/event';
 import EventDetailsRegistered from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsRegistered';
 import { VolunteerData } from '@type/volunteer';
-<<<<<<< HEAD
-import { Container } from '@material-ui/core';
-import React, { useEffect } from 'react';
-import { getEvent } from '@redux/actions/event';
-import EventDetailsUnregistered from '@components/event/EventDetails/EventDetailsUnregistered';
-=======
 import {CircularProgress, Container} from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { getEvent } from '@redux/actions/event';
 import EventDetailsUnregistered from '@components/event/EventDetails/EventDetailsUnregistered';
 import Head from "@components/common/Header";
 import NavBar from "@components/common/NavBar";
->>>>>>> origin/master
 
 // Handles checking that user is logged in and event detail validity
 const EventsDetailPage = () => {
@@ -38,11 +31,7 @@ const EventsDetailPage = () => {
   } else if (eventData) {
     body = <EventDetailsUnregistered user={userData} event={eventData} />;
   } else {
-<<<<<<< HEAD
-    body = <div>Loading...</div>;
-=======
     body = <CircularProgress />;
->>>>>>> origin/master
   }
 
   return (
