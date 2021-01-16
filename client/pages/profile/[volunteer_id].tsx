@@ -46,20 +46,20 @@ const Profile = () => {
           <Grid item md={2} />
           <Grid item container direction="column" xs={12} md={8}>
             <Grid item>
-              <ProfileHeader user={profilePageData} />
+              <ProfileHeader profilePageData={profilePageData} />
             </Grid>
             <Grid item container>
               <Grid item xs={12} md={7}>
-                <Remarks user={profilePageData} />
+                <Remarks profilePageData={profilePageData} />
               </Grid>
               <Grid item xs={12} md={5}>
-                <ContactInformation user={profilePageData} />
+                <ContactInformation profilePageData={profilePageData} />
               </Grid>
               <Grid item xs={12} md={7}>
-                <SignUpInformation user={profilePageData} />
+                <SignUpInformation profilePageData={profilePageData} />
               </Grid>
               <Grid item xs={12} md={5}>
-                <EventCount user={profilePageData} />
+                <EventCount profilePageData={profilePageData} />
               </Grid>
             </Grid>
           </Grid>
