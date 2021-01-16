@@ -50,7 +50,7 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
           });
       }
 
-      const response = handleSignUp({
+      const response = await handleSignUp({
         name: values.firstName + ' ' + values.lastName,
         volunteerType: type,
         password: values.password,
@@ -89,14 +89,22 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
         emergencyContactRelationship: values.emergencyContactRelationship,
       });
 
-      response.then((data) => {
-        if (data.type === 'volunteer//rejected') {
-          alert('Error: ' + data.error.message);
-        } else if (data.type === 'volunteer//fulfilled') {
-          alert('You have signed up successfully.');
-          router.push('/login');
-        }
-      });
+    // response.then((data) => {
+    //     if (data.type === 'volunteer//rejected') {
+    //       alert('Error: ' + data.error.message);
+    //     } else if (data.type === 'volunteer//fulfilled') {
+    //       alert('You have signed up successfully.');
+    //       router.push('/login');
+    //     }
+    //   });
+
+    if (response.type === 'volunteer//rejected') {
+      alert('Error: ' + response.error.message);
+    } else if (response.type === 'volunteer//fulfilled') {
+      alert('You have signed up successfully.');
+      router.push('/login');
+    }
+
     },
     [questionList]
   );
