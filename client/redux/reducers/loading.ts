@@ -1,5 +1,5 @@
-import { getVolunteerById } from "@redux/actions/profilePage"
-import { createSlice } from "@reduxjs/toolkit"
+import { getVolunteerById } from '@redux/actions/profilePage';
+import { createSlice } from '@reduxjs/toolkit';
 
 export type LoadingStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -8,8 +8,8 @@ export type LoadingState = {
 }
 
 const initialState: LoadingState = {
-  status: 'idle'
-}
+  status: 'idle',
+};
 
 const loadingSlice = createSlice({
   name: 'loading',
@@ -17,9 +17,9 @@ const loadingSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getVolunteerById.rejected, (state) => {
-      state.status = 'failed'
-    })
-  }
-})
+      state.status = 'failed';
+    });
+  },
+});
 
 export default loadingSlice.reducer;

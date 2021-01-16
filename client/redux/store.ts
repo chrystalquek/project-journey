@@ -39,7 +39,7 @@ const reducers = combineReducers({
   commitmentApplication: commitmentApplicationReducer,
   image: imageReducer,
   profilePage: profilePageReducer,
-  loading: loadingReducer
+  loading: loadingReducer,
 });
 
 const persistConfig = {

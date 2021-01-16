@@ -16,15 +16,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Loading = () => {
   const classes = useStyles();
-  const status = useSelector((state: StoreState) => state.loading.status)
+  const status = useSelector((state: StoreState) => state.loading.status);
 
   return status === 'failed'
-  ? <ErrorPage statusCode={404} />
-  : (
-    <div className={classes.centralize}>
-      <CircularProgress />
-    </div>
-  );
+    ? <ErrorPage statusCode={404} />
+    : (
+      <div className={classes.centralize}>
+        <CircularProgress />
+      </div>
+    );
 };
 
 export default Loading;

@@ -12,9 +12,9 @@ import {
 import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
 import { VolunteerData } from '@type/volunteer';
 import { useRouter } from 'next/router';
-import {EventTypography} from '@components/common/event/EventTypography';
-import {EventDivider} from '@components/common/event/EventDivider';
-import {EventButton} from '@components/common/event/EventButton';
+import { EventTypography } from '@components/common/event/EventTypography';
+import { EventDivider } from '@components/common/event/EventDivider';
+import { EventButton } from '@components/common/event/EventButton';
 
 type EventRegisterProps = {
   event: EventData

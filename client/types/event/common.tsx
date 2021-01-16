@@ -1,5 +1,5 @@
-import {FormDisabledReason} from "@utils/helpers/event/EventDetails/EventDetails";
-import {SignUpData} from "@type/signUp";
+import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
+import { SignUpData } from '@type/signUp';
 
 // Contains types used in /event
 export type FormStatus = {
