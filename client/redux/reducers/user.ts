@@ -60,10 +60,10 @@ const userSlice = createSlice({
       state.status = 'rejected';
     });
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
-      const updatedVolunteerData = action.payload
+      const updatedVolunteerData = action.payload;
       // Update the loggedInUser data
       if (state.user.email == updatedVolunteerData.email) {
-        state.user = updatedVolunteerData
+        state.user = updatedVolunteerData;
       }
     });
     builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {

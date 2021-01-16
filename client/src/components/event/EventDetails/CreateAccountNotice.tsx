@@ -1,7 +1,7 @@
-import React, {FC} from "react";
-import {Box, Button} from "@material-ui/core";
-import {useRouter} from "next/router";
-import {LOGIN_ROUTE, SIGNUP_ROUTE} from "@constants/routes";
+import React, { FC } from 'react';
+import { Box, Button } from '@material-ui/core';
+import { useRouter } from 'next/router';
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@constants/routes';
 
 type CreateAccountNoticeProps = {
   // nothing yet
@@ -12,7 +12,7 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
 
   return (
     <>
-      <Box fontWeight='bold' fontSize="h3.fontSize">
+      <Box fontWeight="bold" fontSize="h3.fontSize">
         Register Here
       </Box>
       <p>You need an account to register events.</p>
@@ -23,7 +23,7 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
         <Button onClick={() => router.push(LOGIN_ROUTE)}>Login</Button>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default CreateAccountNotice;

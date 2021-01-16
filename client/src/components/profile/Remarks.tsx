@@ -15,7 +15,7 @@ type props = {
 const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: StoreState) => state.user);
-  const userData = user.user
+  const userData = user.user;
 
   let originalVolunteerRemarks = profilePageData.volunteerRemarks;
   const originalAdministratorRemarks = profilePageData.administratorRemarks;
@@ -84,10 +84,10 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           onDiscard={discardVolunteerRemarks}
         />
 
-        {/* Admin remarks not rendered if the profilePageData is admin 
-        and only shows the admin remarks if the user is admin*/}
-        {profilePageData.volunteerType !== VOLUNTEER_TYPE.ADMIN &&
-        userData.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+        {/* Admin remarks not rendered if the profilePageData is admin
+        and only shows the admin remarks if the user is admin */}
+        {profilePageData.volunteerType !== VOLUNTEER_TYPE.ADMIN
+        && userData.volunteerType === VOLUNTEER_TYPE.ADMIN && (
         <RemarksTextField
           value={administratorRemarks}
           onChange={handleAdministratorRemarks}

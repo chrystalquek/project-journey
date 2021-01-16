@@ -31,9 +31,9 @@ import RightDrawer from '@components/common/RightDrawer';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
+import SearchBar from '@components/common/SearchBar';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
-import SearchBar from '@components/common/SearchBar';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'underline',
     cursor: 'pointer',
     textTransform: 'none',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   rightButton: {
     float: 'right',
@@ -55,9 +55,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-const volunteerSortFields = [{ label: "Name", value: "name" }, { label: "Member Since", value: "createdAt" }] // what is "Last Activity"
-export type VolunteerSortFieldsType = "name" | "createdAt";
+const volunteerSortFields = [{ label: 'Name', value: 'name' }, { label: 'Member Since', value: 'createdAt' }]; // what is "Last Activity"
+export type VolunteerSortFieldsType = 'name' | 'createdAt';
 
 const VolunteerProfile: FC<{}> = ({ }) => {
   const classes = useStyles();
@@ -70,28 +69,25 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   const volunteers = useSelector((state: StoreState) => state.volunteer);
 
-  const volunteerType = volunteers.volunteerProfile.filters.volunteerType;
-  const name = volunteers.volunteerProfile.search.name;
-  const sort = volunteers.volunteerProfile.sort;
+  const { volunteerType } = volunteers.volunteerProfile.filters;
+  const { name } = volunteers.volunteerProfile.search;
+  const { sort } = volunteers.volunteerProfile;
 
-  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VOLUNTEER_TYPE, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => {
-    return {
-      pageNo: params.pageNo || 0,
-      filters: {
-        volunteerType: params.volunteerType || volunteerType
-      },
-      search: {
-        name: params.name || name
-      },
-      sort: params.sort || sort
-    }
-  }
+  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VOLUNTEER_TYPE, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => ({
+    pageNo: params.pageNo || 0,
+    filters: {
+      volunteerType: params.volunteerType || volunteerType,
+    },
+    search: {
+      name: params.name || name,
+    },
+    sort: params.sort || sort,
+  });
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
     dispatch(getVolunteersVolunteerProfile(fillOtherParams({ volunteerType, name, sort })));
   }, []);
-
 
   // filter
   const handleFilterVolunteerTypeChange = (event) => {
@@ -100,10 +96,10 @@ const VolunteerProfile: FC<{}> = ({ }) => {
         volunteerType: {
           ...volunteerType,
           [event.target.name]: !volunteerType[event.target.name],
-        }
-      })
-    ))
-  }
+        },
+      }),
+    ));
+  };
 
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
@@ -118,7 +114,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
         <TableRow>
           <TableCell>
             Volunteer Type
-          <Button className={classes.rightButton} size="small" onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon fontSize="small" /> : <AddIcon fontSize="small" />}</Button>
+            <Button className={classes.rightButton} size="small" onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon fontSize="small" /> : <AddIcon fontSize="small" />}</Button>
             {openFilter
               && (
                 <FormGroup>
@@ -139,26 +135,25 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   // search
   const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile(fillOtherParams({ name })));
-  const searchBar = <SearchBar setFilterFunction={onSearch}></SearchBar>
+  const searchBar = <SearchBar setFilterFunction={onSearch} />;
 
   // sort
   const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
     dispatch(getVolunteersVolunteerProfile(fillOtherParams({ sort: event.target.value as VolunteerSortFieldsType })));
   };
 
-  const sortMenu = <FormControl fullWidth variant="outlined" size="small" margin="dense">
-    <InputLabel>Sort By:</InputLabel>
-    <Select
-      value={volunteers.volunteerProfile.sort}
-      onChange={handleSortChange}
-    >
-      {volunteerSortFields.map(field =>
-        <MenuItem value={field.value}>{field.label}</MenuItem>
-      )}
+  const sortMenu = (
+    <FormControl fullWidth variant="outlined" size="small" margin="dense">
+      <InputLabel>Sort By:</InputLabel>
+      <Select
+        value={volunteers.volunteerProfile.sort}
+        onChange={handleSortChange}
+      >
+        {volunteerSortFields.map((field) => <MenuItem value={field.value}>{field.label}</MenuItem>)}
 
-    </Select>
-  </FormControl>
-
+      </Select>
+    </FormControl>
+  );
 
   // change page
   const handleChangePage = (event, newPage: number) => {
@@ -212,21 +207,18 @@ const VolunteerProfile: FC<{}> = ({ }) => {
         ? (
           <Grid>
             <Grid direction="row" container spacing={6}>
-              <Grid item xs={2}>
-              </Grid>
+              <Grid item xs={2} />
               <Grid item xs={4}>
                 {searchBar}
               </Grid>
               <Grid item xs={3}>
                 {sortMenu}
               </Grid>
-              <Grid item xs={3}>
-              </Grid>
+              <Grid item xs={3} />
             </Grid>
 
             <Grid direction="row" container spacing={10}>
-              <Grid item xs={2}>
-              </Grid>
+              <Grid item xs={2} />
               <Grid item xs={7}>
                 {volunteerTable}
               </Grid>

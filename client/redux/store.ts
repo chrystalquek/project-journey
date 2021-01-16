@@ -4,7 +4,7 @@ import userReducer, { UserState } from '@redux/reducers/user';
 import EventReducer, { EventState } from '@redux/reducers/event';
 import imageReducer, { ImageState } from '@redux/reducers/image';
 import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer';
-import profilePageReducer, { ProfilePageState } from '@redux/reducers/profilePage'
+import profilePageReducer, { ProfilePageState } from '@redux/reducers/profilePage';
 import {
   persistStore,
   persistReducer,
@@ -36,7 +36,7 @@ const reducers = combineReducers({
   signUp: signUpReducer,
   commitmentApplication: commitmentApplicationReducer,
   image: imageReducer,
-  profilePage: profilePageReducer
+  profilePage: profilePageReducer,
 });
 
 const persistConfig = {

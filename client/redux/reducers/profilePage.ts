@@ -1,32 +1,32 @@
-import { getVolunteerById } from "@redux/actions/profilePage";
-import { updateVolunteer } from "@redux/actions/user";
-import { createSlice } from "@reduxjs/toolkit";
-import { VolunteerData } from "@type/volunteer";
+import { getVolunteerById } from '@redux/actions/profilePage';
+import { updateVolunteer } from '@redux/actions/user';
+import { createSlice } from '@reduxjs/toolkit';
+import { VolunteerData } from '@type/volunteer';
 
 export type ProfilePageState = {
   data: VolunteerData
 }
 
-const initialState:  ProfilePageState = {
-  data: null
-}
+const initialState: ProfilePageState = {
+  data: null,
+};
 
 const profilePageDataSlice = createSlice({
   name: 'profilePage',
   initialState,
-  reducers:{},
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getVolunteerById.fulfilled, (state, action) => {
-      //@ts-ignore
-      state.data = action.payload.data
-    })
+      // @ts-ignore
+      state.data = action.payload.data;
+    });
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
-      const updatedVolunteerData = action.payload
+      const updatedVolunteerData = action.payload;
       if (state?.data.email === updatedVolunteerData.email) {
-        state.data = updatedVolunteerData
+        state.data = updatedVolunteerData;
       }
-    })
-  }
-})
+    });
+  },
+});
 
-export default profilePageDataSlice.reducer
+export default profilePageDataSlice.reducer;

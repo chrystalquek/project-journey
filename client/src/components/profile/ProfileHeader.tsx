@@ -39,8 +39,8 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const direction = isMobile ? 'column' : 'row';
   const justify = isMobile ? 'center' : 'flex-start';
-  const user = useSelector((state: StoreState) => state.user)
-  const userData = user?.user
+  const user = useSelector((state: StoreState) => state.user);
+  const userData = user?.user;
 
   return (
     <Grid
@@ -64,11 +64,11 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
           <strong>Volunteer Type: </strong>
           {profilePageData?.volunteerType?.toString()}
         </Typography>
-        {/* Only shows the option to become committed if the loggedInUser 
+        {/* Only shows the option to become committed if the loggedInUser
         is viewing own profile and is still an adhoc volunteer */}
-        { profilePageData.volunteerType === VOLUNTEER_TYPE.ADHOC && 
-        userData.email === profilePageData.email &&
-        <BecomeCommitedDialog /> }
+        { profilePageData.volunteerType === VOLUNTEER_TYPE.ADHOC
+        && userData.email === profilePageData.email
+        && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );

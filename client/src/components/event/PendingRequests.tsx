@@ -96,10 +96,10 @@ const PendingRequests: FC<{}> = ({ }) => {
               <TableBody>
                 {upcomingEvents.map((event) => (
                   <TableRow key={event._id}>
-                      <TableCell><b>{event.name}</b></TableCell>
-                      <TableCell>{event.startDate.toLocaleDateString()}</TableCell>
-                      <TableCell>{pendingRequestsForEvent(event)}</TableCell>
-                    </TableRow>
+                    <TableCell><b>{event.name}</b></TableCell>
+                    <TableCell>{event.startDate.toLocaleDateString()}</TableCell>
+                    <TableCell>{pendingRequestsForEvent(event)}</TableCell>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>
