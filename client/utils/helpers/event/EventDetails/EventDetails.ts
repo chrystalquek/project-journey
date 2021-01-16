@@ -1,9 +1,9 @@
-import {EventData} from "@type/event";
-import dayjs from "dayjs";
-import {getEventVacancies} from "@utils/helpers/event/EventsPageBody";
-import {FormState} from "@components/event/EventDetails/EventRegisterForm";
-import {CreateSignUpRequest} from "@utils/api/request";
-import {SignUpStatus} from "@type/signUp";
+import { EventData } from '@type/event';
+import dayjs from 'dayjs';
+import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
+import { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import { CreateSignUpRequest } from '@utils/api/request';
+import { SignUpStatus } from '@type/signUp';
 
 export type TableData = {
   title: string,
@@ -31,17 +31,17 @@ export function getEventInfo(event: EventData) {
   const deadline = dayjs(event.deadline).format('DD MMMM YYYY hh:mmA');
 
   return [
-    createTblData("Date:", date,false),
-    createTblData("Time:", `${startTime} to ${endTime}`, false),
-    createTblData("Location:", event.location, false),
-    createTblData("Vacancies:", vacancies, false),
-    createTblData("Sign-up deadline", deadline, true),
-  ]
+    createTblData('Date:', date, false),
+    createTblData('Time:', `${startTime} to ${endTime}`, false),
+    createTblData('Location:', event.location, false),
+    createTblData('Vacancies:', vacancies, false),
+    createTblData('Sign-up deadline', deadline, true),
+  ];
 }
 
 // Extracts sign up data in a form suitable for API call
 export function getFormData(uid: string, eid: string, form: FormState): Omit<CreateSignUpRequest, 'status'> {
-  const preferences = []
+  const preferences = [];
   if (form.firstChoice) {
     preferences.push(form.firstChoice);
   }
@@ -57,5 +57,5 @@ export function getFormData(uid: string, eid: string, form: FormState): Omit<Cre
     userId: uid,
     preferences,
     isRestricted: true,
-  }
+  };
 }

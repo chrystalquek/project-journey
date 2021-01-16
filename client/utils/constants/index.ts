@@ -3,4 +3,4 @@ export const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December',
 ];
 
-export const COMMITTED_VOLUNTEER_TAG = "Only for Committed Volunteers";
+export const COMMITTED_VOLUNTEER_TAG = 'Only for Committed Volunteers';

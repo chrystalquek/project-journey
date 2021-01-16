@@ -2,14 +2,17 @@ import React, { FC, useEffect } from 'react';
 import Head from 'next/head';
 
 import {
+  Button,
   capitalize,
   Checkbox,
-  Divider,
+  FormControl,
   FormControlLabel,
   FormGroup,
   Grid,
-  IconButton,
+  InputLabel,
   makeStyles,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -30,6 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
+import SearchBar from '@components/common/SearchBar';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -40,14 +44,20 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'underline',
     cursor: 'pointer',
     textTransform: 'none',
+    textAlign: 'left'
   },
   rightButton: {
     float: 'right',
+    padding: 1,
   },
   border: {
     padding: theme.spacing(2),
   },
 }));
+
+
+const volunteerSortFields = [{ label: "Name", value: "name" }, { label: "Member Since", value: "createdAt" }] // what is "Last Activity"
+export type VolunteerSortFieldsType = "name" | "createdAt";
 
 const VolunteerProfile: FC<{}> = ({ }) => {
   const classes = useStyles();
@@ -60,29 +70,102 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   const volunteers = useSelector((state: StoreState) => state.volunteer);
 
-  const { volunteerType } = volunteers.volunteerProfile.filters; // get filter object
+  const volunteerType = volunteers.volunteerProfile.filters.volunteerType;
+  const name = volunteers.volunteerProfile.search.name;
+  const sort = volunteers.volunteerProfile.sort;
+
+  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VOLUNTEER_TYPE, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => {
+    return {
+      pageNo: params.pageNo || 0,
+      filters: {
+        volunteerType: params.volunteerType || volunteerType
+      },
+      search: {
+        name: params.name || name
+      },
+      sort: params.sort || sort
+    }
+  }
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getVolunteersVolunteerProfile({ volunteerType }));
+    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ volunteerType, name, sort })));
   }, []);
 
-  const handleFilterVolunteerTypeChange = (event) => {
-    dispatch(getVolunteersVolunteerProfile({
-      volunteerType: {
-        ...volunteerType,
-        [event.target.name]: !volunteerType[event.target.name],
-      }, // change boolean for checkbox that changed
-    }));
-  };
 
-  // for opening filter menu
+  // filter
+  const handleFilterVolunteerTypeChange = (event) => {
+    dispatch(getVolunteersVolunteerProfile(
+      fillOtherParams({
+        volunteerType: {
+          ...volunteerType,
+          [event.target.name]: !volunteerType[event.target.name],
+        }
+      })
+    ))
+  }
+
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
-  const handleChangePage = (event, newPage: number) => {
-    dispatch(getVolunteersVolunteerProfile({ pageNo: newPage, volunteerType }));
+  const filterOptions = (
+    <TableContainer>
+      <Table>
+        <TableRow>
+          <TableCell>
+            <b>Filter By</b>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            Volunteer Type
+          <Button className={classes.rightButton} size="small" onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon fontSize="small" /> : <AddIcon fontSize="small" />}</Button>
+            {openFilter
+              && (
+                <FormGroup>
+                  {Object.values(VOLUNTEER_TYPE).map((volType) => (
+                    <FormControlLabel
+                      control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} />}
+                      label={<Typography variant="body1">{capitalize(volType)}</Typography>}
+                    />
+                  ))}
+                </FormGroup>
+              )}
+          </TableCell>
+        </TableRow>
+      </Table>
+    </TableContainer>
+
+  );
+
+  // search
+  const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile(fillOtherParams({ name })));
+  const searchBar = <SearchBar setFilterFunction={onSearch}></SearchBar>
+
+  // sort
+  const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
+    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ sort: event.target.value as VolunteerSortFieldsType })));
   };
 
+  const sortMenu = <FormControl fullWidth variant="outlined" size="small" margin="dense">
+    <InputLabel>Sort By:</InputLabel>
+    <Select
+      value={volunteers.volunteerProfile.sort}
+      onChange={handleSortChange}
+    >
+      {volunteerSortFields.map(field =>
+        <MenuItem value={field.value}>{field.label}</MenuItem>
+      )}
+
+    </Select>
+  </FormControl>
+
+
+  // change page
+  const handleChangePage = (event, newPage: number) => {
+    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ pageNo: newPage })));
+  };
+
+  // display table
   const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
 
   const volunteerTable = (
@@ -100,7 +183,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             {currentPageVolunteers.map((vol) => (
               <TableRow key={vol.email}>
                 <TableCell><b>{vol.name}</b></TableCell>
-                <TableCell>{vol.volunteerType}</TableCell>
+                <TableCell>{capitalize(vol.volunteerType)}</TableCell>
                 <TableCell>{vol.createdAt.toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
@@ -118,28 +201,6 @@ const VolunteerProfile: FC<{}> = ({ }) => {
     </>
   );
 
-  const filterOptions = (
-    <Grid>
-      <Typography variant="h4">Filter By</Typography>
-      <Divider />
-      Volunteer Type
-      {' '}
-      <IconButton size="small" className={classes.rightButton} onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon /> : <AddIcon />}</IconButton>
-      {openFilter
-        && (
-          <FormGroup>
-            {Object.values(VOLUNTEER_TYPE).map((volunteerType) => (
-              <FormControlLabel
-                control={<Checkbox checked={volunteers.volunteerProfile.filters.volunteerType[volunteerType]} onChange={handleFilterVolunteerTypeChange} name={volunteerType} />}
-                label={capitalize(volunteerType)}
-              />
-            ))}
-          </FormGroup>
-        )}
-      <Divider />
-    </Grid>
-  );
-
   return (
     <>
       <Head>
@@ -149,20 +210,47 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
       {!isMobile
         ? (
-          <Grid container direction="row" spacing={3} justify="center">
-            <Grid item xs={7}>
-              {volunteerTable}
+          <Grid>
+            <Grid direction="row" container spacing={6}>
+              <Grid item xs={2}>
+              </Grid>
+              <Grid item xs={4}>
+                {searchBar}
+              </Grid>
+              <Grid item xs={3}>
+                {sortMenu}
+              </Grid>
+              <Grid item xs={3}>
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              {filterOptions}
+
+            <Grid direction="row" container spacing={10}>
+              <Grid item xs={2}>
+              </Grid>
+              <Grid item xs={7}>
+                {volunteerTable}
+              </Grid>
+              <Grid item xs={3}>
+                {filterOptions}
+              </Grid>
             </Grid>
           </Grid>
         )
         : (
-          <>
-            <RightDrawer buttonTitle={<div className={classes.link}>Filter results</div>} content={filterOptions} />
-            <Grid className={classes.border}>{volunteerTable}</Grid>
-          </>
+          <Grid className={classes.border} direction="column" container spacing={3}>
+            <Grid item>
+              {searchBar}
+            </Grid>
+            <Grid item>
+              {sortMenu}
+            </Grid>
+            <Grid item>
+              <RightDrawer buttonTitle={<div className={classes.link}>Filter results</div>} content={filterOptions} />
+            </Grid>
+            <Grid item>
+              {volunteerTable}
+            </Grid>
+          </Grid>
         )}
 
       <Footer />

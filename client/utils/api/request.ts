@@ -1,4 +1,3 @@
-import { EventPostData } from '@type/event';
 import {
   CITIZENSHIP,
   GENDER,
@@ -8,6 +7,8 @@ import {
   VolunteerData,
 } from '@type/volunteer';
 import { SignUpData, SignUpIdType, SignUpStatus } from '@type/signUp';
+import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { EventPostData, EventSearchType } from '@type/event';
 
 export type SignUpRequest = {
   name: string;
@@ -78,11 +79,22 @@ export type LoginRequest = {
   password: string;
 };
 
-export type QueryParams = {
-  pageNo?: number;
-  size?: number;
-  [field: string]: any;
-};
+export type VolunteerPaginatedQueryParams = {
+  pageNo: number,
+  size: number
+  volunteerType: string,
+  name?: string
+  sort: string
+}
+
+export type EventQueryParams = {
+  userId?: string
+  eventType: EventSearchType
+}
+
+export type CommitmentApplicationQueryParams = {
+  status: CommitmentApplicationStatus
+}
 
 export type CreateEventRequest = EventPostData;
 

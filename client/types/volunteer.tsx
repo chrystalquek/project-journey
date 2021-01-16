@@ -59,10 +59,9 @@ export enum SOCIAL_MEDIA_PLATFORMS {
 }
 
 export enum VOLUNTEER_TYPE {
-  ADHOC = 'ad-hoc',
-  COMMITED = 'committed',
-  LEAD = 'lead',
-  ADMIN = 'admin',
+    ADHOC = 'ad-hoc',
+    COMMITED = 'committed',
+    ADMIN = 'admin'
 }
 
 export type VolunteerData = {

@@ -1,9 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { CreateCommitmentApplicationRequest, QueryParams } from '@utils/api/request';
+import { CreateCommitmentApplicationRequest, CommitmentApplicationQueryParams } from '@utils/api/request';
 import { GetCommitmentApplicationResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 import { CommitmentApplicationData } from '@type/commitmentApplication';
-import { updateVolunteer } from './user';
 
 export const createCommitmentApplication = createAsyncThunk<CommitmentApplicationData, CreateCommitmentApplicationRequest, { state }>(
   'commitmentApplication/createCommitmentApplication',
@@ -13,7 +12,7 @@ export const createCommitmentApplication = createAsyncThunk<CommitmentApplicatio
   },
 );
 
-export const getCommitmentApplications = createAsyncThunk<GetCommitmentApplicationResponse, QueryParams, { state }>(
+export const getCommitmentApplications = createAsyncThunk<GetCommitmentApplicationResponse, CommitmentApplicationQueryParams, { state }>(
   'commitmentApplication/getCommitmentApplication',
   async ({ status }) => {
     const response = await apiClient.getCommitmentApplications({ status });
