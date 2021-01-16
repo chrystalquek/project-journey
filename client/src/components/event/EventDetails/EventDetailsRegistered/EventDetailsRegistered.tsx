@@ -26,7 +26,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
     dispatch(getSignUps({ id: user._id, idType: 'userId' as SignUpIdType }));
   }, []);
 
-  const signUpInfo = currSignUps.filter((signUp) => signUp.event_id === event._id);
+  const signUpInfo = currSignUps.filter((signUp) => signUp.eventId === event._id);
   const isEventFull = getEventVacancies(event).remaining === 0;
   const hasPendingSignUp = signUpInfo.length > 0
                             && signUpInfo[0].status === 'pending';
@@ -58,7 +58,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
       apiClient.createSignUp(request)
         .then((res) => {
           // TODO: snake_case --> camelCase
-          const query = { id: res.sign_up_id, idType: 'signUpId' as SignUpIdType };
+          const query = { id: res.signUpId, idType: 'signUpId' as SignUpIdType };
           const newReq: UpdateSignUpRequest = {
             ...request,
             status: ['accepted', form.firstChoice],
