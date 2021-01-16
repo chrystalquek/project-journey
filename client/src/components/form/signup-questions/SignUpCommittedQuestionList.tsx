@@ -1,5 +1,5 @@
 import { QuestionList } from '@type/questions';
-import { CITIZENSHIP, GENDER, RACE } from '@type/volunteer';
+import { CITIZENSHIP, GENDER, RACE, SOCIAL_MEDIA_PLATFORMS } from '@type/volunteer';
 
 export const questions: QuestionList = [
   {
@@ -80,10 +80,31 @@ export const questions: QuestionList = [
     isRequired: true,
   },
   {
+    name: 'address',
+    displayText: ['Home address'],
+    type: 'shortAnswer',
+    initialValue: '',
+    isRequired: true,
+  },
+  {
     name: 'mobileNumber',
     displayText: ['Mobile Number'],
     type: 'shortAnswer',
     initialValue: '',
+    isRequired: true,
+  },
+  {
+    name: 'socialMediaPlatform',
+    displayText: ['What social media platform do you use the most?'],
+    type: 'mcq',
+    initialValue: SOCIAL_MEDIA_PLATFORMS.OTHER,
+    options: [
+        { value: SOCIAL_MEDIA_PLATFORMS.INSTAGRAM, label: 'Instagram' },
+        { value: SOCIAL_MEDIA_PLATFORMS.FACEBOOK, label: 'Facebook' },
+        { value: SOCIAL_MEDIA_PLATFORMS.SNAPCHAT, label: 'Snapchat' },
+        { value: SOCIAL_MEDIA_PLATFORMS.EMAIL, label: 'Email' },
+        { value: SOCIAL_MEDIA_PLATFORMS.OTHER, label: 'Other' },
+      ],
     isRequired: true,
   },
   {
@@ -105,7 +126,7 @@ export const questions: QuestionList = [
     displayText: ['School / company name'],
     type: 'shortAnswer',
     initialValue: '',
-    isRequired: false,
+    isRequired: true,
   },
   {
     name: 'position',
@@ -115,13 +136,27 @@ export const questions: QuestionList = [
     isRequired: true,
   },
   {
+    name: 'race',
+    displayText: ['Race / Ethnicity'],
+    type: 'mcq',
+    initialValue: RACE.OTHER,
+    options: [
+        { value: RACE.CHINESE, label: 'Chinese' },
+        { value: RACE.MALAY, label: 'Malay' },
+        { value: RACE.INDIAN, label: 'Indian' },
+        { value: RACE.CAUCASIAN, label: 'Caucasian' },
+        { value: RACE.OTHER, label: 'Other' },
+      ],
+    isRequired: false,
+  },
+  {
     name: 'languages',
     displayText: [
-      'What languages do you speak (please put your first language at the start of your response)',
+      'What languages do you speak (please put your first language at the start of your response, separate each language with a comma)',
     ],
     type: 'shortAnswer',
     initialValue: '',
-    isRequired: false,
+    isRequired: true,
   },
   {
     name: 'referralSources',
@@ -159,9 +194,163 @@ export const questions: QuestionList = [
     isRequired: true,
   },
   {
+    name: 'biabVolunteeringDuration',
+    displayText: [
+      'If you answered YES to above question, how long have you been with us? (in month)',
+    ],
+    type: 'number',
+    initialValue: 0,
+    isRequired: false,
+  },
+  {
+    name: 'hasVolunteeredExternally',
+    displayText: [
+      'Have you volunteered with other organisations before?',
+    ],
+    type: 'mcq',
+    initialValue: false,
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: true,
+  },
+  {
+    name: 'volunteeringExperience',
+    displayText: [
+      'If you answered YES to above, please briefly explain with whom, and what sort of roles.',
+    ],
+    type: 'shortAnswer',
+    initialValue: '',
+    isRequired: false,
+  },
+  {
+    name: 'hasChildrenExperience',
+    displayText: [
+      'Do you have any experience working with children?',
+    ],
+    type: 'mcq',
+    initialValue: false,
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: true,
+  },
+  {
+    name: 'childrenExperience',
+    displayText: [
+      'If you answered YES, please explain.',
+    ],
+    type: 'shortAnswer',
+    initialValue: '',
+    isRequired: false,
+  },
+  {
+    name: 'sessionsPerMonth',
+    displayText: [
+      'How many sessions can you volunteer (realistically) per month?',
+    ],
+    type: 'number',
+    initialValue: 0,
+    isRequired: true,
+  },
+  {
+    name: 'sessionPreference',
+    displayText: [
+      'We run weekly sessions, which sessions are you most able to commit to on a regular basis?',
+    ],
+    type: 'mcq',
+    initialValue: 'Either',
+    options: [
+      { value: 'Thursdays 6PM to 10PM', label: 'Thursdays 6PM to 10PM' },
+      { value: 'Saturdays 2:30PM to 6PM', label: 'Saturdays 2:30PM to 6PM' },
+      { value: 'Either', label: 'Either (No Preference)' },
+    ],
+    isRequired: true,
+  },
+  {
+    name: 'hasFirstAidCertification',
+    displayText: [
+      'Are you certified in FIRST AID?'
+    ],
+    type: 'mcq',
+    initialValue: false,
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: true,
+  },
+  {
+    name: 'leadershipInterest',
+    displayText: [
+      'Would you be interested in taking on a leadership role that would offer you leadership + personal development opportunities?'
+    ],
+    type: 'mcq',
+    initialValue: 'no',
+    options: [
+      { value: 'yes', label: 'Yes' },
+      { value: 'no', label: 'No' },
+      { value: 'maybe', label: 'Perhaps in the future when I\'m more confident' },
+    ],
+    isRequired: true,
+  },
+  {
+    name: 'interests',
+    displayText: ["What are your interests/passions?"],
+    type: 'shortAnswer',
+    initialValue: '',
+    isRequired: true,
+  },
+  {
+    name: 'skills',
+    displayText: [
+      'It takes a village to run our programs and we would love specialised support! Do you have any specialised skills? Or feel you can contribute?'
+    ],
+    type: 'checkboxes',
+    initialValue: [],
+    options: [
+      { value: 'P.R./Marketing', label: 'P.R./Marketing' },
+      { value: 'Developing Corporate Partnerships', label: 'Developing Corporate Partnerships' },
+      { value: 'Community Outreach - Helping bring more kids to the programme', label: 'Community Outreach - Helping bring more kids to the programme' },
+      { value: 'Translating (for Community Engagement)', label: 'Translating (for Community Engagement)' },
+      { value: 'Grant Writing/Fundraising', label: 'Grant Writing/Fundraising' },
+      { value: 'Organizing our Headquarters (Donations etc)', label: 'Organizing our Headquarters (Donations etc)' },
+      { value: 'Graphic Design', label: 'Graphic Design' },
+      { value: 'Website', label: 'Website' },
+      { value: 'Journalism', label: 'Journalism' },
+      { value: 'Other', label: 'Other' },
+    ],
+    isRequired: true,
+  },
+  {
+    name: 'personality',
+    displayText: ["What is your personality type via www.16personalities.com? (For example: INTJ-A)"],
+    type: 'shortAnswer',
+    initialValue: '',
+    isRequired: true,
+  },
+  {
+    name: 'strengths',
+    displayText: ["What are your 5 strengths on https://high5test.com (please list below, separated by comma)"],
+    type: 'shortAnswer',
+    initialValue: '',
+    isRequired: true,
+  },
+  {
     name: 'volunteerReason',
     displayText: [
       "Please tell us why you're interested in volunteering with our program",
+    ],
+    type: 'longAnswer',
+    initialValue: '',
+    isRequired: true,
+  },
+  {
+    name: 'volunteerContribution',
+    displayText: [
+      "Please tell us how you feel you can contribute or add to our program",
     ],
     type: 'longAnswer',
     initialValue: '',

@@ -12,13 +12,17 @@ import DropZoneCard from '@components/common/DropZoneCard';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
+import { useRouter } from 'next/router';
+import { SignUpResponse } from '@utils/api/response';
 
 type FormGeneratorProps = {
+  type: VOLUNTEER_TYPE;
   questionList: QuestionList;
-  handleSignUp: (formValues: Record<string, any>) => void;
+  handleSignUp: (formValues: Record<string, any>) => SignUpResponse;
 };
 
-const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
+const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps) => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const initialValues: Record<string, any> = {};
@@ -46,9 +50,9 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
           });
       }
 
-      handleSignUp({
+      const response = handleSignUp({
         name: values.firstName + ' ' + values.lastName,
-        volunteerType: VOLUNTEER_TYPE.ADHOC,
+        volunteerType: type,
         password: values.password,
 
         nickname: values.nickname,
@@ -64,7 +68,7 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
         organization: values.organization,
         position: values.position,
 
-        languages: values.languages.split(',').trimStart().trimEnd(), // Delete whitespaces
+        languages: values.languages.split(',').map(element => element.trimStart().trimEnd()), // Delete whitespaces
         referralSources: values.referralSources,
 
         hasVolunteered: values.hasVolunteered,
@@ -83,6 +87,15 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
         emergencyContactNumber: values.emergencyContactNumber,
         emergencyContactEmail: values.emergencyContactEmail,
         emergencyContactRelationship: values.emergencyContactRelationship,
+      });
+
+      response.then((data) => {
+        if (data.type === 'volunteer//rejected') {
+          alert('Error: ' + data.error.message);
+        } else if (data.type === 'volunteer//fulfilled') {
+          alert('You have signed up successfully.');
+          router.push('/login');
+        }
       });
     },
     [questionList]
@@ -120,6 +133,10 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
       .matches(phoneRegExp, 'Mobile phone is not valid')
       .required('Required'),
     referralSources: Yup.array().required('Required'),
+    biabVolunteeringDuration: Yup.number().integer('Input must be an integer').positive('Input must be a positive integer'),
+    sessionsPerMonth: type === VOLUNTEER_TYPE.ADHOC
+                        ? Yup.number().integer('Input must be an integer').positive('Input must be a positive integer')
+                        : Yup.number().integer('Input must be an integer').positive('Input must be a positive integer').required('Required')
   });
 
   const onChangeImage = (e, fieldName, setFieldValue) => {
@@ -207,6 +224,17 @@ const FormGenerator = ({ questionList, handleSignUp }: FormGeneratorProps) => {
             />
           </div>
         );
+      case 'number':
+        return (
+          <Field
+            component={TextField}
+            variant='outlined'
+            type='number'
+            name={name}
+            fullWidth
+            margin='dense'
+          />
+        )
       case 'checkboxes':
       default:
         return (

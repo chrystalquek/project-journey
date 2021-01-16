@@ -23,6 +23,9 @@ import Footer from '@components/common/Footer';
 import { SignUpArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 import SignUpForm from '@components/form/SignUpForm';
+import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { questions as SignUpAdhocQuestionList } from '@components/form/signup-questions/SignUpAdhocQuestionList';
+import { questions as SignUpCommittedQuestionList } from '@components/form/signup-questions/SignUpCommittedQuestionList';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -115,9 +118,9 @@ type SignUpProps = {
 };
 
 const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [volunteerType, setVolunteerType] = useState('ad-hoc'); // default set as ad-hoc
-  const [invalid, setInvalid] = useState(false);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [volunteerType, setVolunteerType] = useState<VOLUNTEER_TYPE>(VOLUNTEER_TYPE.ADHOC); // default set as ad-hoc
+  const [invalid, setInvalid] = useState<boolean>(false);
   const [form] = useForm();
   const router = useRouter();
   const classes = useStyles();
@@ -135,12 +138,12 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   };
 
   const selectAdhoc = () => {
-    setVolunteerType('ad-hoc');
+    setVolunteerType(VOLUNTEER_TYPE.ADHOC);
     nextStep();
   };
 
   const selectCommitted = () => {
-    setVolunteerType('committed');
+    setVolunteerType(VOLUNTEER_TYPE.COMMITED);
     nextStep();
   };
 
@@ -295,7 +298,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
               <Typography className={classes.pageHeader}>
                 Registration
               </Typography>
-              <SignUpForm />
+              <SignUpForm type={volunteerType} questionList={volunteerType === VOLUNTEER_TYPE.ADHOC ? SignUpAdhocQuestionList : SignUpCommittedQuestionList}/>
               <div className="section">
                 <Typography variant="body2">
                   Already have an account?
@@ -320,8 +323,6 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
         </div>
       );
     }
-    return <VolunteerInfo />;
-
     return <VolunteerInfo />;
   };
 

@@ -1,19 +1,25 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { questions as questionList } from './signup-questions/SignUpQuestionList';
 import FormGenerator from './signup-questions/SignUpFormGenerator';
 import { signUp, SignUpArgs } from '@redux/actions/user';
+import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { QuestionList } from '@type/questions';
 
-function SignUpForm() {
+type SignUpFormProps = {
+  type: VOLUNTEER_TYPE;
+  questionList: QuestionList;
+}
+
+function SignUpForm({ type, questionList } : SignUpFormProps) {
   const dispatch = useDispatch();
   const handleSignUp = useCallback(
     (values: SignUpArgs) => {
-      dispatch(signUp(values));
+      return dispatch(signUp(values));
     },
     [dispatch]
   );
 
-  return <>{FormGenerator({ questionList, handleSignUp })}</>;
+  return <>{FormGenerator({ type, questionList, handleSignUp })}</>;
 }
 
 export default SignUpForm;

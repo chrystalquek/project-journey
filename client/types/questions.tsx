@@ -5,7 +5,8 @@ export type InputType =
   | 'date'
   | 'mcq'
   | 'password'
-  | 'photo';
+  | 'photo'
+  | 'number';
 
 export type OptionType = { value: any; label: string };
 

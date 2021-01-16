@@ -3,8 +3,7 @@ import { EventData } from '@type/event';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
-export type SignUpResponse = {
-}
+export type SignUpResponse = any // Not sure what type?
 
 export type LoginResponse = {
   token: string
