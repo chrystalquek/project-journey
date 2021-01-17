@@ -85,6 +85,8 @@ const EventVolunteers = ({ eid }) => {
   const [nonApprovedSignUps, setNonApprovedSignUps] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState({});
   const [roleVacancies, setRoleVacancies] = useState({});
+  const [displayedApprovedSignUps, setDisplayedApprovedSignUps] = useState([]);
+  const [displayedNonApprovedSignUps, setDisplayedNonApprovedSignUps] = useState([]);
 
   useEffect(() => {
     if (eid) {
@@ -145,7 +147,10 @@ const EventVolunteers = ({ eid }) => {
       }
     });
     dispatch(getEvent(eid));
+
     setApprovedSignUps(approved);
+    setDisplayedApprovedSignUps(approved);
+    setNonApprovedSignUps(nonApproved);
     setNonApprovedSignUps(nonApproved);
   }, [signUps]);
 
@@ -221,11 +226,6 @@ const EventVolunteers = ({ eid }) => {
     }));
   };
 
-  const closeButton = (
-    <IconButton className={classes.redCloseButton}>
-      <CloseIcon className={classes.whiteCancelIcon} />
-    </IconButton>
-  );
   /** Get  buttons for the approved tab */
   const getApprovedTabButtons = (signUp: SignUpData, volunteerName: string) => {
     const removeButton = (
@@ -367,22 +367,76 @@ const EventVolunteers = ({ eid }) => {
 
   const [isApprovedTab, setIsApprovedTab] = useState(true);
 
+  /** Pagination */
+  const [pageNumber, setPageNumber] = useState(0);
+
+  const handleChangePageNumber = (event, newPageNumber) => {
+    setPageNumber(newPageNumber);
+  };
+
+  /** Sort */
+  const sortFields = [{ label: 'Name', value: 'name' }, { label: 'Role', value: 'role' }];
+
+  const [selectedSort, setSelectedSort] = useState(null);
+
+  const sortByName = (array: SignUpData[]) : SignUpData[] => array
+    .sort((a, b) => allVolunteerData[a.userId].name - allVolunteerData[b.userId].name);
+  const sortByRole = (array: SignUpData[]) : SignUpData[] => array
+    .sort((a, b) => a.status[1].localeCompare(b.status[1]));
+
+  /** Search */
+  const [searchString, setSearchString] = useState('');
+
+  const resetSettings = () => {
+    setSelectedSort('');
+    setSearchString('');
+  };
+
   /** Tabs for approved and pending volunteers */
   const tabs = [
     {
       key: 'volunteers',
       label: `Volunteers (${approvedSignUps.length})`,
-      onClick: () => setIsApprovedTab(true),
+      onClick: () => {
+        setIsApprovedTab(true);
+        resetSettings();
+      },
     },
     {
       key: 'pending-volunteers',
       label: `Pending (${nonApprovedSignUps.length})`,
-      onClick: () => setIsApprovedTab(false),
+      onClick: () => {
+        setIsApprovedTab(false);
+        resetSettings();
+      },
     },
   ];
 
+  useEffect(() => {
+    let temp = isApprovedTab ? [...approvedSignUps] : [...nonApprovedSignUps];
+    temp = temp.filter((signUp) => allVolunteerData[signUp.userId].name.search(new RegExp(searchString, 'i')) >= 0);
+
+    /** Sort */
+    switch (selectedSort) {
+      case 'name':
+        temp = sortByName(temp);
+        break;
+      case 'role':
+        temp = isApprovedTab ? sortByRole(temp) : temp;
+        break;
+      default:
+        break;
+    }
+
+    if (isApprovedTab) setDisplayedApprovedSignUps(temp);
+    else setDisplayedNonApprovedSignUps(temp);
+  }, [searchString, selectedSort]);
+
+  // search
+  const searchBar = <SearchBar setFilterFunction={setSearchString} />;
+
   /** Get  table body for approved volunteers tab */
-  const getApprovedVolunteersTableBody = () => approvedSignUps.map((signUp) => {
+  const getApprovedVolunteersTableBody = () => displayedApprovedSignUps.map((signUp) => {
     const volunteer = allVolunteerData[signUp.userId];
     return (
       <TableRow key={signUp.signUpId}>
@@ -399,7 +453,7 @@ const EventVolunteers = ({ eid }) => {
   });
 
   /** Get  table body for pending volunteers tab */
-  const getNonApprovedSignUpsVolunteersTableBody = () => nonApprovedSignUps.map(
+  const getNonApprovedSignUpsVolunteersTableBody = () => displayedNonApprovedSignUps.map(
     (signUp) => {
       const volunteer = allVolunteerData[signUp.userId];
       return (
@@ -413,46 +467,6 @@ const EventVolunteers = ({ eid }) => {
     },
   );
 
-  /** Pagination */
-  const [pageNumber, setPageNumber] = useState(0);
-
-  const handleChangePageNumber = (event, newPageNumber) => {
-    setPageNumber(newPageNumber);
-  };
-
-  const sortFields = [{ label: 'Name', value: 'name' }, { label: 'Role', value: 'role' }];
-
-  const [selectedSort, setSelectedSort] = useState(null);
-
-  const sortByName = (array: SignUpData[]) : SignUpData[] => array
-    .sort((a, b) => allVolunteerData[a.userId].name - allVolunteerData[b.userId].name);
-  const sortByRole = (array: SignUpData[]) : SignUpData[] => array
-    .sort((a, b) => a.status[1].localeCompare(b.status[1]));
-
-  useEffect(() => {
-    const tempApproved = approvedSignUps;
-    const tempPending = nonApprovedSignUps;
-
-    switch (selectedSort) {
-      case 'name':
-        sortByName(tempApproved);
-        sortByName(tempPending);
-        setApprovedSignUps(tempApproved);
-        setNonApprovedSignUps(tempPending);
-        break;
-      case 'role':
-        sortByRole(tempApproved);
-        setApprovedSignUps(tempApproved);
-        break;
-      default:
-        break;
-    }
-  }, [selectedSort]);
-
-  // search
-  const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile(fillOtherParams({ name })));
-  const searchBar = <SearchBar setFilterFunction={onSearch} />;
-
   const sortMenu = (
     <FormControl fullWidth variant="outlined" size="small" margin="dense">
       <InputLabel>Sort By:</InputLabel>
@@ -464,6 +478,7 @@ const EventVolunteers = ({ eid }) => {
       </Select>
     </FormControl>
   );
+
   return (
     <>
       <Grid container alignItems="center" justify="center">
