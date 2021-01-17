@@ -11,14 +11,6 @@ const EventVolunteersPage = () => {
   const router = useRouter();
   const { eid } = router.query;
   const userData = useSelector((state: StoreState) => state.user);
-  //   const userData: VolunteerData = useSelector((state: StoreState) => state.user.user);
-  //   const eventData: EventData | null = useSelector((state: StoreState) => {
-  //     const ret = state.event.events.filter((e: EventData) => e._id === eid);
-  //     if (ret.length === 0 || ret.length > 1) {
-  //       return null;
-  //     }
-  //     return ret[0];
-  //   });
 
   return (
     <Container fixed>
