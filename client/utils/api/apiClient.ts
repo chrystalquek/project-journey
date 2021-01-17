@@ -6,19 +6,22 @@ import {
   CreateEventRequest,
   EditEventRequest,
   GetEventParams,
-  QueryParams,
   SignUpRequest,
   UploadImageRequest,
   CreateSignUpRequest,
   UpdateSignUpRequest, SignUpQueryParams, UpdateVolunteerRequest,
   CreateCommitmentApplicationRequest,
+  CommitmentApplicationQueryParams,
+  EventQueryParams,
+  VolunteerPaginatedQueryParams,
 } from '@utils/api/request';
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
   CreateSignUpResponse, UpdateSignUpResponse,
-  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse,
+  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse,
 } from '@utils/api/response';
+import {SignUpIdType} from "@type/signUp";
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -27,18 +30,20 @@ export interface ApiClient {
   createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
-  getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse>
-  getSignUps(query: QueryParams): Promise<GetSignUpsResponse>
-  getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse>
-  getEvents(query: QueryParams): Promise<GetEventsResponse>
+  getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse>
+  getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
+  getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse>
+  getEvents(query: EventQueryParams): Promise<GetEventsResponse>
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
-  getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse>
+  getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse>
   updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
 }
 
 class AxiosApiClient implements ApiClient {
   private axiosInstance: AxiosInstance
+
+  private token: string = ''
 
   constructor(
     endpoint: string,
@@ -48,7 +53,11 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
-  private toURLParams = (query: QueryParams) => `?${new URLSearchParams(query).toString()}`
+  private toURLParams = (query) => `?${new URLSearchParams(query).toString()}`
+
+  public setAuthToken(token: string): void {
+    this.token = token;
+  }
 
   // create user
   async signUp(request: SignUpRequest): Promise<SignUpResponse> {
@@ -61,7 +70,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   // sign up
-  async getSignUps(query: QueryParams): Promise<GetSignUpsResponse> {
+  async getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse> {
     return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
   }
 
@@ -78,8 +87,23 @@ class AxiosApiClient implements ApiClient {
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
+  async createAndUpdateSignUp(acceptedRole: string, request: CreateSignUpRequest): Promise<CreateUpdateSignUpResponse> {
+    return this.createSignUp(request)
+      .then((res) => {
+        const newRequest: UpdateSignUpRequest = {
+          ...request,
+          status: ['accepted', acceptedRole],
+        };
+        const newQuery = {
+          id: res["sign_up_id"], // TODO: This will break once we parse everything to camelCame
+          idType: "signUpId" as SignUpIdType,
+        }
+        return this.updateSignUp(newQuery, newRequest);
+      });
+  }
+
   // event
-  async getSignedUpEvents(query: QueryParams): Promise<GetEventsResponse> {
+  async getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse> {
     return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
   }
 
@@ -96,12 +120,12 @@ class AxiosApiClient implements ApiClient {
     return this.send(data, `event/${id}`, 'put');
   }
 
-  async getEvents(query: QueryParams): Promise<GetEventsResponse> {
+  async getEvents(query: EventQueryParams): Promise<GetEventsResponse> {
     return this.send({}, `event/multiple/${query.eventType}`, 'get');
   }
 
   // volunteer
-  async getVolunteers(query: QueryParams): Promise<GetVolunteersPaginatedResponse> {
+  async getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
 
@@ -109,7 +133,7 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
-  async updateVolunteer(request : UpdateVolunteerRequest): Promise<VolunteerData> {
+  async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {
     return this.send(request, 'volunteer', 'put');
   }
 
@@ -119,7 +143,7 @@ class AxiosApiClient implements ApiClient {
     return this.send(request, 'commitment-application', 'post');
   }
 
-  async getCommitmentApplications(query: QueryParams): Promise<GetCommitmentApplicationResponse> {
+  async getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse> {
     return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
   }
 
@@ -147,6 +171,10 @@ class AxiosApiClient implements ApiClient {
 
     if (process.env.NODE_ENV === 'development') {
       headers['Access-Control-Allow-Origin'] = '*';
+    }
+
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
     }
 
     const config: AxiosRequestConfig = { headers };

@@ -1,5 +1,7 @@
 import {
-  makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Popover, FormControl, InputLabel, Select, MenuItem, Badge,
+  makeStyles, Grid, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, IconButton,
+  Button, Popover, FormControl, TablePagination, Select, MenuItem, Badge,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { StoreState } from '@redux/store';
@@ -16,6 +18,8 @@ import { ActionableDialog } from '@components/common/ActionableDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import { getEvent } from '@redux/actions/event';
 import CheckIcon from '@material-ui/icons/Check';
+
+export const rowsPerPage = 10;
 
 const useStyles = makeStyles((theme) => ({
   popUpButton: {
@@ -408,10 +412,16 @@ const EventVolunteers = ({ eid }) => {
     },
   );
 
+  const [pageNumber, setPageNumber] = useState(0);
+
+  const handleChangePageNumber = (event, newPageNumber) => {
+    setPageNumber(newPageNumber);
+  };
+
   return (
     <>
       <Grid container alignItems="center" justify="center">
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <h2>{event?.name}</h2>
           <Tabs tabs={tabs} clickedOn={1} />
           <TableContainer>
@@ -431,6 +441,14 @@ const EventVolunteers = ({ eid }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[rowsPerPage]}
+            component="div"
+            count={isApprovedTab ? approvedSignUps.length : nonApprovedSignUps.length}
+            rowsPerPage={rowsPerPage}
+            page={pageNumber}
+            onChangePage={handleChangePageNumber}
+          />
         </Grid>
       </Grid>
 

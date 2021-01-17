@@ -17,6 +17,7 @@ import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { EventButton } from '@components/common/event/EventButton';
 
 type EventsPageBodyProps = {
   events: Array<EventData>;
@@ -31,15 +32,6 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     display: 'flex',
-  },
-  createEventBtn: {
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: '16px',
-    textTransform: 'none',
-    padding: '6px 16px',
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.main,
-    },
   },
   filterResultsBtn: {
     background: 'none',
@@ -94,9 +86,9 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
             justify="center"
             alignItems="center"
           >
-            <Button disableRipple className={classes.createEventBtn}>
+            <EventButton disableRipple>
               Create new event
-            </Button>
+            </EventButton>
           </Grid>
           )}
           <Grid item container xs={12} justify="space-between">
@@ -157,9 +149,9 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
           </Grid>
           {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
           <Grid item sm={3} style={{ textAlign: 'center' }}>
-            <Button disableRipple className={classes.createEventBtn} onClick={() => router.push('/form/new')}>
+            <EventButton disableRipple onClick={() => router.push('/event/new')}>
               Create new event
-            </Button>
+            </EventButton>
           </Grid>
           )}
         </Grid>

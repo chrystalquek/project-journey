@@ -4,14 +4,16 @@ import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted';
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
-import { createSignUp, getSignUps } from '@redux/actions/signUp';
+import { createAndAcceptSignUp, createSignUp, getSignUps } from '@redux/actions/signUp';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateSignUpRequest, UpdateSignUpRequest } from '@utils/api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
 import { StoreState } from '@redux/store';
-import { SignUpIdType } from '@type/signUp';
+import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import apiClient from '@utils/api/apiClient';
+import { sign } from 'crypto';
+import { signUp } from '@redux/actions/user';
 
 type EventDetailsProps = {
   event: EventData,
@@ -26,8 +28,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
     dispatch(getSignUps({ id: user._id, idType: 'userId' as SignUpIdType }));
   }, []);
 
-  // @ts-ignore type exists TODO: remove after changed back to camel case
-  const signUpInfo = currSignUps.filter((signUp) => signUp.event_id === event._id);
+  const signUpInfo: Array<SignUpData> = currSignUps.filter((signUp) => signUp.eventId === event._id);
   const isEventFull = getEventVacancies(event).remaining === 0;
   const hasPendingSignUp = signUpInfo.length > 0
                             && signUpInfo[0].status === 'pending';
@@ -47,28 +48,21 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
   const formStatus = {
     disabled: isEventFull || hasPendingSignUp || hasAcceptedSignUp, // default disabled reasons
     reason,
+    details: {
+      acceptedSignUp: hasAcceptedSignUp ? signUpInfo : null,
+    },
   };
 
   const formHandlers = {
+    // non-volunteering events don't need admin approval
     signUpAndAccept: async (uid: string, eid: string, form: FormState) => {
       const request: CreateSignUpRequest = {
         ...getFormData(uid, eid, form),
         status: 'pending',
       };
-      // TODO: redux action not really working, need help to fix
-      apiClient.createSignUp(request)
-        .then((res) => {
-          // @ts-ignore TODO: snake_case --> camelCase
-          const query = { id: res.sign_up_id, idType: 'signUpId' as SignUpIdType };
-          const newReq: UpdateSignUpRequest = {
-            ...request,
-            status: ['accepted', form.firstChoice],
-          };
-          return apiClient.updateSignUp(query, newReq);
-        })
-        .then(() => console.log('Success!'));
-      // dispatch(createAndAcceptSignUp( {request, form})); // possibly check for failure
+      dispatch(createAndAcceptSignUp({ request, form })); // possibly check for failure
     },
+    // volunteering events need admin approval
     signUpOnly: async (uid: string, eid: string, form: FormState) => {
       const request: CreateSignUpRequest = {
         ...getFormData(uid, eid, form),

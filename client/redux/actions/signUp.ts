@@ -1,14 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  CreateSignUpRequest, QueryParams, SignUpQueryParams, UpdateSignUpRequest,
+  CreateSignUpRequest, SignUpQueryParams, UpdateSignUpRequest,
 } from '@utils/api/request';
-import { GetSignUpsResponse, UpdateSignUpResponse } from '@utils/api/response';
+import { GetSignUpsResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
-import { SignUpIdType } from '@type/signUp';
+import { SignUpData, SignUpIdType } from '@type/signUp';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
-import { request } from 'http';
 
-export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, QueryParams, { state }>(
+export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, SignUpQueryParams, { state }>(
   'signUp/getSignUpsUpcomingEvent',
   async ({ id, idType }) => {
     const response = await apiClient.getSignUps({ id, idType });
@@ -26,16 +25,7 @@ export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { st
 
 export const createAndAcceptSignUp = createAsyncThunk(
   'signUp/createAndAcceptSignUp',
-  async (payloadCreator: {request: CreateSignUpRequest, form: FormState}, thunkAPI) => {
-    // TODO: snake case issues
-    const res = await apiClient.createSignUp(payloadCreator.request);
-    const query = { id: res['sign-up-id'], idType: 'signUpId' as SignUpIdType };
-    const newReq: UpdateSignUpRequest = {
-      ...payloadCreator.request,
-      status: ['accepted', payloadCreator.form.firstChoice],
-    };
-    return apiClient.updateSignUp(query, newReq);
-  },
+  async (payloadCreator: {request: CreateSignUpRequest, form: FormState}, thunkAPI) => await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request),
 );
 
 export const getSignUps = createAsyncThunk(
@@ -50,7 +40,12 @@ export const createSignUp = createAsyncThunk(
 
 export const updateSignUp = createAsyncThunk(
   'signUp/updateSignUp',
-  async (payloadCreator: {query: SignUpQueryParams, request: UpdateSignUpRequest}) => {
+  async (payloadCreator: { query: SignUpQueryParams, request: UpdateSignUpRequest }) => await apiClient.updateSignUp(payloadCreator.query, payloadCreator.request),
+);
+
+export const updateSignUpInstant = createAsyncThunk(
+  'signUp/updateSignUpInstant',
+  async (payloadCreator: {query: SignUpQueryParams, request: SignUpData}) => {
     await apiClient
       .updateSignUp(payloadCreator.query, payloadCreator.request);
     const response = {

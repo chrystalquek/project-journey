@@ -161,13 +161,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       {menuName}
                     </MenuItem>
                   ))}
-                  {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+                  {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN
+                    && (
                     <MenuItem
                       onClick={() => router.push('/event/pending-requests')}
                     >
                       Pending Requests
                     </MenuItem>
-                    }
+                    )}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -263,8 +264,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-        <Avatar alt={userData?.name} src={userData?.photoUrl} />
-      );
+      <Avatar alt={userData?.name} src={userData?.photoUrl} />
+    );
 
     return (
       <>

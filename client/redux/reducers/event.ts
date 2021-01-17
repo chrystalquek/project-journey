@@ -9,13 +9,13 @@ import { EventData } from 'types/event';
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
 export type EventState = {
-  events: Array<EventData>; // TODO resolve this
+  events: Array<EventData>; // TODO rewrite this to array of IDs
   data: Record<string, EventData>;
   upcomingEvent: { // part of dashboard and events > pending requests
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
-  },
-  form: EventData,
-  status: FetchStatus,
+  };
+  form: EventData | null;
+  status: FetchStatus;
 }
 
 const initialState: EventState = {

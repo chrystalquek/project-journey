@@ -3,9 +3,10 @@ import {
   createAndAcceptSignUp, createSignUp,
   getPendingSignUps, getSignUps,
   getSignUpsUpcomingEvent,
-  updateSignUp,
+  updateSignUp, updateSignUpInstant,
 } from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
+import { useRouter } from 'next/router';
 
 export type SignUpState = {
   data: Record<string, SignUpData>;
@@ -68,10 +69,10 @@ const signUpSlice = createSlice({
       // do nothing yet
     });
     builder.addCase(createAndAcceptSignUp.fulfilled, (state, action) => {
-      // do nothing yet
+      location.reload();
     });
     builder.addCase(createAndAcceptSignUp.rejected, (state, action) => {
-      // do nothing yet
+      location.reload();
     });
     builder.addCase(createSignUp.pending, (state, action) => {
       // do nothing yet
@@ -86,11 +87,14 @@ const signUpSlice = createSlice({
       // do nothing yet
     });
     builder.addCase(updateSignUp.fulfilled, (state, action) => {
-      const { payload } = action;
-      addToData(payload.data, state);
+      // do nothing yet
     });
     builder.addCase(updateSignUp.rejected, (state, action) => {
       // do nothing yet
+    });
+    builder.addCase(updateSignUpInstant.fulfilled, (state, action) => {
+      const { payload } = action;
+      addToData(payload.data, state);
     });
   },
 });
