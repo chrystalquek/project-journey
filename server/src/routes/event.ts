@@ -32,6 +32,11 @@ protectedRouter.delete('/:id', authorize(['admin']), eventController.deleteEvent
 // @access  Private
 protectedRouter.put('/:id', authorize(['admin']), eventController.updateEvent);
 
+// @route   PUT /event/cancel/:id
+// @desc    Cancel an event by id
+// @access  Private
+protectedRouter.put('/cancel/:id', authorize(['admin']), eventController.cancelEvent);
+
 // @route   POST /event
 // @desc    Post a new event
 // @access  Private
