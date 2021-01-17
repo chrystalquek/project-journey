@@ -5,6 +5,9 @@ import {
   FormControlLabel, Grid,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
+import { useDispatch, useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -17,10 +20,17 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       textAlign: 'center',
     },
+    cursor: 'pointer',
   },
 }));
 
 const BecomeCommited: FC = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: StoreState) => state.user);
+  // TODO: a better implementation to check pending application
+  // this is just a quick fix, it's by no mean a correct flag
+  const isPending : boolean = user.user.commitmentApplicationIds.length > 0;
+
   const [open, setOpen] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
   const classes = useStyles();
@@ -71,13 +81,25 @@ const BecomeCommited: FC = () => {
     setChecked(!checked);
   }, [checked]);
 
+  const handleSubmit = useCallback(() => {
+    setOpen(false);
+    setChecked(false);
+    dispatch(createCommitmentApplication({ volunteerId: user.user._id }));
+  }, [open, checked]);
+
   return (
     <div>
       {/* Link to open the dialog */}
       <Typography className={classes.header}>
-        <Link color="secondary" onClick={handleClickOpen}>
-          <u>Become a committed volunteer</u>
-        </Link>
+        {
+          isPending
+            ? (<Typography variant="body2"> Your application is pending </Typography>)
+            : (
+              <Link color="secondary" onClick={handleClickOpen}>
+                <u>Become a committed volunteer</u>
+              </Link>
+            )
+        }
       </Typography>
 
       {/* Dialog */}
@@ -152,7 +174,7 @@ const BecomeCommited: FC = () => {
         <DialogActions className={classes.centralize}>
           <Button
             variant="contained"
-            onClick={handleClose}
+            onClick={handleSubmit}
             color="primary"
             disabled={!checked}
           >

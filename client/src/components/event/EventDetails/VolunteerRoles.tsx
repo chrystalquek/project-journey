@@ -1,6 +1,7 @@
-import React, {FC} from "react";
-import {EventData, RoleData} from "@type/event";
-import {Box} from "@material-ui/core";
+import React, { FC } from 'react';
+import { EventData, RoleData } from '@type/event';
+import { Box } from '@material-ui/core';
+import {EventTypography} from "@components/common/event/EventTypography";
 
 type VolunteerRolesProps = {
   event: EventData
@@ -11,17 +12,15 @@ const VolunteerRoles: FC<VolunteerRolesProps> = ({ event }) => {
 
   return (
     <>
-      <Box fontWeight="bold" fontSize="h3.fontSize">
-        Volunteer Roles
-      </Box>
+      <EventTypography gutterBottom borderBottom fontSize="h3" fontBold text="Volunteer Roles" />
       {volunteerRoles.map((role: RoleData) => (
-        <div key={role.name}>
-          <div><strong>{role.name}</strong></div>
-          <p>{role.description}</p>
-        </div>
+        <Box marginBottom={3} key={role.name}>
+          <EventTypography fontBold text={role.name} />
+          <EventTypography text={role.description} />
+        </Box>
       ))}
     </>
-  )
-}
+  );
+};
 
 export default VolunteerRoles;

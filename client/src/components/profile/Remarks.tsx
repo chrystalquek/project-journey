@@ -4,44 +4,60 @@ import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { useDispatch } from 'react-redux';
+import { updateVolunteer } from '@redux/actions/user';
 
 type props = {
   user: VolunteerData
 }
+
 const Remarks: FC<props> = ({ user }) => {
-  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(user.volunteerRemarks);
-  const [adminRemarks, setAdminRemarks] = useState<string>(user.adminRemarks);
+  const dispatch = useDispatch();
+  let originalVolunteerRemarks = user.volunteerRemarks;
+  const originalAdministratorRemarks = user.administratorRemarks;
+
+  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
+  const [administratorRemarks, setAdministratorRemarks] = useState<string>(originalAdministratorRemarks);
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
-  const [adminRemarksChanged, setAdminRemarksChanged] = useState<boolean>(false);
+  const [administratorRemarksChanged, setAdministratorRemarksChanged] = useState<boolean>(false);
 
   const handleVolunteerRemarks = (event) => {
     setVolunteerRemarks(event.target.value);
-    setVolunteerRemarksChanged(event.target.value !== user.volunteerRemarks);
+    setVolunteerRemarksChanged(event.target.value !== originalVolunteerRemarks);
   };
 
-  const handleAdminRemarks = (event) => {
-    setAdminRemarks(event.target.value);
-    setAdminRemarksChanged(event.target.value !== user.adminRemarks);
+  const handleAdministratorRemarks = (event) => {
+    setAdministratorRemarks(event.target.value);
+    setAdministratorRemarksChanged(event.target.value !== originalAdministratorRemarks);
   };
 
   const saveVolunteerRemarks = () => {
     // TODO: sync database
-    user.volunteerRemarks = volunteerRemarks;
+    dispatch(
+      updateVolunteer({
+        email: user.email,
+        updatedVolunteerData: {
+          volunteerRemarks,
+        },
+      }),
+    );
+
+    originalVolunteerRemarks = volunteerRemarks;
     setVolunteerRemarksChanged(false);
   };
-  const saveAdminRemarks = () => {
+  const saveAdministratorRemarks = () => {
     // TODO: sync database
-    user.adminRemarks = adminRemarks;
-    setAdminRemarksChanged(false);
+    user.administratorRemarks = administratorRemarks;
+    setAdministratorRemarksChanged(false);
   };
 
   const discardVolunteerRemarks = () => {
     setVolunteerRemarks(user.volunteerRemarks);
     setVolunteerRemarksChanged(false);
   };
-  const discardAdminRemarks = () => {
-    setAdminRemarks(user.adminRemarks);
-    setAdminRemarksChanged(false);
+  const discardAdministratorRemarks = () => {
+    setAdministratorRemarks(user.administratorRemarks);
+    setAdministratorRemarksChanged(false);
   };
 
   return (
@@ -67,12 +83,12 @@ const Remarks: FC<props> = ({ user }) => {
         {/* Admin remarks (only renders for admin) */}
         {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
         <RemarksTextField
-          value={adminRemarks}
-          onChange={handleAdminRemarks}
+          value={administratorRemarks}
+          onChange={handleAdministratorRemarks}
           label="Notes on volunteer"
-          show={adminRemarksChanged}
-          onSave={saveAdminRemarks}
-          onDiscard={discardAdminRemarks}
+          show={administratorRemarksChanged}
+          onSave={saveAdministratorRemarks}
+          onDiscard={discardAdministratorRemarks}
         />
         )}
       </Grid>

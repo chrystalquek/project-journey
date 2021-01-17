@@ -18,11 +18,12 @@ import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
-import { VolunteerData } from '@type/volunteer';
+import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { EventButton } from '@components/common/event/EventButton';
 
 type EventsPageBodyProps = {
   events: Array<EventData>;
-  user: VolunteerData;
+  user: VolunteerData | null; // if user isn't logged in
   getAllEvents: () => void;
 };
 
@@ -33,15 +34,6 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     display: 'flex',
-  },
-  createEventBtn: {
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: '16px',
-    textTransform: 'none',
-    padding: '6px 16px',
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.main,
-    },
   },
   filterResultsBtn: {
     background: 'none',
@@ -92,8 +84,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
       <>
         <Grid container spacing={4}>
           <Grid item xs={12}>
+            {/* TODO: Implement search function */}
             <SearchBar setFilterFunction={() => console.log('TODO')} />
           </Grid>
+          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
           <Grid
             item
             container
@@ -102,10 +96,11 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
             justify="center"
             alignItems="center"
           >
-            <Button disableRipple className={classes.createEventBtn}>
+            <EventButton disableRipple>
               Create new event
-            </Button>
+            </EventButton>
           </Grid>
+          )}
           <Grid item container xs={12} justify="space-between">
             <Grid item>
               <Box className={classes.box} fontWeight="bold">
@@ -159,13 +154,16 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
         </Grid>
         <Grid item container sm={12} alignItems="center" spacing={4}>
           <Grid item sm={9}>
+            {/* TODO: Implement search function */}
             <SearchBar setFilterFunction={() => console.log('TODO')} />
           </Grid>
+          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
           <Grid item sm={3} style={{ textAlign: 'center' }}>
-            <Button disableRipple className={classes.createEventBtn}>
+            <EventButton disableRipple onClick={() => router.push('/event/new')}>
               Create new event
-            </Button>
+            </EventButton>
           </Grid>
+          )}
         </Grid>
         <Grid item container sm={9} spacing={4}>
           <Grid item sm={12}>

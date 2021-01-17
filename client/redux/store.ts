@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import userReducer, { UserState } from '@redux/reducers/user';
 import EventReducer, { EventState } from '@redux/reducers/event';
+import imageReducer, { ImageState } from '@redux/reducers/image';
 import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer';
 import {
   persistStore,
@@ -16,6 +17,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import signUpReducer, { SignUpState } from './reducers/signUp';
 import formReducer, { FormState } from './reducers/form';
+import commitmentApplicationReducer, { CommitmentApplicationState } from './reducers/commitmentApplication';
 
 export type StoreState = {
   user: UserState
@@ -23,6 +25,8 @@ export type StoreState = {
   volunteer: VolunteerState
   signUp: SignUpState
   form: FormState
+  commitmentApplication: CommitmentApplicationState,
+  image: ImageState,
 }
 
 const reducers = combineReducers({
@@ -31,6 +35,8 @@ const reducers = combineReducers({
   volunteer: volunteerReducer,
   signUp: signUpReducer,
   form: formReducer,
+  commitmentApplication: commitmentApplicationReducer,
+  image: imageReducer,
 });
 
 const persistConfig = {

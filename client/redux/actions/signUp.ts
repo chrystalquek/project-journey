@@ -1,9 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { QueryParams } from '@utils/api/request';
-import { GetCountResponse, GetSignUpsResponse } from '@utils/api/response';
+import { CreateSignUpRequest, SignUpQueryParams, UpdateSignUpRequest } from '@utils/api/request';
+import { GetSignUpsResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
+import { SignUpIdType } from "@type/signUp";
+import { FormState } from "@components/event/EventDetails/EventRegisterForm";
 
-export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, QueryParams, { state }>(
+export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, SignUpQueryParams, { state }>(
   'signUp/getSignUpsUpcomingEvent',
   async ({ id, idType }) => {
     const response = await apiClient.getSignUps({ id, idType });
@@ -11,10 +13,34 @@ export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, Quer
   },
 );
 
-export const getPendingSignUpsPendingApproval = createAsyncThunk<GetCountResponse, void, { state }>(
-  'signUp/getPendingSignUpsPendingApproval',
+export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { state }>(
+  'signUp/getPendingSignUps',
   async () => {
     const response = await apiClient.getPendingSignUps();
     return response;
+  },
+);
+
+export const createAndAcceptSignUp = createAsyncThunk(
+  'signUp/createAndAcceptSignUp',
+  async (payloadCreator: {request: CreateSignUpRequest, form: FormState}, thunkAPI) => {
+    return await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request);
+  },
+);
+
+export const getSignUps = createAsyncThunk(
+  'signUp/getSignUps',
+  async (query: SignUpQueryParams) => await apiClient.getSignUps(query),
+);
+
+export const createSignUp = createAsyncThunk(
+  'signUp/createSignUp',
+  async (request: CreateSignUpRequest, thunkAPI) => await apiClient.createSignUp(request),
+);
+
+export const updateSignUp = createAsyncThunk(
+  'signUp/updateSignUp',
+  async (payloadCreator: { query: SignUpQueryParams, request: UpdateSignUpRequest }) => {
+    return await apiClient.updateSignUp(payloadCreator.query, payloadCreator.request);
   },
 );

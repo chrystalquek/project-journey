@@ -70,9 +70,10 @@ const useStyles = makeStyles((theme) => ({
 type LoginProps = {
   user: UserState;
   handleFormSubmit: (formData: LoginArgs) => Promise<void>;
+  resetStatus: () => void;
 };
 
-const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
+const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginProps) => {
   const router = useRouter();
   const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
@@ -90,6 +91,13 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
       router.push('/');
     }
   }, [user.status]);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", resetStatus);
+    return () => {
+      window.removeEventListener("beforeunload", resetStatus);
+    };
+  }, []);
 
   const handleSubmit = async (values) => {
     const loginArgs: LoginArgs = {

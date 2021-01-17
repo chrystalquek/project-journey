@@ -1,10 +1,11 @@
+import { VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile';
+import { CommitmentApplicationData } from '@type/commitmentApplication';
 import { EventData } from '@type/event';
 import { QuestionWithOptions } from '@type/form';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
-export type SignUpResponse = {
-}
+export type SignUpResponse = Record<string, any>
 
 export type LoginResponse = {
   token: string
@@ -20,11 +21,14 @@ export type GetEventsResponse = {
 
 export type GetVolunteersResponse = {
   data: Array<VolunteerData>
+}
+
+export type GetVolunteersPaginatedResponse = GetVolunteersResponse & {
   count: number
-  pageNo: number
-  filters: {
-    volunteerType: Record<VOLUNTEER_TYPE, boolean>
-  }
+}
+
+export type GetCommitmentApplicationResponse = {
+  data: Array<CommitmentApplicationData>
 }
 
 export type EditEventResponse = {}
@@ -36,9 +40,24 @@ export type GetSignUpsResponse = {
 
 export type CreateEventResponse = {}
 
+export type UploadImageResponse = {
+  name: string,
+  url: string
+}
 // general response just to get a number
 export type GetCountResponse = {
   count: number
 }
 
 export type GetEventFeedbackQuestionsResponse = Array<QuestionWithOptions>
+export type CreateSignUpResponse = {
+  signUpId: string
+}
+
+export type UpdateSignUpResponse = {
+  success: boolean,
+}
+
+export type CreateUpdateSignUpResponse = {
+  success: boolean,
+}

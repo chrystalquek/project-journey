@@ -1,5 +1,5 @@
 import AdminEventForm from '@components/form/AdminEventForm';
-import { Grid } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 import Head from '@components/common/Header';
 import NavBar from '@components/common/NavBar';
 import { useSelector } from 'react-redux';
@@ -12,19 +12,11 @@ const AdminEventFormPage = () => {
   const eventId = router.query.event_id as string;
 
   return (
-    <Grid container direction="column" spacing={6}>
-      <Grid item>
-        <Head title="Blessings in a Bag" />
-        <NavBar userData={userData.user} />
-      </Grid>
-      <Grid item container>
-        <Grid item md={2} />
-        <Grid item container direction="column" xs={12} md={8}>
-          <AdminEventForm id={eventId} isNew={eventId === 'new'} />
-          <Grid item md={2} />
-        </Grid>
-      </Grid>
-    </Grid>
+    <Container fixed>
+      <Head title="Blessings in a Bag" />
+      <NavBar userData={userData.user} />
+      <AdminEventForm id={eventId} isNew={eventId === 'new'} />
+    </Container>
   );
 };
 

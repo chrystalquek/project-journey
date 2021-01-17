@@ -1,20 +1,25 @@
 import { rowsPerPage } from '@components/volunteer/VolunteerProfile';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { QueryParams } from '@utils/api/request';
-import { convertFilterObjectToQueryString } from '@utils/helpers/TableOptions';
-import { GetCountResponse, GetVolunteersResponse } from '@utils/api/response';
+import { VolunteerPaginatedQueryParams } from '@utils/api/request';
+import { GetVolunteersPaginatedResponse, GetVolunteersResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
+import { convertFilterObjectToQueryString } from '@utils/helpers/TableOptions';
+import { VolunteersMetaArgs } from '@redux/reducers/volunteer';
 
-export const getVolunteersVolunteerProfile = createAsyncThunk<GetVolunteersResponse, QueryParams, { state }>(
+export const getVolunteersVolunteerProfile = createAsyncThunk<GetVolunteersPaginatedResponse, VolunteersMetaArgs, { state }>(
   'volunteer/getVolunteersVolunteerProfile',
-  async ({ pageNo, size, volunteerType }) => {
-    const response = await apiClient.getVolunteers({ pageNo: pageNo || 0, size: size || rowsPerPage, volunteerType: convertFilterObjectToQueryString(volunteerType) }); // fill in default values if necessary
-    return { ...response, pageNo: pageNo || 0, filters: { volunteerType } };
+  async ({ pageNo, filters, search, sort }) => {
+    const apiQueryParams: VolunteerPaginatedQueryParams = { pageNo, size: rowsPerPage, volunteerType: convertFilterObjectToQueryString(filters.volunteerType), sort }
+    if (search.name) {
+      apiQueryParams.name = search.name
+    }
+    const response = await apiClient.getVolunteers(apiQueryParams);
+    return { ...response, pageNo, filters, search, sort };
   },
 );
 
-export const getPendingVolunteersPendingApproval = createAsyncThunk<GetCountResponse, void, { state }>(
-  'volunteer/getPendingVolunteersPendingApproval',
+export const getPendingVolunteers = createAsyncThunk<GetVolunteersResponse, void, { state }>(
+  'volunteer/getPendingVolunteers',
   async () => {
     const response = await apiClient.getPendingVolunteers();
     return response;

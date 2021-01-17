@@ -8,8 +8,7 @@ import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
 import { getSignUpsUpcomingEvent } from '@redux/actions/signUp';
-import { MONTHS, formatAMPM, formatDateStartEndTime } from '@utils/helpers/date';
-import dummyUser from '@constants/dummyUser';
+import { formatDateStartEndTime } from '@utils/helpers/date';
 
 const useStyles = makeStyles((theme) => ({
   pane: {
@@ -46,10 +45,10 @@ const UpcomingEvent: FC<{}> = ({ }) => {
   }, []);
 
   const events = useSelector((state: StoreState) => state.event);
-  const signUps = useSelector((state: StoreState) => state.signUp);
+  const signUps = useSelector((state: StoreState) => state.signUp); // only relevant if user is volunteer
 
   const upcomingEventsIds = events.upcomingEvent.ids;
-  const upcomingSignUpsIds = signUps.upcomingEvent.ids;
+  const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;
 
   const upcomingEvents = upcomingEventsIds.map((id) => events.data[id]);
   const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
@@ -65,6 +64,7 @@ const UpcomingEvent: FC<{}> = ({ }) => {
         </Typography>
       );
     }
+    // is volunteer
     const status = upcomingSignUps.find((signUp) => signUp.eventId == event._id)?.status || 'unknown';
     switch (status) {
       case 'pending':
