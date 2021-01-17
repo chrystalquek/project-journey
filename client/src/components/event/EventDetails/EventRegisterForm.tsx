@@ -12,9 +12,9 @@ import {
 import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
 import { VolunteerData } from '@type/volunteer';
 import { useRouter } from 'next/router';
-import {EventTypography} from '@components/common/event/EventTypography';
-import {EventDivider} from '@components/common/event/EventDivider';
-import {EventButton} from '@components/common/event/EventButton';
+import { EventTypography } from '@components/common/event/EventTypography';
+import { EventDivider } from '@components/common/event/EventDivider';
+import { EventButton } from '@components/common/event/EventButton';
 
 type EventRegisterProps = {
   event: EventData
@@ -95,7 +95,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
-              <MenuItem key={v.id} value={v.value} disabled={v.isDisabled}>{v.description}</MenuItem>
+              <MenuItem
+                key={v.id}
+                value={v.value}
+                disabled={v.isDisabled}
+              >
+                {v.description}
+
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -111,7 +118,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
-              <MenuItem key={v.id} value={v.value} disabled={v.isDisabled}>{v.description}</MenuItem>
+              <MenuItem
+                key={v.id}
+                value={v.value}
+                disabled={v.isDisabled}
+              >
+                {v.description}
+
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -127,7 +141,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
-              <MenuItem key={v.id} value={v.value} disabled={v.isDisabled}>{v.description}</MenuItem>
+              <MenuItem
+                key={v.id}
+                value={v.value}
+                disabled={v.isDisabled}
+              >
+                {v.description}
+
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
