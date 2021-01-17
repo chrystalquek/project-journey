@@ -1,7 +1,7 @@
 import {
   makeStyles, Grid, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, IconButton,
-  Button, Popover, FormControl, TablePagination, Select, MenuItem, Badge,
+  Button, Popover, FormControl, TablePagination, Select, MenuItem, Badge, InputLabel,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { StoreState } from '@redux/store';
@@ -18,6 +18,7 @@ import { ActionableDialog } from '@components/common/ActionableDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import { getEvent } from '@redux/actions/event';
 import CheckIcon from '@material-ui/icons/Check';
+import SearchBar from '@components/common/SearchBar';
 
 export const rowsPerPage = 10;
 
@@ -412,18 +413,75 @@ const EventVolunteers = ({ eid }) => {
     },
   );
 
+  /** Pagination */
   const [pageNumber, setPageNumber] = useState(0);
 
   const handleChangePageNumber = (event, newPageNumber) => {
     setPageNumber(newPageNumber);
   };
 
+  const sortFields = [{ label: 'Name', value: 'name' }, { label: 'Role', value: 'role' }];
+
+  const [selectedSort, setSelectedSort] = useState(null);
+
+  const sortByName = (array: SignUpData[]) : SignUpData[] => array
+    .sort((a, b) => allVolunteerData[a.userId].name - allVolunteerData[b.userId].name);
+  const sortByRole = (array: SignUpData[]) : SignUpData[] => array
+    .sort((a, b) => a.status[1].localeCompare(b.status[1]));
+
+  useEffect(() => {
+    const tempApproved = approvedSignUps;
+    const tempPending = nonApprovedSignUps;
+
+    switch (selectedSort) {
+      case 'name':
+        sortByName(tempApproved);
+        sortByName(tempPending);
+        setApprovedSignUps(tempApproved);
+        setNonApprovedSignUps(tempPending);
+        break;
+      case 'role':
+        sortByRole(tempApproved);
+        setApprovedSignUps(tempApproved);
+        break;
+      default:
+        break;
+    }
+  }, [selectedSort]);
+
+  // search
+  const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile(fillOtherParams({ name })));
+  const searchBar = <SearchBar setFilterFunction={onSearch} />;
+
+  const sortMenu = (
+    <FormControl fullWidth variant="outlined" size="small" margin="dense">
+      <InputLabel>Sort By:</InputLabel>
+      <Select
+        value={selectedSort}
+        onChange={(e) => setSelectedSort(e.target.value)}
+      >
+        {sortFields.map((field) => <MenuItem value={field.value}>{field.label}</MenuItem>)}
+      </Select>
+    </FormControl>
+  );
   return (
     <>
       <Grid container alignItems="center" justify="center">
         <Grid item xs={12} md={8}>
           <h2>{event?.name}</h2>
+        </Grid>
+        <Grid item xs={12} md={8}>
           <Tabs tabs={tabs} clickedOn={1} />
+        </Grid>
+        <Grid item container xs={12} md={8} alignItems="center" justify="center" spacing={2}>
+          <Grid item xs={12} md={9}>
+            {searchBar}
+          </Grid>
+          <Grid item xs={12} md={3}>
+            {sortMenu}
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={8}>
           <TableContainer>
             <Table>
               <TableHead>
