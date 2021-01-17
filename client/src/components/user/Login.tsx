@@ -106,7 +106,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
     if (invalid) {
       return (
         <Typography className={classes.invalidText}>
-          Invalid email & password
+          Invalid email &amp; password
         </Typography>
       );
     }
@@ -200,7 +200,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
                 <div>
                   <Typography>Don&apos;t have an account?</Typography>
                 </div>
-                <Link href="/auth/signup">
+                <Link href="/signup">
                   <Typography className={classes.signUpText}>Sign up</Typography>
                 </Link>
               </div>
