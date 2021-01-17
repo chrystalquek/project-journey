@@ -15,11 +15,13 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import { getEvent } from '@redux/actions/event';
+import CheckIcon from '@material-ui/icons/Check';
 
 const useStyles = makeStyles((theme) => ({
   popUpButton: {
     textTransform: 'none',
     width: '100%',
+    textAlign: 'left',
   },
   redCloseButton: {
     width: '55px',
@@ -41,6 +43,15 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5em',
     color: 'white',
     width: '80%',
+  },
+  tickButton: {
+    width: '55px',
+    height: '38px',
+    backgroundColor: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: '#def024', // lighter green
+    },
+    borderRadius: '5em',
   },
   selectRole: {
     minWidth: '100%',
@@ -107,7 +118,10 @@ const EventVolunteers = ({ eid }) => {
 
   const getVacanciesForAllRoles = () => {
     const vacancies = {};
-    roles?.forEach((role) => { vacancies[role.name] = role.capacity - role.volunteers.length; });
+    roles?.forEach((role) => {
+      const num = role.capacity - role.volunteers.length;
+      vacancies[role.name] = num > 0 ? num : 0;
+    });
     return vacancies;
   };
   useEffect(() => {
@@ -130,32 +144,87 @@ const EventVolunteers = ({ eid }) => {
     setNonApprovedSignUps(nonApproved);
   }, [signUps]);
 
+  /** Anchor for  more button's popover */
   const [anchorEl, setAnchorEl] = useState(null);
 
+  /** Id of an opened more button popoover */
   const [openedPopoverId, setOpenedPopoverId] = useState(null);
 
-  const handleClick = (event, popoverId) => {
+  const handleClickMoreButton = (event, popoverId) => {
     setOpenedPopoverId(popoverId);
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseMoreButton = () => {
     setOpenedPopoverId(null);
     setAnchorEl(null);
   };
 
+  /** States for the choices of the popover buttons */
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
-  // const [isEditingRole, setIsEditingRole] = useState(false);
+  const [suidOfRolesBeingEdited, setSuidOfRolesBeingEdited] = useState([]);
 
   const onUpdateSignUp = ({ request, query }) => {
     dispatch(updateSignUp({ request, query }));
     setOpenRemoveDialog(false);
   };
 
-  const getMoreButton = (signUp: SignUpData, volunteerName: string) => {
+  const handleSelectedRoleChange = (signUpId, event) => {
+    setSelectedRoles({ ...selectedRoles, [signUpId]: event.target.value });
+  };
+
+  /** Get roles select menu */
+  const getRoleSelectMenu = (signUp) => (
+    <FormControl variant="outlined" className={classes.selectRole}>
+      <Select
+        defaultValue={signUp && isStatusApproved(signUp.status) ? signUp.status[1] : 'Role'}
+        value={selectedRoles[signUp.signUpId]}
+        onChange={(e) => handleSelectedRoleChange(signUp.signUpId, e)}
+      >
+        <MenuItem value="" disabled>
+          Preferences
+        </MenuItem>
+        {signUp?.preferences.map((preference, index) => (
+          <MenuItem value={preference} disabled={roleVacancies[preference] === 0}>
+            <Grid container direction="row" justify="flex-end">
+              <Grid item xs={11}>
+                {`${index + 1}. ${preference}`}
+              </Grid>
+              <Grid item xs={1}>
+                <Badge
+                  badgeContent={roleVacancies[preference]}
+                  classes={{ badge: classes.badge }}
+                />
+              </Grid>
+            </Grid>
+
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+
+  const onAssignRole = (signUp) => {
+    const selectedRole = selectedRoles[signUp.signUpId];
+
+    dispatch(updateSignUp({
+      request: { ...signUp, status: ['accepted', selectedRole] },
+      query: {
+        id: signUp.signUpId,
+        idType: 'signUpId',
+      },
+    }));
+  };
+
+  const closeButton = (
+    <IconButton className={classes.redCloseButton}>
+      <CloseIcon className={classes.whiteCancelIcon} />
+    </IconButton>
+  );
+  /** Get  buttons for the approved tab */
+  const getApprovedTabButtons = (signUp: SignUpData, volunteerName: string) => {
     const removeButton = (
       <Button
-        variant="contained"
         className={classes.popUpButton}
         onClick={() => {
           setOpenRemoveDialog(true);
@@ -165,22 +234,31 @@ const EventVolunteers = ({ eid }) => {
       </Button>
     );
 
-    // const editRoleButton = (
-    //   <Button className={classes.popUpButton} onClick={() => setIsEditingRole(true)}>
-    //     Edit Role
-    //   </Button>
-    // );
+    const getEditRoleButton = (suid) => {
+      const temp = [...suidOfRolesBeingEdited, suid];
+      return (
+        <Button
+          className={classes.popUpButton}
+          onClick={() => {
+            setSuidOfRolesBeingEdited(temp);
+            handleCloseMoreButton();
+          }}
+        >
+          Edit Role
+        </Button>
+      );
+    };
 
     const moreButton = (
       <div>
-        <IconButton onClick={(e) => handleClick(e, signUp.signUpId)}>
+        <IconButton onClick={(e) => handleClickMoreButton(e, signUp.signUpId)} ref={anchorEl}>
           <MoreVertIcon />
         </IconButton>
         <Popover
           id={signUp.signUpId}
           open={openedPopoverId === signUp.signUpId}
           anchorEl={anchorEl}
-          onClose={handleClose}
+          onClose={handleCloseMoreButton}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
@@ -208,30 +286,50 @@ const EventVolunteers = ({ eid }) => {
                 })}
               />
             </Grid>
-            {/* <Grid item>
-              {editRoleButton}
-            </Grid> */}
+            <Grid item>
+              {getEditRoleButton(signUp.signUpId)}
+            </Grid>
           </Grid>
         </Popover>
       </div>
 
     );
 
-    return moreButton;
+    const editingButtons = (
+      <Grid container direction="row" alignItems="center" spacing={2}>
+        <Grid item>
+          <IconButton
+            className={classes.tickButton}
+            disabled={roleVacancies[selectedRoles[signUp.signUpId]] === 0}
+            onClick={() => onAssignRole(signUp)}
+          >
+            <CheckIcon className={classes.whiteCancelIcon} />
+          </IconButton>
+        </Grid>
+        <Grid item>
+          <IconButton
+            className={classes.redCloseButton}
+            onClick={() => {
+              const temp = [...suidOfRolesBeingEdited];
+              const idx = temp.indexOf(signUp.signUpId);
+              if (idx > -1) temp.splice(idx, 1);
+              setSuidOfRolesBeingEdited(temp);
+            }}
+          >
+            <CloseIcon className={classes.whiteCancelIcon} />
+          </IconButton>
+        </Grid>
+      </Grid>
+    );
+
+    return (
+      <div>
+        {suidOfRolesBeingEdited.includes(signUp.signUpId) ? editingButtons : moreButton}
+      </div>
+    );
   };
 
-  const onAssignRole = (signUp) => {
-    const selectedRole = selectedRoles[signUp.signUpId];
-
-    dispatch(updateSignUp({
-      request: { ...signUp, status: ['accepted', selectedRole] },
-      query: {
-        id: signUp.signUpId,
-        idType: 'signUpId',
-      },
-    }));
-  };
-
+  /** Get buttons for the pending tab */
   const getPendingTabButtons = (signUp: SignUpData) => {
     const assignButton = (
       <Button
@@ -241,12 +339,6 @@ const EventVolunteers = ({ eid }) => {
       >
         Assign
       </Button>
-    );
-
-    const closeButton = (
-      <IconButton className={classes.redCloseButton}>
-        <CloseIcon className={classes.whiteCancelIcon} />
-      </IconButton>
     );
 
     const assignedButton = (
@@ -261,52 +353,16 @@ const EventVolunteers = ({ eid }) => {
 
     return (
       <Grid container direction="row" alignItems="center">
-        <Grid item xs={8}>
+        <Grid item xs={12}>
           {assignButton}
-        </Grid>
-        <Grid item xs={4}>
-          {closeButton}
         </Grid>
       </Grid>
     );
   };
 
-  const handleSelectedRoleChange = (signUpId, event) => {
-    setSelectedRoles({ ...selectedRoles, [signUpId]: event.target.value });
-  };
-
-  const getRoleSelectMenu = (signUp) => (
-    <FormControl variant="outlined" className={classes.selectRole}>
-      <Select
-        defaultValue=""
-        value={selectedRoles[signUp.signUpId]}
-        onChange={(e) => handleSelectedRoleChange(signUp.signUpId, e)}
-      >
-        <MenuItem value="" disabled>
-          Preferences
-        </MenuItem>
-        {signUp?.preferences.map((preference, index) => (
-          <MenuItem value={preference}>
-            <Grid container direction="row" justify="flex-end">
-              <Grid item xs={11}>
-                {`${index + 1}. ${preference}`}
-              </Grid>
-              <Grid item xs={1}>
-                <Badge
-                  badgeContent={roleVacancies[preference]}
-                  classes={{ badge: classes.badge }}
-                />
-              </Grid>
-            </Grid>
-
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-
   const [isApprovedTab, setIsApprovedTab] = useState(true);
 
+  /** Tabs for approved and pending volunteers */
   const tabs = [
     {
       key: 'volunteers',
@@ -314,24 +370,30 @@ const EventVolunteers = ({ eid }) => {
       onClick: () => setIsApprovedTab(true),
     },
     {
-      ley: 'pending-volunteers',
+      key: 'pending-volunteers',
       label: `Pending (${nonApprovedSignUps.length})`,
       onClick: () => setIsApprovedTab(false),
     },
   ];
 
+  /** Get  table body for approved volunteers tab */
   const getApprovedVolunteersTableBody = () => approvedSignUps.map((signUp) => {
     const volunteer = allVolunteerData[signUp.userId];
     return (
       <TableRow key={signUp.signUpId}>
         <TableCell><b>{volunteer?.name}</b></TableCell>
         <TableCell>{volunteer?.mobileNumber}</TableCell>
-        <TableCell>{signUp?.status[1]}</TableCell>
-        <TableCell>{getMoreButton(signUp, volunteer?.name)}</TableCell>
+        <TableCell>
+          {suidOfRolesBeingEdited.includes(signUp.signUpId)
+            ? getRoleSelectMenu(signUp)
+            : signUp?.status[1]}
+        </TableCell>
+        <TableCell>{getApprovedTabButtons(signUp, volunteer?.name)}</TableCell>
       </TableRow>
     );
   });
 
+  /** Get  table body for pending volunteers tab */
   const getNonApprovedSignUpsVolunteersTableBody = () => nonApprovedSignUps.map(
     (signUp) => {
       const volunteer = allVolunteerData[signUp.userId];
@@ -350,8 +412,8 @@ const EventVolunteers = ({ eid }) => {
     <>
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
+          <h2>{event?.name}</h2>
           <Tabs tabs={tabs} clickedOn={1} />
-          <h1>{event?.name}</h1>
           <TableContainer>
             <Table>
               <TableHead>
