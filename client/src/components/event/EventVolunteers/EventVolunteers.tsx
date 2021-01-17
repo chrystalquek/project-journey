@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersById } from '@redux/actions/volunteer';
-import { getSignUpsUpcomingEvent, updateSignUp } from '@redux/actions/signUp';
+import { getSignUpsUpcomingEvent, updateSignUpInstant } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
 import { Footer } from 'antd/lib/layout/layout';
 
@@ -151,7 +151,7 @@ const EventVolunteers = ({ eid }) => {
     setApprovedSignUps(approved);
     setDisplayedApprovedSignUps(approved);
     setNonApprovedSignUps(nonApproved);
-    setNonApprovedSignUps(nonApproved);
+    setDisplayedNonApprovedSignUps(nonApproved);
   }, [signUps]);
 
   /** Anchor for  more button's popover */
@@ -175,7 +175,7 @@ const EventVolunteers = ({ eid }) => {
   const [suidOfRolesBeingEdited, setSuidOfRolesBeingEdited] = useState([]);
 
   const onUpdateSignUp = ({ request, query }) => {
-    dispatch(updateSignUp({ request, query }));
+    dispatch(updateSignUpInstant({ request, query }));
     setOpenRemoveDialog(false);
   };
 
@@ -217,7 +217,7 @@ const EventVolunteers = ({ eid }) => {
   const onAssignRole = (signUp) => {
     const selectedRole = selectedRoles[signUp.signUpId];
 
-    dispatch(updateSignUp({
+    dispatch(updateSignUpInstant({
       request: { ...signUp, status: ['accepted', selectedRole] },
       query: {
         id: signUp.signUpId,
@@ -425,15 +425,11 @@ const EventVolunteers = ({ eid }) => {
         temp = isApprovedTab ? sortByRole(temp) : temp;
         break;
       default:
-        break;
     }
 
     if (isApprovedTab) setDisplayedApprovedSignUps(temp);
     else setDisplayedNonApprovedSignUps(temp);
   }, [searchString, selectedSort]);
-
-  // search
-  const searchBar = <SearchBar setFilterFunction={setSearchString} />;
 
   /** Get  table body for approved volunteers tab */
   const getApprovedVolunteersTableBody = () => displayedApprovedSignUps.map((signUp) => {
@@ -490,7 +486,7 @@ const EventVolunteers = ({ eid }) => {
         </Grid>
         <Grid item container xs={12} md={8} alignItems="center" justify="center" spacing={2}>
           <Grid item xs={12} md={9}>
-            {searchBar}
+            <SearchBar setFilterFunction={setSearchString} />
           </Grid>
           <Grid item xs={12} md={3}>
             {sortMenu}
