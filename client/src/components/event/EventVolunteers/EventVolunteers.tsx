@@ -375,12 +375,14 @@ const EventVolunteers = ({ eid }) => {
   };
 
   /** Sort */
-  const sortFields = [{ label: 'Name', value: 'name' }, { label: 'Role', value: 'role' }];
+  const sortFieldsForApprovedTab = [{ label: 'Name', value: 'name' }, { label: 'Role', value: 'role' }];
+  const sortFieldsForPendingTab = [{ label: 'Name', value: 'name' }];
+  const sortFields = isApprovedTab ? sortFieldsForApprovedTab : sortFieldsForPendingTab;
 
   const [selectedSort, setSelectedSort] = useState(null);
 
   const sortByName = (array: SignUpData[]) : SignUpData[] => array
-    .sort((a, b) => allVolunteerData[a.userId].name - allVolunteerData[b.userId].name);
+    .sort((a, b) => allVolunteerData[a.userId].name.localeCompare(allVolunteerData[b.userId].name));
   const sortByRole = (array: SignUpData[]) : SignUpData[] => array
     .sort((a, b) => a.status[1].localeCompare(b.status[1]));
 
