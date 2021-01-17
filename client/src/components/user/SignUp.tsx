@@ -107,6 +107,11 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     padding: 24,
   },
+  login: {
+    fontWeight: 'bold',
+    color: '#000',
+    cursor: 'pointer',
+  },
 }));
 
 type SignUpProps = {
@@ -289,12 +294,14 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
         </div>
 
         <div className="section">
-          <Typography variant="body2">
+          <Typography variant="body1">
             Already have an account?
-            {' '}
-            <br />
-            <Link href="/auth/login">Log in</Link>
           </Typography>
+          <Link href="/login">
+            <Typography className={classes.login}>
+              Log in
+            </Typography>
+          </Link>
         </div>
       </Box>
     </Box>
@@ -348,8 +355,6 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
         </div>
       );
     }
-    return <VolunteerInfo />;
-
     return <VolunteerInfo />;
   };
 
