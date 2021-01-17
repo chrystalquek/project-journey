@@ -116,7 +116,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
       ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
       : signUps;
 
-    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);
+    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.eventId);
 
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);

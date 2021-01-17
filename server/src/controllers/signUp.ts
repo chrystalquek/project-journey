@@ -27,7 +27,7 @@ const getValidations = (method: SignUpValidatorMethod) => {
 
 /**
  * Creates a new sign up
- * @param req.body sign up data without the sign_up_id field
+ * @param req.body sign up data without the signUpId field
  */
 const createSignUp = async (
   req: express.Request,
