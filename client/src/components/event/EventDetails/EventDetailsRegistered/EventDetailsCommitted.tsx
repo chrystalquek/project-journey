@@ -69,6 +69,7 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
                 malesuada fames ac turpis egestas. Morbi"
         isOpen={isOpen}
         onClose={handleClose}
+        initialState="prompt"
       />
 
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED

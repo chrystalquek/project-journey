@@ -9,6 +9,7 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import TextField from '@material-ui/core/TextField';
 import Rating from '@material-ui/lab/Rating';
 import dayjs from 'dayjs';
+import Checkbox from '@material-ui/core/Checkbox';
 
 export type FEEDBACK_STATE = 'prompt' | 'fields' | 'success'
 
@@ -18,6 +19,7 @@ type FeedbackModalProps = {
   eventDate: Date
   description: string
   isOpen: boolean
+  initialState: FEEDBACK_STATE
   onClose: () => void
   // onSubmitFeedback: () => void
 }
@@ -95,11 +97,13 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
   eventDate,
   description,
   isOpen,
+  initialState,
   onClose,
   // onSubmitFeedback,
 }) => {
   const classes = useStyles();
-  const [feedbackState, setFeedbackState] = useState<FEEDBACK_STATE>('prompt');
+  const [feedbackState, setFeedbackState] = useState<FEEDBACK_STATE>(initialState);
+  const [checked, setChecked] = useState<boolean>(false);
   const [starRating, setStarRating] = useState<number>(0);
 
   const navigateToFeedback = () => {
@@ -178,6 +182,16 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                   Submitting Feedback for:
                   {' '}
                   {title}
+                </Typography>
+              </div>
+              <div>
+                <Typography variant="body1" className={classes.textBoxTitle}>
+                  <Checkbox
+                    checked={checked}
+                    onChange={() => setChecked(!checked)}
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                  />
+                  I would like to submit my feedback annonymously
                 </Typography>
               </div>
               <div>
