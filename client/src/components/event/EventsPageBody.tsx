@@ -66,8 +66,8 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
   const filteredEvents = withFilters(events || [], filters);
 
   // TODO move filters search to redux
-  const [search, setSearch] = useState("")
-  const filteredSearchedEvents = filteredEvents.filter(event => event.name.toLowerCase().includes(search.toLowerCase()))
+  const [search, setSearch] = useState('');
+  const filteredSearchedEvents = filteredEvents.filter((event) => event.name.toLowerCase().includes(search.toLowerCase()));
 
   useEffect(() => {
     getAllEvents();
@@ -91,7 +91,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
             >
               <EventButton disableRipple>
                 Create new event
-            </EventButton>
+              </EventButton>
             </Grid>
           )}
           <Grid item container xs={12} justify="space-between">
@@ -151,9 +151,9 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
           </Grid>
           {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
             <Grid item sm={3} style={{ textAlign: 'center' }}>
-              <EventButton disableRipple onClick={() => router.push('/event/new')}>
+              <EventButton disableRipple onClick={() => router.push('/form/new')}>
                 Create new event
-            </EventButton>
+              </EventButton>
             </Grid>
           )}
         </Grid>
