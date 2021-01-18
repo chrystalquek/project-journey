@@ -106,7 +106,6 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
   const withdrawCommitment = () => {
     let acceptedSignUp = signUpInfo.find(signUp => Array.isArray(signUp.status) && signUp.status[0] === 'accepted')
     dispatch(deleteSignUp({ id: acceptedSignUp.signUpId, idType: 'signUpId', eventId: acceptedSignUp.eventId, userId: acceptedSignUp.userId }))
-    // just wondering whats the difference between signUpId and _id?
     router.push('/event')
   }
   const withdrawCommitmentQuestion = <>Are you sure you want to withdraw from <b>{event.name}?</b><br /><br />Withdrawal from event cannot be undone.</>

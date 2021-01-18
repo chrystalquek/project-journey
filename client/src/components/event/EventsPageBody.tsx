@@ -65,7 +65,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const filteredEvents = withFilters(events || [], filters);
 
-  // hotfix (should move filters, search to redux?)
+  // TODO move filters search to redux
   const [search, setSearch] = useState("")
   const filteredSearchedEvents = filteredEvents.filter(event => event.name.toLowerCase().includes(search.toLowerCase()))
 
