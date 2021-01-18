@@ -206,6 +206,7 @@ export type EventData = {
     contentUrl?: string;
     contentType?: string;
     location: string;
+    isCancelled: boolean;
 }
 
 export type OpportunityData = EventData & {

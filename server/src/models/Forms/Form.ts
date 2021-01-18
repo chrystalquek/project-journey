@@ -9,7 +9,7 @@ const FormSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   name: String,
   description: String,
-  event_id: {
+  eventId: {
     type: mongoose.Types.ObjectId,
     ref: 'Event',
   },

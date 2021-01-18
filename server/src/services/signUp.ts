@@ -13,15 +13,15 @@ const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
   try {
     const sid = uuidv4();
     const signUpSchemaData = new SignUp({
-      sign_up_id: sid,
-      event_id: signUpData.eventId,
-      user_id: signUpData.userId,
+      signUpId: sid,
+      eventId: signUpData.eventId,
+      userId: signUpData.userId,
       status: signUpData.status,
       preferences: signUpData.preferences,
-      is_restricted: signUpData.isRestricted,
+      isRestricted: signUpData.isRestricted,
     });
     await signUpSchemaData.save();
-    return { sign_up_id: sid };
+    return { signUpId: sid };
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -32,13 +32,13 @@ const readSignUps = async (id: string, idType: SignUpIdType) => {
     let signUp;
     switch (idType) {
       case 'signUpId':
-        signUp = await SignUp.find({ sign_up_id: id });
+        signUp = await SignUp.find({ signUpId: id });
         break;
       case 'eventId':
-        signUp = await SignUp.find({ event_id: id });
+        signUp = await SignUp.find({ eventId: id });
         break;
       case 'userId':
-        signUp = await SignUp.find({ user_id: id });
+        signUp = await SignUp.find({ userId: id });
         break;
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
@@ -153,19 +153,19 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
     switch (idType) {
       case 'signUpId':
         oldFields = await SignUp.findOneAndUpdate(
-          { sign_up_id: id },
+          { signUpId: id },
           { $set: updatedFields },
         );
         break;
       case 'eventId':
         oldFields = await SignUp.findOneAndUpdate(
-          { event_id: id },
+          { eventId: id },
           { $set: updatedFields },
         );
         break;
       case 'userId':
         oldFields = await SignUp.findOneAndUpdate(
-          { user_id: id },
+          { userId: id },
           { $set: updatedFields },
         );
         break;
@@ -183,20 +183,20 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
 
     /** Not accepted --> Accepted : Add */
     if (!checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)) {
-      updateEventRoles(oldFields.event_id, oldFields.user_id,
+      updateEventRoles(oldFields.eventId, oldFields.userId,
         null, updatedFields.status[1], 'add');
     }
 
     /** Accepted --> Not Accepted : Remove */
     if (checkIfAccepted(oldFields.status) && !checkIfAccepted(updatedFields.status)) {
-      updateEventRoles(oldFields.event_id, oldFields.user_id,
+      updateEventRoles(oldFields.eventId, oldFields.userId,
         oldFields.status[1], null, 'remove');
     }
 
     /** Accepted --> Accepted but acceptedRole changed : Replace */
     if (checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)
       && oldFields.status[1] !== updatedFields.status[1]) {
-      updateEventRoles(oldFields.event_id, oldFields.user_id,
+      updateEventRoles(oldFields.eventId, oldFields.userId,
         oldFields.status[1], updatedFields.status[1], 'replace');
     }
   } catch (err) {
@@ -208,13 +208,13 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
   try {
     switch (idType) {
       case 'signUpId':
-        await SignUp.findOneAndDelete({ sign_up_id: id });
+        await SignUp.findOneAndDelete({ signUpId: id });
         break;
       case 'eventId':
-        await SignUp.findOneAndDelete({ event_id: id });
+        await SignUp.findOneAndDelete({ eventId: id });
         break;
       case 'userId':
-        await SignUp.findOneAndDelete({ user_id: id });
+        await SignUp.findOneAndDelete({ userId: id });
         break;
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }

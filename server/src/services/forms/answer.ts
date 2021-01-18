@@ -9,10 +9,10 @@ import { AnswerData } from '../../types';
 const bulkInsertAnswers = async (answers: Array<AnswerData>): Promise<void> => {
   const bulkAnswers = answers.map((answer) => ({
     _id: new mongoose.Types.ObjectId(),
-    question_id: answer.questionId,
+    questionId: answer.questionId,
     userId: answer.userId,
     content: answer.content,
-    form_id: answer.formId,
+    formId: answer.formId,
   }));
   await Answer.insertMany(bulkAnswers);
 };

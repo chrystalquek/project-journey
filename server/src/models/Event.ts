@@ -11,7 +11,7 @@ const EventSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   name: String,
   cover_image: String,
-  event_type: {
+  eventType: {
     type: String,
     enum: ['workshop', 'volunteering', 'hangout'],
   },
@@ -19,23 +19,27 @@ const EventSchema = new Schema({
     type: String,
     enum: ['ad-hoc', 'committed', 'lead', 'admin'],
   },
-  start_date: Date,
-  end_date: Date,
+  startDate: Date,
+  endDate: Date,
   deadline: Date,
   vacancies: Number,
   description: String,
-  facilitator_name: String,
-  facilitator_description: String,
-  facilitator_photo: String,
+  faciliatatorName: String,
+  facilitatorDescription: String,
+  facilitatorPhoto: String,
   roles: [{
     name: String, description: String, capacity: Number, volunteers: [mongoose.Types.ObjectId],
   }],
-  content_url: String,
-  content_type: {
+  contentUrl: String,
+  contentType: {
     type: String,
     enum: ['pdf', 'video', 'image', 'links', 'document'],
   },
   location: String,
+  isCancelled: {
+    type: Boolean,
+    default: false,
+  },
   created_at: {
     type: Date,
     default: Date.now,

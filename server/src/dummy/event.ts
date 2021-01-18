@@ -20,6 +20,7 @@ const dummyEvent: EventData = {
   }],
   vacancies: 0, // TODO: clarify diff between vacancies and capacity
   location: 'Jakarta',
+  isCancelled: false
 };
 
 export default () => (dummyEvent);

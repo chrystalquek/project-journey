@@ -42,6 +42,7 @@ const createEvent = async (
   res: express.Response,
 ): Promise<void> => {
   try {
+    req.body.isCancelled = false; // default
     await eventService.createEvent(req.body as EventData);
     res.status(HTTP_CODES.OK).send('Event data created');
   } catch (err) {
@@ -115,7 +116,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
       ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
       : signUps;
 
-    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.event_id);
+    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.eventId);
 
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
@@ -143,6 +144,20 @@ const updateEvent = async (req: express.Request, res: express.Response) => {
   }
 };
 
+const cancelEvent = async (req: express.Request, res: express.Response) => {
+  try {
+    const { id } = req.params;
+
+    await eventService.cancelEvent(id);
+
+    res.status(HTTP_CODES.OK).send('Event cancelled');
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+};
+
 const deleteEvent = async (req: express.Request, res: express.Response) => {
   try {
     await eventService.deleteEvent(req.params.id);
@@ -160,6 +175,7 @@ export default {
   readEvents,
   readSignedUpEvents,
   updateEvent,
+  cancelEvent,
   deleteEvent,
   getValidations,
 };
