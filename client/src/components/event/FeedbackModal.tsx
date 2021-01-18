@@ -1,5 +1,5 @@
 import {
-  Button, makeStyles, Modal, Typography,
+  Button, IconButton, makeStyles, Modal, Typography,
 } from '@material-ui/core';
 import React, { FC, useState } from 'react';
 import { testEventImage1 } from '@constants/imagePaths';
@@ -79,6 +79,14 @@ const useStyles = makeStyles((theme) => ({
   textBox: {
     width: '100%',
   },
+  submittedRoot: {
+    flex: 1,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
 }));
 
 const FeedbackModal: FC<FeedbackModalProps> = ({
@@ -100,7 +108,6 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
 
   const handleSubmit = () => {
     setFeedbackState('success');
-    console.log('success');
   };
 
   const date = dayjs(eventDate).format('ddd, DD MMMM YYYY');
@@ -217,13 +224,8 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                 }}
               >
                 <EventButton
-                  onSubmit={() => {
-                    setFeedbackState('success');
-                    console.log('success');
-                  }}
                   onClick={handleSubmit}
                   className={classes.feedbackButton}
-                  // type="submit"
                 >
                   Submit
                 </EventButton>
@@ -235,34 +237,31 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
       case 'success':
         return (
           <div className={classes.root}>
-            <div style={{
-              flex: 1,
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}
-            >
-              <IconButton
-                iconStyle={styles.largeIcon}
-              >
-                <CheckCircleOutlineIcon fontSize="large" />
+            <div className={classes.submittedRoot}>
+              <IconButton>
+                <CheckCircleOutlineIcon style={{
+                  fontSize: '100px',
+                  color: '#D0DE39', // light green
+                }}
+                />
               </IconButton>
               <div>
-                <CheckCircleOutlineIcon fontSize="large" />
-              </div>
-              <div>
-                Your Feedback has been submitted!
-                Thank you for your feedback
+                <Typography
+                  variant="h2"
+                  style={{
+                    textAlign: 'center',
+                  }}
+                >
+                  Your Feedback has been submitted!
+                  Thank you for your feedback
+                </Typography>
               </div>
               <div>
                 <EventButton
-                  onSubmit={handleSubmit}
+                  onClick={onClose}
                   className={classes.feedbackButton}
-                  type="submit"
                 >
-                  Submit
+                  Back Home
                 </EventButton>
               </div>
             </div>
