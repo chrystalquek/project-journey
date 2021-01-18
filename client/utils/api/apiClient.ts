@@ -9,12 +9,15 @@ import {
   SignUpRequest,
   UploadImageRequest,
   CreateSignUpRequest,
-  UpdateSignUpRequest, SignUpQueryParams, UpdateVolunteerRequest,
+  UpdateSignUpRequest,
+  SignUpQueryParams,
+  UpdateVolunteerRequest,
   CreateCommitmentApplicationRequest,
   CommitmentApplicationQueryParams,
   EventQueryParams,
   VolunteerPaginatedQueryParams,
 } from '@utils/api/request';
+
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
@@ -23,7 +26,7 @@ import {
 } from '@utils/api/response';
 import { SignUpIdType } from "@type/signUp";
 
-type HttpMethod = 'get' | 'post' | 'put' | 'delete'
+type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
@@ -42,13 +45,11 @@ export interface ApiClient {
 }
 
 class AxiosApiClient implements ApiClient {
-  private axiosInstance: AxiosInstance
+  private axiosInstance: AxiosInstance;
 
-  private token: string = ''
+  private token: string = '';
 
-  constructor(
-    endpoint: string,
-  ) {
+  constructor(endpoint: string) {
     this.axiosInstance = axios.create({
       baseURL: endpoint,
     });
@@ -79,11 +80,16 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'signup/pending', 'get');
   }
 
-  async createSignUp(request: CreateSignUpRequest): Promise<CreateSignUpResponse> {
+  async createSignUp(
+    request: CreateSignUpRequest
+  ): Promise<CreateSignUpResponse> {
     return this.send(request, 'signup', 'post');
   }
 
-  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest): Promise<UpdateSignUpResponse> {
+  async updateSignUp(
+    query: SignUpQueryParams,
+    request: UpdateSignUpRequest
+  ): Promise<UpdateSignUpResponse> {
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
@@ -95,9 +101,9 @@ class AxiosApiClient implements ApiClient {
           status: ['accepted', acceptedRole],
         };
         const newQuery = {
-          id: res["sign_up_id"], // TODO: This will break once we parse everything to camelCame
-          idType: "signUpId" as SignUpIdType,
-        }
+          id: res.signUpId,
+          idType: 'signUpId' as SignUpIdType,
+        };
         return this.updateSignUp(newQuery, newRequest);
       });
   }
@@ -129,6 +135,10 @@ class AxiosApiClient implements ApiClient {
   }
 
   // volunteer
+  async getVolunteerById(id: string): Promise<VolunteerData> {
+    return this.send({}, `volunteer/id/${id}`, 'get');
+  }
+
   async getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
@@ -142,7 +152,9 @@ class AxiosApiClient implements ApiClient {
   }
 
   // commitment application
-  async createCommitmentApplication(request: CreateCommitmentApplicationRequest): Promise<CommitmentApplicationData> {
+  async createCommitmentApplication(
+    request: CreateCommitmentApplicationRequest
+  ): Promise<CommitmentApplicationData> {
     return this.send(request, 'commitment-application', 'post');
   }
 
@@ -150,7 +162,9 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
   }
 
-  async updateCommitmentApplication(data: CommitmentApplicationData): Promise<void> {
+  async updateCommitmentApplication(
+    data: CommitmentApplicationData
+  ): Promise<void> {
     return this.send(data, `commitment-application/${data._id}`, 'put');
   }
 
@@ -159,10 +173,16 @@ class AxiosApiClient implements ApiClient {
     return this.send(request, 'image', 'post', true);
   }
 
-  protected async send(request: any, path: string, method: HttpMethod,
-    isImageUpload: boolean = false) {
+  protected async send(
+    request: any,
+    path: string,
+    method: HttpMethod,
+    isImageUpload: boolean = false
+  ) {
     const headers: Record<string, string> = {
-      'Content-Type': isImageUpload ? 'multipart/form-data' : 'application/json',
+      'Content-Type': isImageUpload
+        ? 'multipart/form-data'
+        : 'application/json',
     };
 
     if (process.env.NODE_ENV === 'development') {

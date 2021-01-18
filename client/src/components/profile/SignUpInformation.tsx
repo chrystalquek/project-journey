@@ -6,12 +6,12 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import { VolunteerData } from '@type/volunteer';
 
 type props = {
-  user: VolunteerData
+  profilePageData: VolunteerData
 }
 
-const SignUpInformation: FC<props> = ({ user }) => {
-  const birthday = new Date(user?.birthday).toLocaleDateString('en-US');
-  const createdAt = new Date(user?.createdAt).toLocaleDateString('en-US');
+const SignUpInformation: FC<props> = ({ profilePageData }) => {
+  const birthday = new Date(profilePageData?.birthday).toLocaleDateString('en-US');
+  const createdAt = new Date(profilePageData?.createdAt).toLocaleDateString('en-US');
   return (
     <PaddedGrid>
       <Grid item>
@@ -20,10 +20,10 @@ const SignUpInformation: FC<props> = ({ user }) => {
       <Grid item>
         <ProfileDivider />
       </Grid>
-      <DataRow header="Buddy" data={user.name} xs1={3} xs2={9} />
+      <DataRow header="Buddy" data={profilePageData.name} xs1={3} xs2={9} />
       <DataRow header="Date of birth" data={birthday} xs1={3} xs2={9} />
-      <DataRow header="Lorem" data={user.description} xs1={3} xs2={9} />
-      <DataRow header="Lorem ipsum" data={user.volunteerReason} xs1={3} xs2={9} />
+      <DataRow header="Lorem" data={profilePageData.description} xs1={3} xs2={9} />
+      <DataRow header="Lorem ipsum" data={profilePageData.volunteerReason} xs1={3} xs2={9} />
       <DataRow header="Member since" data={createdAt} xs1={3} xs2={9} />
     </PaddedGrid>
   );

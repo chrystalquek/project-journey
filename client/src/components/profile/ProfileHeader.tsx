@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import {
   Grid, Typography, Avatar, useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -29,15 +30,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type props = {
-  user: VolunteerData
+  profilePageData: VolunteerData
 }
 
-const ProfileHeader: FC<props> = ({ user }) => {
+const ProfileHeader: FC<props> = ({ profilePageData }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const direction = isMobile ? 'column' : 'row';
   const justify = isMobile ? 'center' : 'flex-start';
+  const user = useSelector((state: StoreState) => state.user);
+  const userData = user?.user;
 
   return (
     <Grid
@@ -51,17 +54,21 @@ const ProfileHeader: FC<props> = ({ user }) => {
 
       {/* Avatar icon */}
       <Grid item xs={12} sm="auto">
-        <Avatar alt={user.name} className={classes.avatar} src={user.photoUrl} />
+        <Avatar alt={profilePageData.name} className={classes.avatar} src={profilePageData.photoUrl} />
       </Grid>
 
       {/* User details */}
       <Grid item xs={12} sm="auto">
-        <Typography variant="h2" className={classes.header}>{user.name}</Typography>
+        <Typography variant="h2" className={classes.header}>{profilePageData.name}</Typography>
         <Typography className={classes.header}>
           <strong>Volunteer Type: </strong>
-          {user?.volunteerType?.toString()}
+          {profilePageData?.volunteerType?.toString()}
         </Typography>
-        { user.volunteerType === VOLUNTEER_TYPE.ADHOC && <BecomeCommitedDialog /> }
+        {/* Only shows the option to become committed if the loggedInUser
+        is viewing own profile and is still an adhoc volunteer */}
+        { profilePageData.volunteerType === VOLUNTEER_TYPE.ADHOC
+        && userData.email === profilePageData.email
+        && <BecomeCommitedDialog /> }
       </Grid>
     </Grid>
   );

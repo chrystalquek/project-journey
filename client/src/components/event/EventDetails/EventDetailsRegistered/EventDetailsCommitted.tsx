@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
 import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
-import {Box, Chip, CircularProgress, Grid, makeStyles} from '@material-ui/core';
+import {
+  Box, Chip, CircularProgress, Grid, makeStyles,
+} from '@material-ui/core';
 import { testEventImage1 } from '@constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventInformation';
 import VolunteerRoles from '@components/event/EventDetails/VolunteerRoles';
@@ -9,9 +11,9 @@ import EventRegisterForm, { FormState } from '@components/event/EventDetails/Eve
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { COMMITTED_VOLUNTEER_TAG } from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
-import {FormStatus} from "@type/event/common";
-import {EventPaper} from '@components/common/event/EventPaper';
-import {EventTypography} from '@components/common/event/EventTypography';
+import { FormStatus } from '@type/event/common';
+import { EventPaper } from '@components/common/event/EventPaper';
+import { EventTypography } from '@components/common/event/EventTypography';
 
 type EventDetailsCommittedProps = {
   event: EventData,
@@ -57,20 +59,24 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
         : null}
 
       {formStatus.reason === FormDisabledReason.SIGNUP_PENDING
-        ? <Grid className={classes.gutterBottom} item xs={12}>
-          <EventPaper>
-            <EventTypography gutterBottom fontBold text="Sign-up Pending." />
-            <EventTypography gutterBottom text="Pending approval by admin." />
-          </EventPaper>
-        </Grid>
+        ? (
+          <Grid className={classes.gutterBottom} item xs={12}>
+            <EventPaper>
+              <EventTypography gutterBottom fontBold text="Sign-up Pending." />
+              <EventTypography gutterBottom text="Pending approval by admin." />
+            </EventPaper>
+          </Grid>
+        )
         : null}
       {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
-        ? <Grid className={classes.gutterBottom} item xs={12}>
-          <EventPaper>
-            <EventTypography gutterBottom fontBold text="Successful registration!" />
-            <EventTypography gutterBottom text={`Accepted role: ${formStatus?.details || "Error retrieving accepted role."}`} />
-          </EventPaper>
-        </Grid>
+        ? (
+          <Grid className={classes.gutterBottom} item xs={12}>
+            <EventPaper>
+              <EventTypography gutterBottom fontBold text="Successful registration!" />
+              <EventTypography gutterBottom text={`Accepted role: ${formStatus?.details || 'Error retrieving accepted role.'}`} />
+            </EventPaper>
+          </Grid>
+        )
         : null}
 
       <Grid className={classes.gutterBottom} item xs={12}>
@@ -91,6 +97,6 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
       </Grid>
     </Grid>
   );
-}
+};
 
 export default EventDetailsCommitted;

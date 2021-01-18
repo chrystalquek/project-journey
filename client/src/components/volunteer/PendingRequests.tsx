@@ -36,9 +36,9 @@ const PendingRequests: FC<{}> = ({ }) => {
   const user = useSelector((state: StoreState) => state.user);
 
   useEffect(() => {
-    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })) // just to load number in tab
+    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })); // just to load number in tab
     dispatch(getPendingVolunteers());
-    dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }))
+    dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }));
   }, []);
 
   const volunteers = useSelector((state: StoreState) => state.volunteer);

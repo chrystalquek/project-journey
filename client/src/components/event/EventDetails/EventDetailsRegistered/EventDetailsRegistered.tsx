@@ -11,7 +11,6 @@ import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetai
 import { StoreState } from '@redux/store';
 import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
-import apiClient from '@utils/api/apiClient';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import { useRouter } from 'next/router';
 
@@ -50,7 +49,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
     reason,
     details: {
       acceptedSignUp: hasAcceptedSignUp ? signUpInfo : null,
-    }
+    },
   };
 
   const formHandlers = {
