@@ -63,17 +63,11 @@ const PendingRequests: FC<{}> = ({ }) => {
   const getApproveRejectButtons = (volunteer: VolunteerData) => {
     const commitmentApplication = upcomingCommitmentApplications.find((commitmentApplications) => commitmentApplications.volunteerId == volunteer._id);
     const approveCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Accepted };
-    const approveButton = <Button className={classes.shapeCircle} onClick={() => setOpenApprove(true)}>  APPROVE  </Button>;
     const rejectCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Rejected };
-    const rejectButton = <Button onClick={() => setOpenReject(true)}><CancelIcon color="error" fontSize="large" /></Button>;
     return (
       <Grid direction="row">
-        {approveButton}
-        {' '}
-        <ActionableDialog open={openApprove} onClose={() => setOpenApprove(false)} content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`} buttonTitle="Approve" buttonOnClick={() => onApproveReject(approveCommitmentApplication)} />
-        {rejectButton}
-        {' '}
-        <ActionableDialog open={openReject} onClose={() => setOpenReject(false)} content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`} buttonTitle="Reject" buttonOnClick={() => onApproveReject(rejectCommitmentApplication)} />
+        <ActionableDialog open={openApprove} setOpen={() => setOpenApprove(!openApprove)} content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`} buttonTitle="Approve" buttonOnClick={() => onApproveReject(approveCommitmentApplication)} openCloseButtonTitle="Approve" />
+        <ActionableDialog open={openReject} setOpen={() => setOpenReject(!openReject)} content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`} buttonTitle="Reject" buttonOnClick={() => onApproveReject(rejectCommitmentApplication)} openCloseButtonStyle="" openCloseButtonTitle={<CancelIcon color="error" fontSize="large" />} />
       </Grid>
     );
   };

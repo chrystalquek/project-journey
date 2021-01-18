@@ -23,7 +23,7 @@ export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { st
 
 export const createAndAcceptSignUp = createAsyncThunk(
   'signUp/createAndAcceptSignUp',
-  async (payloadCreator: {request: CreateSignUpRequest, form: FormState}, thunkAPI) => {
+  async (payloadCreator: { request: CreateSignUpRequest, form: FormState }, thunkAPI) => {
     return await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request);
   },
 );
@@ -43,4 +43,9 @@ export const updateSignUp = createAsyncThunk(
   async (payloadCreator: { query: SignUpQueryParams, request: UpdateSignUpRequest }) => {
     return await apiClient.updateSignUp(payloadCreator.query, payloadCreator.request);
   },
+);
+
+export const deleteSignUp = createAsyncThunk(
+  'signUp/deleteSignUp',
+  async (query: SignUpQueryParams) => await apiClient.deleteSignUp(query),
 );
