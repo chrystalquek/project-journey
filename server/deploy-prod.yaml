@@ -1,0 +1,22 @@
+steps:
+# Install
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+# Create env file
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'create-env']
+  env:
+    - 'PORT=${_PORT}'
+    - 'NODE_ENV=${_NODE_ENV}'
+    - 'GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID}'
+    - 'GOOGLE_CLIENT_SECRET=${_GOOGLE_CLIENT_SECRET}'
+    - 'GOOGLE_REFRESH_TOKEN=${_GOOGLE_REFRESH_TOKEN}'
+    - 'SENDER_EMAIL_ADDRESS=${_SENDER_EMAIL_ADDRESS}'
+# Build
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build']
+# Deploy
+- name: "gcr.io/cloud-builders/gcloud"
+  args: ["app", "deploy", "app-prod.yaml"]
+  timeout: "1600s"
+  
