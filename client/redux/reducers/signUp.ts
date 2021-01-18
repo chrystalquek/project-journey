@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   createAndAcceptSignUp, createSignUp,
+  deleteSignUp,
   getPendingSignUps, getSignUps,
   getSignUpsUpcomingEvent,
   updateSignUp, updateSignUpInstant,
 } from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
-import { useRouter } from 'next/router';
 
 export type SignUpState = {
   data: Record<string, SignUpData>;
@@ -95,6 +95,10 @@ const signUpSlice = createSlice({
     builder.addCase(updateSignUpInstant.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state);
+    });
+    builder.addCase(deleteSignUp.fulfilled, (state, action) => {
+      const { meta } = action;
+      state.data[meta.arg.id] = null;
     });
   },
 });

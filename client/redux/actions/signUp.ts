@@ -4,8 +4,8 @@ import {
 } from '@utils/api/request';
 import { GetSignUpsResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
-import { SignUpData, SignUpIdType } from '@type/signUp';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import { SignUpData } from '@type/signUp';
 
 export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, SignUpQueryParams, { state }>(
   'signUp/getSignUpsUpcomingEvent',
@@ -25,7 +25,7 @@ export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { st
 
 export const createAndAcceptSignUp = createAsyncThunk(
   'signUp/createAndAcceptSignUp',
-  async (payloadCreator: {request: CreateSignUpRequest, form: FormState}, thunkAPI) => await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request),
+  async (payloadCreator: { request: CreateSignUpRequest, form: FormState }, thunkAPI) => await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request),
 );
 
 export const getSignUps = createAsyncThunk(
@@ -53,4 +53,9 @@ export const updateSignUpInstant = createAsyncThunk(
     };
     return response;
   },
+);
+
+export const deleteSignUp = createAsyncThunk(
+  'signUp/deleteSignUp',
+  async (query: SignUpQueryParams) => await apiClient.deleteSignUp(query),
 );

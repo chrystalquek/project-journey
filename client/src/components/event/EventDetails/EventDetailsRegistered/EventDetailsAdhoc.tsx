@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import {EventData} from '@type/event';
+import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import {
   Chip, Grid, makeStyles,
@@ -12,9 +12,9 @@ import VolunteerRoles from '@components/event/EventDetails/VolunteerRoles';
 import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventRegisterForm';
 import FacilitatorInfo from '@components/event/EventDetails/FacilitatorInfo';
 import BecomeCommited from '@components/profile/BecomeCommitedDialog';
-import {EventPaper} from "@components/common/event/EventPaper";
-import {EventTypography} from "@components/common/event/EventTypography";
-import {FormStatus} from "@type/event/common";
+import { EventPaper } from '@components/common/event/EventPaper';
+import { EventTypography } from '@components/common/event/EventTypography';
+import { FormStatus } from '@type/event/common';
 
 type EventDetailsAdhocProps = {
   event: EventData,
@@ -60,20 +60,24 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
         : null}
 
       {formStatus.reason === FormDisabledReason.SIGNUP_PENDING
-        ? <Grid className={classes.gutterBottom} item xs={12}>
-          <EventPaper>
-            <EventTypography gutterBottom fontBold text="Sign-up Pending." />
-            <EventTypography gutterBottom text="Pending approval by admin." />
-          </EventPaper>
-        </Grid>
+        ? (
+          <Grid className={classes.gutterBottom} item xs={12}>
+            <EventPaper>
+              <EventTypography gutterBottom fontBold text="Sign-up Pending." />
+              <EventTypography gutterBottom text="Pending approval by admin." />
+            </EventPaper>
+          </Grid>
+        )
         : null}
       {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
-        ? <Grid className={classes.gutterBottom} item xs={12}>
-          <EventPaper>
-            <EventTypography gutterBottom fontBold text="Successful registration!" />
-            <EventTypography gutterBottom text={`Accepted role: ${formStatus?.details} || "Error retrieving accepted role."`} />
-          </EventPaper>
-        </Grid>
+        ? (
+          <Grid className={classes.gutterBottom} item xs={12}>
+            <EventPaper>
+              <EventTypography gutterBottom fontBold text="Successful registration!" />
+              <EventTypography gutterBottom text={`Accepted role: ${formStatus?.details} || "Error retrieving accepted role."`} />
+            </EventPaper>
+          </Grid>
+        )
         : null}
 
       <Grid className={classes.gutterBottom} item xs={12}>

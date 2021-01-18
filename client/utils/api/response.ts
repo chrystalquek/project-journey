@@ -4,8 +4,7 @@ import { EventData } from '@type/event';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
-export type SignUpResponse = {
-}
+export type SignUpResponse = Record<string, any>
 
 export type LoginResponse = {
   token: string

@@ -235,17 +235,6 @@ const EventVolunteers = ({ eid }) => {
 
   /** Get  buttons for the approved tab */
   const getApprovedTabButtons = (signUp: SignUpData, volunteerName: string) => {
-    const removeButton = (
-      <Button
-        className={classes.popUpButton}
-        onClick={() => {
-          setOpenRemoveDialog(true);
-        }}
-      >
-        Remove Volunteer from Event
-      </Button>
-    );
-
     const getEditRoleButton = (signUpId) => {
       const updatedSignUpIdOfRolesBeingEdited = [...signUpIdOfRolesBeingEdited, signUpId];
       return (
@@ -282,12 +271,11 @@ const EventVolunteers = ({ eid }) => {
         >
           <Grid direction="row">
             <Grid item>
-              {removeButton}
               <ActionableDialog
                 open={openRemoveDialog}
-                onClose={() => setOpenRemoveDialog(false)}
+                setOpen={() => setOpenRemoveDialog(!openRemoveDialog)}
                 content={`Are you sure you want to remove ${volunteerName} as a volunteer?`}
-                buttonTitle="Remove"
+                buttonTitle="Delete"
                 buttonOnClick={() => onUpdateSignUp({
                   request: { ...signUp, status: 'pending' },
                   query: {
@@ -295,6 +283,9 @@ const EventVolunteers = ({ eid }) => {
                     idType: 'signUpId',
                   },
                 })}
+                openCloseButtonStyle="popUpButton"
+                openCloseButtonTitle="Remove Volunteer from Event"
+                recommendedAction="cancel"
               />
             </Grid>
             <Grid item>
