@@ -121,7 +121,7 @@ const EventVolunteers = ({ eid }) => {
     };
 
     if (allVolunteerIds.length) updateVolunteerData();
-  }, [signUps, allVolunteerIds]);
+  }, [allVolunteerIds]);
 
   const getVacanciesForAllRoles = () => {
     const vacancies = {};
@@ -172,7 +172,7 @@ const EventVolunteers = ({ eid }) => {
 
   /** States for the choices of the popover buttons */
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
-  const [suidOfRolesBeingEdited, setSuidOfRolesBeingEdited] = useState([]);
+  const [signUpIdOfRolesBeingEdited, setSignUpIdOfRolesBeingEdited] = useState([]);
 
   const onUpdateSignUp = ({ request, query }) => {
     dispatch(updateSignUpInstant({ request, query }));
@@ -226,6 +226,13 @@ const EventVolunteers = ({ eid }) => {
     }));
   };
 
+  const handleEditingButtonClick = (signUp) => {
+    const signUpIdOfRolesBeingEditedCopy = [...signUpIdOfRolesBeingEdited];
+    const idx = signUpIdOfRolesBeingEditedCopy.indexOf(signUp.signUpId);
+    if (idx > -1) signUpIdOfRolesBeingEditedCopy.splice(idx, 1);
+    setSignUpIdOfRolesBeingEdited(signUpIdOfRolesBeingEditedCopy);
+  };
+
   /** Get  buttons for the approved tab */
   const getApprovedTabButtons = (signUp: SignUpData, volunteerName: string) => {
     const removeButton = (
@@ -239,13 +246,13 @@ const EventVolunteers = ({ eid }) => {
       </Button>
     );
 
-    const getEditRoleButton = (suid) => {
-      const updatedSuidOfRolesBeingEdited = [...suidOfRolesBeingEdited, suid];
+    const getEditRoleButton = (signUpId) => {
+      const updatedSignUpIdOfRolesBeingEdited = [...signUpIdOfRolesBeingEdited, signUpId];
       return (
         <Button
           className={classes.popUpButton}
           onClick={() => {
-            setSuidOfRolesBeingEdited(updatedSuidOfRolesBeingEdited);
+            setSignUpIdOfRolesBeingEdited(updatedSignUpIdOfRolesBeingEdited);
             handleCloseMoreButton();
           }}
         >
@@ -284,7 +291,6 @@ const EventVolunteers = ({ eid }) => {
                 buttonOnClick={() => onUpdateSignUp({
                   request: { ...signUp, status: 'pending' },
                   query: {
-                    // @ts-ignore TODO: snake -> camel
                     id: signUp.signUpId,
                     idType: 'signUpId',
                   },
@@ -314,12 +320,7 @@ const EventVolunteers = ({ eid }) => {
         <Grid item>
           <IconButton
             className={classes.redCloseButton}
-            onClick={() => {
-              const suidOfRolesBeingEditedCopy = [...suidOfRolesBeingEdited];
-              const idx = suidOfRolesBeingEditedCopy.indexOf(signUp.signUpId);
-              if (idx > -1) suidOfRolesBeingEditedCopy.splice(idx, 1);
-              setSuidOfRolesBeingEdited(suidOfRolesBeingEditedCopy);
-            }}
+            onClick={() => handleEditingButtonClick(signUp)}
           >
             <CloseIcon className={classes.whiteCancelIcon} />
           </IconButton>
@@ -329,7 +330,7 @@ const EventVolunteers = ({ eid }) => {
 
     return (
       <div>
-        {suidOfRolesBeingEdited.includes(signUp.signUpId) ? editingButtons : moreButton}
+        {signUpIdOfRolesBeingEdited.includes(signUp.signUpId) ? editingButtons : moreButton}
       </div>
     );
   };
@@ -441,7 +442,7 @@ const EventVolunteers = ({ eid }) => {
         <TableCell><b>{volunteer?.name}</b></TableCell>
         <TableCell>{volunteer?.mobileNumber}</TableCell>
         <TableCell>
-          {suidOfRolesBeingEdited.includes(signUp.signUpId)
+          {signUpIdOfRolesBeingEdited.includes(signUp.signUpId)
             ? getRoleSelectMenu(signUp)
             : signUp?.status[1]}
         </TableCell>
