@@ -1,6 +1,5 @@
 import express from 'express';
 import { body } from 'express-validator';
-import jwt from 'express-jwt';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import { roleCapacityValidator } from '../helpers/validation';
 import {

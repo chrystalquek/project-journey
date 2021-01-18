@@ -206,17 +206,22 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
 
 const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => {
   try {
+    let deletedSignUp: SignUpData | null;
     switch (idType) {
       case 'signUpId':
-        await SignUp.findOneAndDelete({ signUpId: id });
+        deletedSignUp = await SignUp.findOneAndDelete({ signUpId: id });
         break;
       case 'eventId':
-        await SignUp.findOneAndDelete({ eventId: id });
+        deletedSignUp = await SignUp.findOneAndDelete({ eventId: id });
         break;
       case 'userId':
-        await SignUp.findOneAndDelete({ userId: id });
+        deletedSignUp = await SignUp.findOneAndDelete({ userId: id });
         break;
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
+    }
+
+    if (deletedSignUp && deletedSignUp.status[0] === 'accepted') {
+      updateEventRoles(deletedSignUp.eventId, deletedSignUp.userId, deletedSignUp.status[1], null, 'remove');
     }
   } catch (err) {
     throw new Error(err.msg);

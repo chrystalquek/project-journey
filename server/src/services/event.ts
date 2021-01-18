@@ -142,7 +142,7 @@ const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
 
 const updateEvent = async (
   id: string,
-  updatedFields: EventData,
+  updatedFields: Partial<EventData>,
 ): Promise<void> => {
   try {
     await Event.findOneAndUpdate(
