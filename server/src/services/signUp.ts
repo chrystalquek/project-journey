@@ -220,7 +220,7 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
 
-    if (deletedSignUp && deletedSignUp.status[0] === 'accepted') {
+    if (deletedSignUp && checkIfAccepted(deletedSignUp.status)) {
       updateEventRoles(deletedSignUp.eventId, deletedSignUp.userId, deletedSignUp.status[1], null, 'remove');
     }
   } catch (err) {
