@@ -1,10 +1,6 @@
 import { useCallback } from 'react';
-import {
-  Paper, Typography, MenuItem, Button,
-} from '@material-ui/core';
-import {
-  Formik, Field, Form,
-} from 'formik';
+import { Paper, Typography, MenuItem, Button } from '@material-ui/core';
+import { Formik, Field, Form } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
 import { QuestionList, OptionType, InputType } from '@type/questions';
@@ -24,11 +20,13 @@ export const FormQuestionMapper = ({
   name,
   options,
   setFieldValue,
+  props,
 }: {
   formType: InputType;
   name: string;
-  options: OptionType[] | null;
+  options?: OptionType[] | null;
   setFieldValue?: any; // Should be the same type as setFieldValue from Formik
+  props?: object;
 }) => {
   const onChangeImage = (e, fieldName, setFieldValue) => {
     if (e.target.files && e.target.files[0]) {
@@ -48,6 +46,7 @@ export const FormQuestionMapper = ({
           name={name}
           fullWidth
           margin='dense'
+          {...props}
         />
       );
     case 'shortAnswer':
@@ -60,6 +59,7 @@ export const FormQuestionMapper = ({
           name={name}
           fullWidth
           margin='dense'
+          {...props}
         />
       );
     case 'longAnswer':
@@ -71,6 +71,7 @@ export const FormQuestionMapper = ({
           fullWidth
           multiline
           margin='dense'
+          {...props}
         />
       );
     case 'mcq':
@@ -85,6 +86,7 @@ export const FormQuestionMapper = ({
             shrink: true,
           }}
           margin='dense'
+          {...props}
         >
           {(options as Array<OptionType>).map(({ value, label }) => (
             <MenuItem key={value} value={value}>
@@ -113,8 +115,9 @@ export const FormQuestionMapper = ({
           name={name}
           fullWidth
           margin='dense'
+          {...props}
         />
-      )
+      );
     case 'checkboxes':
     default:
       return (
@@ -129,6 +132,7 @@ export const FormQuestionMapper = ({
                 Label={{ label }}
                 color='primary'
                 type='checkbox'
+                {...props}
               />
             </div>
           ))}
@@ -143,7 +147,11 @@ type FormGeneratorProps = {
   handleSignUp: (formValues: Record<string, any>) => SignUpResponse;
 };
 
-const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps) => {
+const FormGenerator = ({
+  type,
+  questionList,
+  handleSignUp,
+}: FormGeneratorProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -190,7 +198,9 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
         organization: values.organization,
         position: values.position,
 
-        languages: values.languages.split(',').map(element => element.trimStart().trimEnd()), // Delete whitespaces
+        languages: values.languages
+          .split(',')
+          .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
         referralSources: values.referralSources,
 
         hasVolunteered: values.hasVolunteered,
@@ -211,15 +221,14 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
         emergencyContactRelationship: values.emergencyContactRelationship,
       });
 
-    if (response.type === 'volunteer//rejected') {
-      alert('Error: ' + response.error.message);
-    } else if (response.type === 'volunteer//fulfilled') {
-      alert('You have signed up successfully.');
-      router.push('/login');
-    }
-
+      if (response.type === 'volunteer//rejected') {
+        alert('Error: ' + response.error.message);
+      } else if (response.type === 'volunteer//fulfilled') {
+        alert('You have signed up successfully.');
+        router.push('/login');
+      }
     },
-    [questionList],
+    [questionList]
   );
 
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -244,7 +253,7 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
       is: (val: string) => val && val.length > 0,
       then: Yup.string().oneOf(
         [Yup.ref('password')],
-        'Confirm Password need to be the same as Password fields',
+        'Confirm Password need to be the same as Password fields'
       ),
     }),
     mobileNumber: Yup.string()
@@ -254,10 +263,18 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
       .matches(phoneRegExp, 'Mobile phone is not valid')
       .required('Required'),
     referralSources: Yup.array().required('Required'),
-    biabVolunteeringDuration: Yup.number().integer('Input must be an integer').positive('Input must be a positive integer'),
-    sessionsPerMonth: type === VOLUNTEER_TYPE.ADHOC
-                        ? Yup.number().integer('Input must be an integer').positive('Input must be a positive integer')
-                        : Yup.number().integer('Input must be an integer').positive('Input must be a positive integer').required('Required')
+    biabVolunteeringDuration: Yup.number()
+      .integer('Input must be an integer')
+      .positive('Input must be a positive integer'),
+    sessionsPerMonth:
+      type === VOLUNTEER_TYPE.ADHOC
+        ? Yup.number()
+            .integer('Input must be an integer')
+            .positive('Input must be a positive integer')
+        : Yup.number()
+            .integer('Input must be an integer')
+            .positive('Input must be a positive integer')
+            .required('Required'),
   });
 
   return (
@@ -318,9 +335,9 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
                 );
               })}
               <Button
-                variant="contained"
-                color="primary"
-                type="submit"
+                variant='contained'
+                color='primary'
+                type='submit'
                 disabled={
                   isSubmitting ||
                   !values.permissionEmailCollection ||
@@ -328,7 +345,7 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
                   !values.acknowledgeTnC ||
                   !values.informedConsent
                 }
-                size="large"
+                size='large'
                 style={{ margin: 'auto', display: 'block' }}
               >
                 Submit
