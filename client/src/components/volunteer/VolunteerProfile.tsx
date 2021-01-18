@@ -32,9 +32,9 @@ import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import SearchBar from '@components/common/SearchBar';
+import { useRouter } from 'next/router';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
-import { useRouter } from 'next/router';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
   },
   border: {
     padding: theme.spacing(2),
+  },
+  nameRow: {
+    cursor: 'pointer',
   },
 }));
 
@@ -164,7 +167,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   // display table
   const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
 
-  const router = useRouter()
+  const router = useRouter();
   const volunteerTable = (
     <>
       <TableContainer>
@@ -179,7 +182,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
           <TableBody>
             {currentPageVolunteers.map((vol) => (
               <TableRow key={vol.email}>
-                <TableCell onClick={() => router.push(`/profile/${vol._id}`)}><b>{vol.name}</b></TableCell>
+                <TableCell onClick={() => router.push(`/profile/${vol._id}`)} className={classes.nameRow}><b>{vol.name}</b></TableCell>
                 <TableCell>{capitalize(vol.volunteerType)}</TableCell>
                 <TableCell>{vol.createdAt.toLocaleDateString()}</TableCell>
               </TableRow>
