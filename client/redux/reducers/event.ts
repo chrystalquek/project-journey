@@ -5,6 +5,7 @@ import {
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
+import { deleteSignUp } from '@redux/actions/signUp';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
@@ -91,6 +92,16 @@ const eventSlice = createSlice({
     });
     builder.addCase(getAllEvents.rejected, (state) => {
       state.events = [];
+    });
+    builder.addCase(deleteSignUp.fulfilled, (state, action) => {
+      const { meta } = action;
+      // remove volunteerId from one of the roles of the event
+      if (state.data[meta.arg.eventId]) {
+        const roleSignedUpFor = state.data[meta.arg.eventId].roles.find(role => role.volunteers.includes(meta.arg.userId))
+        if (roleSignedUpFor) {
+          roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter(vol => vol != meta.arg.userId)
+        }
+      }
     });
   },
 });

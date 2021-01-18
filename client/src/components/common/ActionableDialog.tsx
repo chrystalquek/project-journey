@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(10),
     textAlign: 'center',
   },
-  cancelButton: {
+  unrecommendedButton: {
     padding: theme.spacing(5),
     margin: theme.spacing(5),
     height: 30,
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  otherButton: {
+  recommendedButton: {
     padding: theme.spacing(5),
     margin: theme.spacing(5),
     backgroundColor: theme.palette.primary.main,
@@ -33,31 +33,37 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ActionableDialogProps {
   open: boolean;
-  onClose: () => void;
-  content: string;
-  buttonTitle: string;
+  setOpen: () => void;
+  content: string | JSX.Element;
+  buttonTitle: string | JSX.Element;
   buttonOnClick: () => void;
+  openCloseButtonTitle: string | JSX.Element;
+  openCloseButtonStyle?: string;
+  recommendedAction?: 'cancel' | 'other';
 }
 
 // only for dialogs with a question + 2 buttons (cancel on left, some other button on right thats defined by props)
 export function ActionableDialog(props: ActionableDialogProps) {
   const classes = useStyles();
   const {
-    onClose, open, content, buttonTitle, buttonOnClick,
+    open, setOpen, content, buttonTitle, buttonOnClick, openCloseButtonTitle, openCloseButtonStyle, recommendedAction
   } = props;
 
   return (
-    <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
-      <Grid className={classes.dialog} container direction="column" spacing={5}>
-        <Grid item>
-          <Typography variant="h4">{content}</Typography>
-        </Grid>
+    <>
+      <Button className={openCloseButtonStyle ?? classes.recommendedButton} onClick={setOpen}>{openCloseButtonTitle}</Button>
+      <Dialog onClose={setOpen} aria-labelledby="simple-dialog-title" open={open}>
+        <Grid className={classes.dialog} container direction="column" spacing={5} justify="center">
+          <Grid item>
+            <Typography variant="h4">{content}</Typography>
+          </Grid>
 
-        <Grid item direction="row" spacing={5}>
-          <Button className={classes.cancelButton} onClick={onClose}>Cancel</Button>
-          <Button className={classes.otherButton} onClick={buttonOnClick}>{buttonTitle}</Button>
+          <Grid container direction="row" spacing={5} justify="center">
+            <Button className={recommendedAction == 'cancel' ? classes.recommendedButton : classes.unrecommendedButton} onClick={setOpen}>Cancel</Button>
+            <Button className={recommendedAction == 'cancel' ? classes.unrecommendedButton : classes.recommendedButton} onClick={buttonOnClick}>{buttonTitle}</Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Dialog>
+      </Dialog>
+    </>
   );
 }

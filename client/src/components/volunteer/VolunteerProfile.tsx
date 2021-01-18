@@ -34,6 +34,7 @@ import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import SearchBar from '@components/common/SearchBar';
 import NavBar from '../common/NavBar';
 import Footer from '../common/Footer';
+import { useRouter } from 'next/router';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -163,6 +164,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   // display table
   const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
 
+  const router = useRouter()
   const volunteerTable = (
     <>
       <TableContainer>
@@ -177,7 +179,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
           <TableBody>
             {currentPageVolunteers.map((vol) => (
               <TableRow key={vol.email}>
-                <TableCell><b>{vol.name}</b></TableCell>
+                <TableCell onClick={() => router.push(`/profile/${vol._id}`)}><b>{vol.name}</b></TableCell>
                 <TableCell>{capitalize(vol.volunteerType)}</TableCell>
                 <TableCell>{vol.createdAt.toLocaleDateString()}</TableCell>
               </TableRow>
