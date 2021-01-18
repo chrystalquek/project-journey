@@ -4,16 +4,16 @@ import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted';
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
-import {createAndAcceptSignUp, createSignUp, getSignUps} from '@redux/actions/signUp';
+import { createAndAcceptSignUp, createSignUp, getSignUps } from '@redux/actions/signUp';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateSignUpRequest, UpdateSignUpRequest } from '@utils/api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
 import { StoreState } from '@redux/store';
-import {SignUpData, SignUpIdType} from '@type/signUp';
+import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import apiClient from '@utils/api/apiClient';
-import {sign} from "crypto";
-import {signUp} from "@redux/actions/user";
+import { sign } from 'crypto';
+import { signUp } from '@redux/actions/user';
 
 type EventDetailsProps = {
   event: EventData,
@@ -50,7 +50,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
     reason,
     details: {
       acceptedSignUp: hasAcceptedSignUp ? signUpInfo : null,
-    }
+    },
   };
 
   const formHandlers = {
@@ -60,7 +60,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
         ...getFormData(uid, eid, form),
         status: 'pending',
       };
-      dispatch(createAndAcceptSignUp( {request, form})); // possibly check for failure
+      dispatch(createAndAcceptSignUp({ request, form })); // possibly check for failure
     },
     // volunteering events need admin approval
     signUpOnly: async (uid: string, eid: string, form: FormState) => {

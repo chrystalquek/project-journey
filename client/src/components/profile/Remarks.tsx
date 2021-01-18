@@ -4,17 +4,21 @@ import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateVolunteer } from '@redux/actions/user';
+import { StoreState } from '@redux/store';
 
 type props = {
-  user: VolunteerData
+  profilePageData: VolunteerData
 }
 
-const Remarks: FC<props> = ({ user }) => {
+const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useDispatch();
-  let originalVolunteerRemarks = user.volunteerRemarks;
-  const originalAdministratorRemarks = user.administratorRemarks;
+  const user = useSelector((state: StoreState) => state.user);
+  const userData = user.user;
+
+  let originalVolunteerRemarks = profilePageData.volunteerRemarks;
+  const originalAdministratorRemarks = profilePageData.administratorRemarks;
 
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
   const [administratorRemarks, setAdministratorRemarks] = useState<string>(originalAdministratorRemarks);
@@ -35,7 +39,7 @@ const Remarks: FC<props> = ({ user }) => {
     // TODO: sync database
     dispatch(
       updateVolunteer({
-        email: user.email,
+        email: profilePageData.email,
         updatedVolunteerData: {
           volunteerRemarks,
         },
@@ -47,16 +51,16 @@ const Remarks: FC<props> = ({ user }) => {
   };
   const saveAdministratorRemarks = () => {
     // TODO: sync database
-    user.administratorRemarks = administratorRemarks;
+    profilePageData.administratorRemarks = administratorRemarks;
     setAdministratorRemarksChanged(false);
   };
 
   const discardVolunteerRemarks = () => {
-    setVolunteerRemarks(user.volunteerRemarks);
+    setVolunteerRemarks(profilePageData.volunteerRemarks);
     setVolunteerRemarksChanged(false);
   };
   const discardAdministratorRemarks = () => {
-    setAdministratorRemarks(user.administratorRemarks);
+    setAdministratorRemarks(profilePageData.administratorRemarks);
     setAdministratorRemarksChanged(false);
   };
 
@@ -80,8 +84,10 @@ const Remarks: FC<props> = ({ user }) => {
           onDiscard={discardVolunteerRemarks}
         />
 
-        {/* Admin remarks (only renders for admin) */}
-        {user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+        {/* Admin remarks not rendered if the profilePageData is admin
+        and only shows the admin remarks if the user is admin */}
+        {profilePageData.volunteerType !== VOLUNTEER_TYPE.ADMIN
+        && userData.volunteerType === VOLUNTEER_TYPE.ADMIN && (
         <RemarksTextField
           value={administratorRemarks}
           onChange={handleAdministratorRemarks}

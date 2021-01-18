@@ -6,7 +6,7 @@ import {
   updateSignUp,
 } from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
-import {useRouter} from "next/router";
+import { useRouter } from 'next/router';
 
 export type SignUpState = {
   data: Record<string, SignUpData>;

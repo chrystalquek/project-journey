@@ -1,6 +1,7 @@
-import { Button, makeStyles, Theme } from '@material-ui/core';
+import {
+  Button, makeStyles, Theme, ButtonProps,
+} from '@material-ui/core';
 import { FC } from 'react';
-import { ButtonProps } from "@material-ui/core";
 
 type EventButtonProps = ButtonProps;
 

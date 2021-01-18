@@ -61,6 +61,9 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
         <CreateAccountNotice />
       </Grid>
 
+      <Grid item xs={12}>
+        <CreateAccountNotice />
+      </Grid>
     </Grid>
   );
 };

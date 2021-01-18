@@ -6,10 +6,10 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import { VolunteerData } from '@type/volunteer';
 
 type props = {
-  user: VolunteerData
+  profilePageData: VolunteerData
 }
 
-const ContactInformation: FC<props> = ({ user }) => (
+const ContactInformation: FC<props> = ({ profilePageData }) => (
   <PaddedGrid>
     <Grid item>
       <Typography variant="h4">Contact Information</Typography>
@@ -17,9 +17,9 @@ const ContactInformation: FC<props> = ({ user }) => (
     <Grid item>
       <ProfileDivider />
     </Grid>
-    <DataRow header="Tel. No." data={user.mobileNumber} xs1={3} xs2={9} />
-    <DataRow header="E-mail" data={user.email} xs1={3} xs2={9} />
-    <DataRow header="Lorem" data={user.description} xs1={3} xs2={9} />
+    <DataRow header="Tel. No." data={profilePageData.mobileNumber} xs1={3} xs2={9} />
+    <DataRow header="E-mail" data={profilePageData.email} xs1={3} xs2={9} />
+    <DataRow header="Lorem" data={profilePageData.description} xs1={3} xs2={9} />
   </PaddedGrid>
 );
 
