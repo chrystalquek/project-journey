@@ -97,8 +97,8 @@ const EventVolunteers = ({ eid }) => {
 
   useEffect(() => {
     const signUpsData = signUps.data;
-    const temp = Object.values(signUpsData).map((signUp) => signUp.userId);
-    setAllVolunteerIds(temp);
+    const volunteerIds = Object.values(signUpsData).map((signUp) => signUp.userId);
+    setAllVolunteerIds(volunteerIds);
   }, [signUps]);
 
   const getVolunteerData = async () => {
@@ -240,12 +240,12 @@ const EventVolunteers = ({ eid }) => {
     );
 
     const getEditRoleButton = (suid) => {
-      const temp = [...suidOfRolesBeingEdited, suid];
+      const updatedSuidOfRolesBeingEdited = [...suidOfRolesBeingEdited, suid];
       return (
         <Button
           className={classes.popUpButton}
           onClick={() => {
-            setSuidOfRolesBeingEdited(temp);
+            setSuidOfRolesBeingEdited(updatedSuidOfRolesBeingEdited);
             handleCloseMoreButton();
           }}
         >
@@ -315,10 +315,10 @@ const EventVolunteers = ({ eid }) => {
           <IconButton
             className={classes.redCloseButton}
             onClick={() => {
-              const temp = [...suidOfRolesBeingEdited];
-              const idx = temp.indexOf(signUp.signUpId);
-              if (idx > -1) temp.splice(idx, 1);
-              setSuidOfRolesBeingEdited(temp);
+              const suidOfRolesBeingEditedCopy = [...suidOfRolesBeingEdited];
+              const idx = suidOfRolesBeingEditedCopy.indexOf(signUp.signUpId);
+              if (idx > -1) suidOfRolesBeingEditedCopy.splice(idx, 1);
+              setSuidOfRolesBeingEdited(suidOfRolesBeingEditedCopy);
             }}
           >
             <CloseIcon className={classes.whiteCancelIcon} />
@@ -415,22 +415,22 @@ const EventVolunteers = ({ eid }) => {
   ];
 
   useEffect(() => {
-    let temp = isApprovedTab ? [...approvedSignUps] : [...nonApprovedSignUps];
-    temp = temp.filter((signUp) => allVolunteerData[signUp.userId].name.search(new RegExp(searchString, 'i')) >= 0);
+    let currentSignUps = isApprovedTab ? [...approvedSignUps] : [...nonApprovedSignUps];
+    currentSignUps = currentSignUps.filter((signUp) => allVolunteerData[signUp.userId].name.search(new RegExp(searchString, 'i')) >= 0);
 
     /** Sort */
     switch (selectedSort) {
       case 'name':
-        temp = sortByName(temp);
+        currentSignUps = sortByName(currentSignUps);
         break;
       case 'role':
-        temp = isApprovedTab ? sortByRole(temp) : temp;
+        currentSignUps = isApprovedTab ? sortByRole(currentSignUps) : currentSignUps;
         break;
       default:
     }
 
-    if (isApprovedTab) setDisplayedApprovedSignUps(temp);
-    else setDisplayedNonApprovedSignUps(temp);
+    if (isApprovedTab) setDisplayedApprovedSignUps(currentSignUps);
+    else setDisplayedNonApprovedSignUps(currentSignUps);
   }, [searchString, selectedSort]);
 
   /** Get  table body for approved volunteers tab */
