@@ -1,30 +1,83 @@
+import {
+  CITIZENSHIP,
+  GENDER,
+  RACE,
+  SOCIAL_MEDIA_PLATFORMS,
+  VOLUNTEER_TYPE,
+  VolunteerData,
+} from '@type/volunteer';
+import { SignUpData, SignUpIdType, SignUpStatus } from '@type/signUp';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 import { EventPostData, EventSearchType } from '@type/event';
-import { VolunteerData } from '@type/volunteer';
-import { SignUpData, SignUpIdType } from '@type/signUp';
 
 export type SignUpRequest = {
-  name: string
-  email: string
-  password: string
-  gender: string
-  citizenship: string
-  race: string
-  hasVolunteered: boolean
-  hasChildrenExperience: boolean
-  hasExternalVolunteerExperience: boolean
-  hasFirstAidCertification: boolean
-  volunteerFrequency: number
-  volunteerReason: string
-  volunteerContribution: string
-  birthday: Date
-  volunteerType: string
-}
+  name: string;
+  password?: string;
+  volunteerType: VOLUNTEER_TYPE;
+
+  nickname: string;
+  gender: GENDER;
+  citizenship: CITIZENSHIP;
+  birthday: Date;
+  address: string;
+  mobileNumber: string;
+  photoUrl: string;
+  email: string;
+  description?: string;
+
+  socialMediaPlatform: SOCIAL_MEDIA_PLATFORMS;
+  instagramHandle?: string;
+
+  organization?: string;
+  position?: string;
+  race?: RACE;
+
+  languages: Array<string>;
+  referralSources: Array<string>;
+
+  hasVolunteered: boolean;
+  biabVolunteeringDuration?: number; // Number of months
+
+  hasVolunteeredExternally: boolean;
+  volunteeringExperience?: string;
+
+  hasChildrenExperience: boolean;
+  childrenExperience?: string;
+
+  sessionsPerMonth?: number;
+  sessionPreference?: string; // pre-defined session committment
+
+  hasFirstAidCertification?: boolean;
+  leadershipInterest?: string;
+  interests?: string; // short-ans
+
+  skills?: Array<string>;
+
+  personality?: string; // Myers-Briggs
+  strengths?: Array<string>;
+  volunteeringOpportunityInterest?: string;
+
+  volunteerReason: string; // Essay
+  volunteerContribution?: string;
+
+  // WCA Registration: Medical Information
+  hasMedicalNeeds: boolean;
+  medicalNeeds?: string;
+  hasAllergies: boolean;
+  allergies?: string;
+  hasMedicationDuringDay: boolean;
+
+  // WCA Registration: Emergency Contact
+  emergencyContactName: string;
+  emergencyContactNumber: string;
+  emergencyContactEmail: string;
+  emergencyContactRelationship: string;
+};
 
 export type LoginRequest = {
-  email: string
-  password: string
-}
+  email: string;
+  password: string;
+};
 
 export type VolunteerPaginatedQueryParams = {
   pageNo: number,
@@ -46,31 +99,31 @@ export type CommitmentApplicationQueryParams = {
 export type CreateEventRequest = EventPostData;
 
 export type EditEventRequest = {
-  id: string,
-  data: EventPostData
-}
+  id: string;
+  data: EventPostData;
+};
 
 export type GetEventParams = string;
 
 export type UploadImageRequest = FormData;
 
 export type UploadImageRequestWithField = {
-  name: string,
-  form: FormData,
-}
+  name: string;
+  form: FormData;
+};
 export type CreateCommitmentApplicationRequest = {
-  volunteerId: string
-}
+  volunteerId: string;
+};
 
 export type UpdateVolunteerRequest = {
-  email: string,
-  updatedVolunteerData: Partial<VolunteerData>
-}
+  email: string;
+  updatedVolunteerData: Partial<VolunteerData>;
+};
 // SIGN-UPS
 export type SignUpQueryParams = {
-  id: string, // id to match against once idType is known
-  idType: SignUpIdType,
-}
+  id: string; // id to match against once idType is known
+  idType: SignUpIdType;
+};
 
 export type CreateSignUpRequest = Omit<SignUpData, '_id' | 'signUpId'>;
 

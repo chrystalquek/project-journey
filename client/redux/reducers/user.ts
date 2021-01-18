@@ -32,10 +32,11 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Sets auth token from persisted state to runtime
-    builder.addCase(REHYDRATE, (_, action) => {
+    builder.addCase(REHYDRATE, (state, action) => {
       // @ts-ignore payload attribute not registered despite it available
       const authToken = action?.payload?.user?.token;
       if (authToken) { apiClient.setAuthToken(authToken); }
+      state.status = '';
     });
     builder.addCase(user.pending, (state) => {
       state.token = '';
