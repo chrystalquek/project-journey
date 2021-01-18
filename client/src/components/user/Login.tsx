@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
   signUpText: {
     fontWeight: 'bold',
     color: '#000',
+    cursor: 'pointer',
   },
   invalidText: {
     marginBottom: '10px',
@@ -70,9 +71,10 @@ const useStyles = makeStyles((theme) => ({
 type LoginProps = {
   user: UserState;
   handleFormSubmit: (formData: LoginArgs) => Promise<void>;
+  resetStatus: () => void;
 };
 
-const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
+const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginProps) => {
   const router = useRouter();
   const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
@@ -91,6 +93,13 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
     }
   }, [user.status]);
 
+  useEffect(() => {
+    window.addEventListener("beforeunload", resetStatus);
+    return () => {
+      window.removeEventListener("beforeunload", resetStatus);
+    };
+  }, []);
+
   const handleSubmit = async (values) => {
     const loginArgs: LoginArgs = {
       email: values.email,
@@ -106,7 +115,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
     if (invalid) {
       return (
         <Typography className={classes.invalidText}>
-          Invalid email & password
+          Invalid email &amp; password
         </Typography>
       );
     }
@@ -200,8 +209,14 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit }: LoginProps) => {
                 <div>
                   <Typography>Don&apos;t have an account?</Typography>
                 </div>
-                <Link href="/auth/signup">
-                  <Typography className={classes.signUpText}>Sign up</Typography>
+                <Link
+                  href="/signup"
+                >
+                  <Typography
+                    className={classes.signUpText}
+                  >
+                    Sign up
+                  </Typography>
                 </Link>
               </div>
             </Grid>
