@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
+import { Storage } from '@google-cloud/storage';
 import { ImageData, ImageResponse } from '../types';
 import Image from '../models/Image';
-import { Storage } from '@google-cloud/storage';
 
-const storage = new Storage()
+const storage = new Storage();
 
 const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
   try {
-    const filepath = "/tmp/" + imageData.imageName
+    const filepath = `/tmp/${imageData.imageName}`;
     const returnVal = await storage.bucket('journey-storage').upload(filepath, {
       gzip: true,
       metadata: {
@@ -16,28 +16,28 @@ const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
     });
     try {
       const url = returnVal[1].mediaLink;
-      
+
       await Image.deleteMany({
-        email: imageData.email
-      })
+        email: imageData.email,
+      });
 
       const imageSchemaData = new Image({
-      _id: new mongoose.Types.ObjectId(),
-      email: imageData.email,
-      imageName: imageData.imageName,
-      url: url
-    });
-    
+        _id: new mongoose.Types.ObjectId(),
+        email: imageData.email,
+        imageName: imageData.imageName,
+        url,
+      });
+
       const imageResponse: ImageResponse = {
         email: imageData.email,
         imageName: imageData.imageName,
-        url: url
+        url,
       };
 
-    await imageSchemaData.save();
-    return imageResponse;
+      await imageSchemaData.save();
+      return imageResponse;
     } catch (err) {
-      throw new Error(err.msg)
+      throw new Error(err.msg);
     }
   } catch (err) {
     throw new Error(err.msg);
@@ -56,7 +56,7 @@ const getImage = async (email: string) => {
   const imageResponse: ImageResponse = {
     email: image.email,
     imageName: image.imageName,
-    url: image.url
+    url: image.url,
   };
 
   return imageResponse;
@@ -64,8 +64,8 @@ const getImage = async (email: string) => {
 
 const deleteImage = async (email: string) => {
   await Image.deleteMany({
-    email: email
-  })
+    email,
+  });
 
   return `Image with email ${email} is deleted`;
 };
@@ -73,5 +73,5 @@ const deleteImage = async (email: string) => {
 export default {
   uploadImage,
   getImage,
-  deleteImage
+  deleteImage,
 };

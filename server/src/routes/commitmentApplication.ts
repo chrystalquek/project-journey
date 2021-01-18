@@ -15,7 +15,7 @@ router.get('/', commitmentApplicationController.readCommitmentApplications);
 // @desc    Update a commitmentApplication by id
 // @access  Private
 protectedRouter.put('/:id', authorize(['admin']),
-    validate(commitmentApplicationController.getValidations('updateCommitmentApplication')),
-    commitmentApplicationController.updateCommitmentApplication);
+  validate(commitmentApplicationController.getValidations('updateCommitmentApplication')),
+  commitmentApplicationController.updateCommitmentApplication);
 
 export default router;

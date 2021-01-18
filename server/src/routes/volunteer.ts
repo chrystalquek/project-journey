@@ -24,15 +24,23 @@ router.get(
   validate(volunteerController.getValidations('getVolunteer')),
   volunteerController.getVolunteerDetails,
 );
+
+router.get(
+  '/id/:id',
+  volunteerController.getVolunteerDetailsById,
+);
+
 router.get(
   '/',
   volunteerController.getAllVolunteerDetails,
 );
+
 router.delete(
   '/',
   validate(volunteerController.getValidations('deleteVolunteer')),
   volunteerController.removeVolunteer,
 );
+
 router.put(
   '/',
   validate(volunteerController.getValidations('updateVolunteer')),
