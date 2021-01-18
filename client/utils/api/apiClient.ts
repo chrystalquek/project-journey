@@ -100,7 +100,7 @@ class AxiosApiClient implements ApiClient {
           status: ['accepted', acceptedRole],
         };
         const newQuery = {
-          id: res.signUpId, // TODO: This will break once we parse everything to camelCame
+          id: res.signUpId,
           idType: 'signUpId' as SignUpIdType,
         };
         return this.updateSignUp(newQuery, newRequest);
