@@ -115,6 +115,9 @@ const useStyles = makeStyles((theme) => ({
     color: '#000',
     cursor: 'pointer',
   },
+  loginFooter: {
+    marginTop: theme.spacing(6),
+  },
 }));
 
 type SignUpProps = {
@@ -305,14 +308,22 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
               <Typography className={classes.pageHeader}>
                 Registration
               </Typography>
-              <SignUpForm type={volunteerType} questionList={volunteerType === VOLUNTEER_TYPE.ADHOC ? SignUpAdhocQuestionList : SignUpCommittedQuestionList}/>
-              <div className="section">
-                <Typography variant="body2">
+              <SignUpForm
+                type={volunteerType}
+                questionList={
+                  volunteerType === VOLUNTEER_TYPE.ADHOC
+                    ? SignUpAdhocQuestionList : SignUpCommittedQuestionList
+                }
+              />
+              <div className={classes.loginFooter}>
+                <Typography variant="body1">
                   Already have an account?
-                  {' '}
-                  <br />
-                  <Link href="/auth/login">Log in</Link>
                 </Typography>
+                <Link href="/login">
+                  <Typography variant="body2" className={classes.login}>
+                    Log In
+                  </Typography>
+                </Link>
               </div>
               <br />
             </Grid>
