@@ -41,9 +41,9 @@ const initialState: VolunteerState = {
       volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
     },
     search: {
-      name: null
+      name: null,
     },
-    sort: 'name'
+    sort: 'name',
   },
 };
 
@@ -77,8 +77,8 @@ const volunteerSlice = createSlice({
         pageNo: meta.arg.pageNo,
         filters: meta.arg.filters,
         search: meta.arg.search,
-        sort: meta.arg.sort
-      }
+        sort: meta.arg.sort,
+      };
       state.volunteerProfile.ids = payload.data.map((volunteer) => volunteer._id);
     });
     builder.addCase(getVolunteersVolunteerProfile.rejected, (state) => {

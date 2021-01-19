@@ -4,6 +4,8 @@ import userReducer, { UserState } from '@redux/reducers/user';
 import EventReducer, { EventState } from '@redux/reducers/event';
 import imageReducer, { ImageState } from '@redux/reducers/image';
 import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer';
+import profilePageReducer, { ProfilePageState } from '@redux/reducers/profilePage';
+import loadingReducer, { LoadingState } from '@redux/reducers/loading';
 import {
   persistStore,
   persistReducer,
@@ -27,6 +29,8 @@ export type StoreState = {
   form: FormState
   commitmentApplication: CommitmentApplicationState,
   image: ImageState,
+  profilePage: ProfilePageState,
+  loading: LoadingState
 }
 
 const reducers = combineReducers({
@@ -37,6 +41,8 @@ const reducers = combineReducers({
   form: formReducer,
   commitmentApplication: commitmentApplicationReducer,
   image: imageReducer,
+  profilePage: profilePageReducer,
+  loading: loadingReducer,
 });
 
 const persistConfig = {

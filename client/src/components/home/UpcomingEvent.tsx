@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
 import { getSignUpsUpcomingEvent } from '@redux/actions/signUp';
 import { formatDateStartEndTime } from '@utils/helpers/date';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   pane: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     margin: theme.spacing(5),
+    cursor: 'pointer',
   },
   greenText: {
     color: theme.palette.text.secondary,
@@ -32,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 const UpcomingEvent: FC<{}> = ({ }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const user = useSelector((state: StoreState) => state.user);
 
@@ -91,12 +94,13 @@ const UpcomingEvent: FC<{}> = ({ }) => {
         Upcoming Events
       </Typography>
       {upcomingEvents.map((event) => (
-        <Card className={classes.card} key={event._id}>
+        <Card className={classes.card} key={event._id} onClick={() => router.push(`/event/${event._id}`)}>
           <CardContent>
             <Typography>{formatDateStartEndTime(event.startDate, event.endDate).date}</Typography>
             <Typography variant="h4">{event.name}</Typography>
             <Typography>
               Time:
+              {' '}
               {formatDateStartEndTime(event.startDate, event.endDate).time}
             </Typography>
             {generateNotification(event)}

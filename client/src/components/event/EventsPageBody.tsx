@@ -67,6 +67,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const filteredEvents = withFilters(events || [], filters);
 
+  // TODO move filters search to redux
+  const [search, setSearch] = useState('');
+  const filteredSearchedEvents = filteredEvents.filter((event) => event.name.toLowerCase().includes(search.toLowerCase()));
+
   useEffect(() => {
     getAllEvents();
   }, []);
@@ -84,22 +88,21 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
       <>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            {/* TODO: Implement search function */}
-            <SearchBar setFilterFunction={() => console.log('TODO')} />
+            <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
           </Grid>
           {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
-          <Grid
-            item
-            container
-            xs={12}
-            direction="row"
-            justify="center"
-            alignItems="center"
-          >
-            <EventButton disableRipple>
-              Create new event
-            </EventButton>
-          </Grid>
+            <Grid
+              item
+              container
+              xs={12}
+              direction="row"
+              justify="center"
+              alignItems="center"
+            >
+              <EventButton disableRipple>
+                Create new event
+              </EventButton>
+            </Grid>
           )}
           <Grid item container xs={12} justify="space-between">
             <Grid item>
@@ -123,7 +126,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
             </Grid>
           </Grid>
           <Grid container xs={12} spacing={4}>
-            {filteredEvents?.map((event) => (
+            {filteredSearchedEvents?.map((event) => (
               <Grid key={event._id} item className={classes.card} sm={6} md={4}>
                 <EventCard
                   key={event._id}
@@ -154,15 +157,14 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
         </Grid>
         <Grid item container sm={12} alignItems="center" spacing={4}>
           <Grid item sm={9}>
-            {/* TODO: Implement search function */}
-            <SearchBar setFilterFunction={() => console.log('TODO')} />
+            <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
           </Grid>
           {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
-          <Grid item sm={3} style={{ textAlign: 'center' }}>
-            <EventButton disableRipple onClick={() => router.push('/event/new')}>
-              Create new event
-            </EventButton>
-          </Grid>
+            <Grid item sm={3} style={{ textAlign: 'center' }}>
+              <EventButton disableRipple onClick={() => router.push('/form/new')}>
+                Create new event
+              </EventButton>
+            </Grid>
           )}
         </Grid>
         <Grid item container sm={9} spacing={4}>
@@ -178,7 +180,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
             </Box>
           </Grid>
           <Grid item container sm={12} spacing={2}>
-            {filteredEvents?.map((event) => (
+            {filteredSearchedEvents?.map((event) => (
               <Grid key={event._id} item className={classes.card} sm={6} md={4}>
                 <EventCard
                   key={event._id}

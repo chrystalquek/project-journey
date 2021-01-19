@@ -126,8 +126,12 @@ export type UpdateVolunteerRequest = {
 export type SignUpQueryParams = {
   id: string; // id to match against once idType is known
   idType: SignUpIdType;
-};
+  eventId?: string; // eg use case is when signup is deleted and eventId and userId is needed to update specific event and roledata in redux
+  userId?: string;
+}
 
 export type CreateSignUpRequest = Omit<SignUpData, '_id' | 'signUpId'>;
 
 export type UpdateSignUpRequest = Omit<SignUpData, '_id' | 'signUpId'>;
+
+export type GetVolunteerRequest = string;

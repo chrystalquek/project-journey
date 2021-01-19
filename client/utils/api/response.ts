@@ -55,6 +55,7 @@ export type CreateSignUpResponse = {
 }
 
 export type UpdateSignUpResponse = {
+  data: SignUpData
   success: boolean,
 }
 

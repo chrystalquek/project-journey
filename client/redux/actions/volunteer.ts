@@ -8,13 +8,19 @@ import { VolunteersMetaArgs } from '@redux/reducers/volunteer';
 
 export const getVolunteersVolunteerProfile = createAsyncThunk<GetVolunteersPaginatedResponse, VolunteersMetaArgs, { state }>(
   'volunteer/getVolunteersVolunteerProfile',
-  async ({ pageNo, filters, search, sort }) => {
-    const apiQueryParams: VolunteerPaginatedQueryParams = { pageNo, size: rowsPerPage, volunteerType: convertFilterObjectToQueryString(filters.volunteerType), sort }
+  async ({
+    pageNo, filters, search, sort,
+  }) => {
+    const apiQueryParams: VolunteerPaginatedQueryParams = {
+      pageNo, size: rowsPerPage, volunteerType: convertFilterObjectToQueryString(filters.volunteerType), sort,
+    };
     if (search.name) {
-      apiQueryParams.name = search.name
+      apiQueryParams.name = search.name;
     }
     const response = await apiClient.getVolunteers(apiQueryParams);
-    return { ...response, pageNo, filters, search, sort };
+    return {
+      ...response, pageNo, filters, search, sort,
+    };
   },
 );
 
@@ -22,6 +28,14 @@ export const getPendingVolunteers = createAsyncThunk<GetVolunteersResponse, void
   'volunteer/getPendingVolunteers',
   async () => {
     const response = await apiClient.getPendingVolunteers();
+    return response;
+  },
+);
+
+export const getVolunteersById = createAsyncThunk<GetVolunteersResponse, any, { state }>(
+  'volunteer/getVolunteersById',
+  async (ids) => {
+    const response = await apiClient.getVolunteersById(ids);
     return response;
   },
 );

@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
   signUpText: {
     fontWeight: 'bold',
     color: '#000',
+    cursor: 'pointer',
   },
   invalidText: {
     marginBottom: '10px',
@@ -114,7 +115,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
     if (invalid) {
       return (
         <Typography className={classes.invalidText}>
-          Invalid email & password
+          Invalid email &amp; password
         </Typography>
       );
     }
@@ -208,8 +209,14 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
                 <div>
                   <Typography>Don&apos;t have an account?</Typography>
                 </div>
-                <Link href="/auth/signup">
-                  <Typography className={classes.signUpText}>Sign up</Typography>
+                <Link
+                  href="/signup"
+                >
+                  <Typography
+                    className={classes.signUpText}
+                  >
+                    Sign up
+                  </Typography>
                 </Link>
               </div>
             </Grid>
