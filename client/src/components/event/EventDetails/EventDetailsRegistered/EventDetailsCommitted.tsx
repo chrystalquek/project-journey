@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react';
 import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import {
-  Button, Chip, Grid, makeStyles,
+  Box, Chip, CircularProgress, Grid, makeStyles,
 } from '@material-ui/core';
 import { testEventImage1 } from '@constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventInformation';

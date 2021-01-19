@@ -7,8 +7,8 @@ import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@constants/routes';
 import { EventTypography } from '@components/common/event/EventTypography';
 import PersonIcon from '@material-ui/icons/Person';
 import { EventButton } from '@components/common/event/EventButton';
-import {EventPaper} from "@components/common/event/EventPaper";
-import {EventDivider} from "@components/common/event/EventDivider";
+import { EventPaper } from '@components/common/event/EventPaper';
+import { EventDivider } from '@components/common/event/EventDivider';
 
 type CreateAccountNoticeProps = {
   // nothing yet
@@ -29,7 +29,7 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
 
   return (
     <>
-    <EventDivider>Register Here</EventDivider>
+      <EventDivider>Register Here</EventDivider>
       <EventPaper alignItems="center">
         <PersonIcon className={classes.icon} />
         <EventTypography fontSize="h4" fontBold text="You need an account to register events." />
