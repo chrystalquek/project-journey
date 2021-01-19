@@ -24,7 +24,7 @@ import {
   CreateSignUpResponse, UpdateSignUpResponse,
   GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse,
 } from '@utils/api/response';
-import { SignUpIdType } from '@type/signUp';
+import { SignUpIdType } from "@type/signUp";
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -35,6 +35,7 @@ export interface ApiClient {
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
   getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse>
   getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
+  deleteSignUp(query: SignUpQueryParams): Promise<void>
   getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse>
   getEvents(query: EventQueryParams): Promise<GetEventsResponse>
   getPendingSignUps(): Promise<GetSignUpsResponse>
@@ -105,6 +106,10 @@ class AxiosApiClient implements ApiClient {
         };
         return this.updateSignUp(newQuery, newRequest);
       });
+  }
+
+  async deleteSignUp(query: SignUpQueryParams): Promise<void> {
+    return this.send({}, `signup/${query.id}/${query.idType}`, 'delete');
   }
 
   // event
