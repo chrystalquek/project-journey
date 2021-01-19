@@ -22,7 +22,7 @@ import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
   CreateSignUpResponse, UpdateSignUpResponse,
-  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse,
+  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse, GetEventFeedbackQuestionsResponse,
 } from '@utils/api/response';
 import { SignUpIdType } from '@type/signUp';
 
@@ -40,6 +40,7 @@ export interface ApiClient {
   getEvents(query: EventQueryParams): Promise<GetEventsResponse>
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
+  getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse>
   getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse>
   updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
 }
@@ -143,6 +144,10 @@ class AxiosApiClient implements ApiClient {
 
   async getPendingVolunteers(): Promise<GetVolunteersResponse> {
     return this.send({}, 'volunteer/pending', 'get');
+  }
+
+  async getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse> {
+    return this.send({}, `form/${eventId}`, 'get');
   }
 
   async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {

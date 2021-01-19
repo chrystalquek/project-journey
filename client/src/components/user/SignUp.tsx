@@ -2,7 +2,6 @@ import {
   Box,
   Grid,
   Button,
-  TextField,
   Typography,
   Divider,
   Card,
@@ -12,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
 import { useRouter } from 'next/dist/client/router';
@@ -334,7 +333,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   );
 
   const VolunteerSignUp = (props) => {
-    if (currentStep == 0) {
+    if (currentStep === 0) {
       return (
         <div>
           <VolunteerType />
@@ -349,7 +348,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
       <Head>
         <title>Signup</title>
       </Head>
-      <NavBar userData={null} />
+      <NavBar userData={user.user} />
       <VolunteerSignUp />
       <Footer />
     </>
