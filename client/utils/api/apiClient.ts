@@ -24,7 +24,7 @@ import {
   CreateSignUpResponse, UpdateSignUpResponse,
   GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse,
 } from '@utils/api/response';
-import { SignUpIdType } from "@type/signUp";
+import { SignUpIdType } from '@type/signUp';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -81,15 +81,13 @@ class AxiosApiClient implements ApiClient {
   }
 
   async createSignUp(
-    request: CreateSignUpRequest
+    request: CreateSignUpRequest,
   ): Promise<CreateSignUpResponse> {
     return this.send(request, 'signup', 'post');
   }
 
-  async updateSignUp(
-    query: SignUpQueryParams,
-    request: UpdateSignUpRequest
-  ): Promise<UpdateSignUpResponse> {
+  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest):
+  Promise<UpdateSignUpResponse> {
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
@@ -152,9 +150,8 @@ class AxiosApiClient implements ApiClient {
   }
 
   // commitment application
-  async createCommitmentApplication(
-    request: CreateCommitmentApplicationRequest
-  ): Promise<CommitmentApplicationData> {
+  async createCommitmentApplication(request: CreateCommitmentApplicationRequest):
+  Promise<CommitmentApplicationData> {
     return this.send(request, 'commitment-application', 'post');
   }
 
@@ -163,12 +160,19 @@ class AxiosApiClient implements ApiClient {
   }
 
   async updateCommitmentApplication(
-    data: CommitmentApplicationData
+    data: CommitmentApplicationData,
   ): Promise<void> {
     return this.send(data, `commitment-application/${data._id}`, 'put');
   }
 
-  // upload image
+  async getVolunteersById(ids) {
+    return this.send({ ids }, 'volunteer/ids', 'post');
+  }
+
+  async getSignUpsByEventId(eid) {
+    return this.send({ eid }, `signup/${eid}/eventId`, 'get');
+  }
+
   async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
     return this.send(request, 'image', 'post', true);
   }
@@ -177,7 +181,7 @@ class AxiosApiClient implements ApiClient {
     request: any,
     path: string,
     method: HttpMethod,
-    isImageUpload: boolean = false
+    isImageUpload: boolean = false,
   ) {
     const headers: Record<string, string> = {
       'Content-Type': isImageUpload

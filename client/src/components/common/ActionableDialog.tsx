@@ -29,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  popUpButton: {
+    textTransform: 'none',
+    width: '100%',
+    textAlign: 'left',
+  },
 }));
 
 export interface ActionableDialogProps {
@@ -46,12 +51,19 @@ export interface ActionableDialogProps {
 export function ActionableDialog(props: ActionableDialogProps) {
   const classes = useStyles();
   const {
-    open, setOpen, content, buttonTitle, buttonOnClick, openCloseButtonTitle, openCloseButtonStyle, recommendedAction
+    open, setOpen, content, buttonTitle, buttonOnClick, openCloseButtonTitle, openCloseButtonStyle, recommendedAction,
   } = props;
 
   return (
     <>
-      <Button className={openCloseButtonStyle ?? classes.recommendedButton} onClick={setOpen}>{openCloseButtonTitle}</Button>
+      <Button
+        className={classes[openCloseButtonStyle]
+        ?? classes.recommendedButton}
+        onClick={setOpen}
+      >
+        {openCloseButtonTitle}
+
+      </Button>
       <Dialog onClose={setOpen} aria-labelledby="simple-dialog-title" open={open}>
         <Grid className={classes.dialog} container direction="column" spacing={5} justify="center">
           <Grid item>

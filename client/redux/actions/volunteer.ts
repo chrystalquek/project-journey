@@ -31,3 +31,11 @@ export const getPendingVolunteers = createAsyncThunk<GetVolunteersResponse, void
     return response;
   },
 );
+
+export const getVolunteersById = createAsyncThunk<GetVolunteersResponse, any, { state }>(
+  'volunteer/getVolunteersById',
+  async (ids) => {
+    const response = await apiClient.getVolunteersById(ids);
+    return response;
+  },
+);
