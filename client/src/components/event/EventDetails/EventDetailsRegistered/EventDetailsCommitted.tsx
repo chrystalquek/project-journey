@@ -1,8 +1,8 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import {
-  Box, Chip, CircularProgress, Grid, makeStyles,
+  Button, Chip, Grid, makeStyles,
 } from '@material-ui/core';
 import { testEventImage1 } from '@constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventInformation';
