@@ -1,6 +1,6 @@
-import { Fragment, useCallback } from 'react';
+import { useCallback } from 'react';
 import { Paper, Typography, MenuItem, Button } from '@material-ui/core';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
 import { QuestionList, OptionType, InputType } from '@type/questions';
@@ -15,13 +15,143 @@ import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
 
+export const FormQuestionMapper = ({
+  formType,
+  name,
+  options,
+  setFieldValue,
+  props,
+}: {
+  formType: InputType;
+  name: string;
+  options?: OptionType[] | null;
+  setFieldValue?: any; // Should be the same type as setFieldValue from Formik
+  props?: object;
+}) => {
+  const onChangeImage = (e, fieldName, setFieldValue) => {
+    if (e.target.files && e.target.files[0]) {
+      const imageFile = e.target.files[0];
+      setFieldValue(fieldName, imageFile);
+      return URL.createObjectURL(imageFile);
+    }
+  };
+
+  switch (formType) {
+    case 'date':
+      return (
+        <Field
+          component={DatePicker}
+          inputVariant='outlined'
+          format='dd/MM/yyyy'
+          name={name}
+          fullWidth
+          margin='dense'
+          {...props}
+        />
+      );
+    case 'shortAnswer':
+    case 'password':
+      return (
+        <Field
+          component={TextField}
+          variant='outlined'
+          type={formType === 'password' ? formType : 'text'}
+          name={name}
+          fullWidth
+          margin='dense'
+          {...props}
+        />
+      );
+    case 'longAnswer':
+      return (
+        <Field
+          component={TextField}
+          variant='outlined'
+          name={name}
+          fullWidth
+          multiline
+          margin='dense'
+          {...props}
+        />
+      );
+    case 'mcq':
+      return (
+        <Field
+          component={TextField}
+          variant='outlined'
+          name={name}
+          fullWidth
+          select
+          InputLabelProps={{
+            shrink: true,
+          }}
+          margin='dense'
+          {...props}
+        >
+          {(options as Array<OptionType>).map(({ value, label }) => (
+            <MenuItem key={value} value={value}>
+              {label}
+            </MenuItem>
+          ))}
+        </Field>
+      );
+    case 'photo':
+      return (
+        <div style={{ width: '100%', height: '200px' }}>
+          <DropZoneCard
+            id={name}
+            initialUrl={null}
+            isBig={false}
+            onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
+          />
+        </div>
+      );
+    case 'number':
+      return (
+        <Field
+          component={TextField}
+          variant='outlined'
+          type='number'
+          name={name}
+          fullWidth
+          margin='dense'
+          {...props}
+        />
+      );
+    case 'checkboxes':
+    default:
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {(options as Array<OptionType>).map(({ value, label }) => (
+            <div style={{ flex: 1 }}>
+              <Field
+                component={CheckboxWithLabel}
+                name={name}
+                key={value}
+                value={value}
+                Label={{ label }}
+                color='primary'
+                type='checkbox'
+                {...props}
+              />
+            </div>
+          ))}
+        </div>
+      );
+  }
+};
+
 type FormGeneratorProps = {
   type: VOLUNTEER_TYPE;
   questionList: QuestionList;
   handleSignUp: (formValues: Record<string, any>) => SignUpResponse;
 };
 
-const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps) => {
+const FormGenerator = ({
+  type,
+  questionList,
+  handleSignUp,
+}: FormGeneratorProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -68,7 +198,9 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
         organization: values.organization,
         position: values.position,
 
-        languages: values.languages.split(',').map(element => element.trimStart().trimEnd()), // Delete whitespaces
+        languages: values.languages
+          .split(',')
+          .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
         referralSources: values.referralSources,
 
         hasVolunteered: values.hasVolunteered,
@@ -89,13 +221,12 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
         emergencyContactRelationship: values.emergencyContactRelationship,
       });
 
-    if (response.type === 'volunteer//rejected') {
-      alert('Error: ' + response.error.message);
-    } else if (response.type === 'volunteer//fulfilled') {
-      alert('You have signed up successfully.');
-      router.push('/login');
-    }
-
+      if (response.type === 'volunteer//rejected') {
+        alert('Error: ' + response.error.message);
+      } else if (response.type === 'volunteer//fulfilled') {
+        alert('You have signed up successfully.');
+        router.push('/login');
+      }
     },
     [questionList]
   );
@@ -132,129 +263,19 @@ const FormGenerator = ({ type, questionList, handleSignUp }: FormGeneratorProps)
       .matches(phoneRegExp, 'Mobile phone is not valid')
       .required('Required'),
     referralSources: Yup.array().required('Required'),
-    biabVolunteeringDuration: Yup.number().integer('Input must be an integer').positive('Input must be a positive integer'),
-    sessionsPerMonth: type === VOLUNTEER_TYPE.ADHOC
-                        ? Yup.number().integer('Input must be an integer').positive('Input must be a positive integer')
-                        : Yup.number().integer('Input must be an integer').positive('Input must be a positive integer').required('Required')
+    biabVolunteeringDuration: Yup.number()
+      .integer('Input must be an integer')
+      .positive('Input must be a positive integer'),
+    sessionsPerMonth:
+      type === VOLUNTEER_TYPE.ADHOC
+        ? Yup.number()
+            .integer('Input must be an integer')
+            .positive('Input must be a positive integer')
+        : Yup.number()
+            .integer('Input must be an integer')
+            .positive('Input must be a positive integer')
+            .required('Required'),
   });
-
-  const onChangeImage = (e, fieldName, setFieldValue) => {
-    if (e.target.files && e.target.files[0]) {
-      const imageFile = e.target.files[0];
-      setFieldValue(fieldName, imageFile);
-      return URL.createObjectURL(imageFile);
-    }
-  };
-
-  const FormQuestionMapper = ({
-    formType,
-    name,
-    options,
-    setFieldValue,
-  }: {
-    formType: InputType;
-    name: string;
-    options: OptionType[] | null;
-    setFieldValue?: any; // Should be the same type as setFieldValue from Formik
-  }) => {
-    switch (formType) {
-      case 'date':
-        return (
-          <Field
-            component={DatePicker}
-            inputVariant='outlined'
-            format='dd/MM/yyyy'
-            name={name}
-            fullWidth
-            margin='dense'
-          />
-        );
-      case 'shortAnswer':
-      case 'password':
-        return (
-          <Field
-            component={TextField}
-            variant='outlined'
-            type={formType === 'password' ? formType : 'text'}
-            name={name}
-            fullWidth
-            margin='dense'
-          />
-        );
-      case 'longAnswer':
-        return (
-          <Field
-            component={TextField}
-            variant='outlined'
-            name={name}
-            fullWidth
-            multiline
-            margin='dense'
-          />
-        );
-      case 'mcq':
-        return (
-          <Field
-            component={TextField}
-            variant='outlined'
-            name={name}
-            fullWidth
-            select
-            InputLabelProps={{
-              shrink: true,
-            }}
-            margin='dense'
-          >
-            {(options as Array<OptionType>).map(({ value, label }) => (
-              <MenuItem key={value} value={value}>
-                {label}
-              </MenuItem>
-            ))}
-          </Field>
-        );
-      case 'photo':
-        return (
-          <div style={{ width: '100%', height: '200px' }}>
-            <DropZoneCard
-              id={name}
-              initialUrl={null}
-              isBig={false}
-              onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
-            />
-          </div>
-        );
-      case 'number':
-        return (
-          <Field
-            component={TextField}
-            variant='outlined'
-            type='number'
-            name={name}
-            fullWidth
-            margin='dense'
-          />
-        )
-      case 'checkboxes':
-      default:
-        return (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {(options as Array<OptionType>).map(({ value, label }) => (
-              <div style={{ flex: 1 }}>
-                <Field
-                  component={CheckboxWithLabel}
-                  name={name}
-                  key={value}
-                  value={value}
-                  Label={{ label }}
-                  color='primary'
-                  type='checkbox'
-                />
-              </div>
-            ))}
-          </div>
-        );
-    }
-  };
 
   return (
     <Paper

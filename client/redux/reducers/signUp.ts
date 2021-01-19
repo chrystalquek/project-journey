@@ -36,9 +36,7 @@ const initialState: SignUpState = {
 
 // parse all Dates etc before saving to store
 const addToData = (signUps: Array<SignUpData>, state: SignUpState) => {
-  signUps.forEach((signUp) => state.data[signUp._id] = {
-    ...signUp,
-  });
+  signUps.forEach((signUp) => { state.data[signUp._id] = signUp; });
 };
 
 const signUpSlice = createSlice({

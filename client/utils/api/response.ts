@@ -1,6 +1,7 @@
 import { VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile';
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import { EventData } from '@type/event';
+import { QuestionWithOptions } from '@type/form';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 
@@ -48,6 +49,7 @@ export type GetCountResponse = {
   count: number
 }
 
+export type GetEventFeedbackQuestionsResponse = Array<QuestionWithOptions>
 export type CreateSignUpResponse = {
   signUpId: string
 }
