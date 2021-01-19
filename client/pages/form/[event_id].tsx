@@ -15,7 +15,7 @@ const AdminEventFormPage = () => {
   return (
     <Container fixed>
       <Head title="Blessings in a Bag" />
-      <NavBar userData={userData.user} />
+      <NavBar />
       <AdminEventForm id={eventId} isNew={eventId === 'new'} />
     </Container>
   );

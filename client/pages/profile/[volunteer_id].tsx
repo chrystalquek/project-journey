@@ -40,7 +40,7 @@ const Profile = () => {
     : (
       <Grid container direction="column">
         <Grid item>
-          <NavBar userData={profilePageData} />
+          <NavBar />
         </Grid>
         <Grid item container>
           <Grid item md={2} />

@@ -93,7 +93,7 @@ const PendingRequests: FC<{}> = ({ }) => {
       <Head>
         <title>Volunteer Pending Requests</title>
       </Head>
-      <NavBar userData={user.user} />
+      <NavBar />
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
           <Tabs tabs={tabs} clickedOn={0} />

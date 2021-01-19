@@ -19,7 +19,7 @@ const Home: FC<{}> = ({ }) => {
   return (
     <>
       <Head title="Blessings in a Bag" />
-      <NavBar userData={user.user} />
+      <NavBar />
 
       <PaddedGrid>
         {isMobile

@@ -11,7 +11,7 @@ const EventsPage = () => {
   return (
     <>
       <Head title="Blessings in a Bag" />
-      <NavBar userData={userData.user} />
+      <NavBar />
       <div style={{ width: '80vw', margin: 'auto' }}>
         <EventsPageBody />
       </div>

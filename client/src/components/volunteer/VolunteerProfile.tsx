@@ -206,7 +206,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
       <Head>
         <title>Volunteer Profiles</title>
       </Head>
-      <NavBar userData={userData.user} />
+      <NavBar />
 
       {!isMobile
         ? (

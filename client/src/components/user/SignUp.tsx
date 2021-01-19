@@ -349,7 +349,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
       <Head>
         <title>Signup</title>
       </Head>
-      <NavBar userData={null} />
+      <NavBar />
       <VolunteerSignUp />
       <Footer />
     </>
