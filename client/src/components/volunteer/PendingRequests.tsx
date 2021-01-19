@@ -1,12 +1,13 @@
 import {
-  makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button,
+  makeStyles, Grid, Table,
+  TableBody, TableCell, TableContainer, TableHead,
+  TableRow,
 } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import React, { FC, useEffect } from 'react';
 import { VolunteerData } from 'types/volunteer';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import NavBar from '@components/common/NavBar';
 import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { getCommitmentApplications, updateCommitmentApplication } from '@redux/actions/commitmentApplication';
@@ -30,10 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingRequests: FC<{}> = ({ }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
-
-  const user = useSelector((state: StoreState) => state.user);
 
   useEffect(() => {
     dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })); // just to load number in tab
@@ -93,7 +91,6 @@ const PendingRequests: FC<{}> = ({ }) => {
       <Head>
         <title>Volunteer Pending Requests</title>
       </Head>
-      <NavBar />
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
           <Tabs tabs={tabs} clickedOn={0} />

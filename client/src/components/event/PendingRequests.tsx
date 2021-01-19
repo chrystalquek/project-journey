@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { getPendingSignUps } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
-import NavBar from '@components/common/NavBar';
 import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -80,7 +79,6 @@ const PendingRequests: FC<{}> = ({ }) => {
       <Head>
         <title>Event Pending Requests</title>
       </Head>
-      <NavBar />
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
           <Tabs tabs={tabs} clickedOn={1} />
