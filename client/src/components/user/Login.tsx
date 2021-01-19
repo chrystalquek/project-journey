@@ -9,8 +9,6 @@ import { useRouter } from 'next/dist/client/router';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import NavBar from '@components/common/NavBar';
-import Footer from '@components/common/Footer';
 import { LoginArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 
@@ -94,9 +92,9 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
   }, [user.status]);
 
   useEffect(() => {
-    window.addEventListener("beforeunload", resetStatus);
+    window.addEventListener('beforeunload', resetStatus);
     return () => {
-      window.removeEventListener("beforeunload", resetStatus);
+      window.removeEventListener('beforeunload', resetStatus);
     };
   }, []);
 
@@ -148,7 +146,6 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
         <title>Login</title>
       </Head>
       <Box>
-        <NavBar userData={null} />
         <Box className={classes.content}>
           <Grid container className={classes.rowContent}>
             <Grid item sm={6} lg={4}>
@@ -222,7 +219,6 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
             </Grid>
           </Grid>
         </Box>
-        <Footer />
       </Box>
     </>
   );

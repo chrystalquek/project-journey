@@ -12,13 +12,9 @@ import {
   useTheme,
 } from '@material-ui/core';
 import React, { FC, useState } from 'react';
-import { useForm } from 'antd/lib/form/Form';
 import Head from 'next/head';
-import { useRouter } from 'next/dist/client/router';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
-import NavBar from '@components/common/NavBar';
-import Footer from '@components/common/Footer';
 import { SignUpArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 import SignUpForm from '@components/form/SignUpForm';
@@ -128,11 +124,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [volunteerType, setVolunteerType] = useState<VOLUNTEER_TYPE>(VOLUNTEER_TYPE.ADHOC); // default set as ad-hoc
   const [invalid, setInvalid] = useState<boolean>(false);
-  const [form] = useForm();
-  const router = useRouter();
   const classes = useStyles();
-  const isFormDisabled = !form.isFieldsTouched(true)
-    || !!form.getFieldsError().filter(({ errors }) => errors.length).length;
 
   // Proceed to next step
   const nextStep = () => {
@@ -348,9 +340,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
       <Head>
         <title>Signup</title>
       </Head>
-      <NavBar userData={user.user} />
       <VolunteerSignUp />
-      <Footer />
     </>
   );
 };
