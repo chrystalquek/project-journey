@@ -8,7 +8,6 @@ import React, { FC, useEffect } from 'react';
 import { VolunteerData } from 'types/volunteer';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { getCommitmentApplications, updateCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
@@ -118,8 +117,6 @@ const PendingRequests: FC<{}> = ({ }) => {
           </TableContainer>
         </Grid>
       </Grid>
-
-      <Footer />
 
     </>
   );

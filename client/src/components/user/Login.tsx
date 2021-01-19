@@ -9,7 +9,6 @@ import { useRouter } from 'next/dist/client/router';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import Footer from '@components/common/Footer';
 import { LoginArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 
@@ -220,7 +219,6 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
             </Grid>
           </Grid>
         </Box>
-        <Footer />
       </Box>
     </>
   );

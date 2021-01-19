@@ -33,7 +33,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
-import Footer from '../common/Footer';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -245,8 +244,6 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             </Grid>
           </Grid>
         )}
-
-      <Footer />
 
     </>
   );

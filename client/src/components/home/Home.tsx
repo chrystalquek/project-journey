@@ -3,7 +3,6 @@ import PaddedGrid from '@components/common/PaddedGrid';
 import PendingApproval from '@components/home/PendingApproval';
 import UpcomingEvent from '@components/home/UpcomingEvent';
 import { Grid, useMediaQuery, useTheme } from '@material-ui/core';
-import { Footer } from 'antd/lib/layout/layout';
 import React, { FC } from 'react';
 import { isAdmin } from '@utils/helpers/auth';
 import { StoreState } from '@redux/store';
@@ -45,7 +44,6 @@ const Home: FC = () => {
           )}
 
       </PaddedGrid>
-      <Footer />
     </>
   );
 };

@@ -11,13 +11,11 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
-import React, { FC, useEffect, useState } from 'react';
-import { useForm } from 'antd/lib/form/Form';
+import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/dist/client/router';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
-import Footer from '@components/common/Footer';
 import { SignUpArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 import SignUpForm from '@components/form/SignUpForm';
@@ -344,7 +342,6 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
         <title>Signup</title>
       </Head>
       <VolunteerSignUp />
-      <Footer />
     </>
   );
 };

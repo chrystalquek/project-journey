@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { getPendingSignUps } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
-import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
@@ -104,8 +103,6 @@ const PendingRequests: FC<{}> = ({ }) => {
           </TableContainer>
         </Grid>
       </Grid>
-
-      <Footer />
 
     </>
   );
