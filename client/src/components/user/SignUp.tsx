@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/dist/client/router';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
 import { SignUpArgs } from '@redux/actions/user';
@@ -326,7 +325,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   );
 
   const VolunteerSignUp = (props) => {
-    if (currentStep == 0) {
+    if (currentStep === 0) {
       return (
         <div>
           <VolunteerType />

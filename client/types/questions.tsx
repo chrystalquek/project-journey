@@ -1,7 +1,9 @@
 export type InputType =
   | 'shortAnswer'
+  | 'short-answer'
   | 'longAnswer'
   | 'checkboxes'
+  | 'check-box'
   | 'date'
   | 'mcq'
   | 'password'

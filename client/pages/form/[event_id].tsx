@@ -4,7 +4,6 @@ import Head from '@components/common/Header';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { StoreState } from '@redux/store';
-import { useState } from 'react';
 
 const AdminEventFormPage = () => {
   const router = useRouter();

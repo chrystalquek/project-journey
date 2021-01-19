@@ -105,6 +105,9 @@ export type EditEventRequest = {
 
 export type GetEventParams = string;
 
+export type GetEventFeedbackFormQuestionsRequest = {
+  eventId: string
+}
 export type UploadImageRequest = FormData;
 
 export type UploadImageRequestWithField = {

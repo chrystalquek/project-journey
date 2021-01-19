@@ -18,6 +18,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import signUpReducer, { SignUpState } from './reducers/signUp';
+import formReducer, { FormState } from './reducers/form';
 import commitmentApplicationReducer, { CommitmentApplicationState } from './reducers/commitmentApplication';
 
 export type StoreState = {
@@ -25,6 +26,7 @@ export type StoreState = {
   event: EventState
   volunteer: VolunteerState
   signUp: SignUpState
+  form: FormState
   commitmentApplication: CommitmentApplicationState,
   image: ImageState,
   profilePage: ProfilePageState,
@@ -36,6 +38,7 @@ const reducers = combineReducers({
   event: EventReducer,
   volunteer: volunteerReducer,
   signUp: signUpReducer,
+  form: formReducer,
   commitmentApplication: commitmentApplicationReducer,
   image: imageReducer,
   profilePage: profilePageReducer,
