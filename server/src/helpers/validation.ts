@@ -140,7 +140,7 @@ const position = body('position').isString().optional();
 
 const hasVolunteered = body('hasVolunteered').isBoolean();
 const biabVolunteeringDuration = body('biabVolunteeringDuration')
-  .isString()
+  .isNumeric()
   .optional();
 
 const hasChildrenExperience = body('hasChildrenExperience')
