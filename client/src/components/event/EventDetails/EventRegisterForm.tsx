@@ -95,7 +95,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
-              <MenuItem key={v.id} value={v.value} disabled={v.isDisabled}>{v.description}</MenuItem>
+              <MenuItem
+                key={v.id}
+                value={v.value}
+                disabled={v.isDisabled}
+              >
+                {v.description}
+
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -111,7 +118,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
-              <MenuItem key={v.id} value={v.value} disabled={v.isDisabled}>{v.description}</MenuItem>
+              <MenuItem
+                key={v.id}
+                value={v.value}
+                disabled={v.isDisabled}
+              >
+                {v.description}
+
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -127,7 +141,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             onChange={handleChange}
           >
             {roles.map((v: FormSelectRow) => (
-              <MenuItem key={v.id} value={v.value} disabled={v.isDisabled}>{v.description}</MenuItem>
+              <MenuItem
+                key={v.id}
+                value={v.value}
+                disabled={v.isDisabled}
+              >
+                {v.description}
+
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

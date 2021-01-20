@@ -8,7 +8,7 @@ import {
   createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
 } from '@redux/actions/signUp';
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateSignUpRequest, UpdateSignUpRequest } from '@utils/api/request';
+import { CreateSignUpRequest } from '@utils/api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
 import { StoreState } from '@redux/store';
 import { SignUpData, SignUpIdType } from '@type/signUp';
@@ -98,7 +98,7 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
         );
       default:
         // this path shouldn't be reached
-        return null;
+        return <></>;
     }
   };
 
