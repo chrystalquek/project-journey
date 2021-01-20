@@ -89,6 +89,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  checkIcon: {
+    fontSize: '100px',
+    color: '#D0DE39', // light green
+  },
 }));
 
 const FeedbackModal: FC<FeedbackModalProps> = ({
@@ -253,11 +257,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
           <div className={classes.root}>
             <div className={classes.submittedRoot}>
               <IconButton>
-                <CheckCircleOutlineIcon style={{
-                  fontSize: '100px',
-                  color: '#D0DE39', // light green
-                }}
-                />
+                <CheckCircleOutlineIcon className={classes.checkIcon} />
               </IconButton>
               <div>
                 <Typography
