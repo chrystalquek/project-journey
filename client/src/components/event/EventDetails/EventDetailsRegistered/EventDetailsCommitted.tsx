@@ -54,8 +54,7 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>
-        {/* TODO: Replace with actual image */}
-        <img src={testEventImage1} alt={event.name} />
+        <img src={event?.coverImage ?? testEventImage1} alt={event.name} />
       </Grid>
       <Button variant="contained" onClick={handleOpen}>Default</Button>
 
