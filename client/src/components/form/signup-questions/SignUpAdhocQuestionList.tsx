@@ -50,7 +50,7 @@ export const questions: QuestionList = [
     name: 'gender',
     displayText: ['Gender'],
     type: 'mcq',
-    initialValue: GENDER.MALE,
+    initialValue: '',
     options: [
       { value: GENDER.MALE, label: 'Male' },
       { value: GENDER.FEMALE, label: 'Female' },
@@ -61,7 +61,7 @@ export const questions: QuestionList = [
     name: 'citizenship',
     displayText: ['Citizenship'],
     type: 'mcq',
-    initialValue: 'singapore',
+    initialValue: '',
     options: [
       { value: CITIZENSHIP.SINGAPORE, label: 'Singapore Citizen' },
       { value: CITIZENSHIP.PR, label: 'Singapore Permanent Resident' },
@@ -151,7 +151,7 @@ export const questions: QuestionList = [
       'Have you volunteered with us before? (eg ad-hoc volunteer or other event)',
     ],
     type: 'mcq',
-    initialValue: true,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
@@ -175,7 +175,7 @@ export const questions: QuestionList = [
       'Do you have medical needs we should be aware of (e.g., heart conditions, asthma, seizures, diabetes, hearing or sight loss, etc.)?',
     ],
     type: 'mcq',
-    initialValue: false,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
@@ -193,7 +193,7 @@ export const questions: QuestionList = [
     name: 'hasAllergies',
     displayText: ['Do you have any allergies (medications, foods, materials)?'],
     type: 'mcq',
-    initialValue: false,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
@@ -213,7 +213,7 @@ export const questions: QuestionList = [
       'Do you take any medication during the day that we should be aware of?',
     ],
     type: 'mcq',
-    initialValue: false,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
@@ -265,7 +265,7 @@ export const questions: QuestionList = [
       'I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein.',
     ],
     type: 'mcq',
-    initialValue: false,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
@@ -280,7 +280,7 @@ export const questions: QuestionList = [
       'I give Beyond Awesome (A program by Blessings in a Bag Limited) to communicate my personal information to volunteer mentors in order to support my experience, development and journey with the program',
     ],
     type: 'mcq',
-    initialValue: false,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
@@ -293,7 +293,7 @@ export const questions: QuestionList = [
       'I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein',
     ],
     type: 'mcq',
-    initialValue: false,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
@@ -316,7 +316,7 @@ export const questions: QuestionList = [
       'Please note that although participation in Beyond Awesome (of Blessings in a Bag Limited) programs is voluntary, once this agreement is signed, it cannot be withdrawn and remains in effect even after the individual is no longer participating in any Beyond Awesome (of Blessings in a Bag Limited) programming. "',
     ],
     type: 'mcq',
-    initialValue: false,
+    initialValue: '',
     options: [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
