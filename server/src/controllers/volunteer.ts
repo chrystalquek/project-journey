@@ -74,17 +74,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         VALIDATOR.emergencyContactName,
         VALIDATOR.emergencyContactNumber,
         VALIDATOR.emergencyContactRelationship,
-        // Remarks
-        VALIDATOR.volunteerRemarks,
-        VALIDATOR.administratorRemarks,
 
-        // Event Count
-        VALIDATOR.volunteeringSessionsCount,
-        VALIDATOR.workshopsCount,
-        VALIDATOR.hangoutsCount,
-
-        // Past Events
-        VALIDATOR.pastEventIds,
       ];
     }
     case 'getVolunteer': {

@@ -184,7 +184,7 @@ const skills = body('skills').isArray().optional();
 const referralSources = body('referralSources').isArray();
 
 const volunteerReason = body('volunteerReason').isString();
-const volunteerFrequency = body('volunteerFrequency').isNumeric();
+const volunteerFrequency = body('volunteerFrequency').isNumeric().optional();
 const volunteerContribution = body('volunteerContribution').isString().optional();
 const volunteerType = body('volunteerType').isString().custom(
   (type: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', type),
