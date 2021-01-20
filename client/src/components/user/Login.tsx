@@ -84,9 +84,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
   }, [user]);
 
   useEffect(() => {
-    if (user.status === 'rejected') {
-      alert('Login failed');
-    } else if (user.status === 'fulfilled') {
+    if (user.status === 'fulfilled') {
       router.push('/');
     }
   }, [user.status]);
@@ -166,10 +164,8 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
                         component={TextField}
                         variant="outlined"
                         margin="normal"
-                        // required
                         fullWidth
                         id="email"
-                        label="e.g. user@email.com"
                         name="email"
                         autoComplete="email"
                       />
@@ -178,7 +174,6 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
                         component={TextField}
                         variant="outlined"
                         margin="normal"
-                        // required
                         fullWidth
                         name="password"
                         type="password"
