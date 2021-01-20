@@ -292,7 +292,8 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
       <Box>
         <Box className={classes.content}>
           <Grid container className={classes.rowContent}>
-            <Grid item lg={6}>
+            <Grid item md={2}/>
+            <Grid item xs={12} md={8}>
               <Button className={classes.backButton} onClick={prevStep}>
                 Back
               </Button>
@@ -318,6 +319,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
               </div>
               <br />
             </Grid>
+            <Grid item md={2}/>
           </Grid>
         </Box>
       </Box>

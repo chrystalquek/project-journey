@@ -193,10 +193,12 @@ const FormGenerator = ({
         photoUrl: values.photoUrl,
         email: values.email,
 
+        socialMediaPlatform: values.socialMediaPlatform,
         instagramHandle: values.instagramHandle,
 
         organization: values.organization,
         position: values.position,
+        race: values.race,
 
         languages: values.languages
           .split(',')
@@ -204,8 +206,31 @@ const FormGenerator = ({
         referralSources: values.referralSources,
 
         hasVolunteered: values.hasVolunteered,
+        biabVolunteeringDuration: values.biabVolunteeringDuration,
 
-        volunteerReason: values.volunteerReason, // Essay
+        hasVolunteeredExternally: values.hasVolunteeredExternally,
+        volunteeringExperience: values.volunteeringExperience,
+
+        hasChildrenExperience: values.hasChildrenExperience,
+        childrenExperience: values.childrenExperience,
+
+        sessionsPerMonth: values.sessionsPerMonth,
+        sessionPreference: values.sessionPreference,
+
+        hasFirstAidCertification: values.hasFirstAidCertification,
+        leadershipInterest: values.leadershipInterest,
+        interests: values.interests,
+
+        skills: values.skills,
+
+        personality: values.personality,
+        strengths: values.strengths
+          .split(',')
+          .map((element) => element.trimStart().trimEnd()),
+        volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
+        
+        volunteerReason: values.volunteerReason,
+        volunteerContribution: values.volunteerContribution,
 
         // WCA Registration: Medical Information
         hasMedicalNeeds: values.hasMedicalNeeds,
@@ -237,7 +262,7 @@ const FormGenerator = ({
 
   questionList.forEach(({ name, isRequired }) => {
     if (isRequired) {
-      requiredSchema[name] = Yup.string().required('Required');
+      requiredSchema[name] = Yup.mixed().required('Required');
     }
   });
 
@@ -254,7 +279,7 @@ const FormGenerator = ({
       then: Yup.string().oneOf(
         [Yup.ref('password')],
         'Confirm Password need to be the same as Password fields'
-      ),
+      ).required('Required'),
     }),
     mobileNumber: Yup.string()
       .matches(phoneRegExp, 'Mobile phone is not valid')
@@ -262,6 +287,7 @@ const FormGenerator = ({
     emergencyContactNumber: Yup.string()
       .matches(phoneRegExp, 'Mobile phone is not valid')
       .required('Required'),
+    emergencyContactEmail: Yup.string().email('Invalid email').required('Required'),
     referralSources: Yup.array().required('Required'),
     biabVolunteeringDuration: Yup.number()
       .integer('Input must be an integer')
@@ -280,7 +306,6 @@ const FormGenerator = ({
   return (
     <Paper
       style={{
-        width: '500px',
         margin: 'auto',
         padding: '30px',
         textAlign: 'left',
@@ -304,7 +329,7 @@ const FormGenerator = ({
 
                 return (
                   <div
-                    key={questionItem.displayText[0]}
+                    key={name}
                     style={{
                       marginBottom: '32px',
                     }}
