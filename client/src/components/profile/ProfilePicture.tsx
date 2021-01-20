@@ -2,6 +2,8 @@ import { Avatar, Badge, Button, Dialog, DialogActions, DialogContent, DialogTitl
 import React, { useCallback, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { PhotoCamera } from '@material-ui/icons';
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -19,22 +21,56 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     display: 'none'
+  },
+  image: {
+    maxWidth: '50%',
   }
 }))
 
 const ProfilePicture = ({ profilePageData }) => {
   const classes = useStyles();
 
-  const[open, setOpen] = useState<boolean>(false);
+  const [src, setSrc] = useState(null);
+  const [imageRef, setImageRef] = useState(null);
+  const [crop, setCrop] = useState({
+    unit: '%',
+    width: 30,
+    aspect: 1/1
+  })
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const handleClickOpen = useCallback(() => {
-    setOpen(true);
-  }, [open]);
+
+  const onSelectFile = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setSrc(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
+
+  const onImageLoaded = (image) => {
+    console.log(`onImageLoaded called ${image}`)
+    setImageRef(image);
+  }
+
+  const onCropComplete = (newCrop) => {
+    console.log('onCropComplete called')
+    console.log(newCrop)
+  }
+
+  const onCropChange = (newCrop) => {
+    console.log('onCropChange called')
+    setCrop(newCrop)
+  }
 
   const handleClose = useCallback(() => {
-    setOpen(false);
+    console.log(`before closing: ${src}`)
+    setSrc(null);
+    console.log(`after closing: ${src}`)
   }, [open]);
 
   return (
@@ -52,14 +88,20 @@ const ProfilePicture = ({ profilePageData }) => {
                 <PhotoCamera className={classes.icon}/>
               </Avatar>
             </label>
-            <input id='file-input' className={classes.input} type="file" accept="image/jpg, image/png" />
+            <input 
+              id='file-input' 
+              className={classes.input} 
+              type="file" 
+              accept="image/jpg, image/png"
+              onChange={onSelectFile} 
+            />
           </div>
         }
       >
         <Avatar alt={profilePageData.name} className={classes.avatar} src={profilePageData.photoUrl}/>
       </Badge>
       <Dialog
-        open={open}
+        open={src !== null}
         fullScreen={isMobile}
         onClose={handleClose}
         fullWidth 
@@ -68,16 +110,19 @@ const ProfilePicture = ({ profilePageData }) => {
           Update Profile Picture
         </DialogTitle>
         <DialogContent>
-          <Grid container direction="column">
-            <Grid item >
-            </Grid>
-          </Grid>
+          {src && (
+            <ReactCrop
+              src={src}
+              crop={crop}
+              ruleOfThirds
+              circularCrop
+              onImageLoaded={onImageLoaded}
+              onComplete={onCropComplete}
+              onChange={onCropChange}
+              imageStyle={{ maxWidth: "75%" }}
+            />
+          )}
         </DialogContent>
-        <DialogActions>
-          <Button>
-            Save
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   )
