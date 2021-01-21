@@ -1,8 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import {
-  Button, Chip, Grid, makeStyles,
+  Chip, Grid, makeStyles,
 } from '@material-ui/core';
 import { testEventImage1 } from '@constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventInformation';
@@ -14,7 +14,6 @@ import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetai
 import { FormStatus } from '@type/event/common';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
-import FeedbackModal from '@components/event/FeedbackModal';
 
 type EventDetailsCommittedProps = {
   event: EventData,
@@ -36,13 +35,6 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
   formStatus, formHandlers, event, user,
 }) => {
   const classes = useStyles();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
 
   return (
     <Grid container>
@@ -56,20 +48,6 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
       <Grid className={classes.gutterBottom} item xs={12}>
         <img src={event?.coverImage ?? testEventImage1} alt={event.name} />
       </Grid>
-      <Button variant="contained" onClick={handleOpen}>Default</Button>
-
-      <FeedbackModal
-        title="Volunteering Regular Session"
-        imageUrl="https://asset.kompas.com/crops/ssPEGiJSIZanhEErP8ZegZCpSa4=/55x0:1675x1080/750x500/data/photo/2021/01/17/60040f44ac6a3.jpeg"
-        eventDate={new Date()}
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Proin vel pellentesque augue, a sodales massa. Quisque sed semper libero.
-                Pellentesque habitant morbi tristique senectus et netus et
-                malesuada fames ac turpis egestas. Morbi"
-        isOpen={isOpen}
-        onClose={handleClose}
-        initialState="prompt"
-      />
 
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED
         ? (
