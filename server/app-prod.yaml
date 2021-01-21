@@ -1,3 +1,0 @@
-env: standard
-runtime: nodejs12
-service: api-prod
