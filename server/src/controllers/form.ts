@@ -48,10 +48,10 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
     const { questions, eventId } = req.body as CreateFormQuestionsRequest;
 
     // Generate form attached to event
-    // TODO: Remove "name" & "description"
+    // TODO: Remove "name" & "description" at model
     const formId = await formService.createForm({
-      name: 'Dummy',
-      description: 'Dummy description',
+      name: '',
+      description: '',
       eventId,
     });
 
