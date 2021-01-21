@@ -37,8 +37,7 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>
-        {/* TODO: Replace with actual image */}
-        <img src={testEventImage1} alt={event.name} />
+        <img src={event?.coverImage ?? testEventImage1} alt={event.name} />
       </Grid>
 
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED

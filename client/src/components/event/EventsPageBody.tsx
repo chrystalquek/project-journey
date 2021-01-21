@@ -99,7 +99,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
               justify="center"
               alignItems="center"
             >
-              <EventButton disableRipple>
+              <EventButton disableRipple onClick={() => router.push('/form/new')}>
                 Create new event
               </EventButton>
             </Grid>
