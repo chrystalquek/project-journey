@@ -225,7 +225,7 @@ const FormGenerator = ({
 
         personality: values.personality,
         strengths: values.strengths
-          .split(',')
+          ?.split(',')
           .map((element) => element.trimStart().trimEnd()),
         volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
         
