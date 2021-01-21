@@ -26,13 +26,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  eventName: {
+    cursor: 'pointer',
+  },
 }));
 
-const PendingRequests: FC<{}> = ({ }) => {
+const PendingRequests: FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const user = useSelector((state: StoreState) => state.user);
 
   useEffect(() => {
     dispatch(getPendingVolunteers()); // just to load number in tab
@@ -93,7 +94,13 @@ const PendingRequests: FC<{}> = ({ }) => {
               <TableBody>
                 {upcomingEvents.map((event) => (
                   <TableRow key={event._id}>
-                    <TableCell><b>{event.name}</b></TableCell>
+                    <TableCell
+                      onClick={() => router.push(`/event/${event._id}`)}
+                      className={classes.eventName}
+                    >
+                      <b>{event.name}</b>
+
+                    </TableCell>
                     <TableCell>{event.startDate.toLocaleDateString()}</TableCell>
                     <TableCell>{pendingRequestsForEvent(event)}</TableCell>
                   </TableRow>
