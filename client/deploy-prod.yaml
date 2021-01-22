@@ -1,0 +1,8 @@
+steps:
+# Install
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+# Build & Deploy
+- name: "gcr.io/cloud-builders/npm"
+  args: ["run", "deploy-prod"]
+  timeout: "1600s"

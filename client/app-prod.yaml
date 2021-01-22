@@ -1,6 +1,6 @@
 env: standard
 runtime: nodejs12
-service: default
+service: client-prod
 
 handlers:
   - url: /.*
