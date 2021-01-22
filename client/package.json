@@ -5,6 +5,8 @@
   "scripts": {
     "build": "cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
     "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
+    "deploy-staging": "npm run build && npm run gcp-predeploy && gcloud app deploy app-staging.yaml",
+    "deploy-prod": "npm run build && npm run gcp-predeploy && gcloud app deploy app-prod.yaml",
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "gcp-predeploy": "find ./build -name '\\[...*' -exec bash -c 'mv \"$1\" \"${1/.../@@@}\"' -- {} \\;",
     "gcp-build": "find ./build -name '\\[@@@*' -exec bash -c 'mv \"$1\" \"${1/@@@/...}\"' -- {} \\;",
