@@ -15,7 +15,7 @@ const insertQuestions = async (questions: Array<Omit<QuestionData, 'id'>>): Prom
       _id: questionId,
       formId: question.formId,
       isRequired: question.isRequired,
-      text: question.text,
+      displayText: question.displayText,
       type: question.type,
     };
   });
@@ -49,7 +49,8 @@ const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
     id: question._id,
     formId: question.formId,
     isRequired: question.isRequired,
-    text: question.text,
+    displayText: question.displayText,
+    name: question._id,
     type: question.type,
   }));
 };

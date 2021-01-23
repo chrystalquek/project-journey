@@ -58,7 +58,7 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
     const questionsData = questions.map((questionData) => ({
       formId,
       isRequired: questionData.isRequired,
-      text: questionData.text,
+      displayText: questionData.displayText,
       type: questionData.type,
     }));
     const questionIds = await questionService.insertQuestions(questionsData);
@@ -96,6 +96,7 @@ const getEventFormDetails = async (req: express.Request, res: express.Response) 
 
       questionsWithOptions.push({
         ...question,
+        name: question.id,
         options: optionsForQuestion,
       });
     }
