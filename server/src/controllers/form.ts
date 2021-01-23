@@ -92,6 +92,7 @@ const getEventFormDetails = async (req: express.Request, res: express.Response) 
 
       questionsWithOptions.push({
         ...question,
+        displayText: [question.displayText],
         name: question.id,
         options: optionsForQuestion,
       });
