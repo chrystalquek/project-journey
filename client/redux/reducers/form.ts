@@ -1,9 +1,9 @@
 import { getEventFeedbackFormQuestions } from '@redux/actions/form';
 import { createSlice } from '@reduxjs/toolkit';
-import { QuestionWithOptions } from '@type/form';
+import { QuestionList } from '@type/questions';
 
 export type FormState = {
-  questions: Array<QuestionWithOptions>
+  questions: QuestionList
 }
 
 const initialState: FormState = {
@@ -20,10 +20,7 @@ const formState = createSlice({
     });
     builder.addCase(getEventFeedbackFormQuestions.fulfilled, (state, action) => {
       const { payload } = action;
-      state.questions = payload.map((question) => ({
-        ...question,
-        displayText: [question.displayText],
-      }));
+      state.questions = payload;
     });
   },
 });

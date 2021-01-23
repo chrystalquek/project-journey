@@ -99,6 +99,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '100px',
     color: '#D0DE39', // light green
   },
+  image: {
+    width: '100%',
+    height: '250px',
+    borderRadius: '10px',
+  },
 }));
 
 const FeedbackModal: FC<FeedbackModalProps> = ({
@@ -165,11 +170,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
             <div className={classes.imageContainer}>
               <img
                 src={imageUrl ?? testEventImage1}
-                style={{
-                  width: '100%',
-                  height: '250px',
-                  borderRadius: '10px',
-                }}
+                className={classes.image}
                 alt="imagecover"
               />
             </div>
