@@ -9,7 +9,7 @@ import {
 import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
 
 type FormQuestionsGeneratorType = {
-  handleSubmit: () => void
+  handleSubmit: (values: Record<string, any>) => void
   questionsList: QuestionList
 }
 

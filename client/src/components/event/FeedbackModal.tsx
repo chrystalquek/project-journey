@@ -1,15 +1,20 @@
 import {
   Button, IconButton, makeStyles, Modal, Typography,
 } from '@material-ui/core';
-import React, { FC, useState } from 'react';
+import React, {
+  FC, useCallback, useEffect, useState,
+} from 'react';
 import { testEventImage1 } from '@constants/imagePaths';
 import { EventButton } from '@components/common/event/EventButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import TextField from '@material-ui/core/TextField';
-import Rating from '@material-ui/lab/Rating';
+
 import dayjs from 'dayjs';
 import Checkbox from '@material-ui/core/Checkbox';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEventFeedbackFormQuestions, submitEventFeedbackFormQuestions } from '@redux/actions/form';
+import { StoreState } from '@redux/store';
+import FormQuestionsGenerator from '@components/form/FormGenerator';
 
 export type FEEDBACK_STATE = 'prompt' | 'fields' | 'success'
 
@@ -19,9 +24,9 @@ type FeedbackModalProps = {
   eventDate: Date
   description: string
   isOpen: boolean
+  eventId: string
   initialState: FEEDBACK_STATE
   onClose: () => void
-  // onSubmitFeedback: () => void
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '54px 86px 54px 86px',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    overflow: 'hidden',
   },
   title: {
     marginBottom: theme.spacing(8),
@@ -102,21 +108,40 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
   description,
   isOpen,
   initialState,
+  eventId,
   onClose,
-  // onSubmitFeedback,
 }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [feedbackState, setFeedbackState] = useState<FEEDBACK_STATE>(initialState);
   const [checked, setChecked] = useState<boolean>(false);
-  const [starRating, setStarRating] = useState<number>(0);
+
+  const user = useSelector((state: StoreState) => state.user.user);
+  const questions = useSelector((state: StoreState) => state.form.questions);
+
+  // Load form when opening modal
+  useEffect(() => {
+    dispatch(getEventFeedbackFormQuestions({ eventId }));
+  }, []);
 
   const navigateToFeedback = () => {
     setFeedbackState('fields');
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback((values: Record<string, any>) => {
+    const answers = Object.keys(values).map((key) => ({
+      questionId: key,
+      userId: user._id,
+      content: values[key],
+    }));
+
+    dispatch(submitEventFeedbackFormQuestions({
+      answers,
+      eventId,
+    }));
+
     setFeedbackState('success');
-  };
+  }, [user, eventId, dispatch]);
 
   const date = dayjs(eventDate).format('ddd, DD MMMM YYYY');
   const time = dayjs(eventDate).format('h.mma');
@@ -198,56 +223,10 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                   I would like to submit my feedback annonymously
                 </Typography>
               </div>
-              <div>
-                <Typography variant="body2" className={classes.textBoxTitle}>
-                  How would you rate the event?
-                </Typography>
-                <Rating
-                  name="rating"
-                  value={starRating}
-                  onChange={(_, newValue) => {
-                    setStarRating(newValue);
-                  }}
-                  className={classes.textBoxTitle}
-                />
-              </div>
-              <div>
-                <Typography variant="body2" className={classes.textBoxTitle}>
-                  How can we improve?
-                </Typography>
-                <TextField
-                  id="improvement"
-                  multiline
-                  rows={4}
-                  variant="filled"
-                  className={classes.textBox}
-                />
-              </div>
-              <div>
-                <Typography variant="body2" className={classes.textBoxTitle}>
-                  Additional Remarks
-                </Typography>
-                <TextField
-                  id="remarks"
-                  multiline
-                  rows={4}
-                  variant="filled"
-                  className={classes.textBox}
-                />
-              </div>
-              <div
-                className={classes.footer}
-                style={{
-                  alignSelf: 'flex-end',
-                }}
-              >
-                <EventButton
-                  onClick={handleSubmit}
-                  className={classes.feedbackButton}
-                >
-                  Submit
-                </EventButton>
-              </div>
+              <FormQuestionsGenerator
+                handleSubmit={handleSubmit}
+                questionsList={questions}
+              />
             </div>
           </form>
 
@@ -289,7 +268,13 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose}>
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      style={{
+        overflow: 'scroll',
+      }}
+    >
       {renderModalContent(feedbackState)}
     </Modal>
   );

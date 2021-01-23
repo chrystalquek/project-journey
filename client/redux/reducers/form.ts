@@ -20,7 +20,10 @@ const formState = createSlice({
     });
     builder.addCase(getEventFeedbackFormQuestions.fulfilled, (state, action) => {
       const { payload } = action;
-      state.questions = payload;
+      state.questions = payload.map((question) => ({
+        ...question,
+        displayText: [question.displayText],
+      }));
     });
   },
 });
