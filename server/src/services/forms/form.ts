@@ -10,8 +10,6 @@ const createForm = async (formData: FormData): Promise<string> => {
   const formId = new mongoose.Types.ObjectId();
   const formSchemaData = new Form({
     _id: formId,
-    name: formData.name,
-    description: formData.description,
     eventId: formData.eventId,
   });
   await formSchemaData.save();
