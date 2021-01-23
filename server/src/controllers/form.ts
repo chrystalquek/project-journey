@@ -115,11 +115,7 @@ const answerFormQuestions = async (req: express.Request, res: express.Response) 
     answers,
   } = req.body as AnswerFormQuestionsRequest;
 
-  console.log('h');
-
   const form = await formService.getForm(eventId);
-
-  console.log('form', form);
 
   const formId = form._id;
 

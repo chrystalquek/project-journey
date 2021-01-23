@@ -245,6 +245,19 @@ export type OptionData = {
     text: string;
 }
 
+export type OptionClientData = {
+    value: string;
+    label: string;
+}
+
+export type QuestionItem = {
+  name: string;
+  displayText: string[];
+  type: FormFieldType;
+  options?: Array<OptionClientData>;
+  isRequired: boolean;
+};
+
 export type ImageData = {
     email: String,
     imageName: String
