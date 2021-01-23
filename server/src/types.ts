@@ -171,7 +171,7 @@ export interface CreateFormQuestionsRequest {
 }
 
 export interface AnswerFormQuestionsRequest {
-    formId: string
+    eventId: string
     answers: Array<AnswerData>
 }
 // TODO: delete if we are following FE

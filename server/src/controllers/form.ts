@@ -33,7 +33,7 @@ const getValidations = (method: FormValidatorMethod) => {
     }
     case 'answerForm': {
       return [
-        body('formId', 'formId was not provided').isString(),
+        body('eventId', 'eventId was not provided').isString(),
         body('answers', 'answers parameter format is incorrect').custom((answers: Array<AnswerData>) => validation.answersValidator(answers)),
       ];
     }
@@ -111,9 +111,17 @@ const getEventFormDetails = async (req: express.Request, res: express.Response) 
 
 const answerFormQuestions = async (req: express.Request, res: express.Response) => {
   let {
-    formId,
+    eventId,
     answers,
   } = req.body as AnswerFormQuestionsRequest;
+
+  console.log('h');
+
+  const form = await formService.getForm(eventId);
+
+  console.log('form', form);
+
+  const formId = form._id;
 
   answers = answers.map((answer) => ({
     ...answer,
