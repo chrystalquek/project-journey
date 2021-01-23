@@ -36,7 +36,11 @@ const EventSchema = new Schema({
     enum: ['pdf', 'video', 'image', 'links', 'document'],
   },
   location: String,
-  createdAt: {
+  isCancelled: {
+    type: Boolean,
+    default: false,
+  },
+  created_at: {
     type: Date,
     default: Date.now,
   },

@@ -32,11 +32,11 @@ const LENGTH_MINIMUM_PASSWORD = 8;
 export const stringEnumValidator = (
   enumTypes: Array<string>,
   enumName: string,
-  value: string
+  value: string,
 ) => {
   if (!_.includes(enumTypes, value)) {
     throw new Error(
-      `${enumName}: "${value}" must be either ${enumTypes.join(', ')}`
+      `${enumName}: "${value}" must be either ${enumTypes.join(', ')}`,
     );
   }
   return true;
@@ -55,7 +55,7 @@ export const signUpStatusValidator = (value: SignUpStatus) => {
     return true;
   }
   throw new Error(
-    'status must be either "pending", "rejected", or ["accepted": <acceptedRole>]'
+    'status must be either "pending", "rejected", or ["accepted": <acceptedRole>]',
   );
 };
 
@@ -73,9 +73,9 @@ const questionValidator = (questions: Array<QuestionsOptionsRequestData>) => {
   // eslint-disable-next-line no-restricted-syntax
   questions.forEach((question) => {
     if (
-      question.isRequired === undefined ||
-      question.text?.length === 0 ||
-      question.type?.length === 0
+      question.isRequired === undefined
+      || question.text?.length === 0
+      || question.type?.length === 0
     ) {
       throw new Error('Question Options data is not as expected');
     }
@@ -93,22 +93,21 @@ const answersValidator = (answers: Array<AnswerData>) => {
   return true;
 };
 
-const email = (emailMustBeUnique: boolean) =>
-  body('email')
-    .isEmail()
-    .normalizeEmail()
-    .custom(async (emailString: string) => {
-      const isNewEmailUnique = await doesUserEmailExist(emailString);
-      if (!isNewEmailUnique && emailMustBeUnique) {
-        throw new Error('E-mail is already in use');
-      }
+const email = (emailMustBeUnique: boolean) => body('email')
+  .isEmail()
+  .normalizeEmail()
+  .custom(async (emailString: string) => {
+    const isNewEmailUnique = await doesUserEmailExist(emailString);
+    if (!isNewEmailUnique && emailMustBeUnique) {
+      throw new Error('E-mail is already in use');
+    }
 
-      if (isNewEmailUnique && !emailMustBeUnique) {
-        throw new Error(`E-mail: ${emailString} does not exist in the system`);
-      }
+    if (isNewEmailUnique && !emailMustBeUnique) {
+      throw new Error(`E-mail: ${emailString} does not exist in the system`);
+    }
 
-      return true;
-    });
+    return true;
+  });
 
 const password = body('password').isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
@@ -125,31 +124,23 @@ const mobileNumber = body('mobileNumber').isString().isMobilePhone('en-SG');
 const birthday = body('birthday').isISO8601().toDate();
 const socialMediaPlatform = body('socialMediaPlatform')
   .isString()
-  .custom((socialMedia: string) =>
-    stringEnumValidator(
-      SOCIAL_MEDIA_PLATFORMS,
-      'Social Media Platform',
-      socialMedia
-    )
-  );
+  .custom((socialMedia: string) => stringEnumValidator(
+    SOCIAL_MEDIA_PLATFORMS,
+    'Social Media Platform',
+    socialMedia,
+  ));
 const instagramHandle = body('instagramHandle').isString().optional();
-const gender = body('gender').custom((genderText: string) =>
-  stringEnumValidator(GENDER_TYPES, 'Gender', genderText)
-);
-const citizenship = body('citizenship').custom((citizenshipType: string) =>
-  stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenshipType)
-);
+const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER_TYPES, 'Gender', genderText));
+const citizenship = body('citizenship').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenshipType));
 const race = body('race')
-  .custom((raceType: string) =>
-    stringEnumValidator(RACE_TYPES, 'Race', raceType)
-  )
+  .custom((raceType: string) => stringEnumValidator(RACE_TYPES, 'Race', raceType))
   .optional();
 const organization = body('organization').isString().optional();
 const position = body('position').isString().optional();
 
 const hasVolunteered = body('hasVolunteered').isBoolean();
 const biabVolunteeringDuration = body('biabVolunteeringDuration')
-  .isString()
+  .isNumeric()
   .optional();
 
 const hasChildrenExperience = body('hasChildrenExperience')
@@ -173,22 +164,18 @@ const hasFirstAidCertification = body('hasFirstAidCertification')
 
 const leadershipInterest = body('leadershipInterest')
   .isString()
-  .custom((leadershipInterestType: string) =>
-    stringEnumValidator(
-      LEADERSHIP_INTEREST_TYPES,
-      'Leadership Interest',
-      leadershipInterestType
-    )
-  )
+  .custom((leadershipInterestType: string) => stringEnumValidator(
+    LEADERSHIP_INTEREST_TYPES,
+    'Leadership Interest',
+    leadershipInterestType,
+  ))
   .optional();
 
 const description = body('description').isString().optional();
 const interests = body('interests').isString().optional();
 const personality = body('personality')
   .isString()
-  .custom((personalityType: string) =>
-    stringEnumValidator(PERSONALITY_TYPES, 'Personality', personalityType)
-  )
+  .custom((personalityType: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personalityType))
   .optional();
 const strengths = body('strengths').isArray().optional();
 const languages = body('languages').isArray();
@@ -197,7 +184,7 @@ const skills = body('skills').isArray().optional();
 const referralSources = body('referralSources').isArray();
 
 const volunteerReason = body('volunteerReason').isString();
-const volunteerFrequency = body('volunteerFrequency').isNumeric();
+const volunteerFrequency = body('volunteerFrequency').isNumeric().optional();
 const volunteerContribution = body('volunteerContribution').isString().optional();
 const volunteerType = body('volunteerType').isString().custom(
   (type: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', type),
@@ -216,9 +203,8 @@ const emergencyContactName = body('emergencyContactName').isString();
 const emergencyContactNumber = body('emergencyContactNumber').isString();
 const emergencyContactEmail = body('emergencyContactEmail').isString();
 const emergencyContactRelationship = body(
-  'emergencyContactRelationship'
+  'emergencyContactRelationship',
 ).isString();
-
 
 const volunteerRemarks = body('volunteerRemarks').isString();
 const administratorRemarks = body('administratorRemarks').isString();
@@ -227,25 +213,23 @@ const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
 const workshopsCount = body('workshopsCount').isInt();
 const hangoutsCount = body('hangoutsCount').isInt();
 
-const pastEventIds = body('pastEventIds').isArray()
+const pastEventIds = body('pastEventIds').isArray();
 
 const commitmentApplicationStatus = body('status')
   .isString()
-  .custom((status: string) =>
-    stringEnumValidator(
-      COMMITMENT_APPLICATION_STATUS,
-      'Commitment Application Status',
-      status
-    )
-  );
+  .custom((status: string) => stringEnumValidator(
+    COMMITMENT_APPLICATION_STATUS,
+    'Commitment Application Status',
+    status,
+  ));
 
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request,
   res: express.Response,
-  next: Function
+  next: Function,
 ) => {
   await Promise.all(
-    validations.map((validation: ValidationChain) => validation.run(req))
+    validations.map((validation: ValidationChain) => validation.run(req)),
   );
 
   const validationErrors = validationResult(req);
@@ -313,5 +297,5 @@ export default {
   volunteeringSessionsCount,
   workshopsCount,
   hangoutsCount,
-  pastEventIds
+  pastEventIds,
 };

@@ -115,7 +115,7 @@ const deleteSignUp = async (req: express.Request, res: express.Response) => {
   try {
     const { id, idType } = req.params;
     await signUpService.deleteSignUp(id, idType as SignUpIdType);
-    res.status(HTTP_CODES.OK).send();
+    res.status(HTTP_CODES.OK).send('Sign up deleted and event updated');
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

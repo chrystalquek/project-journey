@@ -25,6 +25,7 @@ const createEvent = async (eventData: EventData): Promise<void> => {
       contentUrl: eventData.contentUrl,
       contentType: eventData.contentType,
       location: eventData.location,
+      isCancelled: eventData.isCancelled,
     });
     await eventSchemaData.save();
   } catch (err) {
@@ -141,12 +142,28 @@ const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
 
 const updateEvent = async (
   id: string,
-  updatedFields: EventData,
+  updatedFields: Partial<EventData>,
 ): Promise<void> => {
   try {
     await Event.findOneAndUpdate(
       { _id: id },
       { $set: updatedFields },
+      { new: true },
+    );
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
+const cancelEvent = async (
+  id: string,
+): Promise<void> => {
+  try {
+    await Event.findOneAndUpdate(
+      { _id: id },
+      { $set: {
+        isCancelled: true
+      } },
       { new: true },
     );
   } catch (err) {
@@ -174,5 +191,6 @@ export default {
   readEvents,
   readEventsByIds,
   updateEvent,
+  cancelEvent,
   deleteEvent,
 };

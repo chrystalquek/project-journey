@@ -95,7 +95,7 @@ export type VolunteerData = {
     // Event count
     volunteeringSessionsCount: number;
     workshopsCount: number;
-    hangoutsCount: number; 
+    hangoutsCount: number;
 
     // Past Events
     pastEventIds: Array<string>
@@ -206,6 +206,7 @@ export type EventData = {
     contentUrl?: string;
     contentType?: string;
     location: string;
+    isCancelled: boolean;
 }
 
 export type OpportunityData = EventData & {
