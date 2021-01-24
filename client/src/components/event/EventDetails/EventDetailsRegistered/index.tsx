@@ -36,6 +36,7 @@ const Index: FC<EventDetailsProps> = ({ event, user }) => {
   const hasAcceptedSignUp = signUpInfo.length > 0
     && Array.isArray(signUpInfo[0].status)
     && signUpInfo[0].status[0] === 'accepted';
+
   let reason;
   if (isEventFull) {
     reason = FormDisabledReason.EVENT_FULL;
@@ -46,11 +47,12 @@ const Index: FC<EventDetailsProps> = ({ event, user }) => {
   } else {
     reason = '';
   }
+
   const formStatus = {
     disabled: isEventFull || hasPendingSignUp || hasAcceptedSignUp, // default disabled reasons
     reason,
     details: {
-      acceptedSignUp: hasAcceptedSignUp ? signUpInfo : null,
+      acceptedSignUp: hasAcceptedSignUp ? signUpInfo[0] : null,
     },
   };
 

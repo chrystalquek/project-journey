@@ -14,6 +14,7 @@ import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetai
 import { FormStatus } from '@type/event/common';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
+import {getAcceptedSignUp} from "@utils/helpers/event";
 
 type EventDetailsCommittedProps = {
   event: EventData,
@@ -72,7 +73,13 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
           <Grid className={classes.gutterBottom} item xs={12}>
             <EventPaper>
               <EventTypography gutterBottom fontBold text="Successful registration!" />
-              <EventTypography gutterBottom text={`Accepted role: ${formStatus?.details || 'Error retrieving accepted role.'}`} />
+              <EventTypography
+                gutterBottom
+                text={
+                  `Accepted role: ${getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
+                  'Error retrieving accepted role.'}`
+                }
+              />
             </EventPaper>
           </Grid>
         )

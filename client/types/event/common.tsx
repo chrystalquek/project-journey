@@ -6,6 +6,6 @@ export type FormStatus = {
   disabled: boolean,
   reason: FormDisabledReason,
   details: {
-    acceptedSignUp: Array<SignUpData> | null,
+    acceptedSignUp: SignUpData | null,
   }
 }
