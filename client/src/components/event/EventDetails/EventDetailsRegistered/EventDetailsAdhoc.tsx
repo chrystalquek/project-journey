@@ -85,14 +85,17 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
           : <FacilitatorInfo event={event} />}
       </Grid>
 
-      <Grid className={classes.gutterBottom} item xs={12}>
-        <EventRegisterForm
-          isDisabled={formStatus.disabled}
-          event={event}
-          user={user}
-          formHandlers={formHandlers}
-        />
-      </Grid>
+
+      {!formStatus.disabled &&
+        <Grid className={classes.gutterBottom} item xs={12}>
+          <EventRegisterForm
+            isDisabled={formStatus.disabled}
+            event={event}
+            user={user}
+            formHandlers={formHandlers}
+          />
+        </Grid>
+      }
 
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED
         ? (
