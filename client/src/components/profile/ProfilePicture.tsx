@@ -1,4 +1,4 @@
-import { Avatar, Badge, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, useMediaQuery } from '@material-ui/core';
+import { Avatar, Badge, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, Typography, useMediaQuery } from '@material-ui/core';
 import React, { useCallback, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { PhotoCamera } from '@material-ui/icons';
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     maxWidth: '50%',
-  }
+  },
 }))
 
 const ProfilePicture = ({ profilePageData }) => {
@@ -119,7 +119,8 @@ const ProfilePicture = ({ profilePageData }) => {
               onImageLoaded={onImageLoaded}
               onComplete={onCropComplete}
               onChange={onCropChange}
-              imageStyle={{ maxWidth: "75%" }}
+              style={{ maxWidth: "75%" }}
+              imageStyle={{ maxWidth: "100%" }}
             />
           )}
         </DialogContent>
