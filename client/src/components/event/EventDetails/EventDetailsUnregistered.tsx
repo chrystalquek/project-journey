@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import {
-  Box, Chip, Grid, makeStyles,
+  Chip, Grid, makeStyles,
 } from '@material-ui/core';
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { testEventImage1 } from '@constants/imagePaths';
@@ -57,10 +57,6 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>
-        <CreateAccountNotice />
-      </Grid>
-
-      <Grid item xs={12}>
         <CreateAccountNotice />
       </Grid>
     </Grid>
