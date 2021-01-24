@@ -96,9 +96,13 @@ const EventVolunteers = ({ eid }) => {
   }, [eid]);
 
   useEffect(() => {
-    const signUpsData = signUps.data;
-    const volunteerIds = Object.values(signUpsData).map((signUp) => signUp.userId);
-    setAllVolunteerIds(volunteerIds);
+    if (signUps && eid) {
+      const signUpsData = signUps.data;
+      const volunteerIds = Object.values(signUpsData)
+        .filter((signUp) => signUp.eventId === eid)
+        .map((signUp) => signUp.userId);
+      setAllVolunteerIds(volunteerIds);
+    }
   }, [signUps]);
 
   const getVolunteerData = async () => {
@@ -139,13 +143,15 @@ const EventVolunteers = ({ eid }) => {
     const signUpData = signUps.data;
     const approved = [];
     const nonApproved = [];
-    Object.values(signUpData).forEach((signUp) => {
-      if (isStatusApproved(signUp.status)) {
-        approved.push(signUp);
-      } else {
-        nonApproved.push(signUp);
-      }
-    });
+    Object.values(signUpData)
+      .filter((signUp) => signUp.eventId === eid)
+      .forEach((signUp) => {
+        if (isStatusApproved(signUp.status)) {
+          approved.push(signUp);
+        } else {
+          nonApproved.push(signUp);
+        }
+      });
     dispatch(getEvent(eid));
 
     setApprovedSignUps(approved);
