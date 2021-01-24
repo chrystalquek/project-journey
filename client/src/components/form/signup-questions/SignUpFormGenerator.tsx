@@ -170,7 +170,17 @@ const FormGenerator = ({
   };
 
   const handleSubmit = useCallback(
-    async (values: Record<string, any>) => {
+    async (formValues: Record<string, any>) => {
+      // Helper function
+      const objectMap = (obj, fn) => 
+        Object.fromEntries(
+          Object.entries(obj).map(
+            ([k, v], i) => [k, fn(v, k, i)]
+          )
+        );
+
+      const values = objectMap(formValues, element => element === '' ? undefined : element);
+      
       // Upload and get cover image URL
       if (values.photoUrl && typeof values.photoUrl !== 'string') {
         // @ts-ignore type exists
@@ -201,7 +211,7 @@ const FormGenerator = ({
         race: values.race,
 
         languages: values.languages
-          .split(',')
+          ?.split(',')
           .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
         referralSources: values.referralSources,
 
@@ -256,7 +266,8 @@ const FormGenerator = ({
     [questionList]
   );
 
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegExp =/^(\+65)?[689]\d{7}$/;
+  const personalityRegex = /(I|E)(N|S)(F|T)(J|P)_(A|T)/;
 
   const requiredSchema: object = {};
 
@@ -301,6 +312,10 @@ const FormGenerator = ({
             .integer('Input must be an integer')
             .positive('Input must be a positive integer')
             .required('Required'),
+    personality:
+      type === VOLUNTEER_TYPE.ADHOC
+        ? Yup.mixed()
+        : Yup.string().matches(personalityRegex, 'Invalid value').required('Required'),
   });
 
   return (

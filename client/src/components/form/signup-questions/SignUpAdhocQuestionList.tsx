@@ -91,7 +91,7 @@ export const questions: QuestionList = [
     displayText: ['Upload profile picture'],
     type: 'photo',
     initialValue: null,
-    isRequired: false,
+    isRequired: true,
   },
   {
     name: 'instagramHandle',
@@ -112,7 +112,7 @@ export const questions: QuestionList = [
     displayText: ['Year Level / Position'],
     type: 'shortAnswer',
     initialValue: '',
-    isRequired: true,
+    isRequired: false,
   },
   {
     name: 'languages',
@@ -172,6 +172,7 @@ export const questions: QuestionList = [
   {
     name: 'hasMedicalNeeds',
     displayText: [
+      'Note: The information in this section is collected in the unlikely event of a medical emergency. This information will not be used for any other purposes.',
       'Do you have medical needs we should be aware of (e.g., heart conditions, asthma, seizures, diabetes, hearing or sight loss, etc.)?',
     ],
     type: 'mcq',
@@ -224,21 +225,21 @@ export const questions: QuestionList = [
   // Emergency Contact Information
   {
     name: 'emergencyContactName',
-    displayText: ['Emergency Contact Full Name #1'],
+    displayText: ['Emergency Contact Full Name'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
   },
   {
     name: 'emergencyContactNumber',
-    displayText: ['Emergency Contact Mobile Number #1'],
+    displayText: ['Emergency Contact Mobile Number'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
   },
   {
     name: 'emergencyContactEmail',
-    displayText: ['Emergency Contact Email Address #1'],
+    displayText: ['Emergency Contact Email Address'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
@@ -250,14 +251,7 @@ export const questions: QuestionList = [
     initialValue: '',
     isRequired: true,
   },
-  {
-    name: 'emergencyContactOther',
-    displayText: ['If Other, please specify'],
-    type: 'shortAnswer',
-    initialValue: '',
-    isRequired: false,
-  },
-
+  
   // Permission for Email Collection and Communication
   {
     name: 'permissionEmailCollection',
