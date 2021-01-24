@@ -2,14 +2,12 @@ import express from 'express';
 import HTTP_CODES from '../constants/httpCodes';
 
 import emailService from '../services/email';
-import generateDummyUser from '../dummy/user';
-import generateDummyEvent from '../dummy/event';
 
 const sendFeedbackRequest = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const { userId, eventId } = req.params;
     await emailService.sendEmail('FEEDBACK', userId, eventId);
-    res.status(HTTP_CODES.OK);
+    res.status(HTTP_CODES.OK).json({ userId, eventId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -18,7 +16,15 @@ const sendFeedbackRequest = async (req: express.Request, res: express.Response):
 };
 
 const sendCancelEvent = async (req: express.Request, res: express.Response): Promise<void> => {
-
+  try {
+    const { userId, eventId } = req.params;
+    await emailService.sendEmail('CANCEL_EVENT', userId, eventId);
+    res.status(HTTP_CODES.OK).json({ userId, eventId });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
 };
 
 export default {
