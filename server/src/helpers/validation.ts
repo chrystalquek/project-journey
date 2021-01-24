@@ -178,7 +178,7 @@ const personality = body('personality')
   .custom((personalityType: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personalityType))
   .optional();
 const strengths = body('strengths').isArray().optional();
-const languages = body('languages').isArray();
+const languages = body('languages').isArray().optional();
 const skills = body('skills').isArray().optional();
 
 const referralSources = body('referralSources').isArray();
@@ -192,11 +192,11 @@ const volunteerType = body('volunteerType').isString().custom(
 const volunteeringOpportunityInterest = body('volunteeringOpportunityInterest').isString().optional();
 
 // Medical Information
-const hasMedicalNeeds = body('hasMedicalNeeds').isBoolean();
+const hasMedicalNeeds = body('hasMedicalNeeds').isBoolean().optional();
 const medicalNeeds = body('medicalNeeds').isString().optional();
-const hasAllergies = body('hasAllergies').isBoolean();
+const hasAllergies = body('hasAllergies').isBoolean().optional();
 const allergies = body('allergies').isString().optional();
-const hasMedicationDuringDay = body('hasMedicationDuringDay').isBoolean();
+const hasMedicationDuringDay = body('hasMedicationDuringDay').isBoolean().optional();
 
 // Emergency contact
 const emergencyContactName = body('emergencyContactName').isString();
