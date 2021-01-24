@@ -1,8 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { CreateSignUpRequest, SignUpQueryParams, UpdateSignUpRequest } from '@utils/api/request';
+import {
+  CreateSignUpRequest, SignUpQueryParams, UpdateSignUpRequest,
+} from '@utils/api/request';
 import { GetSignUpsResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import { SignUpData } from '@type/signUp';
 
 export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, SignUpQueryParams, { state }>(
   'signUp/getSignUpsUpcomingEvent',
@@ -22,9 +25,7 @@ export const getPendingSignUps = createAsyncThunk<GetSignUpsResponse, void, { st
 
 export const createAndAcceptSignUp = createAsyncThunk(
   'signUp/createAndAcceptSignUp',
-  async (payloadCreator: { request: CreateSignUpRequest, form: FormState }, thunkAPI) => {
-    return await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request);
-  },
+  async (payloadCreator: { request: CreateSignUpRequest, form: FormState }, thunkAPI) => await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request),
 );
 
 export const getSignUps = createAsyncThunk(
@@ -40,6 +41,18 @@ export const createSignUp = createAsyncThunk(
 export const updateSignUp = createAsyncThunk(
   'signUp/updateSignUp',
   async (payloadCreator: { query: SignUpQueryParams, request: UpdateSignUpRequest }) => await apiClient.updateSignUp(payloadCreator.query, payloadCreator.request),
+);
+
+export const updateSignUpInstant = createAsyncThunk(
+  'signUp/updateSignUpInstant',
+  async (payloadCreator: {query: SignUpQueryParams, request: SignUpData}) => {
+    await apiClient
+      .updateSignUp(payloadCreator.query, payloadCreator.request);
+    const response = {
+      data: [payloadCreator.request],
+    };
+    return response;
+  },
 );
 
 export const deleteSignUp = createAsyncThunk(

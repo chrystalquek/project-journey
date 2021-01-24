@@ -9,7 +9,9 @@ import {
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { EventData, EventFilterOptions, EventFilters } from '@type/event';
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, useCallback, useEffect, useState,
+} from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import EventCard from '@components/event/EventCard';
@@ -73,6 +75,14 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
     getAllEvents();
   }, []);
 
+  const handleCardClick = useCallback((eventId: string) => {
+    if (user) {
+      router.push(`/event/${eventId}`);
+    } else {
+      router.push('/login');
+    }
+  }, [user]);
+
   if (screenSm) {
     return (
       <>
@@ -89,7 +99,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
               justify="center"
               alignItems="center"
             >
-              <EventButton disableRipple>
+              <EventButton disableRipple onClick={() => router.push('/form/new')}>
                 Create new event
               </EventButton>
             </Grid>
@@ -121,7 +131,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
                 <EventCard
                   key={event._id}
                   event={event}
-                  onCardClick={() => router.push(`/event/${event._id}`)}
+                  onCardClick={() => handleCardClick(event._id)}
                 />
               </Grid>
             ))}

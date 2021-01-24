@@ -33,8 +33,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
-import NavBar from '../common/NavBar';
-import Footer from '../common/Footer';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -68,8 +66,6 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-
-  const userData = useSelector((state: StoreState) => state.user);
 
   const volunteers = useSelector((state: StoreState) => state.volunteer);
 
@@ -206,7 +202,6 @@ const VolunteerProfile: FC<{}> = ({ }) => {
       <Head>
         <title>Volunteer Profiles</title>
       </Head>
-      <NavBar userData={userData.user} />
 
       {!isMobile
         ? (
@@ -249,8 +244,6 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             </Grid>
           </Grid>
         )}
-
-      <Footer />
 
     </>
   );

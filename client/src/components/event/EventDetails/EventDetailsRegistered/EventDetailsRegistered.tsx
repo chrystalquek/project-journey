@@ -4,9 +4,11 @@ import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted';
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
-import { createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps } from '@redux/actions/signUp';
+import {
+  createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
+} from '@redux/actions/signUp';
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateSignUpRequest, UpdateSignUpRequest } from '@utils/api/request';
+import { CreateSignUpRequest } from '@utils/api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
 import { StoreState } from '@redux/store';
 import { SignUpData, SignUpIdType } from '@type/signUp';
@@ -96,23 +98,46 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
         );
       default:
         // this path shouldn't be reached
-        return null;
+        return <></>;
     }
   };
 
   const router = useRouter();
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
   const withdrawCommitment = () => {
-    let acceptedSignUp = signUpInfo.find(signUp => Array.isArray(signUp.status) && signUp.status[0] === 'accepted')
-    dispatch(deleteSignUp({ id: acceptedSignUp.signUpId, idType: 'signUpId', eventId: acceptedSignUp.eventId, userId: acceptedSignUp.userId }))
-    router.push('/event')
-  }
-  const withdrawCommitmentQuestion = <>Are you sure you want to withdraw from <b>{event.name}?</b><br /><br />Withdrawal from event cannot be undone.</>
+    const acceptedSignUp = signUpInfo.find((signUp) => Array.isArray(signUp.status) && signUp.status[0] === 'accepted');
+    dispatch(deleteSignUp({
+      id: acceptedSignUp.signUpId, idType: 'signUpId', eventId: acceptedSignUp.eventId, userId: acceptedSignUp.userId,
+    }));
+    router.push('/event');
+  };
+  const withdrawCommitmentQuestion = (
+    <>
+      Are you sure you want to withdraw from
+      {' '}
+      <b>
+        {event.name}
+        ?
+      </b>
+      <br />
+      <br />
+      Withdrawal from event cannot be undone.
+    </>
+  );
   return (
     <>
       {renderDetails(user.volunteerType)}
-      {hasAcceptedSignUp && <ActionableDialog open={open} setOpen={() => setOpen(!open)} content={withdrawCommitmentQuestion}
-        buttonTitle='Confirm' buttonOnClick={withdrawCommitment} openCloseButtonTitle="Withdraw" recommendedAction="cancel" />}
+      {hasAcceptedSignUp && (
+      <ActionableDialog
+        open={open}
+        setOpen={() => setOpen(!open)}
+        content={withdrawCommitmentQuestion}
+        buttonTitle="Confirm"
+        buttonOnClick={withdrawCommitment}
+        openCloseButtonTitle="Withdraw"
+        recommendedAction="cancel"
+      />
+      )}
     </>
   );
 };

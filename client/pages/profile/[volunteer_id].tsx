@@ -5,7 +5,6 @@ import Remarks from '@components/profile/Remarks';
 import ContactInformation from '@components/profile/ContactInformation';
 import SignUpInformation from '@components/profile/SignUpInformation';
 import EventCount from '@components/profile/EventCount';
-import NavBar from '@components/common/NavBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import ErrorPage from 'next/error';
@@ -39,9 +38,7 @@ const Profile = () => {
   return (profilePageData === null || profilePageData?._id !== profilePageId ? <Loading />
     : (
       <Grid container direction="column">
-        <Grid item>
-          <NavBar userData={profilePageData} />
-        </Grid>
+        <Grid item />
         <Grid item container>
           <Grid item md={2} />
           <Grid item container direction="column" xs={12} md={8}>

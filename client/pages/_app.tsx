@@ -8,6 +8,8 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DayJsUtils from '@date-io/dayjs';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '@styles/theme';
+import NavBar from '@components/common/NavBar';
+import Footer from '@components/common/Footer';
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -15,7 +17,9 @@ function App({ Component, pageProps }: AppProps) {
       <PersistGate loading={null} persistor={configureStore.persistor}>
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DayJsUtils}>
+            <NavBar />
             <Component {...pageProps} />
+            <Footer />
           </MuiPickersUtilsProvider>
         </ThemeProvider>
       </PersistGate>

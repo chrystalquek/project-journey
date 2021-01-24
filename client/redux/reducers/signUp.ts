@@ -4,7 +4,7 @@ import {
   deleteSignUp,
   getPendingSignUps, getSignUps,
   getSignUpsUpcomingEvent,
-  updateSignUp,
+  updateSignUp, updateSignUpInstant,
 } from '@redux/actions/signUp';
 import { SignUpData } from 'types/signUp';
 
@@ -36,9 +36,7 @@ const initialState: SignUpState = {
 
 // parse all Dates etc before saving to store
 const addToData = (signUps: Array<SignUpData>, state: SignUpState) => {
-  signUps.forEach((signUp) => state.data[signUp._id] = {
-    ...signUp,
-  });
+  signUps.forEach((signUp) => { state.data[signUp._id] = signUp; });
 };
 
 const signUpSlice = createSlice({
@@ -92,10 +90,13 @@ const signUpSlice = createSlice({
     builder.addCase(updateSignUp.rejected, (state, action) => {
       // do nothing yet
     });
-
+    builder.addCase(updateSignUpInstant.fulfilled, (state, action) => {
+      const { payload } = action;
+      addToData(payload.data, state);
+    });
     builder.addCase(deleteSignUp.fulfilled, (state, action) => {
       const { meta } = action;
-      state.data[meta.arg.id] = null
+      state.data[meta.arg.id] = null;
     });
   },
 });

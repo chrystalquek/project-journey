@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { EventData } from '@type/event';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import {
-  Box, Chip, CircularProgress, Grid, makeStyles,
+  Chip, Grid, makeStyles,
 } from '@material-ui/core';
 import { testEventImage1 } from '@constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventInformation';
@@ -46,8 +46,7 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>
-        {/* TODO: Replace with actual image */}
-        <img src={testEventImage1} alt={event.name} />
+        <img src={event?.coverImage ?? testEventImage1} alt={event.name} />
       </Grid>
 
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED

@@ -34,7 +34,7 @@ const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
           component="img"
           alt="EventCard"
           height="100%"
-          image={testEventImage3}
+          image={event?.coverImage ?? testEventImage3}
           title={event && event.name ? event.name : 'EventCard'}
         />
         <CardContent>

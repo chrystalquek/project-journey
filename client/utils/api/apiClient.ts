@@ -22,9 +22,9 @@ import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
   CreateSignUpResponse, UpdateSignUpResponse,
-  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse,
+  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse, GetEventFeedbackQuestionsResponse,
 } from '@utils/api/response';
-import { SignUpIdType } from "@type/signUp";
+import { SignUpIdType } from '@type/signUp';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -40,6 +40,7 @@ export interface ApiClient {
   getEvents(query: EventQueryParams): Promise<GetEventsResponse>
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
+  getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse>
   getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse>
   updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
 }
@@ -81,15 +82,13 @@ class AxiosApiClient implements ApiClient {
   }
 
   async createSignUp(
-    request: CreateSignUpRequest
+    request: CreateSignUpRequest,
   ): Promise<CreateSignUpResponse> {
     return this.send(request, 'signup', 'post');
   }
 
-  async updateSignUp(
-    query: SignUpQueryParams,
-    request: UpdateSignUpRequest
-  ): Promise<UpdateSignUpResponse> {
+  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest):
+  Promise<UpdateSignUpResponse> {
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
@@ -147,14 +146,17 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
+  async getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse> {
+    return this.send({}, `form/${eventId}`, 'get');
+  }
+
   async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {
     return this.send(request, 'volunteer', 'put');
   }
 
   // commitment application
-  async createCommitmentApplication(
-    request: CreateCommitmentApplicationRequest
-  ): Promise<CommitmentApplicationData> {
+  async createCommitmentApplication(request: CreateCommitmentApplicationRequest):
+  Promise<CommitmentApplicationData> {
     return this.send(request, 'commitment-application', 'post');
   }
 
@@ -163,12 +165,19 @@ class AxiosApiClient implements ApiClient {
   }
 
   async updateCommitmentApplication(
-    data: CommitmentApplicationData
+    data: CommitmentApplicationData,
   ): Promise<void> {
     return this.send(data, `commitment-application/${data._id}`, 'put');
   }
 
-  // upload image
+  async getVolunteersById(ids) {
+    return this.send({ ids }, 'volunteer/ids', 'post');
+  }
+
+  async getSignUpsByEventId(eid) {
+    return this.send({ eid }, `signup/${eid}/eventId`, 'get');
+  }
+
   async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
     return this.send(request, 'image', 'post', true);
   }
@@ -177,7 +186,7 @@ class AxiosApiClient implements ApiClient {
     request: any,
     path: string,
     method: HttpMethod,
-    isImageUpload: boolean = false
+    isImageUpload: boolean = false,
   ) {
     const headers: Record<string, string> = {
       'Content-Type': isImageUpload

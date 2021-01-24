@@ -8,8 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { getPendingSignUps } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
-import NavBar from '@components/common/NavBar';
-import { Footer } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
@@ -28,13 +26,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  eventName: {
+    cursor: 'pointer',
+  },
 }));
 
-const PendingRequests: FC<{}> = ({ }) => {
+const PendingRequests: FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const user = useSelector((state: StoreState) => state.user);
 
   useEffect(() => {
     dispatch(getPendingVolunteers()); // just to load number in tab
@@ -80,7 +79,6 @@ const PendingRequests: FC<{}> = ({ }) => {
       <Head>
         <title>Event Pending Requests</title>
       </Head>
-      <NavBar userData={user.user} />
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
           <Tabs tabs={tabs} clickedOn={1} />
@@ -96,7 +94,13 @@ const PendingRequests: FC<{}> = ({ }) => {
               <TableBody>
                 {upcomingEvents.map((event) => (
                   <TableRow key={event._id}>
-                    <TableCell><b>{event.name}</b></TableCell>
+                    <TableCell
+                      onClick={() => router.push(`/event/${event._id}`)}
+                      className={classes.eventName}
+                    >
+                      <b>{event.name}</b>
+
+                    </TableCell>
                     <TableCell>{event.startDate.toLocaleDateString()}</TableCell>
                     <TableCell>{pendingRequestsForEvent(event)}</TableCell>
                   </TableRow>
@@ -106,8 +110,6 @@ const PendingRequests: FC<{}> = ({ }) => {
           </TableContainer>
         </Grid>
       </Grid>
-
-      <Footer />
 
     </>
   );
