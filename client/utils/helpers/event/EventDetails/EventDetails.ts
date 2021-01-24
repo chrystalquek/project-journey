@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import { FormState } from '@components/event/EventDetails/EventRegisterForm';
 import { CreateSignUpRequest } from '@utils/api/request';
-import { SignUpStatus } from '@type/signUp';
 
 export type TableData = {
   title: string,

@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { testEventImage1 } from '@constants/imagePaths';
-import { COMMITTED_VOLUNTEER_TAG } from '@constants/index';
+import {ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG} from '@constants/index';
 import EventInformation from '@components/event/EventDetails/EventInformation';
 import FacilitatorInfo from '@components/event/EventDetails/FacilitatorInfo';
 import CreateAccountNotice from '@components/event/EventDetails/CreateAccountNotice';
@@ -40,13 +40,16 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
         <img src={event?.coverImage ?? testEventImage1} alt={event.name} />
       </Grid>
 
-      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
-        ? (
-          <Grid className={classes.gutterBottom} item xs={12}>
-            <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
-          </Grid>
-        )
-        : null}
+      {event.volunteerType === VOLUNTEER_TYPE.COMMITED &&
+        <Grid className={classes.gutterBottom} item xs={12}>
+          <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+        </Grid>
+      }
+      {event.volunteerType === VOLUNTEER_TYPE.ADHOC &&
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <Chip color="primary" label={ADHOC_VOLUNTEER_TAG} />
+      </Grid>
+      }
 
       <Grid className={classes.gutterBottom} item xs={12}>
         <EventInformation event={event} />
