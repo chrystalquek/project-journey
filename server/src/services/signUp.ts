@@ -1,10 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
+import {
+  VolunteerData,
+  RoleData, SignUpData, SignUpIdType, SignUpStatus, EventData,
+} from '../types';
 import SignUp from '../models/SignUp';
 
 import Event from '../models/Event';
-import {
-  RoleData, SignUpData, SignUpIdType, SignUpStatus,
-} from '../types';
+
+import Volunteer from '../models/Volunteer';
+import emailService from './email';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
 type UpdateEventVolunteersAction = 'add' | 'remove' | 'replace'
@@ -185,6 +189,11 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
     if (!checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)) {
       updateEventRoles(oldFields.eventId, oldFields.userId,
         null, updatedFields.status[1], 'add');
+
+      const volunteerData = await Volunteer.findById(updatedFields.userId);
+      const eventData = await Event.findById(updatedFields.eventId);
+
+      emailService.sendEmail('WAITLIST_TO_CONFIRMED', volunteerData as VolunteerData, eventData as EventData);
     }
 
     /** Accepted --> Not Accepted : Remove */
