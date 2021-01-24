@@ -1,13 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import {
-  VolunteerData,
-  RoleData, SignUpData, SignUpIdType, SignUpStatus, EventData,
+  RoleData, SignUpData, SignUpIdType, SignUpStatus,
 } from '../types';
 import SignUp from '../models/SignUp';
-
 import Event from '../models/Event';
-
-import Volunteer from '../models/Volunteer';
 import emailService from './email';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
@@ -25,6 +21,8 @@ const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
       isRestricted: signUpData.isRestricted,
     });
     await signUpSchemaData.save();
+
+    emailService.sendEmail('WAITLIST_TO_CONFIRMED', signUpData.userId, signUpData.eventId);
     return { signUpId: sid };
   } catch (err) {
     throw new Error(err.msg);
@@ -190,10 +188,7 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
       updateEventRoles(oldFields.eventId, oldFields.userId,
         null, updatedFields.status[1], 'add');
 
-      const volunteerData = await Volunteer.findById(updatedFields.userId);
-      const eventData = await Event.findById(updatedFields.eventId);
-
-      emailService.sendEmail('WAITLIST_TO_CONFIRMED', volunteerData as VolunteerData, eventData as EventData);
+      emailService.sendEmail('WAITLIST_TO_CONFIRMED', updatedFields.userId, updatedFields.eventId);
     }
 
     /** Accepted --> Not Accepted : Remove */

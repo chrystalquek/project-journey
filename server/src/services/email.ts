@@ -2,6 +2,8 @@ import nodemailer, { TransportOptions } from 'nodemailer';
 import { google } from 'googleapis';
 import ejs from 'ejs';
 import { EventData, VolunteerData } from '../types';
+import Volunteer from '../models/Volunteer';
+import Event from '../models/Event';
 
 const { OAuth2 } = google.auth;
 
@@ -163,24 +165,29 @@ const waitlistToConfirmedEmailHelper = async (user: VolunteerData, event: EventD
   };
 };
 
-const sendEmail = async (emailType: EmailTemplate, user: VolunteerData, ...otherData) => {
+const sendEmail = async (emailType: EmailTemplate,
+  userId: string,
+  eventId: string | null = null) => {
   let helperObject;
+  const volunteerData = await Volunteer.findById(userId);
+  const eventData = eventId && await Event.findById(eventId);
 
   switch (emailType) {
     case 'WELCOME':
-      helperObject = await welcomeEmailHelper(user as VolunteerData);
+      helperObject = await welcomeEmailHelper(volunteerData as VolunteerData);
       break;
     case 'EVENT_SIGN_UP_CONFIRMATION':
       helperObject = await eventSignUpConfirmationEmailHelper(
-        user as VolunteerData, otherData[0] as EventData,
+        volunteerData as VolunteerData, eventData as EventData,
       );
       break;
     case 'FEEDBACK':
-      helperObject = await feedbackEmailHelper(user as VolunteerData, otherData[0] as EventData);
+      helperObject = await feedbackEmailHelper(volunteerData as VolunteerData,
+        eventData as EventData);
       break;
     case 'WAITLIST_TO_CONFIRMED':
       helperObject = await waitlistToConfirmedEmailHelper(
-        user as VolunteerData, otherData[0] as EventData,
+        volunteerData as VolunteerData, eventData as EventData,
       );
       break;
     default:

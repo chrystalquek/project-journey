@@ -7,7 +7,8 @@ import generateDummyEvent from '../dummy/event';
 
 const sendFeedbackRequest = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    await emailService.sendEmail('FEEDBACK', generateDummyUser(), generateDummyEvent());
+    const { userId, eventId } = req.params;
+    await emailService.sendEmail('FEEDBACK', userId, eventId);
     res.status(HTTP_CODES.OK);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -16,6 +17,11 @@ const sendFeedbackRequest = async (req: express.Request, res: express.Response):
   }
 };
 
+const sendCancelEvent = async (req: express.Request, res: express.Response): Promise<void> => {
+
+};
+
 export default {
   sendFeedbackRequest,
+  sendCancelEvent,
 };
