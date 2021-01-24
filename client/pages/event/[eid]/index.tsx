@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import { getEvent } from '@redux/actions/event';
 import EventDetailsUnregistered from '@components/event/EventDetails/EventDetailsUnregistered';
 import Head from '@components/common/Header';
+import NavBar from "@components/common/NavBar";
 
 // Handles checking that user is logged in and event detail validity
 const EventsDetailPage = () => {
@@ -34,12 +35,11 @@ const EventsDetailPage = () => {
   }
 
   return (
-    <>
+    <Container fixed>
       <Head title="Blessings in a Bag" />
-      <Container fixed>
-        {body}
-      </Container>
-    </>
+      <NavBar />
+      {body}
+    </Container>
   );
 };
 
