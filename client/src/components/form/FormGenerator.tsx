@@ -7,6 +7,7 @@ import {
   Button, makeStyles, Paper, Typography,
 } from '@material-ui/core';
 import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
+import * as Yup from 'yup';
 
 type FormQuestionsGeneratorType = {
   handleSubmit: (values: Record<string, any>) => void
@@ -40,6 +41,15 @@ const FormQuestionsGenerator: FC<FormQuestionsGeneratorType> = ({
 }) => {
   const initialValues: Record<string, any> = {};
   const classes = useStyles();
+  const validationObj = {};
+
+  questionsList
+    .filter(({ isRequired }) => isRequired)
+    .forEach(({ name }) => {
+      validationObj[name] = Yup.string().required('Required');
+    })
+
+  const validationSchema = Yup.object().shape(validationObj);
 
   return (
     <Paper className={classes.root}>
@@ -48,9 +58,10 @@ const FormQuestionsGenerator: FC<FormQuestionsGeneratorType> = ({
           initialValues={initialValues}
           onSubmit={handleSubmit}
           validateOnChange={false}
+          validationSchema={validationSchema}
         >
           {({
-            isSubmitting, setFieldValue,
+            isSubmitting, setFieldValue, isValid
           }) => (
             <Form>
               {questionsList.map((questionItem) => {
@@ -87,7 +98,7 @@ const FormQuestionsGenerator: FC<FormQuestionsGeneratorType> = ({
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isValid}
                 size="large"
                 className={classes.button}
               >
