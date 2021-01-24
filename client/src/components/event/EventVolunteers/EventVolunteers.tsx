@@ -408,7 +408,7 @@ const EventVolunteers = ({ eid }) => {
 
   useEffect(() => {
     let currentSignUps = isApprovedTab ? [...approvedSignUps] : [...nonApprovedSignUps];
-    currentSignUps = currentSignUps.filter((signUp) => allVolunteerData[signUp.userId].name.search(new RegExp(searchString, 'i')) >= 0);
+    currentSignUps = currentSignUps.filter((signUp) => allVolunteerData[signUp.userId]?.name.search(new RegExp(searchString, 'i')) >= 0);
 
     /** Sort */
     switch (selectedSort) {
