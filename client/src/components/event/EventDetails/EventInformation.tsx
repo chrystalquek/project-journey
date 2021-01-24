@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 const EventInformation: FC<EventInformationProps> = ({ event }) => {
   const classes = useStyles();
   const rows: Array<TableData> = getEventInfo(event);
-
   return (
     <>
       <EventTypography fontSize="h3" fontBold borderBottom gutterBottom text="Event Information" />

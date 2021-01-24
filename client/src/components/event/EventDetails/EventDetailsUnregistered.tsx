@@ -59,10 +59,6 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
       <Grid className={classes.gutterBottom} item xs={12}>
         <CreateAccountNotice />
       </Grid>
-
-      <Grid item xs={12}>
-        <CreateAccountNotice />
-      </Grid>
     </Grid>
   );
 };

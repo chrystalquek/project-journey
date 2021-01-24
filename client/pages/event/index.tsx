@@ -1,5 +1,5 @@
 import Head from '@components/common/Header';
-import EventsPageBody from '@containers/event/EventsPageBody';
+import EventsPageBody from '@components/event/EventsPageBody';
 
 const EventsPage = () => (
   <>

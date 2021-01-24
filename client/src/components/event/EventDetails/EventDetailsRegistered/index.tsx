@@ -21,7 +21,7 @@ type EventDetailsProps = {
   user: VolunteerData
 }
 
-const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
+const Index: FC<EventDetailsProps> = ({ event, user }) => {
   const dispatch = useDispatch();
   const currSignUps = useSelector((state: StoreState) => state.signUp.getSignUps.currSignUps);
 
@@ -142,4 +142,4 @@ const EventDetailsRegistered: FC<EventDetailsProps> = ({ event, user }) => {
   );
 };
 
-export default EventDetailsRegistered;
+export default Index;
