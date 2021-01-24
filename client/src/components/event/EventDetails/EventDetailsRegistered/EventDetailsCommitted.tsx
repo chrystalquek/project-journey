@@ -5,9 +5,9 @@ import {
   Chip, Grid, makeStyles,
 } from '@material-ui/core';
 import { testEventImage1 } from '@constants/imagePaths';
-import EventInformation from '@components/event/EventDetails/EventInformation';
-import VolunteerRoles from '@components/event/EventDetails/VolunteerRoles';
-import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import EventInformation from '@components/event/EventDetails/EventDetailsParts/EventInformation';
+import VolunteerRoles from '@components/event/EventDetails/EventDetailsParts/VolunteerRoles';
+import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import {ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG} from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
@@ -39,9 +39,6 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
 
   return (
     <Grid container>
-      <Grid className={classes.gutterBottom} item xs={12}>
-        <EventBreadCrumbs eid={event._id} />
-      </Grid>
       <Grid className={classes.gutterBottom} item xs={12}>
         <EventTypography fontSize="h1" fontBold text={event.name} />
       </Grid>

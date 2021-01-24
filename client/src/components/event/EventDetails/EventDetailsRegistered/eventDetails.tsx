@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted';
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc';
-import { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import {
   createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
 } from '@redux/actions/signUp';
@@ -21,7 +21,7 @@ type EventDetailsProps = {
   user: VolunteerData
 }
 
-const Index: FC<EventDetailsProps> = ({ event, user }) => {
+const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const dispatch = useDispatch();
   const currSignUps = useSelector((state: StoreState) => state.signUp.getSignUps.currSignUps);
 
@@ -48,6 +48,7 @@ const Index: FC<EventDetailsProps> = ({ event, user }) => {
     reason = '';
   }
 
+  // For signup form disabling logic, etc
   const formStatus = {
     disabled: isEventFull || hasPendingSignUp || hasAcceptedSignUp, // default disabled reasons
     reason,
@@ -144,4 +145,4 @@ const Index: FC<EventDetailsProps> = ({ event, user }) => {
   );
 };
 
-export default Index;
+export default EventDetails;

@@ -8,9 +8,9 @@ import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { testEventImage1 } from '@constants/imagePaths';
 import {ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG} from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
-import VolunteerRoles from '@components/event/EventDetails/VolunteerRoles';
-import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventRegisterForm';
-import FacilitatorInfo from '@components/event/EventDetails/FacilitatorInfo';
+import VolunteerRoles from '@components/event/EventDetails/EventDetailsParts/VolunteerRoles';
+import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
+import FacilitatorInfo from '@components/event/EventDetails/EventDetailsParts/FacilitatorInfo';
 import BecomeCommited from '@components/profile/BecomeCommitedDialog';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
@@ -39,9 +39,6 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
 
   return (
     <Grid container>
-      <Grid className={classes.gutterBottom} item xs={12}>
-        <EventBreadCrumbs eid={event._id} />
-      </Grid>
       <Grid className={classes.gutterBottom} item xs={12}>
         <EventTypography fontSize="h1" fontBold text={event.name} />
       </Grid>

@@ -108,7 +108,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
               justify="center"
               alignItems="center"
             >
-              <EventButton disableRipple onClick={() => router.push('/event/new')}>
+              <EventButton disableRipple onClick={() => router.push('/form/new')}>
                 Create new event
               </EventButton>
             </Grid>
@@ -170,7 +170,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           </Grid>
           {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
             <Grid item sm={3} style={{ textAlign: 'center' }}>
-              <EventButton disableRipple onClick={() => router.push('/event/new')}>
+              <EventButton disableRipple onClick={() => router.push('/form/new')}>
                 Create new event
               </EventButton>
             </Grid>
