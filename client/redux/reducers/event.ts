@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getAllEvents, getEvent, editEvent, createEvent, getEventsUpcomingEvent,
+  getAllEvents,
+  getEvent,
+  editEvent,
+  createEvent,
+  getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
 } from '@redux/actions/event';
 
@@ -10,14 +14,15 @@ import { deleteSignUp } from '@redux/actions/signUp';
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
 export type EventState = {
-  events: Array<EventData>; // TODO rewrite this to array of IDs
-  data: Record<string, EventData>;
-  upcomingEvent: { // part of dashboard and events > pending requests
-    ids: Array<string> // if admin, all events. if volunteer, signed up events.
-  };
-  form: EventData | null;
-  status: FetchStatus;
-}
+    events: Array<EventData>; // TODO rewrite this to array of IDs
+    data: Record<string, EventData>;
+    upcomingEvent: {
+        // part of dashboard and events > pending requests
+        ids: Array<string>; // if admin, all events. if volunteer, signed up events.
+    };
+    form: EventData | null;
+    status: FetchStatus;
+};
 
 const initialState: EventState = {
   events: [],
@@ -31,18 +36,24 @@ const initialState: EventState = {
 
 // parse all Dates etc before saving to store
 const addToData = (events: Array<EventData>, state: EventState) => {
-  events.forEach((event) => state.data[event._id] = {
-    ...event,
-    startDate: new Date(event.startDate),
-    endDate: new Date(event.endDate),
-    deadline: new Date(event.deadline),
-  });
+  events.forEach(
+    (event) => (state.data[event._id] = {
+      ...event,
+      startDate: new Date(event.startDate),
+      endDate: new Date(event.endDate),
+      deadline: new Date(event.deadline),
+    }),
+  );
 };
 
 const eventSlice = createSlice({
   name: 'event',
   initialState,
-  reducers: {},
+  reducers: {
+    resetEventStatus(state) {
+      state.status = '';
+    },
+  },
   extraReducers: (builder) => {
     // Simplify immutable updates with redux toolkit
     // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
@@ -51,11 +62,16 @@ const eventSlice = createSlice({
       addToData(payload.data, state);
       state.upcomingEvent.ids = payload.data.map((event) => event._id);
     });
-    builder.addCase(getSignedUpEventsUpcomingEvent.fulfilled, (state, action) => {
-      const { payload } = action;
-      addToData(payload.data, state);
-      state.upcomingEvent.ids = payload.data.map((event) => event._id);
-    });
+    builder.addCase(
+      getSignedUpEventsUpcomingEvent.fulfilled,
+      (state, action) => {
+        const { payload } = action;
+        addToData(payload.data, state);
+        state.upcomingEvent.ids = payload.data.map(
+          (event) => event._id,
+        );
+      },
+    );
     builder.addCase(getEvent.fulfilled, (state, action) => {
       const { payload } = action;
       state.form = payload;
@@ -97,9 +113,13 @@ const eventSlice = createSlice({
       const { meta } = action;
       // remove volunteerId from one of the roles of the event
       if (state.data[meta.arg.eventId]) {
-        const roleSignedUpFor = state.data[meta.arg.eventId].roles.find(role => role.volunteers.includes(meta.arg.userId))
+        const roleSignedUpFor = state.data[
+          meta.arg.eventId
+        ].roles.find((role) => role.volunteers.includes(meta.arg.userId));
         if (roleSignedUpFor) {
-          roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter(vol => vol != meta.arg.userId)
+          roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter(
+            (vol) => vol != meta.arg.userId,
+          );
         }
       }
     });
@@ -107,3 +127,4 @@ const eventSlice = createSlice({
 });
 
 export default eventSlice.reducer;
+export const { resetEventStatus } = eventSlice.actions;
