@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import { EventData } from '@type/event';
-import EventDetailsRegistered from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsRegistered';
+import Index from '@components/event/EventDetails/EventDetailsRegistered';
 import { VolunteerData } from '@type/volunteer';
 import { CircularProgress, Container } from '@material-ui/core';
 import React, { useEffect } from 'react';
@@ -27,7 +27,7 @@ const EventsDetailPage = () => {
   const eventData: EventData | null = useSelector((state: StoreState) => state.event.form);
   let body;
   if (userData && eventData) {
-    body = <EventDetailsRegistered user={userData} event={eventData} />;
+    body = <Index user={userData} event={eventData} />;
   } else if (eventData) {
     body = <EventDetailsUnregistered user={userData} event={eventData} />;
   } else {
