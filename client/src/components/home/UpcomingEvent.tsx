@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   pane: {
     background: theme.palette.secondary.light,
     overflow: 'scroll',
-    height: '70vh'
+    height: '70vh',
   },
   card: {
     margin: theme.spacing(5),
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   noEvents: {
     position: 'relative',
     top: '30%',
-  }
+  },
 }));
 
 const UpcomingEvent: FC<{}> = ({ }) => {
@@ -102,14 +102,25 @@ const UpcomingEvent: FC<{}> = ({ }) => {
     }
   };
 
-  const adminNoEventsUpcoming = <Typography align="center">There are no events upcoming.<br />Click below to create a new event.<br />
-    <Button className={classes.button} onClick={() => router.push('/form/new')}>Create New Event</Button>
-  </Typography>
+  const adminNoEventsUpcoming = (
+    <Typography align="center">
+      There are no events upcoming.
+      <br />
+      Click below to create a new event.
+      <br />
+      <Button className={classes.button} onClick={() => router.push('/form/new')}>Create New Event</Button>
+    </Typography>
+  );
 
-  const volunteerNoEventsUpcoming = <Typography align="center">You have no events upcoming.<br />Click below to browse events.<br />
-    <Button className={classes.button} onClick={() => router.push('/event')}>Browse Events</Button>
-  </Typography>
-
+  const volunteerNoEventsUpcoming = (
+    <Typography align="center">
+      You have no events upcoming.
+      <br />
+      Click below to browse events.
+      <br />
+      <Button className={classes.button} onClick={() => router.push('/event')}>Browse Events</Button>
+    </Typography>
+  );
 
   return (
     <div className={classes.pane}>
@@ -126,7 +137,7 @@ const UpcomingEvent: FC<{}> = ({ }) => {
               <Typography variant="h4">{event.name}</Typography>
               <Typography>
                 Time:
-              {' '}
+                {' '}
                 {formatDateStartEndTime(event.startDate, event.endDate).time}
               </Typography>
               {generateNotification(event)}

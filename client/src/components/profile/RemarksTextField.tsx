@@ -15,7 +15,7 @@ type props = {
 }
 
 const RemarksTextField: FC<props> = ({
-  value, onChange, label, show, onSave, onDiscard, disabled=true
+  value, onChange, label, show, onSave, onDiscard, disabled = true,
 }) => (
   <Grid item container direction="column" spacing={1}>
     <Grid item xs={12}>

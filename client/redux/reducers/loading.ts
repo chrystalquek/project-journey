@@ -18,7 +18,7 @@ const loadingSlice = createSlice({
   reducers: {
     reset(state) {
       state.status = 'idle';
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getVolunteerById.rejected, (state) => {
@@ -26,7 +26,7 @@ const loadingSlice = createSlice({
     });
     builder.addCase(getEvent.rejected, (state) => {
       state.status = 'failed';
-    })
+    });
   },
 });
 

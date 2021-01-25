@@ -105,9 +105,9 @@ const eventSlice = createSlice({
       const { meta } = action;
       // remove volunteerId from one of the roles of the event
       if (state.data[meta.arg.eventId]) {
-        const roleSignedUpFor = state.data[meta.arg.eventId].roles.find(role => role.volunteers.includes(meta.arg.userId))
+        const roleSignedUpFor = state.data[meta.arg.eventId].roles.find((role) => role.volunteers.includes(meta.arg.userId));
         if (roleSignedUpFor) {
-          roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter(vol => vol != meta.arg.userId)
+          roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter((vol) => vol != meta.arg.userId);
         }
       }
     });
