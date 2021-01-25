@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
-import { Paper, Typography, MenuItem, Button } from '@material-ui/core';
+import {
+  Paper, Typography, MenuItem, Button,
+} from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
@@ -41,11 +43,11 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={DatePicker}
-          inputVariant='outlined'
-          format='dd/MM/yyyy'
+          inputVariant="outlined"
+          format="dd/MM/yyyy"
           name={name}
           fullWidth
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -54,11 +56,11 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={TextField}
-          variant='outlined'
+          variant="outlined"
           type={formType === 'password' ? formType : 'text'}
           name={name}
           fullWidth
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -66,11 +68,11 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={TextField}
-          variant='outlined'
+          variant="outlined"
           name={name}
           fullWidth
           multiline
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -78,14 +80,14 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={TextField}
-          variant='outlined'
+          variant="outlined"
           name={name}
           fullWidth
           select
           InputLabelProps={{
             shrink: true,
           }}
-          margin='dense'
+          margin="dense"
           {...props}
         >
           {(options as Array<OptionType>).map(({ value, label }) => (
@@ -110,11 +112,11 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={TextField}
-          variant='outlined'
-          type='number'
+          variant="outlined"
+          type="number"
           name={name}
           fullWidth
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -130,8 +132,8 @@ export const FormQuestionMapper = ({
                 key={value}
                 value={value}
                 Label={{ label }}
-                color='primary'
-                type='checkbox'
+                color="primary"
+                type="checkbox"
                 {...props}
               />
             </div>
@@ -181,7 +183,7 @@ const FormGenerator = ({
       }
 
       const response = await handleSignUp({
-        name: values.firstName + ' ' + values.lastName,
+        name: `${values.firstName} ${values.lastName}`,
         volunteerType: type,
         password: values.password,
 
@@ -228,7 +230,7 @@ const FormGenerator = ({
           ?.split(',')
           .map((element) => element.trimStart().trimEnd()),
         volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
-        
+
         volunteerReason: values.volunteerReason,
         volunteerContribution: values.volunteerContribution,
 
@@ -247,13 +249,13 @@ const FormGenerator = ({
       });
 
       if (response.type === 'volunteer//rejected') {
-        alert('Error: ' + response.error.message);
+        alert(`Error: ${response.error.message}`);
       } else if (response.type === 'volunteer//fulfilled') {
         alert('You have signed up successfully.');
         router.push('/login');
       }
     },
-    [questionList]
+    [questionList],
   );
 
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -278,7 +280,7 @@ const FormGenerator = ({
       is: (val: string) => val && val.length > 0,
       then: Yup.string().oneOf(
         [Yup.ref('password')],
-        'Confirm Password need to be the same as Password fields'
+        'Confirm Password need to be the same as Password fields',
       ).required('Required'),
     }),
     mobileNumber: Yup.string()
@@ -295,12 +297,12 @@ const FormGenerator = ({
     sessionsPerMonth:
       type === VOLUNTEER_TYPE.ADHOC
         ? Yup.number()
-            .integer('Input must be an integer')
-            .positive('Input must be a positive integer')
+          .integer('Input must be an integer')
+          .positive('Input must be a positive integer')
         : Yup.number()
-            .integer('Input must be an integer')
-            .positive('Input must be a positive integer')
-            .required('Required'),
+          .integer('Input must be an integer')
+          .positive('Input must be a positive integer')
+          .required('Required'),
   });
 
   return (
@@ -309,6 +311,8 @@ const FormGenerator = ({
         margin: 'auto',
         padding: '30px',
         textAlign: 'left',
+        overflowY: 'scroll',
+        maxHeight: '100%',
       }}
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -318,14 +322,17 @@ const FormGenerator = ({
           validationSchema={SignUpSchema}
           validateOnChange={false}
         >
-          {({ isSubmitting, touched, setFieldValue, values, errors }) => (
+          {({
+            isSubmitting, setFieldValue, values,
+          }) => (
             <Form>
               {questionList.map((questionItem) => {
-                const { name, displayText, type, isRequired } = questionItem;
-                const options =
-                  type === 'mcq' || type === 'checkboxes'
-                    ? questionItem.options
-                    : null;
+                const {
+                  name, displayText, type, isRequired,
+                } = questionItem;
+                const options = type === 'mcq' || type === 'checkboxes'
+                  ? questionItem.options
+                  : null;
 
                 return (
                   <div
@@ -334,22 +341,20 @@ const FormGenerator = ({
                       marginBottom: '32px',
                     }}
                   >
-                    {displayText.map((text, index) => {
-                      return (
-                        <Typography
-                          key={text}
-                          style={{
-                            marginBottom: '16px',
-                            fontWeight: 500,
-                          }}
-                        >
-                          {text}
-                          {index === displayText.length - 1 &&
-                            isRequired &&
-                            ' *'}
-                        </Typography>
-                      );
-                    })}
+                    {displayText.map((text, index) => (
+                      <Typography
+                        key={text}
+                        style={{
+                          marginBottom: '16px',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {text}
+                        {index === displayText.length - 1
+                            && isRequired
+                            && ' *'}
+                      </Typography>
+                    ))}
                     <FormQuestionMapper
                       formType={type}
                       name={name}
@@ -360,17 +365,17 @@ const FormGenerator = ({
                 );
               })}
               <Button
-                variant='contained'
-                color='primary'
-                type='submit'
+                variant="contained"
+                color="primary"
+                type="submit"
                 disabled={
-                  isSubmitting ||
-                  !values.permissionEmailCollection ||
-                  !values.personalInformationConsent ||
-                  !values.acknowledgeTnC ||
-                  !values.informedConsent
+                  isSubmitting
+                  || !values.permissionEmailCollection
+                  || !values.personalInformationConsent
+                  || !values.acknowledgeTnC
+                  || !values.informedConsent
                 }
-                size='large'
+                size="large"
                 style={{ margin: 'auto', display: 'block' }}
               >
                 Submit
