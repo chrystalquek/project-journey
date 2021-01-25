@@ -11,7 +11,8 @@ const QuestionSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: 'Form',
   },
-  text: String,
+  displayText: String,
+  type: String,
   isRequired: Boolean,
 });
 

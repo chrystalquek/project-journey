@@ -7,8 +7,6 @@ export type FormModel = FormData & mongoose.Document
 
 const FormSchema = new Schema({
   _id: mongoose.Types.ObjectId,
-  name: String,
-  description: String,
   eventId: {
     type: mongoose.Types.ObjectId,
     ref: 'Event',

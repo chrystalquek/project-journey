@@ -33,7 +33,7 @@ const getValidations = (method: FormValidatorMethod) => {
     }
     case 'answerForm': {
       return [
-        body('formId', 'formId was not provided').isString(),
+        body('eventId', 'eventId was not provided').isString(),
         body('answers', 'answers parameter format is incorrect').custom((answers: Array<AnswerData>) => validation.answersValidator(answers)),
       ];
     }
@@ -47,18 +47,14 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
   try {
     const { questions, eventId } = req.body as CreateFormQuestionsRequest;
 
-    // Generate form attached to event
-    // TODO: Remove "name" & "description" at model
     const formId = await formService.createForm({
-      name: '',
-      description: '',
       eventId,
     });
 
     const questionsData = questions.map((questionData) => ({
       formId,
       isRequired: questionData.isRequired,
-      text: questionData.text,
+      displayText: questionData.displayText,
       type: questionData.type,
     }));
     const questionIds = await questionService.insertQuestions(questionsData);
@@ -96,6 +92,8 @@ const getEventFormDetails = async (req: express.Request, res: express.Response) 
 
       questionsWithOptions.push({
         ...question,
+        displayText: [question.displayText],
+        name: question.id,
         options: optionsForQuestion,
       });
     }
@@ -110,9 +108,13 @@ const getEventFormDetails = async (req: express.Request, res: express.Response) 
 
 const answerFormQuestions = async (req: express.Request, res: express.Response) => {
   let {
-    formId,
+    eventId,
     answers,
   } = req.body as AnswerFormQuestionsRequest;
+
+  const form = await formService.getForm(eventId);
+
+  const formId = form._id;
 
   answers = answers.map((answer) => ({
     ...answer,

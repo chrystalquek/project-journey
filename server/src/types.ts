@@ -11,7 +11,7 @@ export type Race = 'chinese' | 'malay' | 'indian' | 'caucasian' | 'other'
 export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 export type EventSearchType = 'all' | 'upcoming' | 'past'
-export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
+export type FormQuestionType = 'shortAnswer' | 'mcq' | 'checkboxes'
 export type EventType = 'workshop' | 'hangout' | 'volunteering'
 export type Gender = 'male' | 'female'
 
@@ -151,9 +151,10 @@ export interface DeleteVolunteerFieldResponse extends ResponseJSON {
 }
 
 export type QuestionsOptionsRequestData = {
-    text: string;
+    displayText: string;
     type: FormQuestionType;
     isRequired: boolean;
+    name: string;
     options: Array<{ content: string }>
 }
 
@@ -170,7 +171,7 @@ export interface CreateFormQuestionsRequest {
 }
 
 export interface AnswerFormQuestionsRequest {
-    formId: string
+    eventId: string
     answers: Array<AnswerData>
 }
 // TODO: delete if we are following FE
@@ -224,16 +225,15 @@ export type SignUpData = {
 }
 
 export type FormData = {
-    name: string;
-    description: string;
     eventId: string;
 }
 
 export type QuestionData = {
     id: string;
-    text: string;
+    displayText: string;
     type: FormQuestionType;
     formId: string;
+    name?: string;
     isRequired: boolean;
 }
 
@@ -242,6 +242,19 @@ export type OptionData = {
     questionId: string;
     text: string;
 }
+
+export type OptionClientData = {
+    value: string;
+    label: string;
+}
+
+export type QuestionItem = {
+  name: string;
+  displayText: string[];
+  type: FormFieldType;
+  options?: Array<OptionClientData>;
+  isRequired: boolean;
+};
 
 export type ImageData = {
     email: String,
