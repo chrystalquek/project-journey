@@ -66,7 +66,6 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
           </EventPaper>
         </Grid>
       }
-
       {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED &&
         <Grid className={classes.gutterBottom} item xs={12}>
           <EventPaper>
