@@ -11,6 +11,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
 import {useRouter} from "next/router";
 import {EventDetailsWrapper} from "@components/event/EventDetails/EventDetailsWrapper";
+import Loading from "@components/common/Loading";
 
 type EventDetailsProps = {
   eid: string,
@@ -42,7 +43,7 @@ const EventDetails: FC<EventDetailsProps> = ({ eid }) => {
       </EventDetailsWrapper>
     );
   } else {
-    return <CircularProgress />;
+    return <Loading />;
   }
 }
 

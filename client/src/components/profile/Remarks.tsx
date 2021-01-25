@@ -37,7 +37,6 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   };
 
   const saveVolunteerRemarks = () => {
-    // TODO: sync database
     dispatch(
       updateVolunteer({
         email: profilePageData.email,
@@ -51,7 +50,6 @@ const Remarks: FC<props> = ({ profilePageData }) => {
     setVolunteerRemarksChanged(false);
   };
   const saveAdministratorRemarks = () => {
-    // TODO: sync database
     dispatch(
       updateVolunteer({
         email: profilePageData.email,

@@ -1,3 +1,4 @@
+import { getEvent } from '@redux/actions/event';
 import { getVolunteerById } from '@redux/actions/profilePage';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -19,6 +20,9 @@ const loadingSlice = createSlice({
     builder.addCase(getVolunteerById.rejected, (state) => {
       state.status = 'failed';
     });
+    builder.addCase(getEvent.rejected, (state) => {
+      state.status = 'failed';
+    })
   },
 });
 
