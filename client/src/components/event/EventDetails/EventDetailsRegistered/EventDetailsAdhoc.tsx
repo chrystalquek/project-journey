@@ -15,6 +15,7 @@ import BecomeCommited from '@components/profile/BecomeCommitedDialog';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
 import { FormStatus } from '@type/event/common';
+import {getAcceptedSignUp} from "@utils/helpers/event";
 
 type EventDetailsAdhocProps = {
   event: EventData,
@@ -67,12 +68,18 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
         </Grid>
       }
       {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED &&
-        <Grid className={classes.gutterBottom} item xs={12}>
-          <EventPaper>
-            <EventTypography gutterBottom fontBold text="Successful registration!" />
-            <EventTypography gutterBottom text={`Accepted role: ${formStatus?.details} || "Error retrieving accepted role."`} />
-          </EventPaper>
-        </Grid>
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <EventPaper>
+          <EventTypography gutterBottom fontBold text="Successful registration!" />
+          <EventTypography
+            gutterBottom
+            text={
+              `Accepted role: ${getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
+              'Error retrieving accepted role.'}`
+            }
+          />
+        </EventPaper>
+      </Grid>
       }
 
       <Grid className={classes.gutterBottom} item xs={12}>
