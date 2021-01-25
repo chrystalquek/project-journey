@@ -93,7 +93,7 @@ const PendingRequests: FC = () => {
               </TableHead>
               <TableBody>
                 {upcomingEvents.map((event) => (
-                  <TableRow key={event._id}>
+                  <TableRow key={event._id} hover onClick={() => router.push(`/event/${event._id}/volunteers`)}>
                     <TableCell
                       onClick={() => router.push(`/event/${event._id}`)}
                       className={classes.eventName}
