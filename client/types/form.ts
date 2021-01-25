@@ -2,7 +2,9 @@ export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
 
 export type QuestionData = {
     id: string;
-    text: string;
+    displayText: [string];
+    name: string;
+    initialValue?: string;
     type: FormQuestionType;
     formId: string;
     isRequired: boolean;

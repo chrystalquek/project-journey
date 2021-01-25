@@ -16,6 +16,7 @@ import {
   CommitmentApplicationQueryParams,
   EventQueryParams,
   VolunteerPaginatedQueryParams,
+  AnswerFormQuestionsRequest,
 } from '@utils/api/request';
 
 import {
@@ -41,8 +42,10 @@ export interface ApiClient {
   getPendingSignUps(): Promise<GetSignUpsResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse>
-  getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse>
+  getCommitmentApplications(query: CommitmentApplicationQueryParams):
+    Promise<GetCommitmentApplicationResponse>
   updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
+  submitEventFeedback(request: AnswerFormQuestionsRequest): Promise<void>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -150,6 +153,10 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `form/${eventId}`, 'get');
   }
 
+  async submitEventFeedback(request: AnswerFormQuestionsRequest): Promise<void> {
+    return this.send(request, 'form/answer', 'post');
+  }
+
   async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {
     return this.send(request, 'volunteer', 'put');
   }
@@ -160,7 +167,8 @@ class AxiosApiClient implements ApiClient {
     return this.send(request, 'commitment-application', 'post');
   }
 
-  async getCommitmentApplications(query: CommitmentApplicationQueryParams): Promise<GetCommitmentApplicationResponse> {
+  async getCommitmentApplications(query: CommitmentApplicationQueryParams):
+    Promise<GetCommitmentApplicationResponse> {
     return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
   }
 

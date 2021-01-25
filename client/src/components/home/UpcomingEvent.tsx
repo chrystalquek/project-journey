@@ -1,5 +1,5 @@
 import {
-  makeStyles, Grid, Card, CardContent, Typography,
+  makeStyles, Grid, Card, CardContent, Typography, Button,
 } from '@material-ui/core';
 import { isAdmin } from '@utils/helpers/auth';
 import React, { FC, useEffect } from 'react';
@@ -14,7 +14,8 @@ import { useRouter } from 'next/router';
 const useStyles = makeStyles((theme) => ({
   pane: {
     background: theme.palette.secondary.light,
-    overflow: 'auto',
+    overflow: 'scroll',
+    height: '70vh'
   },
   card: {
     margin: theme.spacing(5),
@@ -29,6 +30,20 @@ const useStyles = makeStyles((theme) => ({
   header: {
     padding: theme.spacing(5),
   },
+  button: {
+    padding: theme.spacing(5),
+    margin: theme.spacing(5),
+    backgroundColor: theme.palette.primary.main,
+    height: 30,
+    borderRadius: '5em',
+    fontSize: 'small',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noEvents: {
+    position: 'relative',
+    top: '30%',
+  }
 }));
 
 const UpcomingEvent: FC<{}> = ({ }) => {
@@ -87,27 +102,38 @@ const UpcomingEvent: FC<{}> = ({ }) => {
     }
   };
 
+  const adminNoEventsUpcoming = <Typography align="center">There are no events upcoming.<br />Click below to create a new event.<br />
+    <Button className={classes.button} onClick={() => router.push('/form/new')}>Create New Event</Button>
+  </Typography>
+
+  const volunteerNoEventsUpcoming = <Typography align="center">You have no events upcoming.<br />Click below to browse events.<br />
+    <Button className={classes.button} onClick={() => router.push('/event')}>Browse Events</Button>
+  </Typography>
+
+
   return (
-    <Grid className={classes.pane}>
+    <div className={classes.pane}>
       <Typography className={classes.header} variant="h4" align="center">
         {isAdmin(user) ? '' : 'My '}
         Upcoming Events
       </Typography>
-      {upcomingEvents.map((event) => (
-        <Card className={classes.card} key={event._id} onClick={() => router.push(`/event/${event._id}`)}>
-          <CardContent>
-            <Typography>{formatDateStartEndTime(event.startDate, event.endDate).date}</Typography>
-            <Typography variant="h4">{event.name}</Typography>
-            <Typography>
-              Time:
+      {upcomingEvents.length == 0
+        ? <div className={classes.noEvents}>{isAdmin(user) ? adminNoEventsUpcoming : volunteerNoEventsUpcoming}</div>
+        : upcomingEvents.map((event) => (
+          <Card className={classes.card} key={event._id} onClick={() => router.push(`/event/${event._id}`)}>
+            <CardContent>
+              <Typography>{formatDateStartEndTime(event.startDate, event.endDate).date}</Typography>
+              <Typography variant="h4">{event.name}</Typography>
+              <Typography>
+                Time:
               {' '}
-              {formatDateStartEndTime(event.startDate, event.endDate).time}
-            </Typography>
-            {generateNotification(event)}
-          </CardContent>
-        </Card>
-      ))}
-    </Grid>
+                {formatDateStartEndTime(event.startDate, event.endDate).time}
+              </Typography>
+              {generateNotification(event)}
+            </CardContent>
+          </Card>
+        ))}
+    </div>
   );
 };
 
