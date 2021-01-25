@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 const Loading = () => {
   const classes = useStyles();
   const status = useSelector((state: StoreState) => state.loading.status);
-
+  
   return status === 'failed'
     ? <ErrorPage statusCode={404} />
     : (

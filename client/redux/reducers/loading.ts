@@ -15,7 +15,11 @@ const initialState: LoadingState = {
 const loadingSlice = createSlice({
   name: 'loading',
   initialState,
-  reducers: {},
+  reducers: {
+    reset(state) {
+      state.status = 'idle';
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getVolunteerById.rejected, (state) => {
       state.status = 'failed';
@@ -26,4 +30,5 @@ const loadingSlice = createSlice({
   },
 });
 
+export const { reset } = loadingSlice.actions;
 export default loadingSlice.reducer;
