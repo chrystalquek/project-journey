@@ -1,11 +1,11 @@
-import { Avatar, Badge, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, Typography, useMediaQuery } from '@material-ui/core';
+import { Avatar, Badge, Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery } from '@material-ui/core';
 import React, { useCallback, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { PhotoCamera } from '@material-ui/icons';
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import DiscardSaveButtons from './DiscardSaveButtons';
-import { string } from 'yup';
+import { uploadImage } from '@redux/actions/image';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfilePicture = ({ profilePageData }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   var fileUrl = "";
   const [src, setSrc] = useState(null);
@@ -111,8 +112,17 @@ const ProfilePicture = ({ profilePageData }) => {
     });   
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    console.log("SAVE PROFILE PICTURE");
     console.log(newImageUrl);
+    const FormData = require('form-data');
+    const blob = await fetch(newImageUrl).then(res => res.blob());
+
+    const formData = new FormData();
+    formData.append('image', blob);
+    formData.append('email', profilePageData.email);
+
+    dispatch(uploadImage({name: profilePageData.name, form: formData}))
   }
 
   const handleCancel = useCallback(() => {
