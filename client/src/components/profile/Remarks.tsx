@@ -92,7 +92,9 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           show={volunteerRemarksChanged}
           onSave={saveVolunteerRemarks}
           onDiscard={discardVolunteerRemarks}
-          disabled={isAdmin}
+          // Admin cannot edit the remarks written by the volunteer
+          // But admin can edit remarks of him/herself
+          disabled={isAdmin && profilePageData._id !== user.user._id}
         />
 
         {/* Admin remarks not rendered if the profilePageData is admin
@@ -106,6 +108,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           show={administratorRemarksChanged}
           onSave={saveAdministratorRemarks}
           onDiscard={discardAdministratorRemarks}
+          disabled={!isAdmin}
         />
         )}
       </Grid>
