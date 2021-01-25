@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted';
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc';
-import { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import {
   createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
 } from '@redux/actions/signUp';
@@ -21,7 +21,7 @@ type EventDetailsProps = {
   user: VolunteerData
 }
 
-const Index: FC<EventDetailsProps> = ({ event, user }) => {
+const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const dispatch = useDispatch();
   const currSignUps = useSelector((state: StoreState) => state.signUp.getSignUps.currSignUps);
 
@@ -36,6 +36,7 @@ const Index: FC<EventDetailsProps> = ({ event, user }) => {
   const hasAcceptedSignUp = signUpInfo.length > 0
     && Array.isArray(signUpInfo[0].status)
     && signUpInfo[0].status[0] === 'accepted';
+
   let reason;
   if (isEventFull) {
     reason = FormDisabledReason.EVENT_FULL;
@@ -46,11 +47,13 @@ const Index: FC<EventDetailsProps> = ({ event, user }) => {
   } else {
     reason = '';
   }
+
+  // For signup form disabling logic, etc
   const formStatus = {
     disabled: isEventFull || hasPendingSignUp || hasAcceptedSignUp, // default disabled reasons
     reason,
     details: {
-      acceptedSignUp: hasAcceptedSignUp ? signUpInfo : null,
+      acceptedSignUp: hasAcceptedSignUp ? signUpInfo[0] : null,
     },
   };
 
@@ -142,4 +145,4 @@ const Index: FC<EventDetailsProps> = ({ event, user }) => {
   );
 };
 
-export default Index;
+export default EventDetails;

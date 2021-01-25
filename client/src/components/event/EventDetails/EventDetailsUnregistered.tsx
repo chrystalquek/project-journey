@@ -6,10 +6,10 @@ import {
 } from '@material-ui/core';
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { testEventImage1 } from '@constants/imagePaths';
-import { COMMITTED_VOLUNTEER_TAG } from '@constants/index';
-import EventInformation from '@components/event/EventDetails/EventInformation';
-import FacilitatorInfo from '@components/event/EventDetails/FacilitatorInfo';
-import CreateAccountNotice from '@components/event/EventDetails/CreateAccountNotice';
+import {ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG} from '@constants/index';
+import EventInformation from '@components/event/EventDetails/EventDetailsParts/EventInformation';
+import FacilitatorInfo from '@components/event/EventDetails/EventDetailsParts/FacilitatorInfo';
+import CreateAccountNotice from '@components/event/EventDetails/EventDetailsParts/CreateAccountNotice';
 import { EventTypography } from '@components/common/event/EventTypography';
 
 type EventDetailsUnregisteredProps = {
@@ -29,10 +29,6 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
   return (
     <Grid container>
       <Grid className={classes.gutterBottom} item xs={12}>
-        <EventBreadCrumbs eid={event._id} />
-      </Grid>
-
-      <Grid className={classes.gutterBottom} item xs={12}>
         <EventTypography text={event.name} fontBold fontSize="h1" />
       </Grid>
 
@@ -40,13 +36,16 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
         <img src={event?.coverImage ?? testEventImage1} alt={event.name} />
       </Grid>
 
-      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
-        ? (
-          <Grid className={classes.gutterBottom} item xs={12}>
-            <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
-          </Grid>
-        )
-        : null}
+      {event.volunteerType === VOLUNTEER_TYPE.COMMITED &&
+        <Grid className={classes.gutterBottom} item xs={12}>
+          <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+        </Grid>
+      }
+      {event.volunteerType === VOLUNTEER_TYPE.ADHOC &&
+      <Grid className={classes.gutterBottom} item xs={12}>
+        <Chip color="primary" label={ADHOC_VOLUNTEER_TAG} />
+      </Grid>
+      }
 
       <Grid className={classes.gutterBottom} item xs={12}>
         <EventInformation event={event} />
