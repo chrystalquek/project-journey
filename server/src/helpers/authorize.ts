@@ -6,7 +6,7 @@ import HTTP_CODES from '../constants/httpCodes';
 import config from '../config';
 
 const authorize = (roles: Array<VolunteerType> = []) => {
-  if (config.disableAuthentication && config.env !== 'production') {
+  if (config.disableAuthentication && config.env === 'development') {
     return [];
   }
   return [
