@@ -20,13 +20,12 @@ const Home: FC = () => {
       <PaddedGrid>
         {isMobile
           ? (
-            <Grid container spacing={5}>
+            <Grid container direction="column">
               <Grid item>
                 {isAdmin(user)
-                                && <PendingApproval />}
+                  && <PendingApproval />}
               </Grid>
               <Grid item>
-
                 <UpcomingEvent />
               </Grid>
             </Grid>
@@ -38,7 +37,7 @@ const Home: FC = () => {
               </Grid>
               <Grid item xs={3}>
                 {isAdmin(user)
-                                && <PendingApproval />}
+                  && <PendingApproval />}
               </Grid>
             </Grid>
           )}
