@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersById } from '@redux/actions/volunteer';
 import { getSignUpsUpcomingEvent, updateSignUpInstant } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
-import { Footer } from 'antd/lib/layout/layout';
-
 import { Tabs } from '@components/common/Tabs';
 import { unwrapResult } from '@reduxjs/toolkit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -514,9 +512,6 @@ const EventVolunteers = ({ eid }) => {
           />
         </Grid>
       </Grid>
-
-      <Footer />
-
     </>
   );
 };
