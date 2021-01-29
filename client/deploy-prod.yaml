@@ -2,6 +2,11 @@ steps:
 # Install
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
+# Create env file
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'create-env']
+  env:
+    - 'NEXT_PUBLIC_ENV=${_NEXT_PUBLIC_ENV}'
 # Build
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
