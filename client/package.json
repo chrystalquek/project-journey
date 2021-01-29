@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "build": "cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
-    "build-staging": "cross-env-shell NODE_ENV=staging \"shx rm -rf ./build && next build\"",
     "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
     "deploy-staging": "npm run build && npm run gcp-predeploy && gcloud app deploy app-staging.yaml",
     "deploy-prod": "npm run build && npm run gcp-predeploy && gcloud app deploy app-prod.yaml",
@@ -14,7 +13,8 @@
     "lint-fix": "eslint --fix . --ext .js,.jsx,.ts,.tsx",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "start": "next start -p 8080",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-env": "printenv > .env.local"
   },
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
