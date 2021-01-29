@@ -7,7 +7,7 @@ steps:
   args: ['run', 'create-env']
   env:
     - 'PORT=${_PORT}'
-    - 'NODE_ENV=${_NODE_ENV}'
+    - 'ENV=${_ENV}'
     - 'GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID}'
     - 'GOOGLE_CLIENT_SECRET=${_GOOGLE_CLIENT_SECRET}'
     - 'GOOGLE_REFRESH_TOKEN=${_GOOGLE_REFRESH_TOKEN}'
