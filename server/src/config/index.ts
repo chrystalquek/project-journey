@@ -2,7 +2,7 @@ import { EnvironmentConstants } from '../types';
 
 const config: EnvironmentConstants = {
   port: Number(process.env.PORT) || 5000,
-  env: process.env.NODE_ENV ?? 'development',
+  env: process.env.ENV ?? 'development',
   disableAuthentication: true,
 };
 
