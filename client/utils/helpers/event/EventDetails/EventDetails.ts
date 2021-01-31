@@ -25,7 +25,7 @@ export function getEventInfo(event: EventData) {
   const date = dayjs(event.startDate).format('ddd, DD MMMM YYYY');
   const startTime = dayjs(event.startDate).format('h.mma');
   const endTime = dayjs(event.startDate).format('h.mma');
-  const location = event.location ? event.location : "No location listed.";
+  const location = event.location ? event.location : 'No location listed.';
   const { remaining, total } = getEventVacancies(event);
   const vacancies = `${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} left`;
   const deadline = dayjs(event.deadline).format('DD MMMM YYYY hh:mmA');

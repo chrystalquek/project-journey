@@ -5,7 +5,7 @@ import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
 import { EVENTS_ROUTE } from '@constants/routes';
 import { EventData } from '@type/event';
-import {getStoreEvent} from "@utils/helpers/event";
+import { getStoreEvent } from '@utils/helpers/event';
 
 type EventBreadCrumbsProps = {
   eid?: string

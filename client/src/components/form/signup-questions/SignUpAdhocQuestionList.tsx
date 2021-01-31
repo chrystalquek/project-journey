@@ -128,7 +128,7 @@ export const questions: QuestionList = [
     displayText: ['How did you hear about us/Beyond Awesome?'],
     type: 'checkboxes',
     initialValue: [],
-    
+
     // Need clarification for the value assigned
     options: [
       { value: 'biab_website', label: 'Blessings in a Bag Website' },

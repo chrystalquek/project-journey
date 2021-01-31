@@ -1,9 +1,11 @@
-import React, {FC} from "react";
-import {AppBar, IconButton, makeStyles, Toolbar} from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
-import {useRouter} from "next/router";
-import {EventData} from "@type/event";
+import React, { FC } from 'react';
+import {
+  AppBar, IconButton, makeStyles, Toolbar,
+} from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
+import { useRouter } from 'next/router';
+import { EventData } from '@type/event';
 
 type EventDetailsWrapperProps = {
   event: EventData
@@ -14,7 +16,7 @@ const useStyles = makeStyles({
     border: 'none',
     boxShadow: 'none',
     backgroundColor: 'none',
-  }
+  },
 });
 
 const EventDetailsWrapper: FC<EventDetailsWrapperProps> = (props) => {
@@ -34,7 +36,7 @@ const EventDetailsWrapper: FC<EventDetailsWrapperProps> = (props) => {
       </AppBar>
       {props.children}
     </>
-  )
-}
+  );
+};
 
 export { EventDetailsWrapper };

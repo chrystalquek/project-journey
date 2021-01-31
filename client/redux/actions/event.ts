@@ -54,5 +54,5 @@ export const getUpcomingEvents = createAsyncThunk(
 );
 
 export default {
-  createEvent, editEvent, getEvent, getUpcomingEvents: getUpcomingEvents,
+  createEvent, editEvent, getEvent, getUpcomingEvents,
 };
