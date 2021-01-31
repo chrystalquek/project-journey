@@ -29,6 +29,7 @@ import * as yup from 'yup';
 import { keysToCamel, keysToSnake } from '@utils/helpers/keysToCamel';
 import { unwrapResult } from '@reduxjs/toolkit';
 import ClearIcon from '@material-ui/icons/Clear';
+import { resetEventStatus } from '@redux/reducers/event';
 import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
 
 type AdminEventFormProps = {
@@ -263,29 +264,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     [feedbackFormEventQuestions],
   );
 
-  const [dateAndTime, setDateAndTime] = useState({
-    fromDate: dayjs(),
-    toDate: dayjs(),
-    fromTime: '00:00',
-    toTime: '00:00',
-  });
-
-  const [formData, setFormData] = useState({
-    name: '',
-    coverImage: '',
-    eventType: 'workshop',
-    volunteerType: 'committed',
-    deadline: dayjs(),
-    vacancies: 0,
-    description: '',
-    facilitatorName: '',
-    facilitatorPhoto: '',
-    facilitatorDescription: '',
-    roles: [],
-    contentUrl: null,
-    contentType: 'pdf', // TODO: fix this
-    location: '',
-  });
   const router = useRouter();
 
   useEffect(() => {
@@ -293,6 +271,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       dispatch(getEvent(id));
     }
   }, [id]);
+
+  useEffect(() => () => dispatch(resetEventStatus()), []);
 
   useEffect(() => {
     if (event.status === 'rejected') {
