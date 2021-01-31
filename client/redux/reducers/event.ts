@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getAllEvents, getEvent, editEvent, createEvent, getEventsUpcomingEvent,
+  getUpcomingEvents, getEvent, editEvent, createEvent, getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
 } from '@redux/actions/event';
 
@@ -10,19 +10,23 @@ import { deleteSignUp } from '@redux/actions/signUp';
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
 export type EventState = {
-  events: Array<EventData>; // TODO rewrite this to array of IDs
   data: Record<string, EventData>;
   upcomingEvent: { // part of dashboard and events > pending requests
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
+  };
+  browseEvents: {
+    ids: Array<string>
   };
   form: EventData | null;
   status: FetchStatus;
 }
 
 const initialState: EventState = {
-  events: [],
   data: {},
   upcomingEvent: {
+    ids: [],
+  },
+  browseEvents: {
     ids: [],
   },
   form: null,
@@ -84,22 +88,26 @@ const eventSlice = createSlice({
     builder.addCase(editEvent.fulfilled, (state) => {
       state.status = 'fulfilled';
     });
-    builder.addCase(getAllEvents.pending, (state) => {
-      state.events = [];
+    builder.addCase(getUpcomingEvents.pending, (state) => {
+      state.status = 'fetching';
+      state.browseEvents.ids = [];
     });
-    builder.addCase(getAllEvents.fulfilled, (state, action) => {
-      state.events = action.payload.data;
+    builder.addCase(getUpcomingEvents.fulfilled, (state, action) => {
+      state.status = 'fulfilled';
+      addToData(action.payload.data, state);
+      state.browseEvents.ids = action.payload.data.map((event) => event._id);
     });
-    builder.addCase(getAllEvents.rejected, (state) => {
-      state.events = [];
+    builder.addCase(getUpcomingEvents.rejected, (state) => {
+      state.status = 'rejected';
+      state.browseEvents.ids = [];
     });
     builder.addCase(deleteSignUp.fulfilled, (state, action) => {
       const { meta } = action;
       // remove volunteerId from one of the roles of the event
       if (state.data[meta.arg.eventId]) {
-        const roleSignedUpFor = state.data[meta.arg.eventId].roles.find(role => role.volunteers.includes(meta.arg.userId))
+        const roleSignedUpFor = state.data[meta.arg.eventId].roles.find((role) => role.volunteers.includes(meta.arg.userId));
         if (roleSignedUpFor) {
-          roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter(vol => vol != meta.arg.userId)
+          roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter((vol) => vol != meta.arg.userId);
         }
       }
     });

@@ -210,7 +210,7 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpArgs, { state }>(
 
     const response = (await apiClient.signUp(request)) as SignUpResponse;
     return response;
-  }
+  },
 );
 
 const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
@@ -222,7 +222,7 @@ const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
     };
     const response = (await apiClient.login(request)) as LoginResponse;
     return response;
-  }
+  },
 );
 
 type UpdateVolunteerArgs = {

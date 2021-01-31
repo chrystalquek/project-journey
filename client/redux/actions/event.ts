@@ -48,11 +48,11 @@ export const getEvent = createAsyncThunk<GetEventResponse, GetEventParams, { sta
   },
 );
 
-export const getAllEvents = createAsyncThunk(
+export const getUpcomingEvents = createAsyncThunk(
   'event/getEvents',
-  async () => await apiClient.getEvents({ eventType: 'all' }),
+  async () => await apiClient.getEvents({ eventType: 'upcoming' }),
 );
 
 export default {
-  createEvent, editEvent, getEvent, getAllEvents,
+  createEvent, editEvent, getEvent, getUpcomingEvents,
 };

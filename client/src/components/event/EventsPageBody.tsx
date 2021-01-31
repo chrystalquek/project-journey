@@ -20,11 +20,13 @@ import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 import { EventButton } from '@components/common/event/EventButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUpcomingEvents } from '@redux/actions/event';
+import { StoreState } from '@redux/store';
+import { EVENTS_ROUTE, LOGIN_ROUTE } from '@constants/routes';
 
 type EventsPageBodyProps = {
-  events: Array<EventData>;
-  user: VolunteerData | null; // if user isn't logged in
-  getAllEvents: () => void;
+  // nothing yet
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -45,11 +47,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents }) => {
+const EventsPageBody: FC<EventsPageBodyProps> = () => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
+  const dispatch = useDispatch();
+  const events: Array<EventData> = useSelector((state: StoreState) => state.event.browseEvents.ids
+    .map((eid) => state.event.data[eid])
+    .filter((event) => event));
+  const user: VolunteerData | null = useSelector((state: StoreState) => state.user.user);
+
+  useEffect(() => {
+    dispatch(getUpcomingEvents());
+  }, []);
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,
@@ -71,15 +82,11 @@ const EventsPageBody: FC<EventsPageBodyProps> = ({ events, user, getAllEvents })
   const [search, setSearch] = useState('');
   const filteredSearchedEvents = filteredEvents.filter((event) => event.name.toLowerCase().includes(search.toLowerCase()));
 
-  useEffect(() => {
-    getAllEvents();
-  }, []);
-
   const handleCardClick = useCallback((eventId: string) => {
     if (user) {
-      router.push(`/event/${eventId}`);
+      router.push(`${EVENTS_ROUTE}/${eventId}`);
     } else {
-      router.push('/login');
+      router.push(LOGIN_ROUTE);
     }
   }, [user]);
 
