@@ -112,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
   },
   loginFooter: {
     marginTop: theme.spacing(6),
+    marginBottom: theme.spacing(6),
   },
 }));
 
