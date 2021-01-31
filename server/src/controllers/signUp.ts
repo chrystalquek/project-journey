@@ -9,6 +9,7 @@ export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
 
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
+    case 'updateSignUp':
     case 'createSignUp': {
       return [
         body('eventId', 'event id does not exist').isString(),
