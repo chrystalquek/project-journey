@@ -16,6 +16,21 @@ import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
+import { makeStyles } from '@material-ui/core';
+import objectMap from '@utils/helpers/objectMap';
+
+const useStyles = makeStyles((theme) => ({
+  // The following style make sure that the error message shows consistently for 'photo'
+  errorStyle: {
+    color: theme.palette.error.main,
+    fontWeight: 'normal',
+    fontSize: '0.75rem',
+    lineHeight: '1.66',
+    marginLeft: '14px',
+    marginRight: '14px',
+    marginTop: '4px',
+  },
+}))
 
 export const FormQuestionMapper = ({
   formType,
@@ -23,13 +38,15 @@ export const FormQuestionMapper = ({
   options,
   setFieldValue,
   props,
-}: {
+} : {
   formType: InputType;
   name: string;
   options?: OptionType[] | null;
   setFieldValue?: any; // Should be the same type as setFieldValue from Formik
-  props?: object;
+  props?: Record<string, any>;
 }) => {
+  const classes = useStyles();
+
   const onChangeImage = (e, fieldName, setFieldValue) => {
     if (e.target.files && e.target.files[0]) {
       const imageFile = e.target.files[0];
@@ -99,14 +116,17 @@ export const FormQuestionMapper = ({
       );
     case 'photo':
       return (
-        <div style={{ width: '100%', height: '200px' }}>
-          <DropZoneCard
-            id={name}
-            initialUrl={null}
-            isBig={false}
-            onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
-          />
-        </div>
+        <>
+          <div style={{ width: '100%', height: '200px' }}>
+            <DropZoneCard
+              id={name}
+              initialUrl={null}
+              isBig={false}
+              onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
+            />
+          </div>
+          {!!props?.error && <Typography variant='body2' className={classes.errorStyle}>Required</Typography>}
+        </>
       );
     case 'number':
       return (
@@ -173,14 +193,7 @@ const FormGenerator = ({
 
   const handleSubmit = useCallback(
     async (formValues: Record<string, any>) => {
-      // Helper function
-      const objectMap = (obj, fn) => 
-        Object.fromEntries(
-          Object.entries(obj).map(
-            ([k, v], i) => [k, fn(v, k, i)]
-          )
-        );
-
+      // @ts-ignore type exists
       const values = objectMap(formValues, element => element === '' ? undefined : element);
       
       // Upload and get cover image URL
@@ -338,7 +351,7 @@ const FormGenerator = ({
           validateOnChange={false}
         >
           {({
-            isSubmitting, setFieldValue, values,
+            isSubmitting, setFieldValue, values, errors, touched
           }) => (
             <Form>
               {questionList.map((questionItem) => {
@@ -375,6 +388,7 @@ const FormGenerator = ({
                       name={name}
                       options={options}
                       setFieldValue={setFieldValue}
+                      props={{error: touched[name] ? errors[name] : null}}
                     />
                   </div>
                 );
