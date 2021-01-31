@@ -19,6 +19,11 @@ protectedRouter.get(
   volunteerController.getPendingVolunteers,
 );
 
+router.post(
+  '/ids',
+  volunteerController.readVolunteersByIds,
+);
+
 router.get(
   '/:email',
   validate(volunteerController.getValidations('getVolunteer')),

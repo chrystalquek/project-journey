@@ -224,6 +224,22 @@ const getPendingVolunteers = async (
   }
 };
 
+const readVolunteersByIds = async (
+  req: express.Request,
+  res: express.Response,
+): Promise<void> => {
+  try {
+    const { ids } = req.body;
+    const volunteers = await volunteerService.readVolunteersByIds(ids);
+
+    res.status(HTTP_CODES.OK).json({ data: volunteers });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+};
+
 const checkUpdateRights = () => [
   jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
 
@@ -271,4 +287,5 @@ export default {
   removeVolunteer,
   checkUpdateRights,
   updateVolunteer,
+  readVolunteersByIds,
 };
