@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getAllEvents,
+  getUpcomingEvents,
   getEvent,
   editEvent,
   createEvent,
@@ -14,20 +14,23 @@ import { deleteSignUp } from '@redux/actions/signUp';
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
 export type EventState = {
-    events: Array<EventData>; // TODO rewrite this to array of IDs
-    data: Record<string, EventData>;
-    upcomingEvent: {
-        // part of dashboard and events > pending requests
-        ids: Array<string>; // if admin, all events. if volunteer, signed up events.
-    };
-    form: EventData | null;
-    status: FetchStatus;
-};
+  data: Record<string, EventData>;
+  upcomingEvent: { // part of dashboard and events > pending requests
+    ids: Array<string> // if admin, all events. if volunteer, signed up events.
+  };
+  browseEvents: {
+    ids: Array<string>
+  };
+  form: EventData | null;
+  status: FetchStatus;
+}
 
 const initialState: EventState = {
-  events: [],
   data: {},
   upcomingEvent: {
+    ids: [],
+  },
+  browseEvents: {
     ids: [],
   },
   form: null,
@@ -100,14 +103,18 @@ const eventSlice = createSlice({
     builder.addCase(editEvent.fulfilled, (state) => {
       state.status = 'fulfilled';
     });
-    builder.addCase(getAllEvents.pending, (state) => {
-      state.events = [];
+    builder.addCase(getUpcomingEvents.pending, (state) => {
+      state.status = 'fetching';
+      state.browseEvents.ids = [];
     });
-    builder.addCase(getAllEvents.fulfilled, (state, action) => {
-      state.events = action.payload.data;
+    builder.addCase(getUpcomingEvents.fulfilled, (state, action) => {
+      state.status = 'fulfilled';
+      addToData(action.payload.data, state);
+      state.browseEvents.ids = action.payload.data.map((event) => event._id);
     });
-    builder.addCase(getAllEvents.rejected, (state) => {
-      state.events = [];
+    builder.addCase(getUpcomingEvents.rejected, (state) => {
+      state.status = 'rejected';
+      state.browseEvents.ids = [];
     });
     builder.addCase(deleteSignUp.fulfilled, (state, action) => {
       const { meta } = action;
@@ -118,7 +125,7 @@ const eventSlice = createSlice({
         ].roles.find((role) => role.volunteers.includes(meta.arg.userId));
         if (roleSignedUpFor) {
           roleSignedUpFor.volunteers = roleSignedUpFor.volunteers.filter(
-            (vol) => vol != meta.arg.userId,
+            (vol) => vol !== meta.arg.userId,
           );
         }
       }

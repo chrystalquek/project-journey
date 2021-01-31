@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
-import { Paper, Typography, MenuItem, Button } from '@material-ui/core';
+import {
+  Paper, Typography, MenuItem, Button,
+} from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
@@ -14,6 +16,21 @@ import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
+import { makeStyles } from '@material-ui/core';
+import objectMap from '@utils/helpers/objectMap';
+
+const useStyles = makeStyles((theme) => ({
+  // The following style make sure that the error message shows consistently for 'photo'
+  errorStyle: {
+    color: theme.palette.error.main,
+    fontWeight: 'normal',
+    fontSize: '0.75rem',
+    lineHeight: '1.66',
+    marginLeft: '14px',
+    marginRight: '14px',
+    marginTop: '4px',
+  },
+}))
 
 export const FormQuestionMapper = ({
   formType,
@@ -21,13 +38,15 @@ export const FormQuestionMapper = ({
   options,
   setFieldValue,
   props,
-}: {
+} : {
   formType: InputType;
   name: string;
   options?: OptionType[] | null;
   setFieldValue?: any; // Should be the same type as setFieldValue from Formik
-  props?: object;
+  props?: Record<string, any>;
 }) => {
+  const classes = useStyles();
+
   const onChangeImage = (e, fieldName, setFieldValue) => {
     if (e.target.files && e.target.files[0]) {
       const imageFile = e.target.files[0];
@@ -41,11 +60,11 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={DatePicker}
-          inputVariant='outlined'
-          format='dd/MM/yyyy'
+          inputVariant="outlined"
+          format="dd/MM/yyyy"
           name={name}
           fullWidth
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -54,11 +73,11 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={TextField}
-          variant='outlined'
+          variant="outlined"
           type={formType === 'password' ? formType : 'text'}
           name={name}
           fullWidth
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -66,11 +85,11 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={TextField}
-          variant='outlined'
+          variant="outlined"
           name={name}
           fullWidth
           multiline
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -78,14 +97,14 @@ export const FormQuestionMapper = ({
       return (
         <Field
           component={TextField}
-          variant='outlined'
+          variant="outlined"
           name={name}
           fullWidth
           select
           InputLabelProps={{
             shrink: true,
           }}
-          margin='dense'
+          margin="dense"
           {...props}
         >
           {(options as Array<OptionType>).map(({ value, label }) => (
@@ -97,24 +116,27 @@ export const FormQuestionMapper = ({
       );
     case 'photo':
       return (
-        <div style={{ width: '100%', height: '200px' }}>
-          <DropZoneCard
-            id={name}
-            initialUrl={null}
-            isBig={false}
-            onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
-          />
-        </div>
+        <>
+          <div style={{ width: '100%', height: '200px' }}>
+            <DropZoneCard
+              id={name}
+              initialUrl={null}
+              isBig={false}
+              onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
+            />
+          </div>
+          {!!props?.error && <Typography variant='body2' className={classes.errorStyle}>Required</Typography>}
+        </>
       );
     case 'number':
       return (
         <Field
           component={TextField}
-          variant='outlined'
-          type='number'
+          variant="outlined"
+          type="number"
           name={name}
           fullWidth
-          margin='dense'
+          margin="dense"
           {...props}
         />
       );
@@ -130,8 +152,8 @@ export const FormQuestionMapper = ({
                 key={value}
                 value={value}
                 Label={{ label }}
-                color='primary'
-                type='checkbox'
+                color="primary"
+                type="checkbox"
                 {...props}
               />
             </div>
@@ -170,7 +192,10 @@ const FormGenerator = ({
   };
 
   const handleSubmit = useCallback(
-    async (values: Record<string, any>) => {
+    async (formValues: Record<string, any>) => {
+      // @ts-ignore type exists
+      const values = objectMap(formValues, element => element === '' ? undefined : element);
+      
       // Upload and get cover image URL
       if (values.photoUrl && typeof values.photoUrl !== 'string') {
         // @ts-ignore type exists
@@ -181,7 +206,7 @@ const FormGenerator = ({
       }
 
       const response = await handleSignUp({
-        name: values.firstName + ' ' + values.lastName,
+        name: `${values.firstName} ${values.lastName}`,
         volunteerType: type,
         password: values.password,
 
@@ -201,7 +226,7 @@ const FormGenerator = ({
         race: values.race,
 
         languages: values.languages
-          .split(',')
+          ?.split(',')
           .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
         referralSources: values.referralSources,
 
@@ -228,7 +253,7 @@ const FormGenerator = ({
           ?.split(',')
           .map((element) => element.trimStart().trimEnd()),
         volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
-        
+
         volunteerReason: values.volunteerReason,
         volunteerContribution: values.volunteerContribution,
 
@@ -247,16 +272,17 @@ const FormGenerator = ({
       });
 
       if (response.type === 'volunteer//rejected') {
-        alert('Error: ' + response.error.message);
+        alert(`Error: ${response.error.message}`);
       } else if (response.type === 'volunteer//fulfilled') {
         alert('You have signed up successfully.');
         router.push('/login');
       }
     },
-    [questionList]
+    [questionList],
   );
 
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegExp =/^(\+65)?[689]\d{7}$/;
+  const personalityRegex = /(I|E)(N|S)(F|T)(J|P)_(A|T)/;
 
   const requiredSchema: object = {};
 
@@ -278,7 +304,7 @@ const FormGenerator = ({
       is: (val: string) => val && val.length > 0,
       then: Yup.string().oneOf(
         [Yup.ref('password')],
-        'Confirm Password need to be the same as Password fields'
+        'Confirm Password need to be the same as Password fields',
       ).required('Required'),
     }),
     mobileNumber: Yup.string()
@@ -295,12 +321,16 @@ const FormGenerator = ({
     sessionsPerMonth:
       type === VOLUNTEER_TYPE.ADHOC
         ? Yup.number()
-            .integer('Input must be an integer')
-            .positive('Input must be a positive integer')
+          .integer('Input must be an integer')
+          .positive('Input must be a positive integer')
         : Yup.number()
             .integer('Input must be an integer')
             .positive('Input must be a positive integer')
             .required('Required'),
+    personality:
+      type === VOLUNTEER_TYPE.ADHOC
+        ? Yup.mixed()
+        : Yup.string().matches(personalityRegex, 'Invalid value').required('Required'),
   });
 
   return (
@@ -309,6 +339,8 @@ const FormGenerator = ({
         margin: 'auto',
         padding: '30px',
         textAlign: 'left',
+        overflowY: 'scroll',
+        maxHeight: '100%',
       }}
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -318,14 +350,17 @@ const FormGenerator = ({
           validationSchema={SignUpSchema}
           validateOnChange={false}
         >
-          {({ isSubmitting, touched, setFieldValue, values, errors }) => (
+          {({
+            isSubmitting, setFieldValue, values, errors, touched
+          }) => (
             <Form>
               {questionList.map((questionItem) => {
-                const { name, displayText, type, isRequired } = questionItem;
-                const options =
-                  type === 'mcq' || type === 'checkboxes'
-                    ? questionItem.options
-                    : null;
+                const {
+                  name, displayText, type, isRequired,
+                } = questionItem;
+                const options = type === 'mcq' || type === 'checkboxes'
+                  ? questionItem.options
+                  : null;
 
                 return (
                   <div
@@ -334,43 +369,42 @@ const FormGenerator = ({
                       marginBottom: '32px',
                     }}
                   >
-                    {displayText.map((text, index) => {
-                      return (
-                        <Typography
-                          key={text}
-                          style={{
-                            marginBottom: '16px',
-                            fontWeight: 500,
-                          }}
-                        >
-                          {text}
-                          {index === displayText.length - 1 &&
-                            isRequired &&
-                            ' *'}
-                        </Typography>
-                      );
-                    })}
+                    {displayText.map((text, index) => (
+                      <Typography
+                        key={text}
+                        style={{
+                          marginBottom: '16px',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {text}
+                        {index === displayText.length - 1
+                            && isRequired
+                            && ' *'}
+                      </Typography>
+                    ))}
                     <FormQuestionMapper
                       formType={type}
                       name={name}
                       options={options}
                       setFieldValue={setFieldValue}
+                      props={{error: touched[name] ? errors[name] : null}}
                     />
                   </div>
                 );
               })}
               <Button
-                variant='contained'
-                color='primary'
-                type='submit'
+                variant="contained"
+                color="primary"
+                type="submit"
                 disabled={
-                  isSubmitting ||
-                  !values.permissionEmailCollection ||
-                  !values.personalInformationConsent ||
-                  !values.acknowledgeTnC ||
-                  !values.informedConsent
+                  isSubmitting
+                  || !values.permissionEmailCollection
+                  || !values.personalInformationConsent
+                  || !values.acknowledgeTnC
+                  || !values.informedConsent
                 }
-                size='large'
+                size="large"
                 style={{ margin: 'auto', display: 'block' }}
               >
                 Submit

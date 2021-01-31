@@ -4,7 +4,7 @@ import {
 } from '@utils/api/request';
 import { GetSignUpsResponse } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
-import { FormState } from '@components/event/EventDetails/EventRegisterForm';
+import { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import { SignUpData } from '@type/signUp';
 
 export const getSignUpsUpcomingEvent = createAsyncThunk<GetSignUpsResponse, SignUpQueryParams, { state }>(

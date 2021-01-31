@@ -122,6 +122,17 @@ export type UpdateVolunteerRequest = {
   email: string;
   updatedVolunteerData: Partial<VolunteerData>;
 };
+export interface AnswerFormQuestionsRequest {
+    eventId: string
+    answers: Array<AnswerData>
+}
+
+export type AnswerData = {
+    questionId: string;
+    userId: string;
+    content: string;
+}
+
 // SIGN-UPS
 export type SignUpQueryParams = {
   id: string; // id to match against once idType is known

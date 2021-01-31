@@ -1,5 +1,7 @@
 import { QuestionList } from '@type/questions';
-import { CITIZENSHIP, GENDER, RACE, SOCIAL_MEDIA_PLATFORMS } from '@type/volunteer';
+import {
+  CITIZENSHIP, GENDER, RACE, SOCIAL_MEDIA_PLATFORMS,
+} from '@type/volunteer';
 
 export const questions: QuestionList = [
   {
@@ -99,20 +101,20 @@ export const questions: QuestionList = [
     type: 'mcq',
     initialValue: '',
     options: [
-        { value: SOCIAL_MEDIA_PLATFORMS.INSTAGRAM, label: 'Instagram' },
-        { value: SOCIAL_MEDIA_PLATFORMS.FACEBOOK, label: 'Facebook' },
-        { value: SOCIAL_MEDIA_PLATFORMS.SNAPCHAT, label: 'Snapchat' },
-        { value: SOCIAL_MEDIA_PLATFORMS.EMAIL, label: 'Email' },
-        { value: SOCIAL_MEDIA_PLATFORMS.OTHER, label: 'Other' },
-      ],
+      { value: SOCIAL_MEDIA_PLATFORMS.INSTAGRAM, label: 'Instagram' },
+      { value: SOCIAL_MEDIA_PLATFORMS.FACEBOOK, label: 'Facebook' },
+      { value: SOCIAL_MEDIA_PLATFORMS.SNAPCHAT, label: 'Snapchat' },
+      { value: SOCIAL_MEDIA_PLATFORMS.EMAIL, label: 'Email' },
+      { value: SOCIAL_MEDIA_PLATFORMS.OTHER, label: 'Other' },
+    ],
     isRequired: true,
   },
   {
     name: 'photoUrl',
     displayText: ['Upload profile picture'],
     type: 'photo',
-    initialValue: null,
-    isRequired: false,
+    initialValue: '',
+    isRequired: true,
   },
   {
     name: 'instagramHandle',
@@ -133,7 +135,7 @@ export const questions: QuestionList = [
     displayText: ['Year Level / Position'],
     type: 'shortAnswer',
     initialValue: '',
-    isRequired: true,
+    isRequired: false,
   },
   {
     name: 'race',
@@ -141,12 +143,12 @@ export const questions: QuestionList = [
     type: 'mcq',
     initialValue: '',
     options: [
-        { value: RACE.CHINESE, label: 'Chinese' },
-        { value: RACE.MALAY, label: 'Malay' },
-        { value: RACE.INDIAN, label: 'Indian' },
-        { value: RACE.CAUCASIAN, label: 'Caucasian' },
-        { value: RACE.OTHER, label: 'Other' },
-      ],
+      { value: RACE.CHINESE, label: 'Chinese' },
+      { value: RACE.MALAY, label: 'Malay' },
+      { value: RACE.INDIAN, label: 'Indian' },
+      { value: RACE.CAUCASIAN, label: 'Caucasian' },
+      { value: RACE.OTHER, label: 'Other' },
+    ],
     isRequired: false,
   },
   {
@@ -163,7 +165,7 @@ export const questions: QuestionList = [
     displayText: ['How did you hear about us/Beyond Awesome?'],
     type: 'checkboxes',
     initialValue: [],
-    
+
     // Need clarification for the value assigned
     options: [
       { value: 'biab_website', label: 'Blessings in a Bag Website' },
@@ -272,7 +274,7 @@ export const questions: QuestionList = [
   {
     name: 'hasFirstAidCertification',
     displayText: [
-      'Are you certified in FIRST AID?'
+      'Are you certified in FIRST AID?',
     ],
     type: 'mcq',
     initialValue: '',
@@ -285,7 +287,7 @@ export const questions: QuestionList = [
   {
     name: 'leadershipInterest',
     displayText: [
-      'Would you be interested in taking on a leadership role that would offer you leadership + personal development opportunities?'
+      'Would you be interested in taking on a leadership role that would offer you leadership + personal development opportunities?',
     ],
     type: 'mcq',
     initialValue: '',
@@ -298,7 +300,7 @@ export const questions: QuestionList = [
   },
   {
     name: 'interests',
-    displayText: ["What are your interests/passions?"],
+    displayText: ['What are your interests/passions?'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
@@ -306,7 +308,7 @@ export const questions: QuestionList = [
   {
     name: 'skills',
     displayText: [
-      'It takes a village to run our programs and we would love specialised support! Do you have any specialised skills? Or feel you can contribute?'
+      'It takes a village to run our programs and we would love specialised support! Do you have any specialised skills? Or feel you can contribute?',
     ],
     type: 'checkboxes',
     initialValue: [],
@@ -326,14 +328,14 @@ export const questions: QuestionList = [
   },
   {
     name: 'personality',
-    displayText: ["What is your personality type via www.16personalities.com? (For example: INTJ-A)"],
+    displayText: ["What is your personality type via www.16personalities.com? (For example: INTJ_A)"],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
   },
   {
     name: 'strengths',
-    displayText: ["What are your 5 strengths on https://high5test.com (please list below, separated by comma)"],
+    displayText: ['What are your 5 strengths on https://high5test.com (please list below, separated by comma)'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
@@ -350,7 +352,7 @@ export const questions: QuestionList = [
   {
     name: 'volunteerContribution',
     displayText: [
-      "Please tell us how you feel you can contribute or add to our program",
+      'Please tell us how you feel you can contribute or add to our program',
     ],
     type: 'longAnswer',
     initialValue: '',
@@ -361,6 +363,7 @@ export const questions: QuestionList = [
   {
     name: 'hasMedicalNeeds',
     displayText: [
+      'Note: The information in this section is collected in the unlikely event of a medical emergency. This information will not be used for any other purposes.',
       'Do you have medical needs we should be aware of (e.g., heart conditions, asthma, seizures, diabetes, hearing or sight loss, etc.)?',
     ],
     type: 'mcq',
@@ -413,21 +416,21 @@ export const questions: QuestionList = [
   // Emergency Contact Information
   {
     name: 'emergencyContactName',
-    displayText: ['Emergency Contact Full Name #1'],
+    displayText: ['Emergency Contact Full Name'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
   },
   {
     name: 'emergencyContactNumber',
-    displayText: ['Emergency Contact Mobile Number #1'],
+    displayText: ['Emergency Contact Mobile Number'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
   },
   {
     name: 'emergencyContactEmail',
-    displayText: ['Emergency Contact Email Address #1'],
+    displayText: ['Emergency Contact Email Address'],
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
@@ -438,13 +441,6 @@ export const questions: QuestionList = [
     type: 'shortAnswer',
     initialValue: '',
     isRequired: true,
-  },
-  {
-    name: 'emergencyContactOther',
-    displayText: ['If Other, please specify'],
-    type: 'shortAnswer',
-    initialValue: '',
-    isRequired: false,
   },
 
   // Permission for Email Collection and Communication

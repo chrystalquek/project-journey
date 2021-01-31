@@ -5,6 +5,7 @@ import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
 import { EVENTS_ROUTE } from '@constants/routes';
 import { EventData } from '@type/event';
+import { getStoreEvent } from '@utils/helpers/event';
 
 type EventBreadCrumbsProps = {
   eid?: string
@@ -19,15 +20,12 @@ const useStyles = makeStyles({
 
 const EventBreadCrumbs: FC<EventBreadCrumbsProps> = ({ eid }) => {
   const classes = useStyles();
-  const event: EventData | null = useSelector(((state: StoreState) => {
-    const events = state.event.events.filter((e) => e._id === eid);
-    return events.length === 1 ? events[0] : null;
-  }));
+  const event: EventData | null = getStoreEvent(eid);
 
   return (
     <Breadcrumbs separator=">" className={classes.linkColor} aria-label="breadcrumb">
-      <Link href={EVENTS_ROUTE}>Events</Link>
-      <Typography>Search events</Typography>
+      <Typography>Events</Typography>
+      <Link href={EVENTS_ROUTE}>Search events</Link>
       {event ? <Typography>{event.name}</Typography> : null}
     </Breadcrumbs>
   );

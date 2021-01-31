@@ -2,7 +2,16 @@ steps:
 # Install
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
-# Build & Deploy
-- name: "gcr.io/cloud-builders/npm"
-  args: ["run", "deploy-prod"]
+# Create env file
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'create-env']
+  env:
+    - 'NEXT_PUBLIC_ENV=${_NEXT_PUBLIC_ENV}'
+# Build
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build']
+# Deploy
+- name: "gcr.io/cloud-builders/gcloud"
+  args: ["app", "deploy", "app-prod.yaml"]
   timeout: "1600s"
+  
