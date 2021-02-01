@@ -25,7 +25,6 @@ const updateProfilePicture = async (req, res: express.Response) => {
       imageName: req.file.filename,
     };
     const imageResponse = await imageService.uploadImage(imageData);
-    console.log(imageResponse);
     const response = await volunteerService.updateVolunteerDetails(
       imageResponse.email as string,
       { photoUrl: imageResponse.url } as Partial<VolunteerData>,
