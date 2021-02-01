@@ -4,10 +4,12 @@ import { QueryParams, EventSearchType, EventData } from '../types';
 import Event from '../models/Event';
 import util from '../helpers/util';
 
-const createEvent = async (eventData: EventData): Promise<void> => {
+const createEvent = async (eventData: EventData): Promise<string> => {
   try {
+    const _id = new mongoose.Types.ObjectId();
+
     const eventSchemaData: mongoose.Document = new Event({
-      _id: new mongoose.Types.ObjectId(),
+      _id,
       name: eventData.name,
       cover_image: eventData.coverImage,
       eventType: eventData.eventType,
@@ -28,6 +30,7 @@ const createEvent = async (eventData: EventData): Promise<void> => {
       isCancelled: eventData.isCancelled,
     });
     await eventSchemaData.save();
+    return _id.toHexString();
   } catch (err) {
     throw new Error(err.msg);
   }
