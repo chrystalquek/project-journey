@@ -1,6 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Paper, Typography, MenuItem, Button,
+  makeStyles,
 } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
@@ -16,7 +17,9 @@ import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
-import { makeStyles } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
 import objectMap from '@utils/helpers/objectMap';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '14px',
     marginTop: '4px',
   },
-}))
+}));
 
 export const FormQuestionMapper = ({
   formType,
@@ -125,7 +128,7 @@ export const FormQuestionMapper = ({
               onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
             />
           </div>
-          {!!props?.error && <Typography variant='body2' className={classes.errorStyle}>Required</Typography>}
+          {!!props?.error && <Typography variant="body2" className={classes.errorStyle}>Required</Typography>}
         </>
       );
     case 'number':
@@ -177,6 +180,8 @@ const FormGenerator = ({
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>('');
   const initialValues: Record<string, any> = {};
 
   questionList.forEach(({ name, type, initialValue }) => {
@@ -194,8 +199,8 @@ const FormGenerator = ({
   const handleSubmit = useCallback(
     async (formValues: Record<string, any>) => {
       // @ts-ignore type exists
-      const values = objectMap(formValues, element => element === '' ? undefined : element);
-      
+      const values = objectMap(formValues, (element) => (element === '' ? undefined : element));
+
       // Upload and get cover image URL
       if (values.photoUrl && typeof values.photoUrl !== 'string') {
         // @ts-ignore type exists
@@ -272,16 +277,16 @@ const FormGenerator = ({
       });
 
       if (response.type === 'volunteer//rejected') {
-        alert(`Error: ${response.error.message}`);
+        setToastText(`Error: ${response.error.message}`);
       } else if (response.type === 'volunteer//fulfilled') {
-        alert('You have signed up successfully.');
+        setToastText('You have signed up successfully.');
         router.push('/login');
       }
     },
     [questionList],
   );
 
-  const phoneRegExp =/^(\+65)?[689]\d{7}$/;
+  const phoneRegExp = /^(\+65)?[689]\d{7}$/;
   const personalityRegex = /(I|E)(N|S)(F|T)(J|P)_(A|T)/;
 
   const requiredSchema: object = {};
@@ -324,9 +329,9 @@ const FormGenerator = ({
           .integer('Input must be an integer')
           .positive('Input must be a positive integer')
         : Yup.number()
-            .integer('Input must be an integer')
-            .positive('Input must be a positive integer')
-            .required('Required'),
+          .integer('Input must be an integer')
+          .positive('Input must be a positive integer')
+          .required('Required'),
     personality:
       type === VOLUNTEER_TYPE.ADHOC
         ? Yup.mixed()
@@ -351,7 +356,7 @@ const FormGenerator = ({
           validateOnChange={false}
         >
           {({
-            isSubmitting, setFieldValue, values, errors, touched
+            isSubmitting, setFieldValue, values, errors, touched,
           }) => (
             <Form>
               {questionList.map((questionItem) => {
@@ -388,7 +393,7 @@ const FormGenerator = ({
                       name={name}
                       options={options}
                       setFieldValue={setFieldValue}
-                      props={{error: touched[name] ? errors[name] : null}}
+                      props={{ error: touched[name] ? errors[name] : null }}
                     />
                   </div>
                 );
@@ -413,6 +418,15 @@ const FormGenerator = ({
           )}
         </Formik>
       </MuiPickersUtilsProvider>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => { setOpenSnackbar(false); }}
+      >
+        <MuiAlert elevation={6} variant="filled">
+          {toastText}
+        </MuiAlert>
+      </Snackbar>
     </Paper>
   );
 };
