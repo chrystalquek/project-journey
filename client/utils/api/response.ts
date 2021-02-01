@@ -37,7 +37,9 @@ export type GetSignUpsResponse = {
   data: Array<SignUpData>
 }
 
-export type CreateEventResponse = {}
+export type CreateEventResponse = {
+  eventId: string
+}
 
 export type UploadImageResponse = {
   name: string,

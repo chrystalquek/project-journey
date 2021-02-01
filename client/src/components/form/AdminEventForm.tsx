@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${theme.palette.secondary.main}`,
     padding: '6px 16px',
     width: '255px',
+    marginTop: theme.spacing(2),
   },
   questionStyle: {
     fontWeight: 500,
@@ -114,12 +115,12 @@ const getCombinedDateAndTimeString = (
 // Feedback form types
 type QuestionData = {
   type: 'shortAnswer' | 'mcq' | 'checkboxes';
-  text: string;
+  displayText: string;
   options?: Array<string>;
   isRequired: boolean;
 };
 
-type KeyType = 'type' | 'text' | 'options' | 'isRequired';
+type KeyType = 'type' | 'displayText' | 'options' | 'isRequired';
 
 const validationSchema = yup.object({
   eventType: yup.string().required('Event type is required'),
@@ -186,7 +187,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const handleAddQuestion = useCallback(() => {
     const newQuestion: QuestionData = {
       type: 'shortAnswer',
-      text: '',
+      displayText: '',
       isRequired: true,
       options: [],
     };
@@ -236,7 +237,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       };
 
       if (key === 'type') {
-        newQuestion.text = '';
+        newQuestion.displayText = '';
         newQuestion.options = [];
       }
 
@@ -347,8 +348,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           });
       }
 
+      const new_form = {...form, questions: feedbackFormEventQuestions.map((element) => ({...element, name: element.displayText}))}
+
       dispatch(
-        isNew ? createEvent(form) : editEvent({ data: keysToSnake(form), id }),
+        isNew ? createEvent(new_form) : editEvent({ data: keysToSnake(form), id }),
       );
     },
     enableReinitialize: true,
@@ -777,7 +780,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                         options={[
                           { value: 'shortAnswer', label: 'Short Answer' },
                           { value: 'checkboxes', label: 'Check Box' },
-                          { value: 'longAnswer', label: 'Long Answer' },
                           { value: 'mcq', label: 'MCQ' },
                         ]}
                         props={{
@@ -788,11 +790,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                       />
                       <FormQuestionMapper
                         formType="shortAnswer"
-                        name={question.text + String(index)}
+                        name={question.displayText + String(index)}
                         props={{
-                          value: question.text,
+                          value: question.displayText,
                           placeholder: 'Type question here...',
-                          onChange: (e) => handleChangeQuestion(e.target.value, 'text', index),
+                          onChange: (e) => handleChangeQuestion(e.target.value, 'displayText', index),
                         }}
                       />
 
@@ -811,6 +813,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                               </Typography>
                               {question.options.map((option, optionIndex) => (
                                 <div
+                                  key={optionIndex}
                                   style={{
                                     display: 'flex',
                                     alignContent: 'center',
@@ -819,7 +822,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                   <FormQuestionMapper
                                     formType="shortAnswer"
                                     name={String(optionIndex)}
-                                    key={index}
+                                    key={optionIndex}
                                     props={{
                                       style: {
                                         width: '500px',
