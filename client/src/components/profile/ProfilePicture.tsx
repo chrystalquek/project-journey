@@ -117,12 +117,21 @@ const ProfilePicture = ({ profilePageData }) => {
     console.log(newImageUrl);
     const FormData = require('form-data');
     const blob = await fetch(newImageUrl).then(res => res.blob());
+    const imageFile = blobToFile(blob, 'filename');
 
-    const formData = new FormData();
-    formData.append('image', blob);
-    formData.append('email', profilePageData.email);
+    const form = new FormData();
+    form.append('image', imageFile);
+    form.append('email', profilePageData.email);
 
-    dispatch(uploadImage({name: profilePageData.name, form: formData}))
+    dispatch(uploadImage({name: profilePageData.name, form}))
+  }
+
+  const blobToFile = (blob: Blob, fileName: string): File => {
+    var b: any = blob;
+    b.lastModified = new Date();
+    b.name = fileName;
+
+    return b;
   }
 
   const handleCancel = useCallback(() => {
