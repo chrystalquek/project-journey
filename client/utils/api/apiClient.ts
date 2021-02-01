@@ -162,7 +162,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async updateProfilePicture(request: UploadImageRequest): Promise<VolunteerData> {
-    return this.send(request, 'image/profile-picture', 'post', true)
+    return this.send(request, 'image/profile-picture', 'post', true);
   }
 
   // commitment application

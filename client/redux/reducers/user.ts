@@ -4,8 +4,8 @@ import { VolunteerData } from '@type/volunteer';
 import jwt from 'jsonwebtoken';
 import apiClient from '@utils/api/apiClient';
 import { REHYDRATE } from 'redux-persist';
-import user, { updateVolunteer } from '../actions/user';
 import { updateProfilePicture } from '@redux/actions/image';
+import user, { updateVolunteer } from '../actions/user';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 

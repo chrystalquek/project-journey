@@ -13,16 +13,15 @@ UploadImageRequestWithField, { state }>(
   },
 );
 
-
 export const updateProfilePicture = createAsyncThunk<
   VolunteerData,
   UploadImageRequest
 >(
-  'image/updateProfilePicture', 
-  async ( form ) => {
+  'image/updateProfilePicture',
+  async (form) => {
     const response = await apiClient.updateProfilePicture(form);
-    return response
-  }
-)
+    return response;
+  },
+);
 
 export default { uploadImage, updateProfilePicture };

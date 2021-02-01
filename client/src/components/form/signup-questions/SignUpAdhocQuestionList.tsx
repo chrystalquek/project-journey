@@ -251,7 +251,7 @@ export const questions: QuestionList = [
     initialValue: '',
     isRequired: true,
   },
-  
+
   // Permission for Email Collection and Communication
   {
     name: 'permissionEmailCollection',

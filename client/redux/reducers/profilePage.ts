@@ -34,7 +34,7 @@ const profilePageDataSlice = createSlice({
       if (state?.data.email === updatedVolunteerData.email) {
         state.data = updatedVolunteerData;
       }
-    })
+    });
   },
 });
 

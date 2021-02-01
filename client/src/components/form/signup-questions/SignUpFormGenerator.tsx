@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
   Paper, Typography, MenuItem, Button,
+  makeStyles,
 } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
@@ -16,7 +17,7 @@ import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
-import { makeStyles } from '@material-ui/core';
+
 import objectMap from '@utils/helpers/objectMap';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '14px',
     marginTop: '4px',
   },
-}))
+}));
 
 export const FormQuestionMapper = ({
   formType,
@@ -125,7 +126,7 @@ export const FormQuestionMapper = ({
               onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
             />
           </div>
-          {!!props?.error && <Typography variant='body2' className={classes.errorStyle}>Required</Typography>}
+          {!!props?.error && <Typography variant="body2" className={classes.errorStyle}>Required</Typography>}
         </>
       );
     case 'number':
@@ -194,8 +195,8 @@ const FormGenerator = ({
   const handleSubmit = useCallback(
     async (formValues: Record<string, any>) => {
       // @ts-ignore type exists
-      const values = objectMap(formValues, element => element === '' ? undefined : element);
-      
+      const values = objectMap(formValues, (element) => (element === '' ? undefined : element));
+
       // Upload and get cover image URL
       if (values.photoUrl && typeof values.photoUrl !== 'string') {
         // @ts-ignore type exists
@@ -281,7 +282,7 @@ const FormGenerator = ({
     [questionList],
   );
 
-  const phoneRegExp =/^(\+65)?[689]\d{7}$/;
+  const phoneRegExp = /^(\+65)?[689]\d{7}$/;
   const personalityRegex = /(I|E)(N|S)(F|T)(J|P)_(A|T)/;
 
   const requiredSchema: object = {};
@@ -324,9 +325,9 @@ const FormGenerator = ({
           .integer('Input must be an integer')
           .positive('Input must be a positive integer')
         : Yup.number()
-            .integer('Input must be an integer')
-            .positive('Input must be a positive integer')
-            .required('Required'),
+          .integer('Input must be an integer')
+          .positive('Input must be a positive integer')
+          .required('Required'),
     personality:
       type === VOLUNTEER_TYPE.ADHOC
         ? Yup.mixed()
@@ -351,7 +352,7 @@ const FormGenerator = ({
           validateOnChange={false}
         >
           {({
-            isSubmitting, setFieldValue, values, errors, touched
+            isSubmitting, setFieldValue, values, errors, touched,
           }) => (
             <Form>
               {questionList.map((questionItem) => {
@@ -388,7 +389,7 @@ const FormGenerator = ({
                       name={name}
                       options={options}
                       setFieldValue={setFieldValue}
-                      props={{error: touched[name] ? errors[name] : null}}
+                      props={{ error: touched[name] ? errors[name] : null }}
                     />
                   </div>
                 );
