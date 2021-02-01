@@ -98,7 +98,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     ? ['Upcoming Events']
     : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
       ? ['Browse Events', 'Past Events']
-      : ['Browse Events', 'My Upcoming Events', 'My Past Events'];
+      : ['Browse Events', 'My Upcoming Events'];
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);
@@ -167,6 +167,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                         onClick={() => router.push('/event/pending-requests')}
                       >
                         Pending Requests
+                      </MenuItem>
+                    )}
+                  {userData?.volunteerType === VOLUNTEER_TYPE.ADHOC || userData?.volunteerType === VOLUNTEER_TYPE.COMMITED
+                    && (
+                      <MenuItem
+                        onClick={() => router.push('/event/my-past-events')}
+                      >
+                        My Past Events
                       </MenuItem>
                     )}
                 </MenuList>

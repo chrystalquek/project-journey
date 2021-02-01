@@ -90,7 +90,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     ? ['Upcoming Events']
     : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
       ? ['Browse Events', 'Past Events']
-      : ['Browse Events', 'My Upcoming Events', 'My Past Events'];
+      : ['Browse Events', 'My Upcoming Events'];
 
   const openDrawer = () => {
     setDrawer(true);
@@ -202,6 +202,14 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                   <ListItemText primary="Pending Requests" />
                 </ListItem>
               )}
+              {userData?.volunteerType === VOLUNTEER_TYPE.ADHOC || userData?.volunteerType === VOLUNTEER_TYPE.COMMITED
+                && (
+                  <MenuItem
+                    onClick={() => router.push('/event/my-past-events')}
+                  >
+                    My Past Events
+                  </MenuItem>
+                )}
             </List>
           </Collapse>
           {userData

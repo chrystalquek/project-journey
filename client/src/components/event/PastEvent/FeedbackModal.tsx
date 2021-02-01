@@ -205,7 +205,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
         );
       case 'fields':
         return (
-          <form onSubmit={() => {}}>
+          <form onSubmit={() => { }}>
             <div className={classes.root}>
               <div className={classes.title}>
                 <Typography variant="h2">
@@ -268,7 +268,10 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
     }
   };
 
+
+
   return (
+
     <Modal
       open={isOpen}
       onClose={onClose}
@@ -278,6 +281,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
     >
       {renderModalContent(feedbackState)}
     </Modal>
+
   );
 };
 
