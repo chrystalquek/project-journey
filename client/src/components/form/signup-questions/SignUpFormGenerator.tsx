@@ -16,6 +16,21 @@ import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
+import { makeStyles } from '@material-ui/core';
+import objectMap from '@utils/helpers/objectMap';
+
+const useStyles = makeStyles((theme) => ({
+  // The following style make sure that the error message shows consistently for 'photo'
+  errorStyle: {
+    color: theme.palette.error.main,
+    fontWeight: 'normal',
+    fontSize: '0.75rem',
+    lineHeight: '1.66',
+    marginLeft: '14px',
+    marginRight: '14px',
+    marginTop: '4px',
+  },
+}))
 
 export const FormQuestionMapper = ({
   formType,
@@ -23,13 +38,15 @@ export const FormQuestionMapper = ({
   options,
   setFieldValue,
   props,
-}: {
+} : {
   formType: InputType;
   name: string;
   options?: OptionType[] | null;
   setFieldValue?: any; // Should be the same type as setFieldValue from Formik
-  props?: object;
+  props?: Record<string, any>;
 }) => {
+  const classes = useStyles();
+
   const onChangeImage = (e, fieldName, setFieldValue) => {
     if (e.target.files && e.target.files[0]) {
       const imageFile = e.target.files[0];
@@ -99,14 +116,17 @@ export const FormQuestionMapper = ({
       );
     case 'photo':
       return (
-        <div style={{ width: '100%', height: '200px' }}>
-          <DropZoneCard
-            id={name}
-            initialUrl={null}
-            isBig={false}
-            onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
-          />
-        </div>
+        <>
+          <div style={{ width: '100%', height: '200px' }}>
+            <DropZoneCard
+              id={name}
+              initialUrl={null}
+              isBig={false}
+              onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
+            />
+          </div>
+          {!!props?.error && <Typography variant='body2' className={classes.errorStyle}>Required</Typography>}
+        </>
       );
     case 'number':
       return (
@@ -172,7 +192,10 @@ const FormGenerator = ({
   };
 
   const handleSubmit = useCallback(
-    async (values: Record<string, any>) => {
+    async (formValues: Record<string, any>) => {
+      // @ts-ignore type exists
+      const values = objectMap(formValues, element => element === '' ? undefined : element);
+      
       // Upload and get cover image URL
       if (values.photoUrl && typeof values.photoUrl !== 'string') {
         // @ts-ignore type exists
@@ -203,7 +226,7 @@ const FormGenerator = ({
         race: values.race,
 
         languages: values.languages
-          .split(',')
+          ?.split(',')
           .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
         referralSources: values.referralSources,
 
@@ -258,7 +281,8 @@ const FormGenerator = ({
     [questionList],
   );
 
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegExp =/^(\+65)?[689]\d{7}$/;
+  const personalityRegex = /(I|E)(N|S)(F|T)(J|P)_(A|T)/;
 
   const requiredSchema: object = {};
 
@@ -300,9 +324,13 @@ const FormGenerator = ({
           .integer('Input must be an integer')
           .positive('Input must be a positive integer')
         : Yup.number()
-          .integer('Input must be an integer')
-          .positive('Input must be a positive integer')
-          .required('Required'),
+            .integer('Input must be an integer')
+            .positive('Input must be a positive integer')
+            .required('Required'),
+    personality:
+      type === VOLUNTEER_TYPE.ADHOC
+        ? Yup.mixed()
+        : Yup.string().matches(personalityRegex, 'Invalid value').required('Required'),
   });
 
   return (
@@ -323,7 +351,7 @@ const FormGenerator = ({
           validateOnChange={false}
         >
           {({
-            isSubmitting, setFieldValue, values,
+            isSubmitting, setFieldValue, values, errors, touched
           }) => (
             <Form>
               {questionList.map((questionItem) => {
@@ -360,6 +388,7 @@ const FormGenerator = ({
                       name={name}
                       options={options}
                       setFieldValue={setFieldValue}
+                      props={{error: touched[name] ? errors[name] : null}}
                     />
                   </div>
                 );

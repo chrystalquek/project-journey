@@ -15,11 +15,11 @@ const VolunteerRoles: FC<VolunteerRolesProps> = ({ event }) => {
       <EventTypography gutterBottom borderBottom fontSize="h3" fontBold text="Volunteer Roles" />
       {volunteerRoles.length > 0
         ? volunteerRoles.map((role: RoleData) => (
-            <Box marginBottom={3} key={role.name}>
-              <EventTypography fontBold text={role.name} />
-              <EventTypography text={role.description} />
-            </Box>
-          ))
+          <Box marginBottom={3} key={role.name}>
+            <EventTypography fontBold text={role.name} />
+            <EventTypography text={role.description} />
+          </Box>
+        ))
         : <EventTypography text="No roles listed." />}
     </>
   );

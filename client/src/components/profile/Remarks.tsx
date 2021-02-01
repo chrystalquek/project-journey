@@ -16,9 +16,10 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: StoreState) => state.user);
   const userData = user.user;
+  const isAdmin = user.user.volunteerType === VOLUNTEER_TYPE.ADMIN;
 
   let originalVolunteerRemarks = profilePageData.volunteerRemarks;
-  const originalAdministratorRemarks = profilePageData.administratorRemarks;
+  let originalAdministratorRemarks = profilePageData.administratorRemarks;
 
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
   const [administratorRemarks, setAdministratorRemarks] = useState<string>(originalAdministratorRemarks);
@@ -36,7 +37,6 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   };
 
   const saveVolunteerRemarks = () => {
-    // TODO: sync database
     dispatch(
       updateVolunteer({
         email: profilePageData.email,
@@ -50,8 +50,16 @@ const Remarks: FC<props> = ({ profilePageData }) => {
     setVolunteerRemarksChanged(false);
   };
   const saveAdministratorRemarks = () => {
-    // TODO: sync database
-    profilePageData.administratorRemarks = administratorRemarks;
+    dispatch(
+      updateVolunteer({
+        email: profilePageData.email,
+        updatedVolunteerData: {
+          administratorRemarks,
+        },
+      }),
+    );
+
+    originalAdministratorRemarks = administratorRemarks;
     setAdministratorRemarksChanged(false);
   };
 
@@ -82,6 +90,9 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           show={volunteerRemarksChanged}
           onSave={saveVolunteerRemarks}
           onDiscard={discardVolunteerRemarks}
+          // Admin cannot edit the remarks written by the volunteer
+          // But admin can edit remarks of him/herself
+          disabled={isAdmin && profilePageData._id !== user.user._id}
         />
 
         {/* Admin remarks not rendered if the profilePageData is admin
@@ -95,6 +106,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           show={administratorRemarksChanged}
           onSave={saveAdministratorRemarks}
           onDiscard={discardAdministratorRemarks}
+          disabled={!isAdmin}
         />
         )}
       </Grid>

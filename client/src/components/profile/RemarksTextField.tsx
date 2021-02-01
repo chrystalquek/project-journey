@@ -11,10 +11,11 @@ type props = {
   onChange: (event: any) => void,
   onSave: () => void,
   onDiscard: () => void,
+  disabled?: boolean,
 }
 
 const RemarksTextField: FC<props> = ({
-  value, onChange, label, show, onSave, onDiscard,
+  value, onChange, label, show, onSave, onDiscard, disabled = true,
 }) => (
   <Grid item container direction="column" spacing={1}>
     <Grid item xs={12}>
@@ -27,6 +28,7 @@ const RemarksTextField: FC<props> = ({
         value={value}
         onChange={onChange}
         label={label}
+        disabled={disabled}
       />
     </Grid>
     <DiscardSaveButtons

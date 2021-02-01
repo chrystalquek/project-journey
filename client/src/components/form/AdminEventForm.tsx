@@ -1,4 +1,6 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, {
+  FC, useCallback, useEffect, useState,
+} from 'react';
 import {
   TextField,
   makeStyles,
@@ -22,12 +24,13 @@ import { resetImages } from '@redux/reducers/image';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
 import { Formik, FormikProvider, useFormik } from 'formik';
-import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
 import { keysToCamel, keysToSnake } from '@utils/helpers/keysToCamel';
 import { unwrapResult } from '@reduxjs/toolkit';
 import ClearIcon from '@material-ui/icons/Clear';
+import { resetEventStatus } from '@redux/reducers/event';
+import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
 
 type AdminEventFormProps = {
   id: string;
@@ -103,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
  */
 const getCombinedDateAndTimeString = (
   dateDayJs: dayjs.Dayjs,
-  time: string
+  time: string,
 ): string => {
   const dateDayJsWithoutTime = dateDayJs.format('YYYY-MM-DD');
   return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
@@ -132,9 +135,8 @@ const validationSchema = yup.object({
     .required('Start date is required')
     .when(
       'startDate',
-      (startDate, schema) =>
-        startDate &&
-        schema.min(startDate, 'End date should be later than start date')
+      (startDate, schema) => startDate
+        && schema.min(startDate, 'End date should be later than start date'),
     ),
   facilitatorName: yup.string().when('eventType', {
     is: 'volunteering',
@@ -201,7 +203,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       handleChangeQuestion(newOption, 'options', index);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions],
   );
 
   const handleRemoveQuestion = useCallback(
@@ -211,7 +213,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         ...feedbackFormEventQuestions.slice(index + 1),
       ]);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions],
   );
 
   const handleRemoveOption = useCallback(
@@ -224,7 +226,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       handleChangeQuestion(newOption, 'options', questionIndex);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions],
   );
 
   const handleChangeQuestion = useCallback(
@@ -245,13 +247,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         ...feedbackFormEventQuestions.slice(index + 1),
       ]);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions],
   );
 
   const handleChangeOption = useCallback(
     (value: string, questionIndex: number, optionIndex: number) => {
-      const currentOption: Array<string> =
-        feedbackFormEventQuestions[questionIndex].options;
+      const currentOption: Array<string> = feedbackFormEventQuestions[questionIndex].options;
       const newOption: Array<string> = [
         ...currentOption.slice(0, optionIndex),
         value,
@@ -260,32 +261,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       handleChangeQuestion(newOption, 'options', questionIndex);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions],
   );
 
-  const [dateAndTime, setDateAndTime] = useState({
-    fromDate: dayjs(),
-    toDate: dayjs(),
-    fromTime: '00:00',
-    toTime: '00:00',
-  });
-
-  const [formData, setFormData] = useState({
-    name: '',
-    coverImage: '',
-    eventType: 'workshop',
-    volunteerType: 'committed',
-    deadline: dayjs(),
-    vacancies: 0,
-    description: '',
-    facilitatorName: '',
-    facilitatorPhoto: '',
-    facilitatorDescription: '',
-    roles: [],
-    contentUrl: null,
-    contentType: 'pdf', // TODO: fix this
-    location: '',
-  });
   const router = useRouter();
 
   useEffect(() => {
@@ -293,6 +271,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       dispatch(getEvent(id));
     }
   }, [id]);
+
+  useEffect(() => () => dispatch(resetEventStatus()), []);
 
   useEffect(() => {
     if (event.status === 'rejected') {
@@ -337,8 +317,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       // Upload and get facilitator photo URL
       if (
-        formValues.facilitatorPhoto &&
-        typeof formValues.facilitatorPhoto !== 'string'
+        formValues.facilitatorPhoto
+        && typeof formValues.facilitatorPhoto !== 'string'
       ) {
         // @ts-ignore type exists
         await onUploadImage(formValues.facilitatorPhoto, 'facilitatorPhoto').then(unwrapResult)
@@ -348,7 +328,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       }
 
       dispatch(
-        isNew ? createEvent(form) : editEvent({ data: keysToSnake(form), id })
+        isNew ? createEvent(form) : editEvent({ data: keysToSnake(form), id }),
       );
     },
     enableReinitialize: true,
@@ -381,9 +361,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   return (
     <form onSubmit={handleSubmit}>
       <PaddedGrid>
-        <Grid container direction='column' spacing={2}>
+        <Grid container direction="column" spacing={2}>
           <Grid item>
-            <Typography variant='h1'>
+            <Typography variant="h1">
               {isNew ? 'Create Event' : 'Edit Event'}
             </Typography>
           </Grid>
@@ -391,18 +371,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Type of event */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant='h4'>Type of Event</Typography>
+              <Typography variant="h4">Type of Event</Typography>
             </Grid>
             <Grid item xs={6} md={2}>
               <TextField
                 select
-                variant='outlined'
-                margin='dense'
-                id='type'
-                type='text'
+                variant="outlined"
+                margin="dense"
+                id="type"
+                type="text"
                 fullWidth
-                color='secondary'
-                name='eventType'
+                color="secondary"
+                name="eventType"
                 value={eventType}
                 onChange={handleChange}
                 helperText={errors.eventType}
@@ -421,7 +401,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           <Grid item container>
             <div className={classes.coverImage}>
               <DropZoneCard
-                id='coverImage'
+                id="coverImage"
                 initialUrl={eventForm?.cover_image}
                 isBig
                 onChangeImage={(e) => onChangeImage(e, 'coverImage')}
@@ -432,18 +412,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Name of event */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant='h4'>Name of Event</Typography>
+              <Typography variant="h4">Name of Event</Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant='outlined'
-                margin='dense'
-                id='name'
+                variant="outlined"
+                margin="dense"
+                id="name"
                 placeholder={getEventTypePlaceholder(eventType)}
-                type='text'
+                type="text"
                 fullWidth
-                color='secondary'
-                name='name'
+                color="secondary"
+                name="name"
                 value={name}
                 onChange={handleChange}
                 helperText={errors.name}
@@ -455,18 +435,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Volunteer Type */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant='h4'>Volunteer Type</Typography>
+              <Typography variant="h4">Volunteer Type</Typography>
             </Grid>
             <Grid item xs={6} md={2}>
               <TextField
                 select
-                variant='outlined'
-                margin='dense'
-                id='type'
-                type='text'
+                variant="outlined"
+                margin="dense"
+                id="type"
+                type="text"
                 fullWidth
-                color='secondary'
-                name='volunteerType'
+                color="secondary"
+                name="volunteerType"
                 value={volunteerType}
                 onChange={handleChange}
                 helperText={errors.volunteerType}
@@ -482,64 +462,60 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           </Grid>
 
           {/* Date - From & To */}
-          <Grid item container direction='row' alignItems='center' spacing={2}>
+          <Grid item container direction="row" alignItems="center" spacing={2}>
             <Grid item xs={12}>
-              <Typography variant='h4'>Date</Typography>
+              <Typography variant="h4">Date</Typography>
             </Grid>
-            <Grid item xs={2} md='auto'>
-              <Typography variant='body1'>From</Typography>
+            <Grid item xs={2} md="auto">
+              <Typography variant="body1">From</Typography>
             </Grid>
             <Grid item xs={8} md={2}>
               <KeyboardDatePicker
                 disableToolbar
-                variant='inline'
-                inputVariant='outlined'
-                format='DD/MM/YYYY'
-                margin='dense'
-                id='date-from'
-                name='fromDate'
+                variant="inline"
+                inputVariant="outlined"
+                format="DD/MM/YYYY"
+                margin="dense"
+                id="date-from"
+                name="fromDate"
                 value={dayjs(startDate)}
-                onChange={(date) =>
-                  setFieldValue(
-                    'startDate',
-                    getCombinedDateAndTimeString(
-                      date,
-                      dayjs(startDate).format('HH:mm')
-                    )
-                  )
-                }
+                onChange={(date) => setFieldValue(
+                  'startDate',
+                  getCombinedDateAndTimeString(
+                    date,
+                    dayjs(startDate).format('HH:mm'),
+                  ),
+                )}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-                color='secondary'
+                color="secondary"
                 helperText={errors.startDate}
                 error={touched.startDate && Boolean(errors.startDate)}
               />
             </Grid>
-            <Grid item xs={12} md='auto' />
-            <Grid item xs={2} md='auto'>
-              <Typography variant='body1'>To</Typography>
+            <Grid item xs={12} md="auto" />
+            <Grid item xs={2} md="auto">
+              <Typography variant="body1">To</Typography>
             </Grid>
             <Grid item xs={8} md={2}>
               <KeyboardDatePicker
                 disableToolbar
-                variant='inline'
-                inputVariant='outlined'
-                format='DD/MM/YYYY'
-                margin='dense'
-                id='date-to'
-                name='toDate'
+                variant="inline"
+                inputVariant="outlined"
+                format="DD/MM/YYYY"
+                margin="dense"
+                id="date-to"
+                name="toDate"
                 value={dayjs(endDate)}
-                onChange={(date) =>
-                  setFieldValue(
-                    'endDate',
-                    getCombinedDateAndTimeString(
-                      date,
-                      dayjs(endDate).format('HH:mm')
-                    )
-                  )
-                }
-                color='secondary'
+                onChange={(date) => setFieldValue(
+                  'endDate',
+                  getCombinedDateAndTimeString(
+                    date,
+                    dayjs(endDate).format('HH:mm'),
+                  ),
+                )}
+                color="secondary"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
               />
@@ -547,68 +523,64 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           </Grid>
 
           {/* Time - From & To */}
-          <Grid item container direction='row' alignItems='center' spacing={2}>
+          <Grid item container direction="row" alignItems="center" spacing={2}>
             <Grid item xs={12}>
-              <Typography variant='h4'>Time</Typography>
+              <Typography variant="h4">Time</Typography>
             </Grid>
-            <Grid item xs={2} md='auto'>
-              <Typography variant='body1'>From</Typography>
+            <Grid item xs={2} md="auto">
+              <Typography variant="body1">From</Typography>
             </Grid>
             <Grid item xs={8} md={2}>
               <TextField
-                id='time'
-                variant='outlined'
-                name='fromTime'
+                id="time"
+                variant="outlined"
+                name="fromTime"
                 fullWidth
                 value={dayjs(startDate).format('HH:mm')}
-                margin='dense'
-                onChange={(e) =>
-                  setFieldValue(
-                    'startDate',
-                    getCombinedDateAndTimeString(
-                      dayjs(startDate),
-                      e.target.value
-                    )
-                  )
-                }
-                type='time'
+                margin="dense"
+                onChange={(e) => setFieldValue(
+                  'startDate',
+                  getCombinedDateAndTimeString(
+                    dayjs(startDate),
+                    e.target.value,
+                  ),
+                )}
+                type="time"
                 InputLabelProps={{
                   shrink: true,
                 }}
                 inputProps={{
                   step: 300, // 5 min
                 }}
-                color='secondary'
+                color="secondary"
                 helperText={errors.startDate}
                 error={touched.startDate && Boolean(errors.startDate)}
               />
             </Grid>
-            <Grid item xs={12} md='auto' />
-            <Grid item xs={2} md='auto'>
-              <Typography variant='body1'>To</Typography>
+            <Grid item xs={12} md="auto" />
+            <Grid item xs={2} md="auto">
+              <Typography variant="body1">To</Typography>
             </Grid>
             <Grid item xs={8} md={2}>
               <TextField
-                id='time'
-                variant='outlined'
-                name='toTime'
+                id="time"
+                variant="outlined"
+                name="toTime"
                 fullWidth
                 value={dayjs(endDate).format('HH:mm')}
-                margin='dense'
-                onChange={(e) =>
-                  setFieldValue(
-                    'endDate',
-                    getCombinedDateAndTimeString(dayjs(endDate), e.target.value)
-                  )
-                }
-                type='time'
+                margin="dense"
+                onChange={(e) => setFieldValue(
+                  'endDate',
+                  getCombinedDateAndTimeString(dayjs(endDate), e.target.value),
+                )}
+                type="time"
                 InputLabelProps={{
                   shrink: true,
                 }}
                 inputProps={{
                   step: 300, // 5 min
                 }}
-                color='secondary'
+                color="secondary"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
               />
@@ -618,20 +590,20 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Sign-up Deadline */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant='h4'>Sign-up Deadline</Typography>
+              <Typography variant="h4">Sign-up Deadline</Typography>
             </Grid>
             <Grid item xs={12}>
               <KeyboardDateTimePicker
                 disableToolbar
-                variant='inline'
-                inputVariant='outlined'
+                variant="inline"
+                inputVariant="outlined"
                 ampm={false}
-                margin='dense'
+                margin="dense"
                 value={dayjs(deadline)}
                 onChange={(date) => setFieldValue('deadline', date)}
                 disablePast
-                format='DD/MM/YYYY HH:mm'
-                color='secondary'
+                format="DD/MM/YYYY HH:mm"
+                color="secondary"
                 helperText={errors.deadline}
                 error={touched.deadline && Boolean(errors.deadline)}
               />
@@ -641,18 +613,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Number of Vacancies */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant='h4'>Number of Vacancies</Typography>
+              <Typography variant="h4">Number of Vacancies</Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant='outlined'
-                margin='dense'
-                id='type'
-                placeholder='eg.20'
-                type='text'
+                variant="outlined"
+                margin="dense"
+                id="type"
+                placeholder="eg.20"
+                type="text"
                 fullWidth
-                color='secondary'
-                name='vacancies'
+                color="secondary"
+                name="vacancies"
                 value={vacancies}
                 onChange={handleChange}
                 helperText={errors.vacancies}
@@ -664,18 +636,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Event Description */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant='h4'>Event Description</Typography>
+              <Typography variant="h4">Event Description</Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant='outlined'
-                margin='dense'
-                id='type'
-                placeholder='Type something here...'
-                type='text'
+                variant="outlined"
+                margin="dense"
+                id="type"
+                placeholder="Type something here..."
+                type="text"
                 fullWidth
-                color='secondary'
-                name='description'
+                color="secondary"
+                name="description"
                 value={description}
                 onChange={handleChange}
                 multiline
@@ -690,18 +662,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <>
               <Grid item container>
                 <Grid item xs={12}>
-                  <Typography variant='h4'> Name of Facilitator</Typography>
+                  <Typography variant="h4"> Name of Facilitator</Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    variant='outlined'
-                    margin='dense'
-                    id='type'
-                    placeholder='eg. Ms Anna Soh'
-                    type='text'
+                    variant="outlined"
+                    margin="dense"
+                    id="type"
+                    placeholder="eg. Ms Anna Soh"
+                    type="text"
                     fullWidth
-                    color='secondary'
-                    name='facilitatorName'
+                    color="secondary"
+                    name="facilitatorName"
                     value={facilitatorName}
                     onChange={handleChange}
                     helperText={errors.facilitatorName}
@@ -715,7 +687,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               <Grid item container>
                 <div className={classes.facilPhotograph}>
                   <DropZoneCard
-                    id='facilitatorPhoto'
+                    id="facilitatorPhoto"
                     initialUrl={eventForm?.facilitator_photo}
                     isBig={false}
                     onChangeImage={(e) => onChangeImage(e, 'facilitatorPhoto')}
@@ -724,28 +696,28 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               </Grid>
               <Grid item container>
                 <Grid item xs={12}>
-                  <Typography variant='h4'>
+                  <Typography variant="h4">
                     Description of Facilitator
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    variant='outlined'
-                    margin='dense'
-                    id='type'
-                    placeholder='Type something here...'
-                    type='text'
+                    variant="outlined"
+                    margin="dense"
+                    id="type"
+                    placeholder="Type something here..."
+                    type="text"
                     fullWidth
-                    color='secondary'
-                    name='facilitatorDescription'
+                    color="secondary"
+                    name="facilitatorDescription"
                     value={facilitatorDescription}
                     onChange={handleChange}
                     multiline
                     rows={15}
                     helperText={errors.facilitatorDescription}
                     error={
-                      touched.facilitatorDescription &&
-                      Boolean(errors.facilitatorDescription)
+                      touched.facilitatorDescription
+                      && Boolean(errors.facilitatorDescription)
                     }
                   />
                 </Grid>
@@ -761,7 +733,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             {({ isSubmitting, values }) => (
               <>
                 <div>
-                  <Typography variant='h2'>Volunteer Response Form</Typography>
+                  <Typography variant="h2">Volunteer Response Form</Typography>
                 </div>
 
                 {/* Feedback form generator based on redux state */}
@@ -770,7 +742,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                     <div key={String(index)}>
                       <div style={{ display: 'flex' }}>
                         <Typography className={classes.questionStyle}>
-                          Question {index + 1}
+                          Question
+                          {' '}
+                          {index + 1}
                         </Typography>
                         <IconButton onClick={() => handleRemoveQuestion(index)}>
                           <ClearIcon />
@@ -778,8 +752,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                       </div>
 
                       <FormQuestionMapper
-                        formType='mcq'
-                        name={'type' + String(index)}
+                        formType="mcq"
+                        name={`type${String(index)}`}
                         options={[
                           { value: 'shortAnswer', label: 'Short Answer' },
                           { value: 'checkboxes', label: 'Check Box' },
@@ -789,23 +763,21 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                         props={{
                           style: { width: '200px' },
                           value: question.type,
-                          onChange: (e) =>
-                            handleChangeQuestion(e.target.value, 'type', index),
+                          onChange: (e) => handleChangeQuestion(e.target.value, 'type', index),
                         }}
                       />
                       <FormQuestionMapper
-                        formType='shortAnswer'
+                        formType="shortAnswer"
                         name={question.text + String(index)}
                         props={{
                           value: question.text,
                           placeholder: 'Type question here...',
-                          onChange: (e) =>
-                            handleChangeQuestion(e.target.value, 'text', index),
+                          onChange: (e) => handleChangeQuestion(e.target.value, 'text', index),
                         }}
                       />
 
-                      {question.type === 'mcq' ||
-                      question.type === 'checkboxes' ? (
+                      {question.type === 'mcq'
+                      || question.type === 'checkboxes' ? (
                         <Formik
                           initialValues={{}}
                           onSubmit={() => {}}
@@ -814,7 +786,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                           {({ isSubmitting, values }) => (
                             <>
                               <Typography className={classes.optionStyle}>
-                                Options:{' '}
+                                Options:
+                                {' '}
                               </Typography>
                               {question.options.map((option, optionIndex) => (
                                 <div
@@ -824,7 +797,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                   }}
                                 >
                                   <FormQuestionMapper
-                                    formType='shortAnswer'
+                                    formType="shortAnswer"
                                     name={String(optionIndex)}
                                     key={index}
                                     props={{
@@ -833,18 +806,15 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                       },
                                       placeholder: 'Type option here...',
                                       value: option,
-                                      onChange: (e) =>
-                                        handleChangeOption(
-                                          e.target.value,
-                                          index,
-                                          optionIndex
-                                        ),
+                                      onChange: (e) => handleChangeOption(
+                                        e.target.value,
+                                        index,
+                                        optionIndex,
+                                      ),
                                     }}
                                   />
                                   <IconButton
-                                    onClick={() =>
-                                      handleRemoveOption(index, optionIndex)
-                                    }
+                                    onClick={() => handleRemoveOption(index, optionIndex)}
                                   >
                                     <ClearIcon />
                                   </IconButton>
@@ -859,24 +829,22 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                             </>
                           )}
                         </Formik>
-                      ) : null}
+                        ) : null}
                       <div className={classes.isRequiredStyle}>
                         <Typography style={{ display: 'inline-block' }}>
                           Is question required?
                         </Typography>
                         <Switch
                           checked={question.isRequired}
-                          onChange={(e) =>
-                            handleChangeQuestion(
-                              e.target.checked,
-                              'isRequired',
-                              index
-                            )
-                          }
+                          onChange={(e) => handleChangeQuestion(
+                            e.target.checked,
+                            'isRequired',
+                            index,
+                          )}
                         />
                       </div>
                     </div>
-                  )
+                  ),
                 )}
                 <Button
                   className={classes.addNewFieldButton}
@@ -888,16 +856,16 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             )}
           </Formik>
           {/* Create Event Button */}
-          <Grid item container direction='row' justify='flex-end'>
+          <Grid item container direction="row" justify="flex-end">
             <Button
-              variant='contained'
-              type='submit'
+              variant="contained"
+              type="submit"
               disabled={isSubmitting}
-              color='primary'
+              color="primary"
               // onClick={(_) => handleSubmit()}
               className={classes.submitButton}
             >
-              <Typography variant='body1'>
+              <Typography variant="body1">
                 {isNew ? 'Create Event' : 'Edit Event'}
               </Typography>
             </Button>
