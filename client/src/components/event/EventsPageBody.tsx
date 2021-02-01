@@ -93,7 +93,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   if (screenSm) {
     return (
       <>
-        <Grid container spacing={4}>
+        <Grid
+          container
+          spacing={4}
+        >
           <Grid item xs={12}>
             <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
           </Grid>
@@ -158,7 +161,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   }
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid
+        container
+        spacing={4}
+      >
         <Grid item sm={12}>
           <EventBreadCrumbs />
         </Grid>

@@ -13,4 +13,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   margin: 0;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 16px;
 }
