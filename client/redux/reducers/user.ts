@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import apiClient from '@utils/api/apiClient';
 import { REHYDRATE } from 'redux-persist';
 import user, { updateVolunteer } from '../actions/user';
+import { updateProfilePicture } from '@redux/actions/image';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
@@ -61,6 +62,13 @@ const userSlice = createSlice({
       state.status = 'rejected';
     });
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
+      const updatedVolunteerData = action.payload;
+      // Update the loggedInUser data
+      if (state.user.email == updatedVolunteerData.email) {
+        state.user = updatedVolunteerData;
+      }
+    });
+    builder.addCase(updateProfilePicture.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload;
       // Update the loggedInUser data
       if (state.user.email == updatedVolunteerData.email) {
