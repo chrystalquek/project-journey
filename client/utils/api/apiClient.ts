@@ -160,7 +160,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async createForm(request: CreateFormQuestionsRequest): Promise<void> {
-    return this.send(request, 'form/', 'post');
+    return this.send(request, 'form', 'post');
   }
 
   async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {

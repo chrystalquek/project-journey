@@ -348,10 +348,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           });
       }
 
-      const new_form = {...form, questions: feedbackFormEventQuestions.map((element) => ({...element, name: element.displayText}))}
+      const newForm = {...form, questions: feedbackFormEventQuestions.map((element) => ({...element, name: element.displayText}))}
 
       dispatch(
-        isNew ? createEvent(new_form) : editEvent({ data: keysToSnake(form), id }),
+        isNew ? createEvent(newForm) : editEvent({ data: keysToSnake(form), id }),
       );
     },
     enableReinitialize: true,
