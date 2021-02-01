@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     height: '100px',
     width: '100px',
+    objectFit: 'cover'
   },
   input: {
     display: 'none'
