@@ -111,6 +111,8 @@ const eventSlice = createSlice({
       state.status = 'fulfilled';
       addToData(action.payload.data, state);
       state.browseEvents.ids = action.payload.data.map((event) => event._id);
+      // hacky workaround to make create new event work
+      state.status = '';
     });
     builder.addCase(getUpcomingEvents.rejected, (state) => {
       state.status = 'rejected';
