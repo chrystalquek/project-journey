@@ -1,6 +1,16 @@
 import dayjs from 'dayjs';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 
+export type FormQuestionType = 'shortAnswer' | 'mcq' | 'checkboxes'
+
+export type QuestionsOptionsRequestData = {
+  displayText: string;
+  type: FormQuestionType;
+  isRequired: boolean;
+  name: string;
+  options: Array<{ content: string }>
+}
+
 export type EventPostData = {
   name: string;
   coverImage?: string; // TODO: change to appropriate type
@@ -18,6 +28,7 @@ export type EventPostData = {
   contentUrl?: string;
   contentType?: string;
   location: string;
+  questions: Array<QuestionsOptionsRequestData>;
 }
 
 export type EventData = {

@@ -17,6 +17,7 @@ import {
   EventQueryParams,
   VolunteerPaginatedQueryParams,
   AnswerFormQuestionsRequest,
+  CreateFormQuestionsRequest,
 } from '@utils/api/request';
 
 import {
@@ -46,6 +47,7 @@ export interface ApiClient {
     Promise<GetCommitmentApplicationResponse>
   updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
   submitEventFeedback(request: AnswerFormQuestionsRequest): Promise<void>
+  createForm(request: CreateFormQuestionsRequest): Promise<void>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -155,6 +157,10 @@ class AxiosApiClient implements ApiClient {
 
   async submitEventFeedback(request: AnswerFormQuestionsRequest): Promise<void> {
     return this.send(request, 'form/answer', 'post');
+  }
+
+  async createForm(request: CreateFormQuestionsRequest): Promise<void> {
+    return this.send(request, 'form', 'post');
   }
 
   async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {

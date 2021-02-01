@@ -28,6 +28,7 @@ export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequ
   'event/createEvent',
   async (data: CreateEventRequest) => {
     const response = await apiClient.createEvent(data) as CreateEventResponse;
+    await apiClient.createForm({eventId: response.eventId, questions: data.questions});
     return response;
   },
 );
