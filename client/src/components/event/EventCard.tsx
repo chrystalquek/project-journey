@@ -21,6 +21,9 @@ const useStyles = makeStyles({
   bold: {
     fontWeight: 700,
   },
+  card: {
+    width: '25rem',
+  },
   media: {
     objectFit: 'cover',
     height: '12rem',
@@ -37,7 +40,7 @@ const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
   const { date, time } = parseDate(event.startDate, event.endDate);
 
   return (
-    <Card onClick={onCardClick}>
+    <Card className={classes.card} onClick={onCardClick}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
