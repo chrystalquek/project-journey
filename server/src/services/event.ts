@@ -161,9 +161,11 @@ const cancelEvent = async (
   try {
     await Event.findOneAndUpdate(
       { _id: id },
-      { $set: {
-        isCancelled: true
-      } },
+      {
+        $set: {
+          isCancelled: true,
+        },
+      },
       { new: true },
     );
   } catch (err) {

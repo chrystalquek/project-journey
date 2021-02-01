@@ -47,7 +47,7 @@ router.post(
 router.post(
   '/profile-picture',
   upload.single('image'),
-  imageController.updateProfilePicture
+  imageController.updateProfilePicture,
 );
 
 router.delete(

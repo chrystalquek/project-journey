@@ -19,23 +19,22 @@ const uploadImage = async (req, res: express.Response) => {
 };
 
 const updateProfilePicture = async (req, res: express.Response) => {
-
   try {
     const imageData: ImageData = {
       email: req.body.email,
       imageName: req.file.filename,
-    }
+    };
     const imageResponse = await imageService.uploadImage(imageData);
-    console.log(imageResponse)
+    console.log(imageResponse);
     const response = await volunteerService.updateVolunteerDetails(
       imageResponse.email as string,
-      {photoUrl: imageResponse.url} as Partial<VolunteerData>
-    )
-    res.status(HTTP_CODES.OK).json(response)
+      { photoUrl: imageResponse.url } as Partial<VolunteerData>,
+    );
+    res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
   }
-}
+};
 
 const getImageWithEmail = async (req: express.Request, res: express.Response) => {
   try {
