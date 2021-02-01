@@ -42,8 +42,8 @@ const createEvent = async (
 ): Promise<void> => {
   try {
     req.body.isCancelled = false; // default
-    await eventService.createEvent(req.body as EventData);
-    res.status(HTTP_CODES.OK).send('Event data created');
+    const eventId = await eventService.createEvent(req.body as EventData);
+    res.status(HTTP_CODES.OK).send({eventId});
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
