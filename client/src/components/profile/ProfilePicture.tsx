@@ -4,8 +4,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { PhotoCamera } from '@material-ui/icons';
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { uploadImage } from '@redux/actions/image';
 import { useDispatch } from 'react-redux';
+import { updateProfilePicture, uploadImage } from '@redux/actions/image';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -55,17 +55,14 @@ const ProfilePicture = ({ profilePageData }) => {
   }
 
   const onImageLoaded = (image) => {
-    console.log(`onImageLoaded called`)
     setImageRef(image);
   }
 
   const onCropComplete = (newCrop) => {
-    console.log('onCropComplete called')
     makeClientCrop(newCrop);
   }
 
   const onCropChange = (newCrop) => {
-    console.log('onCropChange called')
     setCrop(newCrop)
   }
 
@@ -114,30 +111,22 @@ const ProfilePicture = ({ profilePageData }) => {
   }
 
   const handleSave = async () => {
-    console.log("SAVE PROFILE PICTURE");
-    console.log(newImageUrl);
     const FormData = require('form-data');
     const blob = await fetch(newImageUrl).then(res => res.blob());
-    const imageFile = blobToFile(blob, 'filename');
+    const metadata = { type: 'image/jpeg' }
+    const imageFile = new File([blob], `profile.jpg`, metadata)
 
     const form = new FormData();
     form.append('image', imageFile);
     form.append('email', profilePageData.email);
 
-    dispatch(uploadImage({name: profilePageData.name, form}))
-  }
-
-  const blobToFile = (blob: Blob, fileName: string): File => {
-    var b: any = blob;
-    b.lastModified = new Date();
-    b.name = fileName;
-
-    return b;
+    dispatch(updateProfilePicture(form))
+    setSrc(null);
   }
 
   const handleCancel = useCallback(() => {
     setSrc(null);
-  }, [open]);
+  }, [src]);
 
   return (
     <div>
@@ -189,7 +178,6 @@ const ProfilePicture = ({ profilePageData }) => {
               imageStyle={{ maxWidth: "100%" }}
             />
           )}
-          <img src={newImageUrl} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSave}>Save</Button>
