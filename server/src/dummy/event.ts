@@ -1,6 +1,7 @@
 import { EventData } from '../types';
 
 const dummyEvent: EventData = {
+  _id: 'fakeid',
   name: 'Volunteering: Regular Session [Committed]',
   eventType: 'workshop',
   volunteerType: 'committed',
@@ -20,7 +21,7 @@ const dummyEvent: EventData = {
   }],
   vacancies: 0, // TODO: clarify diff between vacancies and capacity
   location: 'Jakarta',
-  isCancelled: false
+  isCancelled: false,
 };
 
 export default () => (dummyEvent);
