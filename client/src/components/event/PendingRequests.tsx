@@ -9,10 +9,9 @@ import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { getPendingSignUps } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { getPendingVolunteers } from '@redux/actions/volunteer';
-import { Tabs } from '@components/common/Tabs';
 import { checkLoggedIn } from '@utils/helpers/auth';
+import PendingRequestsTabs from '@components/common/PendingRequestsTabs';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -36,9 +35,9 @@ const PendingRequests: FC = () => {
   checkLoggedIn()
   const classes = useStyles();
   const dispatch = useDispatch();
+  const router = useRouter()
 
   useEffect(() => {
-    dispatch(getPendingVolunteers()); // just to load number in tab
     dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
     dispatch(getPendingSignUps());
   }, []);
@@ -52,29 +51,15 @@ const PendingRequests: FC = () => {
   const upcomingEvents = upcomingEventsIds.map((id) => events.data[id]);
   const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
 
-  const pendingRequestsForEvent = (event: EventData) => {
+  const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
     upcomingSignUps.forEach((signUp: SignUpData) => {
       if (signUp.eventId == event._id && signUp.status == 'pending') result++;
     });
-    return <div className={classes.shapeCircle}>{result}</div>;
+    return result;
   };
 
-  // to make tabs
-  const router = useRouter();
-
-  const upcomingVolunteersIds = useSelector((state: StoreState) => state.volunteer).pendingVolunteers.ids;
-
-  const tabs = [
-    {
-      label: `Volunteers (${upcomingVolunteersIds.length})`,
-      onClick: () => router.push('/volunteer/pending-requests'),
-    },
-    {
-      label: `Events (${upcomingEventsIds.length})`,
-      onClick: () => router.push('/event/pending-requests'),
-    },
-  ];
+  const upcomingEventsWithPendingSignUps = upcomingEvents.filter(event => (pendingRequestsForEventCount(event) != 0))
 
   return (
     <>
@@ -83,7 +68,7 @@ const PendingRequests: FC = () => {
       </Head>
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
-          <Tabs tabs={tabs} clickedOn={1} />
+          <PendingRequestsTabs clickedOn={1} />
           <TableContainer>
             <Table>
               <TableHead>
@@ -94,7 +79,7 @@ const PendingRequests: FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {upcomingEvents.map((event) => (
+                {upcomingEventsWithPendingSignUps.map((event) => (
                   <TableRow key={event._id} hover onClick={() => router.push(`/event/${event._id}/volunteers`)}>
                     <TableCell
                       onClick={() => router.push(`/event/${event._id}`)}
@@ -104,7 +89,7 @@ const PendingRequests: FC = () => {
 
                     </TableCell>
                     <TableCell>{event.startDate.toLocaleDateString()}</TableCell>
-                    <TableCell>{pendingRequestsForEvent(event)}</TableCell>
+                    <TableCell><div className={classes.shapeCircle}>{pendingRequestsForEventCount(event)}</div></TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -13,10 +13,8 @@ import { getCommitmentApplications, updateCommitmentApplication } from '@redux/a
 import { getPendingVolunteers } from '@redux/actions/volunteer';
 import { CommitmentApplicationData, CommitmentApplicationStatus } from '@type/commitmentApplication';
 import { ActionableDialog } from '@components/common/ActionableDialog';
-import { Tabs } from '@components/common/Tabs';
-import { useRouter } from 'next/dist/client/router';
-import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { checkLoggedIn } from '@utils/helpers/auth';
+import PendingRequestsTabs from '@components/common/PendingRequestsTabs';
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -35,7 +33,6 @@ const PendingRequests: FC<{}> = ({ }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' })); // just to load number in tab
     dispatch(getPendingVolunteers());
     dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }));
   }, []);
@@ -71,22 +68,6 @@ const PendingRequests: FC<{}> = ({ }) => {
     );
   };
 
-  // to make tabs
-  const router = useRouter();
-
-  const upcomingEventsIds = useSelector((state: StoreState) => state.event).upcomingEvent.ids;
-
-  const tabs = [
-    {
-      label: `Volunteers (${upcomingVolunteersIds.length})`,
-      onClick: () => router.push('/volunteer/pending-requests'),
-    },
-    {
-      label: `Events (${upcomingEventsIds.length})`,
-      onClick: () => router.push('/event/pending-requests'),
-    },
-  ];
-
   return (
     <>
       <Head>
@@ -94,7 +75,7 @@ const PendingRequests: FC<{}> = ({ }) => {
       </Head>
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
-          <Tabs tabs={tabs} clickedOn={0} />
+          <PendingRequestsTabs clickedOn={0} />
           <TableContainer>
             <Table>
               <TableHead>
