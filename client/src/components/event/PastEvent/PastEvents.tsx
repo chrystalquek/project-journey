@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PastEventsPageBody: FC<EventsPageBodyProps> = () => {
+const PastEventsPageBody: FC<{}> = () => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
