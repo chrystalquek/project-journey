@@ -118,7 +118,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/');
+    router.push('/login');
   };
 
   const navigationRender = () => {
@@ -251,8 +251,8 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     const profileIcon = !userData.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize} color="primary" />
     ) : (
-      <Avatar alt={userData.name} src={userData.photoUrl} />
-    );
+        <Avatar alt={userData.name} src={userData.photoUrl} />
+      );
 
     return (
       <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>

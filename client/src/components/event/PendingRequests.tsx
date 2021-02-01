@@ -12,6 +12,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
 import { Tabs } from '@components/common/Tabs';
+import { checkLoggedIn } from '@utils/helpers/auth';
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingRequests: FC = () => {
+  checkLoggedIn()
   const classes = useStyles();
   const dispatch = useDispatch();
 

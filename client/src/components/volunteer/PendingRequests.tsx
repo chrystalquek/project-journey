@@ -16,6 +16,7 @@ import { ActionableDialog } from '@components/common/ActionableDialog';
 import { Tabs } from '@components/common/Tabs';
 import { useRouter } from 'next/dist/client/router';
 import { getEventsUpcomingEvent } from '@redux/actions/event';
+import { checkLoggedIn } from '@utils/helpers/auth';
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingRequests: FC<{}> = ({ }) => {
+  checkLoggedIn()
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -126,7 +126,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/');
+    router.push('/login');
   };
 
   const navigationRender = () => {
@@ -163,11 +163,11 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   ))}
                   {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN
                     && (
-                    <MenuItem
-                      onClick={() => router.push('/event/pending-requests')}
-                    >
-                      Pending Requests
-                    </MenuItem>
+                      <MenuItem
+                        onClick={() => router.push('/event/pending-requests')}
+                      >
+                        Pending Requests
+                      </MenuItem>
                     )}
                 </MenuList>
               </ClickAwayListener>
@@ -264,8 +264,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-      <Avatar alt={userData?.name} src={userData?.photoUrl} />
-    );
+        <Avatar alt={userData?.name} src={userData?.photoUrl} />
+      );
 
     return (
       <>
