@@ -58,7 +58,7 @@ const readEvent = async (id: string): Promise<EventData> => {
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promise<EventData> => {
+const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promise<EventData[]> => {
   try {
     let events;
     switch (eventType) {
@@ -70,13 +70,13 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
       case 'upcoming':
         events = await Event.find({
           _id: { $in: ids },
-          start_date: { $gt: new Date() },
+          startDate: { $gt: new Date() },
         }).lean().exec();
         break;
       case 'past':
         events = await Event.find({
           _id: { $in: ids },
-          start_date: { $lt: new Date() },
+          startDate: { $lt: new Date() },
         }).lean().exec();
         break;
       default:
@@ -161,9 +161,11 @@ const cancelEvent = async (
   try {
     await Event.findOneAndUpdate(
       { _id: id },
-      { $set: {
-        isCancelled: true
-      } },
+      {
+        $set: {
+          isCancelled: true,
+        },
+      },
       { new: true },
     );
   } catch (err) {

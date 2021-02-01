@@ -1,6 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import signUpService, { checkIfAccepted } from '../services/signUp';
+import answerService from '../services/forms/answer';
 import { roleCapacityValidator } from '../helpers/validation';
 import {
   EventSearchType, EventData, RoleData, QueryParams,
@@ -119,6 +120,20 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
 
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
+
+    // append feedback status
+    if (eventType === 'past') {
+      const signedUpEventsWithFeedbackStatus: EventData[] = [];
+      const feedbackStatuses = await Promise.all(signedUpEvents.map(async (signedUpEvent) => await answerService.getFeedbackStatus(userId, signedUpEvent._id)));
+      for (let i = 0; i < signedUpEvents.length; i += 1) {
+        signedUpEventsWithFeedbackStatus.push({
+          ...signedUpEvents[i],
+          feedbackStatus: feedbackStatuses[i],
+        });
+      }
+      res.status(HTTP_CODES.OK).json({ data: signedUpEventsWithFeedbackStatus });
+      return;
+    }
 
     res.status(HTTP_CODES.OK).json({ data: signedUpEvents });
   } catch (err) {

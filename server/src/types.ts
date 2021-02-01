@@ -191,6 +191,7 @@ export interface AnswerFormQuestionsRequest {
 // }
 
 export type EventData = {
+    _id: string;
     name: string;
     coverImage?: string; // TODO: change to appropriate type
     eventType: EventType;
@@ -208,6 +209,7 @@ export type EventData = {
     contentType?: string;
     location: string;
     isCancelled: boolean;
+    feedbackStatus?: boolean
 }
 
 export type OpportunityData = EventData & {
@@ -249,11 +251,11 @@ export type OptionClientData = {
 }
 
 export type QuestionItem = {
-  name: string;
-  displayText: string[];
-  type: FormFieldType;
-  options?: Array<OptionClientData>;
-  isRequired: boolean;
+    name: string;
+    displayText: string[];
+    type: FormFieldType;
+    options?: Array<OptionClientData>;
+    isRequired: boolean;
 };
 
 export type ImageData = {

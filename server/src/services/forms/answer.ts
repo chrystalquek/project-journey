@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Answer from '../../models/Forms/Answer';
 import { AnswerData } from '../../types';
+import formService from './form';
 
 /**
  * Bulk-insert options attached to form
@@ -24,7 +25,7 @@ const bulkInsertAnswers = async (answers: Array<AnswerData>): Promise<void> => {
  * @param formId
  * @param userId
  */
-const retrieveAnswers = async ({ questionId, formId, userId } :
+const retrieveAnswers = async ({ questionId, formId, userId }:
   { questionId: string, formId?: string, userId?: string } | {
     questionId?: string, formId: string, userId: string
   }): Promise<Array<AnswerData>> => {
@@ -39,7 +40,18 @@ const retrieveAnswers = async ({ questionId, formId, userId } :
   }));
 };
 
+// just a helper for getting the status of feedback form for [signedup, past] events
+// returns a boolean
+const getFeedbackStatus = async (userId: string, eventId: string): Promise<boolean> => {
+  const form = await formService.getForm(eventId);
+  const formId = form._id as string;
+  const answers = await retrieveAnswers({ formId, userId });
+  const isAnswerPresent = answers.length > 0;
+  return isAnswerPresent;
+};
+
 export default {
   bulkInsertAnswers,
   retrieveAnswers,
+  getFeedbackStatus,
 };
