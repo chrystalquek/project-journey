@@ -48,7 +48,7 @@ const PastEventsPageBody: FC<{}> = () => {
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
   const dispatch = useDispatch();
-  const events: Array<EventData> = useSelector((state: StoreState) => state.event.pastEvent.ids
+  const events: Array<EventData> = useSelector((state: StoreState) => state.event.pastEvents.ids
     .map((eid) => state.event.data[eid])
     .filter((event) => event));
   const user: VolunteerData | null = useSelector((state: StoreState) => state.user.user);

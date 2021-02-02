@@ -19,7 +19,7 @@ export type EventState = {
   upcomingEvent: { // part of dashboard and events > pending requests
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
   };
-  pastEvent: {
+  pastEvents: {
     ids: Array<string>
   }
   browseEvents: {
@@ -34,7 +34,7 @@ const initialState: EventState = {
   upcomingEvent: {
     ids: [],
   },
-  pastEvent: {
+  pastEvents: {
     ids: [],
   },
   browseEvents: {
@@ -87,7 +87,7 @@ const eventSlice = createSlice({
       (state, action) => {
         const { payload } = action;
         addToData(payload.data, state);
-        state.pastEvent.ids = payload.data.map(
+        state.pastEvents.ids = payload.data.map(
           (event) => event._id,
         );
       },
