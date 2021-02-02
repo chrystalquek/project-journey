@@ -4,11 +4,12 @@ import PendingApproval from '@components/home/PendingApproval';
 import UpcomingEvent from '@components/home/UpcomingEvent';
 import { Grid, useMediaQuery, useTheme } from '@material-ui/core';
 import React, { FC } from 'react';
-import { isAdmin } from '@utils/helpers/auth';
+import { checkLoggedIn, isAdmin } from '@utils/helpers/auth';
 import { StoreState } from '@redux/store';
 import { useSelector } from 'react-redux';
 
 const Home: FC = () => {
+  checkLoggedIn()
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 

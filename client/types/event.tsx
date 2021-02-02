@@ -50,6 +50,7 @@ export type EventData = {
   contentUrl?: string;
   contentType?: string;
   location: string;
+  feedbackStatus?: boolean; // for past events
 }
 
 export interface RoleData {

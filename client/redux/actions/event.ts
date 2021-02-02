@@ -24,6 +24,15 @@ export const getEventsUpcomingEvent = createAsyncThunk<GetEventsResponse, EventQ
   },
 );
 
+export const getSignedUpEventsPastEvent = createAsyncThunk<GetEventsResponse,
+  EventQueryParams, { state }>(
+    'event/getSignedUpEventsPastEvent',
+    async ({ userId, eventType }) => {
+      const response = await apiClient.getSignedUpEvents({ userId, eventType });
+      return response;
+    },
+  );
+
 export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequest, { state }>(
   'event/createEvent',
   async (data: CreateEventRequest) => {

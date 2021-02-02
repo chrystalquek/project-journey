@@ -98,7 +98,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     ? ['Upcoming Events']
     : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
       ? ['Browse Events', 'Past Events']
-      : ['Browse Events', 'My Upcoming Events', 'My Past Events'];
+      : ['Browse Events', 'My Upcoming Events'];
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);
@@ -126,7 +126,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/');
+    router.push('/login');
   };
 
   const navigationRender = () => {
@@ -163,11 +163,19 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   ))}
                   {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN
                     && (
-                    <MenuItem
-                      onClick={() => router.push('/event/pending-requests')}
-                    >
-                      Pending Requests
-                    </MenuItem>
+                      <MenuItem
+                        onClick={() => router.push('/event/pending-requests')}
+                      >
+                        Pending Requests
+                      </MenuItem>
+                    )}
+                  {userData?.volunteerType === VOLUNTEER_TYPE.ADHOC || userData?.volunteerType === VOLUNTEER_TYPE.COMMITED
+                    && (
+                      <MenuItem
+                        onClick={() => router.push('/event/my-past-events')}
+                      >
+                        My Past Events
+                      </MenuItem>
                     )}
                 </MenuList>
               </ClickAwayListener>
@@ -264,8 +272,8 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     const profilePicture = !userData?.photoUrl ? (
       <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
-      <Avatar alt={userData?.name} src={userData?.photoUrl} />
-    );
+        <Avatar alt={userData?.name} src={userData?.photoUrl} />
+      );
 
     return (
       <>

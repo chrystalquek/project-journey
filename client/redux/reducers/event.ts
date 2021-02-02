@@ -6,6 +6,7 @@ import {
   createEvent,
   getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
+  getSignedUpEventsPastEvent,
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
@@ -18,6 +19,9 @@ export type EventState = {
   upcomingEvent: { // part of dashboard and events > pending requests
     ids: Array<string> // if admin, all events. if volunteer, signed up events.
   };
+  pastEvents: {
+    ids: Array<string>
+  }
   browseEvents: {
     ids: Array<string>
   };
@@ -28,6 +32,9 @@ export type EventState = {
 const initialState: EventState = {
   data: {},
   upcomingEvent: {
+    ids: [],
+  },
+  pastEvents: {
     ids: [],
   },
   browseEvents: {
@@ -71,6 +78,16 @@ const eventSlice = createSlice({
         const { payload } = action;
         addToData(payload.data, state);
         state.upcomingEvent.ids = payload.data.map(
+          (event) => event._id,
+        );
+      },
+    );
+    builder.addCase(
+      getSignedUpEventsPastEvent.fulfilled,
+      (state, action) => {
+        const { payload } = action;
+        addToData(payload.data, state);
+        state.pastEvents.ids = payload.data.map(
           (event) => event._id,
         );
       },

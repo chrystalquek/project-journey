@@ -12,8 +12,10 @@ import { useRouter } from 'next/router';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 import { getVolunteerById } from '@redux/actions/profilePage';
 import Loading from '@components/common/Loading';
+import { checkLoggedIn } from '@utils/helpers/auth';
 
 const Profile = () => {
+  checkLoggedIn()
   const router = useRouter();
   const dispatch = useDispatch();
 
