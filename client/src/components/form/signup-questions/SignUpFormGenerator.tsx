@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import {
   Paper, Typography, MenuItem, Button,
-  makeStyles,
 } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
@@ -17,7 +16,7 @@ import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { objectMap } from '@utils/helpers/objectMap';
 
 const useStyles = makeStyles((theme) => ({
