@@ -9,25 +9,20 @@ import {
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { EventData, EventFilterOptions, EventFilters } from '@type/event';
-import {
+import React, {
   FC, useCallback, useEffect, useState,
 } from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
-import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
-import { EventButton } from '@components/common/event/EventButton';
+import { VolunteerData } from '@type/volunteer';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUpcomingEvents } from '@redux/actions/event';
+import { getSignedUpEventsPastEvent } from '@redux/actions/event';
 import { StoreState } from '@redux/store';
 import { EVENTS_ROUTE, LOGIN_ROUTE } from '@constants/routes';
-
-type EventsPageBodyProps = {
-  // nothing yet
-};
+import PastEventCard from './PastEventCard';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -47,19 +42,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsPageBody: FC<EventsPageBodyProps> = () => {
+const PastEventsPageBody: FC<{}> = () => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
   const dispatch = useDispatch();
-  const events: Array<EventData> = useSelector((state: StoreState) => state.event.browseEvents.ids
+  const events: Array<EventData> = useSelector((state: StoreState) => state.event.pastEvents.ids
     .map((eid) => state.event.data[eid])
     .filter((event) => event));
   const user: VolunteerData | null = useSelector((state: StoreState) => state.user.user);
 
   useEffect(() => {
-    dispatch(getUpcomingEvents());
+    dispatch(getSignedUpEventsPastEvent({ userId: user._id, eventType: "past" }));
   }, []);
 
   const eventFilters: EventFilterOptions = {
@@ -100,20 +95,6 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           <Grid item xs={12}>
             <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
           </Grid>
-          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
-            <Grid
-              item
-              container
-              xs={12}
-              direction="row"
-              justify="center"
-              alignItems="center"
-            >
-              <EventButton disableRipple onClick={() => router.push('/form/new')}>
-                Create new event
-              </EventButton>
-            </Grid>
-          )}
           <Grid item container xs={12} justify="space-between">
             <Grid item>
               <Box className={classes.box} fontWeight="bold">
@@ -122,7 +103,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
                 </Typography>
                 <Typography display="inline" variant="body2">
                   {' '}
-                  Upcoming Events
+                  Past Events
                 </Typography>
               </Box>
             </Grid>
@@ -138,7 +119,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           <Grid container xs={12} spacing={4}>
             {filteredSearchedEvents?.map((event) => (
               <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard
+                <PastEventCard
                   key={event._id}
                   event={event}
                   onCardClick={() => handleCardClick(event._id)}
@@ -172,13 +153,6 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           <Grid item sm={9}>
             <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
           </Grid>
-          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
-            <Grid item sm={3} style={{ textAlign: 'center' }}>
-              <EventButton disableRipple onClick={() => router.push('/form/new')}>
-                Create new event
-              </EventButton>
-            </Grid>
-          )}
         </Grid>
         <Grid item container sm={9} spacing={4}>
           <Grid item sm={12}>
@@ -188,14 +162,14 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
               </Typography>
               <Typography display="inline" variant="body2">
                 {' '}
-                Upcoming Events
+                Past Events
               </Typography>
             </Box>
           </Grid>
           <Grid item container sm={12} spacing={2}>
             {filteredSearchedEvents?.map((event) => (
               <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard
+                <PastEventCard
                   key={event._id}
                   event={event}
                   onCardClick={() => router.push(`/event/${event._id}`)}
@@ -214,4 +188,4 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   );
 };
 
-export default EventsPageBody;
+export default PastEventsPageBody;
