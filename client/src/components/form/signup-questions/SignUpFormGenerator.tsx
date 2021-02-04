@@ -17,7 +17,7 @@ import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from '@utils/api/response';
 import { makeStyles } from '@material-ui/core';
-import objectMap from '@utils/helpers/objectMap';
+import { objectMap } from '@utils/helpers/objectMap';
 
 const useStyles = makeStyles((theme) => ({
   // The following style make sure that the error message shows consistently for 'photo'
