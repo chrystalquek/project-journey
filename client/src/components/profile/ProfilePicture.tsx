@@ -7,7 +7,7 @@ import { PhotoCamera } from '@material-ui/icons';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { useDispatch } from 'react-redux';
-import { updateProfilePicture, uploadImage } from '@redux/actions/image';
+import { updateProfilePicture } from '@redux/actions/image';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -33,6 +33,9 @@ const ProfilePicture = ({ profilePageData }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  // ReactCrop documentation
+  // https://www.npmjs.com/package/react-image-crop
+  
   let fileUrl = '';
   const [src, setSrc] = useState<string>(null);
   const [imageRef, setImageRef] = useState(null);
