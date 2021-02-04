@@ -34,9 +34,9 @@ const ProfilePicture = ({ profilePageData }) => {
   const dispatch = useDispatch();
 
   let fileUrl = '';
-  const [src, setSrc] = useState(null);
+  const [src, setSrc] = useState<string>(null);
   const [imageRef, setImageRef] = useState(null);
-  const [newImageUrl, setNewImageUrl] = useState('');
+  const [newImageUrl, setNewImageUrl] = useState<string>('');
   const [crop, setCrop] = useState({
     unit: '%',
     width: 30,
@@ -50,7 +50,7 @@ const ProfilePicture = ({ profilePageData }) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener('load', () => {
-        setSrc(reader.result);
+        setSrc(reader.result as string);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -101,7 +101,6 @@ const ProfilePicture = ({ profilePageData }) => {
     return new Promise<string>((resolve, reject) => {
       canvas.toBlob((blob) => {
         if (!blob) {
-          // reject(new Error('Canvas is empty'));
           console.error('Canvas is empty');
           return;
         }
