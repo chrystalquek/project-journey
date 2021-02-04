@@ -33,6 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
+import { checkLoggedIn } from '@utils/helpers/auth';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -61,6 +62,7 @@ const volunteerSortFields = [{ label: 'Name', value: 'name' }, { label: 'Member 
 export type VolunteerSortFieldsType = 'name' | 'createdAt';
 
 const VolunteerProfile: FC<{}> = ({ }) => {
+  checkLoggedIn()
   const classes = useStyles();
   const dispatch = useDispatch();
 

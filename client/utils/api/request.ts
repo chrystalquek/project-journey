@@ -127,6 +127,21 @@ export interface AnswerFormQuestionsRequest {
     answers: Array<AnswerData>
 }
 
+export type FormQuestionType = 'shortAnswer' | 'mcq' | 'checkboxes'
+
+export type QuestionsOptionsRequestData = {
+  displayText: string;
+  type: FormQuestionType;
+  isRequired: boolean;
+  name: string;
+  options: Array<{ content: string }>
+}
+
+export interface CreateFormQuestionsRequest {
+  eventId: string,
+  questions: Array<QuestionsOptionsRequestData>
+}
+
 export type AnswerData = {
     questionId: string;
     userId: string;
