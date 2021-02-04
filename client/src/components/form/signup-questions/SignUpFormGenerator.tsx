@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
   Paper, Typography, MenuItem, Button,
   makeStyles,
@@ -148,7 +148,7 @@ export const FormQuestionMapper = ({
       return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {(options as Array<OptionType>).map(({ value, label }) => (
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1 }} key={value + label}>
               <Field
                 component={CheckboxWithLabel}
                 name={name}
@@ -169,7 +169,7 @@ export const FormQuestionMapper = ({
 type FormGeneratorProps = {
   type: VOLUNTEER_TYPE;
   questionList: QuestionList;
-  handleSignUp: (formValues: Record<string, any>) => SignUpResponse;
+  handleSignUp: (formValues: Record<string, any>) => Promise<SignUpResponse>;
 };
 
 const FormGenerator = ({
@@ -182,6 +182,7 @@ const FormGenerator = ({
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
+  const [toastStatus, setToastStatus] = useState<'error' | 'warning' | 'info' | 'success'>('success');
   const initialValues: Record<string, any> = {};
 
   questionList.forEach(({ name, type, initialValue }) => {
@@ -196,95 +197,96 @@ const FormGenerator = ({
     return dispatch(uploadImage({ name, form }));
   };
 
-  const handleSubmit = useCallback(
-    async (formValues: Record<string, any>) => {
+  const handleSubmit = async (formValues: Record<string, any>) => {
+    // @ts-ignore type exists
+    const values = objectMap(formValues, (element) => (element === '' ? undefined : element));
+
+    // Upload and get cover image URL
+    if (values.photoUrl && typeof values.photoUrl !== 'string') {
       // @ts-ignore type exists
-      const values = objectMap(formValues, (element) => (element === '' ? undefined : element));
+      await onUploadImage(values.photoUrl, 'photoUrl').then(unwrapResult)
+        .then((result) => {
+          values.photoUrl = result.url;
+        });
+    }
 
-      // Upload and get cover image URL
-      if (values.photoUrl && typeof values.photoUrl !== 'string') {
-        // @ts-ignore type exists
-        await onUploadImage(values.photoUrl, 'photoUrl').then(unwrapResult)
-          .then((result) => {
-            values.photoUrl = result.url;
-          });
-      }
+    const response = await handleSignUp({
+      name: `${values.firstName} ${values.lastName}`,
+      volunteerType: type,
+      password: values.password,
 
-      const response = await handleSignUp({
-        name: `${values.firstName} ${values.lastName}`,
-        volunteerType: type,
-        password: values.password,
+      nickname: values.nickname,
+      gender: values.gender,
+      citizenship: values.citizenship,
+      birthday: values.birthday.toISOString(),
+      mobileNumber: values.mobileNumber,
+      photoUrl: values.photoUrl,
+      email: values.email,
 
-        nickname: values.nickname,
-        gender: values.gender,
-        citizenship: values.citizenship,
-        birthday: values.birthday.toISOString(),
-        mobileNumber: values.mobileNumber,
-        photoUrl: values.photoUrl,
-        email: values.email,
+      socialMediaPlatform: values.socialMediaPlatform,
+      instagramHandle: values.instagramHandle,
 
-        socialMediaPlatform: values.socialMediaPlatform,
-        instagramHandle: values.instagramHandle,
+      organization: values.organization,
+      position: values.position,
+      race: values.race,
 
-        organization: values.organization,
-        position: values.position,
-        race: values.race,
+      languages: values.languages
+        ?.split(',')
+        .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
+      referralSources: values.referralSources,
 
-        languages: values.languages
-          ?.split(',')
-          .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
-        referralSources: values.referralSources,
+      hasVolunteered: values.hasVolunteered,
+      biabVolunteeringDuration: values.biabVolunteeringDuration,
 
-        hasVolunteered: values.hasVolunteered,
-        biabVolunteeringDuration: values.biabVolunteeringDuration,
+      hasVolunteeredExternally: values.hasVolunteeredExternally,
+      volunteeringExperience: values.volunteeringExperience,
 
-        hasVolunteeredExternally: values.hasVolunteeredExternally,
-        volunteeringExperience: values.volunteeringExperience,
+      hasChildrenExperience: values.hasChildrenExperience,
+      childrenExperience: values.childrenExperience,
 
-        hasChildrenExperience: values.hasChildrenExperience,
-        childrenExperience: values.childrenExperience,
+      sessionsPerMonth: values.sessionsPerMonth,
+      sessionPreference: values.sessionPreference,
 
-        sessionsPerMonth: values.sessionsPerMonth,
-        sessionPreference: values.sessionPreference,
+      hasFirstAidCertification: values.hasFirstAidCertification,
+      leadershipInterest: values.leadershipInterest,
+      interests: values.interests,
 
-        hasFirstAidCertification: values.hasFirstAidCertification,
-        leadershipInterest: values.leadershipInterest,
-        interests: values.interests,
+      skills: values.skills,
 
-        skills: values.skills,
+      personality: values.personality,
+      strengths: values.strengths
+        ?.split(',')
+        .map((element) => element.trimStart().trimEnd()),
+      volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
 
-        personality: values.personality,
-        strengths: values.strengths
-          ?.split(',')
-          .map((element) => element.trimStart().trimEnd()),
-        volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
+      volunteerReason: values.volunteerReason,
+      volunteerContribution: values.volunteerContribution,
 
-        volunteerReason: values.volunteerReason,
-        volunteerContribution: values.volunteerContribution,
+      // WCA Registration: Medical Information
+      hasMedicalNeeds: values.hasMedicalNeeds,
+      medicalNeeds: values.medicalNeeds,
+      hasAllergies: values.hasAllergies,
+      allergies: values.allergies,
+      hasMedicationDuringDay: values.hasMedicalDuringDay,
 
-        // WCA Registration: Medical Information
-        hasMedicalNeeds: values.hasMedicalNeeds,
-        medicalNeeds: values.medicalNeeds,
-        hasAllergies: values.hasAllergies,
-        allergies: values.allergies,
-        hasMedicationDuringDay: values.hasMedicalDuringDay,
+      // WCA Registration: Emergency Contact
+      emergencyContactName: values.emergencyContactName,
+      emergencyContactNumber: values.emergencyContactNumber,
+      emergencyContactEmail: values.emergencyContactEmail,
+      emergencyContactRelationship: values.emergencyContactRelationship,
+    });
 
-        // WCA Registration: Emergency Contact
-        emergencyContactName: values.emergencyContactName,
-        emergencyContactNumber: values.emergencyContactNumber,
-        emergencyContactEmail: values.emergencyContactEmail,
-        emergencyContactRelationship: values.emergencyContactRelationship,
-      });
-
-      if (response.type === 'volunteer//rejected') {
-        setToastText(`Error: ${response.error.message}`);
-      } else if (response.type === 'volunteer//fulfilled') {
-        setToastText('You have signed up successfully.');
-        router.push('/login');
-      }
-    },
-    [questionList],
-  );
+    if (response.type === 'volunteer//rejected') {
+      setToastText(`Error: ${response.error.message}`);
+      setToastStatus('error');
+      setOpenSnackbar(true);
+    } else if (response.type === 'volunteer//fulfilled') {
+      setToastText('You have signed up successfully.');
+      setToastStatus('success');
+      setOpenSnackbar(true);
+      router.push('/login');
+    }
+  };
 
   const phoneRegExp = /^(\+65)?[689]\d{7}$/;
   const personalityRegex = /(I|E)(N|S)(F|T)(J|P)_(A|T)/;
@@ -423,7 +425,7 @@ const FormGenerator = ({
         autoHideDuration={6000}
         onClose={() => { setOpenSnackbar(false); }}
       >
-        <MuiAlert elevation={6} variant="filled">
+        <MuiAlert elevation={6} severity={toastStatus}>
           {toastText}
         </MuiAlert>
       </Snackbar>
