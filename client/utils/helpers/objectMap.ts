@@ -6,3 +6,4 @@ export const objectMap : (obj : any, fn : any) => any = (obj, fn) =>
       ([k, v], i) => [k, fn(v, k, i)]
     )
   );
+  
