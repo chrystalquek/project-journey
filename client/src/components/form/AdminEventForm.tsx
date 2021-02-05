@@ -23,13 +23,16 @@ import { uploadImage } from '@redux/actions/image';
 import { resetImages } from '@redux/reducers/image';
 import dayjs from 'dayjs';
 import { StoreState } from '@redux/store';
-import { Formik, FormikProvider, useFormik } from 'formik';
+import { Formik, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
 import { keysToCamel, keysToSnake } from '@utils/helpers/keysToCamel';
 import { unwrapResult } from '@reduxjs/toolkit';
 import ClearIcon from '@material-ui/icons/Clear';
 import { resetEventStatus } from '@redux/reducers/event';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { ToastStatus } from '@type/common';
 import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
 
 type AdminEventFormProps = {
@@ -49,6 +52,9 @@ const volunteerTypes = [
   { value: 'lead', label: 'Lead' },
   { value: 'admin', label: 'Admin' },
 ];
+
+const TOAST_MESSAGE_LENGTH_MS = 2000;
+const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
 const getEventTypePlaceholder = (eventType) => {
   switch (eventType) {
@@ -179,6 +185,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const user = useSelector((state: StoreState) => state.user);
   const dispatch = useDispatch();
 
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>('');
+  const [toastStatus, setToastStatus] = useState<ToastStatus>('success');
+
   // Store feedback event form
   const [feedbackFormEventQuestions, setFeedbackFormEventQuestions] = useState<
     Array<QuestionData>
@@ -277,11 +287,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
   useEffect(() => {
     if (event.status === 'rejected') {
-      alert('Form submission failed');
+      setToastText('Form submission failed');
+      setToastStatus('error');
+      setOpenSnackbar(true);
     } else if (event.status === 'fulfilled') {
-      alert('Form submission successful');
-      router.push('/event');
+      setToastText('You have signed up successfully.');
+      setToastStatus('success');
+      setOpenSnackbar(true);
+
       dispatch(resetImages());
+      setTimeout(() => {
+        router.push('/event');
+      }, TOAST_MESSAGE_LENGTH_MS);
     }
   }, [event.status]);
 
@@ -328,7 +345,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           });
       }
 
-      const newForm = {...form, questions: feedbackFormEventQuestions.map((element) => ({...element, name: element.displayText}))}
+      const newForm = { ...form, questions: feedbackFormEventQuestions.map((element) => ({ ...element, name: element.displayText })) };
 
       dispatch(
         isNew ? createEvent(newForm) : editEvent({ data: keysToSnake(form), id }),
@@ -623,7 +640,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 variant="outlined"
                 margin="dense"
                 id="type"
-                placeholder="eg.20"
+                placeholder="e.g. 20"
                 type="text"
                 fullWidth
                 color="secondary"
@@ -875,6 +892,15 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           </Grid>
         </Grid>
       </PaddedGrid>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
+        onClose={() => { setOpenSnackbar(false); }}
+      >
+        <MuiAlert elevation={6} severity={toastStatus}>
+          {toastText}
+        </MuiAlert>
+      </Snackbar>
     </form>
   );
 };

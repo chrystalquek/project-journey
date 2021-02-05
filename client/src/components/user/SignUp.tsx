@@ -129,6 +129,12 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
 
   // Proceed to next step
   const nextStep = () => {
+    // TODO: Replace once we use new url pathway for signup
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
     setCurrentStep(currentStep + 1);
   };
 
