@@ -20,7 +20,7 @@ import { SignUpResponse } from '@utils/api/response';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import objectMap from '@utils/helpers/objectMap';
+import { objectMap } from '@utils/helpers/objectMap';
 import { ToastStatus } from '@type/common';
 
 const useStyles = makeStyles((theme) => ({

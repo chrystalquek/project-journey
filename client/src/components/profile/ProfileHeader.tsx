@@ -7,6 +7,7 @@ import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
+import ProfilePicture from './ProfilePicture';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -54,7 +55,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
 
       {/* Avatar icon */}
       <Grid item xs={12} sm="auto">
-        <Avatar alt={profilePageData.name} className={classes.avatar} src={profilePageData.photoUrl} />
+        <ProfilePicture profilePageData={profilePageData} />
       </Grid>
 
       {/* User details */}
