@@ -32,6 +32,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import { resetEventStatus } from '@redux/reducers/event';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { ToastStatus } from '@type/common';
 import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
 
 type AdminEventFormProps = {
@@ -53,6 +54,7 @@ const volunteerTypes = [
 ];
 
 const TOAST_MESSAGE_LENGTH_MS = 2000;
+const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
 const getEventTypePlaceholder = (eventType) => {
   switch (eventType) {
@@ -185,7 +187,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
-  const [toastStatus, setToastStatus] = useState<'error' | 'warning' | 'info' | 'success'>('success');
+  const [toastStatus, setToastStatus] = useState<ToastStatus>('success');
 
   // Store feedback event form
   const [feedbackFormEventQuestions, setFeedbackFormEventQuestions] = useState<
@@ -638,7 +640,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 variant="outlined"
                 margin="dense"
                 id="type"
-                placeholder="eg. 20"
+                placeholder="e.g. 20"
                 type="text"
                 fullWidth
                 color="secondary"
@@ -892,7 +894,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       </PaddedGrid>
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
         onClose={() => { setOpenSnackbar(false); }}
       >
         <MuiAlert elevation={6} severity={toastStatus}>

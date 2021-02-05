@@ -21,6 +21,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import objectMap from '@utils/helpers/objectMap';
+import { ToastStatus } from '@type/common';
 
 const useStyles = makeStyles((theme) => ({
   // The following style make sure that the error message shows consistently for 'photo'
@@ -34,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '4px',
   },
 }));
+
+const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
 export const FormQuestionMapper = ({
   formType,
@@ -182,7 +185,7 @@ const FormGenerator = ({
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
-  const [toastStatus, setToastStatus] = useState<'error' | 'warning' | 'info' | 'success'>('success');
+  const [toastStatus, setToastStatus] = useState<ToastStatus>('success');
   const initialValues: Record<string, any> = {};
 
   questionList.forEach(({ name, type, initialValue }) => {
@@ -422,7 +425,7 @@ const FormGenerator = ({
       </MuiPickersUtilsProvider>
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
         onClose={() => { setOpenSnackbar(false); }}
       >
         <MuiAlert elevation={6} severity={toastStatus}>
