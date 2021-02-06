@@ -37,6 +37,7 @@ export type EventData = {
   eventType: EventType;
   createdAt: Date;
   coverImage?: string; // TODO: change to appropriate type
+  isCancelled?: boolean
   volunteerType: VOLUNTEER_TYPE;
   startDate: Date;
   endDate: Date;

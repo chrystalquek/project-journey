@@ -1,6 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  CreateEventRequest, EditEventRequest, GetEventParams, EventQueryParams, UploadImageRequest,
+  CreateEventRequest,
+  EditEventRequest,
+  GetEventParams, EventQueryParams,
+  CancelEventParams, DeleteEventRequest,
 } from '@utils/api/request';
 import {
   CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse, UploadImageResponse,
@@ -37,7 +40,7 @@ export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequ
   'event/createEvent',
   async (data: CreateEventRequest) => {
     const response = await apiClient.createEvent(data) as CreateEventResponse;
-    await apiClient.createForm({eventId: response.eventId, questions: data.questions});
+    await apiClient.createForm({ eventId: response.eventId, questions: data.questions });
     return response;
   },
 );
@@ -58,9 +61,23 @@ export const getEvent = createAsyncThunk<GetEventResponse, GetEventParams, { sta
   },
 );
 
+export const cancelEvent = createAsyncThunk<void, CancelEventParams, { }>(
+  'event/cancelEvent',
+  async ({ eventId }) => {
+    await apiClient.cancelEvent({ eventId });
+  },
+);
+
+export const deleteEvent = createAsyncThunk<void, DeleteEventRequest, { }>(
+  'event/deleteEvent',
+  async ({ eventId }) => {
+    await apiClient.deleteEvent({ eventId });
+  },
+);
+
 export const getUpcomingEvents = createAsyncThunk(
   'event/getEvents',
-  async () => await apiClient.getEvents({ eventType: 'upcoming' }),
+  async () => { await apiClient.getEvents({ eventType: 'upcoming' }); },
 );
 
 export default {

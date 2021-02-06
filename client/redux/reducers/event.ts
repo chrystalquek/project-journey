@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   getUpcomingEvents,
   getEvent,
@@ -7,6 +7,8 @@ import {
   getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
   getSignedUpEventsPastEvent,
+  cancelEvent,
+  deleteEvent,
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
@@ -101,6 +103,15 @@ const eventSlice = createSlice({
     });
     builder.addCase(getEvent.pending, (state) => {
       state.form = null;
+    });
+    builder.addCase(cancelEvent.fulfilled, (state, { meta }) => {
+      state.data[meta.arg.eventId].isCancelled = true;
+    });
+    builder.addCase(cancelEvent.rejected, (state, { meta }) => {
+      state.data[meta.arg.eventId].isCancelled = false;
+    });
+    builder.addCase(deleteEvent.fulfilled, (state, { meta }) => {
+      delete state.data[meta.arg.eventId];
     });
     builder.addCase(createEvent.rejected, (state) => {
       state.status = 'rejected';

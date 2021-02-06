@@ -1,5 +1,5 @@
 import { EventData } from '@type/event';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted';
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc';
@@ -15,6 +15,8 @@ import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import { useRouter } from 'next/router';
+import { isAdmin } from '@utils/helpers/auth';
+import { cancelEvent, deleteEvent } from '@redux/actions/event';
 
 type EventDetailsProps = {
   event: EventData,
@@ -80,7 +82,8 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     switch (volunteerType) {
       case VOLUNTEER_TYPE.ADHOC:
         // adhoc volunteers can't register for events opened to committed volunteers
-        formStatus.disabled = event.volunteerType === VOLUNTEER_TYPE.COMMITED || formStatus.disabled;
+        formStatus.disabled = event.volunteerType
+          === VOLUNTEER_TYPE.COMMITED || formStatus.disabled;
         return (
           <EventDetailsAdhoc
             formStatus={formStatus}
@@ -106,7 +109,9 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   };
 
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = React.useState<boolean>(false);
+  const [isCancelDeleteModalOpen, setIsCancelDeleteModalOpen] = React.useState<boolean>(false);
+
   const withdrawCommitment = () => {
     const acceptedSignUp = signUpInfo.find((signUp) => Array.isArray(signUp.status) && signUp.status[0] === 'accepted');
     dispatch(deleteSignUp({
@@ -114,10 +119,18 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     }));
     router.push('/event');
   };
+
+  const handleCancelEvent = useCallback(() => {
+    dispatch(cancelEvent({ eventId: event._id }));
+  }, [event]);
+
+  const handleDeleteEvent = useCallback(() => {
+    dispatch(deleteEvent({ eventId: event._id }));
+  }, [event]);
+
   const withdrawCommitmentQuestion = (
     <>
       Are you sure you want to withdraw from
-      {' '}
       <b>
         {event.name}
         ?
@@ -127,13 +140,70 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
       Withdrawal from event cannot be undone.
     </>
   );
+
+  const DeleteEventContent = (
+    <>
+      Are you sure you want to delete
+      <br />
+      <b>
+        {event.name}
+      </b>
+      <br />
+      <br />
+      <br />
+      Deletion of event cannot be undone.
+    </>
+  );
+
+  const CancelEventContent = (
+    <>
+      Are you sure you want to cancel
+      <br />
+      <b>
+        {event.name}
+      </b>
+      <br />
+      <br />
+      <br />
+      Cancellation of event cannot be undone.
+    </>
+  );
+
+  // eslint-disable-next-line no-nested-ternary
+  const CancelDeleteButton = isAdmin(user) ? (
+    getEventVacancies(event).filled === 0 ? (
+      <ActionableDialog
+        open={isCancelDeleteModalOpen}
+        setOpen={() => setIsCancelDeleteModalOpen(!isCancelDeleteModalOpen)}
+        content={DeleteEventContent}
+        buttonTitle="Confirm"
+        buttonOnClick={handleDeleteEvent}
+        openCloseButtonTitle="Delete"
+        recommendedAction="cancel"
+      />
+    ) : (
+      <ActionableDialog
+        open={isCancelDeleteModalOpen}
+        setOpen={() => setIsCancelDeleteModalOpen(!isCancelDeleteModalOpen)}
+        content={CancelEventContent}
+        buttonTitle="Confirm"
+        buttonOnClick={handleCancelEvent}
+        openCloseButtonTitle="Cancel"
+        recommendedAction="cancel"
+      />
+    )
+  ) : (
+    <>
+    </>
+  );
+
   return (
     <>
       {renderDetails(user.volunteerType)}
       {hasAcceptedSignUp && (
       <ActionableDialog
-        open={open}
-        setOpen={() => setOpen(!open)}
+        open={isWithdrawModalOpen}
+        setOpen={() => setIsWithdrawModalOpen(!isWithdrawModalOpen)}
         content={withdrawCommitmentQuestion}
         buttonTitle="Confirm"
         buttonOnClick={withdrawCommitment}
@@ -141,6 +211,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
         recommendedAction="cancel"
       />
       )}
+      {CancelDeleteButton}
     </>
   );
 };
