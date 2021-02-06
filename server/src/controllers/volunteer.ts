@@ -255,7 +255,8 @@ const checkUpdateRights = () => [
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
     const savedVolunteerData = await volunteerService.updateVolunteerDetails(
-      req.body.email as string, req.body.updatedVolunteerData as Partial<VolunteerData>,
+      req.body.email as string,
+      req.body.updatedVolunteerData as Partial<VolunteerData>,
     );
     res.status(HTTP_CODES.OK).json(savedVolunteerData);
   } catch (error) {

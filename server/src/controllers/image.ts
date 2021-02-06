@@ -1,6 +1,7 @@
 import express from 'express';
-import { ImageData, ImageResponse } from '../types';
+import { ImageData, ImageResponse, VolunteerData } from '../types';
 import imageService from '../services/image';
+import volunteerService from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
 
@@ -11,6 +12,23 @@ const uploadImage = async (req, res: express.Response) => {
       imageName: req.file.filename,
     };
     const response = await imageService.uploadImage(imageData);
+    res.status(HTTP_CODES.OK).json(response);
+  } catch (error) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
+  }
+};
+
+const updateProfilePicture = async (req, res: express.Response) => {
+  try {
+    const imageData: ImageData = {
+      email: req.body.email,
+      imageName: req.file.filename,
+    };
+    const imageResponse = await imageService.uploadImage(imageData);
+    const response = await volunteerService.updateVolunteerDetails(
+      imageResponse.email as string,
+      { photoUrl: imageResponse.url } as Partial<VolunteerData>,
+    );
     res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
@@ -46,5 +64,6 @@ const deleteImageWithEmail = async (req: express.Request, res: express.Response)
 export default {
   getImageWithEmail,
   uploadImage,
+  updateProfilePicture,
   deleteImageWithEmail,
 };

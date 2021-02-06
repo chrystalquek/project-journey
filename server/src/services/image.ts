@@ -17,10 +17,6 @@ const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
     try {
       const url = returnVal[1].mediaLink;
 
-      await Image.deleteMany({
-        email: imageData.email,
-      });
-
       const imageSchemaData = new Image({
         _id: new mongoose.Types.ObjectId(),
         email: imageData.email,

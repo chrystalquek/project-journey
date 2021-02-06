@@ -2,7 +2,6 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import imageController from '../controllers/image';
-import { validate } from '../helpers/validation';
 
 const router = express.Router();
 
@@ -44,6 +43,13 @@ router.post(
   upload.single('image'),
   imageController.uploadImage,
 );
+
+router.post(
+  '/profile-picture',
+  upload.single('image'),
+  imageController.updateProfilePicture,
+);
+
 router.delete(
   '/:email',
   imageController.deleteImageWithEmail,

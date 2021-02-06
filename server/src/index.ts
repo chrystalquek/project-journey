@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 if (config.env === 'development') {
   console.log('Using cors middleware');
   app.use(cors({ origin: '*' }));
-} else if (config.env === 'production'){
+} else if (config.env === 'production') {
   app.use(cors({ origin: 'https://client-prod-dot-journey-288113.et.r.appspot.com' }));
 } else {
   app.use(cors({ origin: 'https://journey-288113.et.r.appspot.com' }));
