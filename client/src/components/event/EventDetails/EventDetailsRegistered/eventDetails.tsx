@@ -15,6 +15,7 @@ import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import { useRouter } from 'next/router';
+import EventDetailsAdminButtons from '../EventDetailsParts/EventDetailsAdminButtons';
 
 type EventDetailsProps = {
   event: EventData,
@@ -90,7 +91,6 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
           />
         );
       case VOLUNTEER_TYPE.COMMITED:
-      case VOLUNTEER_TYPE.ADMIN:
         return (
           <EventDetailsCommitted
             formStatus={formStatus}
@@ -98,6 +98,18 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
             event={event}
             user={user}
           />
+        );
+      case VOLUNTEER_TYPE.ADMIN:
+        return (
+          <>
+            <EventDetailsCommitted
+              formStatus={formStatus}
+              formHandlers={formHandlers}
+              event={event}
+              user={user}
+            />
+            <EventDetailsAdminButtons event={event} />
+          </>
         );
       default:
         // this path shouldn't be reached

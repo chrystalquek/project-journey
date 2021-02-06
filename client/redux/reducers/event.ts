@@ -3,6 +3,7 @@ import {
   getUpcomingEvents,
   getEvent,
   editEvent,
+  deleteEvent,
   createEvent,
   getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
@@ -119,6 +120,10 @@ const eventSlice = createSlice({
     });
     builder.addCase(editEvent.fulfilled, (state) => {
       state.status = 'fulfilled';
+    });
+    builder.addCase(deleteEvent.fulfilled, (state, action) => {
+      const { meta } = action;
+      state.data[meta.arg.id] = null;
     });
     builder.addCase(getUpcomingEvents.pending, (state) => {
       state.status = 'fetching';

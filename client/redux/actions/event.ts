@@ -37,7 +37,7 @@ export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequ
   'event/createEvent',
   async (data: CreateEventRequest) => {
     const response = await apiClient.createEvent(data) as CreateEventResponse;
-    await apiClient.createForm({eventId: response.eventId, questions: data.questions});
+    await apiClient.createForm({ eventId: response.eventId, questions: data.questions });
     return response;
   },
 );
@@ -47,6 +47,13 @@ export const editEvent = createAsyncThunk<EditEventResponse, EditEventRequest, {
   async (request: EditEventRequest) => {
     const response = await apiClient.editEvent(request) as EditEventResponse;
     return response;
+  },
+);
+
+export const deleteEvent = createAsyncThunk<void, string, { state }>(
+  'event/deleteEvent',
+  async (eventId: string) => {
+    await apiClient.deleteEvent(eventId);
   },
 );
 

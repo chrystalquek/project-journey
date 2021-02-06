@@ -35,6 +35,7 @@ export interface ApiClient {
   createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
+  deleteEvent(eventId: string): Promise<void>
   getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse>
   getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
   deleteSignUp(query: SignUpQueryParams): Promise<void>
@@ -132,6 +133,10 @@ class AxiosApiClient implements ApiClient {
 
   async editEvent({ id, data }: EditEventRequest): Promise<EditEventResponse> {
     return this.send(data, `event/${id}`, 'put');
+  }
+
+  async deleteEvent(signUpId: string): Promise<void> {
+    return this.send({}, `event/${signUpId}`, 'delete');
   }
 
   async getEvents(query: EventQueryParams): Promise<GetEventsResponse> {
