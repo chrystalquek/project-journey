@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { Storage } from '@google-cloud/storage';
 import { ImageData, ImageResponse } from '../types';
 import Image from '../models/Image';
@@ -17,20 +16,12 @@ const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
     try {
       const url = returnVal[1].mediaLink;
 
-      const imageSchemaData = new Image({
-        _id: new mongoose.Types.ObjectId(),
-        email: imageData.email,
-        imageName: imageData.imageName,
-        url,
-      });
-
       const imageResponse: ImageResponse = {
         email: imageData.email,
         imageName: imageData.imageName,
         url,
       };
 
-      await imageSchemaData.save();
       return imageResponse;
     } catch (err) {
       throw new Error(err.msg);
@@ -38,24 +29,6 @@ const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
   } catch (err) {
     throw new Error(err.msg);
   }
-};
-
-const getImage = async (email: string) => {
-  const image = await Image.findOne({
-    email,
-  }).lean().exec();
-
-  if (!image) {
-    throw new Error(`Image with email: ${email} not found`);
-  }
-
-  const imageResponse: ImageResponse = {
-    email: image.email,
-    imageName: image.imageName,
-    url: image.url,
-  };
-
-  return imageResponse;
 };
 
 const deleteImage = async (email: string) => {
@@ -68,6 +41,5 @@ const deleteImage = async (email: string) => {
 
 export default {
   uploadImage,
-  getImage,
   deleteImage,
 };

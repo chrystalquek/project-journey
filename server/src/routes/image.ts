@@ -33,17 +33,13 @@ const upload = multer({
   fileFilter,
 });
 
-router.get(
-  '/:email',
-  imageController.getImageWithEmail,
-);
-
 router.post(
   '/',
   upload.single('image'),
   imageController.uploadImage,
 );
 
+// TO BE DEPRECATED; Use image route to upload and volunteer update to set url
 router.post(
   '/profile-picture',
   upload.single('image'),

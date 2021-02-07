@@ -35,19 +35,6 @@ const updateProfilePicture = async (req, res: express.Response) => {
   }
 };
 
-const getImageWithEmail = async (req: express.Request, res: express.Response) => {
-  try {
-    // if (typeof req.query.email !== 'string') {
-    //   throw new Error("Email field is not string");
-    // }
-    const { email } = req.params;
-    const imageResponse: ImageResponse = await imageService.getImage(email);
-    res.status(HTTP_CODES.OK).json(imageResponse);
-  } catch (error) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
-  }
-};
-
 const deleteImageWithEmail = async (req: express.Request, res: express.Response) => {
   try {
     // if (typeof req.query.email !== 'string') {
@@ -62,7 +49,6 @@ const deleteImageWithEmail = async (req: express.Request, res: express.Response)
 };
 
 export default {
-  getImageWithEmail,
   uploadImage,
   updateProfilePicture,
   deleteImageWithEmail,
