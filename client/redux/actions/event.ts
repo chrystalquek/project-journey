@@ -6,7 +6,7 @@ import {
   CancelEventParams, DeleteEventRequest,
 } from '@utils/api/request';
 import {
-  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse, UploadImageResponse,
+  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse,
 } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 
@@ -77,7 +77,7 @@ export const deleteEvent = createAsyncThunk<void, DeleteEventRequest, { }>(
 
 export const getUpcomingEvents = createAsyncThunk(
   'event/getEvents',
-  async () => { await apiClient.getEvents({ eventType: 'upcoming' }); },
+  async () => await apiClient.getEvents({ eventType: 'upcoming' }),
 );
 
 export default {
