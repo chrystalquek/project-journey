@@ -123,7 +123,7 @@ const eventSlice = createSlice({
     });
     builder.addCase(deleteEvent.fulfilled, (state, action) => {
       const { meta } = action;
-      state.data[meta.arg.id] = null;
+      delete state.data[meta.arg.id];
     });
     builder.addCase(getUpcomingEvents.pending, (state) => {
       state.status = 'fetching';
