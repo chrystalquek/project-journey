@@ -17,11 +17,25 @@ import { ActionableDialog } from '@components/common/ActionableDialog';
 import { useRouter } from 'next/router';
 import { isAdmin } from '@utils/helpers/auth';
 import { cancelEvent, deleteEvent } from '@redux/actions/event';
+import { Button, makeStyles, Typography } from '@material-ui/core';
 
 type EventDetailsProps = {
   event: EventData,
   user: VolunteerData
 }
+
+const useStyles = makeStyles((theme) => ({
+  editButton: {
+    borderRadius: '5em',
+    textTransform: 'none',
+    padding: theme.spacing(5),
+    height: 30,
+    marginRight: theme.spacing(5),
+  },
+  editButtonText: {
+    color: 'black',
+  },
+}));
 
 const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const dispatch = useDispatch();
@@ -108,6 +122,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     }
   };
 
+  const classes = useStyles();
   const router = useRouter();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = React.useState<boolean>(false);
   const [isCancelDeleteModalOpen, setIsCancelDeleteModalOpen] = React.useState<boolean>(false);
@@ -201,9 +216,27 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     </>
   );
 
+  const EditButton = isAdmin(user) ? (
+    <Button
+      variant="contained"
+      type="submit"
+      color="primary"
+      onClick={() => router.push(`/form/${event._id}`)}
+      className={classes.editButton}
+    >
+      <Typography
+        variant="body1"
+        className={classes.editButtonText}
+      >
+        EDIT
+      </Typography>
+    </Button>
+  ) : <></>;
+
   return (
     <>
       {renderDetails(user.volunteerType)}
+      {EditButton}
       {hasAcceptedSignUp && (
       <ActionableDialog
         open={isWithdrawModalOpen}
