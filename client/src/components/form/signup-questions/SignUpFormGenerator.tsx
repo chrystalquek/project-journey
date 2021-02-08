@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '14px',
     marginTop: '4px',
   },
+  listItem: {
+    whiteSpace: 'normal',
+  }
 }));
 
 const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
@@ -114,7 +117,7 @@ export const FormQuestionMapper = ({
           {...props}
         >
           {(options as Array<OptionType>).map(({ value, label }) => (
-            <MenuItem key={value} value={value}>
+            <MenuItem className={classes.listItem} key={value} value={value}>
               {label}
             </MenuItem>
           ))}
