@@ -156,7 +156,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {eventMenuArray.map((menuName) => (
                     <MenuItem
                       key={menuName}
-                      onClick={() => router.push(EVENTS_ROUTE)}
+                      onClick={() => {handleCloseEventMenu(); router.push(EVENTS_ROUTE)}}
                     >
                       {menuName}
                     </MenuItem>
@@ -164,7 +164,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN
                     && (
                       <MenuItem
-                        onClick={() => router.push('/event/pending-requests')}
+                        onClick={() => {handleCloseEventMenu(); router.push('/event/pending-requests')}}
                       >
                         Pending Requests
                       </MenuItem>
@@ -172,7 +172,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   {userData?.volunteerType === VOLUNTEER_TYPE.ADHOC || userData?.volunteerType === VOLUNTEER_TYPE.COMMITED
                     && (
                       <MenuItem
-                        onClick={() => router.push('/event/my-past-events')}
+                        onClick={() => {handleCloseEventMenu(); router.push('/event/my-past-events')}}
                       >
                         My Past Events
                       </MenuItem>
@@ -207,6 +207,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     {/* Requires changes for the router */}
                     <MenuItem
                       onClick={() => {
+                        handleCloseVolunteerMenu();
                         router.push('/volunteer/volunteer-profiles');
                       }}
                     >
@@ -214,6 +215,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
+                        handleCloseVolunteerMenu();
                         router.push('/volunteer/pending-requests');
                       }}
                     >
