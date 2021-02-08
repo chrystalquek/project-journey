@@ -86,11 +86,22 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const logoutRef = useRef<HTMLButtonElement>(null);
 
+  /**
+   * Navigation for Event menu.
+   */
   const eventMenuArray = !userData
-    ? ['Upcoming Events']
+    ? [{title: 'Upcoming Events', route: EVENTS_ROUTE}]
     : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
-      ? ['Browse Events', 'Past Events']
-      : ['Browse Events', 'My Upcoming Events'];
+    ? [
+        {title: 'Browse Events', route: EVENTS_ROUTE}, 
+        {title: 'Past Events', route: '/event/my-past-events'},
+        {title: 'Pending Requests', route: '/event/pending-requests'},
+      ]
+    : [ // Adhoc / Committed
+        {title: 'Browse Events', route: EVENTS_ROUTE},
+        {title: 'My Upcoming Events', route: EVENTS_ROUTE}, // TODO: change the route after the page is completed.
+        {title: 'My Past Events', route: '/event/my-past-events'},
+      ];
 
   const openDrawer = () => {
     setDrawer(true);
@@ -121,6 +132,12 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     router.push('/login');
   };
 
+  const handleCloseAll = () => {
+    setOpenEventMenu(false);
+    setOpenVolunteerMenu(false);
+    setDrawer(false);
+  }
+
   const navigationRender = () => {
     const volunteerMenu = (
       <>
@@ -140,14 +157,14 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             <ListItem
               button
               className={classes.nested}
-              onClick={() => router.push('/volunteer/volunteer-profiles')}
+              onClick={() => {handleCloseAll(); router.push('/volunteer/volunteer-profiles')}}
             >
               <ListItemText primary="Volunteer Profiles" />
             </ListItem>
             <ListItem
               button
               className={classes.nested}
-              onClick={() => router.push('/volunteer/pending-requests')}
+              onClick={() => {handleCloseAll(); router.push('/volunteer/pending-requests')}}
             >
               <ListItemText primary="Pending Requests" />
             </ListItem>
@@ -183,33 +200,16 @@ export default function MobileNavBar({ userData }: NavBarProps) {
           <Collapse in={openEventMenu} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               {/* Requires changes for the router */}
-              {eventMenuArray.map((eventMenu, index) => (
+              {eventMenuArray.map(({title, route}) => (
                 <ListItem
                   button
                   className={classes.nested}
-                  key={index}
-                  onClick={() => router.push(EVENTS_ROUTE)}
+                  key={title}
+                  onClick={() => {handleCloseAll(); router.push(route)}}
                 >
-                  <ListItemText primary={eventMenu} />
+                  <ListItemText primary={title} />
                 </ListItem>
               ))}
-              {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN && (
-                <ListItem
-                  button
-                  className={classes.nested}
-                  onClick={() => router.push('/event/pending-requests')}
-                >
-                  <ListItemText primary="Pending Requests" />
-                </ListItem>
-              )}
-              {userData?.volunteerType === VOLUNTEER_TYPE.ADHOC || userData?.volunteerType === VOLUNTEER_TYPE.COMMITED
-                && (
-                  <MenuItem
-                    onClick={() => router.push('/event/my-past-events')}
-                  >
-                    My Past Events
-                  </MenuItem>
-                )}
             </List>
           </Collapse>
           {userData

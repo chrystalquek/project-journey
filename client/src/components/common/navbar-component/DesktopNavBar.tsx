@@ -128,7 +128,6 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   };
 
   const toggleLogoutMenu = () => {
-    console.log(userData.volunteerType === VOLUNTEER_TYPE.ADHOC);
     setOpenLogout((prevOpen) => !prevOpen);
   };
 
@@ -283,7 +282,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                 <Paper>
                   <ClickAwayListener onClickAway={closeLogoutMenu}>
                     <MenuList>
-                      <MenuItem dense onClick={() => {closeLogoutMenu(); handleLogout();}}>
+                      <MenuItem dense onClick={handleLogout}>
                         Logout
                       </MenuItem>
                     </MenuList>
