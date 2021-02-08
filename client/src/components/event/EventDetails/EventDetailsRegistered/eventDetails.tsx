@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
     height: 30,
     marginRight: theme.spacing(5),
+    marginTop: theme.spacing(5),
   },
   editButtonText: {
     color: 'black',
