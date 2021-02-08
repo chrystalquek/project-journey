@@ -94,11 +94,22 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   const [openVolunteerMenu, setOpenVolunteerMenu] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
 
+  /**
+   * Navigation for Event menu.
+   */
   const eventMenuArray = !userData
-    ? ['Upcoming Events']
+    ? [{title: 'Upcoming Events', route: EVENTS_ROUTE}]
     : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
-      ? ['Browse Events', 'Past Events']
-      : ['Browse Events', 'My Upcoming Events'];
+    ? [
+        {title: 'Browse Events', route: EVENTS_ROUTE}, 
+        {title: 'Past Events', route: '/event/my-past-events'},
+        {title: 'Pending Requests', route: '/event/pending-requests'},
+      ]
+    : [ // Adhoc / Committed
+        {title: 'Browse Events', route: EVENTS_ROUTE},
+        {title: 'My Upcoming Events', route: EVENTS_ROUTE}, // TODO: change the route after the page is completed.
+        {title: 'My Past Events', route: '/event/my-past-events'},
+      ];
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);
@@ -117,6 +128,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   };
 
   const toggleLogoutMenu = () => {
+    console.log(userData.volunteerType === VOLUNTEER_TYPE.ADHOC);
     setOpenLogout((prevOpen) => !prevOpen);
   };
 
@@ -153,30 +165,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
             <Paper>
               <ClickAwayListener onClickAway={handleCloseEventMenu}>
                 <MenuList>
-                  {eventMenuArray.map((menuName) => (
+                  {eventMenuArray.map(({title, route}) => (
                     <MenuItem
-                      key={menuName}
-                      onClick={() => {handleCloseEventMenu(); router.push(EVENTS_ROUTE)}}
+                      key={title}
+                      onClick={() => {handleCloseEventMenu(); router.push(route)}}
                     >
-                      {menuName}
+                      {title}
                     </MenuItem>
                   ))}
-                  {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN
-                    && (
-                      <MenuItem
-                        onClick={() => {handleCloseEventMenu(); router.push('/event/pending-requests')}}
-                      >
-                        Pending Requests
-                      </MenuItem>
-                    )}
-                  {userData?.volunteerType === VOLUNTEER_TYPE.ADHOC || userData?.volunteerType === VOLUNTEER_TYPE.COMMITED
-                    && (
-                      <MenuItem
-                        onClick={() => {handleCloseEventMenu(); router.push('/event/my-past-events')}}
-                      >
-                        My Past Events
-                      </MenuItem>
-                    )}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -287,7 +283,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                 <Paper>
                   <ClickAwayListener onClickAway={closeLogoutMenu}>
                     <MenuList>
-                      <MenuItem dense onClick={handleLogout}>
+                      <MenuItem dense onClick={() => {closeLogoutMenu(); handleLogout();}}>
                         Logout
                       </MenuItem>
                     </MenuList>
