@@ -1,17 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
-  Paper, Typography, MenuItem, Button,
+  Paper, Typography, Button,
   makeStyles,
 } from '@material-ui/core';
-import { Formik, Field, Form } from 'formik';
-import { TextField, CheckboxWithLabel } from 'formik-material-ui';
-import { DatePicker } from 'formik-material-ui-pickers';
-import { QuestionList, OptionType, InputType } from '@type/questions';
+import { Formik, Form } from 'formik';
+
+import { QuestionList } from '@type/questions';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
-import DropZoneCard from '@components/common/DropZoneCard';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
@@ -22,6 +20,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import { objectMap } from '@utils/helpers/objectMap';
 import { ToastStatus } from '@type/common';
+import { FormQuestionMapper } from './FormGenerator';
 
 const useStyles = makeStyles((theme) => ({
   // The following style make sure that the error message shows consistently for 'photo'
@@ -41,136 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
-export const FormQuestionMapper = ({
-  formType,
-  name,
-  options,
-  setFieldValue,
-  props,
-} : {
-  formType: InputType;
-  name: string;
-  options?: OptionType[] | null;
-  setFieldValue?: any; // Should be the same type as setFieldValue from Formik
-  props?: Record<string, any>;
-}) => {
-  const classes = useStyles();
 
-  const onChangeImage = (e, fieldName, setFieldValue) => {
-    if (e.target.files && e.target.files[0]) {
-      const imageFile = e.target.files[0];
-      setFieldValue(fieldName, imageFile);
-      return URL.createObjectURL(imageFile);
-    }
-  };
-
-  switch (formType) {
-    case 'date':
-      return (
-        <Field
-          component={DatePicker}
-          inputVariant="outlined"
-          format="dd/MM/yyyy"
-          name={name}
-          fullWidth
-          margin="dense"
-          {...props}
-        />
-      );
-    case 'shortAnswer':
-    case 'password':
-      return (
-        <Field
-          component={TextField}
-          variant="outlined"
-          type={formType === 'password' ? formType : 'text'}
-          name={name}
-          fullWidth
-          margin="dense"
-          {...props}
-        />
-      );
-    case 'longAnswer':
-      return (
-        <Field
-          component={TextField}
-          variant="outlined"
-          name={name}
-          fullWidth
-          multiline
-          margin="dense"
-          {...props}
-        />
-      );
-    case 'mcq':
-      return (
-        <Field
-          component={TextField}
-          variant="outlined"
-          name={name}
-          fullWidth
-          select
-          InputLabelProps={{
-            shrink: true,
-          }}
-          margin="dense"
-          {...props}
-        >
-          {(options as Array<OptionType>).map(({ value, label }) => (
-            <MenuItem className={classes.listItem} key={value} value={value}>
-              {label}
-            </MenuItem>
-          ))}
-        </Field>
-      );
-    case 'photo':
-      return (
-        <>
-          <div style={{ width: '100%', height: '200px' }}>
-            <DropZoneCard
-              id={name}
-              initialUrl={null}
-              isBig={false}
-              onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
-            />
-          </div>
-          {!!props?.error && <Typography variant="body2" className={classes.errorStyle}>Required</Typography>}
-        </>
-      );
-    case 'number':
-      return (
-        <Field
-          component={TextField}
-          variant="outlined"
-          type="number"
-          name={name}
-          fullWidth
-          margin="dense"
-          {...props}
-        />
-      );
-    case 'checkboxes':
-    default:
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {(options as Array<OptionType>).map(({ value, label }) => (
-            <div style={{ flex: 1 }} key={value + label}>
-              <Field
-                component={CheckboxWithLabel}
-                name={name}
-                key={value}
-                value={value}
-                Label={{ label }}
-                color="primary"
-                type="checkbox"
-                {...props}
-              />
-            </div>
-          ))}
-        </div>
-      );
-  }
-};
 
 type FormGeneratorProps = {
   type: VOLUNTEER_TYPE;
@@ -178,7 +48,7 @@ type FormGeneratorProps = {
   handleSignUp: (formValues: Record<string, any>) => Promise<SignUpResponse>;
 };
 
-const FormGenerator = ({
+const SignUpFormGenerator = ({
   type,
   questionList,
   handleSignUp,
@@ -352,7 +222,6 @@ const FormGenerator = ({
         margin: 'auto',
         padding: '30px',
         textAlign: 'left',
-        overflowY: 'scroll',
         maxHeight: '100%',
       }}
     >
@@ -439,4 +308,4 @@ const FormGenerator = ({
   );
 };
 
-export default FormGenerator;
+export default SignUpFormGenerator;

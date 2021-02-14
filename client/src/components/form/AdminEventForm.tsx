@@ -32,7 +32,7 @@ import { resetEventStatus } from '@redux/reducers/event';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { ToastStatus } from '@type/common';
-import { FormQuestionMapper } from './signup-questions/SignUpFormGenerator';
+import { FormQuestionMapper } from './SignUpFormGenerator';
 
 type AdminEventFormProps = {
   id: string;
