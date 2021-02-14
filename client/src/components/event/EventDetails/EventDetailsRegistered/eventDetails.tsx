@@ -15,6 +15,7 @@ import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import { useRouter } from 'next/router';
+import EventDetailsAdminButtons from '../EventDetailsParts/EventDetailsAdminButtons';
 import { isAdmin } from '@utils/helpers/auth';
 import { cancelEvent, deleteEvent } from '@redux/actions/event';
 import { Button, makeStyles, Typography } from '@material-ui/core';
@@ -108,7 +109,6 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
           />
         );
       case VOLUNTEER_TYPE.COMMITED:
-      case VOLUNTEER_TYPE.ADMIN:
         return (
           <EventDetailsCommitted
             formStatus={formStatus}
@@ -116,6 +116,18 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
             event={event}
             user={user}
           />
+        );
+      case VOLUNTEER_TYPE.ADMIN:
+        return (
+          <>
+            <EventDetailsCommitted
+              formStatus={formStatus}
+              formHandlers={formHandlers}
+              event={event}
+              user={user}
+            />
+            <EventDetailsAdminButtons event={event} />
+          </>
         );
       default:
         // this path shouldn't be reached
@@ -137,13 +149,13 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   };
 
   const handleCancelEvent = useCallback(() => {
-    dispatch(cancelEvent({ eventId: event._id }));
+    dispatch(cancelEvent(event._id));
     setIsCancelDeleteModalOpen(false);
     router.push('/event');
   }, [event]);
 
   const handleDeleteEvent = useCallback(() => {
-    dispatch(deleteEvent({ eventId: event._id }));
+    dispatch(deleteEvent(event._id));
     setIsCancelDeleteModalOpen(false);
     router.push('/event');
   }, [event]);
