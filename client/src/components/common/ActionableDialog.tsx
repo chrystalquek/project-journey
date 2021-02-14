@@ -11,7 +11,8 @@ const useStyles = makeStyles((theme) => ({
   },
   unrecommendedButton: {
     padding: theme.spacing(5),
-    margin: theme.spacing(5),
+    marginRight: theme.spacing(5),
+    marginTop: theme.spacing(5),
     height: 30,
     backgroundColor: '#D3D3D3',
     borderRadius: '5em',
@@ -21,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
   recommendedButton: {
     padding: theme.spacing(5),
-    margin: theme.spacing(5),
+    marginRight: theme.spacing(5),
+    marginTop: theme.spacing(5),
     backgroundColor: theme.palette.primary.main,
     height: 30,
     borderRadius: '5em',
@@ -51,7 +53,9 @@ export interface ActionableDialogProps {
 export function ActionableDialog(props: ActionableDialogProps) {
   const classes = useStyles();
   const {
-    open, setOpen, content, buttonTitle, buttonOnClick, openCloseButtonTitle, openCloseButtonStyle, recommendedAction,
+    open, setOpen, content, buttonTitle,
+    buttonOnClick, openCloseButtonTitle,
+    openCloseButtonStyle, recommendedAction,
   } = props;
 
   return (
@@ -71,8 +75,8 @@ export function ActionableDialog(props: ActionableDialogProps) {
           </Grid>
 
           <Grid container direction="row" spacing={5} justify="center">
-            <Button className={recommendedAction == 'cancel' ? classes.recommendedButton : classes.unrecommendedButton} onClick={setOpen}>Cancel</Button>
-            <Button className={recommendedAction == 'cancel' ? classes.unrecommendedButton : classes.recommendedButton} onClick={buttonOnClick}>{buttonTitle}</Button>
+            <Button className={recommendedAction === 'cancel' ? classes.recommendedButton : classes.unrecommendedButton} onClick={setOpen}>Cancel</Button>
+            <Button className={recommendedAction === 'cancel' ? classes.unrecommendedButton : classes.recommendedButton} onClick={buttonOnClick}>{buttonTitle}</Button>
           </Grid>
         </Grid>
       </Dialog>

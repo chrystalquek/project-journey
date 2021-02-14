@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   getUpcomingEvents,
   getEvent,
@@ -8,6 +8,8 @@ import {
   getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
   getSignedUpEventsPastEvent,
+  cancelEvent,
+  deleteEvent,
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
@@ -47,7 +49,7 @@ const initialState: EventState = {
 
 // parse all Dates etc before saving to store
 const addToData = (events: Array<EventData>, state: EventState) => {
-  events.forEach(
+  events?.forEach(
     (event) => (state.data[event._id] = {
       ...event,
       startDate: new Date(event.startDate),
@@ -103,6 +105,15 @@ const eventSlice = createSlice({
     builder.addCase(getEvent.pending, (state) => {
       state.form = null;
     });
+    builder.addCase(cancelEvent.fulfilled, (state, { meta }) => {
+      state.data[meta.arg.eventId].isCancelled = true;
+    });
+    builder.addCase(cancelEvent.rejected, (state, { meta }) => {
+      state.data[meta.arg.eventId].isCancelled = false;
+    });
+    builder.addCase(deleteEvent.fulfilled, (state, { meta }) => {
+      delete state.data[meta.arg.eventId];
+    });
     builder.addCase(createEvent.rejected, (state) => {
       state.status = 'rejected';
     });
@@ -131,8 +142,8 @@ const eventSlice = createSlice({
     });
     builder.addCase(getUpcomingEvents.fulfilled, (state, action) => {
       state.status = 'fulfilled';
-      addToData(action.payload.data, state);
-      state.browseEvents.ids = action.payload.data.map((event) => event._id);
+      addToData(action.payload?.data, state);
+      state.browseEvents.ids = action.payload?.data?.map((event) => event._id);
       // hacky workaround to make create new event work
       state.status = '';
     });

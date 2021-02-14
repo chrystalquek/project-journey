@@ -64,7 +64,7 @@ const getEventTypePlaceholder = (eventType) => {
     case 'volunteering':
       return 'eg. Volunteering: Session 4';
     default:
-      throw new Error();
+      return '';
   }
 };
 
