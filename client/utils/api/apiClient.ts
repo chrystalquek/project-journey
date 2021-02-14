@@ -18,6 +18,8 @@ import {
   VolunteerPaginatedQueryParams,
   AnswerFormQuestionsRequest,
   CreateFormQuestionsRequest,
+  CancelEventParams,
+  DeleteEventRequest,
 } from '@utils/api/request';
 
 import {
@@ -35,6 +37,8 @@ export interface ApiClient {
   createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
+  cancelEvent(request: CancelEventParams): Promise<void>
+  deleteEvent(request: DeleteEventRequest): Promise<void>
   getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse>
   getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
   deleteSignUp(query: SignUpQueryParams): Promise<void>
@@ -143,8 +147,17 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `volunteer/id/${id}`, 'get');
   }
 
-  async getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse> {
+  async getVolunteers(query: VolunteerPaginatedQueryParams):
+    Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
+  }
+
+  async cancelEvent({ eventId }): Promise<void> {
+    return this.send({ }, `event/cancel/${eventId}`, 'put');
+  }
+
+  async deleteEvent({ eventId }): Promise<void> {
+    return this.send({ }, `event/${eventId}`, 'delete');
   }
 
   async getPendingVolunteers(): Promise<GetVolunteersResponse> {
