@@ -1,7 +1,7 @@
 import { QuestionList } from '@type/questions';
 import { RACE } from '@type/volunteer';
 
-export const questions: QuestionList = [
+export const conversionFormQuestions: QuestionList = [
   {
     name: 'homeAddress',
     displayText: ['Home Address'],

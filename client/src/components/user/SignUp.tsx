@@ -19,8 +19,8 @@ import { SignUpArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 import SignUpForm from '@components/form/SignUpForm';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
-import { questions as SignUpAdhocQuestionList } from '@components/form/signup-questions/SignUpAdhocQuestionList';
-import { questions as SignUpCommittedQuestionList } from '@components/form/signup-questions/SignUpCommittedQuestionList';
+import { questions as SignUpAdhocQuestionList } from '@components/form/questions/SignUpAdhocQuestionList';
+import { questions as SignUpCommittedQuestionList } from '@components/form/questions/SignUpCommittedQuestionList';
 
 const useStyles = makeStyles((theme) => ({
   content: {

@@ -197,7 +197,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
   const validationSchema = Yup.object().shape(validationObj);
 
   return (
-    <Paper className={classes.root}>
+    <Paper elevation={0} className={classes.root}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={initialValues}
