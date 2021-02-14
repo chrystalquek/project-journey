@@ -68,17 +68,10 @@ export const getEvent = createAsyncThunk<GetEventResponse, GetEventParams, { sta
   },
 );
 
-export const cancelEvent = createAsyncThunk<void, CancelEventParams, { }>(
+export const cancelEvent = createAsyncThunk<void, string, { state }>(
   'event/cancelEvent',
-  async ({ eventId }) => {
-    await apiClient.cancelEvent({ eventId });
-  },
-);
-
-export const deleteEvent = createAsyncThunk<void, DeleteEventRequest, { }>(
-  'event/deleteEvent',
-  async ({ eventId }) => {
-    await apiClient.deleteEvent({ eventId });
+  async (eventId: string) => {
+    await apiClient.cancelEvent(eventId);
   },
 );
 

@@ -149,13 +149,13 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   };
 
   const handleCancelEvent = useCallback(() => {
-    dispatch(cancelEvent({ eventId: event._id }));
+    dispatch(cancelEvent(event._id));
     setIsCancelDeleteModalOpen(false);
     router.push('/event');
   }, [event]);
 
   const handleDeleteEvent = useCallback(() => {
-    dispatch(deleteEvent({ eventId: event._id }));
+    dispatch(deleteEvent(event._id));
     setIsCancelDeleteModalOpen(false);
     router.push('/event');
   }, [event]);

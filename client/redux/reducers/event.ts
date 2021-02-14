@@ -9,7 +9,6 @@ import {
   getSignedUpEventsUpcomingEvent,
   getSignedUpEventsPastEvent,
   cancelEvent,
-  deleteEvent,
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
@@ -106,13 +105,10 @@ const eventSlice = createSlice({
       state.form = null;
     });
     builder.addCase(cancelEvent.fulfilled, (state, { meta }) => {
-      state.data[meta.arg.eventId].isCancelled = true;
+      state.data[meta.arg].isCancelled = true;
     });
     builder.addCase(cancelEvent.rejected, (state, { meta }) => {
-      state.data[meta.arg.eventId].isCancelled = false;
-    });
-    builder.addCase(deleteEvent.fulfilled, (state, { meta }) => {
-      delete state.data[meta.arg.eventId];
+      state.data[meta.arg].isCancelled = false;
     });
     builder.addCase(createEvent.rejected, (state) => {
       state.status = 'rejected';
