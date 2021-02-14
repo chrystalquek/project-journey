@@ -19,15 +19,16 @@ const Profile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const profilePageId = router.query.volunteer_id as string;
+  let profilePageId = router.query.volunteer_id as string;
 
   const loggedInUser = useSelector((state: StoreState) => state.user);
   const profilePageData = useSelector((state: StoreState) => state.profilePage.data);
 
   // First time load page, send request to receive data
   useEffect(() => {
+    profilePageId = router.query.volunteer_id as string;
     dispatch(getVolunteerById(profilePageId));
-  }, []);
+  }, [router]);
 
   // Guard clause, user cannot view other users
   // Only admin can view other users
