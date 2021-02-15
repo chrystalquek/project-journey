@@ -110,12 +110,12 @@ const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
             .exec();
           break;
         case 'past':
-          events = await Event.find({ start_date: { $lt: new Date() } }).skip(eventType.skip)
+          events = await Event.find({ startDate: { $lt: new Date() } }).skip(eventType.skip)
             .limit(eventType.limit).lean()
             .exec();
           break;
         case 'upcoming':
-          events = await Event.find({ start_date: { $gt: new Date() } }).skip(eventType.skip)
+          events = await Event.find({ startDate: { $gt: new Date() } }).skip(eventType.skip)
             .limit(eventType.limit).sort({ startDate: 1 })
             .lean()
             .exec();
@@ -128,10 +128,10 @@ const readEvents = async (eventType: QueryParams): Promise<EventData[]> => {
           events = await Event.find({}).lean().exec();
           break;
         case 'past':
-          events = await Event.find({ start_date: { $lt: new Date() } }).lean().exec();
+          events = await Event.find({ startDate: { $lt: new Date() } }).lean().exec();
           break;
         case 'upcoming':
-          events = await Event.find({ start_date: { $gt: new Date() } })
+          events = await Event.find({ startDate: { $gt: new Date() } })
             .sort({ startDate: 1 }).lean().exec();
           break;
         default: throw new Error('Event type is invalid');
