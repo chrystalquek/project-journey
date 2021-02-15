@@ -10,12 +10,12 @@ const options = { discriminatorKey: 'eventType' };
 const EventSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   name: String,
-  cover_image: String,
+  coverImage: String,
   eventType: {
     type: String,
     enum: ['workshop', 'volunteering', 'hangout'],
   },
-  volunteer_type: {
+  volunteerType: {
     type: String,
     enum: ['ad-hoc', 'committed', 'lead', 'admin'],
   },
