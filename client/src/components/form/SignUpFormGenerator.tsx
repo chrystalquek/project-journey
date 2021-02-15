@@ -40,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
 
 const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
-
-
 type FormGeneratorProps = {
   type: VOLUNTEER_TYPE;
   questionList: QuestionList;
