@@ -421,7 +421,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <div className={classes.coverImage}>
               <DropZoneCard
                 id="coverImage"
-                initialUrl={eventForm?.cover_image}
+                initialUrl={eventForm?.coverImage}
                 isBig
                 onChangeImage={(e) => onChangeImage(e, 'coverImage')}
               />
@@ -707,7 +707,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 <div className={classes.facilPhotograph}>
                   <DropZoneCard
                     id="facilitatorPhoto"
-                    initialUrl={eventForm?.facilitator_photo}
+                    initialUrl={eventForm?.facilitatorPhoto}
                     isBig={false}
                     onChangeImage={(e) => onChangeImage(e, 'facilitatorPhoto')}
                   />
