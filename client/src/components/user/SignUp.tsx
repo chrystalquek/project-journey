@@ -112,7 +112,6 @@ const useStyles = makeStyles((theme) => ({
   },
   loginFooter: {
     marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(6),
   },
 }));
 
@@ -269,7 +268,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
           </div>
         </div>
 
-        <div className="section">
+        <div className={classes.loginFooter}>
           <Typography variant="body1">
             Already have an account?
           </Typography>
