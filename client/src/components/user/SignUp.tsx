@@ -309,7 +309,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
               </Typography>
               <SignUpForm
                 type={volunteerType}
-                questionList={
+                questionWithHeader={
                   volunteerType === VOLUNTEER_TYPE.ADHOC
                     ? SignUpAdhocQuestionList : SignUpCommittedQuestionList
                 }

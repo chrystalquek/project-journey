@@ -1,9 +1,7 @@
 export type InputType =
   | 'shortAnswer'
-  | 'short-answer'
   | 'longAnswer'
   | 'checkboxes'
-  | 'check-box'
   | 'date'
   | 'mcq'
   | 'password'
@@ -22,3 +20,9 @@ export type QuestionItem = {
 };
 
 export type QuestionList = Array<QuestionItem>;
+
+export type QuestionWithHeader = Array<{
+  header: string;
+  info?: string;
+  questionList: QuestionList;
+}>;
