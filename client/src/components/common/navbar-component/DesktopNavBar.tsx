@@ -312,6 +312,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       <MenuItem dense onClick={handleLogout}>
                         Logout
                       </MenuItem>
+                      <MenuItem dense onClick={() => router.push(`/profile/${userData._id}`)}>
+                        Edit Profile
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
@@ -323,15 +326,6 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           <Typography className={classes.nameStyle}>
             <Box fontWeight={700}>{userData?.name}</Box>
           </Typography>
-          <Button
-            className={`${classes.button} ${classes.editProfileButton}`}
-            onClick={() => router.push(`/profile/${userData._id}`)}
-            disableRipple
-          >
-            <Typography className={classes.editProfileText}>
-              Edit Profile
-            </Typography>
-          </Button>
         </div>
       </>
     );

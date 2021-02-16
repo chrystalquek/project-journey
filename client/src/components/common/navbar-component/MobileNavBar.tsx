@@ -299,6 +299,9 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                     <MenuItem dense onClick={handleLogout}>
                       Logout
                     </MenuItem>
+                    <MenuItem dense onClick={() => router.push(`/profile/${userData._id}`)}>
+                        Edit Profile
+                    </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

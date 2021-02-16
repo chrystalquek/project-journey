@@ -1,9 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  CreateEventRequest, EditEventRequest, GetEventParams, EventQueryParams, UploadImageRequest,
+  CreateEventRequest,
+  EditEventRequest,
+  GetEventParams, EventQueryParams,
+  CancelEventParams, DeleteEventRequest,
 } from '@utils/api/request';
 import {
-  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse, UploadImageResponse,
+  CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse,
 } from '@utils/api/response';
 import apiClient from '@utils/api/apiClient';
 
@@ -37,7 +40,7 @@ export const createEvent = createAsyncThunk<CreateEventResponse, CreateEventRequ
   'event/createEvent',
   async (data: CreateEventRequest) => {
     const response = await apiClient.createEvent(data) as CreateEventResponse;
-    await apiClient.createForm({eventId: response.eventId, questions: data.questions});
+    await apiClient.createForm({ eventId: response.eventId, questions: data.questions });
     return response;
   },
 );
@@ -50,11 +53,25 @@ export const editEvent = createAsyncThunk<EditEventResponse, EditEventRequest, {
   },
 );
 
+export const deleteEvent = createAsyncThunk<void, string, { state }>(
+  'event/deleteEvent',
+  async (eventId: string) => {
+    await apiClient.deleteEvent(eventId);
+  },
+);
+
 export const getEvent = createAsyncThunk<GetEventResponse, GetEventParams, { state }>(
   'event/getEvent',
   async (params: GetEventParams) => {
     const response = await apiClient.getEvent(params) as GetEventResponse;
     return response;
+  },
+);
+
+export const cancelEvent = createAsyncThunk<void, string, { state }>(
+  'event/cancelEvent',
+  async (eventId: string) => {
+    await apiClient.cancelEvent(eventId);
   },
 );
 

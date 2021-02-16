@@ -1,12 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   getUpcomingEvents,
   getEvent,
   editEvent,
+  deleteEvent,
   createEvent,
   getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
   getSignedUpEventsPastEvent,
+  cancelEvent,
 } from '@redux/actions/event';
 
 import { EventData } from 'types/event';
@@ -46,7 +48,7 @@ const initialState: EventState = {
 
 // parse all Dates etc before saving to store
 const addToData = (events: Array<EventData>, state: EventState) => {
-  events.forEach(
+  events?.forEach(
     (event) => (state.data[event._id] = {
       ...event,
       startDate: new Date(event.startDate),
@@ -102,6 +104,12 @@ const eventSlice = createSlice({
     builder.addCase(getEvent.pending, (state) => {
       state.form = null;
     });
+    builder.addCase(cancelEvent.fulfilled, (state, { meta }) => {
+      state.data[meta.arg].isCancelled = true;
+    });
+    builder.addCase(cancelEvent.rejected, (state, { meta }) => {
+      state.data[meta.arg].isCancelled = false;
+    });
     builder.addCase(createEvent.rejected, (state) => {
       state.status = 'rejected';
     });
@@ -120,14 +128,18 @@ const eventSlice = createSlice({
     builder.addCase(editEvent.fulfilled, (state) => {
       state.status = 'fulfilled';
     });
+    builder.addCase(deleteEvent.fulfilled, (state, action) => {
+      const { meta } = action;
+      delete state.data[meta.arg];
+    });
     builder.addCase(getUpcomingEvents.pending, (state) => {
       state.status = 'fetching';
       state.browseEvents.ids = [];
     });
     builder.addCase(getUpcomingEvents.fulfilled, (state, action) => {
       state.status = 'fulfilled';
-      addToData(action.payload.data, state);
-      state.browseEvents.ids = action.payload.data.map((event) => event._id);
+      addToData(action.payload?.data, state);
+      state.browseEvents.ids = action.payload?.data?.map((event) => event._id);
       // hacky workaround to make create new event work
       state.status = '';
     });

@@ -26,7 +26,6 @@ import { StoreState } from '@redux/store';
 import { Formik, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
-import { keysToCamel, keysToSnake } from '@utils/helpers/keysToCamel';
 import { unwrapResult } from '@reduxjs/toolkit';
 import ClearIcon from '@material-ui/icons/Clear';
 import { resetEventStatus } from '@redux/reducers/event';
@@ -65,7 +64,7 @@ const getEventTypePlaceholder = (eventType) => {
     case 'volunteering':
       return 'eg. Volunteering: Session 4';
     default:
-      throw new Error();
+      return '';
   }
 };
 
@@ -319,7 +318,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     setFieldValue,
     values,
   } = useFormik({
-    initialValues: eventForm ? keysToCamel(eventForm) : emptyForm,
+    initialValues: eventForm || emptyForm,
     validationSchema,
     onSubmit: async (formValues) => {
       const form = formValues;
@@ -348,7 +347,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       const newForm = { ...form, questions: feedbackFormEventQuestions.map((element) => ({ ...element, name: element.displayText })) };
 
       dispatch(
-        isNew ? createEvent(newForm) : editEvent({ data: keysToSnake(form), id }),
+        isNew ? createEvent(newForm) : editEvent({ data: form, id }),
       );
     },
     enableReinitialize: true,
@@ -422,7 +421,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <div className={classes.coverImage}>
               <DropZoneCard
                 id="coverImage"
-                initialUrl={eventForm?.cover_image}
+                initialUrl={eventForm?.coverImage}
                 isBig
                 onChangeImage={(e) => onChangeImage(e, 'coverImage')}
               />
@@ -708,7 +707,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 <div className={classes.facilPhotograph}>
                   <DropZoneCard
                     id="facilitatorPhoto"
-                    initialUrl={eventForm?.facilitator_photo}
+                    initialUrl={eventForm?.facilitatorPhoto}
                     isBig={false}
                     onChangeImage={(e) => onChangeImage(e, 'facilitatorPhoto')}
                   />
