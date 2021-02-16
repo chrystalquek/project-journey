@@ -21,61 +21,73 @@ import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
-import { EVENTS_ROUTE } from '@constants/routes';
+import {
+  EVENTS_ROUTE,
+  PAST_EVENTS_ROUTE,
+  UPCOMING_EVENTS_ROUTE,
+  EVENT_PENDING_REQUESTS_ROUTE,
+  VOLUNTEER_PROFILES_ROUTE,
+  VOLUNTEER_PENDING_REQUESTS_ROUTE,
+  LOGIN_ROUTE,
+  SIGNUP_ROUTE,
+  HOME_ROUTE,
+} from '@constants/routes';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    flexGrow: 1,
-  },
-  buttonsContainer: {
-    flexGrow: 1,
-    marginLeft: theme.spacing(4),
-  },
-  button: {
-    textTransform: 'none',
-    marginLeft: theme.spacing(2),
-    fontSize: theme.typography.h4.fontSize,
-    fontWeight: 'bold',
-  },
-  buttonRight: {
-    textTransform: 'none',
-    fontSize: theme.typography.h4.fontSize,
-    fontWeight: 'bold',
-  },
-  nameContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: theme.spacing(2),
-  },
-  nameStyle: {
-    color: '#000000',
-    flex: 1,
-  },
-  loginButtonContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    marginRight: theme.spacing(2),
-  },
-  signUpButtonContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  editProfileButton: {
-    margin: 0,
-    padding: 0,
-    textAlign: 'left',
-  },
-  editProfileText: {
-    flex: 1,
-    fontWeight: 'bold',
-  },
-  iconSize24: {
-    fontSize: '24px',
-  },
-  iconSize40: {
-    fontSize: '40px',
-  },
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    buttonsContainer: {
+      flexGrow: 1,
+      marginLeft: theme.spacing(4),
+    },
+    button: {
+      textTransform: 'none',
+      marginLeft: theme.spacing(2),
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: 'bold',
+    },
+    buttonRight: {
+      textTransform: 'none',
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: 'bold',
+    },
+    nameContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginLeft: theme.spacing(2),
+    },
+    nameStyle: {
+      color: '#000000',
+      flex: 1,
+    },
+    loginButtonContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: theme.spacing(2),
+    },
+    signUpButtonContainer: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    editProfileButton: {
+      margin: 0,
+      padding: 0,
+      textAlign: 'left',
+    },
+    editProfileText: {
+      flex: 1,
+      fontWeight: 'bold',
+    },
+    iconSize24: {
+      fontSize: '24px',
+    },
+    iconSize40: {
+      fontSize: '40px',
+    },
+  })
+);
 
 type NavBarProps = {
   userData: null | VolunteerData;
@@ -94,11 +106,23 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   const [openVolunteerMenu, setOpenVolunteerMenu] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
 
+  /**
+   * Navigation for Event menu.
+   */
   const eventMenuArray = !userData
-    ? ['Upcoming Events']
+    ? [{ title: 'Upcoming Events', route: EVENTS_ROUTE }]
     : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
-      ? ['Browse Events', 'Past Events']
-      : ['Browse Events', 'My Upcoming Events'];
+    ? [
+        { title: 'Browse Events', route: EVENTS_ROUTE },
+        { title: 'Past Events', route: PAST_EVENTS_ROUTE },
+        { title: 'Pending Requests', route: EVENT_PENDING_REQUESTS_ROUTE },
+      ]
+    : [
+        // Adhoc / Committed
+        { title: 'Browse Events', route: EVENTS_ROUTE },
+        { title: 'My Upcoming Events', route: UPCOMING_EVENTS_ROUTE },
+        { title: 'My Past Events', route: PAST_EVENTS_ROUTE },
+      ];
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);
@@ -129,9 +153,17 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     router.push('/login');
   };
 
+  const closeMenuNavigateTo = (closeHandler, route) => {
+    closeHandler();
+    router.push(route);
+  };
+
   const navigationRender = () => {
     const homeButton = (
-      <Button className={classes.button} onClick={() => router.push('/')}>
+      <Button
+        className={classes.button}
+        onClick={() => router.push(HOME_ROUTE)}
+      >
         Home
       </Button>
     );
@@ -153,30 +185,16 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
             <Paper>
               <ClickAwayListener onClickAway={handleCloseEventMenu}>
                 <MenuList>
-                  {eventMenuArray.map((menuName) => (
+                  {eventMenuArray.map(({ title, route }) => (
                     <MenuItem
-                      key={menuName}
-                      onClick={() => router.push(EVENTS_ROUTE)}
+                      key={title}
+                      onClick={() => {
+                        closeMenuNavigateTo(handleCloseEventMenu, route);
+                      }}
                     >
-                      {menuName}
+                      {title}
                     </MenuItem>
                   ))}
-                  {userData?.volunteerType === VOLUNTEER_TYPE.ADMIN
-                    && (
-                      <MenuItem
-                        onClick={() => router.push('/event/pending-requests')}
-                      >
-                        Pending Requests
-                      </MenuItem>
-                    )}
-                  {userData?.volunteerType === VOLUNTEER_TYPE.ADHOC || userData?.volunteerType === VOLUNTEER_TYPE.COMMITED
-                    && (
-                      <MenuItem
-                        onClick={() => router.push('/event/my-past-events')}
-                      >
-                        My Past Events
-                      </MenuItem>
-                    )}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -206,16 +224,22 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   <MenuList>
                     {/* Requires changes for the router */}
                     <MenuItem
-                      onClick={() => {
-                        router.push('/volunteer/volunteer-profiles');
-                      }}
+                      onClick={() =>
+                        closeMenuNavigateTo(
+                          handleCloseVolunteerMenu,
+                          VOLUNTEER_PROFILES_ROUTE
+                        )
+                      }
                     >
                       Volunteer Profiles
                     </MenuItem>
                     <MenuItem
-                      onClick={() => {
-                        router.push('/volunteer/pending-requests');
-                      }}
+                      onClick={() =>
+                        closeMenuNavigateTo(
+                          handleCloseVolunteerMenu,
+                          VOLUNTEER_PENDING_REQUESTS_ROUTE
+                        )
+                      }
                     >
                       Pending Requests
                     </MenuItem>
@@ -233,9 +257,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         {homeButton}
         {eventButton}
         {eventMenuWrapper}
-        {userData
-          && userData.volunteerType === VOLUNTEER_TYPE.ADMIN
-          && volunteer}
+        {userData &&
+          userData.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+          volunteer}
       </>
     );
   };
@@ -245,22 +269,22 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
       return (
         <>
           <div className={classes.loginButtonContainer}>
-            <ExitToAppIcon className={classes.iconSize24} color="primary" />
+            <ExitToAppIcon className={classes.iconSize24} color='primary' />
             <Button
               className={classes.buttonRight}
               onClick={() => {
-                router.push('/login');
+                router.push(LOGIN_ROUTE);
               }}
             >
               Login
             </Button>
           </div>
           <div className={classes.signUpButtonContainer}>
-            <PersonIcon className={classes.iconSize24} color="primary" />
+            <PersonIcon className={classes.iconSize24} color='primary' />
             <Button
               className={classes.buttonRight}
               onClick={() => {
-                router.push('/signup');
+                router.push(SIGNUP_ROUTE);
               }}
             >
               Sign Up
@@ -270,14 +294,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
       );
     }
     const profilePicture = !userData?.photoUrl ? (
-      <AccountCircleIcon className={classes.iconSize40} color="primary" />
+      <AccountCircleIcon className={classes.iconSize40} color='primary' />
     ) : (
-        <Avatar alt={userData?.name} src={userData?.photoUrl} />
-      );
+      <Avatar alt={userData?.name} src={userData?.photoUrl} />
+    );
 
     return (
       <>
-        <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
+        <IconButton edge='start' onClick={toggleLogoutMenu} ref={logoutRef}>
           {profilePicture}
           <Popper open={openLogout} anchorEl={logoutRef.current} transition>
             {({ TransitionProps }) => (
@@ -309,7 +333,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   return (
     <>
-      <Image src="/blessings-in-a-bag.png" width={100} height={100} />
+      <Image src='/blessings-in-a-bag.png' width={100} height={100} />
       <div className={classes.buttonsContainer}>{navigationRender()}</div>
       {loggedInRender()}
     </>
