@@ -22,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
     },
     cursor: 'pointer',
   },
+  dialogContent: {
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    msOverflowStyle: '-ms-autohiding-scrollbar',
+    height: '100%'
+  }
 }));
 
 const BecomeCommited: FC = () => {
@@ -74,7 +80,7 @@ const BecomeCommited: FC = () => {
             Ad-hoc to Committed Volunteer
           </Typography>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent className={classes.dialogContent}>
           <CommittedConversionForm/>
         </DialogContent>
       </Dialog>

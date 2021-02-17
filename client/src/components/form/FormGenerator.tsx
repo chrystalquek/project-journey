@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 type FormQuestionsGeneratorType = {
   handleSubmit: (values: Record<string, any>) => void
   questionsList: QuestionList
+  validationObj: any
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     padding: theme.spacing(8),
     textAlign: 'left',
-    overflowY: 'scroll',
+    overflowY: 'hidden',
     maxHeight: '100%',
   },
   questionContainer: {
@@ -183,10 +184,10 @@ export const FormQuestionMapper = ({
 const FormGenerator: FC<FormQuestionsGeneratorType> = ({
   handleSubmit,
   questionsList,
+  validationObj
 }) => {
   const initialValues: Record<string, any> = {};
   const classes = useStyles();
-  const validationObj = {};
 
   questionsList
     .filter(({ isRequired }) => isRequired)
@@ -206,7 +207,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
           validationSchema={validationSchema}
         >
           {({
-            isSubmitting, setFieldValue, isValid,
+            isSubmitting, setFieldValue, values, isValid,
           }) => (
             <Form>
               {questionsList.map((questionItem) => {
@@ -243,7 +244,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={isSubmitting || isValid}
+                disabled={isValid}
                 size="large"
                 className={classes.button}
               >
