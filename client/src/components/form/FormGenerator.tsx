@@ -186,8 +186,12 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
   questionsList,
   validationObj
 }) => {
-  const initialValues: Record<string, any> = {};
   const classes = useStyles();
+  const initialValues: Record<string, any> = {};
+
+  questionsList.forEach(({ name, type, initialValue }) => {
+    initialValues[name] = type === 'checkboxes' ? [] : initialValue;
+  })
 
   questionsList
     .filter(({ isRequired }) => isRequired)
