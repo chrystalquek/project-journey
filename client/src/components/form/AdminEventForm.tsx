@@ -286,11 +286,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
   useEffect(() => {
     if (event.status === 'rejected') {
-      setToastText('Form submission failed');
+      setToastText('Event creation failed.');
       setToastStatus('error');
       setOpenSnackbar(true);
     } else if (event.status === 'fulfilled') {
-      setToastText('You have signed up successfully.');
+      setToastText('Successfully Created Event.');
       setToastStatus('success');
       setOpenSnackbar(true);
 
