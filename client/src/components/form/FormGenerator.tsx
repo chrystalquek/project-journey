@@ -12,7 +12,7 @@ import {
 import * as Yup from 'yup';
 
 type FormQuestionsGeneratorType = {
-  handleSubmit: (values: Record<string, any>) => void
+  handleSubmit: (values: Record<string, any>) => Promise<void>
   questionsList: QuestionList
   validationObj: any
 }
@@ -193,12 +193,6 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;
   })
 
-  questionsList
-    .filter(({ isRequired }) => isRequired)
-    .forEach(({ name }) => {
-      validationObj[name] = Yup.string().required('Required');
-    });
-
   const validationSchema = Yup.object().shape(validationObj);
 
   return (
@@ -211,7 +205,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
           validationSchema={validationSchema}
         >
           {({
-            isSubmitting, setFieldValue, values, isValid,
+            isSubmitting, setFieldValue
           }) => (
             <Form>
               {questionsList.map((questionItem) => {
@@ -248,7 +242,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={isValid}
+                disabled={isSubmitting}
                 size="large"
                 className={classes.button}
               >
