@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'rgba(0, 186, 220, 30%)', // Light blue
     padding: theme.spacing(2),
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(4),
   },
   infoStyle: {
     fontStyle: 'italic',
@@ -249,6 +249,7 @@ const SignUpFormGenerator = ({
         padding: '30px',
         textAlign: 'left',
         maxHeight: '100%',
+        wordWrap: 'break-word',
       }}
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -299,7 +300,7 @@ const SignUpFormGenerator = ({
                         >
                           {displayText.map((text, index) => (
                             <Typography
-                              key={text}
+                              key={index}
                               style={{
                                 marginBottom: '16px',
                                 fontWeight: 500,

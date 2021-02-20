@@ -221,7 +221,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
                   <div key={name} className={classes.questionContainer}>
                     {displayText.map((text, index) => (
                       <Typography
-                        key={text}
+                        key={index}
                         className={classes.questionTitle}
                       >
                         {text}

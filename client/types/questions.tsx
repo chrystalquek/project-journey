@@ -12,7 +12,7 @@ export type OptionType = { value: any; label: string };
 
 export type QuestionItem = {
   name: string;
-  displayText: string[];
+  displayText: Array<string | JSX.Element>;
   type: InputType;
   initialValue: string | Date | number | [] | boolean | null;
   options?: Array<OptionType>;
