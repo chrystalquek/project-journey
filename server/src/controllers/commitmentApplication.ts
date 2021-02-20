@@ -80,7 +80,7 @@ const readCommitmentApplications = async (
 const updateCommitmentApplication = async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
-    const updatedFields = req.body as CommitmentApplicationData;
+    const updatedFields = req.body as Partial<CommitmentApplicationData>;
 
     const commitmentApplication = await commitmentApplicationService
       .updateCommitmentApplication(id, updatedFields);

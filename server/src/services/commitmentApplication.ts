@@ -9,7 +9,23 @@ const createCommitmentApplication = async (
     _id: new mongoose.Types.ObjectId(),
     volunteerId: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId),
     createdAt: Date.now(),
-    // TODO: @matt setup timestamp
+    homeAddress: commitmentApplicationData.homeAddress,
+    race: commitmentApplicationData.race,
+    biabVolunteeringDuration: commitmentApplicationData.biabVolunteeringDuration,
+    hasVolunteeredExternally: commitmentApplicationData.hasVolunteeredExternally,
+    volunteeringExperience: commitmentApplicationData.volunteeringExperience,
+    hasChildrenExperience: commitmentApplicationData.hasChildrenExperience,
+    childrenExperience: commitmentApplicationData.childrenExperience,
+    sessionsPerMonth: commitmentApplicationData.sessionsPerMonth,
+    sessionPreference: commitmentApplicationData.sessionPreference,
+    hasFirstAidCertification: commitmentApplicationData.hasFirstAidCertification,
+    leadershipInterest: commitmentApplicationData.leadershipInterest,
+    interests: commitmentApplicationData.interests,
+    skills: commitmentApplicationData.skills,
+    personality: commitmentApplicationData.personality,
+    strengths: commitmentApplicationData.strengths,
+    volunteerContribution: commitmentApplicationData.volunteerContribution,
+    hasCriminalRecord: commitmentApplicationData.hasCriminalRecord
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
   return savedCommitmentApplication.toObject();
@@ -25,7 +41,7 @@ const readCommitmentApplications = async (status?: CommitmentApplicationStatus):
 
 const updateCommitmentApplication = async (
   id: string,
-  updatedFields: CommitmentApplicationData,
+  updatedFields: Partial<CommitmentApplicationData>,
 ): Promise<CommitmentApplicationData> => {
   try {
     const commitmentApplication = await CommitmentApplication.findOneAndUpdate(
