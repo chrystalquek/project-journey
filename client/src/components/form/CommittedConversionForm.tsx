@@ -2,24 +2,21 @@ import React from 'react'
 import FormGenerator from './FormGenerator';
 import { conversionFormQuestions } from './questions/CommittedConversionQuestionList';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
 
-const CommittedConversionForm = () => {
-
-  const handleSubmit = async (formValues: Record<string, any>) => {
-    // dispatch(createCommitmentApplication());
-    console.log(formValues);
-  }
+const CommittedConversionForm = ({handleSubmit}) => {
 
   const conversionSchema = {
     homeAddress: Yup.string().required('Required'),
-    // how to validate enums?
+    race: Yup.mixed().required('Required'),
     biabVolunteeringDuration: Yup.string().required('Required'),
     hasVolunteeredExternally: Yup.boolean().required('Required'),
     volunteeringExperience: Yup.string().when('hasVolunteeredExternally', {
       is: true,
       then: Yup.string().required()
     }), // Dependent validation
-    hasChildrenExperience: Yup.string().required('Required'),
+    hasChildrenExperience: Yup.boolean().required('Required'),
     childrenExperience: Yup.string().when('hasChildrenExperience', {
       is: true,
       then: Yup.string().required()
@@ -32,11 +29,11 @@ const CommittedConversionForm = () => {
     personality: Yup.string().required('Required'),
     strengths: Yup.string().required('Required'),
     volunteerContribution: Yup.string().required('Required'),
-    crimeAcknowledgement: Yup.boolean().required('Required'),
-    addedToGroupAcknowledgement: Yup.boolean().test('ack-group', '', value => value).required(), // Has to be true
-    commitmentExpectation: Yup.boolean().test('ack-commitment', '', value => value).required(), // Has to be true
-    confidentiality: Yup.boolean().test('ack-confidentiality', '', value => value).required(), // Has to be true
-    backgroundCheck: Yup.boolean().test('ack-backgroundCheck', '', value => value).required(), // Has to be true
+    hasCriminalRecord: Yup.boolean().required('Required'),
+    isAwareOfGroupInvite: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
+    isAwareOfCommitmentExpectation: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
+    isAwareOfConfidentiality: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
+    isAwareOfBackgroundCheck: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
   }
 
   return (

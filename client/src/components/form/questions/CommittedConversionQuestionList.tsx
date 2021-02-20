@@ -181,7 +181,7 @@ export const conversionFormQuestions: QuestionList = [
     isRequired: true,
   },
   {
-    name: 'crimeAcknowledgement',
+    name: 'hasCriminalRecord',
     displayText:[
       'Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education?',
     ],
@@ -194,7 +194,7 @@ export const conversionFormQuestions: QuestionList = [
     isRequired: true
   },
   {
-    name: 'addedToGroupAcknowledgement',
+    name: 'isAwareOfGroupInvite',
     displayText:[
       'I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc.',
     ],
@@ -207,7 +207,7 @@ export const conversionFormQuestions: QuestionList = [
     isRequired: true
   },
   {
-    name: 'commitmentExpectation',
+    name: 'isAwareOfCommitmentExpectation',
     displayText:[
       'I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement.',
     ],
@@ -220,7 +220,7 @@ export const conversionFormQuestions: QuestionList = [
     isRequired: true
   },
   {
-    name: 'confidentiality',
+    name: 'isAwareOfConfidentiality',
     displayText:[
       'If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation.',
     ],
@@ -233,7 +233,7 @@ export const conversionFormQuestions: QuestionList = [
     isRequired: true
   },
   {
-    name: 'backgroundCheck',
+    name: 'isAwareOfBackgroundCheck',
     displayText:[
       'I give Beyond Awesome (under Blessings in a Bag Limited) permission to conduct a background check with the relevant authorities and understand that they will notify me before conducting this process.',
     ],
