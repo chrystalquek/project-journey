@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import * as Yup from 'yup';
 
-type FormQuestionsGeneratorType = {
+type FormGeneratorType = {
   handleSubmit: (values: Record<string, any>) => Promise<void>
   questionsList: QuestionList
   validationObj: any
@@ -181,7 +181,7 @@ export const FormQuestionMapper = ({
   }
 };
 
-const FormGenerator: FC<FormQuestionsGeneratorType> = ({
+const FormGenerator: FC<FormGeneratorType> = ({
   handleSubmit,
   questionsList,
   validationObj
