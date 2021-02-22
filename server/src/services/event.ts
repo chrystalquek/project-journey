@@ -196,10 +196,10 @@ export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
     nDaysAgo.setDate(nDaysAgo.getDate() - n);
 
     const startOfNDaysAgo = new Date(nDaysAgo);
-    nDaysAgo.setHours(0, 0, 0, 0);
+    startOfNDaysAgo.setHours(0, 0, 0);
 
     const endOfNDaysAgo = new Date(nDaysAgo);
-    endOfNDaysAgo.setHours(23, 59, 59, 999);
+    endOfNDaysAgo.setHours(23, 59, 59);
 
     const eventsNDaysAgo: EventData[] = await Event.find({
       endDate: {
