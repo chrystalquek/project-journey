@@ -31,6 +31,10 @@ const useStyles = makeStyles({
   cardAction: {
     flexWrap: 'wrap',
   },
+  committedTag: {
+    borderRadius: '10px',
+    opacity: 0.85,
+  },
 });
 
 const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
@@ -60,7 +64,14 @@ const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
       </CardActionArea>
       <CardActions className={classes.cardAction}>
         {event?.volunteerType === VOLUNTEER_TYPE.COMMITED
-          && <Chip color="secondary" size="small" label={COMMITTED_VOLUNTEER_TAG} />}
+          && (
+            <Chip
+              color="secondary"
+              size="small"
+              label={COMMITTED_VOLUNTEER_TAG}
+              className={classes.committedTag}
+            />
+          )}
         {event?.volunteerType === VOLUNTEER_TYPE.ADHOC
           && <Chip color="primary" size="small" label={ADHOC_VOLUNTEER_TAG} />}
       </CardActions>

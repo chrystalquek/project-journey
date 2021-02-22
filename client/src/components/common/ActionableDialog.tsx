@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 'small',
     justifyContent: 'center',
     alignItems: 'center',
+    textTransform: 'none',
   },
   popUpButton: {
     textTransform: 'none',
@@ -66,7 +67,6 @@ export function ActionableDialog(props: ActionableDialogProps) {
         onClick={setOpen}
       >
         {openCloseButtonTitle}
-
       </Button>
       <Dialog onClose={setOpen} aria-labelledby="simple-dialog-title" open={open}>
         <Grid className={classes.dialog} container direction="column" spacing={5} justify="center">

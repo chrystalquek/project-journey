@@ -2,7 +2,9 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import { Button, CardActions, Chip, makeStyles } from '@material-ui/core';
+import {
+  Button, CardActions, Chip, makeStyles,
+} from '@material-ui/core';
 import React, { FC, useState } from 'react';
 import { EventData } from '@type/event';
 import { parseDate } from '@utils/helpers/event/EventsPageBody';
@@ -21,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
   viewFeedbackButton: {
     textTransform: 'none',
     color: theme.palette.text.disabled,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   submitFeedbackButton: {
     textTransform: 'none',
     color: theme.palette.text.secondary,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   media: {
     objectFit: 'cover',
@@ -35,13 +37,17 @@ const useStyles = makeStyles((theme) => ({
   cardAction: {
     flexWrap: 'wrap',
   },
+  committedTag: {
+    borderRadius: '10px',
+    opacity: 0.85,
+  },
 }));
 
 const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
   const classes = useStyles();
   const { date, time } = parseDate(event.startDate, event.endDate);
 
-  const [isOpen, setOpen] = useState(false)
+  const [isOpen, setOpen] = useState<boolean>(false);
 
   return (
     <Card>
@@ -61,23 +67,37 @@ const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
         </CardContent>
       </CardActionArea>
 
-      <Button className={event?.feedbackStatus ? classes.viewFeedbackButton : classes.submitFeedbackButton} onClick={() => setOpen(true)}>
-        {event?.feedbackStatus ?
-          "View Submitted Feedback"
-          : "Submit Volunteer Feedback"}
+      <Button
+        className={event?.feedbackStatus
+          ? classes.viewFeedbackButton
+          : classes.submitFeedbackButton}
+        onClick={() => setOpen(true)}
+      >
+        {event?.feedbackStatus
+          ? 'View Submitted Feedback'
+          : 'Submit Volunteer Feedback'}
       </Button>
-      <FeedbackModal title={event.name}
+      <FeedbackModal
+        title={event.name}
         imageUrl={event?.coverImage}
         eventDate={event.startDate}
         description={event.description}
         isOpen={isOpen}
         eventId={event._id}
         initialState={event?.feedbackStatus ? 'success' : 'prompt'}
-        onClose={() => setOpen(false)} />
+        onClose={() => setOpen(false)}
+      />
 
       <CardActions className={classes.cardAction}>
         {event?.volunteerType === VOLUNTEER_TYPE.COMMITED
-          && <Chip color="secondary" size="small" label={COMMITTED_VOLUNTEER_TAG} />}
+          && (
+          <Chip
+            color="secondary"
+            size="small"
+            label={COMMITTED_VOLUNTEER_TAG}
+            className={classes.committedTag}
+          />
+          )}
         {event?.volunteerType === VOLUNTEER_TYPE.ADHOC
           && <Chip color="primary" size="small" label={ADHOC_VOLUNTEER_TAG} />}
       </CardActions>
