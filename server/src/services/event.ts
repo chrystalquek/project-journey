@@ -190,7 +190,7 @@ const deleteEvent = async (id: string): Promise<void> => {
   }
 };
 
-const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
+export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
   try {
     const nDaysAgo = new Date();
     nDaysAgo.setDate(nDaysAgo.getDate() - n);
