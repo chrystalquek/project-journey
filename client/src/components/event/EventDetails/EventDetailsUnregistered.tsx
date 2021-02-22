@@ -4,7 +4,6 @@ import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
 import {
   Chip, Grid, makeStyles,
 } from '@material-ui/core';
-import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { testEventImage1 } from '@constants/imagePaths';
 import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
 import EventInformation from '@components/event/EventDetails/EventDetailsParts/EventInformation';
@@ -20,6 +19,10 @@ type EventDetailsUnregisteredProps = {
 const useStyles = makeStyles({
   gutterBottom: {
     marginBottom: '0.7em',
+  },
+  committedTag: {
+    borderRadius: '10px',
+    opacity: 0.85,
   },
 });
 
@@ -39,7 +42,11 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED
         && (
         <Grid className={classes.gutterBottom} item xs={12}>
-          <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+          <Chip
+            color="secondary"
+            label={COMMITTED_VOLUNTEER_TAG}
+            className={classes.committedTag}
+          />
         </Grid>
         )}
       {event.volunteerType === VOLUNTEER_TYPE.ADHOC

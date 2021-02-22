@@ -8,7 +8,6 @@ import { testEventImage1 } from '@constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventDetailsParts/EventInformation';
 import VolunteerRoles from '@components/event/EventDetails/EventDetailsParts/VolunteerRoles';
 import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
-import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
 import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
 import { FormStatus } from '@type/event/common';
@@ -30,6 +29,10 @@ const useStyles = makeStyles({
   gutterBottom: {
     marginBottom: '0.7em',
   },
+  committedTag: {
+    borderRadius: '10px',
+    opacity: 0.85,
+  },
 });
 
 const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
@@ -50,7 +53,11 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED
       && (
       <Grid className={classes.gutterBottom} item xs={12}>
-        <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+        <Chip
+          color="secondary"
+          label={COMMITTED_VOLUNTEER_TAG}
+          className={classes.committedTag}
+        />
       </Grid>
       )}
       {event.volunteerType === VOLUNTEER_TYPE.ADHOC
