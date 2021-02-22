@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-  makeStyles, Typography, Theme, Box, useTheme,
+  makeStyles, Theme, Box, useTheme,
 } from '@material-ui/core';
 
 type SectionTitleProps = {
@@ -11,6 +11,7 @@ type SectionTitleProps = {
   gutterBottom?: boolean,
   borderBottom?: boolean,
   borderTop?: boolean,
+  gutterTop?: boolean,
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: props.textCenter ? 'center' : 'initial',
     paddingBottom: '0.1rem',
     marginBottom: props.gutterBottom ? '0.35em' : '0',
+    marginTop: props.gutterTop ? '0.35em' : '0',
     borderTop: props.borderTop ? '2px solid #CECECE' : 'none',
     borderBottom: props.borderBottom ? '2px solid #CECECE' : 'none',
     fontWeight: props.fontBold ? 'bold' : 'normal',

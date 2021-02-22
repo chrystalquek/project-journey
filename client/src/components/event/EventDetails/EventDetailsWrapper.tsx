@@ -1,10 +1,8 @@
 import React, { FC } from 'react';
 import {
-  AppBar, IconButton, makeStyles, Toolbar,
+  AppBar, makeStyles, Toolbar,
 } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
-import { useRouter } from 'next/router';
 import { EventData } from '@type/event';
 
 type EventDetailsWrapperProps = {
@@ -15,12 +13,11 @@ const useStyles = makeStyles({
   root: {
     border: 'none',
     boxShadow: 'none',
-    backgroundColor: 'none',
+    backgroundColor: 'white',
   },
 });
 
 const EventDetailsWrapper: FC<EventDetailsWrapperProps> = (props) => {
-  const router = useRouter();
   const classes = useStyles();
   const { event } = props;
 
@@ -28,9 +25,6 @@ const EventDetailsWrapper: FC<EventDetailsWrapperProps> = (props) => {
     <>
       <AppBar className={classes.root} position="static">
         <Toolbar>
-          <IconButton onClick={() => router.back()} edge="start">
-            <ArrowBackIcon />
-          </IconButton>
           <EventBreadCrumbs eid={event._id} />
         </Toolbar>
       </AppBar>
