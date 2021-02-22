@@ -204,7 +204,7 @@ export type EventData = {
     facilitatorName?: string;
     facilitatorPhoto?: string;
     facilitatorDescription?: string;
-    roles?: Array<RoleData>;
+    roles: Array<RoleData>;
     contentUrl?: string;
     contentType?: string;
     location: string;
