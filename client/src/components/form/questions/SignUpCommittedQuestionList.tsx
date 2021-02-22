@@ -1,3 +1,4 @@
+import { Link } from '@material-ui/core'
 import { QuestionWithHeader } from '@type/questions';
 import {
   CITIZENSHIP, GENDER, RACE, SOCIAL_MEDIA_PLATFORMS,
@@ -460,12 +461,15 @@ export const questions: QuestionWithHeader = [
     ]
   },
 
+  // Email Collection & Communication Permission
   {
     header: 'WCA Registration: Permission for Email Collection and Communication',
     questionList: [
       {
         name: 'permissionEmailCollection',
         displayText: [
+          'For purposes of communicating with our community about current and upcoming program opportunities and events, Beyond Awesome and Blessings in a Bag Limited may collect email addresses and email individuals ages 13 and above. This information will be used solely for program, event, and alumni engagement purposes by the program and will not be used for any commercial purpose or given to any third party. Individuals may opt out of these communications at any time.',
+
           'I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein.',
         ],
         type: 'mcq',
@@ -476,10 +480,10 @@ export const questions: QuestionWithHeader = [
         ],
         isRequired: true,
       },
-    ]
+    ],
   },
 
-  // Acknowledgements
+  // Acknowledgement
   {
     header: 'WCA Registration: Acknowledgements',
     questionList: [
@@ -492,7 +496,111 @@ export const questions: QuestionWithHeader = [
         initialValue: '',
         options: [
           { value: true, label: 'Yes' },
+        ],
+        isRequired: true,
+      },
+      {
+        name: 'acknowledgeWAGroup',
+        displayText: [
+          'I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc.',
+        ],
+        type: 'mcq',
+        initialValue: '',
+        options: [
+          { value: true, label: 'Yes' },
+        ],
+        isRequired: true,
+      },
+      {
+        name: 'hasCrimeHistory',
+        displayText: [
+          'Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education?',
+        ],
+        type: 'mcq',
+        initialValue: '',
+        options: [
+          { value: true, label: 'Yes' },
           { value: false, label: 'No' },
+        ],
+        isRequired: true,
+      },
+      {
+        name: 'acknowledgeMinimumCommitment',
+        displayText: [
+          'I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement.',
+        ],
+        type: 'mcq',
+        initialValue: '',
+        options: [
+          { value: true, label: 'Yes' },
+        ],
+        isRequired: true,
+      },
+      {
+        name: 'acknowledgeConfidential',
+        displayText: [
+          'If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation.',
+        ],
+        type: 'mcq',
+        initialValue: '',
+        options: [
+          { value: true, label: 'Yes' },
+        ],
+        isRequired: true,
+      },
+      {
+        name: 'permissionBackgroundCheck',
+        displayText: [
+          'I give Beyond Awesome (under Blessings in a Bag Limited) permission to conduct a background check with the relevant authorities and understand that they will notify me before conducting this process. *',
+        ],
+        type: 'mcq',
+        initialValue: '',
+        options: [
+          { value: true, label: 'Yes' },
+          { value: false, label: 'No' },
+        ],
+        isRequired: true,
+      },
+      {
+        name: 'safetyProtection',
+        displayText: [
+          `Blessings In A Bag is committed to the safety and protection of its community. This Code of Conduct applies to all guests, volunteers and participants who represent the organisation and who interact with children or young people in both a direct and/or unsupervised capacity.`,
+
+          `The public and private conduct of volunteers acting on behalf of Blessings In A Bag can inspire and motivate those with whom they interact, or can cause great harm if inappropriate. We must, at all times, be aware of the responsibilities that accompany our work.`,
+          
+          `I agree:`,
+
+          `(a) Not to take any photos or video documentation on my phone of students or volunteers participating in the program.  I am aware that I can, however, take photo and video documentation of myself and/or the surrounding environment such as the classroom space, interesting projects, etc.`,
+
+          `(b) To respect the guidance of the WCA Captain who is hosting me to act in the best interests of the students and to minimise interference with the programming/in-session.`,
+          
+          `(c) To respect the value the rights, religious beliefs and practices of individuals. Refrain from actions and behaviours that constitute harassment or discrimination and strive to be sensitive to the feelings of others.`,
+
+          `(d) To respect the confidential nature of information gained, or behaviour observed, whilst participating in the program, in relation to children and adults.  I am aware that there are some individuals who are present that may be under the child protection services program.`,
+          
+          // A bit nasty, but it needs link here.
+          (<>(e) To report any accidents or situations involving any member of the community (Student, WCA, etc) and to record this in our record book as soon as practically possible (Including incidents such as misbehaviour on the bus, during program, having a personal challenge that directly impacts the safety and well being of the community (eg a stalker), etc: <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdaVJ4OTtXyuucvL4U59TifnIsXhQB6a93zmFhdmcjJIiIS-Q/viewform" color="secondary">Click here</Link></>),
+          
+          `(f) To be responsible for familiarising myself with building/facility safety issues, such as, fire procedures, location of emergency exits, location of emergency telephones and first aid equipment.`,
+
+          `(g) To be responsible for reporting suspected cases of child abuse to the appropriate individuals in the organisation (Program Captains, Emily Teng)`,
+          
+          `(h) To be committed to the dates I've scheduled myself for in the roster and will give notice at least 1 day before the scheduled date should I not be able to make it due to unforeseen circumstances.`,
+
+          `(i) To promote, demonstrate and incorporate the values of fair play, trust, classroom rules/values and ethics throughout the activities I'm involved with`,
+
+          `(j) To set examples of appropriate and expected behaviour.  Because I know that young people learn by example, I will avoid the use of sarcasm or discrimination, direct criticism, name-calling, labelling, un-necessary competition or comparison.`,
+
+          `(k) To encourage good behaviour  - amongst children and the WCA community`,
+
+          (<>(l) To not physically or verbally punish any young person.  Our program follows Restorative Care practices, please see: <Link href="https://www.edutopia.org/blog/restorative-justice-resources-matt-davis" color="secondary">https://www.edutopia.org/blog/restorative-justice-resources-matt-davis</Link></>),
+
+          `(m) To seek for assistance, guidance or clarification from any of the program captains and/or Emily Teng.`,
+        ],
+        type: 'mcq',
+        initialValue: '',
+        options: [
+          { value: true, label: 'Yes' },
         ],
         isRequired: true,
       },
@@ -505,35 +613,37 @@ export const questions: QuestionWithHeader = [
         initialValue: '',
         options: [
           { value: true, label: 'Yes' },
-          { value: false, label: 'No' },
         ],
         isRequired: true,
       },
-    ]
+     
+      
+    ],
   },
 
   // Informed Consent and License Agreement
   {
     header: 'WCA Registration: Informed Consent and License Agreement',
     questionList: [
-       {
+      {
         name: 'informedConsent',
         displayText: [
-          "\"PUBLISHING PERMISSION: This form grants Beyond Awesome (of Blessings in a Bag Limited) the right to edit and publish the above named individual's work (including writing, audio recordings, and any other products) in any manner in any type of publication or materials affiliated with Beyond Awesome (of Blessings in a Bag Limited), now existing or which may be created in the future. This is a non-exclusive agreement, meaning that the author can also publish their work in publications unaffiliated with Beyond Awesome (of Blessings in a Bag Limited), as well. Publication by another person or entity shall not have any effect on Beyond Awesome (of Blessings in a Bag Limited) rights under this agreement. The author warrants to Beyond Awesome (of Blessings in a Bag Limited) that to the extent the author's material contains any accounts of non-fictional individuals or events, that the information is substantially true, does not defame or slander or place in a false light any individual or group, and does not disclose private or personal facts regarding any third party without that third party's written consent. Beyond Awesome (of Blessings in a Bag Limited) also asks students to refrain from writing inappropriate language and about incidents that may hurt, degrade, or endanger others and the author agrees to advise Beyond Awesome (of Blessings in a Bag Limited) if its work is not in compliance with this request. We do retain the right to paraphrase or re-word passages during the editing process.",
-    
-          'FILM, PHOTOGRAPHY, AND AUDIO PERMISSION: During Beyond Awesome (of Blessings in a Bag Limited) programming, Beyond Awesome (of Blessings in a Bag Limited) may document the work of the individual through photography, film, video, audio, or other recording technique. Individuals agree that these images and recordings may thereafter appear in Beyond Awesome (of Blessings in a Bag Limited) publications, reports, film productions, websites, or social or online media platforms. This documentation is intended to display the hard work of the individuals and the type and effectiveness of the programming Beyond Awesome (of Blessings in a Bag Limited). No material will be used for commercial purposes but rather will be used for furthering the Beyond Awesome (of Blessings in a Bag Limited) goals of supporting and serving under-resourced students. Consent to such use, including any waiver of any right to publicity or privacy, is given.',
-    
-          'MEDIA PERMISSION: While individuals are engaged in programming at Beyond Awesome (of Blessings in a Bag Limited), they may appear in photographs, video or audio that Beyond Awesome (of Blessings in a Bag Limited) may wish to use on the radio, television, in press articles, or other media about Beyond Awesome (of Blessings in a Bag Limited). These materials help provide the public with information about programs at Beyond Awesome (of Blessings in a Bag Limited) and allow individuals the opportunity to have their work shared with a broader audience. Consent to such use, including any waiver of any right to publicity or privacy, is given.',
-    
-          'FEEDBACK PERMISSION: In order to gain information about the effectiveness of our programs and better address the needs of students, communities and the program in general, Beyond Awesome (of Blessings in a Bag Limited) may request access for feedback and survey completion by individuals, including (but not limited to): focus groups, online surveys, feedback forms, reflection sheets, etc.  At no point is participation in any of these required and no identifying information will be attached to any results that are collected or disseminated unless otherwise confirmed or agreed upon between the individual and the organisation. Findings will be shared for the purposes of demonstrating our programs and their impact to funders and partners. Furthermore, Beyond Awesome (of Blessings in a Bag Limited) reserves the right to communicate within leadership regarding individual achievement, development and well-being.',
-    
-          'Please note that although participation in Beyond Awesome (of Blessings in a Bag Limited) programs is voluntary, once this agreement is signed, it cannot be withdrawn and remains in effect even after the individual is no longer participating in any Beyond Awesome (of Blessings in a Bag Limited) programming. "',
+          `PUBLISHING PERMISSION: This form grants Beyond Awesome (of Blessings in a Bag Limited) the right to edit and publish the above named individual's work (including writing, audio recordings, and any other products) in any manner in any type of publication or materials affiliated with Beyond Awesome (of Blessings in a Bag Limited), now existing or which may be created in the future. This is a non-exclusive agreement, meaning that the author can also publish their work in publications unaffiliated with Beyond Awesome (of Blessings in a Bag Limited), as well. Publication by another person or entity shall not have any effect on Beyond Awesome (of Blessings in a Bag Limited) rights under this agreement. The author warrants to Beyond Awesome (of Blessings in a Bag Limited) that to the extent the author's material contains any accounts of non-fictional individuals or events, that the information is substantially true, does not defame or slander or place in a false light any individual or group, and does not disclose private or personal facts regarding any third party without that third party's written consent. Beyond Awesome (of Blessings in a Bag Limited) also asks students to refrain from writing inappropriate language and about incidents that may hurt, degrade, or endanger others and the author agrees to advise Beyond Awesome (of Blessings in a Bag Limited) if its work is not in compliance with this request. We do retain the right to paraphrase or re-word passages during the editing process.`,
+
+          `FILM, PHOTOGRAPHY, AND AUDIO PERMISSION: During Beyond Awesome (of Blessings in a Bag Limited) programming, Beyond Awesome (of Blessings in a Bag Limited) may document the work of the individual through photography, film, video, audio, or other recording technique. Individuals agree that these images and recordings may thereafter appear in Beyond Awesome (of Blessings in a Bag Limited) publications, reports, film productions, websites, or social or online media platforms. This documentation is intended to display the hard work of the individuals and the type and effectiveness of the programming Beyond Awesome (of Blessings in a Bag Limited). No material will be used for commercial purposes but rather will be used for furthering the Beyond Awesome (of Blessings in a Bag Limited) goals of supporting and serving under-resourced students. Consent to such use, including any waiver of any right to publicity or privacy, is given.`,
+
+          `MEDIA PERMISSION: While individuals are engaged in programming at Beyond Awesome (of Blessings in a Bag Limited), they may appear in photographs, video or audio that Beyond Awesome (of Blessings in a Bag Limited) may wish to use on the radio, television, in press articles, or other media about Beyond Awesome (of Blessings in a Bag Limited). These materials help provide the public with information about programs at Beyond Awesome (of Blessings in a Bag Limited) and allow individuals the opportunity to have their work shared with a broader audience. Consent to such use, including any waiver of any right to publicity or privacy, is given.`,
+
+          `FEEDBACK PERMISSION: In order to gain information about the effectiveness of our programs and better address the needs of students, communities and the program in general, Beyond Awesome (of Blessings in a Bag Limited) may request access for feedback and survey completion by individuals, including (but not limited to): focus groups, online surveys, feedback forms, reflection sheets, etc.  At no point is participation in any of these required and no identifying information will be attached to any results that are collected or disseminated unless otherwise confirmed or agreed upon between the individual and the organisation. Findings will be shared for the purposes of demonstrating our programs and their impact to funders and partners. Furthermore, Beyond Awesome (of Blessings in a Bag Limited) reserves the right to communicate within leadership regarding individual achievement, development and well-being.`,
+
+          `Please note that although participation in Beyond Awesome (of Blessings in a Bag Limited) programs is voluntary, once this agreement is signed, it cannot be withdrawn and remains in effect even after the individual is no longer participating in any Beyond Awesome (of Blessings in a Bag Limited) programming.`,
+          
+          'I have read and agree to each of the terms and conditions of this Informed Consent and License Agreement, and agree to waive any and all claims for monetary compensation from Beyond Awesome (of Blessings in a Bag Limited), acknowledging that Blessings in a Bag Limited is a purpose-driven entity focusing on youth development with a focus on under-resourced students and the community at large.',
         ],
         type: 'mcq',
         initialValue: '',
         options: [
           { value: true, label: 'Yes' },
-          { value: false, label: 'No' },
         ],
         isRequired: true,
       },

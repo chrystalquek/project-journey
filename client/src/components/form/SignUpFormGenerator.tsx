@@ -331,13 +331,7 @@ const SignUpFormGenerator = ({
                 variant='contained'
                 color='primary'
                 type='submit'
-                disabled={
-                  isSubmitting ||
-                  !values.permissionEmailCollection ||
-                  !values.personalInformationConsent ||
-                  !values.acknowledgeTnC ||
-                  !values.informedConsent
-                }
+                disabled={isSubmitting}
                 size='large'
                 style={{ margin: 'auto', display: 'block' }}
               >
