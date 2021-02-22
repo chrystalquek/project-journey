@@ -1,3 +1,5 @@
+import { RACE } from "./volunteer"
+
 export enum CommitmentApplicationStatus {
     Pending = 'pending',
     Accepted = 'accepted',
@@ -11,7 +13,21 @@ export type CommitmentApplicationData = {
     volunteerId: string
     status: CommitmentApplicationStatus,
     createdAt: Date,
-
-    // List of questions in the application form
-    // yet to be determined, waiting for BD team
+    homeAddress: string,
+    race: RACE,
+    biabVolunteeringDuration: string,
+    hasVolunteeredExternally: boolean,
+    volunteeringExperience: string,
+    hasChildrenExperience: boolean,
+    childrenExperience: string,
+    sessionsPerMonth: boolean,
+    sessionPreference: string,
+    hasFirstAidCertification: boolean,
+    leadershipInterest: string,
+    interests: string,
+    skills: [string],
+    personality: string,
+    strengths: string,
+    volunteerContribution: string,
+    hasCriminalRecord: boolean
 }

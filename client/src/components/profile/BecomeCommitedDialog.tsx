@@ -5,9 +5,11 @@ import {
   FormControlLabel, Grid,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import CommittedConversionForm from '@components/form/CommittedConversionForm';
+import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
+import { CreateCommitmentApplicationRequest } from '@utils/api/request';
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -22,16 +24,22 @@ const useStyles = makeStyles((theme) => ({
     },
     cursor: 'pointer',
   },
+  dialogContent: {
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    msOverflowStyle: '-ms-autohiding-scrollbar',
+    height: '100%'
+  }
 }));
 
 const BecomeCommited: FC = () => {
   const user = useSelector((state: StoreState) => state.user);
+  const dispatch = useDispatch();
   // TODO: a better implementation to check pending application
   // this is just a quick fix, it's by no mean a correct flag
   const isPending : boolean = user.user.commitmentApplicationIds.length > 0;
 
   const [open, setOpen] = useState<boolean>(false);
-  const [checked, setChecked] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -42,8 +50,14 @@ const BecomeCommited: FC = () => {
 
   const handleClose = useCallback(() => {
     setOpen(false);
-    setChecked(false);
-  }, [open, checked]);
+  }, [open]);
+
+  const handleSubmit = async (formValues: Record<string, any>) => {
+    formValues.volunteerId = user.user._id
+    await dispatch(createCommitmentApplication(formValues as CreateCommitmentApplicationRequest));
+    console.log(formValues);
+    handleClose();
+  }
 
   return (
     <div>
@@ -74,8 +88,8 @@ const BecomeCommited: FC = () => {
             Ad-hoc to Committed Volunteer
           </Typography>
         </DialogTitle>
-        <DialogContent>
-          <CommittedConversionForm/>
+        <DialogContent className={classes.dialogContent}>
+          <CommittedConversionForm handleSubmit={handleSubmit}/>
         </DialogContent>
       </Dialog>
     </div>

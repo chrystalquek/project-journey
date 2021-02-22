@@ -11,9 +11,10 @@ import {
 } from '@material-ui/core';
 import * as Yup from 'yup';
 
-type FormQuestionsGeneratorType = {
-  handleSubmit: (values: Record<string, any>) => void
+type FormGeneratorType = {
+  handleSubmit: (values: Record<string, any>) => Promise<void>
   questionsList: QuestionList
+  validationObj: any
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     padding: theme.spacing(8),
     textAlign: 'left',
-    overflowY: 'scroll',
+    overflowY: 'hidden',
     maxHeight: '100%',
   },
   questionContainer: {
@@ -180,19 +181,17 @@ export const FormQuestionMapper = ({
   }
 };
 
-const FormGenerator: FC<FormQuestionsGeneratorType> = ({
+const FormGenerator: FC<FormGeneratorType> = ({
   handleSubmit,
   questionsList,
+  validationObj
 }) => {
-  const initialValues: Record<string, any> = {};
   const classes = useStyles();
-  const validationObj = {};
+  const initialValues: Record<string, any> = {};
 
-  questionsList
-    .filter(({ isRequired }) => isRequired)
-    .forEach(({ name }) => {
-      validationObj[name] = Yup.string().required('Required');
-    });
+  questionsList.forEach(({ name, type, initialValue }) => {
+    initialValues[name] = type === 'checkboxes' ? [] : initialValue;
+  })
 
   const validationSchema = Yup.object().shape(validationObj);
 
@@ -206,7 +205,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
           validationSchema={validationSchema}
         >
           {({
-            isSubmitting, setFieldValue, isValid,
+            isSubmitting, setFieldValue
           }) => (
             <Form>
               {questionsList.map((questionItem) => {
@@ -243,7 +242,7 @@ const FormGenerator: FC<FormQuestionsGeneratorType> = ({
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={isSubmitting || isValid}
+                disabled={isSubmitting}
                 size="large"
                 className={classes.button}
               >

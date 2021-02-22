@@ -155,7 +155,7 @@ export const conversionFormQuestions: QuestionList = [
       { value: 'Journalism', label: 'Journalism' },
       { value: 'Other', label: 'Other' },
     ],
-    isRequired: true,
+    isRequired: false,
   }, 
   {
     name: 'personality',
@@ -181,19 +181,68 @@ export const conversionFormQuestions: QuestionList = [
     isRequired: true,
   },
   {
-    name: 'acknowledgements',
-    displayText: [
-      'Acknowledgements'
+    name: 'hasCriminalRecord',
+    displayText:[
+      'Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education?',
     ],
-    type: 'checkboxes',
-    initialValue: [],
+    type: 'mcq',
+    initialValue: '',
     options: [
-      { value: true, label: 'I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc.' },
-      { value: true, label: 'Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education?'},
-      { value: true, label: 'I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement.'},
-      { value: true, label: 'If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation.'},
-      { value: true, label: 'I give Beyond Awesome (under Blessings in a Bag Limited) permission to conduct a background check with the relevant authorities and understand that they will notify me before conducting this process.'}
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
     ],
     isRequired: true
-  }
+  },
+  {
+    name: 'isAwareOfGroupInvite',
+    displayText:[
+      'I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc.',
+    ],
+    type: 'mcq',
+    initialValue: '',
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: true
+  },
+  {
+    name: 'isAwareOfCommitmentExpectation',
+    displayText:[
+      'I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement.',
+    ],
+    type: 'mcq',
+    initialValue: '',
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: true
+  },
+  {
+    name: 'isAwareOfConfidentiality',
+    displayText:[
+      'If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation.',
+    ],
+    type: 'mcq',
+    initialValue: '',
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: true
+  },
+  {
+    name: 'isAwareOfBackgroundCheck',
+    displayText:[
+      'I give Beyond Awesome (under Blessings in a Bag Limited) permission to conduct a background check with the relevant authorities and understand that they will notify me before conducting this process.',
+    ],
+    type: 'mcq',
+    initialValue: '',
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
+    isRequired: true
+  },
 ];

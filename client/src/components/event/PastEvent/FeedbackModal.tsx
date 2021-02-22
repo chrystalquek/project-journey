@@ -14,7 +14,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEventFeedbackFormQuestions, submitEventFeedbackFormQuestions } from '@redux/actions/form';
 import { StoreState } from '@redux/store';
-import FormQuestionsGenerator from '@components/form/FormGenerator';
+import FormGenerator from '@components/form/FormGenerator';
 
 export type FEEDBACK_STATE = 'prompt' | 'fields' | 'success'
 
@@ -133,7 +133,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
     setFeedbackState('fields');
   };
 
-  const handleSubmit = useCallback((values: Record<string, any>) => {
+  const handleSubmit = useCallback(async (values: Record<string, any>) => {
     const answers = Object.keys(values).map((key) => ({
       questionId: key,
       userId: user._id,
@@ -224,9 +224,10 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                   I would like to submit my feedback annonymously
                 </Typography>
               </div>
-              <FormQuestionsGenerator
+              <FormGenerator
                 handleSubmit={handleSubmit}
                 questionsList={questions}
+                validationObj={{}}
               />
             </div>
           </form>
