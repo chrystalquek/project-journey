@@ -15,7 +15,6 @@ import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import { useRouter } from 'next/router';
-import EventDetailsAdminButtons from '../EventDetailsParts/EventDetailsAdminButtons';
 import { isAdmin } from '@utils/helpers/auth';
 import { cancelEvent, deleteEvent } from '@redux/actions/event';
 import { Button, makeStyles, Typography } from '@material-ui/core';
@@ -126,7 +125,6 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
               event={event}
               user={user}
             />
-            <EventDetailsAdminButtons event={event} />
           </>
         );
       default:
@@ -210,7 +208,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
         content={DeleteEventContent}
         buttonTitle="Confirm"
         buttonOnClick={handleDeleteEvent}
-        openCloseButtonTitle="Delete"
+        openCloseButtonTitle="Delete Event"
         recommendedAction="cancel"
       />
     ) : (
@@ -220,7 +218,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
         content={CancelEventContent}
         buttonTitle="Confirm"
         buttonOnClick={handleCancelEvent}
-        openCloseButtonTitle="Cancel"
+        openCloseButtonTitle="Cancel Event"
         recommendedAction="cancel"
       />
     )
@@ -241,7 +239,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
         variant="body1"
         className={classes.editButtonText}
       >
-        EDIT
+        Edit Event
       </Typography>
     </Button>
   ) : <></>;

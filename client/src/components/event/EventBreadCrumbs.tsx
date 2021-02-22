@@ -1,8 +1,6 @@
 import { Breadcrumbs, Link, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FC } from 'react';
-import { StoreState } from '@redux/store';
-import { useSelector } from 'react-redux';
 import { EVENTS_ROUTE } from '@constants/routes';
 import { EventData } from '@type/event';
 import { getStoreEvent } from '@utils/helpers/event';
