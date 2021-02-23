@@ -8,7 +8,11 @@ const sendMassFeedbackEmail = async (): Promise<void> => {
   const eventsNDaysAgo = await findEventsNDaysAgo(N_DAYS_AGO);
   eventsNDaysAgo.forEach((event: EventData) => {
     const volunteerIds: Array<string> = event.roles.flatMap((role) => role.volunteers);
-    return volunteerIds.forEach((volunteerId) => sendEmail('FEEDBACK', volunteerId, event._id));
+    return Promise.all(
+      volunteerIds.map(
+        (volunteerId) => sendEmail('FEEDBACK', volunteerId, event._id),
+      ),
+    );
   });
 };
 
