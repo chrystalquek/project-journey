@@ -168,7 +168,7 @@ const cancelEventEmailHelper = async (user: VolunteerData, event: EventData) => 
   };
 };
 
-const sendEmail = async (emailType: EmailTemplate,
+export const sendEmail = async (emailType: EmailTemplate,
   userId: string,
   eventId: string | null = null) => {
   let helperObject;

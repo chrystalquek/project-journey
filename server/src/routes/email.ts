@@ -7,4 +7,6 @@ router.get('/feedback/:userId/:eventId', (req, res) => emailController.sendFeedb
 
 router.get('/event-cancel/:userId/:eventId', (req, res) => emailController.sendCancelEvent(req, res));
 
+router.get('/feedback-mass', (req, res) => emailController.sendMassFeedbackRequest(req, res));
+
 export default router;

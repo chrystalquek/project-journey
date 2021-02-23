@@ -190,6 +190,34 @@ const deleteEvent = async (id: string): Promise<void> => {
   }
 };
 
+export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
+  try {
+    const nDaysAgo = new Date();
+    nDaysAgo.setDate(nDaysAgo.getDate() - n);
+
+    const startOfNDaysAgo = new Date(nDaysAgo);
+    startOfNDaysAgo.setHours(0, 0, 0);
+
+    const endOfNDaysAgo = new Date(nDaysAgo);
+    endOfNDaysAgo.setHours(23, 59, 59);
+
+    const eventsNDaysAgo: EventData[] = await Event.find({
+      endDate: {
+        $gte: startOfNDaysAgo,
+        $lt: endOfNDaysAgo,
+      },
+    });
+
+    if (!eventsNDaysAgo || eventsNDaysAgo.length === 0) {
+      throw new Error('Event is not found.');
+    }
+
+    return eventsNDaysAgo;
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
 export default {
   createEvent,
   readEvent,
@@ -198,4 +226,5 @@ export default {
   updateEvent,
   cancelEvent,
   deleteEvent,
+  findEventsNDaysAgo,
 };
