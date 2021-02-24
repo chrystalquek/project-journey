@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 const CommittedConversionForm = ({handleSubmit}) => {
 
   const conversionSchema = {
-    homeAddress: Yup.string().required('Required'),
+    address: Yup.string().required('Required'),
     race: Yup.mixed().required('Required'),
     biabVolunteeringDuration: Yup.string().required('Required'),
     hasVolunteeredExternally: Yup.boolean().required('Required'),
@@ -28,10 +28,10 @@ const CommittedConversionForm = ({handleSubmit}) => {
     strengths: Yup.string().required('Required'),
     volunteerContribution: Yup.string().required('Required'),
     hasCriminalRecord: Yup.boolean().required('Required'),
-    isAwareOfGroupInvite: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
-    isAwareOfCommitmentExpectation: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
-    isAwareOfConfidentiality: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
-    isAwareOfBackgroundCheck: Yup.boolean().required('Required').oneOf([true], "This has to be accepted"), // Has to be true
+    isAwareOfGroupInvite: Yup.boolean().required('Required').oneOf([true], "Please acknowledge to proceed"), // Has to be true
+    isAwareOfCommitmentExpectation: Yup.boolean().required('Required').oneOf([true], "Please acknowledge to proceed"), // Has to be true
+    isAwareOfConfidentiality: Yup.boolean().required('Required').oneOf([true], "Please acknowledge to proceed"), // Has to be true
+    isAwareOfBackgroundCheck: Yup.boolean().required('Required').oneOf([true], "Please acknowledge to proceed"), // Has to be true
   }
 
   return (
