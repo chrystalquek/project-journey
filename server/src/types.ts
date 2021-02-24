@@ -69,11 +69,12 @@ export type VolunteerData = {
     skills?: Array<string>;
 
     personality?: string; // Myers-Briggs
-    strengths?: Array<string>;
+    strengths?: string;
     volunteeringOpportunityInterest?: string;
 
     volunteerReason: string; // Essay
     volunteerContribution?: string
+    hasCriminalRecord: boolean;
 
     // WCA Registration: Medical Information
     hasMedicalNeeds: boolean

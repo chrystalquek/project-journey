@@ -21,26 +21,6 @@ const CommitmentApplicationSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  homeAddress: String,
-  race: {
-    type: String,
-    enum: RACE,
-  },
-  biabVolunteeringDuration: String,
-  hasVolunteeredExternally: Boolean,
-  volunteeringExperience: String,
-  hasChildrenExperience: Boolean,
-  childrenExperience: String,
-  sessionsPerMonth: Number,
-  sessionPreference: String,
-  hasFirstAidCertification: Boolean,
-  leadershipInterest: String,
-  interests: String,
-  skills: [String],
-  personality: String,
-  strengths: String,
-  volunteerContribution: String,
-  hasCriminalRecord: Boolean
 });
 
 export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema);

@@ -9,23 +9,6 @@ const createCommitmentApplication = async (
     _id: new mongoose.Types.ObjectId(),
     volunteerId: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId),
     createdAt: Date.now(),
-    homeAddress: commitmentApplicationData.homeAddress,
-    race: commitmentApplicationData.race,
-    biabVolunteeringDuration: commitmentApplicationData.biabVolunteeringDuration,
-    hasVolunteeredExternally: commitmentApplicationData.hasVolunteeredExternally,
-    volunteeringExperience: commitmentApplicationData.volunteeringExperience,
-    hasChildrenExperience: commitmentApplicationData.hasChildrenExperience,
-    childrenExperience: commitmentApplicationData.childrenExperience,
-    sessionsPerMonth: commitmentApplicationData.sessionsPerMonth,
-    sessionPreference: commitmentApplicationData.sessionPreference,
-    hasFirstAidCertification: commitmentApplicationData.hasFirstAidCertification,
-    leadershipInterest: commitmentApplicationData.leadershipInterest,
-    interests: commitmentApplicationData.interests,
-    skills: commitmentApplicationData.skills,
-    personality: commitmentApplicationData.personality,
-    strengths: commitmentApplicationData.strengths,
-    volunteerContribution: commitmentApplicationData.volunteerContribution,
-    hasCriminalRecord: commitmentApplicationData.hasCriminalRecord
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
   return savedCommitmentApplication.toObject();

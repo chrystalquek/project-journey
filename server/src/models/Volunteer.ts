@@ -140,7 +140,7 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     enum: PERSONALITY_TYPES,
   },
   strengths: {
-    type: [String],
+    type: String,
   },
   volunteeringOpportunityInterest: {
     type: String,
