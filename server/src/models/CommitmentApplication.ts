@@ -4,6 +4,7 @@ import { CommitmentApplicationData } from '../types';
 export type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document;
 
 export const COMMITMENT_APPLICATION_STATUS = ['pending', 'accepted', 'rejected'];
+export const RACE = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
 
 const CommitmentApplicationSchema = new Schema({
   _id: mongoose.Types.ObjectId,

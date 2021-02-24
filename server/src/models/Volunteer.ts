@@ -109,8 +109,8 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
   referralSources: [String],
   hasVolunteered: Boolean,
   biabVolunteeringDuration: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: '',
   },
   hasVolunteeredExternally: Boolean,
   volunteeringExperience: {
@@ -122,6 +122,8 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     type: String,
     default: '',
   },
+  sessionsPerMonth: Number,
+  sessionPreference: String,
   hasFirstAidCertification: Boolean,
   leadershipInterest: {
     type: String,
@@ -140,7 +142,7 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
     enum: PERSONALITY_TYPES,
   },
   strengths: {
-    type: [String],
+    type: String,
   },
   volunteeringOpportunityInterest: {
     type: String,
@@ -148,6 +150,7 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
   },
   volunteerReason: String,
   volunteerContribution: String,
+  hasCriminalRecord: Boolean,
 
   // WCA Registration: Medical Information
   hasMedicalNeeds: Boolean,

@@ -43,12 +43,19 @@ const createCommitmentApplication = async (
 
     const savedCommitmentApplication = await commitmentApplicationService.createCommitmentApplication(req.body as CommitmentApplicationData);
     // Add the commitment application id to the volunteer data
+    const body = req.body;
+    delete body.volunteerId
+
+    const updatedVolunteerData =       {
+      commitmentApplicationIds: volunteer.commitmentApplicationIds
+        .concat(savedCommitmentApplication._id),
+      ...body
+    };
+
+
     await volunteerService.updateVolunteerDetails(
       volunteer.email,
-      {
-        commitmentApplicationIds: volunteer.commitmentApplicationIds
-          .concat(savedCommitmentApplication._id),
-      },
+      updatedVolunteerData
     );
 
     res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
@@ -80,7 +87,7 @@ const readCommitmentApplications = async (
 const updateCommitmentApplication = async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
-    const updatedFields = req.body as CommitmentApplicationData;
+    const updatedFields = req.body as Partial<CommitmentApplicationData>;
 
     const commitmentApplication = await commitmentApplicationService
       .updateCommitmentApplication(id, updatedFields);

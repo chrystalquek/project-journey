@@ -36,6 +36,7 @@ const dummyUser: VolunteerData = {
   hasVolunteered: true,
   hasChildrenExperience: true,
   hasFirstAidCertification: true,
+  hasCriminalRecord: false,
   volunteerContribution: 'string',
   volunteeringSessionsCount: 1,
   workshopsCount: 1,
