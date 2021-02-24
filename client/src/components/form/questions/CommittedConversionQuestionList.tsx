@@ -3,7 +3,7 @@ import { RACE } from '@type/volunteer';
 
 export const conversionFormQuestions: QuestionList = [
   {
-    name: 'homeAddress',
+    name: 'address',
     displayText: ['Home Address'],
     type: 'shortAnswer',
     initialValue: '',

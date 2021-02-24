@@ -54,8 +54,15 @@ const BecomeCommited: FC = () => {
 
   const handleSubmit = async (formValues: Record<string, any>) => {
     formValues.volunteerId = user.user._id
-    await dispatch(createCommitmentApplication(formValues as CreateCommitmentApplicationRequest));
-    console.log(formValues);
+    // Drop the acknowledgement attributes before sending api call\
+    const request = {...formValues}
+    request.volunteerId = user.user._id;
+    delete request.isAwareOfGroupInvite;
+    delete request.isAwareOfCommitmentExpectation;
+    delete request.isAwareOfConfidentiality;
+    delete request.isAwareOfBackgroundCheck;
+
+    await dispatch(createCommitmentApplication(request as CreateCommitmentApplicationRequest));
     handleClose();
   }
 
