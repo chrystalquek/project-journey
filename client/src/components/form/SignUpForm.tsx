@@ -4,7 +4,7 @@ import { signUp, SignUpArgs } from '@redux/actions/user';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 import { QuestionList } from '@type/questions';
 import { SignUpResponse } from '@utils/api/response';
-import FormGenerator from './signup-questions/SignUpFormGenerator';
+import SignUpFormGenerator from './SignUpFormGenerator';
 
 type SignUpFormProps = {
   type: VOLUNTEER_TYPE;
@@ -19,7 +19,7 @@ function SignUpForm({ type, questionList } : SignUpFormProps) {
   );
 
   // @ts-ignore types are too complicated
-  return <>{FormGenerator({ type, questionList, handleSignUp })}</>;
+  return SignUpFormGenerator({ type, questionList, handleSignUp });
 }
 
 export default SignUpForm;

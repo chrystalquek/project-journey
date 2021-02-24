@@ -5,9 +5,11 @@ import {
   FormControlLabel, Grid,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
+import CommittedConversionForm from '@components/form/CommittedConversionForm';
+import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
+import { CreateCommitmentApplicationRequest } from '@utils/api/request';
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -22,51 +24,25 @@ const useStyles = makeStyles((theme) => ({
     },
     cursor: 'pointer',
   },
+  dialogContent: {
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    msOverflowStyle: '-ms-autohiding-scrollbar',
+    height: '100%'
+  }
 }));
 
 const BecomeCommited: FC = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state: StoreState) => state.user);
+  const dispatch = useDispatch();
   // TODO: a better implementation to check pending application
   // this is just a quick fix, it's by no mean a correct flag
   const isPending : boolean = user.user.commitmentApplicationIds.length > 0;
 
   const [open, setOpen] = useState<boolean>(false);
-  const [checked, setChecked] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-
-  const CheckboxLabel = (
-    <Typography>
-      I understand to regularly participate in BIAB events in the
-      <Link color="secondary">
-        {' '}
-        <strong>next 3 months</strong>
-        {' '}
-      </Link>
-      in becoming a committed volunteer, upon approval from the admin.
-    </Typography>
-  );
-
-  const TermsAndAgreement = (
-    <Typography>
-      By confirming, my application, I agree to the
-      <Link color="secondary">
-        {' '}
-        <strong><u>Privacy</u></strong>
-        {' '}
-      </Link>
-      {' '}
-      and
-      <Link color="secondary">
-        {' '}
-        <strong><u>Terms of Service</u></strong>
-        {' '}
-      </Link>
-      of Blessings in a Bag.
-    </Typography>
-  );
 
   const handleClickOpen = useCallback(() => {
     setOpen(true);
@@ -74,18 +50,21 @@ const BecomeCommited: FC = () => {
 
   const handleClose = useCallback(() => {
     setOpen(false);
-    setChecked(false);
-  }, [open, checked]);
+  }, [open]);
 
-  const handleCheck = useCallback(() => {
-    setChecked(!checked);
-  }, [checked]);
+  const handleSubmit = async (formValues: Record<string, any>) => {
+    formValues.volunteerId = user.user._id
+    // Drop the acknowledgement attributes before sending api call\
+    const request = {...formValues}
+    request.volunteerId = user.user._id;
+    delete request.isAwareOfGroupInvite;
+    delete request.isAwareOfCommitmentExpectation;
+    delete request.isAwareOfConfidentiality;
+    delete request.isAwareOfBackgroundCheck;
 
-  const handleSubmit = useCallback(() => {
-    setOpen(false);
-    setChecked(false);
-    dispatch(createCommitmentApplication({ volunteerId: user.user._id }));
-  }, [open, checked]);
+    await dispatch(createCommitmentApplication(request as CreateCommitmentApplicationRequest));
+    handleClose();
+  }
 
   return (
     <div>
@@ -116,71 +95,9 @@ const BecomeCommited: FC = () => {
             Ad-hoc to Committed Volunteer
           </Typography>
         </DialogTitle>
-        <DialogContent>
-          <Grid container direction="column" spacing={2}>
-
-            {/* Form fields */}
-            <Grid item>
-              <TextField
-                variant="outlined"
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Occupation"
-                type="email"
-                fullWidth
-                color="secondary"
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                variant="outlined"
-                margin="dense"
-                id="name"
-                label="Open ended question"
-                type="email"
-                fullWidth
-                color="secondary"
-                multiline
-                rows={5}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                variant="outlined"
-                margin="dense"
-                id="name"
-                label="Open ended question"
-                type="email"
-                fullWidth
-                color="secondary"
-                multiline
-                rows={5}
-              />
-            </Grid>
-
-            {/* Agreement checkbox */}
-            <Grid item>
-              <FormControlLabel
-                control={<Checkbox checked={checked} onChange={handleCheck} />}
-                label={CheckboxLabel}
-              />
-            </Grid>
-            <Grid item>
-              {TermsAndAgreement}
-            </Grid>
-          </Grid>
+        <DialogContent className={classes.dialogContent}>
+          <CommittedConversionForm handleSubmit={handleSubmit}/>
         </DialogContent>
-        <DialogActions className={classes.centralize}>
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            color="primary"
-            disabled={!checked}
-          >
-            Submit
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
