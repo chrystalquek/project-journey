@@ -48,6 +48,7 @@ const createCommitmentApplication = async (
       {
         commitmentApplicationIds: volunteer.commitmentApplicationIds
           .concat(savedCommitmentApplication._id),
+        ...req
       },
     );
 
