@@ -97,7 +97,7 @@ const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
   try {
     return await Volunteer.find({
       _id: { $in: ids },
-    });
+    }).populate('commitmentApplicationIds');
   } catch (err) {
     throw new Error(err.msg);
   }
