@@ -32,13 +32,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const BecomeCommited = ({ commitmentApplication }) => {
+const BecomeCommited = () => {
   const user = useSelector((state: StoreState) => state.user);
+  const userData = user.user
   const dispatch = useDispatch();
-  
+
+  const length = userData?.commitmentApplicationIds?.length 
+  const commitmentApplication: any = length 
+    ? userData.commitmentApplicationIds[length-1]
+    : null
   // Check if there is pending application
-  const isPending : boolean = commitmentApplication.status == CommitmentApplicationStatus.Pending
-  
+  const isPending : boolean = commitmentApplication?.status == CommitmentApplicationStatus.Pending
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();
