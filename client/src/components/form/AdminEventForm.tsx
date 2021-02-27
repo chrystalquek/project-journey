@@ -136,14 +136,7 @@ const validationSchema = yup.object({
   vacancies: yup.number().required('Vacancies is required'),
   description: yup.string().required('Description is required'),
   startDate: yup.date().required('Start date is required'),
-  endDate: yup
-    .date()
-    .required('Start date is required')
-    .when(
-      'startDate',
-      (startDate, schema) => startDate
-        && schema.min(startDate, 'End date should be later than start date'),
-    ),
+  endDate: yup.date().required('End date is required'),
   facilitatorName: yup.string().when('eventType', {
     is: 'volunteering',
     then: yup.string().required('Facilitator name is required'),
@@ -514,6 +507,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 id="date-from"
                 name="fromDate"
                 value={dayjs(startDate)}
+                maxDate={endDate}
+                maxDateMessage="Start date should not be after end date"
                 onError={(error) => {
                   if (error !== errors.startDate) {
                     setFieldError('startDate', error);
@@ -544,12 +539,14 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 id="date-to"
                 name="toDate"
                 value={dayjs(endDate)}
+                minDate={startDate}
+                maxDateMessage="End date should not be before start date"
                 onError={(error) => {
                   if (error !== errors.endDate) {
                     setFieldError('endDate', error);
                   }
                 }}
-                onChange={(value) => setFieldValue('endDate', value, false)}
+                onChange={(value) => setFieldValue('endDate', value, true)}
                 color="secondary"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
@@ -578,7 +575,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   }
                 }}
                 margin="dense"
-                onChange={(value) => setFieldValue('startTime', value, false)}
+                onChange={(value) => setFieldValue('startTime', value, true)}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -608,7 +605,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   }
                 }}
                 margin="dense"
-                onChange={(value) => setFieldValue('endTime', value, false)}
+                onChange={(value) => setFieldValue('endTime', value, true)}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
