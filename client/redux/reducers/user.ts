@@ -6,6 +6,7 @@ import apiClient from '@utils/api/apiClient';
 import { REHYDRATE } from 'redux-persist';
 import { updateProfilePicture } from '@redux/actions/image';
 import user, { updateVolunteer } from '../actions/user';
+import { CommitmentApplicationData } from '@type/commitmentApplication';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
 
@@ -76,7 +77,9 @@ const userSlice = createSlice({
       }
     });
     builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
-      state.user.commitmentApplicationIds.push(action.payload._id);
+      const { payload } = action;
+      const newCommitmentApplication = { ...payload, createdAt: new Date(payload.createdAt) } as any;
+      state.user.commitmentApplicationIds.push(newCommitmentApplication);
     });
   },
 });
