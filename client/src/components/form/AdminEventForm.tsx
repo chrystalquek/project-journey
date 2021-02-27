@@ -174,7 +174,9 @@ const emptyForm = {
   contentType: 'pdf',
   location: '',
   startDate: dayjs().toISOString(),
+  startTime: dayjs().toISOString(),
   endDate: dayjs().toISOString(),
+  endTime: dayjs().toISOString(),
 };
 
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
@@ -316,6 +318,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     handleSubmit,
     isSubmitting,
     setFieldValue,
+    setFieldError,
     values,
   } = useFormik({
     initialValues: eventForm || emptyForm,
@@ -344,6 +347,15 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           });
       }
 
+      // Combine date and time
+      const startDateAndTime = getCombinedDateAndTimeString(formValues.startDate,
+        formValues.startTime);
+      const endDateAndTime = getCombinedDateAndTimeString(formValues.endDate,
+        formValues.endTime);
+
+      form.startDate = startDateAndTime;
+      form.endDate = endDateAndTime;
+
       const newForm = { ...form, questions: feedbackFormEventQuestions.map((element) => ({ ...element, name: element.displayText })) };
 
       dispatch(
@@ -371,7 +383,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     facilitatorName,
     facilitatorDescription,
     startDate,
+    startTime,
     endDate,
+    endTime,
   } = values;
 
   if (id !== 'new' && eventForm === null) {
@@ -490,6 +504,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </Grid>
             <Grid item xs={8} md={2}>
               <KeyboardDatePicker
+                clearable
+                disablePast
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
@@ -498,13 +514,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 id="date-from"
                 name="fromDate"
                 value={dayjs(startDate)}
-                onChange={(date) => setFieldValue(
-                  'startDate',
-                  getCombinedDateAndTimeString(
-                    date,
-                    dayjs(startDate).format('HH:mm'),
-                  ),
-                )}
+                onError={(error) => {
+                  if (error !== errors.startDate) {
+                    setFieldError('startDate', error);
+                  }
+                }}
+                onChange={(value) => setFieldValue('startDate', value, false)}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -519,6 +534,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </Grid>
             <Grid item xs={8} md={2}>
               <KeyboardDatePicker
+                clearable
+                disablePast
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
@@ -527,13 +544,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 id="date-to"
                 name="toDate"
                 value={dayjs(endDate)}
-                onChange={(date) => setFieldValue(
-                  'endDate',
-                  getCombinedDateAndTimeString(
-                    date,
-                    dayjs(endDate).format('HH:mm'),
-                  ),
-                )}
+                onError={(error) => {
+                  if (error !== errors.endDate) {
+                    setFieldError('endDate', error);
+                  }
+                }}
+                onChange={(value) => setFieldValue('endDate', value, false)}
                 color="secondary"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
@@ -555,15 +571,14 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 variant="outlined"
                 name="fromTime"
                 fullWidth
-                value={dayjs(startDate).format('HH:mm')}
+                value={dayjs(startTime).format('HH:mm')}
+                onError={(error) => {
+                  if (error !== errors.startTime) {
+                    setFieldError('startTime', error);
+                  }
+                }}
                 margin="dense"
-                onChange={(e) => setFieldValue(
-                  'startDate',
-                  getCombinedDateAndTimeString(
-                    dayjs(startDate),
-                    e.target.value,
-                  ),
-                )}
+                onChange={(value) => setFieldValue('startTime', value, false)}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -572,8 +587,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   step: 300, // 5 min
                 }}
                 color="secondary"
-                helperText={errors.startDate}
-                error={touched.startDate && Boolean(errors.startDate)}
+                helperText={errors.startTime}
+                error={touched.startTime && Boolean(errors.startTime)}
               />
             </Grid>
             <Grid item xs={12} md="auto" />
@@ -586,12 +601,14 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 variant="outlined"
                 name="toTime"
                 fullWidth
-                value={dayjs(endDate).format('HH:mm')}
+                value={dayjs(endTime).format('HH:mm')}
+                onError={(error) => {
+                  if (error !== errors.endTime) {
+                    setFieldError('endTime', error);
+                  }
+                }}
                 margin="dense"
-                onChange={(e) => setFieldValue(
-                  'endDate',
-                  getCombinedDateAndTimeString(dayjs(endDate), e.target.value),
-                )}
+                onChange={(value) => setFieldValue('endTime', value, false)}
                 type="time"
                 InputLabelProps={{
                   shrink: true,
@@ -600,8 +617,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   step: 300, // 5 min
                 }}
                 color="secondary"
-                helperText={errors.endDate}
-                error={touched.endDate && Boolean(errors.endDate)}
+                helperText={errors.endTime}
+                error={touched.endTime && Boolean(errors.endTime)}
               />
             </Grid>
           </Grid>
