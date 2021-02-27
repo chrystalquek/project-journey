@@ -2,7 +2,7 @@ import { VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 
 export const getUser = async (email: string): Promise<VolunteerData> => {
-  const user = await Volunteer.findOne({ email });
+  const user = await Volunteer.findOne({ email }).populate('commitmentApplicationIds');
   if (!user) {
     throw new Error(`User with email: ${email} is not found`);
   }
