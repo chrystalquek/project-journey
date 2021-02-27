@@ -45,8 +45,8 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
   const user = useSelector((state: StoreState) => state.user);
   const userData = user?.user;
 
-  const length = profilePageData?.commitmentApplicationIds.length 
-  const commitmentApplication: any = length > 0 
+  const length = profilePageData?.commitmentApplicationIds?.length 
+  const commitmentApplication: any = length
     ? profilePageData.commitmentApplicationIds[length-1]
     : null
 
@@ -76,11 +76,11 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
         is viewing own profile and is still an adhoc volunteer */}
         { profilePageData.volunteerType === VOLUNTEER_TYPE.ADHOC
         && userData.email === profilePageData.email
-        && <BecomeCommitedDialog commitmentApplication={commitmentApplication}/> }
+        && <BecomeCommitedDialog/> }
         {/* Approval button if loggedInUser is admin and volunteerProfile
         has a pending commitmentApplication*/}
         { userData.volunteerType === VOLUNTEER_TYPE.ADMIN 
-        && commitmentApplication.status === CommitmentApplicationStatus.Pending
+        && commitmentApplication?.status === CommitmentApplicationStatus.Pending
         && <ApproveCommitmentApplication commitmentApplication={commitmentApplication}/>}
       </Grid>
     </Grid>
