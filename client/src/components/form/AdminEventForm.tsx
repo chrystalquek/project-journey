@@ -472,6 +472,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={10} md={3}>
               <KeyboardDateTimePicker
                 fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
@@ -480,7 +481,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(startDate)}
                 onError={(error) => {
                   if (error !== errors.startDate) {
-                    setFieldError('startDate', error);
+                    setFieldError('startDate', error.toLocaleString());
                   }
                 }}
                 onChange={(date) => setFieldValue('startDate', date)}
@@ -498,6 +499,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={10} md={3}>
               <KeyboardDateTimePicker
                 fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
@@ -506,7 +508,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(endDate)}
                 onError={(error) => {
                   if (error !== errors.endDate) {
-                    setFieldError('endDate', error);
+                    setFieldError('endDate', error.toLocaleString());
                   }
                 }}
                 onChange={(date) => setFieldValue('endDate', date)}
@@ -526,9 +528,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Sign-up Deadline</Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={10} md={3}>
               <KeyboardDateTimePicker
                 fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
@@ -537,7 +540,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(deadline)}
                 onError={(error) => {
                   if (error !== errors.deadline) {
-                    setFieldError('deadline', error);
+                    setFieldError('deadline', error.toLocaleString());
                   }
                 }}
                 onChange={(date) => setFieldValue('deadline', date)}
