@@ -380,7 +380,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   return (
     <form onSubmit={handleSubmit}>
       <PaddedGrid>
-        <Grid container direction="column" spacing={2}>
+        <Grid container direction="column" spacing={10}>
           <Grid item>
             <Typography variant="h1">
               {isNew ? 'Create Event' : 'Edit Event'}
@@ -744,136 +744,138 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </>
           )}
 
-          <Formik
-            initialValues={{}}
-            onSubmit={() => {}}
-            enableReinitialize
-          >
-            {({ isSubmitting, values }) => (
-              <>
-                <div>
-                  <Typography variant="h2">Volunteer Response Form</Typography>
-                </div>
+          <Grid item>
+            <Formik
+              initialValues={{}}
+              onSubmit={() => { }}
+              enableReinitialize
+            >
+              {({ isSubmitting, values }) => (
+                <>
+                  <div>
+                    <Typography variant="h2">Volunteer Response Form</Typography>
+                  </div>
 
-                {/* Feedback form generator based on redux state */}
-                {feedbackFormEventQuestions.map(
-                  (question: QuestionData, index: number) => (
-                    <div key={String(index)}>
-                      <div style={{ display: 'flex' }}>
-                        <Typography className={classes.questionStyle}>
-                          Question
+                  {/* Feedback form generator based on redux state */}
+                  {feedbackFormEventQuestions.map(
+                    (question: QuestionData, index: number) => (
+                      <div key={String(index)}>
+                        <div style={{ display: 'flex' }}>
+                          <Typography className={classes.questionStyle}>
+                            Question
                           {' '}
-                          {index + 1}
-                        </Typography>
-                        <IconButton onClick={() => handleRemoveQuestion(index)}>
-                          <ClearIcon />
-                        </IconButton>
-                      </div>
+                            {index + 1}
+                          </Typography>
+                          <IconButton onClick={() => handleRemoveQuestion(index)}>
+                            <ClearIcon />
+                          </IconButton>
+                        </div>
 
-                      <FormQuestionMapper
-                        formType="mcq"
-                        name={`type${String(index)}`}
-                        options={[
-                          { value: 'shortAnswer', label: 'Short Answer' },
-                          { value: 'checkboxes', label: 'Check Box' },
-                          { value: 'mcq', label: 'MCQ' },
-                        ]}
-                        props={{
-                          style: { width: '200px' },
-                          value: question.type,
-                          onChange: (e) => handleChangeQuestion(e.target.value, 'type', index),
-                        }}
-                      />
-                      <FormQuestionMapper
-                        formType="shortAnswer"
-                        name={question.displayText + String(index)}
-                        props={{
-                          value: question.displayText,
-                          placeholder: 'Type question here...',
-                          onChange: (e) => handleChangeQuestion(e.target.value, 'displayText', index),
-                        }}
-                      />
-
-                      {question.type === 'mcq'
-                      || question.type === 'checkboxes' ? (
-                        <Formik
-                          initialValues={{}}
-                          onSubmit={() => {}}
-                          enableReinitialize
-                        >
-                          {({ isSubmitting, values }) => (
-                            <>
-                              <Typography className={classes.optionStyle}>
-                                Options:
-                                {' '}
-                              </Typography>
-                              {question.options.map((option, optionIndex) => (
-                                <div
-                                  key={optionIndex}
-                                  style={{
-                                    display: 'flex',
-                                    alignContent: 'center',
-                                  }}
-                                >
-                                  <FormQuestionMapper
-                                    formType="shortAnswer"
-                                    name={String(optionIndex)}
-                                    key={optionIndex}
-                                    props={{
-                                      style: {
-                                        width: '500px',
-                                      },
-                                      placeholder: 'Type option here...',
-                                      value: option,
-                                      onChange: (e) => handleChangeOption(
-                                        e.target.value,
-                                        index,
-                                        optionIndex,
-                                      ),
-                                    }}
-                                  />
-                                  <IconButton
-                                    onClick={() => handleRemoveOption(index, optionIndex)}
-                                  >
-                                    <ClearIcon />
-                                  </IconButton>
-                                </div>
-                              ))}
-                              <Button
-                                className={classes.addNewFieldButton}
-                                onClick={() => handleAddOption(index)}
-                              >
-                                + Add another option
-                              </Button>
-                            </>
-                          )}
-                        </Formik>
-                        ) : null}
-                      <div className={classes.isRequiredStyle}>
-                        <Typography style={{ display: 'inline-block' }}>
-                          Is question required?
-                        </Typography>
-                        <Switch
-                          checked={question.isRequired}
-                          onChange={(e) => handleChangeQuestion(
-                            e.target.checked,
-                            'isRequired',
-                            index,
-                          )}
+                        <FormQuestionMapper
+                          formType="mcq"
+                          name={`type${String(index)}`}
+                          options={[
+                            { value: 'shortAnswer', label: 'Short Answer' },
+                            { value: 'checkboxes', label: 'Check Box' },
+                            { value: 'mcq', label: 'MCQ' },
+                          ]}
+                          props={{
+                            style: { width: '200px' },
+                            value: question.type,
+                            onChange: (e) => handleChangeQuestion(e.target.value, 'type', index),
+                          }}
                         />
+                        <FormQuestionMapper
+                          formType="shortAnswer"
+                          name={question.displayText + String(index)}
+                          props={{
+                            value: question.displayText,
+                            placeholder: 'Type question here...',
+                            onChange: (e) => handleChangeQuestion(e.target.value, 'displayText', index),
+                          }}
+                        />
+
+                        {question.type === 'mcq'
+                          || question.type === 'checkboxes' ? (
+                            <Formik
+                              initialValues={{}}
+                              onSubmit={() => { }}
+                              enableReinitialize
+                            >
+                              {({ isSubmitting, values }) => (
+                                <>
+                                  <Typography className={classes.optionStyle}>
+                                    Options:
+                                {' '}
+                                  </Typography>
+                                  {question.options.map((option, optionIndex) => (
+                                    <div
+                                      key={optionIndex}
+                                      style={{
+                                        display: 'flex',
+                                        alignContent: 'center',
+                                      }}
+                                    >
+                                      <FormQuestionMapper
+                                        formType="shortAnswer"
+                                        name={String(optionIndex)}
+                                        key={optionIndex}
+                                        props={{
+                                          style: {
+                                            width: '500px',
+                                          },
+                                          placeholder: 'Type option here...',
+                                          value: option,
+                                          onChange: (e) => handleChangeOption(
+                                            e.target.value,
+                                            index,
+                                            optionIndex,
+                                          ),
+                                        }}
+                                      />
+                                      <IconButton
+                                        onClick={() => handleRemoveOption(index, optionIndex)}
+                                      >
+                                        <ClearIcon />
+                                      </IconButton>
+                                    </div>
+                                  ))}
+                                  <Button
+                                    className={classes.addNewFieldButton}
+                                    onClick={() => handleAddOption(index)}
+                                  >
+                                    + Add another option
+                              </Button>
+                                </>
+                              )}
+                            </Formik>
+                          ) : null}
+                        <div className={classes.isRequiredStyle}>
+                          <Typography style={{ display: 'inline-block' }}>
+                            Is question required?
+                        </Typography>
+                          <Switch
+                            checked={question.isRequired}
+                            onChange={(e) => handleChangeQuestion(
+                              e.target.checked,
+                              'isRequired',
+                              index,
+                            )}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ),
-                )}
-                <Button
-                  className={classes.addNewFieldButton}
-                  onClick={handleAddQuestion}
-                >
-                  + Add another question
+                    ),
+                  )}
+                  <Button
+                    className={classes.addNewFieldButton}
+                    onClick={handleAddQuestion}
+                  >
+                    + Add another question
                 </Button>
-              </>
-            )}
-          </Formik>
+                </>
+              )}
+            </Formik>
+          </Grid>
           {/* Create Event Button */}
           <Grid item container direction="row" justify="flex-end">
             <Button

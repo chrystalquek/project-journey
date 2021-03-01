@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderTop: props.borderTop ? '2px solid #CECECE' : 'none',
     borderBottom: props.borderBottom ? '2px solid #CECECE' : 'none',
     fontWeight: props.fontBold ? 'bold' : 'normal',
+    whiteSpace: 'pre-line'
   }),
 }));
 

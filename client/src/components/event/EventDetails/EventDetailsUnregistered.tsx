@@ -10,6 +10,7 @@ import EventInformation from '@components/event/EventDetails/EventDetailsParts/E
 import FacilitatorInfo from '@components/event/EventDetails/EventDetailsParts/FacilitatorInfo';
 import CreateAccountNotice from '@components/event/EventDetails/EventDetailsParts/CreateAccountNotice';
 import { EventTypography } from '@components/common/event/EventTypography';
+import ResizedImage from './ResizedImage';
 
 type EventDetailsUnregisteredProps = {
   event: EventData,
@@ -30,31 +31,31 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, us
   const classes = useStyles();
 
   return (
-    <Grid container>
+    <Grid container spacing={8}>
       <Grid className={classes.gutterBottom} item xs={12}>
         <EventTypography text={event.name} fontBold fontSize="h1" />
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>
-        <img src={event?.coverImage ?? testEventImage1} alt={event.name} />
+        <ResizedImage img={event?.coverImage ?? testEventImage1} name={event.name} />
       </Grid>
 
       {event.volunteerType === VOLUNTEER_TYPE.COMMITED
         && (
-        <Grid className={classes.gutterBottom} item xs={12}>
-          <Chip
-            color="secondary"
-            label={COMMITTED_VOLUNTEER_TAG}
-            className={classes.committedTag}
-          />
-        </Grid>
+          <Grid className={classes.gutterBottom} item xs={12}>
+            <Chip
+              color="secondary"
+              label={COMMITTED_VOLUNTEER_TAG}
+              className={classes.committedTag}
+            />
+          </Grid>
         )}
       {event.volunteerType === VOLUNTEER_TYPE.ADHOC
-      && (
-      <Grid className={classes.gutterBottom} item xs={12}>
-        <Chip color="primary" label={ADHOC_VOLUNTEER_TAG} />
-      </Grid>
-      )}
+        && (
+          <Grid className={classes.gutterBottom} item xs={12}>
+            <Chip color="primary" label={ADHOC_VOLUNTEER_TAG} />
+          </Grid>
+        )}
 
       <Grid className={classes.gutterBottom} item xs={12}>
         <EventInformation event={event} />
