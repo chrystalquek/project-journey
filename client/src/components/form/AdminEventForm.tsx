@@ -270,7 +270,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       setToastStatus('error');
       setOpenSnackbar(true);
     } else if (event.status === 'fulfilled') {
-      setToastText('Successfully Created Event.');
+      setToastText(isNew ? 'Successfully Created Event!' : 'Successfully Edited Event!');
       setToastStatus('success');
       setOpenSnackbar(true);
 
