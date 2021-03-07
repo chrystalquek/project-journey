@@ -21,8 +21,10 @@ export type QuestionItem = {
 
 export type QuestionList = Array<QuestionItem>;
 
-export type QuestionWithHeader = Array<{
+export type QuestionsWithHeader = {
   header: string;
   info?: string;
   questionList: QuestionList;
-}>;
+}
+
+export type HeaderQuestionList = Array<QuestionsWithHeader>;

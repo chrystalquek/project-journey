@@ -172,7 +172,7 @@ export const FormQuestionMapper = ({
                 Label={{ label }}
                 color="primary"
                 type="checkbox"
-                {...props}
+                // Excluded props here since there's error. Will fix if needed.
               />
             </div>
           ))}

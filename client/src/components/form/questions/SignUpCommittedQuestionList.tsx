@@ -1,10 +1,10 @@
 import { Link } from '@material-ui/core'
-import { QuestionWithHeader } from '@type/questions';
+import { HeaderQuestionList } from '@type/questions';
 import {
   CITIZENSHIP, GENDER, RACE, SOCIAL_MEDIA_PLATFORMS,
 } from '@type/volunteer';
 
-export const questions: QuestionWithHeader = [
+export const questions: HeaderQuestionList = [
   {
     header: 'Personal Information',
     questionList: [

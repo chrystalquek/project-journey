@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Paper, Typography, Button, makeStyles } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 
-import { QuestionList, QuestionWithHeader } from '@type/questions';
+import { HeaderQuestionList, QuestionItem, QuestionList, QuestionsWithHeader } from '@type/questions';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
@@ -18,6 +18,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { objectMap } from '@utils/helpers/objectMap';
 import { ToastStatus } from '@type/common';
 import { FormQuestionMapper } from './FormGenerator';
+import { QuestionWithOptions } from '@type/form';
 
 const useStyles = makeStyles((theme) => ({
   // The following style make sure that the error message shows consistently for 'photo'
@@ -53,7 +54,7 @@ const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
 type FormGeneratorProps = {
   type: VOLUNTEER_TYPE;
-  questionWithHeader: QuestionWithHeader;
+  questionWithHeader: HeaderQuestionList;
   handleSignUp: (formValues: Record<string, any>) => Promise<SignUpResponse>;
 };
 
@@ -71,13 +72,9 @@ const SignUpFormGenerator = ({
   const [toastStatus, setToastStatus] = useState<ToastStatus>('success');
   const initialValues: Record<string, any> = {};
 
-  let temp : QuestionList = [];
-  
-  questionWithHeader.forEach(({ questionList }) => {
-    temp = temp.concat(questionList);
-  })
-
-  const questionList : QuestionList = temp;
+  // Basically concatenates all the question lists from each section
+  const reducer = (accumulator : QuestionList, currentValue : QuestionsWithHeader) : QuestionList => accumulator.concat(currentValue.questionList);
+  const questionList : QuestionList = questionWithHeader.reduce(reducer, []);
   
   questionList.forEach(({ name, type, initialValue }) => {
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;
@@ -94,7 +91,7 @@ const SignUpFormGenerator = ({
   const handleSubmit = async (formValues: Record<string, any>) => {
     // @ts-ignore type exists
     const values = objectMap(formValues, (element) =>
-      element === '' ? undefined : element
+      element || {}
     );
 
     // Upload and get cover image URL
@@ -261,9 +258,9 @@ const SignUpFormGenerator = ({
         >
           {({ isSubmitting, setFieldValue, values, errors, touched }) => (
             <Form>
-              {questionWithHeader.map(({ header, info, questionList }) => {
+              {questionWithHeader.map(({ header, info, questionList }, index) => {
                 return (
-                  <>
+                  <React.Fragment key={index}>
                     <Typography
                       className={classes.headerStyle}
                       align='center'
@@ -279,7 +276,7 @@ const SignUpFormGenerator = ({
                         {info}
                       </Typography>
                     )}
-                    {questionList.map((questionItem) => {
+                    {questionList.map((questionItem, index) => {
                       const {
                         name,
                         displayText,
@@ -293,7 +290,7 @@ const SignUpFormGenerator = ({
 
                       return (
                         <div
-                          key={name}
+                          key={index}
                           style={{
                             marginBottom: '32px',
                           }}
@@ -318,13 +315,14 @@ const SignUpFormGenerator = ({
                             options={options}
                             setFieldValue={setFieldValue}
                             props={{
-                              error: touched[name] ? errors[name] : null,
+                              error: touched[name] && !!errors[name],
+                              helperText: touched[name] ? errors[name] : null
                             }}
                           />
                         </div>
                       );
                     })}
-                  </>
+                  </React.Fragment>
                 );
               })}
               <Button
