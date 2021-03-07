@@ -105,19 +105,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/**
- * Combine date and time as JSON string
- * @param date Date object representing date
- * @param time string representing time
- */
-const getCombinedDateAndTimeString = (
-  dateDayJs: dayjs.Dayjs,
-  time: string,
-): string => {
-  const dateDayJsWithoutTime = dateDayJs.format('YYYY-MM-DD');
-  return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
-};
-
 // Feedback form types
 type QuestionData = {
   type: 'shortAnswer' | 'mcq' | 'checkboxes';
@@ -136,14 +123,7 @@ const validationSchema = yup.object({
   vacancies: yup.number().required('Vacancies is required'),
   description: yup.string().required('Description is required'),
   startDate: yup.date().required('Start date is required'),
-  endDate: yup
-    .date()
-    .required('Start date is required')
-    .when(
-      'startDate',
-      (startDate, schema) => startDate
-        && schema.min(startDate, 'End date should be later than start date'),
-    ),
+  endDate: yup.date().required('End date is required'),
   facilitatorName: yup.string().when('eventType', {
     is: 'volunteering',
     then: yup.string().required('Facilitator name is required'),
@@ -316,6 +296,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     handleSubmit,
     isSubmitting,
     setFieldValue,
+    setFieldError,
     values,
   } = useFormik({
     initialValues: eventForm || emptyForm,
@@ -488,26 +469,24 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={2} md="auto">
               <Typography variant="body1">From</Typography>
             </Grid>
-            <Grid item xs={8} md={2}>
-              <KeyboardDatePicker
+            <Grid item xs={10} md={3}>
+              <KeyboardDateTimePicker
+                fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
-                format="DD/MM/YYYY"
+                ampm={false}
                 margin="dense"
-                id="date-from"
-                name="fromDate"
                 value={dayjs(startDate)}
-                onChange={(date) => setFieldValue(
-                  'startDate',
-                  getCombinedDateAndTimeString(
-                    date,
-                    dayjs(startDate).format('HH:mm'),
-                  ),
-                )}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
+                onError={(error) => {
+                  if (error !== errors.startDate) {
+                    setFieldError('startDate', error.toLocaleString());
+                  }
                 }}
+                onChange={(date) => setFieldValue('startDate', date)}
+                disablePast
+                format="DD/MM/YYYY HH:mm"
                 color="secondary"
                 helperText={errors.startDate}
                 error={touched.startDate && Boolean(errors.startDate)}
@@ -517,91 +496,29 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={2} md="auto">
               <Typography variant="body1">To</Typography>
             </Grid>
-            <Grid item xs={8} md={2}>
-              <KeyboardDatePicker
+            <Grid item xs={10} md={3}>
+              <KeyboardDateTimePicker
+                fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
-                format="DD/MM/YYYY"
+                ampm={false}
                 margin="dense"
-                id="date-to"
-                name="toDate"
                 value={dayjs(endDate)}
-                onChange={(date) => setFieldValue(
-                  'endDate',
-                  getCombinedDateAndTimeString(
-                    date,
-                    dayjs(endDate).format('HH:mm'),
-                  ),
-                )}
+                onError={(error) => {
+                  if (error !== errors.endDate) {
+                    setFieldError('endDate', error.toLocaleString());
+                  }
+                }}
+                onChange={(date) => setFieldValue('endDate', date)}
+                disablePast
+                format="DD/MM/YYYY HH:mm"
                 color="secondary"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
-              />
-            </Grid>
-          </Grid>
-
-          {/* Time - From & To */}
-          <Grid item container direction="row" alignItems="center" spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h4">Time</Typography>
-            </Grid>
-            <Grid item xs={2} md="auto">
-              <Typography variant="body1">From</Typography>
-            </Grid>
-            <Grid item xs={8} md={2}>
-              <TextField
-                id="time"
-                variant="outlined"
-                name="fromTime"
-                fullWidth
-                value={dayjs(startDate).format('HH:mm')}
-                margin="dense"
-                onChange={(e) => setFieldValue(
-                  'startDate',
-                  getCombinedDateAndTimeString(
-                    dayjs(startDate),
-                    e.target.value,
-                  ),
-                )}
-                type="time"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 300, // 5 min
-                }}
-                color="secondary"
-                helperText={errors.startDate}
-                error={touched.startDate && Boolean(errors.startDate)}
-              />
-            </Grid>
-            <Grid item xs={12} md="auto" />
-            <Grid item xs={2} md="auto">
-              <Typography variant="body1">To</Typography>
-            </Grid>
-            <Grid item xs={8} md={2}>
-              <TextField
-                id="time"
-                variant="outlined"
-                name="toTime"
-                fullWidth
-                value={dayjs(endDate).format('HH:mm')}
-                margin="dense"
-                onChange={(e) => setFieldValue(
-                  'endDate',
-                  getCombinedDateAndTimeString(dayjs(endDate), e.target.value),
-                )}
-                type="time"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 300, // 5 min
-                }}
-                color="secondary"
-                helperText={errors.endDate}
-                error={touched.endDate && Boolean(errors.endDate)}
+                minDate={startDate}
+                maxDateMessage="End date should not be before start date"
               />
             </Grid>
           </Grid>
@@ -611,14 +528,21 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Sign-up Deadline</Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={10} md={3}>
               <KeyboardDateTimePicker
+                fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
                 ampm={false}
                 margin="dense"
                 value={dayjs(deadline)}
+                onError={(error) => {
+                  if (error !== errors.deadline) {
+                    setFieldError('deadline', error.toLocaleString());
+                  }
+                }}
                 onChange={(date) => setFieldValue('deadline', date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
