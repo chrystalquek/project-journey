@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { EventData } from '@type/event';
 import { getEventInfo, TableData } from '@utils/helpers/event/EventDetails/EventDetails';
 import {
+  Grid,
   makeStyles,
   Table,
   TableBody,
@@ -25,40 +26,45 @@ const useStyles = makeStyles((theme) => ({
   },
   highlight: {
     color: theme.palette.text.secondary,
-  },
-  container: {
-    marginTop: theme.spacing(5),
-  },
+  }
 }));
 
 const EventInformation: FC<EventInformationProps> = ({ event }) => {
   const classes = useStyles();
   const rows: Array<TableData> = getEventInfo(event);
   return (
-    <div className={classes.container}>
-      <EventTypography fontSize="h3" fontBold borderBottom gutterBottom text="Event Information" />
-      <TableContainer className={classes.gutterBottom}>
-        <Table aria-label="event information table">
-          <TableBody>
-            {rows.map((row: TableData) => (
-              <TableRow
-                key={row.title}
-              >
-                <TableCell className={classes.root} padding="none" component="th" scope="row">
-                  <strong>{row.title}</strong>
-                </TableCell>
-                <TableCell className={classes.root} padding="none" align="left">
-                  {row.isHighlight
-                    ? <strong className={classes.highlight}>{row.description}</strong>
-                    : <strong>{row.description}</strong>}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <EventTypography text={event.description || 'No event description.'} gutterTop />
-    </div>
+    <Grid container spacing={5} direction="column">
+      <Grid item>
+        <EventTypography fontSize="h3" fontBold borderBottom gutterBottom text="Event Information" />
+      </Grid>
+      <Grid item>
+        <TableContainer className={classes.gutterBottom}>
+          <Table aria-label="event information table">
+            <TableBody>
+              {rows.map((row: TableData) => (
+                <TableRow
+                  key={row.title}
+                >
+                  <TableCell className={classes.root} padding="none" component="th" scope="row">
+                    {row.isHighlight
+                      ? <strong className={classes.highlight}>{row.title}</strong>
+                      : <strong>{row.title}</strong>}
+                  </TableCell>
+                  <TableCell className={classes.root} padding="none" align="left">
+                    {row.isHighlight
+                      ? <strong className={classes.highlight}>{row.description}</strong>
+                      : <strong>{row.description}</strong>}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid item>
+        <EventTypography text={event.description || 'No event description.'} gutterTop />
+      </Grid>
+    </Grid>
   );
 };
 
