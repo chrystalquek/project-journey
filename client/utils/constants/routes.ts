@@ -1,3 +1,9 @@
+export const HOME_ROUTE = '/';
 export const EVENTS_ROUTE = '/event';
 export const SIGNUP_ROUTE = '/signup';
 export const LOGIN_ROUTE = '/login';
+export const PAST_EVENTS_ROUTE = '/event/my-past-events';
+export const UPCOMING_EVENTS_ROUTE = EVENTS_ROUTE; // TODO: change to correct page
+export const EVENT_PENDING_REQUESTS_ROUTE = '/event/pending-requests';
+export const VOLUNTEER_PROFILES_ROUTE = '/volunteer/volunteer-profiles';
+export const VOLUNTEER_PENDING_REQUESTS_ROUTE = '/volunteer/pending-requests';

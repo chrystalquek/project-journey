@@ -105,19 +105,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/**
- * Combine date and time as JSON string
- * @param date Date object representing date
- * @param time string representing time
- */
-const getCombinedDateAndTimeString = (
-  dateDayJs: dayjs.Dayjs,
-  time: string,
-): string => {
-  const dateDayJsWithoutTime = dateDayJs.format('YYYY-MM-DD');
-  return dayjs(`${dateDayJsWithoutTime} ${time}`).toISOString();
-};
-
 // Feedback form types
 type QuestionData = {
   type: 'shortAnswer' | 'mcq' | 'checkboxes';
@@ -136,14 +123,7 @@ const validationSchema = yup.object({
   vacancies: yup.number().required('Vacancies is required'),
   description: yup.string().required('Description is required'),
   startDate: yup.date().required('Start date is required'),
-  endDate: yup
-    .date()
-    .required('Start date is required')
-    .when(
-      'startDate',
-      (startDate, schema) => startDate
-        && schema.min(startDate, 'End date should be later than start date'),
-    ),
+  endDate: yup.date().required('End date is required'),
   facilitatorName: yup.string().when('eventType', {
     is: 'volunteering',
     then: yup.string().required('Facilitator name is required'),
@@ -286,11 +266,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
   useEffect(() => {
     if (event.status === 'rejected') {
-      setToastText('Form submission failed');
+      setToastText('Event creation failed.');
       setToastStatus('error');
       setOpenSnackbar(true);
     } else if (event.status === 'fulfilled') {
-      setToastText('You have signed up successfully.');
+      setToastText(isNew ? 'Successfully Created Event!' : 'Successfully Edited Event!');
       setToastStatus('success');
       setOpenSnackbar(true);
 
@@ -316,6 +296,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     handleSubmit,
     isSubmitting,
     setFieldValue,
+    setFieldError,
     values,
   } = useFormik({
     initialValues: eventForm || emptyForm,
@@ -380,7 +361,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   return (
     <form onSubmit={handleSubmit}>
       <PaddedGrid>
-        <Grid container direction="column" spacing={2}>
+        <Grid container direction="column" spacing={10}>
           <Grid item>
             <Typography variant="h1">
               {isNew ? 'Create Event' : 'Edit Event'}
@@ -421,7 +402,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <div className={classes.coverImage}>
               <DropZoneCard
                 id="coverImage"
-                initialUrl={eventForm?.cover_image}
+                initialUrl={eventForm?.coverImage}
                 isBig
                 onChangeImage={(e) => onChangeImage(e, 'coverImage')}
               />
@@ -488,26 +469,24 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={2} md="auto">
               <Typography variant="body1">From</Typography>
             </Grid>
-            <Grid item xs={8} md={2}>
-              <KeyboardDatePicker
+            <Grid item xs={10} md={3}>
+              <KeyboardDateTimePicker
+                fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
-                format="DD/MM/YYYY"
+                ampm={false}
                 margin="dense"
-                id="date-from"
-                name="fromDate"
                 value={dayjs(startDate)}
-                onChange={(date) => setFieldValue(
-                  'startDate',
-                  getCombinedDateAndTimeString(
-                    date,
-                    dayjs(startDate).format('HH:mm'),
-                  ),
-                )}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
+                onError={(error) => {
+                  if (error !== errors.startDate) {
+                    setFieldError('startDate', error.toLocaleString());
+                  }
                 }}
+                onChange={(date) => setFieldValue('startDate', date)}
+                disablePast
+                format="DD/MM/YYYY HH:mm"
                 color="secondary"
                 helperText={errors.startDate}
                 error={touched.startDate && Boolean(errors.startDate)}
@@ -517,91 +496,29 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={2} md="auto">
               <Typography variant="body1">To</Typography>
             </Grid>
-            <Grid item xs={8} md={2}>
-              <KeyboardDatePicker
+            <Grid item xs={10} md={3}>
+              <KeyboardDateTimePicker
+                fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
-                format="DD/MM/YYYY"
+                ampm={false}
                 margin="dense"
-                id="date-to"
-                name="toDate"
                 value={dayjs(endDate)}
-                onChange={(date) => setFieldValue(
-                  'endDate',
-                  getCombinedDateAndTimeString(
-                    date,
-                    dayjs(endDate).format('HH:mm'),
-                  ),
-                )}
+                onError={(error) => {
+                  if (error !== errors.endDate) {
+                    setFieldError('endDate', error.toLocaleString());
+                  }
+                }}
+                onChange={(date) => setFieldValue('endDate', date)}
+                disablePast
+                format="DD/MM/YYYY HH:mm"
                 color="secondary"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
-              />
-            </Grid>
-          </Grid>
-
-          {/* Time - From & To */}
-          <Grid item container direction="row" alignItems="center" spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h4">Time</Typography>
-            </Grid>
-            <Grid item xs={2} md="auto">
-              <Typography variant="body1">From</Typography>
-            </Grid>
-            <Grid item xs={8} md={2}>
-              <TextField
-                id="time"
-                variant="outlined"
-                name="fromTime"
-                fullWidth
-                value={dayjs(startDate).format('HH:mm')}
-                margin="dense"
-                onChange={(e) => setFieldValue(
-                  'startDate',
-                  getCombinedDateAndTimeString(
-                    dayjs(startDate),
-                    e.target.value,
-                  ),
-                )}
-                type="time"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 300, // 5 min
-                }}
-                color="secondary"
-                helperText={errors.startDate}
-                error={touched.startDate && Boolean(errors.startDate)}
-              />
-            </Grid>
-            <Grid item xs={12} md="auto" />
-            <Grid item xs={2} md="auto">
-              <Typography variant="body1">To</Typography>
-            </Grid>
-            <Grid item xs={8} md={2}>
-              <TextField
-                id="time"
-                variant="outlined"
-                name="toTime"
-                fullWidth
-                value={dayjs(endDate).format('HH:mm')}
-                margin="dense"
-                onChange={(e) => setFieldValue(
-                  'endDate',
-                  getCombinedDateAndTimeString(dayjs(endDate), e.target.value),
-                )}
-                type="time"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 300, // 5 min
-                }}
-                color="secondary"
-                helperText={errors.endDate}
-                error={touched.endDate && Boolean(errors.endDate)}
+                minDate={startDate}
+                maxDateMessage="End date should not be before start date"
               />
             </Grid>
           </Grid>
@@ -611,14 +528,21 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <Grid item xs={12}>
               <Typography variant="h4">Sign-up Deadline</Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={10} md={3}>
               <KeyboardDateTimePicker
+                fullWidth
+                clearable
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"
                 ampm={false}
                 margin="dense"
                 value={dayjs(deadline)}
+                onError={(error) => {
+                  if (error !== errors.deadline) {
+                    setFieldError('deadline', error.toLocaleString());
+                  }
+                }}
                 onChange={(date) => setFieldValue('deadline', date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
@@ -707,7 +631,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 <div className={classes.facilPhotograph}>
                   <DropZoneCard
                     id="facilitatorPhoto"
-                    initialUrl={eventForm?.facilitator_photo}
+                    initialUrl={eventForm?.facilitatorPhoto}
                     isBig={false}
                     onChangeImage={(e) => onChangeImage(e, 'facilitatorPhoto')}
                   />
@@ -744,136 +668,138 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </>
           )}
 
-          <Formik
-            initialValues={{}}
-            onSubmit={() => {}}
-            enableReinitialize
-          >
-            {({ isSubmitting, values }) => (
-              <>
-                <div>
-                  <Typography variant="h2">Volunteer Response Form</Typography>
-                </div>
+          <Grid item>
+            <Formik
+              initialValues={{}}
+              onSubmit={() => { }}
+              enableReinitialize
+            >
+              {({ isSubmitting, values }) => (
+                <>
+                  <div>
+                    <Typography variant="h2">Volunteer Response Form</Typography>
+                  </div>
 
-                {/* Feedback form generator based on redux state */}
-                {feedbackFormEventQuestions.map(
-                  (question: QuestionData, index: number) => (
-                    <div key={String(index)}>
-                      <div style={{ display: 'flex' }}>
-                        <Typography className={classes.questionStyle}>
-                          Question
+                  {/* Feedback form generator based on redux state */}
+                  {feedbackFormEventQuestions.map(
+                    (question: QuestionData, index: number) => (
+                      <div key={String(index)}>
+                        <div style={{ display: 'flex' }}>
+                          <Typography className={classes.questionStyle}>
+                            Question
                           {' '}
-                          {index + 1}
-                        </Typography>
-                        <IconButton onClick={() => handleRemoveQuestion(index)}>
-                          <ClearIcon />
-                        </IconButton>
-                      </div>
+                            {index + 1}
+                          </Typography>
+                          <IconButton onClick={() => handleRemoveQuestion(index)}>
+                            <ClearIcon />
+                          </IconButton>
+                        </div>
 
-                      <FormQuestionMapper
-                        formType="mcq"
-                        name={`type${String(index)}`}
-                        options={[
-                          { value: 'shortAnswer', label: 'Short Answer' },
-                          { value: 'checkboxes', label: 'Check Box' },
-                          { value: 'mcq', label: 'MCQ' },
-                        ]}
-                        props={{
-                          style: { width: '200px' },
-                          value: question.type,
-                          onChange: (e) => handleChangeQuestion(e.target.value, 'type', index),
-                        }}
-                      />
-                      <FormQuestionMapper
-                        formType="shortAnswer"
-                        name={question.displayText + String(index)}
-                        props={{
-                          value: question.displayText,
-                          placeholder: 'Type question here...',
-                          onChange: (e) => handleChangeQuestion(e.target.value, 'displayText', index),
-                        }}
-                      />
-
-                      {question.type === 'mcq'
-                      || question.type === 'checkboxes' ? (
-                        <Formik
-                          initialValues={{}}
-                          onSubmit={() => {}}
-                          enableReinitialize
-                        >
-                          {({ isSubmitting, values }) => (
-                            <>
-                              <Typography className={classes.optionStyle}>
-                                Options:
-                                {' '}
-                              </Typography>
-                              {question.options.map((option, optionIndex) => (
-                                <div
-                                  key={optionIndex}
-                                  style={{
-                                    display: 'flex',
-                                    alignContent: 'center',
-                                  }}
-                                >
-                                  <FormQuestionMapper
-                                    formType="shortAnswer"
-                                    name={String(optionIndex)}
-                                    key={optionIndex}
-                                    props={{
-                                      style: {
-                                        width: '500px',
-                                      },
-                                      placeholder: 'Type option here...',
-                                      value: option,
-                                      onChange: (e) => handleChangeOption(
-                                        e.target.value,
-                                        index,
-                                        optionIndex,
-                                      ),
-                                    }}
-                                  />
-                                  <IconButton
-                                    onClick={() => handleRemoveOption(index, optionIndex)}
-                                  >
-                                    <ClearIcon />
-                                  </IconButton>
-                                </div>
-                              ))}
-                              <Button
-                                className={classes.addNewFieldButton}
-                                onClick={() => handleAddOption(index)}
-                              >
-                                + Add another option
-                              </Button>
-                            </>
-                          )}
-                        </Formik>
-                        ) : null}
-                      <div className={classes.isRequiredStyle}>
-                        <Typography style={{ display: 'inline-block' }}>
-                          Is question required?
-                        </Typography>
-                        <Switch
-                          checked={question.isRequired}
-                          onChange={(e) => handleChangeQuestion(
-                            e.target.checked,
-                            'isRequired',
-                            index,
-                          )}
+                        <FormQuestionMapper
+                          formType="mcq"
+                          name={`type${String(index)}`}
+                          options={[
+                            { value: 'shortAnswer', label: 'Short Answer' },
+                            { value: 'checkboxes', label: 'Check Box' },
+                            { value: 'mcq', label: 'MCQ' },
+                          ]}
+                          props={{
+                            style: { width: '200px' },
+                            value: question.type,
+                            onChange: (e) => handleChangeQuestion(e.target.value, 'type', index),
+                          }}
                         />
+                        <FormQuestionMapper
+                          formType="shortAnswer"
+                          name={question.displayText + String(index)}
+                          props={{
+                            value: question.displayText,
+                            placeholder: 'Type question here...',
+                            onChange: (e) => handleChangeQuestion(e.target.value, 'displayText', index),
+                          }}
+                        />
+
+                        {question.type === 'mcq'
+                          || question.type === 'checkboxes' ? (
+                            <Formik
+                              initialValues={{}}
+                              onSubmit={() => { }}
+                              enableReinitialize
+                            >
+                              {({ isSubmitting, values }) => (
+                                <>
+                                  <Typography className={classes.optionStyle}>
+                                    Options:
+                                {' '}
+                                  </Typography>
+                                  {question.options.map((option, optionIndex) => (
+                                    <div
+                                      key={optionIndex}
+                                      style={{
+                                        display: 'flex',
+                                        alignContent: 'center',
+                                      }}
+                                    >
+                                      <FormQuestionMapper
+                                        formType="shortAnswer"
+                                        name={String(optionIndex)}
+                                        key={optionIndex}
+                                        props={{
+                                          style: {
+                                            width: '500px',
+                                          },
+                                          placeholder: 'Type option here...',
+                                          value: option,
+                                          onChange: (e) => handleChangeOption(
+                                            e.target.value,
+                                            index,
+                                            optionIndex,
+                                          ),
+                                        }}
+                                      />
+                                      <IconButton
+                                        onClick={() => handleRemoveOption(index, optionIndex)}
+                                      >
+                                        <ClearIcon />
+                                      </IconButton>
+                                    </div>
+                                  ))}
+                                  <Button
+                                    className={classes.addNewFieldButton}
+                                    onClick={() => handleAddOption(index)}
+                                  >
+                                    + Add another option
+                              </Button>
+                                </>
+                              )}
+                            </Formik>
+                          ) : null}
+                        <div className={classes.isRequiredStyle}>
+                          <Typography style={{ display: 'inline-block' }}>
+                            Is question required?
+                        </Typography>
+                          <Switch
+                            checked={question.isRequired}
+                            onChange={(e) => handleChangeQuestion(
+                              e.target.checked,
+                              'isRequired',
+                              index,
+                            )}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ),
-                )}
-                <Button
-                  className={classes.addNewFieldButton}
-                  onClick={handleAddQuestion}
-                >
-                  + Add another question
+                    ),
+                  )}
+                  <Button
+                    className={classes.addNewFieldButton}
+                    onClick={handleAddQuestion}
+                  >
+                    + Add another question
                 </Button>
-              </>
-            )}
-          </Formik>
+                </>
+              )}
+            </Formik>
+          </Grid>
           {/* Create Event Button */}
           <Grid item container direction="row" justify="flex-end">
             <Button

@@ -43,13 +43,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.secondary.main,
     },
   },
+  positionContainer: {
+    marginBottom: theme.spacing(4),
+  },
 }));
 
 const EventRegisterForm: FC<EventRegisterProps> = ({
   formHandlers, event, user, isDisabled,
 }) => {
   const classes = useStyles();
-  const router = useRouter();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
   const defaultForm: FormState = {
@@ -81,9 +83,9 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
     <>
       <form onSubmit={onFormSubmit}>
         <EventDivider fontBold gutterBottom>Register Here</EventDivider>
-        <EventTypography fontBold text="Position Interested:" />
-        <EventTypography text="First Choice:" />
-        <FormControl fullWidth variant="outlined" disabled={isDisabled}>
+        <EventTypography fontBold text="Position Interested:" gutterBottom />
+        <EventTypography text="First Choice:" gutterBottom />
+        <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
           <InputLabel id="first-choice">Select Position</InputLabel>
           <Select
             required
@@ -106,8 +108,8 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             ))}
           </Select>
         </FormControl>
-        <EventTypography text="Second Choice: (optional)" />
-        <FormControl fullWidth variant="outlined" disabled={isDisabled}>
+        <EventTypography text="Second Choice: (optional)" gutterBottom />
+        <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
           <InputLabel id="second-choice">Select Position</InputLabel>
           <Select
             fullWidth
@@ -129,8 +131,8 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             ))}
           </Select>
         </FormControl>
-        <EventTypography text="Third Choice: (optional)" />
-        <FormControl fullWidth variant="outlined" disabled={isDisabled}>
+        <EventTypography text="Third Choice: (optional)" gutterBottom />
+        <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
           <InputLabel id="third-choice">Select Position</InputLabel>
           <Select
             fullWidth
@@ -152,7 +154,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
             ))}
           </Select>
         </FormControl>
-        <EventTypography fontBold text="Anything you would like us to know?" />
+        <EventTypography fontBold text="Anything you would like us to know?" gutterBottom />
         <TextField
           id="additionalInfo"
           name="additionalInfo"

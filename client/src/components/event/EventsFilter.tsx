@@ -113,7 +113,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
             <Typography>Date</Typography>
           </AccordionSummary>
           <AccordionDetails
-            style={{ justifyContent: 'center', paddingBottom: '15px' }}
+            style={{ justifyContent: 'left', paddingBottom: '15px' }}
           >
             <KeyboardDatePicker
               value={filters.date}
@@ -124,6 +124,10 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
               inputVariant="outlined"
               margin="dense"
               placeholder="dd/MM/yyyy"
+              PopoverProps={{
+                anchorOrigin: {horizontal: 'left', vertical: 'bottom'},
+                transformOrigin: {horizontal: 'left', vertical: 'top'},
+              }}
             />
           </AccordionDetails>
         </Accordion>

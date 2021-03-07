@@ -118,7 +118,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
             <Grid item>
               <Box className={classes.box} fontWeight="bold">
                 <Typography display="inline" color="secondary">
-                  {events ? events.length : 0}
+                  {filteredSearchedEvents ? filteredSearchedEvents.length : 0}
                 </Typography>
                 <Typography display="inline" variant="body2">
                   {' '}
@@ -184,7 +184,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           <Grid item sm={12}>
             <Box className={classes.box} fontWeight="bold">
               <Typography display="inline" color="secondary">
-                {events ? events.length : 0}
+                {filteredSearchedEvents ? filteredSearchedEvents.length : 0}
               </Typography>
               <Typography display="inline" variant="body2">
                 {' '}

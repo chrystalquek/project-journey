@@ -58,6 +58,7 @@ const dummyData : VolunteerData = {
 
   hasMedicalNeeds: true,
   hasAllergies: true,
+  hasCriminalRecord: false,
 
   emergencyContactEmail: 'help@help.com',
   emergencyContactNumber: '12345678',

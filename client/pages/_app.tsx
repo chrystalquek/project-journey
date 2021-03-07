@@ -17,9 +17,13 @@ function App({ Component, pageProps }: AppProps) {
       <PersistGate loading={null} persistor={configureStore.persistor}>
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DayJsUtils}>
-            <NavBar />
-            <Component {...pageProps} />
-            <Footer />
+            <div style={{display: 'flex', minHeight: '100vh', flexDirection: 'column'}}>
+              <NavBar />
+              <div style={{flex: 1}}>
+                <Component {...pageProps} />
+              </div>
+              <Footer />
+            </div>
           </MuiPickersUtilsProvider>
         </ThemeProvider>
       </PersistGate>

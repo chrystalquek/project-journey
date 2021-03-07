@@ -10,6 +10,8 @@ import {
   Button, makeStyles, MenuItem, Paper, Typography,
 } from '@material-ui/core';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@redux/store';
 
 type FormGeneratorType = {
   handleSubmit: (values: Record<string, any>) => Promise<void>
@@ -188,10 +190,16 @@ const FormGenerator: FC<FormGeneratorType> = ({
 }) => {
   const classes = useStyles();
   const initialValues: Record<string, any> = {};
+  const userData = useSelector((state: StoreState) => state.user.user);
 
   questionsList.forEach(({ name, type, initialValue }) => {
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;
+    // Autofill with user data
+    if (userData.hasOwnProperty(name)) {
+      initialValues[name] = userData[name];
+    }
   })
+
 
   const validationSchema = Yup.object().shape(validationObj);
 
