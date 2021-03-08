@@ -174,7 +174,7 @@ export const FormQuestionMapper = ({
                 Label={{ label }}
                 color="primary"
                 type="checkbox"
-                {...props}
+                // Excluded props here since there's error. Will fix if needed.
               />
             </div>
           ))}
@@ -228,7 +228,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
                   <div key={name} className={classes.questionContainer}>
                     {displayText.map((text, index) => (
                       <Typography
-                        key={text}
+                        key={index}
                         className={classes.questionTitle}
                       >
                         {text}

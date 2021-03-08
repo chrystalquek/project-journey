@@ -1,9 +1,7 @@
 export type InputType =
   | 'shortAnswer'
-  | 'short-answer'
   | 'longAnswer'
   | 'checkboxes'
-  | 'check-box'
   | 'date'
   | 'mcq'
   | 'password'
@@ -14,7 +12,7 @@ export type OptionType = { value: any; label: string };
 
 export type QuestionItem = {
   name: string;
-  displayText: string[];
+  displayText: Array<string | JSX.Element>;
   type: InputType;
   initialValue: string | Date | number | [] | boolean | null;
   options?: Array<OptionType>;
@@ -22,3 +20,11 @@ export type QuestionItem = {
 };
 
 export type QuestionList = Array<QuestionItem>;
+
+export type QuestionsWithHeader = {
+  header: string;
+  info?: string;
+  questionList: QuestionList;
+}
+
+export type HeaderQuestionList = Array<QuestionsWithHeader>;
