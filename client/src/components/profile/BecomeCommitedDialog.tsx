@@ -1,8 +1,7 @@
 import React, { FC, useState, useCallback } from 'react';
 import {
-  Button, TextField, Dialog, DialogActions, DialogContent,
-  DialogTitle, Link, Typography, Checkbox, useMediaQuery,
-  FormControlLabel, Grid,
+  Dialog, DialogContent,
+  DialogTitle, Link, Typography, useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import { StoreState } from '@redux/store';
 import CommittedConversionForm from '@components/form/CommittedConversionForm';
 import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { CreateCommitmentApplicationRequest } from '@utils/api/request';
+import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -32,13 +32,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const BecomeCommited: FC = () => {
+const BecomeCommited = () => {
   const user = useSelector((state: StoreState) => state.user);
+  const userData = user.user
   const dispatch = useDispatch();
-  // TODO: a better implementation to check pending application
-  // this is just a quick fix, it's by no mean a correct flag
-  const isPending : boolean = user.user.commitmentApplicationIds.length > 0;
 
+  const length = userData?.commitmentApplicationIds?.length 
+  const commitmentApplication: any = length 
+    ? userData.commitmentApplicationIds[length-1]
+    : null
+  // Check if there is pending application
+  const isPending : boolean = commitmentApplication?.status == CommitmentApplicationStatus.Pending
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();

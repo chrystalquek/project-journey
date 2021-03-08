@@ -8,6 +8,8 @@ import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import ProfilePicture from './ProfilePicture';
+import ApproveCommitmentApplication from './ApproveCommitmentApplication';
+import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -43,6 +45,11 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
   const user = useSelector((state: StoreState) => state.user);
   const userData = user?.user;
 
+  const length = profilePageData?.commitmentApplicationIds?.length 
+  const commitmentApplication: any = length
+    ? profilePageData.commitmentApplicationIds[length-1]
+    : null
+
   return (
     <Grid
       container
@@ -69,7 +76,12 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
         is viewing own profile and is still an adhoc volunteer */}
         { profilePageData.volunteerType === VOLUNTEER_TYPE.ADHOC
         && userData.email === profilePageData.email
-        && <BecomeCommitedDialog /> }
+        && <BecomeCommitedDialog/> }
+        {/* Approval button if loggedInUser is admin and volunteerProfile
+        has a pending commitmentApplication*/}
+        { userData.volunteerType === VOLUNTEER_TYPE.ADMIN 
+        && commitmentApplication?.status === CommitmentApplicationStatus.Pending
+        && <ApproveCommitmentApplication commitmentApplication={commitmentApplication}/>}
       </Grid>
     </Grid>
   );
