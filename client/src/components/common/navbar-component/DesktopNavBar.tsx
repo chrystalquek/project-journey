@@ -231,7 +231,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                         )
                       }
                     >
-                      Volunteer Profiles
+                      Volunteers List
                     </MenuItem>
                     <MenuItem
                       onClick={() =>
@@ -241,7 +241,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                         )
                       }
                     >
-                      Pending Requests
+                      Pending Approvals
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
