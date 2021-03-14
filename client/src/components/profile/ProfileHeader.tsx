@@ -10,7 +10,7 @@ import { StoreState } from '@redux/store';
 import ProfilePicture from './ProfilePicture';
 import ApproveCommitmentApplication from './ApproveCommitmentApplication';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
-import ChangeVolunteerStatus from './ChangeVolunteerStatus';
+import ChangeVolunteerType from './ChangeVolunteerType';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -78,7 +78,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
           </Grid>
           <Grid item>
             { userData.volunteerType === VOLUNTEER_TYPE.ADMIN 
-            && <ChangeVolunteerStatus/> }
+            && <ChangeVolunteerType/> }
           </Grid>
         </Grid>
         {/* Only shows the option to become committed if the loggedInUser

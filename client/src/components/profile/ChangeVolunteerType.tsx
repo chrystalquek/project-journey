@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useRef, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import {
-  IconButton, Popper, Fade, Paper, MenuList, MenuItem, ClickAwayListener, Dialog, DialogTitle, Typography, DialogContent, DialogActions, makeStyles, FormControl, InputLabel, Select, Input, Button,
+  IconButton, MenuItem, Dialog, DialogTitle, Typography, DialogContent, DialogActions, makeStyles, FormControl, InputLabel, Select, Input, Button,
 } from '@material-ui/core';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChangeVolunteerStatus = () => {
+const ChangeVolunteerType: FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -91,9 +91,7 @@ const ChangeVolunteerStatus = () => {
         </DialogActions>
       </Dialog>
     </div>
-
   )
-
 }
 
-export default ChangeVolunteerStatus
+export default ChangeVolunteerType
