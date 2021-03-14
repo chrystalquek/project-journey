@@ -10,6 +10,7 @@ import { StoreState } from '@redux/store';
 import ProfilePicture from './ProfilePicture';
 import ApproveCommitmentApplication from './ApproveCommitmentApplication';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import ChangeVolunteerStatus from './ChangeVolunteerStatus';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -68,10 +69,18 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
       {/* User details */}
       <Grid item xs={12} sm="auto">
         <Typography variant="h2" className={classes.header}>{profilePageData.name}</Typography>
-        <Typography className={classes.header}>
-          <strong>Volunteer Type: </strong>
-          {profilePageData?.volunteerType?.toString()}
-        </Typography>
+        <Grid item container alignItems='center'>
+          <Grid item>
+            <Typography className={classes.header} >
+              <strong>Volunteer Type: </strong>
+              {profilePageData?.volunteerType?.toString()}
+            </Typography>
+          </Grid>
+          <Grid item>
+            { userData.volunteerType === VOLUNTEER_TYPE.ADMIN 
+            && <ChangeVolunteerStatus/> }
+          </Grid>
+        </Grid>
         {/* Only shows the option to become committed if the loggedInUser
         is viewing own profile and is still an adhoc volunteer */}
         { profilePageData.volunteerType === VOLUNTEER_TYPE.ADHOC
