@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const BecomeCommited = () => {
+const BecomeCommited: FC = () => {
   const user = useSelector((state: StoreState) => state.user);
   const userData = user.user
   const dispatch = useDispatch();
