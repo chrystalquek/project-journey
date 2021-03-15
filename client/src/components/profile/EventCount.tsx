@@ -1,23 +1,28 @@
 import React, { FC } from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Link, makeStyles, Typography } from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
 import PaddedGrid from '@components/common/PaddedGrid';
-import { makeStyles } from '@material-ui/core/styles';
 import { VolunteerData } from '@type/volunteer';
-
-const useStyles = makeStyles((theme) => ({
-  link: {
-    color: theme.palette.secondary.main,
-  },
-}));
+import { useRouter } from 'next/router';
 
 type props = {
   profilePageData: VolunteerData
 }
 
+const useStyles = makeStyles((theme) => ({
+  link: {
+    cursor: 'pointer',
+  },
+}));
+
 const EventCount: FC<props> = ({ profilePageData }) => {
+  const router = useRouter();
   const classes = useStyles();
+
+  const handleViewPastEvents = () => {
+    router.push('/event/my-past-events');
+  }
 
   return (
     <PaddedGrid>
@@ -31,7 +36,9 @@ const EventCount: FC<props> = ({ profilePageData }) => {
       <DataRow header="Workshops" data={profilePageData.workshopsCount?.toString()} xs1={11} xs2={1} />
       <DataRow header="Hangouts" data={profilePageData.hangoutsCount?.toString()} xs1={11} xs2={1} />
       <Grid item>
-        <Typography className={classes.link}><u>View past events</u></Typography>
+        <Typography className={classes.link}>
+          <Link color="secondary" onClick={handleViewPastEvents}><u>View past events</u></Link>
+        </Typography>
       </Grid>
     </PaddedGrid>
   );

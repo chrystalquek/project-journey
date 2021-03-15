@@ -11,13 +11,15 @@ import { VOLUNTEER_TYPE } from '@type/volunteer';
 import { EventTypography } from '@components/common/event/EventTypography';
 import { testEventImage3 } from '@constants/imagePaths';
 import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
+import { SignUpData } from '@type/signUp';
 
 type EventCardProps = {
   event: EventData,
+  upcomingSignUps?: SignUpData[],
   onCardClick: () => void
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   bold: {
     fontWeight: 700,
   },
@@ -35,13 +37,39 @@ const useStyles = makeStyles({
     borderRadius: '10px',
     opacity: 0.85,
   },
-});
+  orangeText: {
+    color: theme.palette.warning.main,
+  },
+  greenText: {
+    color: theme.palette.text.secondary,
+  },
+}));
 
-const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
+const EventCard: FC<EventCardProps> = ({ event, upcomingSignUps, onCardClick }) => {
   const classes = useStyles();
   const { total, remaining } = getEventVacancies(event);
   const vacancies = `${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} left`;
   const { date, time } = parseDate(event.startDate, event.endDate);
+
+  const getSignUpStatus = (signUps: SignUpData[], eventData: EventData) => {
+    const status = signUps.find((signUp) => signUp.eventId === eventData._id)?.status || 'unknown';
+    switch (status) {
+      case 'pending':
+        return <Typography><i>Sign-up pending</i></Typography>;
+      case 'rejected':
+        return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>;
+      case 'unknown':
+        return <Typography>-</Typography>;
+      default:
+        const roleAssigned = status[1];
+        return (
+          <Typography className={classes.greenText}>
+            Volunteer role assigned -
+            {roleAssigned}
+          </Typography>
+        );
+    }
+  };
 
   return (
     <Card className={classes.card} onClick={onCardClick}>
@@ -58,7 +86,7 @@ const EventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
           <EventTypography text={date || 'No date provided'} />
           <EventTypography gutterBottom text={time || 'No time provided'} />
           <Typography color="primary" gutterBottom className={classes.bold}>
-            {vacancies}
+            {upcomingSignUps ? getSignUpStatus(upcomingSignUps, event) : vacancies}
           </Typography>
         </CardContent>
       </CardActionArea>
