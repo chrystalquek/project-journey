@@ -11,7 +11,7 @@ const VolunteerRoles: FC<VolunteerRolesProps> = ({ event }) => {
   const volunteerRoles = event.roles;
 
   return (
-    <Grid container direction="column" spacing={8}>
+    <Grid container direction="column" spacing={5}>
       <Grid item>
         <EventTypography gutterBottom borderBottom fontSize="h3" fontBold text="Volunteer Roles" />
       </Grid>

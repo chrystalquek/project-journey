@@ -62,7 +62,7 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
         </TableContainer>
       </Grid>
       <Grid item>
-        <EventTypography text={event.description || 'No event description.'} gutterTop />
+        <EventTypography text={event.description || 'No event description.'} />
       </Grid>
     </Grid>
   );

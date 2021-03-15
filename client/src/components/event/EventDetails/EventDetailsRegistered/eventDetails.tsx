@@ -248,7 +248,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     <>
       {renderDetails(user.volunteerType)}
       {EditButton}
-      {hasAcceptedSignUp && (
+      {user.volunteerType !== VOLUNTEER_TYPE.ADMIN && hasAcceptedSignUp && (
       <ActionableDialog
         open={isWithdrawModalOpen}
         setOpen={() => setIsWithdrawModalOpen(!isWithdrawModalOpen)}
