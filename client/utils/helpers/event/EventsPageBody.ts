@@ -43,23 +43,6 @@ export function getEventVacancies(data: EventData): { filled: number, total: num
   return { filled, total, remaining: total - filled };
 }
 
-// Filters events based on event type and volunteer type given some filter options
-export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
-  // TODO: sort by increasing remaining slots left
-  // default calendar value is null
-  const allowAllDates = getDateFilter(filters) === null;
-
-  return events.filter((e: EventData) => {
-    const allowEvent = getEventType(e) === undefined;
-    const allowVol = getVolunteerType(e) === undefined;
-
-    // TODO: fix date filtering
-    return (allowAllDates ? true : getDateFilter(filters) === getDate(e))
-      && (allowEvent || getEventFilters(filters).includes(getEventType(e)))
-      && (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)));
-  });
-}
-
 // Getters for events, to future-proof changes to event structure
 function getDate(e: EventData): dayjs.Dayjs {
   return dayjs(e.startDate);
@@ -103,4 +86,30 @@ function getVolunteerFilters(f: EventFilterOptions): Array<VOLUNTEER_TYPE> {
     ret.push(VOLUNTEER_TYPE.COMMITED);
   }
   return ret;
+}
+
+/**
+ * Compares two dayjs.Dayjs objects based on the date but not time
+ *
+ * @param d1 arbitrary date to be compared
+ * @param d2 arbitrary date to be compared
+ */
+function areDatesEqual(d1: dayjs.Dayjs, d2: dayjs.Dayjs) {
+  return d1.diff(d2, 'day') === 0;
+}
+
+// Filters events based on event type and volunteer type given some filter options
+export function withFilters(events: Array<EventData>, filters: EventFilterOptions) {
+  // TODO: sort by increasing remaining slots left
+  // default calendar value is null
+  const allowAllDates = getDateFilter(filters) === null;
+
+  return events.filter((e: EventData) => {
+    const allowEvent = getEventType(e) === undefined;
+    const allowVol = getVolunteerType(e) === undefined;
+
+    return (allowAllDates ? true : areDatesEqual(getDateFilter(filters), getDate(e)))
+      && (allowEvent || getEventFilters(filters).includes(getEventType(e)))
+      && (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)));
+  });
 }
