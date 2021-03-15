@@ -15,7 +15,7 @@ import { SignUpResponse } from '@utils/api/response';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import { objectMap } from '@utils/helpers/objectMap';
+import { objectFilter } from '@utils/helpers/objectFilter';
 import { ToastStatus } from '@type/common';
 import { FormQuestionMapper } from './FormGenerator';
 import { QuestionWithOptions } from '@type/form';
@@ -90,8 +90,8 @@ const SignUpFormGenerator = ({
 
   const handleSubmit = async (formValues: Record<string, any>) => {
     // @ts-ignore type exists
-    const values = objectMap(formValues, (element) =>
-      element || {}
+    const values = objectFilter(formValues, (element) =>
+      typeof element === 'boolean' || element
     );
 
     // Upload and get cover image URL
