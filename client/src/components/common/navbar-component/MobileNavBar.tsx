@@ -179,7 +179,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                 closeMenuNavigateTo(handleCloseAll, VOLUNTEER_PROFILES_ROUTE)
               }
             >
-              <ListItemText primary='Volunteer Profiles' />
+              <ListItemText primary='Volunteers List' />
             </ListItem>
             <ListItem
               button
@@ -191,7 +191,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                 )
               }
             >
-              <ListItemText primary='Pending Requests' />
+              <ListItemText primary='Pending Approvals' />
             </ListItem>
           </List>
         </Collapse>
