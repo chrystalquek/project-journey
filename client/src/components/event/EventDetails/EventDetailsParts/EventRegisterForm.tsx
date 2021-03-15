@@ -8,6 +8,7 @@ import {
   MenuItem,
   TextField,
   makeStyles,
+  Grid,
 } from '@material-ui/core';
 import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
 import { VolunteerData } from '@type/volunteer';
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   positionContainer: {
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(4),
   },
 }));
@@ -83,99 +85,123 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
     <>
       <form onSubmit={onFormSubmit}>
         <EventDivider fontBold gutterBottom>Register Here</EventDivider>
-        <EventTypography fontBold text="Position Interested:" gutterBottom />
-        <EventTypography text="First Choice:" gutterBottom />
-        <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
-          <InputLabel id="first-choice">Select Position</InputLabel>
-          <Select
-            required
-            fullWidth
-            labelId="first-choice"
-            id="firstChoice"
-            name="firstChoice"
-            value={formState.firstChoice}
-            onChange={handleChange}
-          >
-            {roles.map((v: FormSelectRow) => (
-              <MenuItem
-                key={v.id}
-                value={v.value}
-                disabled={v.isDisabled}
+        <Grid container direction="column" spacing={5}>
+          <Grid item>
+            <EventTypography fontBold text="Position Interested:" />
+          </Grid>
+
+          <Grid item>
+            <EventTypography text="First Choice:" gutterBottom />
+            <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
+              <TextField
+                select
+                variant="outlined"
+                label="Select Position"
+                size="small"
+                required
+                fullWidth
+                id="firstChoice"
+                name="firstChoice"
+                value={formState.firstChoice}
+                onChange={handleChange}
               >
-                {v.description}
+                {roles.map((v: FormSelectRow) => (
+                  <MenuItem
+                    key={v.id}
+                    value={v.value}
+                    disabled={v.isDisabled}
+                  >
+                    {v.description}
 
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <EventTypography text="Second Choice: (optional)" gutterBottom />
-        <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
-          <InputLabel id="second-choice">Select Position</InputLabel>
-          <Select
-            fullWidth
-            labelId="second-choice"
-            id="secondChoice"
-            name="secondChoice"
-            value={formState.secondChoice}
-            onChange={handleChange}
-          >
-            {roles.map((v: FormSelectRow) => (
-              <MenuItem
-                key={v.id}
-                value={v.value}
-                disabled={v.isDisabled}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+          </Grid>
+
+          <Grid item>
+            <EventTypography text="Second Choice: (optional)" gutterBottom />
+            <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
+              <TextField
+                select
+                variant="outlined"
+                label="Select Position"
+                size="small"
+                fullWidth
+                id="secondChoice"
+                name="secondChoice"
+                value={formState.secondChoice}
+                onChange={handleChange}
               >
-                {v.description}
+                {roles.map((v: FormSelectRow) => (
+                  <MenuItem
+                    key={v.id}
+                    value={v.value}
+                    disabled={v.isDisabled}
+                  >
+                    {v.description}
 
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <EventTypography text="Third Choice: (optional)" gutterBottom />
-        <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
-          <InputLabel id="third-choice">Select Position</InputLabel>
-          <Select
-            fullWidth
-            labelId="third-choice"
-            id="thirdChoice"
-            name="thirdChoice"
-            value={formState.thirdChoice}
-            onChange={handleChange}
-          >
-            {roles.map((v: FormSelectRow) => (
-              <MenuItem
-                key={v.id}
-                value={v.value}
-                disabled={v.isDisabled}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+          </Grid>
+
+          <Grid item>
+            <EventTypography text="Third Choice: (optional)" gutterBottom />
+            <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
+              <TextField
+                select
+                variant="outlined"
+                label="Select Position"
+                size="small"
+                fullWidth
+                id="thirdChoice"
+                name="thirdChoice"
+                value={formState.thirdChoice}
+                onChange={handleChange}
               >
-                {v.description}
+                {roles.map((v: FormSelectRow) => (
+                  <MenuItem
+                    key={v.id}
+                    value={v.value}
+                    disabled={v.isDisabled}
+                  >
+                    {v.description}
 
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <EventTypography fontBold text="Anything you would like us to know?" gutterBottom />
-        <TextField
-          id="additionalInfo"
-          name="additionalInfo"
-          fullWidth
-          multiline
-          rows={4}
-          label="Type something here..."
-          variant="outlined"
-          onChange={handleChange}
-          disabled={isDisabled}
-        />
-        <Box margin={3} />
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+          </Grid>
 
-        <EventButton
-          onSubmit={onFormSubmit}
-          disabled={isDisabled}
-          className={classes.button}
-          type="submit"
-        >
-          Register
-        </EventButton>
+          <Grid item>
+            <EventTypography fontBold text="Anything you would like us to know?" gutterBottom />
+            <TextField
+              id="additionalInfo"
+              name="additionalInfo"
+              fullWidth
+              multiline
+              rows={4}
+              label="Type something here..."
+              variant="outlined"
+              onChange={handleChange}
+              disabled={isDisabled}
+            />
+          </Grid>
+
+          <Grid item>
+            <Box margin={3} />
+            <EventButton
+              onSubmit={onFormSubmit}
+              disabled={isDisabled}
+              className={classes.button}
+              type="submit"
+            >
+              Register
+            </EventButton>
+          </Grid>
+        </Grid>
       </form>
     </>
   );
