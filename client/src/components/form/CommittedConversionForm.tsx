@@ -4,6 +4,7 @@ import { conversionFormQuestions } from './questions/CommittedConversionQuestion
 import * as Yup from 'yup';
 
 const CommittedConversionForm = ({handleSubmit}) => {
+  const personalityRegex = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
 
   const conversionSchema = {
     address: Yup.string().required('Required'),
@@ -24,7 +25,7 @@ const CommittedConversionForm = ({handleSubmit}) => {
     hasFirstAidCertification: Yup.boolean().required('Required'),
     leadershipInterest: Yup.string().required('Required'),
     interests: Yup.string().required('Required'),
-    personality: Yup.string().required('Required'),
+    personality: Yup.string().matches(personalityRegex, 'Invalid value').required('Required'),
     strengths: Yup.string().required('Required'),
     volunteerContribution: Yup.string().required('Required'),
     hasCriminalRecord: Yup.boolean().required('Required'),

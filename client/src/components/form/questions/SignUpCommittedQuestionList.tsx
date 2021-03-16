@@ -332,7 +332,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: 'personality',
-        displayText: ['What is your personality type via www.16personalities.com? (For example: INTJ_A)'],
+        displayText: ['What is your personality type via www.16personalities.com? (For example: INTJ-A)'],
         type: 'shortAnswer',
         initialValue: '',
         isRequired: true,
