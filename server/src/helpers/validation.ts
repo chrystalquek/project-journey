@@ -6,10 +6,10 @@ import {
   CITIZENSHIP_TYPES,
   GENDER_TYPES,
   LEADERSHIP_INTEREST_TYPES,
-  PERSONALITY_TYPES,
   RACE_TYPES,
   SOCIAL_MEDIA_PLATFORMS,
   VOLUNTEER_TYPE,
+  PERSONALITY_TYPES_REGEX
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
@@ -41,6 +41,14 @@ export const stringEnumValidator = (
   }
   return true;
 };
+
+const regexValidator = (regexExp: RegExp, regexName : string, value: string) => {
+  if (!regexExp.test(value)) {
+    throw new Error(`${regexName}: "${value}" must conform with the regex ${regexExp}`);
+  }
+
+  return true;
+}
 
 const checkIfStatusValid = (value: SignUpStatus) => {
   const isPending = value === 'pending';
@@ -175,7 +183,7 @@ const description = body('description').isString().optional();
 const interests = body('interests').isString().optional();
 const personality = body('personality')
   .isString()
-  .custom((personalityType: string) => stringEnumValidator(PERSONALITY_TYPES, 'Personality', personalityType))
+  .custom((personalityType: string) => regexValidator(PERSONALITY_TYPES_REGEX, 'Personality', personalityType))
   .optional();
 const strengths = body('strengths').isArray().optional();
 const languages = body('languages').isArray().optional();
