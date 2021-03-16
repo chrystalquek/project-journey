@@ -182,7 +182,7 @@ const SignUpFormGenerator = ({
   };
 
   const phoneRegExp = /^(\+65)?[689]\d{7}$/;
-  const personalityRegex = /(I|E)(N|S)(F|T)(J|P)_(A|T)/;
+  const personalityRegex = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
 
   const requiredSchema: object = {};
 
