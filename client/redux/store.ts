@@ -55,11 +55,11 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducers);
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+  middleware: (getDefaultMiddleware) => (process.env.NODE_ENV === 'development' ? getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
-  }).concat(logger),
+  }).concat(logger) : getDefaultMiddleware()),
   devTools: process.env.NODE_ENV === 'development',
 });
 

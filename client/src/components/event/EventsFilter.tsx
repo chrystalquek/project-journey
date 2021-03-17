@@ -8,10 +8,8 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import {
   Checkbox,
-  FormControl,
   FormControlLabel,
   FormGroup,
-  makeStyles,
   Typography,
 } from '@material-ui/core';
 import { EventFilterOptions, EventFilters } from '@type/event';
@@ -113,20 +111,20 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
             <Typography>Date</Typography>
           </AccordionSummary>
           <AccordionDetails
-            style={{ justifyContent: 'left', paddingBottom: '15px' }}
+            style={{ justifyContent: 'left', paddingBottom: '16px' }}
           >
             <KeyboardDatePicker
               value={filters.date}
               variant="inline"
               onChange={(date) => handleDateChange(date)}
               minDate={dayjs(new Date())}
-              format="MM/DD/YYYY"
+              format="DD/MM/YYYY"
               inputVariant="outlined"
               margin="dense"
               placeholder="dd/MM/yyyy"
               PopoverProps={{
-                anchorOrigin: {horizontal: 'left', vertical: 'bottom'},
-                transformOrigin: {horizontal: 'left', vertical: 'top'},
+                anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
+                transformOrigin: { horizontal: 'left', vertical: 'top' },
               }}
             />
           </AccordionDetails>
