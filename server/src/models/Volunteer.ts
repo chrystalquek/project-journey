@@ -21,31 +21,9 @@ export const CITIZENSHIP_TYPES = [
 ];
 export const RACE_TYPES = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
 export const LEADERSHIP_INTEREST_TYPES = ['yes', 'no', 'maybe'];
-export const PERSONALITY_TYPES = [
-  'INTJ_A',
-  'INTJ_T',
-  'INTP_A',
-  'INTP_T',
-  'ENTJ_A',
-  'ENTJ_T',
-  'ENFP_A',
-  'ENFP_T',
-  'ISTJ_A',
-  'ISTJ_T',
-  'ISFJ_A',
-  'ISFJ_T',
-  'ESTJ_A',
-  'ESTJ_T',
-  'ESFJ_A',
-  'ESFJ_T',
-  'ISTP_A',
-  'ISTP_T',
-  'ISFP_A',
-  'ISFP_T',
-  'ESTP_A',
-  'ESTP_T',
-  'ESFP_A',
-];
+
+export const PERSONALITY_TYPES_REGEX = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
+
 export const SOCIAL_MEDIA_PLATFORMS = [
   'instagram',
   'facebook',
@@ -139,10 +117,10 @@ export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
   },
   personality: {
     type: String,
-    enum: PERSONALITY_TYPES,
+    validate: PERSONALITY_TYPES_REGEX,
   },
   strengths: {
-    type: String,
+    type: [String],
   },
   volunteeringOpportunityInterest: {
     type: String,
