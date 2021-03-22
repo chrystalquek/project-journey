@@ -601,7 +601,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </Grid>
           </Grid>
 
-          {eventType !== 'volunteering' && (
+          {eventType === 'volunteering' && (
             <>
               <Grid item container>
                 <Grid item xs={12}>
@@ -687,7 +687,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                         <div style={{ display: 'flex' }}>
                           <Typography className={classes.questionStyle}>
                             Question
-                          {' '}
+                            {' '}
                             {index + 1}
                           </Typography>
                           <IconButton onClick={() => handleRemoveQuestion(index)}>
@@ -730,7 +730,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                 <>
                                   <Typography className={classes.optionStyle}>
                                     Options:
-                                {' '}
+                                    {' '}
                                   </Typography>
                                   {question.options.map((option, optionIndex) => (
                                     <div
@@ -769,7 +769,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                     onClick={() => handleAddOption(index)}
                                   >
                                     + Add another option
-                              </Button>
+                                  </Button>
                                 </>
                               )}
                             </Formik>
@@ -777,7 +777,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                         <div className={classes.isRequiredStyle}>
                           <Typography style={{ display: 'inline-block' }}>
                             Is question required?
-                        </Typography>
+                          </Typography>
                           <Switch
                             checked={question.isRequired}
                             onChange={(e) => handleChangeQuestion(
@@ -795,7 +795,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                     onClick={handleAddQuestion}
                   >
                     + Add another question
-                </Button>
+                  </Button>
                 </>
               )}
             </Formik>

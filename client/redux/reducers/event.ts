@@ -64,6 +64,7 @@ const eventSlice = createSlice({
   reducers: {
     resetEventStatus(state) {
       state.status = '';
+      state.form = null;
     },
   },
   extraReducers: (builder) => {
