@@ -28,6 +28,7 @@ const EventDetailsWrapper: FC<EventDetailsWrapperProps> = (props) => {
   return (
     <div style={{
       marginLeft: isDesktop ? theme.spacing(9) : 0,
+      marginRight: isDesktop ? theme.spacing(10) : 0,
     }}
     >
       <AppBar
