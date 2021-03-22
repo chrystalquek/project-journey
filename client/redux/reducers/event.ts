@@ -51,9 +51,9 @@ const addToData = (events: Array<EventData>, state: EventState) => {
   events?.forEach(
     (event) => (state.data[event._id] = {
       ...event,
-      startDate: new Date(event.startDate),
-      endDate: new Date(event.endDate),
-      deadline: new Date(event.deadline),
+      startDate: event.startDate,
+      endDate: event.endDate,
+      deadline: event.deadline,
     }),
   );
 };

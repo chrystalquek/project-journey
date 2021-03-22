@@ -20,7 +20,7 @@ const initialState: CommitmentApplicationState = {
 const addToData = (commitmentApplications: Array<CommitmentApplicationData>, state: CommitmentApplicationState) => {
   commitmentApplications.forEach((commitmentApplication) => state.data[commitmentApplication._id] = {
     ...commitmentApplication,
-    createdAt: new Date(commitmentApplication.createdAt),
+    createdAt: commitmentApplication.createdAt,
   });
 };
 
@@ -41,7 +41,7 @@ const commitmentApplicationSlice = createSlice({
     });
     builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
       const { payload } = action;
-      const newCommitmentApplication = { ...payload, createdAt: new Date(payload.createdAt) } as CommitmentApplicationData;
+      const newCommitmentApplication = { ...payload, createdAt: payload.createdAt } as CommitmentApplicationData;
       state.data[newCommitmentApplication._id] = newCommitmentApplication;
       state.pendingCommitmentApplications.ids.push(newCommitmentApplication._id);
     });

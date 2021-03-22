@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
   const classes = useStyles();
-  const { date, time } = parseDate(event.startDate, event.endDate);
+  const { date, time } = parseDate(new Date(event.startDate), new Date(event.endDate));
 
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -80,7 +80,7 @@ const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
       <FeedbackModal
         title={event.name}
         imageUrl={event?.coverImage}
-        eventDate={event.startDate}
+        eventDate={new Date(event.startDate)}
         description={event.description}
         isOpen={isOpen}
         eventId={event._id}

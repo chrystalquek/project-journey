@@ -182,7 +182,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
               <TableRow key={vol.email}>
                 <TableCell onClick={() => router.push(`/profile/${vol._id}`)} className={classes.nameRow}><b>{vol.name}</b></TableCell>
                 <TableCell>{capitalize(vol.volunteerType)}</TableCell>
-                <TableCell>{vol.createdAt.toLocaleDateString()}</TableCell>
+                <TableCell>{new Date(vol.createdAt).toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -52,8 +52,8 @@ const addToData = (volunteers: Array<VolunteerData>, state: VolunteerState) => {
   volunteers.forEach((volunteer) => {
     state.data[volunteer._id] = {
       ...volunteer,
-      birthday: new Date(volunteer.birthday),
-      createdAt: new Date(volunteer.createdAt),
+      birthday: volunteer.birthday,
+      createdAt: volunteer.createdAt,
     };
   });
 };
