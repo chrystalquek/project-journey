@@ -49,7 +49,7 @@ const EventCard: FC<EventCardProps> = ({ event, upcomingSignUps, onCardClick }) 
   const classes = useStyles();
   const { total, remaining } = getEventVacancies(event);
   const vacancies = `${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} left`;
-  const { date, time } = parseDate(event.startDate, event.endDate);
+  const { date, time } = parseDate(new Date(event.startDate), new Date(event.endDate));
 
   const getSignUpStatus = (signUps: SignUpData[], eventData: EventData) => {
     const status = signUps.find((signUp) => signUp.eventId === eventData._id)?.status || 'unknown';

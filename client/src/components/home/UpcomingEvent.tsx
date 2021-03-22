@@ -133,12 +133,12 @@ const UpcomingEvent: FC<{}> = ({ }) => {
         : upcomingEvents.map((event) => (
           <Card className={classes.card} key={event._id} onClick={() => router.push(`/event/${event._id}`)}>
             <CardContent>
-              <Typography>{formatDateStartEndTime(event.startDate, event.endDate).date}</Typography>
+              <Typography>{formatDateStartEndTime(new Date(event.startDate), new Date(event.endDate)).date}</Typography>
               <Typography variant="h4">{event.name}</Typography>
               <Typography>
                 Time:
                 {' '}
-                {formatDateStartEndTime(event.startDate, event.endDate).time}
+                {formatDateStartEndTime(new Date(event.startDate), new Date(event.endDate)).time}
               </Typography>
               {generateNotification(event)}
             </CardContent>
