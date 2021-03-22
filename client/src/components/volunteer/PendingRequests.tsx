@@ -90,7 +90,7 @@ const PendingRequests: FC<{}> = ({ }) => {
                 {upcomingVolunteers.map((volunteer) => (
                   <TableRow key={volunteer._id}>
                     <TableCell><b>{volunteer.name}</b></TableCell>
-                    <TableCell>{volunteer.createdAt.toLocaleDateString()}</TableCell>
+                    <TableCell>{new Date(volunteer.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell>{volunteer.volunteerType}</TableCell>
                     <TableCell>{getApproveRejectButtons(volunteer)}</TableCell>
                   </TableRow>

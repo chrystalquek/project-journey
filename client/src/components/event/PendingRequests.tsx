@@ -88,7 +88,7 @@ const PendingRequests: FC = () => {
                       <b>{event.name}</b>
 
                     </TableCell>
-                    <TableCell>{event.startDate.toLocaleDateString()}</TableCell>
+                    <TableCell>{new Date(event.startDate).toLocaleDateString()}</TableCell>
                     <TableCell><div className={classes.shapeCircle}>{pendingRequestsForEventCount(event)}</div></TableCell>
                   </TableRow>
                 ))}
