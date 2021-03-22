@@ -54,8 +54,8 @@ const userSlice = createSlice({
       const userObj = jwt.decode(payload.token);
       state.user = {
         ...userObj,
-        birthday: new Date(userObj.birthday),
-        createdAt: new Date(userObj.createdAt),
+        birthday: userObj.birthday,
+        createdAt: userObj.createdAt,
       };
     });
     builder.addCase(user.rejected, (state) => {
