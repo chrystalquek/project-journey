@@ -26,7 +26,10 @@ const useStyles = makeStyles((theme) => ({
   },
   highlight: {
     color: theme.palette.text.secondary,
-  }
+  },
+  row: {
+    height: '20px',
+  },
 }));
 
 const EventInformation: FC<EventInformationProps> = ({ event }) => {
@@ -34,7 +37,12 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
   const rows: Array<TableData> = getEventInfo(event);
   return (
     <Grid container spacing={5} direction="column">
-      <Grid item>
+      <Grid
+        item
+        style={{
+          paddingBottom: 0,
+        }}
+      >
         <EventTypography fontSize="h3" fontBold borderBottom gutterBottom text="Event Information" />
       </Grid>
       <Grid item>
@@ -44,6 +52,7 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
               {rows.map((row: TableData) => (
                 <TableRow
                   key={row.title}
+                  className={classes.row}
                 >
                   <TableCell className={classes.root} padding="none" component="th" scope="row">
                     {row.isHighlight
