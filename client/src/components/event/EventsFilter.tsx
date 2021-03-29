@@ -65,13 +65,15 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
   filters,
   setFilters,
 }: AdminEventsFilterProps) => {
-  const [dateExpanded, setDateExpanded] = useState(false);
-  const [eventTypeExpanded, setEventTypeExpanded] = useState(false);
-  const [volTypeExpanded, setVolTypeExpanded] = useState(false);
+  const [dateExpanded, setDateExpanded] = useState<boolean>(false);
+  const [eventTypeExpanded, setEventTypeExpanded] = useState<boolean>(false);
+  const [volTypeExpanded, setVolTypeExpanded] = useState<boolean>(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
 
   const handleDateChange = (date) => {
     const newFilters = { ...filters, [EventFilters.DATE]: date };
     setFilters(newFilters);
+    setIsCalendarOpen(false);
   };
 
   const handleCheckboxChange = (event) => {
@@ -116,6 +118,9 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
             <KeyboardDatePicker
               value={filters.date}
               variant="inline"
+              open={isCalendarOpen}
+              onClose={() => setIsCalendarOpen(false)}
+              onOpen={() => setIsCalendarOpen(true)}
               onChange={(date) => handleDateChange(date)}
               minDate={dayjs(new Date())}
               format="DD/MM/YYYY"
