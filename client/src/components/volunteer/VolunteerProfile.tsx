@@ -103,6 +103,19 @@ const VolunteerProfile: FC<{}> = ({ }) => {
     ));
   };
 
+  const allFiltersCleared = Object.values(VOLUNTEER_TYPE).every(volType => !volunteerType[volType]);
+
+  const clearallFilters = () => {
+    var clearedVolunteerTypeFilters = Object.assign({}, volunteerType);
+    Object.values(VOLUNTEER_TYPE).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
+
+    dispatch(getVolunteersVolunteerProfile(
+      fillOtherParams({
+        volunteerType: clearedVolunteerTypeFilters
+      }),
+    ));
+  }
+
   const [openFilter, setOpenFilter] = React.useState(isMobile);
 
   const filterOptions = (
@@ -119,14 +132,18 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             <Button className={classes.rightButton} size="small" onClick={() => setOpenFilter(!openFilter)}>{openFilter ? <RemoveIcon fontSize="small" /> : <AddIcon fontSize="small" />}</Button>
             {openFilter
               && (
-                <FormGroup>
-                  {Object.values(VOLUNTEER_TYPE).map((volType) => (
-                    <FormControlLabel
-                      control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} />}
-                      label={<Typography variant="body1">{capitalize(volType)}</Typography>}
-                    />
-                  ))}
-                </FormGroup>
+                <>
+                  <FormGroup>
+                    {Object.values(VOLUNTEER_TYPE).map((volType) => (
+                      <FormControlLabel
+                        control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} />}
+                        label={<Typography variant="body1">{capitalize(volType)}</Typography>}
+                      />
+                    ))}
+
+                  </FormGroup>
+                  <Button className={classes.link} disabled={allFiltersCleared} onClick={clearallFilters}><u>Clear</u></Button>
+                </>
               )}
           </TableCell>
         </TableRow>
