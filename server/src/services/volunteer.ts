@@ -49,7 +49,7 @@ const getVolunteer = async (email: string) => {
  * @param id User id to be searched
  */
 const getVolunteerById = async (id: string) => {
-  const volunteer = await Volunteer.findById(id).populate("commitmentApplicationIds").lean().exec();
+  const volunteer = await Volunteer.findById(id).populate('commitmentApplicationIds').lean().exec();
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }
@@ -62,21 +62,21 @@ const getVolunteerById = async (id: string) => {
  */
 const getAllVolunteers = async (query: QueryParams) => {
   // no of volunteers that match name (if any)
-  const count = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find({}))
+  const count = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
     .find({ volunteerType: { $in: query.volunteerType || [] } })
     .countDocuments();
 
   // get only part of the collection cos of pagination
   let volunteers;
   if (query.skip && query.limit) {
-    volunteers = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find({}))
+    volunteers = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
       .find({ volunteerType: { $in: query.volunteerType || [] } })
       .sort({ [query.sort]: 1 })
       .skip(query.skip).limit(query.limit)
       .lean()
       .exec();
   } else {
-    volunteers = await (query.name ? Volunteer.find({ $text: { $search: query.name } }) : Volunteer.find({}))
+    volunteers = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
       .find({ volunteerType: { $in: query.volunteerType || [] } })
       .sort({ [query.sort]: 1 })
       .lean().exec();
