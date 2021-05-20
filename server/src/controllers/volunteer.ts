@@ -1,11 +1,9 @@
 import express from 'express';
 import _ from 'lodash';
 import { body, param } from 'express-validator';
-import jwt from 'express-jwt';
 import { QueryParams, VolunteerData } from '../types';
 import volunteerService from '../services/volunteer';
 import commitmentApplicationService from '../services/commitmentApplication';
-import { accessTokenSecret } from '../helpers/auth';
 
 import HTTP_CODES from '../constants/httpCodes';
 import VALIDATOR from '../helpers/validation';
@@ -114,6 +112,12 @@ const createNewVolunteer = async (
   res: express.Response,
 ) => {
   try {
+    // assuming we create a few fixed admin accounts for biab, should only be able to create ad-hoc
+    if (req.body.volunteerType !== 'ad-hoc') {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
+    }
+
     await volunteerService.addNewVolunteer(req.body as VolunteerData);
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
@@ -132,6 +136,12 @@ const getVolunteerDetails = async (
     const volunteerDetails = await volunteerService.getVolunteer(
       req.params.email,
     );
+
+    if (req.user._id !== volunteerDetails._id) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
+    }
+
     res.status(HTTP_CODES.OK).json({
       data: volunteerDetails,
     });
@@ -148,6 +158,11 @@ const getVolunteerDetailsById = async (
   res: express.Response,
 ) => {
   try {
+    if (req.user._id !== req.params.id) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
+    }
+
     const volunteerDetails = await volunteerService.getVolunteerById(
       req.params.id,
     );
@@ -240,23 +255,16 @@ const readVolunteersByIds = async (
   }
 };
 
-const checkUpdateRights = () => [
-  jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
-
-  (req, res, next) => {
-    if (req.body.administratorRemarks && req.user.volunteeerType != 'admin') {
-      return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
-    }
-
-    next();
-  },
-];
-
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
-    const savedVolunteerData = await volunteerService.updateVolunteerDetails(
-      req.body.email as string,
-      req.body.updatedVolunteerData as Partial<VolunteerData>,
+    const volunteerId = req.params.id;
+    if (req.user._id !== volunteerId) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const savedVolunteerData = await volunteerService.updateVolunteer(
+      volunteerId, req.body.updatedVolunteerData as Partial<VolunteerData>,
     );
     res.status(HTTP_CODES.OK).json(savedVolunteerData);
   } catch (error) {
@@ -286,7 +294,6 @@ export default {
   getAllVolunteerDetails,
   getPendingVolunteers,
   removeVolunteer,
-  checkUpdateRights,
   updateVolunteer,
   readVolunteersByIds,
 };

@@ -29,7 +29,7 @@ const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
   }
 };
 
-const readSignUps = async (id: string, idType: SignUpIdType) => {
+const readSignUps = async (id: string, idType: SignUpIdType): Promise<[SignUpData]> => {
   try {
     let signUp;
     switch (idType) {
@@ -216,6 +216,7 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
         deletedSignUp = await SignUp.findOneAndDelete({ signUpId: id });
         break;
       case 'eventId':
+        // @clara should this case and userId delete all that match then?
         deletedSignUp = await SignUp.findOneAndDelete({ eventId: id });
         break;
       case 'userId':

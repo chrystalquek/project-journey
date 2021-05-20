@@ -103,6 +103,7 @@ const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
   }
 };
 
+// TODO remove below after fixing image
 /**
  * Updates volunteer data with email
  * @param email
@@ -112,6 +113,21 @@ const updateVolunteerDetails = async (email: string, updatedVolunteerData: Parti
   await getVolunteer(email);
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
     { email },
+    updatedVolunteerData,
+    { new: true },
+  );
+  return savedVolunteerData;
+};
+
+/**
+ * Updates volunteer data
+ * @param id
+ * @param updatedVolunteerData
+ */
+const updateVolunteer = async (id: string, updatedVolunteerData: Partial<VolunteerData>) => {
+  await getVolunteerById(id);
+  const savedVolunteerData = await Volunteer.findOneAndUpdate(
+    { _id: id },
     updatedVolunteerData,
     { new: true },
   );
@@ -129,5 +145,5 @@ const deleteVolunteer = async (email: string) => {
 };
 
 export default {
-  addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, getVolunteerById, readVolunteersByIds, updateVolunteerDetails,
+  addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, getVolunteerById, readVolunteersByIds, updateVolunteerDetails, updateVolunteer,
 };

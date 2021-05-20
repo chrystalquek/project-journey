@@ -40,6 +40,11 @@ const readOpportunity = async (
 ): Promise<void> => {
   try {
     const opportunity = await opportunityService.readOpportunity(req.params.id);
+
+    if (req.user.volunteerType === 'ad-hoc' && opportunity.volunteerType === 'committed') {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
+    }
     res.status(HTTP_CODES.OK).json(opportunity);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({

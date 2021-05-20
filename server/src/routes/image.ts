@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import imageController from '../controllers/image';
+import authorize from '../helpers/authorize';
 
 const router = express.Router();
 
@@ -33,8 +34,11 @@ const upload = multer({
   fileFilter,
 });
 
+// @route   POST /image
+// @desc    For volunteers and admin to upload image
 router.post(
   '/',
+  authorize([]),
   upload.single('image'),
   imageController.uploadImage,
 );
@@ -48,6 +52,7 @@ router.post(
 
 router.delete(
   '/:email',
+  authorize([]),
   imageController.deleteImageWithEmail,
 );
 

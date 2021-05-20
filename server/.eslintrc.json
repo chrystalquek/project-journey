@@ -15,7 +15,23 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
-        "react/react-in-jsx-scope": "off"
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        ],
+        "react/react-in-jsx-scope": "off",
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allow": [
+                    "_id"
+                ]
+            }
+        ]
     }
 }

@@ -1,20 +1,21 @@
 import express from 'express';
 import commitmentApplicationController from '../controllers/commitmentApplication';
-import { createProtectedRouter } from '../helpers/auth';
 import authorize from '../helpers/authorize';
 import { validate } from '../helpers/validation';
 
 const router = express.Router();
-const protectedRouter = createProtectedRouter(router);
 
-router.post('/', commitmentApplicationController.createCommitmentApplication);
+// @route   POST /commitment-application
+// @desc    For ad-hoc volunteers to submit a commitment application
+router.post('/', authorize(['ad-hoc']), commitmentApplicationController.createCommitmentApplication);
 
-router.get('/', commitmentApplicationController.readCommitmentApplications);
+// @route   GET /commitment-application
+// @desc    For admin to read commitment applications
+router.get('/', authorize(['admin']), commitmentApplicationController.readCommitmentApplications);
 
-// @route   PUT /commitment-application
-// @desc    Update a commitmentApplication by id
-// @access  Private
-protectedRouter.put('/:id', authorize(['admin']),
+// @route   PUT /commitment-application/:id
+// @desc    For admin to approve or reject a commitment application
+router.put('/:id', authorize(['admin']),
   validate(commitmentApplicationController.getValidations('updateCommitmentApplication')),
   commitmentApplicationController.updateCommitmentApplication);
 

@@ -322,3 +322,12 @@ export type CommitmentApplicationData = {
     volunteerContribution: string,
     hasCriminalRecord: boolean
 }
+
+// extend express.Request type with user object
+declare global {
+    namespace Express {
+        interface Request {
+            user: VolunteerData
+        }
+    }
+}

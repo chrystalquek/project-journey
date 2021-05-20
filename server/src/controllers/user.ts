@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { getUser, readAllUsers } from '../services/user';
+import { getUser } from '../services/user';
 import { VolunteerData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -29,13 +29,6 @@ const getValidations = (method: UserValidatorMethod) => {
     default:
       return [];
   }
-};
-
-const getAllUsers = async (req: express.Request, res: express.Response) => {
-  const users = await readAllUsers();
-  res.json({
-    data: users,
-  });
 };
 
 const login = async (req: express.Request, res: express.Response) => {
@@ -70,6 +63,7 @@ const login = async (req: express.Request, res: express.Response) => {
   }
 };
 
+// TODO can remove?
 const updatePassword = async (req: express.Request, res: express.Response) => {
   const {
     email,
@@ -79,13 +73,19 @@ const updatePassword = async (req: express.Request, res: express.Response) => {
 
   try {
     const user = await getUser(email);
-    if (bcrypt.compareSync(password, user.password)) {
-      await volunteerService.updateVolunteerDetails(email, { password: newPassword });
+
+    if (req.user._id !== user._id) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    }
+
+    // should not be same as old password
+    if (!bcrypt.compareSync(newPassword, user.password)) {
+      await volunteerService.updateVolunteer(user._id, { password: newPassword });
       res.status(HTTP_CODES.OK).send();
     } else {
       res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
         errors: [{
-          message: 'Password is incorrect, please try again',
+          message: 'Password is the same, please enter a new password',
         }],
       });
     }
@@ -99,7 +99,6 @@ const updatePassword = async (req: express.Request, res: express.Response) => {
 };
 
 export default {
-  getAllUsers,
   login,
   getValidations,
   updatePassword,

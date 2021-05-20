@@ -1,32 +1,28 @@
 import express from 'express';
 import eventController from '../controllers/event';
 import opportunityController from '../controllers/opportunity';
-import { createProtectedRouter } from '../helpers/auth';
+import authorize from '../helpers/authorize';
 import { validate } from '../helpers/validation';
 
 const router = express.Router();
-const protectedRouter = createProtectedRouter(router);
 
 // @route   GET /opportunity/:id
 // @desc    Get opportunity by id
-// @access  Private
-protectedRouter.get('/:id', opportunityController.readOpportunity);
+router.get('/:id', authorize([]), opportunityController.readOpportunity);
 
-// @route   DELETE /opportunity
+// @route   DELETE /opportunity/:id
 // @desc    Delete a opportunity by id
-// @access  Private
-protectedRouter.delete('/:id', opportunityController.deleteOpportunity);
+router.delete('/:id', authorize(['admin']), opportunityController.deleteOpportunity);
 
-// @route   PUT /opportunity
+// @route   PUT /opportunity/:id
 // @desc    Update a opportunity by id
-// @access  Private
-protectedRouter.put('/:id', opportunityController.updateOpportunity);
+router.put('/:id', authorize(['admin']), opportunityController.updateOpportunity);
 
 // @route   POST /opportunity
 // @desc    Post a new opportunity
-// @access  Private
-protectedRouter.post(
+router.post(
   '/',
+  authorize(['admin']),
   validate(eventController.getValidations('createEvent')),
   validate(opportunityController.getValidations('createOpportunity')),
   opportunityController.createOpportunity,
