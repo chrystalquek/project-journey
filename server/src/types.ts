@@ -324,6 +324,7 @@ export type CommitmentApplicationData = {
 }
 
 // extend express.Request type with user object
+/* eslint-disable no-unused-vars */
 declare global {
     namespace Express {
         interface Request {
@@ -331,3 +332,4 @@ declare global {
         }
     }
 }
+/* eslint-enable no-unused-vars */

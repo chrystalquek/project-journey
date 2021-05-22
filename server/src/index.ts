@@ -1,7 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-
-import CONFIG from './config/index';
 import db from './loaders/connection';
 
 // Import routes
@@ -34,8 +32,8 @@ if (config.env === 'development') {
 // Add routes to app
 app.use('/', router);
 
-app.listen(CONFIG.port, () => {
-  console.log('listening on port: ', CONFIG.port);
+app.listen(config.port, () => {
+  console.log('listening on port: ', config.port);
 });
 
 export default app;

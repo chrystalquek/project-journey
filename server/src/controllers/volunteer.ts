@@ -1,5 +1,4 @@
 import express from 'express';
-import _ from 'lodash';
 import { body, param } from 'express-validator';
 import { QueryParams, VolunteerData } from '../types';
 import volunteerService from '../services/volunteer';
@@ -219,9 +218,10 @@ const getPendingVolunteers = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    const pendingCommitmentApplications = await commitmentApplicationService.readCommitmentApplications(
-      'pending',
-    );
+    const pendingCommitmentApplications = await commitmentApplicationService
+      .readCommitmentApplications(
+        'pending',
+      );
 
     const pendingVolunteersIds = pendingCommitmentApplications.map(
       (commitmentApplication) => commitmentApplication.volunteerId,

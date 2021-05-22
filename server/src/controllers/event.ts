@@ -4,7 +4,7 @@ import signUpService, { checkIfAccepted } from '../services/signUp';
 import answerService from '../services/forms/answer';
 import { roleCapacityValidator } from '../helpers/validation';
 import {
-  EventSearchType, EventData, RoleData, QueryParams, VolunteerType,
+  EventSearchType, EventData, RoleData, VolunteerType,
 } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';

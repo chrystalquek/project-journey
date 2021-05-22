@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import {
-  QueryParams, EventSearchType, EventData, VolunteerType,
+  EventSearchType, EventData, VolunteerType,
 } from '../types';
 
 import Event from '../models/Event';
