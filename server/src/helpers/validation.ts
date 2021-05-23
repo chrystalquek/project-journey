@@ -4,38 +4,9 @@ import express from 'express';
 import { checkIfAccepted } from '../services/signUp';
 import HTTP_CODES from '../constants/httpCodes';
 import {
-  AnswerData,
-  QuestionsOptionsRequestData,
   RoleData,
   SignUpStatus,
 } from '../types';
-
-const checkIfStatusValid = (value: SignUpStatus) => {
-  const isPending = value === 'pending';
-  const isRejected = value === 'rejected';
-  const isAccepted = checkIfAccepted(value);
-
-  return isPending || isRejected || isAccepted;
-};
-
-export const signUpStatusValidator = (value: SignUpStatus) => {
-  if (checkIfStatusValid(value)) {
-    return true;
-  }
-  throw new Error(
-    'status must be either "pending", "rejected", or ["accepted": <acceptedRole>]',
-  );
-};
-
-export const roleCapacityValidator = (roles: Array<RoleData>) => {
-  for (let i = 0; i < roles.length; i += 1) {
-    const currRole = roles[i];
-    if (currRole.capacity < currRole.volunteers.length) {
-      return false;
-    }
-  }
-  return true;
-};
 
 const newPassword = body('newPassword').isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
@@ -49,6 +20,16 @@ const pastEventIds = body('pastEventIds').isArray();
 
 const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
 const sessionPreference = body('sessionPreference').isString().optional();
+
+export const roleCapacityValidator = (roles: Array<RoleData>) => {
+  for (let i = 0; i < roles.length; i += 1) {
+    const currRole = roles[i];
+    if (currRole.capacity < currRole.volunteers.length) {
+      return false;
+    }
+  }
+  return true;
+};
 
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request,

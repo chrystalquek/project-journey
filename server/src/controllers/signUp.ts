@@ -1,30 +1,8 @@
 import express from 'express';
-import { body } from 'express-validator';
-import { signUpStatusValidator } from '../helpers/validation';
 import signUpService from '../services/signUp';
-import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
+import { SignUpData, SignUpIdType } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
-
-export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
-
-const getValidations = (method: SignUpValidatorMethod) => {
-  switch (method) {
-    case 'updateSignUp':
-    case 'createSignUp': {
-      return [
-        body('eventId', 'event id does not exist').isString(),
-        body('userId', 'user id does not exist').isString(),
-        body('status').custom((status: SignUpStatus) => signUpStatusValidator(status)),
-        body('preferences', 'preferences does not exist').isArray().notEmpty(),
-        body('isRestricted', 'is restricted does not exist').isBoolean(),
-      ];
-    }
-    default: {
-      return [];
-    }
-  }
-};
 
 /**
  * Creates a new sign up
@@ -166,5 +144,4 @@ export default {
   readPendingSignUps,
   updateSignUp,
   deleteSignUp,
-  getValidations,
 };
