@@ -1,110 +1,11 @@
 import express from 'express';
-import { body, param } from 'express-validator';
+import _ from 'lodash';
+import jwt from 'express-jwt';
 import { QueryParams, VolunteerData } from '../types';
 import volunteerService from '../services/volunteer';
 import commitmentApplicationService from '../services/commitmentApplication';
 
 import HTTP_CODES from '../constants/httpCodes';
-import VALIDATOR from '../helpers/validation';
-
-export type VolunteerValidatorMethod =
-  | 'createVolunteer'
-  | 'getVolunteer'
-  | 'deleteVolunteer'
-  | 'updateVolunteer';
-
-/**
- * Handles route request validation for controllers
- * @param method Controller handler names
- */
-const getValidations = (method: VolunteerValidatorMethod) => {
-  switch (method) {
-    case 'createVolunteer': {
-      return [
-        // Login details
-        VALIDATOR.email(true),
-        VALIDATOR.password,
-        // Personal details
-        VALIDATOR.name,
-        VALIDATOR.nickname,
-        VALIDATOR.gender,
-        VALIDATOR.citizenship,
-        VALIDATOR.birthday,
-        VALIDATOR.address,
-        VALIDATOR.mobileNumber,
-        VALIDATOR.socialMediaPlatform,
-        VALIDATOR.instagramHandle,
-        VALIDATOR.organization,
-        VALIDATOR.position,
-        VALIDATOR.race,
-        VALIDATOR.referralSources,
-        VALIDATOR.languages,
-        VALIDATOR.volunteerType,
-        // Boolean responses
-        VALIDATOR.hasVolunteered,
-        VALIDATOR.biabVolunteeringDuration,
-        VALIDATOR.hasChildrenExperience,
-        VALIDATOR.childrenExperience,
-        VALIDATOR.hasVolunteeredExternally,
-        VALIDATOR.volunteeringExperience,
-        VALIDATOR.hasFirstAidCertification,
-        // Enum responses
-        VALIDATOR.leadershipInterest,
-        VALIDATOR.description,
-        VALIDATOR.interests,
-        VALIDATOR.personality,
-        VALIDATOR.skills,
-        VALIDATOR.strengths,
-        VALIDATOR.volunteeringOpportunityInterest,
-        // Volunteering related
-        VALIDATOR.volunteerReason, // Categorize answers
-        VALIDATOR.volunteerFrequency, // Frequency per month
-        VALIDATOR.volunteerContribution,
-        // Medical Information
-        VALIDATOR.hasMedicalNeeds,
-        VALIDATOR.medicalNeeds,
-        VALIDATOR.hasAllergies,
-        VALIDATOR.allergies,
-        VALIDATOR.hasMedicationDuringDay,
-        // Emergency Contact
-        VALIDATOR.emergencyContactEmail,
-        VALIDATOR.emergencyContactName,
-        VALIDATOR.emergencyContactNumber,
-        VALIDATOR.emergencyContactRelationship,
-
-      ];
-    }
-    case 'getVolunteer': {
-      return [param('email').isEmail()];
-    }
-    case 'deleteVolunteer': {
-      return [body('email').isEmail()];
-    }
-    case 'updateVolunteer': {
-      return [
-        VALIDATOR.email(false),
-        VALIDATOR.password.optional(),
-        VALIDATOR.name.optional(),
-        VALIDATOR.address.optional(),
-        VALIDATOR.mobileNumber.optional(),
-
-        VALIDATOR.socialMediaPlatform.optional(),
-        VALIDATOR.organization.optional(),
-        VALIDATOR.position.optional(),
-        VALIDATOR.leadershipInterest.optional(),
-        VALIDATOR.volunteerType.optional(),
-
-        VALIDATOR.interests.optional(),
-        VALIDATOR.personality.optional(),
-        VALIDATOR.skills.optional(),
-        VALIDATOR.administratorRemarks.optional(),
-        VALIDATOR.volunteerRemarks.optional(),
-      ];
-    }
-    default:
-      return [];
-  }
-};
 
 const createNewVolunteer = async (
   req: express.Request,
@@ -218,10 +119,10 @@ const getPendingVolunteers = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    const pendingCommitmentApplications = await commitmentApplicationService
-      .readCommitmentApplications(
-        'pending',
-      );
+    const pendingCommitmentApplications = await
+    commitmentApplicationService.readCommitmentApplications(
+      'pending',
+    );
 
     const pendingVolunteersIds = pendingCommitmentApplications.map(
       (commitmentApplication) => commitmentApplication.volunteerId,
@@ -255,6 +156,18 @@ const readVolunteersByIds = async (
   }
 };
 
+const checkUpdateRights = () => [
+  jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
+
+  (req, res, next) => {
+    if (req.body.administratorRemarks && req.user.volunteeerType !== 'admin') {
+      return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    }
+
+    next();
+  },
+];
+
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
     const volunteerId = req.params.id;
@@ -287,7 +200,6 @@ const removeVolunteer = async (req: express.Request, res: express.Response) => {
 };
 
 export default {
-  getValidations,
   createNewVolunteer,
   getVolunteerDetails,
   getVolunteerDetailsById,

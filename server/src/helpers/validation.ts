@@ -2,26 +2,13 @@ import _ from 'lodash';
 import { body, validationResult, ValidationChain } from 'express-validator';
 import express from 'express';
 import { checkIfAccepted } from '../services/signUp';
-import {
-  CITIZENSHIP_TYPES,
-  GENDER_TYPES,
-  LEADERSHIP_INTEREST_TYPES,
-  RACE_TYPES,
-  SOCIAL_MEDIA_PLATFORMS,
-  VOLUNTEER_TYPE,
-  PERSONALITY_TYPES_REGEX,
-} from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
-import { doesUserEmailExist } from '../services/volunteer';
 import {
   AnswerData,
   QuestionsOptionsRequestData,
   RoleData,
   SignUpStatus,
 } from '../types';
-import { COMMITMENT_APPLICATION_STATUS } from '../models/CommitmentApplication';
-
-const LENGTH_MINIMUM_PASSWORD = 8;
 
 const checkIfStatusValid = (value: SignUpStatus) => {
   const isPending = value === 'pending';
@@ -50,6 +37,16 @@ export const roleCapacityValidator = (roles: Array<RoleData>) => {
   return true;
 };
 
+const newPassword = body('newPassword').isString().isLength({
+  min: LENGTH_MINIMUM_PASSWORD,
+});
+
+const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
+const workshopsCount = body('workshopsCount').isInt();
+const hangoutsCount = body('hangoutsCount').isInt();
+
+const pastEventIds = body('pastEventIds').isArray();
+
 const questionValidator = (questions: Array<QuestionsOptionsRequestData>) => {
   // eslint-disable-next-line no-restricted-syntax
   questions.forEach((question) => {
@@ -74,127 +71,8 @@ const answersValidator = (answers: Array<AnswerData>) => {
   return true;
 };
 
-const email = (emailMustBeUnique: boolean) => body('email')
-  .isEmail()
-  .normalizeEmail()
-  .custom(async (emailString: string) => {
-    const isNewEmailUnique = await doesUserEmailExist(emailString);
-    if (!isNewEmailUnique && emailMustBeUnique) {
-      throw new Error('E-mail is already in use');
-    }
-
-    if (isNewEmailUnique && !emailMustBeUnique) {
-      throw new Error(`E-mail: ${emailString} does not exist in the system`);
-    }
-
-    return true;
-  });
-
-const password = body('password').isString().isLength({
-  min: LENGTH_MINIMUM_PASSWORD,
-});
-const newPassword = body('newPassword').isString().isLength({
-  min: LENGTH_MINIMUM_PASSWORD,
-});
-
-const name = body('name').isString();
-
-const address = body('address').isString();
-const nickname = body('nickname').isString().optional();
-const mobileNumber = body('mobileNumber').isString().isMobilePhone('en-SG');
-const birthday = body('birthday').isISO8601().toDate();
-const socialMediaPlatform = body('socialMediaPlatform')
-  .isString()
-  .custom((socialMedia: string) => stringEnumValidator(
-    SOCIAL_MEDIA_PLATFORMS,
-    'Social Media Platform',
-    socialMedia,
-  ));
-const instagramHandle = body('instagramHandle').isString().optional();
-const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER_TYPES, 'Gender', genderText));
-const citizenship = body('citizenship').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenshipType));
-const race = body('race')
-  .custom((raceType: string) => stringEnumValidator(RACE_TYPES, 'Race', raceType))
-  .optional();
-const organization = body('organization').isString().optional();
-const position = body('position').isString().optional();
-
-const hasVolunteered = body('hasVolunteered').isBoolean();
-const biabVolunteeringDuration = body('biabVolunteeringDuration')
-  .isNumeric()
-  .optional();
-
-const hasChildrenExperience = body('hasChildrenExperience')
-  .isBoolean()
-  .optional();
-const childrenExperience = body('childrenExperience').isString().optional();
-
-const hasVolunteeredExternally = body('hasVolunteeredExternally')
-  .isBoolean()
-  .optional();
-const volunteeringExperience = body('volunteeringExperience')
-  .isString()
-  .optional();
-
 const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
 const sessionPreference = body('sessionPreference').isString().optional();
-
-const hasFirstAidCertification = body('hasFirstAidCertification')
-  .isBoolean()
-  .optional();
-
-const leadershipInterest = body('leadershipInterest')
-  .isString()
-  .custom((leadershipInterestType: string) => stringEnumValidator(
-    LEADERSHIP_INTEREST_TYPES,
-    'Leadership Interest',
-    leadershipInterestType,
-  ))
-  .optional();
-
-const description = body('description').isString().optional();
-const interests = body('interests').isString().optional();
-const personality = body('personality')
-  .isString()
-  .custom((personalityType: string) => regexValidator(PERSONALITY_TYPES_REGEX, 'Personality', personalityType))
-  .optional();
-const strengths = body('strengths').isArray().optional();
-const languages = body('languages').isArray().optional();
-const skills = body('skills').isArray().optional();
-
-const referralSources = body('referralSources').isArray();
-
-const volunteerReason = body('volunteerReason').isString();
-const volunteerFrequency = body('volunteerFrequency').isNumeric().optional();
-const volunteerContribution = body('volunteerContribution').isString().optional();
-const volunteerType = body('volunteerType').isString().custom(
-  (type: string) => stringEnumValidator(VOLUNTEER_TYPE, 'Volunteer Type', type),
-);
-const volunteeringOpportunityInterest = body('volunteeringOpportunityInterest').isString().optional();
-
-// Medical Information
-const hasMedicalNeeds = body('hasMedicalNeeds').isBoolean().optional();
-const medicalNeeds = body('medicalNeeds').isString().optional();
-const hasAllergies = body('hasAllergies').isBoolean().optional();
-const allergies = body('allergies').isString().optional();
-const hasMedicationDuringDay = body('hasMedicationDuringDay').isBoolean().optional();
-
-// Emergency contact
-const emergencyContactName = body('emergencyContactName').isString();
-const emergencyContactNumber = body('emergencyContactNumber').isString();
-const emergencyContactEmail = body('emergencyContactEmail').isString();
-const emergencyContactRelationship = body(
-  'emergencyContactRelationship',
-).isString();
-
-const volunteerRemarks = body('volunteerRemarks').isString();
-const administratorRemarks = body('administratorRemarks').isString();
-
-const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
-const workshopsCount = body('workshopsCount').isInt();
-const hangoutsCount = body('hangoutsCount').isInt();
-
-const pastEventIds = body('pastEventIds').isArray();
 
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request,
@@ -265,7 +143,6 @@ export default {
   volunteerType,
   volunteerRemarks,
   administratorRemarks,
-  commitmentApplicationStatus,
   questionValidator,
   answersValidator,
   volunteeringSessionsCount,
