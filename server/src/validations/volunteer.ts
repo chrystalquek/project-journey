@@ -1,5 +1,7 @@
 import { body, param } from 'express-validator';
-import { password, regexValidator, stringEnumValidator } from './global';
+import {
+  email, password, regexValidator, stringEnumValidator,
+} from './global';
 import {
   CITIZENSHIP_TYPES,
   GENDER_TYPES,
@@ -108,6 +110,12 @@ const emergencyContactRelationship = body(
 
 const volunteerRemarks = body('volunteerRemarks').isString();
 const administratorRemarks = body('administratorRemarks').isString();
+const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
+const workshopsCount = body('workshopsCount').isInt();
+const hangoutsCount = body('hangoutsCount').isInt();
+const pastEventIds = body('pastEventIds').isArray();
+const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
+const sessionPreference = body('sessionPreference').isString().optional();
 
 const getValidations = (method: VolunteerValidatorMethod) => {
   switch (method) {
@@ -152,6 +160,13 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         volunteerReason, // Categorize answers
         volunteerFrequency, // Frequency per month
         volunteerContribution,
+        volunteeringSessionsCount,
+        workshopsCount,
+        hangoutsCount,
+        pastEventIds,
+        sessionsPerMonth,
+        sessionPreference,
+
         // Medical Information
         hasMedicalNeeds,
         medicalNeeds,
@@ -163,7 +178,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         emergencyContactName,
         emergencyContactNumber,
         emergencyContactRelationship,
-
       ];
     }
     case 'getVolunteer': {
