@@ -1,6 +1,7 @@
 import express from 'express';
+import { CommitmentApplicationData, CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
 import commitmentApplicationService from '../services/commitmentApplication';
-import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
+
 import HTTP_CODES from '../constants/httpCodes';
 import volunteerService from '../services/volunteer';
 

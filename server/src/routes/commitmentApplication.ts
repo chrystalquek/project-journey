@@ -1,6 +1,5 @@
 import express from 'express';
-import { createCommitmentApplication, readCommitmentApplications, updateCommitmentApplication }
-  from '../controllers/commitmentApplication';
+import commitmentApplicationController from '../controllers/commitmentApplication';
 import getValidations from '../validations/commitmentApplication';
 import { createProtectedRouter } from '../helpers/auth';
 import authorize from '../helpers/authorize';
@@ -11,10 +10,11 @@ const router = express.Router();
 router.post(
   '/',
   validate(getValidations('createCommitmentApplication')),
-  createCommitmentApplication,
+  commitmentApplicationController.createCommitmentApplication,
 );
 
-router.get('/', readCommitmentApplications);
+router.get('/',
+  commitmentApplicationController.readCommitmentApplications);
 
 // @route   PUT /commitment-application
 // @desc    Update a commitmentApplication by id
@@ -23,7 +23,7 @@ router.put(
   '/:id',
   authorize(['admin']),
   validate(getValidations('updateCommitmentApplication')),
-  updateCommitmentApplication,
+  commitmentApplicationController.updateCommitmentApplication,
 );
 
 export default router;
