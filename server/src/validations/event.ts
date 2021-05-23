@@ -1,16 +1,25 @@
 import { body } from 'express-validator';
-import { roleCapacityValidator } from '../helpers/validation';
 import { RoleData } from '../types';
 
-export type EventValidatorMethod = 'createEvent';
+type EventValidatorMethod = 'createEvent';
 
-export const getValidations = (method: EventValidatorMethod) => {
+const roleCapacityValidator = (roles: Array<RoleData>) => {
+  for (let i = 0; i < roles.length; i += 1) {
+    const currRole = roles[i];
+    if (currRole.capacity < currRole.volunteers.length) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const getValidations = (method: EventValidatorMethod) => {
   switch (method) {
     case 'createEvent': {
       return [
         body('name', 'name does not exist').exists(),
         body('description', 'description does not exist').exists(),
-        body('contentUrl', 'content url is invalid').optional({ checkFalsy: true }).isURL(),
+        body('contentUrl', 'content url is invaßlid').optional({ checkFalsy: true }).isURL(),
         body('facilitatorName', 'facilitator name does not exist').optional({ checkFalsy: true }).isString(),
         body('facilitatorDescription', 'facilitator description is not a string').optional({ checkFalsy: true }).isString(),
         body('startDate', 'start date does not exist').exists(),
@@ -29,3 +38,5 @@ export const getValidations = (method: EventValidatorMethod) => {
     }
   }
 };
+
+export default getValidations;

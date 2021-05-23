@@ -1,5 +1,8 @@
-import { body } from 'express-validator';
+import { body, ValidationChain, validationResult } from 'express-validator';
+import { Request, Response } from 'express';
+import _ from 'lodash';
 import { doesUserEmailExist } from '../services/volunteer';
+import HTTP_CODES from '../constants/httpCodes';
 
 /**
  * Helper function to deal with validation of request body inputs
@@ -7,6 +10,24 @@ import { doesUserEmailExist } from '../services/volunteer';
  * @param enumName Variable name used for identification in error statement
  * @param value String to test out against enumTypes
  */
+
+export const validate = (validations: ValidationChain[]) => async (
+  req: Request, res: Response, next: Function,
+) => {
+  await Promise.all(
+    validations.map((validation: ValidationChain) => validation.run(req)),
+  );
+
+  const validationErrors = validationResult(req);
+  if (validationErrors.isEmpty()) {
+    return next();
+  }
+
+  return res
+    .status(HTTP_CODES.UNPROCESSABLE_ENTITIY)
+    .json({ errors: validationErrors.array() });
+};
+
 export const stringEnumValidator = (
   enumTypes: Array<string>,
   enumName: string,
