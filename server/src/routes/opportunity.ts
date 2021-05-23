@@ -1,5 +1,4 @@
 import express from 'express';
-import eventController from '../controllers/event';
 import opportunityController from '../controllers/opportunity';
 import authorize from '../helpers/authorize';
 import { validate } from '../helpers/validation';
