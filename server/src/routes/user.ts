@@ -1,6 +1,6 @@
 import express from 'express';
 import userController from '../controllers/user';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
 import authorize from '../helpers/authorize';
 import getValidations from '../validations/user';
 
@@ -23,7 +23,7 @@ router.post(
 );
 
 // Expanding this for other use-cases
-protectedRouter.get('/',
+router.get('/',
   authorize(['admin']),
   userController.getAllUsers); // example usage of protectedRoute
 

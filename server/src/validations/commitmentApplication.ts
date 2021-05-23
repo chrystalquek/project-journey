@@ -2,7 +2,7 @@ import { body, ValidationChain } from 'express-validator';
 import { COMMITMENT_APPLICATION_STATUS } from '../models/CommitmentApplication';
 import { stringEnumValidator } from './global';
 
-export type CommitmentApplicationValidatorMethod = 'createCommitmentApplication' | 'readCommitmentApplication' | 'updateCommitmentApplication'
+type CommitmentApplicationValidatorMethod = 'createCommitmentApplication' | 'readCommitmentApplication' | 'updateCommitmentApplication'
 
 const commitmentApplicationStatus: ValidationChain = body('status')
   .isString()
@@ -28,3 +28,5 @@ export const getValidations = (method: CommitmentApplicationValidatorMethod): Va
       return [];
   }
 };
+
+export default getValidations;

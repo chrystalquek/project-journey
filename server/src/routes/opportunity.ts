@@ -1,7 +1,7 @@
 import express from 'express';
 import opportunityController from '../controllers/opportunity';
 import authorize from '../helpers/authorize';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
 import getValidations from '../validations/opportunity';
 
 const router = express.Router();

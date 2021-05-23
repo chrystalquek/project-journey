@@ -1,7 +1,7 @@
 import express from 'express';
 import resourceController from '../controllers/resource';
 import authorize from '../helpers/authorize';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
 import getValidations from '../validations/resource';
 
 const router = express.Router();

@@ -1,6 +1,6 @@
 import { body, param } from 'express-validator';
 
-export type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
+type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
 
 const questionValidator = (questions: Array<QuestionsOptionsRequestData>) => {
   // eslint-disable-next-line no-restricted-syntax
@@ -26,7 +26,7 @@ const answersValidator = (answers: Array<AnswerData>) => {
   return true;
 };
 
-export const getValidations = (method: FormValidatorMethod) => {
+const getValidations = (method: FormValidatorMethod) => {
   switch (method) {
     case 'createForm': {
       return [
@@ -55,3 +55,5 @@ export const getValidations = (method: FormValidatorMethod) => {
     }
   }
 };
+
+export default getValidations;

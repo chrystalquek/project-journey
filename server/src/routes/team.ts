@@ -1,6 +1,6 @@
 import express from 'express';
 import teamController from '../controllers/team';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
 import getValidations from '../validations/team';
 
 const router = express.Router();

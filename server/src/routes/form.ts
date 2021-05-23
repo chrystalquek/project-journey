@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { validate } from '../helpers/validation';
+import { createProtectedRouter } from '../helpers/auth';
+import { validate } from '../validations/global';
 import formController from '../controllers/form';
-import { getValidations } from '../validations/form';
+import getValidations from '../validations/form';
 
 const router = Router();
 

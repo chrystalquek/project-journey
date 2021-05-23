@@ -1,12 +1,10 @@
 import express from 'express';
-import {
-  createCommitmentApplication,
-  readCommitmentApplications,
-  updateCommitmentApplication,
-} from '../controllers/commitmentApplication';
-import { getValidations } from '../validations/commitmentApplication';
+import { createCommitmentApplication, readCommitmentApplications, updateCommitmentApplication }
+  from '../controllers/commitmentApplication';
+import getValidations from '../validations/commitmentApplication';
+import { createProtectedRouter } from '../helpers/auth';
 import authorize from '../helpers/authorize';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
 
 const router = express.Router();
 
