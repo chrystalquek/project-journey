@@ -8,10 +8,6 @@ import {
   SignUpStatus,
 } from '../types';
 
-const newPassword = body('newPassword').isString().isLength({
-  min: LENGTH_MINIMUM_PASSWORD,
-});
-
 const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
 const workshopsCount = body('workshopsCount').isInt();
 const hangoutsCount = body('hangoutsCount').isInt();

@@ -6,29 +6,13 @@ import { VolunteerData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
-import VALIDATOR from '../helpers/validation';
 import volunteerService from '../services/volunteer';
 
-export type UserValidatorMethod = 'login' | 'updatePassword'
-
-const getValidations = (method: UserValidatorMethod) => {
-  switch (method) {
-    case 'login': {
-      return [
-        VALIDATOR.email(false),
-        VALIDATOR.password,
-      ];
-    }
-    case 'updatePassword': {
-      return [
-        VALIDATOR.email(false),
-        VALIDATOR.password,
-        VALIDATOR.newPassword,
-      ];
-    }
-    default:
-      return [];
-  }
+const getAllUsers = async (req: express.Request, res: express.Response) => {
+  const users = await readAllUsers();
+  res.json({
+    data: users,
+  });
 };
 
 const login = async (req: express.Request, res: express.Response) => {
@@ -100,6 +84,5 @@ const updatePassword = async (req: express.Request, res: express.Response) => {
 
 export default {
   login,
-  getValidations,
   updatePassword,
 };

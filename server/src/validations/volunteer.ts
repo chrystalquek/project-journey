@@ -1,6 +1,5 @@
 import { body, param } from 'express-validator';
-import { regexValidator, stringEnumValidator } from './global';
-import { doesUserEmailExist } from '../services/volunteer';
+import { password, regexValidator, stringEnumValidator } from './global';
 import {
   CITIZENSHIP_TYPES,
   GENDER_TYPES,
@@ -17,29 +16,10 @@ type VolunteerValidatorMethod =
   | 'deleteVolunteer'
   | 'updateVolunteer';
 
-const LENGTH_MINIMUM_PASSWORD = 8;
-
 /**
  * Handles route request validation for controllers
  * @param method Controller handler names
  */
-
-const email = (emailMustBeUnique: boolean) => body('email')
-  .isEmail()
-  .normalizeEmail()
-  .custom(async (emailString: string) => {
-    const isNewEmailUnique = await doesUserEmailExist(emailString);
-    if (!isNewEmailUnique && emailMustBeUnique) {
-      throw new Error('E-mail is already in use');
-    }
-
-    if (isNewEmailUnique && !emailMustBeUnique) {
-      throw new Error(`E-mail: ${emailString} does not exist in the system`);
-    }
-
-    return true;
-  });
-
 const name = body('name').isString();
 const address = body('address').isString();
 const nickname = body('nickname').isString().optional();
@@ -128,10 +108,6 @@ const emergencyContactRelationship = body(
 
 const volunteerRemarks = body('volunteerRemarks').isString();
 const administratorRemarks = body('administratorRemarks').isString();
-
-const password = body('password').isString().isLength({
-  min: LENGTH_MINIMUM_PASSWORD,
-});
 
 const getValidations = (method: VolunteerValidatorMethod) => {
   switch (method) {
