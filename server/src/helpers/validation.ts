@@ -47,30 +47,6 @@ const hangoutsCount = body('hangoutsCount').isInt();
 
 const pastEventIds = body('pastEventIds').isArray();
 
-const questionValidator = (questions: Array<QuestionsOptionsRequestData>) => {
-  // eslint-disable-next-line no-restricted-syntax
-  questions.forEach((question) => {
-    if (
-      question.isRequired === undefined
-      || question.displayText?.length === 0
-      || question.type?.length === 0
-    ) {
-      throw new Error('Question Options data is not as expected');
-    }
-  });
-  return true;
-};
-
-const answersValidator = (answers: Array<AnswerData>) => {
-  answers.forEach((answer) => {
-    if (!answer.questionId || !answer.content || !answer.userId) {
-      throw new Error('Answers form data is not as expected');
-    }
-  });
-
-  return true;
-};
-
 const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
 const sessionPreference = body('sessionPreference').isString().optional();
 
