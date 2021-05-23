@@ -23,33 +23,6 @@ import { COMMITMENT_APPLICATION_STATUS } from '../models/CommitmentApplication';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
-/**
- * Helper function to deal with validation of request body inputs
- * @param enumTypes Array of accepted string values
- * @param enumName Variable name used for identification in error statement
- * @param value String to test out against enumTypes
- */
-export const stringEnumValidator = (
-  enumTypes: Array<string>,
-  enumName: string,
-  value: string,
-) => {
-  if (!_.includes(enumTypes, value)) {
-    throw new Error(
-      `${enumName}: "${value}" must be either ${enumTypes.join(', ')}`,
-    );
-  }
-  return true;
-};
-
-const regexValidator = (regexExp: RegExp, regexName: string, value: string) => {
-  if (!regexExp.test(value)) {
-    throw new Error(`${regexName}: "${value}" must conform with the regex ${regexExp}`);
-  }
-
-  return true;
-};
-
 const checkIfStatusValid = (value: SignUpStatus) => {
   const isPending = value === 'pending';
   const isRejected = value === 'rejected';
@@ -222,14 +195,6 @@ const workshopsCount = body('workshopsCount').isInt();
 const hangoutsCount = body('hangoutsCount').isInt();
 
 const pastEventIds = body('pastEventIds').isArray();
-
-const commitmentApplicationStatus = body('status')
-  .isString()
-  .custom((status: string) => stringEnumValidator(
-    COMMITMENT_APPLICATION_STATUS,
-    'Commitment Application Status',
-    status,
-  ));
 
 export const validate = (validations: ValidationChain[]) => async (
   req: express.Request,
