@@ -1,4 +1,5 @@
 import { body, param } from 'express-validator';
+import { AnswerData, QuestionsOptionsRequestData } from '../types';
 
 type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
 

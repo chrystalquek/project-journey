@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import { TeamMethod } from '../controllers/team';
 
 // TODO @everyone - fill as required
 const getValidations = (method: TeamMethod) => {

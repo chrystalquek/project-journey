@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import volunteerController from '../controllers/volunteer';
 import authorize from '../helpers/authorize';
 import { validate } from '../validations/global';
-import getValidations from '../validations/volunteers';
+import getValidations from '../validations/volunteer';
 
 const router: Router = express.Router();
 const protectedRouter: Router = createProtectedRouter(router);
