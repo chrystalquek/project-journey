@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import mongoose from 'mongoose';
-import { QueryParams, VolunteerData } from '../types';
-import Volunteer from '../models/Volunteer';
+import { Id } from '../types';
+import Volunteer, { VolunteerData, VolunteerType, VOLUNTEER_TYPE } from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
 import util from '../helpers/util';
 
@@ -48,7 +48,7 @@ const getVolunteer = async (email: string) => {
  * Throws error if user doesn't exist
  * @param id User id to be searched
  */
-const getVolunteerById = async (id: string) => {
+const getVolunteerById = async (id: Id) => {
   const volunteer = await Volunteer.findById(id).populate('commitmentApplicationIds').lean().exec();
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
@@ -59,30 +59,24 @@ const getVolunteerById = async (id: string) => {
 
 /**
  * Gets all volunteer details.
+ * Filter by volunteerType and name inclusive
+ * Sort by field specified if any
  */
-const getAllVolunteers = async (query: QueryParams) => {
+const getAllVolunteers = async (volunteerType?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number) => {
   // no of volunteers that match name (if any)
-  const count = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
-    .find({ volunteerType: { $in: query.volunteerType || [] } })
+  const count = await (name ? Volunteer.find({ name: { $regex: `.*${name}.*`, $options: 'xis' } }) : Volunteer.find({}))
+    .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
     .countDocuments();
 
   // get only part of the collection cos of pagination
-  let volunteers;
-  if (query.skip && query.limit) {
-    volunteers = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
-      .find({ volunteerType: { $in: query.volunteerType || [] } })
-      .sort({ [query.sort]: 1 })
-      .skip(query.skip).limit(query.limit)
-      .lean()
-      .exec();
-  } else {
-    volunteers = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
-      .find({ volunteerType: { $in: query.volunteerType || [] } })
-      .sort({ [query.sort]: 1 })
-      .lean().exec();
-  }
+  const volunteers = await (name ? Volunteer.find({ name: { $regex: `.*${name}.*`, $options: 'xis' } }) : Volunteer.find({}))
+    .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
+    .sort({ [sort ?? '']: 1 })
+    .skip(skip ?? 0).limit(limit ?? 0)
+    .lean()
+    .exec();
 
-  const data = volunteers.map((volunteer: VolunteerData) => util.snakeToCamelCase(volunteerUtil.extractVolunteerDetails(volunteer)));
+  const data = volunteers.map((volunteer: VolunteerData) => (volunteerUtil.extractVolunteerDetails(volunteer)));
 
   return { data, count };
 };
@@ -93,7 +87,7 @@ const getAllVolunteers = async (query: QueryParams) => {
  * @param ids array of volunteer ids
  * @return corresponding volunteers
  */
-const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
+const readVolunteersByIds = async (ids: Id[]): Promise<VolunteerData[]> => {
   try {
     return await Volunteer.find({
       _id: { $in: ids },
@@ -124,7 +118,7 @@ const updateVolunteerDetails = async (email: string, updatedVolunteerData: Parti
  * @param id
  * @param updatedVolunteerData
  */
-const updateVolunteer = async (id: string, updatedVolunteerData: Partial<VolunteerData>) => {
+const updateVolunteer = async (id: Id, updatedVolunteerData: Partial<VolunteerData>) => {
   await getVolunteerById(id);
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
     { _id: id },

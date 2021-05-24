@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
-import Form from '../../models/Forms/Form';
-import { FormData } from '../../types';
+import Form, { FormData } from '../../models/Forms/Form';
 
 /**
  * Create form attached to event
  * @param formData form data created
  */
-const createForm = async (formData: FormData): Promise<string> => {
+const createForm = async (formData: Omit<FormData, "_id">): Promise<string> => {
   const formId = new mongoose.Types.ObjectId();
   const formSchemaData = new Form({
     _id: formId,

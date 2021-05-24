@@ -1,22 +1,24 @@
-import mongoose from 'mongoose';
-import { ResourceData } from '../types';
+import {
+  createSchema, ExtractProps, Type, typedModel,
+} from 'ts-mongoose';
 
-const { Schema } = mongoose;
+const RESOURCE_TYPE = ['google docs', 'link', 'pdf', 'video']
 
-export type ResourceModel = ResourceData & mongoose.Document;
-
-const ResourceSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
-  name: String,
-  url: String,
-  createdAt: {
-    type: Date,
+const ResourceSchema = createSchema({
+  name: Type.string({ required: true }),
+  url: Type.string({ required: true }),
+  resourceType: Type.string({
+    required: true,
+    enum: RESOURCE_TYPE,
+  }),
+  createdAt: Type.date({
+    required: true,
     default: Date.now,
-  },
-  resource_type: {
-    type: String,
-    enum: ['google docs', 'link', 'pdf', 'video'],
-  },
+  }),
 });
 
-export default mongoose.model<ResourceModel>('Resource', ResourceSchema);
+export type ResourceData = Omit<ExtractProps<typeof ResourceSchema>, "__v">;
+
+export default typedModel('Resource', ResourceSchema);
+
+// export default mongoose.model<ResourceModel>('Resource', ResourceSchema);

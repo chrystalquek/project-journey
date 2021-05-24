@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { VolunteerData, VolunteerPublicData } from '../types';
+import { VolunteerData, VolunteerPublicData } from '../models/Volunteer';
+
 
 /**
  * Retrieves volunteer details that can be sent as response

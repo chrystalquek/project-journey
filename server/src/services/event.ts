@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import {
-  EventSearchType, EventData, VolunteerType,
-} from '../types';
 
-import Event from '../models/Event';
+import Event, { EventData } from '../models/Event';
 import util from '../helpers/util';
+import { EventSearchType } from '../controllers/event';
+import { VolunteerType } from '../models/Volunteer';
+import { Id } from '../types';
 
 const createEvent = async (eventData: EventData): Promise<string> => {
   try {
@@ -63,7 +63,7 @@ const readEvent = async (id: string): Promise<EventData> => {
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promise<EventData[]> => {
+const readEventsByIds = async (ids: Id[], eventType: EventSearchType): Promise<EventData[]> => {
   try {
     let events;
     switch (eventType) {
@@ -135,7 +135,7 @@ const readEvents = async (eventType: EventSearchType, volunteerType: VolunteerTy
       default: throw new Error('Event type is invalid');
     }
 
-    return events.map((event) => util.snakeToCamelCase(event) as EventData);
+    return events;
   } catch (err) {
     throw new Error(err.msg);
   }

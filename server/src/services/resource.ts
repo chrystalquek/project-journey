@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import { ResourceData } from '../types';
-import Resource from '../models/Resource';
+import Resource, { ResourceData } from '../models/Resource';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
@@ -9,7 +8,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
       name: resourceData.name,
       url: resourceData.url,
       createdAt: Date.now(),
-      type: resourceData.type,
+      resourceType: resourceData.resourceType,
     });
     await resourceSchemaData.save();
   } catch (err) {

@@ -1,9 +1,9 @@
 import nodemailer, { TransportOptions } from 'nodemailer';
 import { google } from 'googleapis';
 import ejs from 'ejs';
-import { EventData, VolunteerData } from '../types';
-import Volunteer from '../models/Volunteer';
-import Event from '../models/Event';
+
+import Volunteer, { VolunteerData } from '../models/Volunteer';
+import Event, { EventData } from '../models/Event';
 
 const { OAuth2 } = google.auth;
 

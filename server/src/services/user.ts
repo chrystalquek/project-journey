@@ -1,5 +1,4 @@
-import { VolunteerData } from '../types';
-import Volunteer from '../models/Volunteer';
+import Volunteer, { VolunteerData } from '../models/Volunteer';
 
 export const getUser = async (email: string): Promise<VolunteerData> => {
   const user = await Volunteer.findOne({ email }).populate('commitmentApplicationIds');

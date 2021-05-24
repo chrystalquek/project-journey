@@ -1,9 +1,9 @@
 import express from 'express';
 import commitmentApplicationService from '../services/commitmentApplication';
-import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import VALIDATOR from '../helpers/validation';
 import volunteerService from '../services/volunteer';
+import { CommitmentApplicationData, CommitmentApplicationStatus } from '../models/CommitmentApplication';
 
 export type CommitmentApplicationValidatorMethod = 'createCommitmentApplication' | 'readCommitmentApplication' | 'updateCommitmentApplication'
 

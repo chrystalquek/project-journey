@@ -2,12 +2,13 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { getUser } from '../services/user';
-import { VolunteerData } from '../types';
+
 
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
 import VALIDATOR from '../helpers/validation';
 import volunteerService from '../services/volunteer';
+import { VolunteerData } from '../models/Volunteer';
 
 export type UserValidatorMethod = 'login' | 'updatePassword'
 

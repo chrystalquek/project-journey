@@ -1,15 +1,15 @@
 import express from 'express';
-import { ImageData, VolunteerData } from '../types';
 import imageService from '../services/image';
 import volunteerService from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
+import { VolunteerData } from '../models/Volunteer';
 
 // TODO authentication not done in anticipation of changes made here
 
 const uploadImage = async (req, res: express.Response) => {
   try {
-    const imageData: ImageData = {
+    const imageData: ImageRequest = {
       email: req.body.email,
       imageName: req.file.filename,
     };
@@ -22,7 +22,7 @@ const uploadImage = async (req, res: express.Response) => {
 
 const updateProfilePicture = async (req, res: express.Response) => {
   try {
-    const imageData: ImageData = {
+    const imageData: ImageRequest = {
       email: req.body.email,
       imageName: req.file.filename,
     };
@@ -49,6 +49,11 @@ const deleteImageWithEmail = async (req: express.Request, res: express.Response)
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
   }
 };
+
+export type ImageRequest = {
+  email: String,
+  imageName: String
+}
 
 export default {
   uploadImage,

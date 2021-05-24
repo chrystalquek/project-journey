@@ -1,11 +1,11 @@
 import express from 'express';
 import { body, param } from 'express-validator';
-import { QueryParams, VolunteerData } from '../types';
 import volunteerService from '../services/volunteer';
 import commitmentApplicationService from '../services/commitmentApplication';
 
 import HTTP_CODES from '../constants/httpCodes';
 import VALIDATOR from '../helpers/validation';
+import { VolunteerData, VolunteerType, VOLUNTEER_TYPE } from '../models/Volunteer';
 
 export type VolunteerValidatorMethod =
   | 'createVolunteer'
@@ -157,7 +157,7 @@ const getVolunteerDetailsById = async (
   res: express.Response,
 ) => {
   try {
-    if (req.user._id !== req.params.id) {
+    if (String(req.user._id) !== req.params.id) {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
       return;
     }
@@ -182,25 +182,22 @@ const getAllVolunteerDetails = async (
   try {
     // handles both searching volunteers and returning all volunteers
 
+    const volunteerType = req.query.volunteerType
+      ? ((req.query.volunteerType as string).split(',')).map((volType) => volType as VolunteerType)
+      : VOLUNTEER_TYPE;
+
     const pageNo = Number(req.query.pageNo);
     const size = Number(req.query.size);
-    const query: QueryParams = { skip: 0, limit: 0 };
-    if (pageNo < 0) {
+    if (pageNo < 0 || size < 0) {
       throw new Error('Invalid page number, should start with 0');
     }
-    query.skip = size * pageNo;
-    query.limit = size;
+    const withPagination = !Number.isNaN(pageNo) && !Number.isNaN(size);
+    const skip = withPagination ? size * pageNo : 0;
+    const limit = withPagination ? size : 0;
 
-    if (req.query.name) {
-      query.name = req.query.name;
-    }
-    if (req.query.volunteerType) {
-      query.volunteerType = (req.query.volunteerType as string).split(',');
-    }
-    if (req.query.sort) {
-      query.sort = req.query.sort;
-    }
-    const volunteersDetails = await volunteerService.getAllVolunteers(query);
+    const volunteersDetails = await volunteerService.getAllVolunteers(
+      volunteerType, String(req.query.name), String(req.query.sort), skip, limit,
+    );
     res.status(HTTP_CODES.OK).json(volunteersDetails);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
@@ -258,7 +255,7 @@ const readVolunteersByIds = async (
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {
     const volunteerId = req.params.id;
-    if (req.user._id !== volunteerId) {
+    if (String(req.user._id) !== volunteerId) {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
       return;
     }

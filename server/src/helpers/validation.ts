@@ -3,23 +3,22 @@ import { body, validationResult, ValidationChain } from 'express-validator';
 import express from 'express';
 import { checkIfAccepted } from '../services/signUp';
 import {
-  CITIZENSHIP_TYPES,
-  GENDER_TYPES,
-  LEADERSHIP_INTEREST_TYPES,
-  RACE_TYPES,
-  SOCIAL_MEDIA_PLATFORMS,
+  GENDER,
+  LEADERSHIP_INTEREST,
+  RACE,
+  SOCIAL_MEDIA_PLATFORM,
   VOLUNTEER_TYPE,
   PERSONALITY_TYPES_REGEX,
+  CITIZENSHIP,
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
-import {
-  AnswerData,
-  QuestionsOptionsRequestData,
-  RoleData,
-  SignUpStatus,
-} from '../types';
+
 import { COMMITMENT_APPLICATION_STATUS } from '../models/CommitmentApplication';
+import { RoleData } from '../models/Event';
+import { SignUpStatus } from '../models/SignUp';
+import { QuestionsOptionsRequestData } from '../controllers/form';
+import { AnswerData } from '../models/Forms/Answer';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 
@@ -30,7 +29,7 @@ const LENGTH_MINIMUM_PASSWORD = 8;
  * @param value String to test out against enumTypes
  */
 export const stringEnumValidator = (
-  enumTypes: Array<string>,
+  enumTypes: readonly string[],
   enumName: string,
   value: string,
 ) => {
@@ -133,15 +132,15 @@ const birthday = body('birthday').isISO8601().toDate();
 const socialMediaPlatform = body('socialMediaPlatform')
   .isString()
   .custom((socialMedia: string) => stringEnumValidator(
-    SOCIAL_MEDIA_PLATFORMS,
+    SOCIAL_MEDIA_PLATFORM,
     'Social Media Platform',
     socialMedia,
   ));
 const instagramHandle = body('instagramHandle').isString().optional();
-const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER_TYPES, 'Gender', genderText));
-const citizenship = body('citizenship').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenshipType));
+const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER, 'Gender', genderText));
+const citizenship = body('citizenship').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP, 'Citizenship', citizenshipType));
 const race = body('race')
-  .custom((raceType: string) => stringEnumValidator(RACE_TYPES, 'Race', raceType))
+  .custom((raceType: string) => stringEnumValidator(RACE, 'Race', raceType))
   .optional();
 const organization = body('organization').isString().optional();
 const position = body('position').isString().optional();
@@ -173,7 +172,7 @@ const hasFirstAidCertification = body('hasFirstAidCertification')
 const leadershipInterest = body('leadershipInterest')
   .isString()
   .custom((leadershipInterestType: string) => stringEnumValidator(
-    LEADERSHIP_INTEREST_TYPES,
+    LEADERSHIP_INTEREST,
     'Leadership Interest',
     leadershipInterestType,
   ))

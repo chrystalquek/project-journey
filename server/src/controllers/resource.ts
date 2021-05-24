@@ -1,7 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { ResourceData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
+import { ResourceData } from '../models/Resource';
 import resourceService from '../services/resource';
 
 export type ResourceValidatorMethod = 'createResource';

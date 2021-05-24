@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import { OpportunityData } from '../types';
-import Opportunity from '../models/Opportunity';
+import Opportunity, { OpportunityData } from '../models/Opportunity';
 
 const createOpportunity = async (opportunityData: OpportunityData): Promise<void> => {
   try {

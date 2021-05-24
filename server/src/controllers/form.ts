@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import express from 'express';
+import mongoose from 'mongoose';
 import { body, param } from 'express-validator';
 
 import HTTP_CODES from '../constants/httpCodes';
@@ -7,13 +8,10 @@ import formService from '../services/forms/form';
 import optionsService from '../services/forms/option';
 import questionService from '../services/forms/question';
 import answerService from '../services/forms/answer';
-import {
-  AnswerData,
-  AnswerFormQuestionsRequest,
-  CreateFormQuestionsRequest,
-  QuestionsOptionsRequestData,
-} from '../types';
+
 import validation from '../helpers/validation';
+import { FormQuestionType } from '../models/Forms/Question';
+import { AnswerData } from '../models/Forms/Answer';
 
 export type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
 
@@ -48,11 +46,11 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
     const { questions, eventId } = req.body as CreateFormQuestionsRequest;
 
     const formId = await formService.createForm({
-      eventId,
+      eventId: mongoose.Types.ObjectId(eventId),
     });
 
     const questionsData = questions.map((questionData) => ({
-      formId,
+      formId: mongoose.Types.ObjectId(formId),
       isRequired: questionData.isRequired,
       displayText: questionData.displayText,
       type: questionData.type,
@@ -88,12 +86,12 @@ const getEventFormDetails = async (req: express.Request, res: express.Response) 
     const questionsWithOptions: Array<any> = [];
     for (let i = 0; i < questions.length; i += 1) {
       const question = questions[i];
-      const optionsForQuestion = await optionsService.getOptionsForQuestion(question.id);
+      const optionsForQuestion = await optionsService.getOptionsForQuestion(question._id);
 
       questionsWithOptions.push({
         ...question,
         displayText: [question.displayText],
-        name: question.id,
+        name: question._id,
         options: optionsForQuestion,
       });
     }
@@ -136,6 +134,23 @@ const answerFormQuestions = async (req: express.Request, res: express.Response) 
     });
   }
 };
+
+export type QuestionsOptionsRequestData = {
+  displayText: string;
+  type: FormQuestionType;
+  isRequired: boolean;
+  name: string;
+  options: Array<{ content: string }>
+}
+export interface CreateFormQuestionsRequest {
+  eventId: string,
+  questions: Array<QuestionsOptionsRequestData>
+}
+
+export interface AnswerFormQuestionsRequest {
+  eventId: string
+  answers: Array<AnswerData>
+}
 
 export default {
   createForm,

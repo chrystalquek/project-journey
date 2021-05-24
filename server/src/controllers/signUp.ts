@@ -2,9 +2,11 @@ import express from 'express';
 import { body } from 'express-validator';
 import { signUpStatusValidator } from '../helpers/validation';
 import signUpService from '../services/signUp';
-import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
+import { SignUpStatus, SignUpData } from '../models/SignUp';
+
+export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 
 export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
 

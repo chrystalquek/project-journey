@@ -1,15 +1,22 @@
 import mongoose from 'mongoose';
-import { OpportunityData } from '../types';
-import Event from './Event';
+import Event, { EventData } from './Event';
+import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
 
-const { Schema } = mongoose;
+// const { Schema } = mongoose;
 
 export type OpportunityModel = OpportunityData & mongoose.Document;
 
-// TODO: make variable schema
-const OpportunitySchema = new Schema({
-  positions: [String],
-  photo: String,
+const OpportunitySchema = createSchema({
+  positions: Type.array({ required: true }).of(Type.string({ required: true })),
+  photo: Type.string({ required: true }),
+  createdAt: Type.date({
+    required: true,
+    default: Date.now,
+  }),
 });
+
+export type OpportunityData = EventData & Omit<ExtractProps<typeof OpportunitySchema>, "__v">;
+
+// export default typedModel('Event', EventSchema);
 
 export default Event.discriminator('Opportunity', OpportunitySchema) as mongoose.Model<OpportunityModel>;

@@ -1,4 +1,5 @@
-import { EventData } from '../types';
+import { EventData } from "../models/Event";
+import mongoose from "mongoose";
 
 const dummyEvent: EventData = {
   _id: 'fakeid',
@@ -14,7 +15,7 @@ const dummyEvent: EventData = {
   endDate: new Date('2021-12-12T00:00:00.000Z'),
   deadline: new Date(),
   roles: [{
-    volunteers: ['5fdcb0f2332e9c2a4d5bb7bb'],
+    volunteers: [mongoose.Types.ObjectId('5fdcb0f2332e9c2a4d5bb7bb')],
     name: 'cameraman',
     description: 'desc cameraman',
     capacity: 2,

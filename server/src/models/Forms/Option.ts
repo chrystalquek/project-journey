@@ -1,17 +1,13 @@
-import mongoose from 'mongoose';
-import { OptionData } from '../../types';
+import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
 
-const { Schema } = mongoose;
-
-export type OptionModel = OptionData & mongoose.Document
-
-const OptionSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
-  questionId: {
-    type: mongoose.Types.ObjectId,
+const OptionSchema = createSchema({
+  questionId: Type.objectId({
+    required: true,
     ref: 'Question',
-  },
-  text: String,
+  }),
+  text: Type.string({ required: true }),
 });
 
-export default mongoose.model<OptionModel>('Option', OptionSchema);
+export type OptionData = Omit<ExtractProps<typeof OptionSchema>, "__v">;
+
+export default typedModel('Option', OptionSchema);

@@ -1,214 +1,185 @@
 import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
-import { VolunteerData } from '../types';
-
-const { Schema } = mongoose;
+import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
 
 export const setPassword = (value: string) => bcrypt.hashSync(value, 10);
 
-export type VolunteerModel = VolunteerData & mongoose.Document;
+export const GENDER = ['male', 'female'] as const;
+export type Gender = (typeof GENDER)[number]
 
-// ENUM Types
-// should we declare as enums instead?
-// enum strings can be all caps, snakecase?
-// same for client
-// TODO: UPDATE ENUMS TO FOLLOW THE FE
-export const GENDER_TYPES = ['male', 'female'];
-export const CITIZENSHIP_TYPES = [
+export const CITIZENSHIP = [
   'singapore',
   'permanent_resident',
   'foreigner',
-];
-export const RACE_TYPES = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
-export const LEADERSHIP_INTEREST_TYPES = ['yes', 'no', 'maybe'];
+] as const;
+export type Citizenship = (typeof CITIZENSHIP)[number]
+
+export const RACE = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
+export type Race = (typeof RACE)[number]
+
+export const LEADERSHIP_INTEREST = ['yes', 'no', 'maybe'] as const;
+export type LeadershipInterest = (typeof LEADERSHIP_INTEREST)[number]
 
 export const PERSONALITY_TYPES_REGEX = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
 
-export const SOCIAL_MEDIA_PLATFORMS = [
+export const SOCIAL_MEDIA_PLATFORM = [
   'instagram',
   'facebook',
   'snapchat',
   'email',
   'other',
-];
-export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'admin'];
+] as const;
+export type SocialMediaPlatform = (typeof SOCIAL_MEDIA_PLATFORM)[number]
 
-export const VolunteerSchemaDefinition: mongoose.SchemaDefinition = {
-  _id: mongoose.Types.ObjectId,
-  volunteerType: {
-    type: String,
+export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'admin'];
+export type VolunteerType = (typeof VOLUNTEER_TYPE)[number]
+
+export const VolunteerSchema = createSchema({
+  volunteerType: Type.string({
+    required: true,
     enum: VOLUNTEER_TYPE,
-  },
-  name: String,
-  password: {
-    type: String,
+  }),
+  name: Type.string({ required: true }),
+  password: Type.string({
     required: true,
     set: setPassword,
-  },
-  nickname: {
-    type: String,
-    default: '',
-  },
-  gender: {
-    type: String,
-    enum: GENDER_TYPES,
-  },
-  citizenship: {
-    type: String,
-    enum: CITIZENSHIP_TYPES,
-  },
-  birthday: Date,
-  address: String,
-  mobileNumber: String,
-  photoUrl: String, // Process on server side - not immediately available
-  email: String,
+  }),
+  nickname: Type.string({ required: false }),
+  gender: Type.string({
+    required: true,
+    enum: GENDER
+  }),
+  citizenship: Type.string({
+    required: true,
+    enum: CITIZENSHIP,
+  }),
+  birthday: Type.date({ required: false }),
+  address: Type.string({ required: false }),
+  mobileNumber: Type.string({ required: true }),
+  photoUrl: Type.string({ required: true }), // Process on server side - not immediately available
+  email: Type.string({ required: true }),
 
-  socialMediaPlatform: {
-    type: String,
-    enum: SOCIAL_MEDIA_PLATFORMS,
-  },
-  instagramHandle: {
-    type: String,
-    default: '',
-  },
-  orgnanization: {
-    type: String,
-    default: '',
-  },
-  position: {
-    type: String,
-    default: '',
-  },
-  race: {
-    type: String,
-    enum: RACE_TYPES,
-  },
-  languages: [String],
-  referralSources: [String],
-  hasVolunteered: Boolean,
-  biabVolunteeringDuration: {
-    type: String,
-    default: '',
-  },
-  hasVolunteeredExternally: Boolean,
-  volunteeringExperience: {
-    type: String,
-    default: '',
-  },
-  hasChildrenExperience: Boolean,
-  childrenExperience: {
-    type: String,
-    default: '',
-  },
-  sessionsPerMonth: Number,
-  sessionPreference: String,
-  hasFirstAidCertification: Boolean,
-  leadershipInterest: {
-    type: String,
-    default: '',
-  },
-  interests: {
-    type: String,
-    default: '',
-  },
-  skills: {
-    type: [String],
-    default: [],
-  },
-  personality: {
-    type: String,
+  socialMediaPlatform: Type.string({
+    required: true,
+    enum: SOCIAL_MEDIA_PLATFORM,
+  }),
+  instagramHandle: Type.string({ required: false }),
+
+  orgnanization: Type.string({ required: false }),
+  position: Type.string({ required: false }),
+  race: Type.string({
+    required: false,
+    enum: RACE,
+  }),
+
+  languages: Type.array({
+    required: true,
+    default: []
+  }).of(Type.string({ required: true })),
+  referralSources: Type.array({
+    required: true,
+    default: []
+  }).of(Type.string({ required: true })),
+
+  hasVolunteered: Type.boolean({ required: true }),
+  biabVolunteeringDuration: Type.number({ required: false }), // Number of months
+
+  hasVolunteeredExternally: Type.boolean({ required: true }),
+  volunteeringExperience: Type.string({ required: false }),
+
+  hasChildrenExperience: Type.boolean({ required: true }),
+  childrenExperience: Type.string({ required: false }),
+
+  sessionsPerMonth: Type.number({ required: false }),
+  sessionPreference: Type.string({ required: false }), // pre-defined session committment
+
+  hasFirstAidCertification: Type.boolean({ required: false }),
+  leadershipInterest: Type.string({
+    required: false,
+    enum: LEADERSHIP_INTEREST
+  }),
+  interests: Type.string({ required: false }), // short-ans
+
+  skills: Type.array({ required: false }).of(Type.string({ required: true })),
+
+  personality: Type.string({
+    required: false,
     validate: PERSONALITY_TYPES_REGEX,
-  },
-  strengths: {
-    type: [String],
-  },
-  volunteeringOpportunityInterest: {
-    type: String,
-    default: '',
-  },
-  volunteerReason: String,
-  volunteerContribution: String,
-  hasCriminalRecord: Boolean,
+  }), // Myers-Briggs
+  strengths: Type.array({ required: false }).of(Type.string({ required: true })),
+  volunteeringOpportunityInterest: Type.string({ required: false }),
+
+  volunteerReason: Type.string({ required: true }), // Essay
+  volunteerContribution: Type.string({ required: false }),
+  hasCriminalRecord: Type.boolean({ required: true }),
 
   // WCA Registration: Medical Information
-  hasMedicalNeeds: Boolean,
-  medicalNeeds: {
-    type: String,
-    default: '',
-  },
-  hasAllergies: Boolean,
-  allergies: {
-    type: String,
-    default: '',
-  },
-  hasMedicationDuringDay: Boolean,
+  hasMedicalNeeds: Type.boolean({ required: true }),
+  medicalNeeds: Type.string({ required: false }),
+  hasAllergies: Type.boolean({ required: true }),
+  allergies: Type.string({ required: false }),
+  hasMedicationDuringDay: Type.boolean({ required: true }),
 
   // WCA Registration: Emergency Contact
-  emergencyContactName: {
-    type: String,
-    default: '',
-  },
-  emergencyContactNumber: {
-    type: String,
-    default: '',
-  },
-  emergencyContactEmail: {
-    type: String,
-    default: '',
-  },
-  emergencyContactRelationship: {
-    type: String,
-    default: '',
-  },
-  // Remarks
-  volunteerRemarks: {
-    type: String,
-    default: '',
-  },
-  administratorRemarks: {
-    type: String,
-    default: '',
-  },
-  volunteeringSessionsCount: {
-    type: Number,
-    default: 0,
-  },
-  workshopsCount: {
-    type: Number,
-    default: 0,
-  },
-  hangoutsCount: {
-    type: Number,
-    default: 0,
-  },
-  pastEventIds: {
-    type: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: 'Event',
-      },
-    ],
-    default: [],
-  },
-  commitmentApplicationIds: {
-    type: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: 'CommitmentApplication',
-      },
-    ],
-    default: [],
-  },
-};
+  emergencyContactName: Type.string({ required: true }),
+  emergencyContactNumber: Type.string({ required: true }),
+  emergencyContactEmail: Type.string({ required: true }),
+  emergencyContactRelationship: Type.string({ required: true }),
 
-const VolunteerSchema = new Schema(VolunteerSchemaDefinition, {
-  timestamps: {
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-  },
-  strict: true,
+  // Remarks
+  volunteerRemarks: Type.string({ required: false }),
+  administratorRemarks: Type.string({ required: false }),
+
+  // Event count
+  volunteeringSessionsCount: Type.number({
+    required: true,
+    default: 0
+  }),
+  workshopsCount: Type.number({
+    required: true,
+    default: 0
+  }),
+  hangoutsCount: Type.number({
+    required: true,
+    default: 0
+  }),
+
+  // Past Events
+  // TODO how is this even updated?
+  pastEventIds: Type.array({
+    required: true,
+    default: []
+  })
+    .of(Type.objectId({
+      required: true,
+      ref: 'Event'
+    })),
+
+  // Submitted Commitment Application
+  commitmentApplicationIds: Type.array({
+    required: true,
+    default: []
+  })
+    .of(Type.objectId({
+      required: true,
+      ref: 'CommitmentApplication'
+    })),
+
+  createdAt: Type.date({
+    required: true,
+    default: Date.now,
+  })
 });
 
-VolunteerSchema.index({ name: 'text' }); // to enable searching by name
+export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, "__v">;
 
-export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);
+export type VolunteerPublicData = Omit<
+  VolunteerData,
+  'password' |
+  '_id' |
+  'identificationNumber' |
+  'administratorRemarks'
+>
+
+export default typedModel('Volunteer', VolunteerSchema);
+
+// export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);

@@ -1,7 +1,8 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { OpportunityData } from '../types';
+
 import HTTP_CODES from '../constants/httpCodes';
+import { OpportunityData } from '../models/Opportunity';
 import opportunityService from '../services/opportunity';
 
 export type OpportunityValidatorMethod = 'createOpportunity';

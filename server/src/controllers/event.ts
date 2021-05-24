@@ -3,11 +3,13 @@ import { body } from 'express-validator';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import answerService from '../services/forms/answer';
 import { roleCapacityValidator } from '../helpers/validation';
-import {
-  EventSearchType, EventData, RoleData, VolunteerType,
-} from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
+import { EventData, RoleData } from '../models/Event';
+import { VolunteerType } from '../models/Volunteer';
+import { Id } from '../types';
+
+export type EventSearchType = 'all' | 'upcoming' | 'past'
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -123,7 +125,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
       ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
       : signUps;
 
-    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.eventId);
+    const signedUpEventsIds: Id[] = filteredSignUps.map((signUp) => signUp.eventId);
 
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
@@ -132,7 +134,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     if (eventType === 'past') {
       const signedUpEventsWithFeedbackStatus: EventData[] = [];
       const feedbackStatuses = await Promise.all(signedUpEvents
-        .map(async (signedUpEvent) => answerService.getFeedbackStatus(userId, signedUpEvent._id)));
+        .map(async (signedUpEvent) => answerService.getFeedbackStatus(userId, String(signedUpEvent._id))));
       for (let i = 0; i < signedUpEvents.length; i += 1) {
         signedUpEventsWithFeedbackStatus.push({
           ...signedUpEvents[i],

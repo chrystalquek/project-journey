@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import Answer from '../../models/Forms/Answer';
-import { AnswerData } from '../../types';
+import Answer, { AnswerData } from '../../models/Forms/Answer';
+
 import formService from './form';
 
 /**
@@ -32,12 +32,7 @@ const retrieveAnswers = async ({ questionId, formId, userId }:
   const options = await Answer.find(questionId ? {
     questionId,
   } : { formId, userId }).lean().exec();
-  return options.map((option) => ({
-    questionId: option.questionId,
-    userId: option.userId,
-    formId: option.formId,
-    content: option.content,
-  }));
+  return options
 };
 
 // just a helper for getting the status of feedback form for [signedup, past] events
