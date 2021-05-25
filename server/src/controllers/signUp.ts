@@ -4,6 +4,7 @@ import { signUpStatusValidator } from '../helpers/validation';
 import signUpService from '../services/signUp';
 import { SignUpData, SignUpIdType, SignUpStatus } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
+import eventService from '../services/event';
 
 export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
 
@@ -34,6 +35,11 @@ const createSignUp = async (
   res: express.Response,
 ): Promise<void> => {
   try {
+    const event = await eventService.readEvent(req.body.eventId);
+    if (req.user._id !== req.body.userId || (req.user.volunteerType === 'ad-hoc' && event.volunteerType === 'committed')) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    }
+
     const signUpData = await signUpService.createSignUp(req.body);
     res.status(HTTP_CODES.OK).json(signUpData);
   } catch (err) {
@@ -114,8 +120,38 @@ const updateSignUp = async (req: express.Request, res: express.Response) => {
  */
 const deleteSignUp = async (req: express.Request, res: express.Response) => {
   try {
-    const { id, idType } = req.params;
-    await signUpService.deleteSignUp(id, idType as SignUpIdType);
+    let { idType } = req.params;
+    const { id } = req.params;
+    idType = idType as SignUpIdType;
+
+    switch (idType) {
+      case 'signUpId': {
+        const signUps = await signUpService.readSignUps(id, idType as SignUpIdType);
+        if (signUps.length !== 1) {
+          throw Error('Sign up does not exist');
+        }
+
+        // check that deleting your own signup
+        if (signUps[0].userId !== req.user._id) {
+          res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+          return;
+        }
+        break;
+      }
+      case 'eventId' || 'userId': {
+        // after admin delete an event or a volunteer
+        if (req.user.volunteerType !== 'admin') {
+          res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+          return;
+        }
+        break;
+      }
+      default: {
+        throw Error('problem');
+      }
+    }
+
+    await signUpService.deleteSignUp(id, idType);
     res.status(HTTP_CODES.OK).send('Sign up deleted and event updated');
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({

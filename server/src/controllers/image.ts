@@ -1,9 +1,11 @@
 import express from 'express';
-import { ImageData, ImageResponse, VolunteerData } from '../types';
+import { ImageData, VolunteerData } from '../types';
 import imageService from '../services/image';
 import volunteerService from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
+
+// TODO authentication not done in anticipation of changes made here
 
 const uploadImage = async (req, res: express.Response) => {
   try {

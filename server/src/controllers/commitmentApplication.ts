@@ -33,29 +33,28 @@ const createCommitmentApplication = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    // ensure volunteer is only ad-hoc before being able to submit a commitment application
-    const volunteer = (await volunteerService
-      .readVolunteersByIds([req.body.volunteerId]))[0];
+    const { body } = req;
+    const { volunteerId } = body;
 
-    if (volunteer.volunteerType !== 'ad-hoc') {
-      throw new Error(`Volunteer is a ${volunteer.volunteerType}, cannot create Commitment Application`);
+    if (req.user._id !== volunteerId) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
     }
 
-    const savedCommitmentApplication = await commitmentApplicationService.createCommitmentApplication(req.body as CommitmentApplicationData);
+    const savedCommitmentApplication = await commitmentApplicationService
+      .createCommitmentApplication(req.body as CommitmentApplicationData);
     // Add the commitment application id to the volunteer data
-    const body = req.body;
-    delete body.volunteerId
 
-    const updatedVolunteerData =       {
-      commitmentApplicationIds: volunteer.commitmentApplicationIds
+    delete body.volunteerId;
+
+    const updatedVolunteerData = {
+      commitmentApplicationIds: req.user.commitmentApplicationIds
         .concat(savedCommitmentApplication._id),
-      ...body
     };
 
-
-    await volunteerService.updateVolunteerDetails(
-      volunteer.email,
-      updatedVolunteerData
+    await volunteerService.updateVolunteer(
+      volunteerId,
+      updatedVolunteerData,
     );
 
     res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
@@ -89,15 +88,20 @@ const updateCommitmentApplication = async (req: express.Request, res: express.Re
     const { id } = req.params;
     const updatedFields = req.body as Partial<CommitmentApplicationData>;
 
-    const commitmentApplication = await commitmentApplicationService
-      .updateCommitmentApplication(id, updatedFields);
+    const { volunteerId } = updatedFields;
+    if (!volunteerId) {
+      throw Error('No volunteerId');
+    }
+    const volunteer = await volunteerService.getVolunteerById(volunteerId);
+    if (volunteer.volunteerType !== 'ad-hoc') {
+      throw Error('Invalid volunteer type');
+    }
 
-    const volunteer = (await volunteerService
-      .readVolunteersByIds([commitmentApplication.volunteerId]))[0];
+    await commitmentApplicationService.updateCommitmentApplication(id, updatedFields);
 
     if (updatedFields.status === 'accepted') {
-      await volunteerService.updateVolunteerDetails(
-        volunteer.email as string, { volunteerType: 'committed' },
+      await volunteerService.updateVolunteer(
+        volunteerId, { volunteerType: 'committed' },
       );
     }
 

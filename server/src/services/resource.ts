@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 import { ResourceData } from '../types';
 import Resource from '../models/Resource';
-import emailService from '../services/email';
-import generateDummyUser from '../dummy/user';
-import generateDummyEvent from '../dummy/event';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {

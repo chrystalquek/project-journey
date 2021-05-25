@@ -1,29 +1,27 @@
 import express from 'express';
 import resourceController from '../controllers/resource';
+import authorize from '../helpers/authorize';
 import { validate } from '../helpers/validation';
 
 const router = express.Router();
 
 // @route   GET /resource/:id
 // @desc    Get resource by id
-// @access  Public
-router.get('/:id', resourceController.readResource);
+router.get('/:id', authorize([]), resourceController.readResource);
 
-// @route   DELETE /resource
+// @route   DELETE /resource/:id
 // @desc    Delete a resource by id
-// @access  Public
-router.delete('/:id', resourceController.deleteResource);
+router.delete('/:id', authorize(['admin']), resourceController.deleteResource);
 
-// @route   PUT /resource
+// @route   PUT /resource/:id
 // @desc    Update a resource by id
-// @access  Public
-router.put('/:id', resourceController.updateResource);
+router.put('/:id', authorize(['admin']), resourceController.updateResource);
 
 // @route   POST /resource
 // @desc    Post a new resource
-// @access  Public
 router.post(
   '/',
+  authorize(['admin']),
   validate(resourceController.getValidations('createResource')),
   resourceController.createResource,
 );

@@ -9,7 +9,7 @@ import {
   RACE_TYPES,
   SOCIAL_MEDIA_PLATFORMS,
   VOLUNTEER_TYPE,
-  PERSONALITY_TYPES_REGEX
+  PERSONALITY_TYPES_REGEX,
 } from '../models/Volunteer';
 import HTTP_CODES from '../constants/httpCodes';
 import { doesUserEmailExist } from '../services/volunteer';
@@ -42,13 +42,13 @@ export const stringEnumValidator = (
   return true;
 };
 
-const regexValidator = (regexExp: RegExp, regexName : string, value: string) => {
+const regexValidator = (regexExp: RegExp, regexName: string, value: string) => {
   if (!regexExp.test(value)) {
     throw new Error(`${regexName}: "${value}" must conform with the regex ${regexExp}`);
   }
 
   return true;
-}
+};
 
 const checkIfStatusValid = (value: SignUpStatus) => {
   const isPending = value === 'pending';
@@ -235,6 +235,7 @@ export const validate = (validations: ValidationChain[]) => async (
   req: express.Request,
   res: express.Response,
   next: Function,
+  // eslint-disable-next-line consistent-return
 ) => {
   await Promise.all(
     validations.map((validation: ValidationChain) => validation.run(req)),

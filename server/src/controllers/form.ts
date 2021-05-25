@@ -112,6 +112,12 @@ const answerFormQuestions = async (req: express.Request, res: express.Response) 
     answers,
   } = req.body as AnswerFormQuestionsRequest;
 
+  if (answers.some((answer) => answer.userId !== req.user._id)) {
+    // trying to submit responses that are not your user id is not allowed
+    res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    return;
+  }
+
   const form = await formService.getForm(eventId);
 
   const formId = form._id;

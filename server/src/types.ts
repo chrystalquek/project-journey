@@ -322,3 +322,14 @@ export type CommitmentApplicationData = {
     volunteerContribution: string,
     hasCriminalRecord: boolean
 }
+
+// extend express.Request type with user object
+/* eslint-disable no-unused-vars */
+declare global {
+    namespace Express {
+        interface Request {
+            user: VolunteerData
+        }
+    }
+}
+/* eslint-enable no-unused-vars */

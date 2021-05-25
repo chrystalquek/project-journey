@@ -4,7 +4,7 @@ import signUpService, { checkIfAccepted } from '../services/signUp';
 import answerService from '../services/forms/answer';
 import { roleCapacityValidator } from '../helpers/validation';
 import {
-  EventSearchType, EventData, RoleData, QueryParams,
+  EventSearchType, EventData, RoleData, VolunteerType,
 } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
@@ -44,7 +44,7 @@ const createEvent = async (
   try {
     req.body.isCancelled = false; // default
     const eventId = await eventService.createEvent(req.body as EventData);
-    res.status(HTTP_CODES.OK).send({eventId});
+    res.status(HTTP_CODES.OK).send({ eventId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -59,10 +59,10 @@ const readEvent = async (
   try {
     const event = await eventService.readEvent(req.params.id);
 
-    // to access volunteers by Id
-    // const volunteers = Volunteer.find(
-    //   { _id: { $in: event.volunteers } },
-    // );
+    if (event.volunteerType === 'committed' && req.user.volunteerType === 'ad-hoc') {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
+    }
 
     res.status(HTTP_CODES.OK).json(event);
   } catch (err) {
@@ -80,14 +80,21 @@ const readEvents = async (req: express.Request, res: express.Response): Promise<
     const searchType = req.params.eventType as EventSearchType;
     const pageNo = Number(req.query.pageNo);
     const size = Number(req.query.size);
-    const query: QueryParams = { searchType, skip: 0, limit: 0 };
 
-    if (pageNo < 0) {
-      throw new Error('Invalid page number, should start with 0');
+    if (pageNo < 0 || size < 0) {
+      throw new Error('Invalid page or size number');
     }
-    query.skip = size * pageNo;
-    query.limit = size;
-    const events = await eventService.readEvents(query);
+
+    const volunteerType: VolunteerType[] = req.user.volunteerType === 'ad-hoc'
+      ? ['ad-hoc']
+      : ['ad-hoc', 'committed'];
+
+    let events;
+    if (Number.isNaN(pageNo) || Number.isNaN(size)) {
+      events = await eventService.readEvents(searchType, volunteerType);
+    } else {
+      events = await eventService.readEvents(searchType, volunteerType, size * pageNo, size);
+    }
     res.status(HTTP_CODES.OK).json({
       data: events,
     });
@@ -124,7 +131,8 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     // append feedback status
     if (eventType === 'past') {
       const signedUpEventsWithFeedbackStatus: EventData[] = [];
-      const feedbackStatuses = await Promise.all(signedUpEvents.map(async (signedUpEvent) => await answerService.getFeedbackStatus(userId, signedUpEvent._id)));
+      const feedbackStatuses = await Promise.all(signedUpEvents
+        .map(async (signedUpEvent) => answerService.getFeedbackStatus(userId, signedUpEvent._id)));
       for (let i = 0; i < signedUpEvents.length; i += 1) {
         signedUpEventsWithFeedbackStatus.push({
           ...signedUpEvents[i],
