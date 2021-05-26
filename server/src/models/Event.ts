@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
 import { VOLUNTEER_TYPE } from './Volunteer';
 
@@ -13,6 +13,16 @@ export type RoleData = {
   capacity: number;
   volunteers: mongoose.Types.ObjectId[];
 }
+
+// const RoleSchema = createSchema({
+//   name: Type.string({ required: true }),
+//   description: Type.string({ required: true }),
+//   capacity: Type.number({ required: true }),
+//   volunteers: Type.array({ required: true }).of(Type.objectId()),
+// },
+//   { _id: false });
+
+// export type RoleData = Omit<ExtractProps<typeof RoleSchema>, "__v">;
 
 const CONTENT_TYPE = ['pdf', 'video', 'image', 'links', 'document']
 
@@ -36,6 +46,7 @@ const EventSchema = createSchema(
     facilitatorName: Type.string({ required: false }),
     facilitatorDescription: Type.string({ required: false }),
     facilitatorPhoto: Type.string({ required: false }),
+    // roles: Type.array({ required: true }).of(RoleSchema),
     roles: Type.array({ required: true }).of({
       name: Type.string({ required: true }),
       description: Type.string({ required: true }),

@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import SignUp, { SignUpData, SignUpStatus } from '../models/SignUp';
+import SignUp, { SignUpData, SignUpIdType, SignUpStatus } from '../models/SignUp';
 import Event, { RoleData } from '../models/Event';
 import emailService from './email';
 import mongoose from 'mongoose';
-import { SignUpIdType } from '../controllers/signUp';
+
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
 type UpdateEventVolunteersAction = 'add' | 'remove' | 'replace'

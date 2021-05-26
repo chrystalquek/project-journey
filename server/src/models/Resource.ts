@@ -20,5 +20,3 @@ const ResourceSchema = createSchema({
 export type ResourceData = Omit<ExtractProps<typeof ResourceSchema>, "__v">;
 
 export default typedModel('Resource', ResourceSchema);
-
-// export default mongoose.model<ResourceModel>('Resource', ResourceSchema);

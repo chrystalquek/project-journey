@@ -1,7 +1,5 @@
 import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
 
-// export type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document;
-
 export const COMMITMENT_APPLICATION_STATUS = ['pending', 'accepted', 'rejected'] as const;
 export type CommitmentApplicationStatus = (typeof COMMITMENT_APPLICATION_STATUS)[number]
 

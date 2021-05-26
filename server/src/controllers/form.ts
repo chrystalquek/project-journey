@@ -10,8 +10,8 @@ import questionService from '../services/forms/question';
 import answerService from '../services/forms/answer';
 
 import validation from '../helpers/validation';
-import { FormQuestionType } from '../models/Forms/Question';
 import { AnswerData } from '../models/Forms/Answer';
+import { QuestionsOptionsRequestData, CreateFormQuestionsRequest, AnswerFormQuestionsRequest } from '../questionTypes';
 
 export type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
 
@@ -134,23 +134,6 @@ const answerFormQuestions = async (req: express.Request, res: express.Response) 
     });
   }
 };
-
-export type QuestionsOptionsRequestData = {
-  displayText: string;
-  type: FormQuestionType;
-  isRequired: boolean;
-  name: string;
-  options: Array<{ content: string }>
-}
-export interface CreateFormQuestionsRequest {
-  eventId: string,
-  questions: Array<QuestionsOptionsRequestData>
-}
-
-export interface AnswerFormQuestionsRequest {
-  eventId: string
-  answers: Array<AnswerData>
-}
 
 export default {
   createForm,

@@ -176,10 +176,7 @@ export type VolunteerPublicData = Omit<
   VolunteerData,
   'password' |
   '_id' |
-  'identificationNumber' |
   'administratorRemarks'
 >
 
 export default typedModel('Volunteer', VolunteerSchema);
-
-// export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);

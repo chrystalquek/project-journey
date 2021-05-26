@@ -1,10 +1,14 @@
 import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
 
+// types in schema
 export const SIGN_UP_STATUS = ['pending', ['accepted', String], 'rejected'] as const;
 export type SignUpStatus = (typeof SIGN_UP_STATUS)[number]
 
+// types in controllers/services
+export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
+
 const SignUpSchema = createSchema({
-  signUpId: Type.objectId({ required: true }), // TODO remove
+  signUpId: Type.objectId({ required: true }), // TODO change to _id
   eventId: Type.objectId({ required: true }),
   userId: Type.objectId({ required: true }),
   status: Type.mixed({
@@ -22,5 +26,3 @@ const SignUpSchema = createSchema({
 export type SignUpData = Omit<ExtractProps<typeof SignUpSchema>, "__v">;
 
 export default typedModel('SignUp', SignUpSchema);
-
-// export default mongoose.model<SignUpModel>('SignUp', SignUpSchema);

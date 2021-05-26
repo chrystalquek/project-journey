@@ -50,6 +50,7 @@ const deleteImageWithEmail = async (req: express.Request, res: express.Response)
   }
 };
 
+// TODO should try to get rid of this
 export type ImageRequest = {
   email: String,
   imageName: String

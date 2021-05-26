@@ -9,10 +9,6 @@ export type OpportunityModel = OpportunityData & mongoose.Document;
 const OpportunitySchema = createSchema({
   positions: Type.array({ required: true }).of(Type.string({ required: true })),
   photo: Type.string({ required: true }),
-  createdAt: Type.date({
-    required: true,
-    default: Date.now,
-  }),
 });
 
 export type OpportunityData = EventData & Omit<ExtractProps<typeof OpportunitySchema>, "__v">;

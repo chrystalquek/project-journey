@@ -17,8 +17,9 @@ import { doesUserEmailExist } from '../services/volunteer';
 import { COMMITMENT_APPLICATION_STATUS } from '../models/CommitmentApplication';
 import { RoleData } from '../models/Event';
 import { SignUpStatus } from '../models/SignUp';
-import { QuestionsOptionsRequestData } from '../controllers/form';
+
 import { AnswerData } from '../models/Forms/Answer';
+import { QuestionsOptionsRequestData } from '../questionTypes';
 
 const LENGTH_MINIMUM_PASSWORD = 8;
 

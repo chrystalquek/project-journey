@@ -4,9 +4,7 @@ import { signUpStatusValidator } from '../helpers/validation';
 import signUpService from '../services/signUp';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
-import { SignUpStatus, SignUpData } from '../models/SignUp';
-
-export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
+import { SignUpStatus, SignUpData, SignUpIdType } from '../models/SignUp';
 
 export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
 
