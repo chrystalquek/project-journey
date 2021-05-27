@@ -10,11 +10,11 @@ import VolunteerRoles from '@components/event/EventDetails/EventDetailsParts/Vol
 import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
-import { FormStatus } from '@type/event/common';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
 import { getAcceptedSignUp } from '@utils/helpers/event';
 import ResizedImage from '../ResizedImage';
+import { FormStatus } from '@type/form/form';
 
 type EventDetailsCommittedProps = {
   event: EventData,

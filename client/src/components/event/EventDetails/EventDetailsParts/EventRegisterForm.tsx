@@ -107,7 +107,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
               >
                 {roles.map((v: FormSelectRow) => (
                   <MenuItem
-                    key={v.id}
+                    key={v.value}
                     value={v.value}
                     disabled={v.isDisabled}
                   >
@@ -135,7 +135,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
               >
                 {roles.map((v: FormSelectRow) => (
                   <MenuItem
-                    key={v.id}
+                    key={v.value}
                     value={v.value}
                     disabled={v.isDisabled}
                   >
@@ -163,7 +163,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
               >
                 {roles.map((v: FormSelectRow) => (
                   <MenuItem
-                    key={v.id}
+                    key={v.value}
                     value={v.value}
                     disabled={v.isDisabled}
                   >

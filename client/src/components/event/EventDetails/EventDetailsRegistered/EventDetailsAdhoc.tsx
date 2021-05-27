@@ -13,9 +13,9 @@ import FacilitatorInfo from '@components/event/EventDetails/EventDetailsParts/Fa
 import BecomeCommited from '@components/profile/BecomeCommitedDialog';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
-import { FormStatus } from '@type/event/common';
 import { getAcceptedSignUp } from '@utils/helpers/event';
 import ResizedImage from '../ResizedImage';
+import { FormStatus } from '@type/form/form';
 
 type EventDetailsAdhocProps = {
   event: EventData,

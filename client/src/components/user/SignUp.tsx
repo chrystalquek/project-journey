@@ -15,10 +15,9 @@ import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
-import { SignUpArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
 import SignUpForm from '@components/form/SignUpForm';
-import { VolunteerType } from '@type/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { questions as SignUpAdhocQuestionList } from '@components/form/questions/SignUpAdhocQuestionList';
 import { questions as SignUpCommittedQuestionList } from '@components/form/questions/SignUpCommittedQuestionList';
 
@@ -117,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 
 type SignUpProps = {
   user: UserState;
-  handleFormSubmit: (formData: SignUpArgs) => Promise<void>;
+  handleFormSubmit: (formData: VolunteerData) => Promise<void>;
 };
 
 const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
@@ -148,7 +147,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
   };
 
   const selectCommitted = () => {
-    setVolunteerType(VolunteerType.COMMITED);
+    setVolunteerType(VolunteerType.COMMITTED);
     nextStep();
   };
 
@@ -179,7 +178,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
     );
   };
 
-  const VolunteerType = (props) => (
+  const VolunteerTypeSelection = (props) => (
     <Box>
       <Box className={classes.content}>
         <div>
@@ -336,7 +335,7 @@ const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
     if (currentStep === 0) {
       return (
         <div>
-          <VolunteerType />
+          <VolunteerTypeSelection />
         </div>
       );
     }
