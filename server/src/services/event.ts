@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 
-import Event, { EventData } from '../models/Event';
+import Event, { EventData, EventSearchType } from '../models/Event';
 import util from '../helpers/util';
-import { EventSearchType } from '../models/event';
 import { VolunteerType } from '../models/Volunteer';
 import { Id } from '../types';
 
