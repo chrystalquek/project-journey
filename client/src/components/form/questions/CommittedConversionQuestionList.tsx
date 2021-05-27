@@ -1,4 +1,4 @@
-import { QuestionList } from '@type/questions';
+import { QuestionList } from '@type/form/form';
 import { Race } from '@type/volunteer';
 
 export const conversionFormQuestions: QuestionList = [

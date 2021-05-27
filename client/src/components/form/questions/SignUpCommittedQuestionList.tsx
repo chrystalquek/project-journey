@@ -1,5 +1,5 @@
 import { Link } from '@material-ui/core';
-import { HeaderQuestionList } from '@type/questions';
+import { HeaderQuestionList } from '@type/form/form';
 import {
   Citizenship, Gender, Race, SocialMediaPlatform,
 } from '@type/volunteer';

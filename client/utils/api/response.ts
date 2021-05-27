@@ -1,6 +1,6 @@
 import { CommitmentApplicationData } from '@type/commitmentApplication';
 import { EventData } from '@type/event';
-import { QuestionItem } from '@type/questions';
+import { QuestionItem } from '@type/form/question';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData } from '@type/volunteer';
 

@@ -1,5 +1,4 @@
-import { OptionType } from "dayjs";
-import { OptionData } from "./option";
+import { OptionType } from "./option";
 
 export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
 
@@ -10,20 +9,6 @@ export type QuestionsOptionsRequestData = {
     name: string;
     options: Array<{ content: string }>
 }
-
-// export type QuestionData = {
-//     _id: string;
-//     displayText: [string];
-//     name: string; // not in backend
-//     initialValue?: string; // not in backend
-//     type: FormQuestionType;
-//     formId: string;
-//     isRequired: boolean;
-// }
-
-// export type QuestionWithOptions = QuestionData & {
-//     options: OptionData
-// }
 
 // used for FE only
 export type InputType =
