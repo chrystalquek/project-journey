@@ -1,6 +1,6 @@
 import { Link } from '@material-ui/core';
 import { HeaderQuestionList } from '@type/questions';
-import { CITIZENSHIP, GENDER, RACE } from '@type/volunteer';
+import { Citizenship, Gender, Race } from '@type/volunteer';
 
 export const questions: HeaderQuestionList = [
   {
@@ -56,8 +56,8 @@ export const questions: HeaderQuestionList = [
         type: 'mcq',
         initialValue: '',
         options: [
-          { value: GENDER.MALE, label: 'Male' },
-          { value: GENDER.FEMALE, label: 'Female' },
+          { value: Gender.MALE, label: 'Male' },
+          { value: Gender.FEMALE, label: 'Female' },
         ],
         isRequired: true,
       },
@@ -67,10 +67,10 @@ export const questions: HeaderQuestionList = [
         type: 'mcq',
         initialValue: '',
         options: [
-          { value: CITIZENSHIP.SINGAPORE, label: 'Singapore Citizen' },
-          { value: CITIZENSHIP.PR, label: 'Singapore Permanent Resident' },
+          { value: Citizenship.SINGAPORE, label: 'Singapore Citizen' },
+          { value: Citizenship.PR, label: 'Singapore Permanent Resident' },
           {
-            value: CITIZENSHIP.FOREIGNER,
+            value: Citizenship.FOREIGNER,
             label: 'Foreigner requiring work pass to work in Singapore',
           },
         ],
@@ -316,20 +316,20 @@ export const questions: HeaderQuestionList = [
           `Blessings In A Bag is committed to the safety and protection of its community. This Code of Conduct applies to all guests, volunteers and participants who represent the organisation and who interact with children or young people in both a direct and/or unsupervised capacity.`,
 
           `The public and private conduct of volunteers acting on behalf of Blessings In A Bag can inspire and motivate those with whom they interact, or can cause great harm if inappropriate. We must, at all times, be aware of the responsibilities that accompany our work.`,
-          
+
           `I agree:`,
 
           `(a) Not to take any photos or video documentation on my phone of students or volunteers participating in the program.  I am aware that I can, however, take photo and video documentation of myself and/or the surrounding environment such as the classroom space, interesting projects, etc.`,
 
           `(b) To respect the guidance of the WCA Captain in the activity I am participating in and seek for assistance or clarification from the WCA Captain`,
-          
+
           `(c) To respect the value the rights, religious beliefs and practices of individuals. Refrain from actions and behaviours that constitute harassment or discrimination and strive to be sensitive to the feelings of others.`,
-          
+
           // A bit nasty, but it needs link here.
           (<>(d) To report any accidents or situations involving any member of the community (Student, WCA, etc) and to record this in our record book as soon as practically possible (Including incidents such as misbehaviour on the bus, during program, having a personal challenge that directly impacts the safety and well being of the community (eg a stalker), etc: <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdaVJ4OTtXyuucvL4U59TifnIsXhQB6a93zmFhdmcjJIiIS-Q/viewform" color="secondary">Click here</Link></>),
-          
+
           `(e) To be responsible for familiarising myself with building/facility safety issues, such as, fire procedures, location of emergency exits, location of emergency telephones and first aid equipment.`,
-          
+
           `(f) To be committed to the dates I've scheduled myself for in the roster and will give notice at least 1 day before the scheduled date should I not be able to make it due to unforeseen circumstances.`
         ],
         type: 'mcq',
@@ -351,8 +351,8 @@ export const questions: HeaderQuestionList = [
         ],
         isRequired: true,
       },
-     
-      
+
+
     ],
   },
 
@@ -372,7 +372,7 @@ export const questions: HeaderQuestionList = [
           `FEEDBACK PERMISSION: In order to gain information about the effectiveness of our programs and better address the needs of students, communities and the program in general, Beyond Awesome (of Blessings in a Bag Limited) may request access for feedback and survey completion by individuals, including (but not limited to): focus groups, online surveys, feedback forms, reflection sheets, etc.  At no point is participation in any of these required and no identifying information will be attached to any results that are collected or disseminated unless otherwise confirmed or agreed upon between the individual and the organisation. Findings will be shared for the purposes of demonstrating our programs and their impact to funders and partners. Furthermore, Beyond Awesome (of Blessings in a Bag Limited) reserves the right to communicate within leadership regarding individual achievement, development and well-being.`,
 
           `Please note that although participation in Beyond Awesome (of Blessings in a Bag Limited) programs is voluntary, once this agreement is signed, it cannot be withdrawn and remains in effect even after the individual is no longer participating in any Beyond Awesome (of Blessings in a Bag Limited) programming.`,
-          
+
           'I have read and agree to each of the terms and conditions of this Informed Consent and License Agreement, and agree to waive any and all claims for monetary compensation from Beyond Awesome (of Blessings in a Bag Limited), acknowledging that Blessings in a Bag Limited is a purpose-driven entity focusing on youth development with a focus on under-resourced students and the community at large.',
         ],
         type: 'mcq',

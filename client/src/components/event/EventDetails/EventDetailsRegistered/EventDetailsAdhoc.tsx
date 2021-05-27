@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { EventData } from '@type/event';
-import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
+import { VolunteerType, VolunteerData } from '@type/volunteer';
 import {
   Chip, Grid, makeStyles,
 } from '@material-ui/core';
@@ -52,7 +52,7 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
         <ResizedImage img={event?.coverImage ?? testEventImage1} name={event.name} />
       </Grid>
 
-      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+      {event.volunteerType === VolunteerType.COMMITTED
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <Chip
@@ -62,7 +62,7 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
             />
           </Grid>
         )}
-      {event.volunteerType === VOLUNTEER_TYPE.ADHOC
+      {event.volunteerType === VolunteerType.ADHOC
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <Chip color="primary" label={ADHOC_VOLUNTEER_TAG} />
@@ -95,7 +95,7 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
         )}
 
       <Grid className={classes.gutterBottom} item xs={12}>
-        {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+        {event.volunteerType === VolunteerType.COMMITTED
           ? <VolunteerRoles event={event} />
           : <FacilitatorInfo event={event} />}
       </Grid>
@@ -112,7 +112,7 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
           </Grid>
         )}
 
-      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+      {event.volunteerType === VolunteerType.COMMITTED
         && (
           <div>
             <EventTypography text="This event is only opened to committed volunteers." />

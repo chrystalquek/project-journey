@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import { MONTHS } from '@constants/index';
 import {
-  Event, EventData, EventFilterOptions, EventFilters, EventType,
+  EventData, EventFilterOptions, EventFilters, EventType,
 } from '@type/event';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 
 // Contains helper functions for everything related to the events page.
 
@@ -52,8 +52,8 @@ function getEventType(e: EventData): EventType {
   return e.eventType as EventType; // type assertion
 }
 
-function getVolunteerType(e: EventData): VOLUNTEER_TYPE {
-  return e.volunteerType as VOLUNTEER_TYPE;
+function getVolunteerType(e: EventData): VolunteerType {
+  return e.volunteerType as VolunteerType;
 }
 
 // may be null
@@ -65,25 +65,25 @@ function getEventFilters(f: EventFilterOptions): Array<EventType> {
   const ret: Array<EventType> = [];
   const eFilters = f[EventFilters.EVENTTYPE];
   if (eFilters[EventFilters.VOLUNTEERING]) {
-    ret.push(Event.Volunteering);
+    ret.push(EventType.VOLUNTEERING);
   }
   if (eFilters[EventFilters.WORKSHOPS]) {
-    ret.push(Event.Workshop);
+    ret.push(EventType.WORKSHOP);
   }
   if (eFilters[EventFilters.HANGOUTS]) {
-    ret.push(Event.Hangout);
+    ret.push(EventType.HANGOUT);
   }
   return ret;
 }
 
-function getVolunteerFilters(f: EventFilterOptions): Array<VOLUNTEER_TYPE> {
-  const ret: Array<VOLUNTEER_TYPE> = [];
+function getVolunteerFilters(f: EventFilterOptions): Array<VolunteerType> {
+  const ret: Array<VolunteerType> = [];
   const vFilters = f[EventFilters.VOLUNTEERTYPE];
   if (vFilters[EventFilters.ADHOC]) {
-    ret.push(VOLUNTEER_TYPE.ADHOC);
+    ret.push(VolunteerType.ADHOC);
   }
   if (vFilters[EventFilters.COMMITTED]) {
-    ret.push(VOLUNTEER_TYPE.COMMITED);
+    ret.push(VolunteerType.COMMITTED);
   }
   return ret;
 }

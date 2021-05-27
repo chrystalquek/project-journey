@@ -9,13 +9,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import ErrorPage from 'next/error';
 import { useRouter } from 'next/router';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import { getVolunteerById } from '@redux/actions/profilePage';
 import Loading from '@components/common/Loading';
 import { checkLoggedIn } from '@utils/helpers/auth';
 
 const Profile = () => {
-  checkLoggedIn()
+  checkLoggedIn();
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -33,8 +33,8 @@ const Profile = () => {
   // Guard clause, user cannot view other users
   // Only admin can view other users
   if (loggedInUser.user === null
-    || loggedInUser.user.volunteerType !== VOLUNTEER_TYPE.ADMIN
-    && loggedInUser.user._id !== profilePageId) {
+    || (loggedInUser.user.volunteerType !== VolunteerType.ADMIN
+      && loggedInUser.user._id !== profilePageId)) {
     return <ErrorPage statusCode={404} />;
   }
 

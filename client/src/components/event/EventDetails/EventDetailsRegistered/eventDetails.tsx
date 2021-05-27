@@ -1,6 +1,6 @@
 import { EventData } from '@type/event';
 import React, { FC, useCallback, useEffect } from 'react';
-import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
+import { VolunteerType, VolunteerData } from '@type/volunteer';
 import EventDetailsCommitted from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsCommitted';
 import EventDetailsAdhoc from '@components/event/EventDetails/EventDetailsRegistered/EventDetailsAdhoc';
 import { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
@@ -93,12 +93,12 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     },
   };
 
-  const renderDetails = (volunteerType: VOLUNTEER_TYPE): React.ReactNode => {
+  const renderDetails = (volunteerType: VolunteerType): React.ReactNode => {
     switch (volunteerType) {
-      case VOLUNTEER_TYPE.ADHOC:
+      case VolunteerType.ADHOC:
         // adhoc volunteers can't register for events opened to committed volunteers
         formStatus.disabled = event.volunteerType
-          === VOLUNTEER_TYPE.COMMITED || formStatus.disabled;
+          === VolunteerType.COMMITTED || formStatus.disabled;
         return (
           <EventDetailsAdhoc
             formStatus={formStatus}
@@ -107,7 +107,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
             user={user}
           />
         );
-      case VOLUNTEER_TYPE.COMMITED:
+      case VolunteerType.COMMITTED:
         return (
           <EventDetailsCommitted
             formStatus={formStatus}
@@ -116,7 +116,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
             user={user}
           />
         );
-      case VOLUNTEER_TYPE.ADMIN:
+      case VolunteerType.ADMIN:
         return (
           <>
             <EventDetailsCommitted
@@ -248,16 +248,16 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     <>
       {renderDetails(user.volunteerType)}
       {EditButton}
-      {user.volunteerType !== VOLUNTEER_TYPE.ADMIN && hasAcceptedSignUp && (
-      <ActionableDialog
-        open={isWithdrawModalOpen}
-        setOpen={() => setIsWithdrawModalOpen(!isWithdrawModalOpen)}
-        content={withdrawCommitmentQuestion}
-        buttonTitle="Confirm"
-        buttonOnClick={withdrawCommitment}
-        openCloseButtonTitle="Withdraw"
-        recommendedAction="cancel"
-      />
+      {user.volunteerType !== VolunteerType.ADMIN && hasAcceptedSignUp && (
+        <ActionableDialog
+          open={isWithdrawModalOpen}
+          setOpen={() => setIsWithdrawModalOpen(!isWithdrawModalOpen)}
+          content={withdrawCommitmentQuestion}
+          buttonTitle="Confirm"
+          buttonOnClick={withdrawCommitment}
+          openCloseButtonTitle="Withdraw"
+          recommendedAction="cancel"
+        />
       )}
       {CancelDeleteButton}
     </>

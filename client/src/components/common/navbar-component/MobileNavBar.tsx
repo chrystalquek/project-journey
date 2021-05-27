@@ -24,7 +24,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { VolunteerData, VolunteerType } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
 import {
@@ -103,13 +103,13 @@ export default function MobileNavBar({ userData }: NavBarProps) {
    */
   const eventMenuArray = !userData
     ? [{ title: 'Upcoming Events', route: EVENTS_ROUTE }]
-    : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
-    ? [
+    : userData.volunteerType === VolunteerType.ADMIN
+      ? [
         { title: 'Browse Events', route: EVENTS_ROUTE },
         { title: 'Past Events', route: PAST_EVENTS_ROUTE },
         { title: 'Pending Requests', route: EVENT_PENDING_REQUESTS_ROUTE },
       ]
-    : [
+      : [
         // Adhoc / Committed
         { title: 'Browse Events', route: EVENTS_ROUTE },
         { title: 'My Upcoming Events', route: UPCOMING_EVENTS_ROUTE },
@@ -238,7 +238,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             </List>
           </Collapse>
           {userData &&
-            userData.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+            userData.volunteerType === VolunteerType.ADMIN &&
             volunteerMenu}
         </List>
         <div className={classes.drawerWhitespace} />
@@ -300,7 +300,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                       Logout
                     </MenuItem>
                     <MenuItem dense onClick={() => router.push(`/profile/${userData._id}`)}>
-                        Edit Profile
+                      Edit Profile
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>

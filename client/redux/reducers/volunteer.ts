@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { VolunteerData, VolunteerType } from 'types/volunteer';
 import { getPendingVolunteers, getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import { initializeFilterObject } from '@utils/helpers/TableOptions';
 import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
@@ -9,7 +9,7 @@ import { VolunteerSortFieldsType } from '@components/volunteer/VolunteerProfile'
 export type VolunteersMetaArgs = {
   pageNo: number,
   filters: {
-    volunteerType: Record<VOLUNTEER_TYPE, boolean>
+    volunteerType: Record<VolunteerType, boolean>
   },
   search: {
     name: string
@@ -38,7 +38,7 @@ const initialState: VolunteerState = {
     pageNo: 0,
     count: 0,
     filters: {
-      volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
+      volunteerType: initializeFilterObject(VolunteerType),
     },
     search: {
       name: null,
@@ -98,7 +98,7 @@ const volunteerSlice = createSlice({
       if (payload.status == CommitmentApplicationStatus.Accepted) {
         state.data[payload.volunteerId] = {
           ...volunteer,
-          volunteerType: VOLUNTEER_TYPE.COMMITED,
+          volunteerType: VolunteerType.COMMITTED,
         };
       }
       // no longer a pending request with either accept or reject

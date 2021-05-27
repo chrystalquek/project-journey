@@ -18,7 +18,7 @@ import {
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { VolunteerData, VolunteerType } from 'types/volunteer';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@redux/reducers/user';
 import {
@@ -111,13 +111,13 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
    */
   const eventMenuArray = !userData
     ? [{ title: 'Upcoming Events', route: EVENTS_ROUTE }]
-    : userData.volunteerType === VOLUNTEER_TYPE.ADMIN
-    ? [
+    : userData.volunteerType === VolunteerType.ADMIN
+      ? [
         { title: 'Browse Events', route: EVENTS_ROUTE },
         { title: 'Past Events', route: PAST_EVENTS_ROUTE },
         { title: 'Pending Requests', route: EVENT_PENDING_REQUESTS_ROUTE },
       ]
-    : [
+      : [
         // Adhoc / Committed
         { title: 'Browse Events', route: EVENTS_ROUTE },
         { title: 'My Upcoming Events', route: UPCOMING_EVENTS_ROUTE },
@@ -258,7 +258,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         {eventButton}
         {eventMenuWrapper}
         {userData &&
-          userData.volunteerType === VOLUNTEER_TYPE.ADMIN &&
+          userData.volunteerType === VolunteerType.ADMIN &&
           volunteer}
       </>
     );
