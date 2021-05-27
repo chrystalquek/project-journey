@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 import Event, { EventData } from './Event';
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
-
-// const { Schema } = mongoose;
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
 
 export type OpportunityModel = OpportunityData & mongoose.Document;
 
@@ -12,7 +10,5 @@ const OpportunitySchema = createSchema({
 });
 
 export type OpportunityData = EventData & Omit<ExtractProps<typeof OpportunitySchema>, "__v">;
-
-// export default typedModel('Event', EventSchema);
 
 export default Event.discriminator('Opportunity', OpportunitySchema) as mongoose.Model<OpportunityModel>;

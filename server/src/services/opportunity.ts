@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
 import Opportunity, { OpportunityData } from '../models/Opportunity';
+import { Id } from '../types';
 
 const createOpportunity = async (opportunityData: OpportunityData): Promise<void> => {
   try {
     const opportunitySchemeData = new Opportunity({
       // Inherited
-      _id: new mongoose.Types.ObjectId(),
       name: opportunityData.name,
-      createdAt: Date.now(),
       description: opportunityData.description,
       contentUrl: opportunityData.contentUrl,
       contentType: opportunityData.contentType,
@@ -31,7 +30,7 @@ const createOpportunity = async (opportunityData: OpportunityData): Promise<void
   }
 };
 
-const readOpportunity = async (id: string) => {
+const readOpportunity = async (id: Id) => {
   try {
     const opportunity = await Opportunity.findById(id);
 
@@ -46,7 +45,7 @@ const readOpportunity = async (id: string) => {
 };
 
 const updateOpportunity = async (
-  id: string,
+  id: Id,
   updatedFields: OpportunityData,
 ): Promise<void> => {
   try {
@@ -60,7 +59,7 @@ const updateOpportunity = async (
   }
 };
 
-const deleteOpportunity = async (id: string): Promise<void> => {
+const deleteOpportunity = async (id: Id): Promise<void> => {
   try {
     await Opportunity.findOneAndDelete({ _id: id });
   } catch (err) {

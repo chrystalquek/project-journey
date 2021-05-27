@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Question, { QuestionData } from '../../models/Forms/Question';
+import { Id } from '../../types';
 
 
 /**
@@ -40,7 +41,7 @@ const updateQuestions = async (updatedQuestions: Array<Partial<QuestionData>>): 
  * Retrieve all questsions from specified form id
  * @param formId Mongoose form id
  */
-const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
+const getQuestions = async (formId: Id): Promise<Array<QuestionData>> => {
   const questions = await Question.find({
     formId,
   }).lean().exec();

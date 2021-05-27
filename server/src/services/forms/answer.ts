@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Answer, { AnswerData } from '../../models/Forms/Answer';
+import { Id } from '../../types';
 
 import formService from './form';
 
@@ -9,7 +10,6 @@ import formService from './form';
  */
 const bulkInsertAnswers = async (answers: Array<AnswerData>): Promise<void> => {
   const bulkAnswers = answers.map((answer) => ({
-    _id: new mongoose.Types.ObjectId(),
     questionId: answer.questionId,
     userId: answer.userId,
     content: answer.content,
@@ -26,8 +26,8 @@ const bulkInsertAnswers = async (answers: Array<AnswerData>): Promise<void> => {
  * @param userId
  */
 const retrieveAnswers = async ({ questionId, formId, userId }:
-  { questionId: string, formId?: string, userId?: string } | {
-    questionId?: string, formId: string, userId: string
+  { questionId: Id, formId?: Id, userId?: Id } | {
+    questionId?: Id, formId: Id, userId: Id
   }): Promise<Array<AnswerData>> => {
   const options = await Answer.find(questionId ? {
     questionId,
@@ -37,10 +37,10 @@ const retrieveAnswers = async ({ questionId, formId, userId }:
 
 // just a helper for getting the status of feedback form for [signedup, past] events
 // returns a boolean
-const getFeedbackStatus = async (userId: string, eventId: string): Promise<boolean> => {
+const getFeedbackStatus = async (userId: Id, eventId: Id): Promise<boolean> => {
   const form = await formService.getForm(eventId);
   const formId = form._id as string;
-  const answers = await retrieveAnswers({ formId, userId });
+  const answers = await retrieveAnswers({ formId: formId, userId: userId });
   const isAnswerPresent = answers.length > 0;
   return isAnswerPresent;
 };

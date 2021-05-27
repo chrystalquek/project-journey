@@ -4,6 +4,7 @@ import ejs from 'ejs';
 
 import Volunteer, { VolunteerData } from '../models/Volunteer';
 import Event, { EventData } from '../models/Event';
+import { Id } from '../types';
 
 const { OAuth2 } = google.auth;
 
@@ -169,8 +170,8 @@ const cancelEventEmailHelper = async (user: VolunteerData, event: EventData) => 
 };
 
 export const sendEmail = async (emailType: EmailTemplate,
-  userId: string,
-  eventId: string | null = null) => {
+  userId: Id,
+  eventId: Id | null = null) => {
   let helperObject;
   const volunteerData = await Volunteer.findById(userId);
   const eventData = eventId && await Event.findById(eventId);

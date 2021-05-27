@@ -20,7 +20,6 @@ export const doesUserEmailExist = async (email: string) => {
 const addNewVolunteer = async (volunteerData: VolunteerData) => {
   const volunteerSchemaData = new Volunteer({
     ...volunteerData,
-    _id: new mongoose.Types.ObjectId(),
   });
 
   await volunteerSchemaData.save();
@@ -64,12 +63,12 @@ const getVolunteerById = async (id: Id) => {
  */
 const getAllVolunteers = async (volunteerType?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number) => {
   // no of volunteers that match name (if any)
-  const count = await (name ? Volunteer.find({ name: { $regex: `.*${name}.*`, $options: 'xis' } }) : Volunteer.find({}))
+  const count = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
     .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
     .countDocuments();
 
   // get only part of the collection cos of pagination
-  const volunteers = await (name ? Volunteer.find({ name: { $regex: `.*${name}.*`, $options: 'xis' } }) : Volunteer.find({}))
+  const volunteers = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
     .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
     .sort({ [sort ?? '']: 1 })
     .skip(skip ?? 0).limit(limit ?? 0)

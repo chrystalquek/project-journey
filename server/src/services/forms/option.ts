@@ -9,7 +9,6 @@ import { Id } from '../../types';
  */
 const createOptionsForQuestion = async (options: Array<Omit<OptionData, '_id'>>): Promise<void> => {
   const bulkOptions = options.map((option) => ({
-    _id: new mongoose.Types.ObjectId(),
     questionId: option.questionId,
     text: option.text,
   }));

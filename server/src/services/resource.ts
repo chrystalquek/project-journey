@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
 import Resource, { ResourceData } from '../models/Resource';
+import { Id } from '../types';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
     const resourceSchemaData = new Resource({
-      _id: new mongoose.Types.ObjectId(),
       name: resourceData.name,
       url: resourceData.url,
-      createdAt: Date.now(),
       resourceType: resourceData.resourceType,
     });
     await resourceSchemaData.save();
@@ -16,7 +15,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
   }
 };
 
-const readResource = async (id: string): Promise<ResourceData> => {
+const readResource = async (id: Id): Promise<ResourceData> => {
   try {
     const resource = await Resource.findById(id);
 
@@ -31,7 +30,7 @@ const readResource = async (id: string): Promise<ResourceData> => {
 };
 
 const updateResource = async (
-  id: string,
+  id: Id,
   updatedFields: ResourceData,
 ): Promise<void> => {
   try {
@@ -45,7 +44,7 @@ const updateResource = async (
   }
 };
 
-const deleteResource = async (id: string): Promise<void> => {
+const deleteResource = async (id: Id): Promise<void> => {
   try {
     const resource = await Resource.findById(id);
 

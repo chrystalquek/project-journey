@@ -50,7 +50,7 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
     });
 
     const questionsData = questions.map((questionData) => ({
-      formId: mongoose.Types.ObjectId(formId),
+      formId,
       isRequired: questionData.isRequired,
       displayText: questionData.displayText,
       type: questionData.type,

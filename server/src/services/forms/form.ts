@@ -1,25 +1,24 @@
 import mongoose from 'mongoose';
 import Form, { FormData } from '../../models/Forms/Form';
+import { Id } from '../../types';
 
 /**
  * Create form attached to event
  * @param formData form data created
  */
-const createForm = async (formData: Omit<FormData, "_id">): Promise<string> => {
-  const formId = new mongoose.Types.ObjectId();
+const createForm = async (formData: Omit<FormData, "_id">): Promise<mongoose.Types.ObjectId> => {
   const formSchemaData = new Form({
-    _id: formId,
     eventId: formData.eventId,
   });
   await formSchemaData.save();
-  return formId.toHexString();
+  return formSchemaData._id;
 };
 
 /**
  * Get form details
  * @param eventId eventId related to form
  */
-const getForm = async (eventId: string) => {
+const getForm = async (eventId: Id) => {
   const form = await Form.findOne({
     eventId,
   }).lean().exec();

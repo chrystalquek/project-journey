@@ -5,11 +5,9 @@ import answerService from '../services/forms/answer';
 import { roleCapacityValidator } from '../helpers/validation';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
-import { EventData, RoleData } from '../models/Event';
+import { EventData, EventSearchType, RoleData } from '../models/Event';
 import { VolunteerType } from '../models/Volunteer';
 import { Id } from '../types';
-
-export type EventSearchType = 'all' | 'upcoming' | 'past'
 
 export type EventValidatorMethod = 'createEvent';
 
@@ -44,7 +42,6 @@ const createEvent = async (
   res: express.Response,
 ): Promise<void> => {
   try {
-    req.body.isCancelled = false; // default
     const eventId = await eventService.createEvent(req.body as EventData);
     res.status(HTTP_CODES.OK).send({ eventId });
   } catch (err) {

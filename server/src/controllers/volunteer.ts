@@ -196,7 +196,7 @@ const getAllVolunteerDetails = async (
     const limit = withPagination ? size : 0;
 
     const volunteersDetails = await volunteerService.getAllVolunteers(
-      volunteerType, String(req.query.name), String(req.query.sort), skip, limit,
+      volunteerType, req.query.name as string, req.query.sort as string, skip, limit,
     );
     res.status(HTTP_CODES.OK).json(volunteersDetails);
   } catch (error) {

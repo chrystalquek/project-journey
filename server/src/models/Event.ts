@@ -7,6 +7,7 @@ const options = { discriminatorKey: 'eventType' };
 export const EVENT_TYPE = ['workshop', 'volunteering', 'hangout'] as const
 export type EventType = (typeof EVENT_TYPE)[number]
 
+// make sure RoleData matches fields defined in EventSchema
 export type RoleData = {
   name: string;
   description: string;
@@ -14,17 +15,9 @@ export type RoleData = {
   volunteers: mongoose.Types.ObjectId[];
 }
 
-// const RoleSchema = createSchema({
-//   name: Type.string({ required: true }),
-//   description: Type.string({ required: true }),
-//   capacity: Type.number({ required: true }),
-//   volunteers: Type.array({ required: true }).of(Type.objectId()),
-// },
-//   { _id: false });
-
-// export type RoleData = Omit<ExtractProps<typeof RoleSchema>, "__v">;
-
 const CONTENT_TYPE = ['pdf', 'video', 'image', 'links', 'document']
+
+export type EventSearchType = 'all' | 'upcoming' | 'past'
 
 const EventSchema = createSchema(
   {
@@ -46,7 +39,6 @@ const EventSchema = createSchema(
     facilitatorName: Type.string({ required: false }),
     facilitatorDescription: Type.string({ required: false }),
     facilitatorPhoto: Type.string({ required: false }),
-    // roles: Type.array({ required: true }).of(RoleSchema),
     roles: Type.array({ required: true }).of({
       name: Type.string({ required: true }),
       description: Type.string({ required: true }),

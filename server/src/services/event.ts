@@ -2,16 +2,13 @@ import mongoose from 'mongoose';
 
 import Event, { EventData } from '../models/Event';
 import util from '../helpers/util';
-import { EventSearchType } from '../controllers/event';
+import { EventSearchType } from '../models/event';
 import { VolunteerType } from '../models/Volunteer';
 import { Id } from '../types';
 
-const createEvent = async (eventData: EventData): Promise<string> => {
+const createEvent = async (eventData: EventData): Promise<mongoose.Types.ObjectId> => {
   try {
-    const _id = new mongoose.Types.ObjectId();
-
     const eventSchemaData: mongoose.Document = new Event({
-      _id,
       name: eventData.name,
       coverImage: eventData.coverImage,
       eventType: eventData.eventType,
@@ -19,7 +16,6 @@ const createEvent = async (eventData: EventData): Promise<string> => {
       startDate: eventData.startDate,
       endDate: eventData.endDate,
       deadline: eventData.deadline,
-      createdAt: Date.now(),
       vacancies: eventData.vacancies,
       description: eventData.description,
       facilitatorName: eventData.facilitatorName,
@@ -29,12 +25,12 @@ const createEvent = async (eventData: EventData): Promise<string> => {
       contentUrl: eventData.contentUrl,
       contentType: eventData.contentType,
       location: eventData.location,
-      isCancelled: eventData.isCancelled,
     });
     await eventSchemaData.save();
-    return _id.toHexString();
+    return eventSchemaData._id;
   } catch (err) {
     throw new Error(err.msg);
+
   }
 };
 
@@ -42,7 +38,7 @@ const createEvent = async (eventData: EventData): Promise<string> => {
  * Retrieves the event with the specified id.
  * @param id event id
  */
-const readEvent = async (id: string): Promise<EventData> => {
+const readEvent = async (id: Id): Promise<EventData> => {
   try {
     const event = await Event.findById(id);
 
@@ -142,7 +138,7 @@ const readEvents = async (eventType: EventSearchType, volunteerType: VolunteerTy
 };
 
 const updateEvent = async (
-  id: string,
+  id: Id,
   updatedFields: Partial<EventData>,
 ): Promise<void> => {
   try {
@@ -157,7 +153,7 @@ const updateEvent = async (
 };
 
 const cancelEvent = async (
-  id: string,
+  id: Id,
 ): Promise<void> => {
   try {
     await Event.findOneAndUpdate(
@@ -174,7 +170,7 @@ const cancelEvent = async (
   }
 };
 
-const deleteEvent = async (id: string): Promise<void> => {
+const deleteEvent = async (id: Id): Promise<void> => {
   try {
     const event = await Event.findById(id);
 

@@ -42,7 +42,7 @@ const createCommitmentApplication = async (
     }
 
     const savedCommitmentApplication = await commitmentApplicationService
-      .createCommitmentApplication(req.body as CommitmentApplicationData);
+      .createCommitmentApplication(req.body as Partial<CommitmentApplicationData>);
     // Add the commitment application id to the volunteer data
 
     delete body.volunteerId;
