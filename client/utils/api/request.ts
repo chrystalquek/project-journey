@@ -117,8 +117,8 @@ export type SignUpQueryParams = {
   userId?: string;
 }
 
-export type CreateSignUpRequest = Omit<SignUpData, '_id' | 'signUpId'>;
+export type CreateSignUpRequest = Omit<SignUpData, 'signUpId' | 'createdAt'>;
 
-export type UpdateSignUpRequest = Omit<SignUpData, '_id' | 'signUpId'>;
+export type UpdateSignUpRequest = Omit<SignUpData, 'signUpId' | 'createdAt'>;
 
 export type GetVolunteerRequest = string;
