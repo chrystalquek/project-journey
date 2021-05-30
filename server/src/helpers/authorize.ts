@@ -1,7 +1,7 @@
 import jwt from 'express-jwt';
 import { VolunteerType } from '../types';
 
-import { accessTokenSecret } from './auth';
+import accessTokenSecret from './auth';
 import HTTP_CODES from '../constants/httpCodes';
 
 const authorize = (roles: Array<VolunteerType> = []) => [

@@ -1,6 +1,7 @@
 import express from 'express';
+import getValidations from '../validations/event';
 import eventController from '../controllers/event';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
 import authorize from '../helpers/authorize';
 
 const router = express.Router();
@@ -33,8 +34,7 @@ router.put('/cancel/:id', authorize(['admin']), eventController.cancelEvent);
 // @desc    Post a new event
 router.post(
   '/',
-  authorize(['admin']),
-  validate(eventController.getValidations('createEvent')),
+  validate(getValidations('createEvent')),
   eventController.createEvent,
 );
 

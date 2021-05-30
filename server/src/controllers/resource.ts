@@ -1,25 +1,7 @@
 import express from 'express';
-import { body } from 'express-validator';
 import { ResourceData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import resourceService from '../services/resource';
-
-export type ResourceValidatorMethod = 'createResource';
-
-const getValidations = (method: ResourceValidatorMethod) => {
-  switch (method) {
-    case 'createResource': {
-      return [
-        body('name', 'name does not exist').exists(),
-        body('url', 'url is invalid').isURL(),
-        body('type', 'type does not exist').exists(),
-      ];
-    }
-    default: {
-      return [];
-    }
-  }
-};
 
 const createResource = async (
   req: express.Request,
@@ -80,5 +62,4 @@ export default {
   readResource,
   updateResource,
   deleteResource,
-  getValidations,
 };

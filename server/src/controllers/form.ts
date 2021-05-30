@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
 import express from 'express';
-import { body, param } from 'express-validator';
 
 import HTTP_CODES from '../constants/httpCodes';
 import formService from '../services/forms/form';
@@ -8,40 +7,9 @@ import optionsService from '../services/forms/option';
 import questionService from '../services/forms/question';
 import answerService from '../services/forms/answer';
 import {
-  AnswerData,
   AnswerFormQuestionsRequest,
   CreateFormQuestionsRequest,
-  QuestionsOptionsRequestData,
 } from '../types';
-import validation from '../helpers/validation';
-
-export type FormValidatorMethod = 'createForm' | 'getFormDetails' | 'answerForm'
-
-const getValidations = (method: FormValidatorMethod) => {
-  switch (method) {
-    case 'createForm': {
-      return [
-        body('eventId', 'Event ID was not provided').isString(),
-        body('questions', 'questions parameter not provided').isArray(),
-        body('questions', 'questions parameter format is incorrect').custom((questions: QuestionsOptionsRequestData[]) => validation.questionValidator(questions)),
-      ];
-    }
-    case 'getFormDetails': {
-      return [
-        param('eventId').isString(),
-      ];
-    }
-    case 'answerForm': {
-      return [
-        body('eventId', 'eventId was not provided').isString(),
-        body('answers', 'answers parameter format is incorrect').custom((answers: Array<AnswerData>) => validation.answersValidator(answers)),
-      ];
-    }
-    default: {
-      return [];
-    }
-  }
-};
 
 const createForm = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
@@ -140,6 +108,5 @@ const answerFormQuestions = async (req: express.Request, res: express.Response) 
 export default {
   createForm,
   getEventFormDetails,
-  getValidations,
   answerFormQuestions,
 };
