@@ -1,15 +1,16 @@
-import express from 'express';
+import express, { Router } from 'express';
 import volunteerController from '../controllers/volunteer';
 import authorize from '../helpers/authorize';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
+import getValidations from '../validations/volunteer';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // @route   POST /volunteer
 // @desc    For anyone to create new accounts
 router.post(
   '/',
-  validate(volunteerController.getValidations('createVolunteer')),
+  validate(getValidations('createVolunteer')),
   volunteerController.createNewVolunteer,
 );
 
@@ -33,8 +34,7 @@ router.get(
 // @desc    For volunteer and admin to get volunteer
 router.get(
   '/:email',
-  authorize([]),
-  validate(volunteerController.getValidations('getVolunteer')),
+  validate(getValidations('getVolunteer')),
   volunteerController.getVolunteerDetails,
 );
 
@@ -58,17 +58,15 @@ router.get(
 // @desc    For admin to delete volunteer
 router.delete(
   '/',
-  authorize(['admin']),
-  validate(volunteerController.getValidations('deleteVolunteer')),
+  validate(getValidations('deleteVolunteer')),
   volunteerController.removeVolunteer,
 );
 
 // @route   PUT /volunteer/:id
 // @desc    For admin to update volunteer
 router.put(
-  '/:id',
-  authorize([]),
-  validate(volunteerController.getValidations('updateVolunteer')),
+  '/',
+  validate(getValidations('updateVolunteer')),
   volunteerController.updateVolunteer,
 );
 

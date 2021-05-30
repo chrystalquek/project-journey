@@ -1,22 +1,28 @@
 import express from 'express';
 import commitmentApplicationController from '../controllers/commitmentApplication';
+import getValidations from '../validations/commitmentApplication';
 import authorize from '../helpers/authorize';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
 
 const router = express.Router();
 
-// @route   POST /commitment-application
-// @desc    For ad-hoc volunteers to submit a commitment application
-router.post('/', authorize(['ad-hoc']), commitmentApplicationController.createCommitmentApplication);
+router.post(
+  '/',
+  validate(getValidations('createCommitmentApplication')),
+  commitmentApplicationController.createCommitmentApplication,
+);
 
-// @route   GET /commitment-application
-// @desc    For admin to read commitment applications
-router.get('/', authorize(['admin']), commitmentApplicationController.readCommitmentApplications);
+router.get('/',
+  commitmentApplicationController.readCommitmentApplications);
 
-// @route   PUT /commitment-application/:id
-// @desc    For admin to approve or reject a commitment application
-router.put('/:id', authorize(['admin']),
-  validate(commitmentApplicationController.getValidations('updateCommitmentApplication')),
-  commitmentApplicationController.updateCommitmentApplication);
+// @route   PUT /commitment-application
+// @desc    Update a commitmentApplication by id
+// @access  Private
+router.put(
+  '/:id',
+  authorize(['admin']),
+  validate(getValidations('updateCommitmentApplication')),
+  commitmentApplicationController.updateCommitmentApplication,
+);
 
 export default router;

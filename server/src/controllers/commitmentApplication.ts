@@ -1,59 +1,36 @@
 import express from 'express';
 import commitmentApplicationService from '../services/commitmentApplication';
 import HTTP_CODES from '../constants/httpCodes';
-import VALIDATOR from '../helpers/validation';
 import volunteerService from '../services/volunteer';
 import { CommitmentApplicationData, CommitmentApplicationStatus } from '../models/CommitmentApplication';
-
-export type CommitmentApplicationValidatorMethod = 'createCommitmentApplication' | 'readCommitmentApplication' | 'updateCommitmentApplication'
-
-/**
- * Handles route request validation for controllers
- * @param method Controller handler names
- */
-const getValidations = (method: CommitmentApplicationValidatorMethod) => {
-  switch (method) {
-    case 'createCommitmentApplication': {
-      return [
-        VALIDATOR.commitmentApplicationStatus,
-      ];
-    }
-    case 'updateCommitmentApplication': {
-      return [
-        VALIDATOR.commitmentApplicationStatus,
-      ];
-    }
-    default:
-      return [];
-  }
-};
 
 const createCommitmentApplication = async (
   req: express.Request,
   res: express.Response,
 ): Promise<void> => {
   try {
-    const { body } = req;
-    const { volunteerId } = body;
+    // ensure volunteer is only ad-hoc before being able to submit a commitment application
+    const volunteer = (await volunteerService
+      .readVolunteersByIds([req.body.volunteerId]))[0];
 
-    if (req.user._id !== volunteerId) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
-      return;
+    if (volunteer.volunteerType !== 'ad-hoc') {
+      throw new Error(`Volunteer is a ${volunteer.volunteerType}, cannot create Commitment Application`);
     }
 
     const savedCommitmentApplication = await commitmentApplicationService
       .createCommitmentApplication(req.body as Partial<CommitmentApplicationData>);
     // Add the commitment application id to the volunteer data
-
+    const { body } = req;
     delete body.volunteerId;
 
     const updatedVolunteerData = {
-      commitmentApplicationIds: req.user.commitmentApplicationIds
+      commitmentApplicationIds: volunteer.commitmentApplicationIds
         .concat(savedCommitmentApplication._id),
+      ...body,
     };
 
-    await volunteerService.updateVolunteer(
-      volunteerId,
+    await volunteerService.updateVolunteerDetails(
+      volunteer.email,
       updatedVolunteerData,
     );
 
@@ -117,5 +94,4 @@ export default {
   createCommitmentApplication,
   readCommitmentApplications,
   updateCommitmentApplication,
-  getValidations,
 };

@@ -1,7 +1,7 @@
 import express from 'express';
 import userController from '../controllers/user';
-import { validate } from '../helpers/validation';
-import authorize from '../helpers/authorize';
+import { validate } from '../validations/global';
+import getValidations from '../validations/user';
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const router = express.Router();
 // @desc    For volunteers and admins to login
 router.post(
   '/login',
-  validate(userController.getValidations('login')),
+  validate(getValidations('login')),
   userController.login,
 );
 
@@ -17,8 +17,7 @@ router.post(
 // @desc    For volunteers and admins to change their password
 router.post(
   '/password',
-  authorize([]),
-  validate(userController.getValidations('updatePassword')),
+  validate(getValidations('updatePassword')),
   userController.updatePassword,
 );
 

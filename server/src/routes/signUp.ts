@@ -1,7 +1,8 @@
 import express from 'express';
 import signUpController from '../controllers/signUp';
 import authorize from '../helpers/authorize';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
+import getValidations from '../validations/signUp';
 
 const router = express.Router();
 
@@ -9,8 +10,7 @@ const router = express.Router();
 // @desc    For volunteers to sign up for an event
 router.post(
   '/',
-  authorize(['ad-hoc', 'committed']),
-  validate(signUpController.getValidations('createSignUp')),
+  validate(getValidations('createSignUp')),
   signUpController.createSignUp,
 );
 
@@ -42,8 +42,7 @@ router.delete(
 // @desc    For admin to change status of sign up
 router.put(
   '/:id/:idType',
-  authorize(['admin']),
-  validate(signUpController.getValidations('updateSignUp')),
+  validate(getValidations('updateSignUp')),
   signUpController.updateSignUp,
 );
 

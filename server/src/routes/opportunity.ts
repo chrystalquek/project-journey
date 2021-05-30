@@ -1,8 +1,8 @@
 import express from 'express';
-import eventController from '../controllers/event';
 import opportunityController from '../controllers/opportunity';
 import authorize from '../helpers/authorize';
-import { validate } from '../helpers/validation';
+import { validate } from '../validations/global';
+import getValidations from '../validations/opportunity';
 
 const router = express.Router();
 
@@ -22,9 +22,7 @@ router.put('/:id', authorize(['admin']), opportunityController.updateOpportunity
 // @desc    Post a new opportunity
 router.post(
   '/',
-  authorize(['admin']),
-  validate(eventController.getValidations('createEvent')),
-  validate(opportunityController.getValidations('createOpportunity')),
+  validate(getValidations('createOpportunity')),
   opportunityController.createOpportunity,
 );
 
