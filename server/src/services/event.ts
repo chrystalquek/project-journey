@@ -4,7 +4,6 @@ import {
 } from '../types';
 
 import Event from '../models/Event';
-import util from '../helpers/util';
 
 const createEvent = async (eventData: EventData): Promise<string> => {
   try {
@@ -42,7 +41,7 @@ const createEvent = async (eventData: EventData): Promise<string> => {
  * Retrieves the event with the specified id.
  * @param id event id
  */
-const readEvent = async (id: string): Promise<EventData> => {
+const getEvent = async (id: string): Promise<EventData> => {
   try {
     const event = await Event.findById(id);
 
@@ -58,7 +57,7 @@ const readEvent = async (id: string): Promise<EventData> => {
 
 /**
  * Retrieves either all, upcoming, or past events from the specified event ids.
- * A helper function for readSignedUpEvents
+ * A helper function for getSignedUpEvents
  * @param ids array of event ids
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
@@ -88,7 +87,7 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
         throw new Error('Event type is invalid');
     }
 
-    return events.map((event: EventData) => util.snakeToCamelCase(event));
+    return events.map((event: EventData) => event);
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -101,7 +100,7 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEvents = async (eventType: EventSearchType, volunteerType: VolunteerType[],
+const getEvents = async (eventType: EventSearchType, volunteerType: VolunteerType[],
   skip?: number, limit?: number): Promise<EventData[]> => {
   try {
     let events: EventData[];
@@ -135,7 +134,7 @@ const readEvents = async (eventType: EventSearchType, volunteerType: VolunteerTy
       default: throw new Error('Event type is invalid');
     }
 
-    return events.map((event) => util.snakeToCamelCase(event) as EventData);
+    return events;
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -218,8 +217,8 @@ export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
 
 export default {
   createEvent,
-  readEvent,
-  readEvents,
+  getEvent,
+  getEvents,
   readEventsByIds,
   updateEvent,
   cancelEvent,

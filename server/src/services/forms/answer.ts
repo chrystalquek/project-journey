@@ -44,7 +44,7 @@ const retrieveAnswers = async ({ questionId, formId, userId }:
 // returns a boolean
 const getFeedbackStatus = async (userId: string, eventId: string): Promise<boolean> => {
   const form = await formService.getForm(eventId);
-  const formId = form._id as string;
+  const formId = form._id;
   const answers = await retrieveAnswers({ formId, userId });
   const isAnswerPresent = answers.length > 0;
   return isAnswerPresent;

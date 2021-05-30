@@ -17,7 +17,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
   }
 };
 
-const readResource = async (id: string): Promise<ResourceData> => {
+const getResource = async (id: string): Promise<ResourceData> => {
   try {
     const resource = await Resource.findById(id);
 
@@ -62,7 +62,7 @@ const deleteResource = async (id: string): Promise<void> => {
 
 export default {
   createResource,
-  readResource,
+  getResource,
   updateResource,
   deleteResource,
 };

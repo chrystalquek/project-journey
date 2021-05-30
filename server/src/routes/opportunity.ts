@@ -8,7 +8,7 @@ const router = express.Router();
 
 // @route   GET /opportunity/:id
 // @desc    Get opportunity by id
-router.get('/:id', authorize([]), opportunityController.readOpportunity);
+router.get('/:id', authorize([]), opportunityController.getOpportunity);
 
 // @route   DELETE /opportunity/:id
 // @desc    Delete a opportunity by id

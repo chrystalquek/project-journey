@@ -1,4 +1,4 @@
-import express from 'express';
+import { Response, Request } from 'express';
 import signUpService from '../services/signUp';
 import { SignUpData, SignUpIdType } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
@@ -8,16 +8,12 @@ import eventService from '../services/event';
  * Creates a new sign up
  * @param req.body sign up data without the signUpId field
  */
-const createSignUp = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const createSignUp = async (req: Request, res: Response): Promise<void> => {
   try {
-    const event = await eventService.readEvent(req.body.eventId);
+    const event = await eventService.getEvent(req.body.eventId);
     if (req.user._id !== req.body.userId || (req.user.volunteerType === 'ad-hoc' && event.volunteerType === 'committed')) {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
     }
-
     const signUpData = await signUpService.createSignUp(req.body);
     res.status(HTTP_CODES.OK).json(signUpData);
   } catch (err) {
@@ -33,13 +29,10 @@ const createSignUp = async (
  * @param req.params.idType type of the specified id
  * @return userSignUpDetails the sign up data with the specified id
  */
-const readSignUps = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const getSignUps = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id, idType } = req.params;
-    const userSignUpDetails: SignUpData[] = await signUpService.readSignUps(
+    const userSignUpDetails: SignUpData[] = await signUpService.getSignUps(
       id, idType as SignUpIdType,
     );
 
@@ -55,12 +48,9 @@ const readSignUps = async (
  * Retrieves sign ups that are pending approval
  * @return sign ups that are pending approval
  */
-const readPendingSignUps = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const getPendingSignUps = async (req: Request, res: Response): Promise<void> => {
   try {
-    const pendingSignUps = await signUpService.readPendingSignUps();
+    const pendingSignUps = await signUpService.getPendingSignUps();
 
     res.status(HTTP_CODES.OK).json({ data: pendingSignUps });
   } catch (err) {
@@ -76,12 +66,12 @@ const readPendingSignUps = async (
  * @param req.params.idType type of the specified id
  * @param req.body the updated sign up data
  */
-const updateSignUp = async (req: express.Request, res: express.Response) => {
+const updateSignUp = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id, idType } = req.params;
-    const updatedFields = req.body as SignUpData;
+    const updatedFields: SignUpData = req.body;
 
-    await signUpService.updateSignUp(id as string, idType as SignUpIdType, updatedFields);
+    await signUpService.updateSignUp(id, idType as SignUpIdType, updatedFields);
 
     res.status(HTTP_CODES.OK).send();
   } catch (err) {
@@ -96,15 +86,14 @@ const updateSignUp = async (req: express.Request, res: express.Response) => {
  * @param req.params.id one of the ids in the sign up
  * @param req.params.idType type of the specified id
  */
-const deleteSignUp = async (req: express.Request, res: express.Response) => {
+const deleteSignUp = async (req: Request, res: Response): Promise<void> => {
   try {
-    let { idType } = req.params;
+    const { idType } = req.params;
     const { id } = req.params;
-    idType = idType as SignUpIdType;
 
     switch (idType) {
       case 'signUpId': {
-        const signUps = await signUpService.readSignUps(id, idType as SignUpIdType);
+        const signUps = await signUpService.getSignUps(id, idType);
         if (signUps.length !== 1) {
           throw Error('Sign up does not exist');
         }
@@ -140,8 +129,8 @@ const deleteSignUp = async (req: express.Request, res: express.Response) => {
 
 export default {
   createSignUp,
-  readSignUps,
-  readPendingSignUps,
+  getSignUps,
+  getPendingSignUps,
   updateSignUp,
   deleteSignUp,
 };

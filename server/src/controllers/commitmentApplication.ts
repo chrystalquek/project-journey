@@ -1,37 +1,33 @@
-import express from 'express';
-import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
+import { Request, Response } from 'express';
+import { VolunteerData, CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
+
 import commitmentApplicationService from '../services/commitmentApplication';
 
 import HTTP_CODES from '../constants/httpCodes';
 import volunteerService from '../services/volunteer';
 
-const createCommitmentApplication = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const createCommitmentApplication = async (req: Request, res: Response): Promise<void> => {
   try {
-    // ensure volunteer is only ad-hoc before being able to submit a commitment application
-    const volunteer = (await volunteerService
-      .readVolunteersByIds([req.body.volunteerId]))[0];
+    const commitmentApplicationData: CommitmentApplicationData = req.body;
+    const volunteerData: VolunteerData = req.user;
+    const { volunteerId } = commitmentApplicationData;
 
-    if (volunteer.volunteerType !== 'ad-hoc') {
-      throw new Error(`Volunteer is a ${volunteer.volunteerType}, cannot create Commitment Application`);
+    if (volunteerData._id !== volunteerId) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      return;
     }
 
     const savedCommitmentApplication = await commitmentApplicationService
-      .createCommitmentApplication(req.body as CommitmentApplicationData);
-    // Add the commitment application id to the volunteer data
-    const { body } = req;
-    delete body.volunteerId;
+      .createCommitmentApplication(commitmentApplicationData);
 
+    // Add the commitment application id to the volunteer data
     const updatedVolunteerData = {
-      commitmentApplicationIds: volunteer.commitmentApplicationIds
+      commitmentApplicationIds: volunteerData.commitmentApplicationIds
         .concat(savedCommitmentApplication._id),
-      ...body,
     };
 
-    await volunteerService.updateVolunteerDetails(
-      volunteer.email,
+    await volunteerService.updateVolunteer(
+      volunteerId,
       updatedVolunteerData,
     );
 
@@ -43,14 +39,13 @@ const createCommitmentApplication = async (
   }
 };
 
-const readCommitmentApplications = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const getCommitmentApplications = async (req: Request, res: Response): Promise<void> => {
   try {
-    const status = req.query.status as CommitmentApplicationStatus ?? undefined;
+    // TODO: fix after chrystal's merged
+    // const comAppStatus: CommitmentApplicationStatus | undefined = req.query.status;
+    const comAppStatus = req.query.status as CommitmentApplicationStatus | undefined;
     const commitmentApplications = await commitmentApplicationService
-      .readCommitmentApplications(status);
+      .getCommitmentApplications(comAppStatus);
     res.status(HTTP_CODES.OK).json({
       data: commitmentApplications,
     });
@@ -61,21 +56,22 @@ const readCommitmentApplications = async (
   }
 };
 
-const updateCommitmentApplication = async (req: express.Request, res: express.Response) => {
+const updateCommitmentApplication = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    const updatedFields = req.body as Partial<CommitmentApplicationData>;
-
+    const commitmentId = req.params.id;
+    const updatedFields: Partial<CommitmentApplicationData> = req.body;
     const { volunteerId } = updatedFields;
+
     if (!volunteerId) {
       throw Error('No volunteerId');
     }
+
     const volunteer = await volunteerService.getVolunteerById(volunteerId);
     if (volunteer.volunteerType !== 'ad-hoc') {
       throw Error('Invalid volunteer type');
     }
 
-    await commitmentApplicationService.updateCommitmentApplication(id, updatedFields);
+    await commitmentApplicationService.updateCommitmentApplication(commitmentId, updatedFields);
 
     if (updatedFields.status === 'accepted') {
       await volunteerService.updateVolunteer(
@@ -93,6 +89,6 @@ const updateCommitmentApplication = async (req: express.Request, res: express.Re
 
 export default {
   createCommitmentApplication,
-  readCommitmentApplications,
+  getCommitmentApplications,
   updateCommitmentApplication,
 };

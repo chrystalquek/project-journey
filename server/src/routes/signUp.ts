@@ -19,7 +19,7 @@ router.post(
 router.get(
   '/:id/:idType',
   authorize(['admin']),
-  signUpController.readSignUps,
+  signUpController.getSignUps,
 );
 
 // @route   GET /signup/pending
@@ -27,7 +27,7 @@ router.get(
 router.get(
   '/pending',
   authorize(['admin']),
-  signUpController.readPendingSignUps,
+  signUpController.getPendingSignUps,
 );
 
 // @route   DELETE /signup/:id/:idType

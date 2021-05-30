@@ -1,14 +1,12 @@
-import express from 'express';
+import { Request, Response } from 'express';
 import { ResourceData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import resourceService from '../services/resource';
 
-const createResource = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const createResource = async (req: Request, res: Response): Promise<void> => {
   try {
-    await resourceService.createResource(req.body as ResourceData);
+    const resourceData: ResourceData = req.body;
+    await resourceService.createResource(resourceData);
     res.status(HTTP_CODES.OK).send('Resource data created');
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -17,12 +15,9 @@ const createResource = async (
   }
 };
 
-const readResource = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const getResource = async (req: Request, res: Response): Promise<void> => {
   try {
-    const resource = await resourceService.readResource(req.params.id);
+    const resource = await resourceService.getResource(req.params.id);
     res.status(HTTP_CODES.OK).json(resource);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -31,10 +26,10 @@ const readResource = async (
   }
 };
 
-const updateResource = async (req: express.Request, res: express.Response) => {
+const updateResource = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const updatedFields = req.body as ResourceData;
+    const updatedFields: ResourceData = req.body;
 
     await resourceService.updateResource(id, updatedFields);
 
@@ -46,7 +41,7 @@ const updateResource = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const deleteResource = async (req: express.Request, res: express.Response) => {
+const deleteResource = async (req: Request, res: Response): Promise<void> => {
   try {
     await resourceService.deleteResource(req.params.id);
     res.status(HTTP_CODES.OK).send('Resource data deleted');
@@ -59,7 +54,7 @@ const deleteResource = async (req: express.Request, res: express.Response) => {
 
 export default {
   createResource,
-  readResource,
+  getResource,
   updateResource,
   deleteResource,
 };

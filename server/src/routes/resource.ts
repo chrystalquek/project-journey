@@ -8,7 +8,7 @@ const router = express.Router();
 
 // @route   GET /resource/:id
 // @desc    Get resource by id
-router.get('/:id', authorize([]), resourceController.readResource);
+router.get('/:id', authorize([]), resourceController.getResource);
 
 // @route   DELETE /resource/:id
 // @desc    Delete a resource by id

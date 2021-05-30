@@ -11,7 +11,7 @@ const router: Router = express.Router();
 router.post(
   '/',
   validate(getValidations('createVolunteer')),
-  volunteerController.createNewVolunteer,
+  volunteerController.createVolunteer,
 );
 
 // @route   GET /volunteer/pending
@@ -27,7 +27,7 @@ router.get(
 router.get(
   '/ids',
   authorize(['admin']),
-  volunteerController.readVolunteersByIds,
+  volunteerController.getVolunteersByIds,
 );
 
 // @route   GET /volunteer/:email
@@ -35,7 +35,7 @@ router.get(
 router.get(
   '/:email',
   validate(getValidations('getVolunteer')),
-  volunteerController.getVolunteerDetails,
+  volunteerController.getVolunteerDetailsByEmail,
 );
 
 // @route   GET /volunteer/id/:id
@@ -59,7 +59,7 @@ router.get(
 router.delete(
   '/',
   validate(getValidations('deleteVolunteer')),
-  volunteerController.removeVolunteer,
+  volunteerController.deleteVolunteer,
 );
 
 // @route   PUT /volunteer/:id

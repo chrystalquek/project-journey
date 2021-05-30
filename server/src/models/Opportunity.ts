@@ -12,4 +12,6 @@ const OpportunitySchema = new Schema({
   photo: String,
 });
 
-export default Event.discriminator('Opportunity', OpportunitySchema) as mongoose.Model<OpportunityModel>;
+const opportunityModel: mongoose.Model<OpportunityModel> = Event.discriminator('Opportunity', OpportunitySchema);
+
+export default opportunityModel;

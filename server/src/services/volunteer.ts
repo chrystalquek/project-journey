@@ -3,10 +3,9 @@ import mongoose from 'mongoose';
 import { QueryParams, VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
-import util from '../helpers/util';
 
 // Helper methods
-export const doesUserEmailExist = async (email: string) => {
+export const doesUserEmailExist = async (email: string): Promise<boolean> => {
   const user = await Volunteer.findOne({
     email,
   });
@@ -17,7 +16,7 @@ export const doesUserEmailExist = async (email: string) => {
  * Creates new volunteer for both ad-hoc/committed
  * @param volunteerData new volunteer data
  */
-const addNewVolunteer = async (volunteerData: VolunteerData) => {
+const createVolunteer = async (volunteerData: VolunteerData): Promise<void> => {
   const volunteerSchemaData = new Volunteer({
     ...volunteerData,
     _id: new mongoose.Types.ObjectId(),
@@ -31,7 +30,7 @@ const addNewVolunteer = async (volunteerData: VolunteerData) => {
  * Throws error if user doesn't exist
  * @param email User email to be searched
  */
-const getVolunteer = async (email: string) => {
+const getVolunteer = async (email: string): Promise<Partial<VolunteerData>> => {
   const volunteer = await Volunteer.findOne({
     email,
   }).lean().exec();
@@ -40,7 +39,7 @@ const getVolunteer = async (email: string) => {
     throw new Error(`Volunteer with email: ${email} not found`);
   }
 
-  return util.snakeToCamelCase(volunteerUtil.extractVolunteerDetails(volunteer));
+  return volunteerUtil.extractVolunteerDetails(volunteer);
 };
 
 /**
@@ -48,7 +47,7 @@ const getVolunteer = async (email: string) => {
  * Throws error if user doesn't exist
  * @param id User id to be searched
  */
-const getVolunteerById = async (id: string) => {
+const getVolunteerById = async (id: string): Promise<Partial<VolunteerData>> => {
   const volunteer = await Volunteer.findById(id).populate('commitmentApplicationIds').lean().exec();
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
@@ -82,7 +81,7 @@ const getAllVolunteers = async (query: QueryParams) => {
       .lean().exec();
   }
 
-  const data = volunteers.map((volunteer: VolunteerData) => util.snakeToCamelCase(volunteerUtil.extractVolunteerDetails(volunteer)));
+  const data = volunteers.map((volunteer: VolunteerData) => volunteerUtil.extractVolunteerDetails(volunteer));
 
   return { data, count };
 };
@@ -93,7 +92,7 @@ const getAllVolunteers = async (query: QueryParams) => {
  * @param ids array of volunteer ids
  * @return corresponding volunteers
  */
-const readVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
+const getVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
   try {
     return await Volunteer.find({
       _id: { $in: ids },
@@ -138,12 +137,12 @@ const updateVolunteer = async (id: string, updatedVolunteerData: Partial<Volunte
  * Removes volunteer from DB (hard delete)
  * @param email User email to be used to search
  */
-const deleteVolunteer = async (email: string) => {
+const deleteVolunteer = async (email: string): Promise<void> => {
   await Volunteer.findOneAndDelete({
     email,
   });
 };
 
 export default {
-  addNewVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, getVolunteerById, readVolunteersByIds, updateVolunteerDetails, updateVolunteer,
+  createVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, getVolunteerById, getVolunteersByIds, updateVolunteerDetails, updateVolunteer,
 };

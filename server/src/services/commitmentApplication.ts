@@ -14,7 +14,7 @@ const createCommitmentApplication = async (
   return savedCommitmentApplication.toObject();
 };
 
-const readCommitmentApplications = async (status?: CommitmentApplicationStatus):
+const getCommitmentApplications = async (status?: CommitmentApplicationStatus):
   Promise<CommitmentApplicationData[]> => {
   const commitmentApplications = await (status
     ? CommitmentApplication.find({ status })
@@ -44,6 +44,6 @@ const updateCommitmentApplication = async (
 
 export default {
   createCommitmentApplication,
-  readCommitmentApplications,
+  getCommitmentApplications,
   updateCommitmentApplication,
 };

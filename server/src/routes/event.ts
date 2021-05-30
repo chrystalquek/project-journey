@@ -8,15 +8,15 @@ const router = express.Router();
 
 // @route   GET /event/single/:id
 // @desc    Get event by id
-router.get('/single/:id', authorize([]), eventController.readEvent);
+router.get('/single/:id', authorize([]), eventController.getEvent);
 
 // @route   GET /event/multiple/:eventType
 // @desc    Get either all, upcoming, or past events
-router.get('/multiple/:eventType', authorize([]), eventController.readEvents);
+router.get('/multiple/:eventType', authorize([]), eventController.getEvents);
 
 // @route   GET /event/signup/:userId/:eventType
 // @desc    Get either all, upcoming, or past signed up events
-router.get('/signup/:userId/:eventType', authorize([]), eventController.readSignedUpEvents);
+router.get('/signup/:userId/:eventType', authorize([]), eventController.getSignedUpEvents);
 
 // @route   DELETE /event
 // @desc    Delete a event by id

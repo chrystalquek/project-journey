@@ -1,6 +1,7 @@
 import nodemailer, { TransportOptions } from 'nodemailer';
 import { google } from 'googleapis';
 import ejs from 'ejs';
+import Mail from 'nodemailer/lib/mailer';
 import { EventData, VolunteerData } from '../types';
 import Volunteer from '../models/Volunteer';
 import Event from '../models/Event';
@@ -8,15 +9,24 @@ import Event from '../models/Event';
 const { OAuth2 } = google.auth;
 
 type EmailTemplate = 'CANCEL_EVENT' | 'FEEDBACK' | 'EVENT_SIGN_UP_CONFIRMATION' | 'WAITLIST_TO_CONFIRMED';
+type EmailMetadata = {
+  to: string,
+  cc: string[],
+  bcc: string[],
+  subject:string,
+  templateFile: string,
+  templateData: object,
+}
 
 const EMAIL_TYPE_INVALID = 'Email type is invalid';
+const DETAILS_NOT_FOUND = 'Event or volunteer is not found';
 
 const FEEDBACK_TEMPLATE_FILE = 'src/views/feedback.ejs';
 const WAITLIST_TO_CONFIRMED_TEMPLATE_FILE = 'src/views/waitlist-to-confirmed.ejs';
 const EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE = 'src/views/event-sign-up-confirmation.ejs';
 const EVENT_CANCEL_TEMPLATE_FILE = 'src/views/event-cancel.ejs';
 
-const getSmtpTransport = async () => {
+const getSmtpTransport = async (): Promise<Mail> => {
   const oauth2Client = new OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
@@ -54,13 +64,12 @@ const getSmtpTransport = async () => {
 };
 
 const sendEmailHelper = async (to: string[], cc: string[],
-  bcc: string[], subject: string, templateFile: string, templateData: Record<string, string>) => {
+  bcc: string[], subject: string, templateFile: string,
+  templateData: Record<string, string>): Promise<void> => {
   const smtpTransport = await getSmtpTransport();
 
   ejs.renderFile(templateFile, templateData, (err, content) => {
-    if (err) {
-      console.log(err);
-    } else {
+    try {
       const mainOptions = {
         from: `Blessings in a Bag <${process.env.SENDER_EMAIL_ADDRESS}>`,
         to,
@@ -71,17 +80,20 @@ const sendEmailHelper = async (to: string[], cc: string[],
       };
       smtpTransport.sendMail(mainOptions, (error, info) => {
         if (error) {
-          console.log(error);
+          throw new Error(error.message);
         } else {
-          console.log(`Message sent: ${info.response}`);
+          console.info(`Message sent: ${info.response}`);
         }
       });
       smtpTransport.close();
+    } catch (e) {
+      throw new Error(e.message);
     }
   });
 };
 
-const eventSignUpConfirmationEmailHelper = async (user: VolunteerData, event: EventData) => {
+const eventSignUpConfirmationEmailHelper = async (user: VolunteerData,
+  event: EventData): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
@@ -105,7 +117,8 @@ const eventSignUpConfirmationEmailHelper = async (user: VolunteerData, event: Ev
   };
 };
 
-const feedbackEmailHelper = async (user: VolunteerData, event: EventData) => {
+const feedbackEmailHelper = async (user: VolunteerData,
+  event: EventData):Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
@@ -123,7 +136,8 @@ const feedbackEmailHelper = async (user: VolunteerData, event: EventData) => {
   };
 };
 
-const waitlistToConfirmedEmailHelper = async (user: VolunteerData, event: EventData) => {
+const waitlistToConfirmedEmailHelper = async (user: VolunteerData,
+  event: EventData): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
@@ -148,7 +162,8 @@ const waitlistToConfirmedEmailHelper = async (user: VolunteerData, event: EventD
   };
 };
 
-const cancelEventEmailHelper = async (user: VolunteerData, event: EventData) => {
+const cancelEventEmailHelper = async (user: VolunteerData,
+  event: EventData): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
@@ -170,29 +185,33 @@ const cancelEventEmailHelper = async (user: VolunteerData, event: EventData) => 
 
 export const sendEmail = async (emailType: EmailTemplate,
   userId: string,
-  eventId: string | null = null) => {
+  eventId: string | null = null): Promise<void> => {
   let helperObject;
-  const volunteerData = await Volunteer.findById(userId);
+  const volunteerData: VolunteerData | null = await Volunteer.findById(userId);
   const eventData = eventId && await Event.findById(eventId);
+
+  if (!volunteerData || !eventData) {
+    throw new Error(DETAILS_NOT_FOUND);
+  }
 
   switch (emailType) {
     case 'EVENT_SIGN_UP_CONFIRMATION':
       helperObject = await eventSignUpConfirmationEmailHelper(
-        volunteerData as VolunteerData, eventData as EventData,
+        volunteerData, eventData,
       );
       break;
     case 'FEEDBACK':
-      helperObject = await feedbackEmailHelper(volunteerData as VolunteerData,
-        eventData as EventData);
+      helperObject = await feedbackEmailHelper(volunteerData,
+        eventData);
       break;
     case 'WAITLIST_TO_CONFIRMED':
       helperObject = await waitlistToConfirmedEmailHelper(
-        volunteerData as VolunteerData, eventData as EventData,
+        volunteerData, eventData,
       );
       break;
     case 'CANCEL_EVENT':
       helperObject = await cancelEventEmailHelper(
-        volunteerData as VolunteerData, eventData as EventData,
+        volunteerData, eventData,
       );
       break;
     default:
