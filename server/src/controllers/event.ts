@@ -2,7 +2,7 @@ import express from 'express';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import answerService from '../services/forms/answer';
 import {
-  EventSearchType, EventData, QueryParams,
+  EventSearchType, EventData, VolunteerType,
 } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
@@ -101,15 +101,10 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
     // append feedback status
     if (eventType === 'past') {
       const signedUpEventsWithFeedbackStatus: EventData[] = [];
-<<<<<<< HEAD
-      const feedbackStatuses = await Promise.all(signedUpEvents
-        .map(async (signedUpEvent) => answerService.getFeedbackStatus(userId, signedUpEvent._id)));
-=======
       const feedbackStatuses = await Promise.all(
         signedUpEvents.map(async (signedUpEvent) => answerService
           .getFeedbackStatus(userId, signedUpEvent._id)),
       );
->>>>>>> 2be648c (Fix validation for event)
       for (let i = 0; i < signedUpEvents.length; i += 1) {
         signedUpEventsWithFeedbackStatus.push({
           ...signedUpEvents[i],

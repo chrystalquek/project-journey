@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { createProtectedRouter } from '../helpers/auth';
 import { validate } from '../validations/global';
 import formController from '../controllers/form';
 import getValidations from '../validations/form';

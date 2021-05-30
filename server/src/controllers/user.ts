@@ -5,15 +5,8 @@ import { getUser } from '../services/user';
 import { VolunteerData } from '../types';
 
 import HTTP_CODES from '../constants/httpCodes';
-import { accessTokenSecret } from '../helpers/auth';
+import accessTokenSecret from '../helpers/auth';
 import volunteerService from '../services/volunteer';
-
-const getAllUsers = async (req: express.Request, res: express.Response) => {
-  const users = await readAllUsers();
-  res.json({
-    data: users,
-  });
-};
 
 const login = async (req: express.Request, res: express.Response) => {
   const { email, password } = req.body;

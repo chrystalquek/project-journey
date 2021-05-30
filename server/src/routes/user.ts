@@ -1,7 +1,6 @@
 import express from 'express';
 import userController from '../controllers/user';
 import { validate } from '../validations/global';
-import authorize from '../helpers/authorize';
 import getValidations from '../validations/user';
 
 const router = express.Router();
@@ -21,10 +20,5 @@ router.post(
   validate(getValidations('updatePassword')),
   userController.updatePassword,
 );
-
-// Expanding this for other use-cases
-router.get('/',
-  authorize(['admin']),
-  userController.getAllUsers); // example usage of protectedRoute
 
 export default router;

@@ -5,7 +5,6 @@ import { validate } from '../validations/global';
 import getValidations from '../validations/volunteer';
 
 const router: Router = express.Router();
-const protectedRouter: Router = createProtectedRouter(router);
 
 // @route   POST /volunteer
 // @desc    For anyone to create new accounts
@@ -35,12 +34,7 @@ router.get(
 // @desc    For volunteer and admin to get volunteer
 router.get(
   '/:email',
-<<<<<<< HEAD
-  authorize([]),
-  validate(volunteerController.getValidations('getVolunteer')),
-=======
   validate(getValidations('getVolunteer')),
->>>>>>> 9c6015d (Fix validation for volunteers + other nits)
   volunteerController.getVolunteerDetails,
 );
 
@@ -64,26 +58,15 @@ router.get(
 // @desc    For admin to delete volunteer
 router.delete(
   '/',
-<<<<<<< HEAD
-  authorize(['admin']),
-  validate(volunteerController.getValidations('deleteVolunteer')),
-=======
   validate(getValidations('deleteVolunteer')),
->>>>>>> 9c6015d (Fix validation for volunteers + other nits)
   volunteerController.removeVolunteer,
 );
 
 // @route   PUT /volunteer/:id
 // @desc    For admin to update volunteer
 router.put(
-<<<<<<< HEAD
-  '/:id',
-  authorize([]),
-  validate(volunteerController.getValidations('updateVolunteer')),
-=======
   '/',
   validate(getValidations('updateVolunteer')),
->>>>>>> 9c6015d (Fix validation for volunteers + other nits)
   volunteerController.updateVolunteer,
 );
 

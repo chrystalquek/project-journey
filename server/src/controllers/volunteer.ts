@@ -1,6 +1,4 @@
 import express from 'express';
-import _ from 'lodash';
-import jwt from 'express-jwt';
 import { QueryParams, VolunteerData } from '../types';
 import volunteerService from '../services/volunteer';
 import commitmentApplicationService from '../services/commitmentApplication';
@@ -155,18 +153,6 @@ const readVolunteersByIds = async (
     });
   }
 };
-
-const checkUpdateRights = () => [
-  jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),
-
-  (req, res, next) => {
-    if (req.body.administratorRemarks && req.user.volunteeerType !== 'admin') {
-      return res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
-    }
-
-    next();
-  },
-];
 
 const updateVolunteer = async (req: express.Request, res: express.Response) => {
   try {

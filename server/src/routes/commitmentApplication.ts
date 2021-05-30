@@ -1,7 +1,6 @@
 import express from 'express';
 import commitmentApplicationController from '../controllers/commitmentApplication';
 import getValidations from '../validations/commitmentApplication';
-import { createProtectedRouter } from '../helpers/auth';
 import authorize from '../helpers/authorize';
 import { validate } from '../validations/global';
 
