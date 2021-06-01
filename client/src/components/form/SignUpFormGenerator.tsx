@@ -11,7 +11,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
-import { SignUpResponse } from '@utils/api/response';
+import { SignUpResponse } from 'api/response';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -73,9 +73,9 @@ const SignUpFormGenerator = ({
   const initialValues: Record<string, any> = {};
 
   // Basically concatenates all the question lists from each section
-  const reducer = (accumulator : QuestionList, currentValue : QuestionsWithHeader) : QuestionList => accumulator.concat(currentValue.questionList);
-  const questionList : QuestionList = questionWithHeader.reduce(reducer, []);
-  
+  const reducer = (accumulator: QuestionList, currentValue: QuestionsWithHeader): QuestionList => accumulator.concat(currentValue.questionList);
+  const questionList: QuestionList = questionWithHeader.reduce(reducer, []);
+
   questionList.forEach(({ name, type, initialValue }) => {
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;
   });
@@ -225,18 +225,18 @@ const SignUpFormGenerator = ({
     sessionsPerMonth:
       type === VOLUNTEER_TYPE.ADHOC
         ? Yup.number()
-            .integer('Input must be an integer')
-            .positive('Input must be a positive integer')
+          .integer('Input must be an integer')
+          .positive('Input must be a positive integer')
         : Yup.number()
-            .integer('Input must be an integer')
-            .positive('Input must be a positive integer')
-            .required('Required'),
+          .integer('Input must be an integer')
+          .positive('Input must be a positive integer')
+          .required('Required'),
     personality:
       type === VOLUNTEER_TYPE.ADHOC
         ? Yup.mixed()
         : Yup.string()
-            .matches(personalityRegex, 'Invalid value')
-            .required('Required'),
+          .matches(personalityRegex, 'Invalid value')
+          .required('Required'),
   });
 
   return (

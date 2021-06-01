@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import CommittedConversionForm from '@components/form/CommittedConversionForm';
 import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
-import { CreateCommitmentApplicationRequest } from '@utils/api/request';
+import { CreateCommitmentApplicationRequest } from 'api/request';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,12 +37,12 @@ const BecomeCommited: FC = () => {
   const userData = user.user
   const dispatch = useDispatch();
 
-  const length = userData?.commitmentApplicationIds?.length 
-  const commitmentApplication: any = length 
-    ? userData.commitmentApplicationIds[length-1]
+  const length = userData?.commitmentApplicationIds?.length
+  const commitmentApplication: any = length
+    ? userData.commitmentApplicationIds[length - 1]
     : null
   // Check if there is pending application
-  const isPending : boolean = commitmentApplication?.status == CommitmentApplicationStatus.Pending
+  const isPending: boolean = commitmentApplication?.status == CommitmentApplicationStatus.Pending
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();
@@ -59,7 +59,7 @@ const BecomeCommited: FC = () => {
   const handleSubmit = async (formValues: Record<string, any>) => {
     formValues.volunteerId = user.user._id
     // Drop the acknowledgement attributes before sending api call\
-    const request = {...formValues}
+    const request = { ...formValues }
     request.volunteerId = user.user._id;
     delete request.isAwareOfGroupInvite;
     delete request.isAwareOfCommitmentExpectation;
@@ -100,7 +100,7 @@ const BecomeCommited: FC = () => {
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <CommittedConversionForm handleSubmit={handleSubmit}/>
+          <CommittedConversionForm handleSubmit={handleSubmit} />
         </DialogContent>
       </Dialog>
     </div>

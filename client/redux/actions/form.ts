@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import apiClient from '@utils/api/apiClient';
-import { AnswerFormQuestionsRequest, CreateFormQuestionsRequest } from '@utils/api/request';
-import { GetEventFeedbackQuestionsResponse } from '@utils/api/response';
+import apiClient from 'api/apiClient';
+import { AnswerFormQuestionsRequest, CreateFormQuestionsRequest } from 'api/request';
+import { GetEventFeedbackQuestionsResponse } from 'api/response';
 
 export const getEventFeedbackFormQuestions = createAsyncThunk<
   GetEventFeedbackQuestionsResponse,
@@ -16,15 +16,15 @@ export const getEventFeedbackFormQuestions = createAsyncThunk<
 );
 
 export const submitEventFeedbackFormQuestions = createAsyncThunk<
-void, AnswerFormQuestionsRequest>(
-  'form/submitQuestions',
-  async ({ eventId, answers }) => {
-    const response = await apiClient.submitEventFeedback({
-      eventId, answers,
-    });
-    return response;
-  },
-);
+  void, AnswerFormQuestionsRequest>(
+    'form/submitQuestions',
+    async ({ eventId, answers }) => {
+      const response = await apiClient.submitEventFeedback({
+        eventId, answers,
+      });
+      return response;
+    },
+  );
 
 export const createForm = createAsyncThunk<void, CreateFormQuestionsRequest>(
   'form/createForm',

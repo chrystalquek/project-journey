@@ -15,43 +15,51 @@ import {
   CreateCommitmentApplicationRequest,
   CommitmentApplicationQueryParams,
   EventQueryParams,
-  VolunteerPaginatedQueryParams,
+  GetVolunteersPaginatedRequest as GetVolunteersPaginatedRequest,
   AnswerFormQuestionsRequest,
   CreateFormQuestionsRequest,
   CancelEventParams,
   DeleteEventRequest,
-} from '@utils/api/request';
+} from 'api/request';
 
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
   CreateSignUpResponse, UpdateSignUpResponse,
   GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse, GetEventFeedbackQuestionsResponse,
-} from '@utils/api/response';
+} from 'api/response';
 import { SignUpIdType } from '@type/signUp';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
 export interface ApiClient {
   login(request: LoginRequest): Promise<LoginResponse>
+
+  // event
   createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
   getEvent(request: GetEventParams): Promise<GetEventResponse>
   editEvent(request: EditEventRequest): Promise<EditEventResponse>
   deleteEvent(eventId: string): Promise<void>
   cancelEvent(eventId: string): Promise<void>
-  getVolunteers(query: VolunteerPaginatedQueryParams): Promise<GetVolunteersPaginatedResponse>
-  getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
-  deleteSignUp(query: SignUpQueryParams): Promise<void>
   getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse>
   getEvents(query: EventQueryParams): Promise<GetEventsResponse>
-  getPendingSignUps(): Promise<GetSignUpsResponse>
-  getPendingVolunteers(): Promise<GetVolunteersResponse>
   getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse>
-  getCommitmentApplications(query: CommitmentApplicationQueryParams):
-    Promise<GetCommitmentApplicationResponse>
-  updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
   submitEventFeedback(request: AnswerFormQuestionsRequest): Promise<void>
   createForm(request: CreateFormQuestionsRequest): Promise<void>
+
+  // volunteers
+  getVolunteersPaginated(query: GetVolunteersPaginatedRequest): Promise<GetVolunteersPaginatedResponse>
+  getPendingVolunteers(): Promise<GetVolunteersResponse>
+  updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
+
+  // signup
+  getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
+  deleteSignUp(query: SignUpQueryParams): Promise<void>
+  getPendingSignUps(): Promise<GetSignUpsResponse>
+
+  // commitment application
+  getCommitmentApplications(query: CommitmentApplicationQueryParams):
+    Promise<GetCommitmentApplicationResponse>
 }
 
 class AxiosApiClient implements ApiClient {
@@ -97,7 +105,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest):
-  Promise<UpdateSignUpResponse> {
+    Promise<UpdateSignUpResponse> {
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
@@ -143,7 +151,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async cancelEvent(eventId: string): Promise<void> {
-    return this.send({ }, `event/cancel/${eventId}`, 'put');
+    return this.send({}, `event/cancel/${eventId}`, 'put');
   }
 
   async getEvents(query: EventQueryParams): Promise<GetEventsResponse> {
@@ -155,7 +163,7 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `volunteer/id/${id}`, 'get');
   }
 
-  async getVolunteers(query: VolunteerPaginatedQueryParams):
+  async getVolunteersPaginated(query: GetVolunteersPaginatedRequest):
     Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }
@@ -186,7 +194,7 @@ class AxiosApiClient implements ApiClient {
 
   // commitment application
   async createCommitmentApplication(request: CreateCommitmentApplicationRequest):
-  Promise<CommitmentApplicationData> {
+    Promise<CommitmentApplicationData> {
     return this.send(request, 'commitment-application', 'post');
   }
 

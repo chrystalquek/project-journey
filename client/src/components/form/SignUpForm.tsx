@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { signUp, SignUpArgs } from '@redux/actions/user';
 import { VOLUNTEER_TYPE } from '@type/volunteer';
 import { QuestionList, HeaderQuestionList } from '@type/questions';
-import { SignUpResponse } from '@utils/api/response';
+import { SignUpResponse } from 'api/response';
 import SignUpFormGenerator from './SignUpFormGenerator';
 
 type SignUpFormProps = {
@@ -11,7 +11,7 @@ type SignUpFormProps = {
   questionWithHeader: HeaderQuestionList;
 }
 
-function SignUpForm({ type, questionWithHeader } : SignUpFormProps) {
+function SignUpForm({ type, questionWithHeader }: SignUpFormProps) {
   const dispatch = useDispatch();
   const handleSignUp = useCallback(
     (values: SignUpArgs) => dispatch(signUp(values)),

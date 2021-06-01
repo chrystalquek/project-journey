@@ -3,9 +3,10 @@ import logger from 'redux-logger';
 import userReducer, { UserState } from '@redux/reducers/user';
 import EventReducer, { EventState } from '@redux/reducers/event';
 import imageReducer, { ImageState } from '@redux/reducers/image';
-import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer';
+import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer/index';
 import profilePageReducer, { ProfilePageState } from '@redux/reducers/profilePage';
 import loadingReducer, { LoadingState } from '@redux/reducers/loading';
+import pendingVolunteerReducer, { PendingVolunteerState } from './reducers/volunteer';
 import {
   persistStore,
   persistReducer,
@@ -21,10 +22,12 @@ import signUpReducer, { SignUpState } from './reducers/signUp';
 import formReducer, { FormState } from './reducers/form';
 import commitmentApplicationReducer, { CommitmentApplicationState } from './reducers/commitmentApplication';
 
+
 export type StoreState = {
   user: UserState
   event: EventState
   volunteer: VolunteerState
+  pendingVolunteersState: PendingVolunteerState
   signUp: SignUpState
   form: FormState
   commitmentApplication: CommitmentApplicationState,
@@ -37,6 +40,7 @@ const reducers = combineReducers({
   user: userReducer,
   event: EventReducer,
   volunteer: volunteerReducer,
+  pendingVolunteer: pendingVolunteerReducer,
   signUp: signUpReducer,
   form: formReducer,
   commitmentApplication: commitmentApplicationReducer,

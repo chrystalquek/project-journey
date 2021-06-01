@@ -27,7 +27,7 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
     }, []);
 
     // volunteer no
-    const volunteers = useSelector((state: StoreState) => state.volunteer);
+    const volunteers = useSelector((state: StoreState) => state.pendingVolunteersState);
     const upcomingVolunteersIds = volunteers.pendingVolunteers.ids;
 
     // event no

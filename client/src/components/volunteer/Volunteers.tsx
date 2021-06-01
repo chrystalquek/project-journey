@@ -1,6 +1,4 @@
 import React, { FC, useEffect } from 'react';
-import Head from 'next/head';
-
 import {
   Button,
   capitalize,
@@ -30,10 +28,13 @@ import { VOLUNTEER_TYPE } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
 import { checkLoggedIn } from '@utils/helpers/auth';
+import { getPaginatedVolunteers } from '@redux/actions/volunteer/index';
+import { formatDDMMYYYY } from '@utils/helpers/date';
+import { VolunteerSortFieldsType } from '@redux/reducers/volunteer/index';
+import LoadingIndicator from '@components/common/LoadingIndicator';
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -58,74 +59,62 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const volunteerSortFields = [{ label: 'Name', value: 'name' }, { label: 'Member Since', value: 'createdAt' }]; // what is "Last Activity"
-export type VolunteerSortFieldsType = 'name' | 'createdAt';
-
-const VolunteerProfile: FC<{}> = ({ }) => {
+const Volunteers: FC<{}> = ({ }) => {
   checkLoggedIn()
   const classes = useStyles();
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const volunteers = useSelector((state: StoreState) => state.volunteer);
+  const volunteerState = useSelector((state: StoreState) => state.volunteer);
+  const { volunteerType } = volunteerState.collate.filters;
+  const { sort } = volunteerState.collate;
+  const { volunteers } = volunteerState;
+  const { total, pageNo } = volunteerState.pagination;
 
-  const { volunteerType } = volunteers.volunteerProfile.filters;
-  const { name } = volunteers.volunteerProfile.search;
-  const { sort } = volunteers.volunteerProfile;
-
-  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VOLUNTEER_TYPE, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => ({
-    pageNo: params.pageNo || 0,
-    filters: {
-      volunteerType: params.volunteerType || volunteerType,
-    },
-    search: {
-      name: params.name || name,
-    },
-    sort: params.sort || sort,
-  });
+  const { loadingStatus } = volunteerState
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ volunteerType, name, sort })));
+    dispatch(getPaginatedVolunteers({}));
   }, []);
 
-  // filter
+
+
+  // filter functions
   const handleFilterVolunteerTypeChange = (event) => {
-    dispatch(getVolunteersVolunteerProfile(
-      fillOtherParams({
+    dispatch(getPaginatedVolunteers({
+      filters: {
         volunteerType: {
           ...volunteerType,
           [event.target.name]: !volunteerType[event.target.name],
         },
-      }),
-    ));
+      }
+    }))
   };
-
-  const allFiltersCleared = Object.values(VOLUNTEER_TYPE).every(volType => !volunteerType[volType]);
-
-  const clearallFilters = () => {
+  const handleClearAllFilters = () => {
     var clearedVolunteerTypeFilters = Object.assign({}, volunteerType);
     Object.values(VOLUNTEER_TYPE).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
 
-    dispatch(getVolunteersVolunteerProfile(
-      fillOtherParams({
+    dispatch(getPaginatedVolunteers({
+      filters: {
         volunteerType: clearedVolunteerTypeFilters
-      }),
-    ));
+      }
+    }))
   }
 
+  // filter state and components
+  const isDisableClearFilters = Object.values(VOLUNTEER_TYPE).every(volType => !volunteerType[volType]);
   const [openFilter, setOpenFilter] = React.useState(isMobile);
-
   const filterOptions = (
     <TableContainer>
       <Table>
-        <TableRow>
+        <TableHead>
           <TableCell>
             <b>Filter By</b>
           </TableCell>
-        </TableRow>
+        </TableHead>
         <TableRow>
           <TableCell>
             Volunteer Type
@@ -136,13 +125,13 @@ const VolunteerProfile: FC<{}> = ({ }) => {
                   <FormGroup>
                     {Object.values(VOLUNTEER_TYPE).map((volType) => (
                       <FormControlLabel
-                        control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} />}
+                        control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} key={volType} />}
                         label={<Typography variant="body1">{capitalize(volType)}</Typography>}
                       />
                     ))}
 
                   </FormGroup>
-                  <Button className={classes.link} disabled={allFiltersCleared} onClick={clearallFilters}><u>Clear</u></Button>
+                  <Button className={classes.link} disabled={isDisableClearFilters} onClick={handleClearAllFilters}><u>Clear</u></Button>
                 </>
               )}
           </TableCell>
@@ -152,37 +141,38 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   );
 
-  // search
-  const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile(fillOtherParams({ name })));
+  // search function
+  const onSearch = (newNameToSearch: string) => dispatch(getPaginatedVolunteers({ search: { name: newNameToSearch } }))
+
+  // search component
   const searchBar = <SearchBar setFilterFunction={onSearch} />;
 
-  // sort
+  // sort function
   const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
-    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ sort: event.target.value as VolunteerSortFieldsType })));
+    dispatch(getPaginatedVolunteers({ sort: event.target.value as VolunteerSortFieldsType }));
   };
 
+  // sort component
+  const volunteerSortFields = [{ label: 'Name', value: 'name' }, { label: 'Member Since', value: 'createdAt' }];
   const sortMenu = (
     <FormControl fullWidth variant="outlined" size="small" margin="dense">
       <InputLabel>Sort By:</InputLabel>
       <Select
-        value={volunteers.volunteerProfile.sort}
+        value={sort}
         onChange={handleSortChange}
       >
-        {volunteerSortFields.map((field) => <MenuItem value={field.value}>{field.label}</MenuItem>)}
+        {volunteerSortFields.map((field) => <MenuItem value={field.value} key={field.value}>{field.label}</MenuItem>)}
 
       </Select>
     </FormControl>
   );
 
-  // change page
+  // change page function
   const handleChangePage = (event, newPage: number) => {
-    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ pageNo: newPage })));
+    dispatch(getPaginatedVolunteers({ pageNo: newPage }));
   };
 
-  // display table
-  const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
 
-  const router = useRouter();
   const volunteerTable = (
     <>
       <TableContainer>
@@ -195,11 +185,11 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentPageVolunteers.map((vol) => (
+            {volunteers.map((vol) => (
               <TableRow key={vol.email}>
                 <TableCell onClick={() => router.push(`/profile/${vol._id}`)} className={classes.nameRow}><b>{vol.name}</b></TableCell>
                 <TableCell>{capitalize(vol.volunteerType)}</TableCell>
-                <TableCell>{new Date(vol.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{formatDDMMYYYY(vol.createdAt)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -208,9 +198,9 @@ const VolunteerProfile: FC<{}> = ({ }) => {
       <TablePagination
         rowsPerPageOptions={[rowsPerPage]}
         component="div"
-        count={volunteers.volunteerProfile.count}
+        count={total}
         rowsPerPage={rowsPerPage}
-        page={volunteers.volunteerProfile.pageNo}
+        page={pageNo}
         onChangePage={handleChangePage}
       />
     </>
@@ -218,13 +208,10 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   return (
     <>
-      <Head>
-        <title>Volunteer Profiles</title>
-      </Head>
-
+      <LoadingIndicator status={loadingStatus} />
       {!isMobile
         ? (
-          <Grid>
+          <Grid >
             <Grid direction="row" container spacing={6}>
               <Grid item xs={2} />
               <Grid item xs={4}>
@@ -268,4 +255,4 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   );
 };
 
-export default VolunteerProfile;
+export default Volunteers;

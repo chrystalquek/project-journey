@@ -8,7 +8,7 @@ import {
   createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
 } from '@redux/actions/signUp';
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateSignUpRequest } from '@utils/api/request';
+import { CreateSignUpRequest } from 'api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
 import { StoreState } from '@redux/store';
 import { SignUpData, SignUpIdType } from '@type/signUp';
@@ -249,15 +249,15 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
       {renderDetails(user.volunteerType)}
       {EditButton}
       {user.volunteerType !== VOLUNTEER_TYPE.ADMIN && hasAcceptedSignUp && (
-      <ActionableDialog
-        open={isWithdrawModalOpen}
-        setOpen={() => setIsWithdrawModalOpen(!isWithdrawModalOpen)}
-        content={withdrawCommitmentQuestion}
-        buttonTitle="Confirm"
-        buttonOnClick={withdrawCommitment}
-        openCloseButtonTitle="Withdraw"
-        recommendedAction="cancel"
-      />
+        <ActionableDialog
+          open={isWithdrawModalOpen}
+          setOpen={() => setIsWithdrawModalOpen(!isWithdrawModalOpen)}
+          content={withdrawCommitmentQuestion}
+          buttonTitle="Confirm"
+          buttonOnClick={withdrawCommitment}
+          openCloseButtonTitle="Withdraw"
+          recommendedAction="cancel"
+        />
       )}
       {CancelDeleteButton}
     </>

@@ -30,3 +30,8 @@ export function formatDateStartEndTime(startDate: Date, endDate: Date) {
   const time = `${formatAMPM(startDate)} - ${formatAMPM(endDate)}`;
   return { date, time };
 }
+
+// to 26/08/2018
+export function formatDDMMYYYY(date: string): string {
+  return new Date(date).toLocaleDateString()
+}

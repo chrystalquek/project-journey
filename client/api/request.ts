@@ -79,7 +79,7 @@ export type LoginRequest = {
   password: string;
 };
 
-export type VolunteerPaginatedQueryParams = {
+export type GetVolunteersPaginatedRequest = {
   pageNo: number,
   size: number
   volunteerType: string,
@@ -148,8 +148,8 @@ export type UpdateVolunteerRequest = {
   updatedVolunteerData: Partial<VolunteerData>;
 };
 export interface AnswerFormQuestionsRequest {
-    eventId: string
-    answers: Array<AnswerData>
+  eventId: string
+  answers: Array<AnswerData>
 }
 
 export type FormQuestionType = 'shortAnswer' | 'mcq' | 'checkboxes'
@@ -168,9 +168,9 @@ export interface CreateFormQuestionsRequest {
 }
 
 export type AnswerData = {
-    questionId: string;
-    userId: string;
-    content: string;
+  questionId: string;
+  userId: string;
+  content: string;
 }
 
 // SIGN-UPS
