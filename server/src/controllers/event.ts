@@ -1,16 +1,14 @@
 import { Request, Response } from 'express';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import answerService from '../services/forms/answer';
-import {
-  EventSearchType, EventData, VolunteerType,
-} from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
+import { EventData, EventSearchType } from '../models/Event';
+import { VolunteerType } from '../models/Volunteer';
 
 const createEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const eventData: EventData = req.body;
-    eventData.isCancelled = false; // default
     const eventId = await eventService.createEvent(eventData);
     res.status(HTTP_CODES.OK).send({ eventId });
   } catch (err) {

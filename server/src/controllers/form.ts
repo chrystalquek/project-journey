@@ -1,15 +1,12 @@
 /* eslint-disable no-await-in-loop */
 import { Request, Response } from 'express';
-
 import HTTP_CODES from '../constants/httpCodes';
 import formService from '../services/forms/form';
 import optionsService from '../services/forms/option';
 import questionService from '../services/forms/question';
 import answerService from '../services/forms/answer';
-import {
-  AnswerData,
-  QuestionsOptionsRequestData,
-} from '../types';
+import { QuestionsOptionsRequestData } from '../questionTypes';
+import { AnswerData } from '../models/Forms/Answer';
 
 const createForm = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,7 +16,7 @@ const createForm = async (req: Request, res: Response): Promise<void> => {
     }: { questions: QuestionsOptionsRequestData[], eventId: string } = req.body;
 
     const formId = await formService.createForm({
-      eventId,
+      eventId
     });
 
     const questionsData = questions.map((questionData) => ({
@@ -59,14 +56,12 @@ const getEventFormDetails = async (req: Request, res: Response): Promise<void> =
     const questionsWithOptions: Array<any> = [];
     for (let i = 0; i < questions.length; i += 1) {
       const question = questions[i];
-      const optionsForQuestion = await optionsService.getOptionsForQuestion(
-        question.id,
-      );
+      const optionsForQuestion = await optionsService.getOptionsForQuestion(question._id);
 
       questionsWithOptions.push({
         ...question,
         displayText: [question.displayText],
-        name: question.id,
+        name: question._id,
         options: optionsForQuestion,
       });
     }
@@ -80,8 +75,8 @@ const getEventFormDetails = async (req: Request, res: Response): Promise<void> =
 };
 
 const answerFormQuestions = async (req: Request, res: Response): Promise<void> => {
-  let { answers }: { answers: AnswerData[]} = req.body;
-  const { eventId }: {eventId: string} = req.body;
+  let { answers }: { answers: AnswerData[] } = req.body;
+  const { eventId }: { eventId: string } = req.body;
 
   if (answers.some((answer) => answer.userId !== req.user._id)) {
     // trying to submit responses that are not your user id is not allowed

@@ -1,19 +1,17 @@
-import mongoose from 'mongoose';
-import { ImageResponse } from '../types';
+import {
+  createSchema, ExtractProps, Type, typedModel,
+} from 'ts-mongoose';
 
-const { Schema } = mongoose;
-
-export type ImageModel = ImageResponse & mongoose.Document;
-
-const ImageSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
-  email: String,
-  imageName: String,
-  url: String,
-  createdAt: {
-    type: Date,
+const ImageSchema = createSchema({
+  email: Type.string({ required: true }),
+  imageName: Type.string({ required: true }),
+  url: Type.string({ required: true }),
+  createdAt: Type.date({
+    required: true,
     default: Date.now,
-  },
+  }),
 });
 
-export default mongoose.model<ImageModel>('Image', ImageSchema);
+export type ImageData = Omit<ExtractProps<typeof ImageSchema>, "__v">;
+
+export default typedModel('Image', ImageSchema);

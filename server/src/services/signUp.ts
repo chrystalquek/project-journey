@@ -1,19 +1,13 @@
-import { v4 as uuidv4 } from 'uuid';
-import {
-  RoleData, SignUpData, SignUpIdType, SignUpStatus,
-} from '../types';
-import SignUp from '../models/SignUp';
-import Event from '../models/Event';
+import SignUp, { SignUpData, SignUpIdType, SignUpStatus } from '../models/SignUp';
+import Event, { RoleData } from '../models/Event';
 import emailService from './email';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
 type UpdateEventVolunteersAction = 'add' | 'remove' | 'replace'
 
-const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
+const createSignUp = async (signUpData: Omit<SignUpData, '_id'>) => {
   try {
-    const sid = uuidv4();
     const signUpSchemaData = new SignUp({
-      signUpId: sid,
       eventId: signUpData.eventId,
       userId: signUpData.userId,
       status: signUpData.status,
@@ -23,7 +17,7 @@ const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
     await signUpSchemaData.save();
 
     emailService.sendEmail('WAITLIST_TO_CONFIRMED', signUpData.userId, signUpData.eventId);
-    return { signUpId: sid };
+    return { signUpId: signUpSchemaData._id };
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -34,7 +28,7 @@ const getSignUps = async (id: string, idType: SignUpIdType): Promise<SignUpData[
     let signUps: SignUpData[];
     switch (idType) {
       case 'signUpId':
-        signUps = await SignUp.find({ signUpId: id });
+        signUps = await SignUp.find({ _id: id });
         break;
       case 'eventId':
         signUps = await SignUp.find({ eventId: id });
@@ -118,7 +112,7 @@ const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleNam
     const unupdatedEvent = await Event.findById(eventId);
     let eventRoles: RoleData[];
 
-    if (unupdatedEvent !== null && unupdatedEvent.roles) {
+    if (unupdatedEvent && unupdatedEvent.roles) {
       switch (actionType) {
         case 'add':
           eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName, volunteerId);
@@ -154,7 +148,7 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
     switch (idType) {
       case 'signUpId':
         oldFields = await SignUp.findOneAndUpdate(
-          { signUpId: id },
+          { _id: id },
           { $set: updatedFields },
         );
         break;
@@ -212,7 +206,7 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
     let deletedSignUp: SignUpData | null;
     switch (idType) {
       case 'signUpId':
-        deletedSignUp = await SignUp.findOneAndDelete({ signUpId: id });
+        deletedSignUp = await SignUp.findOneAndDelete({ _id: id });
         break;
       case 'eventId':
         // @clara should this case and userId delete all that match then?

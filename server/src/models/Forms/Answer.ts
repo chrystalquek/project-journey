@@ -1,25 +1,27 @@
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
 import mongoose from 'mongoose';
-import { AnswerData } from '../../types';
 
-const { Schema } = mongoose;
-
-export type AnswerModel = AnswerData & mongoose.Document
-
-const AnswerSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
-  questionId: {
-    type: mongoose.Types.ObjectId,
+const AnswerSchema = createSchema({
+  questionId: Type.objectId({
+    required: true,
     ref: 'Question',
-  },
-  userId: {
-    type: mongoose.Types.ObjectId,
+  }),
+  userId: Type.objectId({
+    required: true,
     ref: 'Volunteer',
-  },
-  formId: {
-    type: mongoose.Types.ObjectId,
+  }),
+  formId: Type.objectId({
+    required: false,
     ref: 'Form',
-  },
-  content: String,
+  }), // TODO conflict with FE: FE does not have formId
+  content: Type.string({ required: true }),
 });
 
+export type AnswerData = Omit<ExtractProps<typeof AnswerSchema>, "__v" | "_id" | "questionId" | "userId" | "formId"> & {
+  questionId: string,
+  userId: string,
+  formId?: string
+};
+
+type AnswerModel = AnswerData & mongoose.Document
 export default mongoose.model<AnswerModel>('Answer', AnswerSchema);

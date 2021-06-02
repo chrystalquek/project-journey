@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
-import Question from '../../models/Forms/Question';
-import { QuestionData } from '../../types';
+import Question, { QuestionData } from '../../models/Forms/Question';
 
 /**
  * Bulk-insert questions attached to form
  * @param questions question data to be created
  */
-const insertQuestions = async (questions: Array<Omit<QuestionData, 'id'>>): Promise<Array<string>> => {
-  const questionIds: Array<string> = [];
+const insertQuestions = async (questions: Array<Omit<QuestionData, '_id'>>): Promise<Array<string>> => {
+  const questionIds: string[] = [];
   const bulkQuestions = questions.map((question) => {
     const questionId = new mongoose.Types.ObjectId();
     questionIds.push(questionId.toHexString());
@@ -31,7 +30,7 @@ const updateQuestions = async (updatedQuestions: Array<Partial<QuestionData>>): 
   // Bulk update supported but for same condition, reads in parallel
   await Promise.all(updatedQuestions.map(async (question) => {
     await Question.findOneAndUpdate({
-      _id: question.id,
+      _id: question._id,
     }, question);
   }));
 };
@@ -44,15 +43,7 @@ const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
   const questions = await Question.find({
     formId,
   }).lean().exec();
-  return questions.map((question) => ({
-    // eslint-disable-next-line no-underscore-dangle
-    id: question._id,
-    formId: question.formId,
-    isRequired: question.isRequired,
-    displayText: question.displayText,
-    name: question._id,
-    type: question.type,
-  }));
+  return questions
 };
 
 export default {

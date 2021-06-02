@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
-import { VolunteerData, CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
-
 import commitmentApplicationService from '../services/commitmentApplication';
-
 import HTTP_CODES from '../constants/httpCodes';
 import volunteerService from '../services/volunteer';
+import { CommitmentApplicationData, CommitmentApplicationStatus } from '../models/CommitmentApplication';
+import { VolunteerData } from '../models/Volunteer';
 
 const createCommitmentApplication = async (req: Request, res: Response): Promise<void> => {
   try {

@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
+import { SignUpStatus } from '../models/SignUp';
 import { checkIfAccepted } from '../services/signUp';
-import { SignUpStatus } from '../types';
 
 export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
 

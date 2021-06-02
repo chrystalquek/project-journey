@@ -1,14 +1,10 @@
-import mongoose from 'mongoose';
-import { OpportunityData } from '../types';
-import Opportunity from '../models/Opportunity';
+import Opportunity, { OpportunityData } from '../models/Opportunity';
 
 const createOpportunity = async (opportunityData: OpportunityData): Promise<void> => {
   try {
     const opportunitySchemeData = new Opportunity({
       // Inherited
-      _id: new mongoose.Types.ObjectId(),
       name: opportunityData.name,
-      createdAt: Date.now(),
       description: opportunityData.description,
       contentUrl: opportunityData.contentUrl,
       contentType: opportunityData.contentType,

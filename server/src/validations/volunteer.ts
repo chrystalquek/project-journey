@@ -3,11 +3,11 @@ import {
   email, password, regexValidator, stringEnumValidator,
 } from './global';
 import {
-  CITIZENSHIP_TYPES,
-  GENDER_TYPES,
-  LEADERSHIP_INTEREST_TYPES,
-  RACE_TYPES,
-  SOCIAL_MEDIA_PLATFORMS,
+  CITIZENSHIP,
+  GENDER,
+  LEADERSHIP_INTEREST,
+  RACE,
+  SOCIAL_MEDIA_PLATFORM,
   VOLUNTEER_TYPE,
   PERSONALITY_TYPES_REGEX,
 } from '../models/Volunteer';
@@ -30,15 +30,15 @@ const birthday = body('birthday').isISO8601().toDate();
 const socialMediaPlatform = body('socialMediaPlatform')
   .isString()
   .custom((socialMedia: string) => stringEnumValidator(
-    SOCIAL_MEDIA_PLATFORMS,
+    SOCIAL_MEDIA_PLATFORM,
     'Social Media Platform',
     socialMedia,
   ));
 const instagramHandle = body('instagramHandle').isString().optional();
-const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER_TYPES, 'Gender', genderText));
-const citizenship = body('citizenship').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP_TYPES, 'Citizenship', citizenshipType));
+const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER, 'Gender', genderText));
+const citizenship = body('citizenship').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP, 'Citizenship', citizenshipType));
 const race = body('race')
-  .custom((raceType: string) => stringEnumValidator(RACE_TYPES, 'Race', raceType))
+  .custom((raceType: string) => stringEnumValidator(RACE, 'Race', raceType))
   .optional();
 const organization = body('organization').isString().optional();
 const position = body('position').isString().optional();
@@ -67,7 +67,7 @@ const hasFirstAidCertification = body('hasFirstAidCertification')
 const leadershipInterest = body('leadershipInterest')
   .isString()
   .custom((leadershipInterestType: string) => stringEnumValidator(
-    LEADERSHIP_INTEREST_TYPES,
+    LEADERSHIP_INTEREST,
     'Leadership Interest',
     leadershipInterestType,
   ))
@@ -113,7 +113,6 @@ const administratorRemarks = body('administratorRemarks').isString();
 const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
 const workshopsCount = body('workshopsCount').isInt();
 const hangoutsCount = body('hangoutsCount').isInt();
-const pastEventIds = body('pastEventIds').isArray();
 const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
 const sessionPreference = body('sessionPreference').isString().optional();
 
@@ -163,7 +162,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         volunteeringSessionsCount,
         workshopsCount,
         hangoutsCount,
-        pastEventIds,
         sessionsPerMonth,
         sessionPreference,
 

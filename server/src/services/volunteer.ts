@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
-import mongoose from 'mongoose';
-import { QueryParams, VolunteerData } from '../types';
-import Volunteer from '../models/Volunteer';
+import Volunteer, { VolunteerData, VolunteerType, VOLUNTEER_TYPE } from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
 
 // Helper methods
@@ -19,7 +17,6 @@ export const doesUserEmailExist = async (email: string): Promise<boolean> => {
 const createVolunteer = async (volunteerData: VolunteerData): Promise<void> => {
   const volunteerSchemaData = new Volunteer({
     ...volunteerData,
-    _id: new mongoose.Types.ObjectId(),
   });
 
   await volunteerSchemaData.save();
@@ -58,30 +55,24 @@ const getVolunteerById = async (id: string): Promise<Partial<VolunteerData>> => 
 
 /**
  * Gets all volunteer details.
+ * Filter by volunteerType and name inclusive
+ * Sort by field specified if any
  */
-const getAllVolunteers = async (query: QueryParams) => {
+const getAllVolunteers = async (volunteerTypes?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number) => {
   // no of volunteers that match name (if any)
-  const count = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
-    .find({ volunteerType: { $in: query.volunteerType || [] } })
+  const count = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
+    .find({ volunteerType: { $in: volunteerTypes ?? VOLUNTEER_TYPE } })
     .countDocuments();
 
   // get only part of the collection cos of pagination
-  let volunteers;
-  if (query.skip && query.limit) {
-    volunteers = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
-      .find({ volunteerType: { $in: query.volunteerType || [] } })
-      .sort({ [query.sort]: 1 })
-      .skip(query.skip).limit(query.limit)
-      .lean()
-      .exec();
-  } else {
-    volunteers = await (query.name ? Volunteer.find({ name: { $regex: `.*${query.name}.*`, $options: 'xis' } }) : Volunteer.find({}))
-      .find({ volunteerType: { $in: query.volunteerType || [] } })
-      .sort({ [query.sort]: 1 })
-      .lean().exec();
-  }
+  const volunteers = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
+    .find({ volunteerType: { $in: volunteerTypes ?? VOLUNTEER_TYPE } })
+    .sort({ [sort ?? '']: 1 })
+    .skip(skip ?? 0).limit(limit ?? 0)
+    .lean()
+    .exec();
 
-  const data = volunteers.map((volunteer: VolunteerData) => volunteerUtil.extractVolunteerDetails(volunteer));
+  const data = volunteers.map((volunteer: VolunteerData) => (volunteerUtil.extractVolunteerDetails(volunteer)));
 
   return { data, count };
 };

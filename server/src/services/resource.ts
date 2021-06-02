@@ -1,15 +1,11 @@
-import mongoose from 'mongoose';
-import { ResourceData } from '../types';
-import Resource from '../models/Resource';
+import Resource, { ResourceData } from '../models/Resource';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
     const resourceSchemaData = new Resource({
-      _id: new mongoose.Types.ObjectId(),
       name: resourceData.name,
       url: resourceData.url,
-      createdAt: Date.now(),
-      type: resourceData.type,
+      resourceType: resourceData.resourceType,
     });
     await resourceSchemaData.save();
   } catch (err) {

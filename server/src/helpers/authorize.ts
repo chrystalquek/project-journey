@@ -1,8 +1,8 @@
 import jwt from 'express-jwt';
+import { accessTokenSecret } from './auth';
 import { Request, Response, NextFunction } from 'express';
-import { VolunteerType } from '../types';
-import accessTokenSecret from './auth';
 import HTTP_CODES from '../constants/httpCodes';
+import { VolunteerType } from '../models/Volunteer';
 
 const authorize = (roles: Array<VolunteerType> = []) => [
   jwt({ secret: accessTokenSecret, algorithms: ['HS256'] }),

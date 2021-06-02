@@ -1,10 +1,12 @@
 import { Storage } from '@google-cloud/storage';
-import { ImageData, ImageResponse } from '../types';
-import Image from '../models/Image';
+import mongoose from 'mongoose';
+import { ImageRequest } from '../controllers/image';
+
+import Image, { ImageData } from '../models/Image';
 
 const storage = new Storage();
 
-const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
+const uploadImage = async (imageData: ImageRequest): Promise<ImageData> => {
   try {
     const filepath = `/tmp/${imageData.imageName}`;
     const returnVal = await storage.bucket('journey-storage').upload(filepath, {
@@ -16,10 +18,13 @@ const uploadImage = async (imageData: ImageData): Promise<ImageResponse> => {
     try {
       const url = returnVal[1].mediaLink;
 
-      const imageResponse: ImageResponse = {
-        email: imageData.email,
-        imageName: imageData.imageName,
+      // TODO change when fixing image, don't really know what's going on here
+      const imageResponse: ImageData = {
+        _id: mongoose.Types.ObjectId(imageData.email as string),
+        email: imageData.email as string,
+        imageName: imageData.imageName as string,
         url,
+        createdAt: new Date(),
       };
 
       return imageResponse;

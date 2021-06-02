@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import HTTP_CODES from '../constants/httpCodes';
-
 import emailService from '../services/email';
 import massEmailService from '../services/massEmail';
 

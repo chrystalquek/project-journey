@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { OpportunityData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
+import { OpportunityData } from '../models/Opportunity';
 import opportunityService from '../services/opportunity';
 
 const createOpportunity = async (req: Request, res: Response): Promise<void> => {

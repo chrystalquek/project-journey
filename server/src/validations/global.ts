@@ -29,7 +29,7 @@ export const validate = (validations: ValidationChain[]) => async (
 };
 
 export const stringEnumValidator = (
-  enumTypes: Array<string>,
+  enumTypes: Readonly<Array<string>>,
   enumName: string,
   value: string,
 ) => {
@@ -41,7 +41,7 @@ export const stringEnumValidator = (
   return true;
 };
 
-export const regexValidator = (regexExp: RegExp, regexName : string, value: string) => {
+export const regexValidator = (regexExp: RegExp, regexName: string, value: string) => {
   if (!regexExp.test(value)) {
     throw new Error(`${regexName}: "${value}" must conform with the regex ${regexExp}`);
   }

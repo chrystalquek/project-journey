@@ -1,16 +1,10 @@
 import mongoose from 'mongoose';
-import {
-  EventSearchType, EventData, VolunteerType,
-} from '../types';
-
-import Event from '../models/Event';
+import Event, { EventData, EventSearchType } from '../models/Event';
+import { VolunteerType } from '../models/Volunteer';
 
 const createEvent = async (eventData: EventData): Promise<string> => {
   try {
-    const _id = new mongoose.Types.ObjectId();
-
     const eventSchemaData: mongoose.Document = new Event({
-      _id,
       name: eventData.name,
       coverImage: eventData.coverImage,
       eventType: eventData.eventType,
@@ -18,7 +12,6 @@ const createEvent = async (eventData: EventData): Promise<string> => {
       startDate: eventData.startDate,
       endDate: eventData.endDate,
       deadline: eventData.deadline,
-      createdAt: Date.now(),
       vacancies: eventData.vacancies,
       description: eventData.description,
       facilitatorName: eventData.facilitatorName,
@@ -28,12 +21,12 @@ const createEvent = async (eventData: EventData): Promise<string> => {
       contentUrl: eventData.contentUrl,
       contentType: eventData.contentType,
       location: eventData.location,
-      isCancelled: eventData.isCancelled,
     });
     await eventSchemaData.save();
-    return _id.toHexString();
+    return eventSchemaData._id;
   } catch (err) {
     throw new Error(err.msg);
+
   }
 };
 

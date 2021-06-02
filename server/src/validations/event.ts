@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { RoleData } from '../types';
+import { RoleData } from '../models/Event';
 
 type EventValidatorMethod = 'createEvent';
 

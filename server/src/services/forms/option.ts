@@ -1,14 +1,11 @@
-import mongoose from 'mongoose';
-import Option from '../../models/Forms/Option';
-import { OptionClientData, OptionData } from '../../types';
+import Option, { OptionData } from '../../models/Forms/Option';
 
 /**
  * Bulk-insert options attached to form
  * @param options Option answers for question
  */
-const createOptionsForQuestion = async (options: Array<Omit<OptionData, 'id'>>): Promise<void> => {
+const createOptionsForQuestion = async (options: Array<Omit<OptionData, '_id'>>): Promise<void> => {
   const bulkOptions = options.map((option) => ({
-    _id: new mongoose.Types.ObjectId(),
     questionId: option.questionId,
     text: option.text,
   }));
@@ -23,7 +20,7 @@ const updateQuestions = async (updatedOptions: Array<Partial<OptionData>>): Prom
   // Bulk update for different conditions in parallel
   await Promise.all(updatedOptions.map(async (option) => {
     await Option.findOneAndUpdate({
-      _id: option.id,
+      _id: option._id,
     }, option);
   }));
 };
@@ -32,7 +29,7 @@ const updateQuestions = async (updatedOptions: Array<Partial<OptionData>>): Prom
  * Retrieve all questsions from specified form id
  * @param questionId Mongoose question id
  */
-const getOptionsForQuestion = async (questionId: string): Promise<Array<OptionClientData>> => {
+const getOptionsForQuestion = async (questionId: string): Promise<Array<{ label: string, value: string }>> => {
   const options = await Option.find({
     questionId,
   }).lean().exec();

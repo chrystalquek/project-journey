@@ -1,8 +1,8 @@
 import { Response, Request } from 'express';
 import signUpService from '../services/signUp';
-import { SignUpData, SignUpIdType } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
+import { SignUpData, SignUpIdType } from '../models/SignUp';
 
 /**
  * Creates a new sign up

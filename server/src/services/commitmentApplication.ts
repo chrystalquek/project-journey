@@ -1,14 +1,11 @@
 import mongoose from 'mongoose';
-import CommitmentApplication from '../models/CommitmentApplication';
-import { CommitmentApplicationData, CommitmentApplicationStatus } from '../types';
+import CommitmentApplication, { CommitmentApplicationData, CommitmentApplicationStatus } from '../models/CommitmentApplication';
 
 const createCommitmentApplication = async (
-  commitmentApplicationData: CommitmentApplicationData,
+  commitmentApplicationData: Partial<CommitmentApplicationData>,
 ): Promise<CommitmentApplicationData> => {
   const commitmentApplicationSchemaData: mongoose.Document = new CommitmentApplication({
-    _id: new mongoose.Types.ObjectId(),
-    volunteerId: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId),
-    createdAt: Date.now(),
+    volunteerId: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId)
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
   return savedCommitmentApplication.toObject();

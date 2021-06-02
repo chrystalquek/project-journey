@@ -2,11 +2,10 @@ import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { getUser } from '../services/user';
-import { VolunteerData } from '../types';
-
 import HTTP_CODES from '../constants/httpCodes';
-import accessTokenSecret from '../helpers/auth';
+import { accessTokenSecret } from '../helpers/auth';
 import volunteerService from '../services/volunteer';
+import { VolunteerData } from '../models/Volunteer';
 
 const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;

@@ -1,26 +1,26 @@
-import mongoose, { Schema } from 'mongoose';
-import { CommitmentApplicationData } from '../types';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
-export type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document;
+export const COMMITMENT_APPLICATION_STATUS = ['pending', 'accepted', 'rejected'] as const;
+export type CommitmentApplicationStatus = (typeof COMMITMENT_APPLICATION_STATUS)[number]
 
-export const COMMITMENT_APPLICATION_STATUS = ['pending', 'accepted', 'rejected'];
-export const RACE = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
-
-const CommitmentApplicationSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
-  volunteerId: {
-    type: mongoose.Types.ObjectId,
+const CommitmentApplicationSchema = createSchema({
+  volunteerId: Type.objectId({
+    required: true,
     ref: 'Volunteer',
-  },
-  status: {
-    type: String,
+  }),
+  status: Type.string({
+    required: true,
     enum: COMMITMENT_APPLICATION_STATUS,
     default: 'pending',
-  },
-  createdAt: {
-    type: Date,
+  }),
+  createdAt: Type.date({
+    required: true,
     default: Date.now,
-  },
+  }),
 });
 
-export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema);
+export type CommitmentApplicationData = Omit<ExtractProps<typeof CommitmentApplicationSchema>, "__v" | "_id" | "volunteerId"> & { _id: string, volunteerId: string };
+
+type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document
+export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema)

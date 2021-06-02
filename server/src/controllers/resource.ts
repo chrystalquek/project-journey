@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { ResourceData } from '../types';
 import HTTP_CODES from '../constants/httpCodes';
+import { ResourceData } from '../models/Resource';
 import resourceService from '../services/resource';
 
 const createResource = async (req: Request, res: Response): Promise<void> => {

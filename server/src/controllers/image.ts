@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { ImageData, VolunteerData } from '../types';
 import imageService from '../services/image';
 import volunteerService from '../services/volunteer';
 
 import HTTP_CODES from '../constants/httpCodes';
+import { VolunteerData } from '../models/Volunteer';
 
 // TODO authentication not done in anticipation of changes made here
 const uploadImage = async (req: Request, res: Response): Promise<void> => {
   try {
-    const imageData: ImageData = {
+    const imageData: ImageRequest = {
       email: req.body.email,
       imageName: req.body.file.filename,
     };
@@ -21,7 +21,7 @@ const uploadImage = async (req: Request, res: Response): Promise<void> => {
 
 const updateProfilePicture = async (req: Request, res: Response): Promise<void> => {
   try {
-    const imageData: ImageData = {
+    const imageData: ImageRequest = {
       email: req.body.email,
       imageName: req.body.file.filename,
     };
@@ -48,6 +48,12 @@ const deleteImageWithEmail = async (req: Request, res: Response): Promise<void> 
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
   }
 };
+
+// TODO should try to get rid of this
+export type ImageRequest = {
+  email: String,
+  imageName: String
+}
 
 export default {
   uploadImage,

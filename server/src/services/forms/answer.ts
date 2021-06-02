@@ -1,6 +1,4 @@
-import mongoose from 'mongoose';
-import Answer from '../../models/Forms/Answer';
-import { AnswerData } from '../../types';
+import Answer, { AnswerData } from '../../models/Forms/Answer';
 import formService from './form';
 
 /**
@@ -9,7 +7,6 @@ import formService from './form';
  */
 const bulkInsertAnswers = async (answers: Array<AnswerData>): Promise<void> => {
   const bulkAnswers = answers.map((answer) => ({
-    _id: new mongoose.Types.ObjectId(),
     questionId: answer.questionId,
     userId: answer.userId,
     content: answer.content,
@@ -32,12 +29,7 @@ const retrieveAnswers = async ({ questionId, formId, userId }:
   const options = await Answer.find(questionId ? {
     questionId,
   } : { formId, userId }).lean().exec();
-  return options.map((option) => ({
-    questionId: option.questionId,
-    userId: option.userId,
-    formId: option.formId,
-    content: option.content,
-  }));
+  return options
 };
 
 // just a helper for getting the status of feedback form for [signedup, past] events

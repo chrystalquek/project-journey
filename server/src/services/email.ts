@@ -1,10 +1,10 @@
 import nodemailer, { TransportOptions } from 'nodemailer';
 import { google } from 'googleapis';
 import ejs from 'ejs';
+import Volunteer, { VolunteerData } from '../models/Volunteer';
+import Event, { EventData } from '../models/Event';
 import Mail from 'nodemailer/lib/mailer';
-import { EventData, VolunteerData } from '../types';
-import Volunteer from '../models/Volunteer';
-import Event from '../models/Event';
+
 
 const { OAuth2 } = google.auth;
 
@@ -13,7 +13,7 @@ type EmailMetadata = {
   to: string,
   cc: string[],
   bcc: string[],
-  subject:string,
+  subject: string,
   templateFile: string,
   templateData: object,
 }
@@ -118,7 +118,7 @@ const eventSignUpConfirmationEmailHelper = async (user: VolunteerData,
 };
 
 const feedbackEmailHelper = async (user: VolunteerData,
-  event: EventData):Promise<EmailMetadata> => {
+  event: EventData): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
