@@ -5,13 +5,15 @@ import DateFnsUtils from '@date-io/date-fns';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
 import DropZoneCard from '@components/common/DropZoneCard';
-import { InputType, OptionType, QuestionList } from '@type/questions';
 import {
   Button, makeStyles, MenuItem, Paper, Typography,
 } from '@material-ui/core';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
+import { OptionType } from '@type/form/option';
+import { QuestionList } from '@type/form/form';
+import { InputType } from '@type/form/question';
 
 type FormGeneratorType = {
   handleSubmit: (values: Record<string, any>) => Promise<void>
@@ -58,7 +60,7 @@ export const FormQuestionMapper = ({
   options,
   setFieldValue,
   props,
-} : {
+}: {
   formType: InputType;
   name: string;
   options?: OptionType[] | null;
@@ -174,7 +176,7 @@ export const FormQuestionMapper = ({
                 Label={{ label }}
                 color="primary"
                 type="checkbox"
-                // Excluded props here since there's error. Will fix if needed.
+              // Excluded props here since there's error. Will fix if needed.
               />
             </div>
           ))}
@@ -233,8 +235,8 @@ const FormGenerator: FC<FormGeneratorType> = ({
                       >
                         {text}
                         {index === displayText.length - 1
-                            && isRequired
-                            && ' *'}
+                          && isRequired
+                          && ' *'}
                       </Typography>
                     ))}
                     <FormQuestionMapper

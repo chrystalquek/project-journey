@@ -31,15 +31,32 @@
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
     // allow jsx syntax in ts files (for next.js project)
-    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
+      }
+    ],
     // https://stackoverflow.com/questions/63818415/react-was-used-before-it-was-defined/64024916#64024916
     "no-use-before-define": "off",
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"],
-    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
     // https://stackoverflow.com/questions/59265981/typescript-eslint-missing-file-extension-ts-import-extensions
     "no-param-reassign": 0,
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
     // https://stackoverflow.com/questions/35637770/how-to-avoid-no-param-reassign-when-setting-a-property-on-a-dom-object
     "linebreak-style": 0,
     "import/extensions": [
@@ -51,25 +68,64 @@
         "ts": "never",
         "tsx": "never"
       }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id"
+        ]
+      }
     ]
   },
   "settings": {
     "import/resolver": {
       // https://stackoverflow.com/questions/56548928/eslint-resolve-error-on-imports-using-with-path-mapping-configured-jsconfig-json
       "alias": {
-        "map" : [
-          ["@components", "./src/components/"],
-          ["@containers", "./src/containers/"],
-          ["@constants", "./utils/constants/"],
-          ["@redux", "./redux/"],
-          ["@utils", "./utils/"],
-          ["@public", "./public/"],
-          ["@type", "./types/"]
+        "map": [
+          [
+            "@components",
+            "./src/components/"
+          ],
+          [
+            "@containers",
+            "./src/containers/"
+          ],
+          [
+            "@constants",
+            "./utils/constants/"
+          ],
+          [
+            "@redux",
+            "./redux/"
+          ],
+          [
+            "@utils",
+            "./utils/"
+          ],
+          [
+            "@public",
+            "./public/"
+          ],
+          [
+            "@type",
+            "./types/"
+          ]
         ],
-        "extensions": [".js",".jsx",".ts",".tsx"]
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
       },
       "node": {
-        "extensions": [".js",".jsx",".ts",".tsx"]
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
       }
     }
   }

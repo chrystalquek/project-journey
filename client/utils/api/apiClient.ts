@@ -97,7 +97,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest):
-  Promise<UpdateSignUpResponse> {
+    Promise<UpdateSignUpResponse> {
     return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
   }
 
@@ -109,7 +109,7 @@ class AxiosApiClient implements ApiClient {
           status: ['accepted', acceptedRole],
         };
         const newQuery = {
-          id: res.signUpId,
+          id: res._id,
           idType: 'signUpId' as SignUpIdType,
         };
         return this.updateSignUp(newQuery, newRequest);
@@ -143,7 +143,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async cancelEvent(eventId: string): Promise<void> {
-    return this.send({ }, `event/cancel/${eventId}`, 'put');
+    return this.send({}, `event/cancel/${eventId}`, 'put');
   }
 
   async getEvents(query: EventQueryParams): Promise<GetEventsResponse> {
@@ -177,7 +177,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {
-    return this.send(request, 'volunteer', 'put');
+    return this.send(request, `volunteer/${request.id}`, 'put');
   }
 
   async updateProfilePicture(request: UploadImageRequest): Promise<VolunteerData> {
@@ -186,7 +186,7 @@ class AxiosApiClient implements ApiClient {
 
   // commitment application
   async createCommitmentApplication(request: CreateCommitmentApplicationRequest):
-  Promise<CommitmentApplicationData> {
+    Promise<CommitmentApplicationData> {
     return this.send(request, 'commitment-application', 'post');
   }
 
@@ -202,7 +202,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async getVolunteersById(ids) {
-    return this.send({ ids }, 'volunteer/ids', 'post');
+    return this.send({ ids }, 'volunteer/ids', 'get');
   }
 
   async getSignUpsByEventId(eid) {

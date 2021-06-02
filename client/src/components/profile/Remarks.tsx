@@ -3,7 +3,7 @@ import { Grid, Typography } from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
-import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateVolunteer } from '@redux/actions/user';
 import { StoreState } from '@redux/store';
@@ -16,7 +16,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: StoreState) => state.user);
   const userData = user.user;
-  const isAdmin = user.user.volunteerType === VOLUNTEER_TYPE.ADMIN;
+  const isAdmin = user.user.volunteerType === VolunteerType.ADMIN;
 
   let originalVolunteerRemarks = profilePageData.volunteerRemarks;
   let originalAdministratorRemarks = profilePageData.administratorRemarks;
@@ -39,7 +39,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   const saveVolunteerRemarks = () => {
     dispatch(
       updateVolunteer({
-        email: profilePageData.email,
+        id: profilePageData._id,
         updatedVolunteerData: {
           volunteerRemarks,
         },
@@ -52,7 +52,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   const saveAdministratorRemarks = () => {
     dispatch(
       updateVolunteer({
-        email: profilePageData.email,
+        id: profilePageData._id,
         updatedVolunteerData: {
           administratorRemarks,
         },
@@ -97,18 +97,18 @@ const Remarks: FC<props> = ({ profilePageData }) => {
 
         {/* Admin remarks not rendered if the profilePageData is admin
         and only shows the admin remarks if the user is admin */}
-        {profilePageData.volunteerType !== VOLUNTEER_TYPE.ADMIN
-        && userData.volunteerType === VOLUNTEER_TYPE.ADMIN && (
-        <RemarksTextField
-          value={administratorRemarks}
-          onChange={handleAdministratorRemarks}
-          label="Notes on volunteer"
-          show={administratorRemarksChanged}
-          onSave={saveAdministratorRemarks}
-          onDiscard={discardAdministratorRemarks}
-          disabled={!isAdmin}
-        />
-        )}
+        {profilePageData.volunteerType !== VolunteerType.ADMIN
+          && userData.volunteerType === VolunteerType.ADMIN && (
+            <RemarksTextField
+              value={administratorRemarks}
+              onChange={handleAdministratorRemarks}
+              label="Notes on volunteer"
+              show={administratorRemarksChanged}
+              onSave={saveAdministratorRemarks}
+              onDiscard={discardAdministratorRemarks}
+              disabled={!isAdmin}
+            />
+          )}
       </Grid>
     </PaddedGrid>
   );

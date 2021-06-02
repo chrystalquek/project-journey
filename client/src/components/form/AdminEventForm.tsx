@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Feedback form types
+// TODO should rename this
 type QuestionData = {
   type: 'shortAnswer' | 'mcq' | 'checkboxes';
   displayText: string;
@@ -721,59 +722,59 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
                         {question.type === 'mcq'
                           || question.type === 'checkboxes' ? (
-                            <Formik
-                              initialValues={{}}
-                              onSubmit={() => { }}
-                              enableReinitialize
-                            >
-                              {({ isSubmitting, values }) => (
-                                <>
-                                  <Typography className={classes.optionStyle}>
-                                    Options:
+                          <Formik
+                            initialValues={{}}
+                            onSubmit={() => { }}
+                            enableReinitialize
+                          >
+                            {({ isSubmitting, values }) => (
+                              <>
+                                <Typography className={classes.optionStyle}>
+                                  Options:
                                     {' '}
-                                  </Typography>
-                                  {question.options.map((option, optionIndex) => (
-                                    <div
-                                      key={optionIndex}
-                                      style={{
-                                        display: 'flex',
-                                        alignContent: 'center',
-                                      }}
-                                    >
-                                      <FormQuestionMapper
-                                        formType="shortAnswer"
-                                        name={String(optionIndex)}
-                                        key={optionIndex}
-                                        props={{
-                                          style: {
-                                            width: '500px',
-                                          },
-                                          placeholder: 'Type option here...',
-                                          value: option,
-                                          onChange: (e) => handleChangeOption(
-                                            e.target.value,
-                                            index,
-                                            optionIndex,
-                                          ),
-                                        }}
-                                      />
-                                      <IconButton
-                                        onClick={() => handleRemoveOption(index, optionIndex)}
-                                      >
-                                        <ClearIcon />
-                                      </IconButton>
-                                    </div>
-                                  ))}
-                                  <Button
-                                    className={classes.addNewFieldButton}
-                                    onClick={() => handleAddOption(index)}
+                                </Typography>
+                                {question.options.map((option, optionIndex) => (
+                                  <div
+                                    key={optionIndex}
+                                    style={{
+                                      display: 'flex',
+                                      alignContent: 'center',
+                                    }}
                                   >
-                                    + Add another option
+                                    <FormQuestionMapper
+                                      formType="shortAnswer"
+                                      name={String(optionIndex)}
+                                      key={optionIndex}
+                                      props={{
+                                        style: {
+                                          width: '500px',
+                                        },
+                                        placeholder: 'Type option here...',
+                                        value: option,
+                                        onChange: (e) => handleChangeOption(
+                                          e.target.value,
+                                          index,
+                                          optionIndex,
+                                        ),
+                                      }}
+                                    />
+                                    <IconButton
+                                      onClick={() => handleRemoveOption(index, optionIndex)}
+                                    >
+                                      <ClearIcon />
+                                    </IconButton>
+                                  </div>
+                                ))}
+                                <Button
+                                  className={classes.addNewFieldButton}
+                                  onClick={() => handleAddOption(index)}
+                                >
+                                  + Add another option
                                   </Button>
-                                </>
-                              )}
-                            </Formik>
-                          ) : null}
+                              </>
+                            )}
+                          </Formik>
+                        ) : null}
                         <div className={classes.isRequiredStyle}>
                           <Typography style={{ display: 'inline-block' }}>
                             Is question required?

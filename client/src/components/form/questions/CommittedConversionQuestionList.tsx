@@ -1,5 +1,5 @@
-import { QuestionList } from '@type/questions';
-import { RACE } from '@type/volunteer';
+import { QuestionList } from '@type/form/form';
+import { Race } from '@type/volunteer';
 
 export const conversionFormQuestions: QuestionList = [
   {
@@ -15,11 +15,11 @@ export const conversionFormQuestions: QuestionList = [
     type: 'mcq',
     initialValue: '',
     options: [
-      { value: RACE.CHINESE, label: 'Chinese' },
-      { value: RACE.MALAY, label: 'Malay' },
-      { value: RACE.INDIAN, label: 'Indian' },
-      { value: RACE.CAUCASIAN, label: 'Caucasian' },
-      { value: RACE.OTHER, label: 'Other' },
+      { value: Race.CHINESE, label: 'Chinese' },
+      { value: Race.MALAY, label: 'Malay' },
+      { value: Race.INDIAN, label: 'Indian' },
+      { value: Race.CAUCASIAN, label: 'Caucasian' },
+      { value: Race.OTHER, label: 'Other' },
     ],
     isRequired: true,
   },
@@ -96,9 +96,9 @@ export const conversionFormQuestions: QuestionList = [
     type: 'mcq',
     initialValue: '',
     options: [
-      { value: 'Thursday 6PM-10PM', label: 'Thursday 6PM-10PM'},
-      { value: 'Saturday 2.30PM-6PM', label: 'Saturday 2.30PM-6PM'}, 
-      { value: 'Either', label: 'Either'},
+      { value: 'Thursday 6PM-10PM', label: 'Thursday 6PM-10PM' },
+      { value: 'Saturday 2.30PM-6PM', label: 'Saturday 2.30PM-6PM' },
+      { value: 'Either', label: 'Either' },
     ],
     isRequired: true
   },
@@ -156,7 +156,7 @@ export const conversionFormQuestions: QuestionList = [
       { value: 'Other', label: 'Other' },
     ],
     isRequired: false,
-  }, 
+  },
   {
     name: 'personality',
     displayText: ['What is your personality type via www.16personalities.com? (For example: INTJ-A)'],
@@ -182,7 +182,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: 'hasCriminalRecord',
-    displayText:[
+    displayText: [
       'Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education?',
     ],
     type: 'mcq',
@@ -195,7 +195,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: 'isAwareOfGroupInvite',
-    displayText:[
+    displayText: [
       'I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc.',
     ],
     type: 'mcq',
@@ -208,7 +208,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: 'isAwareOfCommitmentExpectation',
-    displayText:[
+    displayText: [
       'I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement.',
     ],
     type: 'mcq',
@@ -221,7 +221,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: 'isAwareOfConfidentiality',
-    displayText:[
+    displayText: [
       'If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation.',
     ],
     type: 'mcq',
@@ -234,7 +234,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: 'isAwareOfBackgroundCheck',
-    displayText:[
+    displayText: [
       'I give Beyond Awesome (under Blessings in a Bag Limited) permission to conduct a background check with the relevant authorities and understand that they will notify me before conducting this process.',
     ],
     type: 'mcq',

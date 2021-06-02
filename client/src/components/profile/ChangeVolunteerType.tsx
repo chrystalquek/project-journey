@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import EditIcon from '@material-ui/icons/Edit';
 import { updateVolunteer } from '@redux/actions/user';
 
@@ -30,7 +30,7 @@ const ChangeVolunteerType: FC = () => {
   const profilePageData = useSelector((state: StoreState) => state.profilePage.data);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [volunteerType, setVolunteerType] = useState<VOLUNTEER_TYPE>(profilePageData.volunteerType)
+  const [volunteerType, setVolunteerType] = useState<VolunteerType>(profilePageData.volunteerType)
 
   const handleOpenDialog = useCallback(() => {
     setOpenDialog(true);
@@ -43,17 +43,17 @@ const ChangeVolunteerType: FC = () => {
   const handleChange = useCallback((event) => {
     setVolunteerType(event.target.value || profilePageData.volunteerType)
   }, [volunteerType])
-  
+
   const handleSubmit = () => {
-    const updatedVolunteerData = {...profilePageData, volunteerType:volunteerType}
-    dispatch(updateVolunteer({ email: profilePageData.email, updatedVolunteerData: updatedVolunteerData}))
+    const updatedVolunteerData = { ...profilePageData, volunteerType: volunteerType }
+    dispatch(updateVolunteer({ id: profilePageData._id, updatedVolunteerData: updatedVolunteerData }))
     handleCloseDialog()
   }
 
   return (
     <div>
       <IconButton onClick={handleOpenDialog}>
-        <EditIcon fontSize='small'/>
+        <EditIcon fontSize='small' />
       </IconButton>
 
       <Dialog
@@ -73,15 +73,15 @@ const ChangeVolunteerType: FC = () => {
                 onChange={handleChange}
                 input={<Input />}
               >
-                <MenuItem className={classes.centralize} value={VOLUNTEER_TYPE.ADHOC}>Ad-hoc Volunteer</MenuItem>
-                <MenuItem className={classes.centralize} value={VOLUNTEER_TYPE.COMMITED}>Committed Volunteer</MenuItem>
-                <MenuItem className={classes.centralize} value={VOLUNTEER_TYPE.ADMIN}>Admin</MenuItem>
+                <MenuItem className={classes.centralize} value={VolunteerType.ADHOC}>Ad-hoc Volunteer</MenuItem>
+                <MenuItem className={classes.centralize} value={VolunteerType.COMMITTED}>Committed Volunteer</MenuItem>
+                <MenuItem className={classes.centralize} value={VolunteerType.ADMIN}>Admin</MenuItem>
               </Select>
             </FormControl>
           </form>
         </DialogContent>
         <DialogActions className={classes.centralize}>
-          <Button 
+          <Button
             onClick={handleSubmit}
             variant="contained"
             color="primary"

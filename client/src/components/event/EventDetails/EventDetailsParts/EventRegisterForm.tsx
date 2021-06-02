@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { EventData, Event } from '@type/event';
+import { EventData, EventType } from '@type/event';
 import {
   Select,
   Box,
@@ -69,11 +69,11 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
   const onFormSubmit = (e) => {
     e.preventDefault();
     switch (event.eventType) {
-      case Event.Volunteering:
+      case EventType.VOLUNTEERING:
         formHandlers.signUpOnly(user._id, event._id, formState);
         break;
-      case Event.Hangout:
-      case Event.Workshop:
+      case EventType.HANGOUT:
+      case EventType.WORKSHOP:
         formHandlers.signUpAndAccept(user._id, event._id, formState);
         break;
       default:
@@ -107,7 +107,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
               >
                 {roles.map((v: FormSelectRow) => (
                   <MenuItem
-                    key={v.id}
+                    key={v.value}
                     value={v.value}
                     disabled={v.isDisabled}
                   >
@@ -135,7 +135,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
               >
                 {roles.map((v: FormSelectRow) => (
                   <MenuItem
-                    key={v.id}
+                    key={v.value}
                     value={v.value}
                     disabled={v.isDisabled}
                   >
@@ -163,7 +163,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
               >
                 {roles.map((v: FormSelectRow) => (
                   <MenuItem
-                    key={v.id}
+                    key={v.value}
                     value={v.value}
                     disabled={v.isDisabled}
                   >

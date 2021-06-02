@@ -1,16 +1,12 @@
-import { RACE } from "./volunteer"
-
 export enum CommitmentApplicationStatus {
     Pending = 'pending',
     Accepted = 'accepted',
     Rejected = 'rejected'
 }
 
-export type CommitmentApplicationStatusType = CommitmentApplicationStatus.Pending | CommitmentApplicationStatus.Accepted | CommitmentApplicationStatus.Rejected
-
 export type CommitmentApplicationData = {
     _id: string,
-    volunteerId: string
+    volunteerId: string,
     status: CommitmentApplicationStatus,
     createdAt: string,
 }

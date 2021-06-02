@@ -18,7 +18,7 @@ import EventCard from '@components/event/EventCard';
 import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
-import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { EventButton } from '@components/common/event/EventButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUpcomingEvents } from '@redux/actions/event';
@@ -100,7 +100,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           <Grid item xs={12}>
             <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
           </Grid>
-          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+          {user && user.volunteerType === VolunteerType.ADMIN && (
             <Grid
               item
               container
@@ -172,7 +172,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           <Grid item sm={9}>
             <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
           </Grid>
-          {user && user.volunteerType === VOLUNTEER_TYPE.ADMIN && (
+          {user && user.volunteerType === VolunteerType.ADMIN && (
             <Grid item sm={3} style={{ textAlign: 'center' }}>
               <EventButton disableRipple onClick={() => router.push('/form/new')}>
                 Create new event

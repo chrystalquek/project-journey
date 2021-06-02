@@ -26,7 +26,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,7 +75,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   const { name } = volunteers.volunteerProfile.search;
   const { sort } = volunteers.volunteerProfile;
 
-  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VOLUNTEER_TYPE, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => ({
+  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VolunteerType, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => ({
     pageNo: params.pageNo || 0,
     filters: {
       volunteerType: params.volunteerType || volunteerType,
@@ -103,11 +103,11 @@ const VolunteerProfile: FC<{}> = ({ }) => {
     ));
   };
 
-  const allFiltersCleared = Object.values(VOLUNTEER_TYPE).every(volType => !volunteerType[volType]);
+  const allFiltersCleared = Object.values(VolunteerType).every(volType => !volunteerType[volType]);
 
   const clearallFilters = () => {
     var clearedVolunteerTypeFilters = Object.assign({}, volunteerType);
-    Object.values(VOLUNTEER_TYPE).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
+    Object.values(VolunteerType).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
 
     dispatch(getVolunteersVolunteerProfile(
       fillOtherParams({
@@ -134,7 +134,7 @@ const VolunteerProfile: FC<{}> = ({ }) => {
               && (
                 <>
                   <FormGroup>
-                    {Object.values(VOLUNTEER_TYPE).map((volType) => (
+                    {Object.values(VolunteerType).map((volType) => (
                       <FormControlLabel
                         control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} />}
                         label={<Typography variant="body1">{capitalize(volType)}</Typography>}

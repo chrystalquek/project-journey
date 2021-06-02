@@ -1,44 +1,29 @@
 import dayjs from 'dayjs';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 
-export type FormQuestionType = 'shortAnswer' | 'mcq' | 'checkboxes'
-
-export type QuestionsOptionsRequestData = {
-  displayText: string;
-  type: FormQuestionType;
-  isRequired: boolean;
-  name: string;
-  options: Array<{ content: string }>
+// Used when filtering actual events
+export enum EventType {
+  WORKSHOP = 'workshop',
+  VOLUNTEERING = 'volunteering',
+  HANGOUT = 'hangout'
 }
 
-export type EventPostData = {
-  name: string;
-  coverImage?: string; // TODO: change to appropriate type
-  eventType: string;
-  volunteerType: string;
-  startDate: string;
-  endDate: string;
-  deadline: string;
-  vacancies: number;
-  description: string;
-  facilitatorName?: string;
-  facilitatorPhoto?: string;
-  facilitatorDescription?: string;
-  roles?: Array<RoleData>;
-  contentUrl?: string;
-  contentType?: string;
-  location: string;
-  questions: Array<QuestionsOptionsRequestData>;
+export enum ContentType {
+  PDF = 'pdf',
+  VIDEO = 'video',
+  IMAGE = 'image',
+  LINKS = 'links',
+  DOCUMENT = 'document'
 }
+
+export type EventSearchType = 'all' | 'upcoming' | 'past'
 
 export type EventData = {
   _id: string,
   name: string;
-  eventType: EventType;
-  createdAt: string;
   coverImage?: string; // TODO: change to appropriate type
-  isCancelled?: boolean
-  volunteerType: VOLUNTEER_TYPE;
+  eventType: EventType;
+  volunteerType: VolunteerType;
   startDate: string;
   endDate: string;
   deadline: string;
@@ -47,21 +32,23 @@ export type EventData = {
   facilitatorName?: string;
   facilitatorPhoto?: string;
   facilitatorDescription?: string;
-  roles?: Array<RoleData>;
+  roles: Array<RoleData>;
   contentUrl?: string;
-  contentType?: string;
+  contentType?: ContentType;
   location: string;
+  isCancelled: boolean
   feedbackStatus?: boolean; // for past events
+  createdAt: string;
 }
 
-export interface RoleData {
-  _id: string,
-  volunteers: Array<string>,
+export type RoleData = {
   name: string;
   description: string;
   capacity: number;
+  volunteers: Array<string>,
 }
 
+// TODO remove below filtering stuff
 // Used in filtering component
 export enum EventFilters {
   DATE = 'date',
@@ -86,14 +73,3 @@ export type EventFilterOptions = {
     [EventFilters.HANGOUTS]: boolean
   },
 }
-
-// Used when filtering actual events
-export enum Event {
-  Volunteering = 'volunteering',
-  Workshop = 'workshop',
-  Hangout = 'hangout'
-}
-
-export type EventType = Event.Volunteering | Event.Workshop | Event.Hangout;
-
-export type EventSearchType = 'all' | 'upcoming' | 'past'
