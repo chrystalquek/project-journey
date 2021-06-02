@@ -8,7 +8,7 @@ import {
   createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
 } from '@redux/actions/signUp';
 import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
-import { CreateSignUpRequest } from 'api/request';
+import { CreateSignUpRequest } from '@api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
 import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';

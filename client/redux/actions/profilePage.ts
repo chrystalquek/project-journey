@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { VolunteerData } from '@type/volunteer';
-import apiClient from 'api/apiClient';
+import apiClient from '@api/apiClient';
 
 export const getVolunteerById = createAsyncThunk<VolunteerData, string, { state }>(
   'profilePageData/getVolunteerById',

@@ -10,7 +10,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useAppDispatch } from '@redux/store';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
-import { SignUpResponse } from 'api/response';
+import { SignUpResponse } from '@api/response';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 

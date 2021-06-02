@@ -212,7 +212,7 @@ const Volunteers: FC<{}> = ({ }) => {
   // use these for all pages
   const { isLoading, error } = volunteerState
   if (isLoading) {
-    return <LoadingIndicator status={isLoading} />
+    return <LoadingIndicator />
   }
   if (error) {
     return <ErrorPage message={error.message} />

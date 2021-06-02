@@ -15,19 +15,19 @@ import {
   CreateCommitmentApplicationRequest,
   CommitmentApplicationQueryParams,
   EventQueryParams,
-  GetVolunteersPaginatedRequest as GetVolunteersPaginatedRequest,
+  GetVolunteersPaginatedRequest,
   AnswerFormQuestionsRequest,
   CreateFormQuestionsRequest,
   CancelEventParams,
   DeleteEventRequest,
-} from 'api/request';
+} from '@api/request';
 
 import {
   GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
   EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
   CreateSignUpResponse, UpdateSignUpResponse,
   GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse, GetEventFeedbackQuestionsResponse,
-} from 'api/response';
+} from '@api/response';
 import { SignUpIdType } from '@type/signUp';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';

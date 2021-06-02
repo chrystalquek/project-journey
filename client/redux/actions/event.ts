@@ -4,11 +4,11 @@ import {
   EditEventRequest,
   GetEventParams, EventQueryParams,
   CancelEventParams, DeleteEventRequest,
-} from 'api/request';
+} from '@api/request';
 import {
   CreateEventResponse, EditEventResponse, GetEventsResponse, GetEventResponse,
-} from 'api/response';
-import apiClient from 'api/apiClient';
+} from '@api/response';
+import apiClient from '@api/apiClient';
 
 export const getSignedUpEventsUpcomingEvent = createAsyncThunk<GetEventsResponse,
   EventQueryParams, { state }>(

@@ -11,20 +11,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface LoadingIndicatorProps {
-    status: boolean
-}
-
-const LoadingIndicator: FC<LoadingIndicatorProps> = (props: LoadingIndicatorProps) => {
+const LoadingIndicator: FC<{}> = () => {
     const classes = useStyles();
 
-    return !props.status
-        ? <></>
-        : (
-            <div className={classes.centralize}>
-                <CircularProgress />
-            </div>
-        );
+    return <div className={classes.centralize}>
+        <CircularProgress />
+    </div>
+
 };
 
 export default LoadingIndicator;

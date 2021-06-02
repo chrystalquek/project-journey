@@ -3,7 +3,7 @@ import { VolunteerData, VolunteerType } from 'types/volunteer';
 import { initializeFilterObject } from '@utils/helpers/filterObject';
 import { getPaginatedVolunteers } from '@redux/actions/volunteer/index';
 import { rowsPerPage } from '@components/volunteer/Volunteers';
-import { Pagination } from '../../../types/Pagination';
+import { Pagination } from '../../../utils/types/Pagination';
 
 export type VolunteerSortFieldsType = 'name' | 'createdAt';
 

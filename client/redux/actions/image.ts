@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UploadImageRequest, UploadImageRequestWithField } from 'api/request';
-import { UploadImageResponse } from 'api/response';
-import apiClient from 'api/apiClient';
+import { UploadImageRequest, UploadImageRequestWithField } from '@api/request';
+import { UploadImageResponse } from '@api/response';
+import apiClient from '@api/apiClient';
 import { VolunteerData } from '@type/volunteer';
 
 export const uploadImage = createAsyncThunk<UploadImageResponse,

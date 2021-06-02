@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   CreateSignUpRequest, SignUpQueryParams, UpdateSignUpRequest,
-} from 'api/request';
-import { GetSignUpsResponse } from 'api/response';
-import apiClient from 'api/apiClient';
+} from '@api/request';
+import { GetSignUpsResponse } from '@api/response';
+import apiClient from '@api/apiClient';
 import { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import { SignUpData } from '@type/signUp';
 

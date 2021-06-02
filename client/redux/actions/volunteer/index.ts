@@ -1,10 +1,10 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import apiClient from "api/apiClient";
-import { GetVolunteersPaginatedRequest } from "api/request";
-import { convertFilterObjectToQueryString } from "@utils/helpers/filterObject";
-import { VolunteerCollate, VolunteerState } from "@redux/reducers/volunteer/index";
-import { Pagination } from "@type/Pagination";
-import { GetVolunteersPaginatedResponse } from "api/response";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import apiClient from '@api/apiClient';
+import { GetVolunteersPaginatedRequest } from '@api/request';
+import { convertFilterObjectToQueryString } from '@utils/helpers/filterObject';
+import { VolunteerCollate, VolunteerState } from '@redux/reducers/volunteer/index';
+import { Pagination } from '@utils/types/Pagination';
+import { GetVolunteersPaginatedResponse } from '@api/response';
 
 // functions
 

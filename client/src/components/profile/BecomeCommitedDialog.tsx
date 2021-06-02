@@ -7,7 +7,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import CommittedConversionForm from '@components/form/CommittedConversionForm';
 import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
-import { CreateCommitmentApplicationRequest } from 'api/request';
+import { CreateCommitmentApplicationRequest } from '@api/request';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 
 const useStyles = makeStyles((theme) => ({

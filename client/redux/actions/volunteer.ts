@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GetVolunteersResponse } from 'api/response';
-import apiClient from 'api/apiClient';
+import { GetVolunteersResponse } from '@api/response';
+import apiClient from '@api/apiClient';
 
 export const getPendingVolunteers = createAsyncThunk<GetVolunteersResponse, void, { state }>(
   'volunteer/getPendingVolunteers',
