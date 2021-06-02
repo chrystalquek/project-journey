@@ -47,7 +47,7 @@ export type VolunteerData = {
   nickname?: string;
   gender: Gender;
   citizenship: Citizenship;
-  birthday?: Date;
+  birthday?: string;
   address?: string;
   mobileNumber: string;
   photoUrl: string;
@@ -114,5 +114,5 @@ export type VolunteerData = {
   // Record of commitment applications
   commitmentApplicationIds: Array<string>;
 
-  createdAt: Date; // used for member since
+  createdAt: string; // used for member since
 };

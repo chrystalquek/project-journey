@@ -8,5 +8,5 @@ export type CommitmentApplicationData = {
     _id: string,
     volunteerId: string,
     status: CommitmentApplicationStatus,
-    createdAt: Date,
+    createdAt: string,
 }

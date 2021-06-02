@@ -24,9 +24,9 @@ export type EventData = {
   coverImage?: string; // TODO: change to appropriate type
   eventType: EventType;
   volunteerType: VolunteerType;
-  startDate: Date;
-  endDate: Date;
-  deadline: Date;
+  startDate: string;
+  endDate: string;
+  deadline: string;
   vacancies: number;
   description: string;
   facilitatorName?: string;
@@ -38,7 +38,7 @@ export type EventData = {
   location: string;
   isCancelled: boolean
   feedbackStatus?: boolean; // for past events
-  createdAt: Date;
+  createdAt: string;
 }
 
 export type RoleData = {

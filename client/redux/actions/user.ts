@@ -14,7 +14,7 @@ export type LoginArgs = {
 export const signUp = createAsyncThunk<SignUpResponse, VolunteerData, { state }>(
   'volunteer/',
   async (volunteer) => {
-    const response = (await apiClient.signUp(volunteer)) as SignUpResponse;
+    const response = apiClient.signUp(volunteer);
     return response;
   },
 );

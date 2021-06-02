@@ -8,5 +8,5 @@ export type SignUpData = {
     status: SignUpStatus,
     preferences: Array<string>,
     isRestricted: boolean,
-    createdAt: Date
+    createdAt: string
 }
