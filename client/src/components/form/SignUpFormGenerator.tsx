@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Paper, Typography, Button, makeStyles } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 
-import { HeaderQuestionList, QuestionItem, QuestionList, QuestionsWithHeader } from '@type/questions';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { uploadImage } from '@redux/actions/image';
@@ -18,7 +17,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { objectFilter } from '@utils/helpers/objectFilter';
 import { ToastStatus } from '@type/common';
 import { FormQuestionMapper } from './FormGenerator';
-import { QuestionWithOptions } from '@type/form';
+import { HeaderQuestionList, QuestionList, QuestionsWithHeader } from '@type/form/form';
 
 const useStyles = makeStyles((theme) => ({
   // The following style make sure that the error message shows consistently for 'photo'
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
 type FormGeneratorProps = {
-  type: VOLUNTEER_TYPE;
+  type: VolunteerType;
   questionWithHeader: HeaderQuestionList;
   handleSignUp: (formValues: Record<string, any>) => Promise<SignUpResponse>;
 };
@@ -223,7 +222,7 @@ const SignUpFormGenerator = ({
       .integer('Input must be an integer')
       .positive('Input must be a positive integer'),
     sessionsPerMonth:
-      type === VOLUNTEER_TYPE.ADHOC
+      type === VolunteerType.ADHOC
         ? Yup.number()
           .integer('Input must be an integer')
           .positive('Input must be a positive integer')
@@ -232,7 +231,7 @@ const SignUpFormGenerator = ({
           .positive('Input must be a positive integer')
           .required('Required'),
     personality:
-      type === VOLUNTEER_TYPE.ADHOC
+      type === VolunteerType.ADHOC
         ? Yup.mixed()
         : Yup.string()
           .matches(personalityRegex, 'Invalid value')

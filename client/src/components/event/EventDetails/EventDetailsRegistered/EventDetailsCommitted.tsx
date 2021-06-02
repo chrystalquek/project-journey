@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { EventData } from '@type/event';
-import { VOLUNTEER_TYPE, VolunteerData } from '@type/volunteer';
+import { VolunteerType, VolunteerData } from '@type/volunteer';
 import {
   Chip, Grid, makeStyles,
 } from '@material-ui/core';
@@ -10,11 +10,11 @@ import VolunteerRoles from '@components/event/EventDetails/EventDetailsParts/Vol
 import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
 import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
-import { FormStatus } from '@type/event/common';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
 import { getAcceptedSignUp } from '@utils/helpers/event';
 import ResizedImage from '../ResizedImage';
+import { FormStatus } from '@type/form/form';
 
 type EventDetailsCommittedProps = {
   event: EventData,
@@ -51,7 +51,7 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
         <ResizedImage img={event?.coverImage ?? testEventImage1} name={event.name} />
       </Grid>
 
-      {event.volunteerType === VOLUNTEER_TYPE.COMMITED
+      {event.volunteerType === VolunteerType.COMMITTED
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <Chip
@@ -61,14 +61,14 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
             />
           </Grid>
         )}
-      {event.volunteerType === VOLUNTEER_TYPE.ADHOC
+      {event.volunteerType === VolunteerType.ADHOC
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <Chip color="primary" label={ADHOC_VOLUNTEER_TAG} />
           </Grid>
         )}
 
-      {user.volunteerType !== VOLUNTEER_TYPE.ADMIN && formStatus.reason === FormDisabledReason.SIGNUP_PENDING
+      {user.volunteerType !== VolunteerType.ADMIN && formStatus.reason === FormDisabledReason.SIGNUP_PENDING
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <EventPaper>
@@ -77,7 +77,7 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
             </EventPaper>
           </Grid>
         )}
-      {user.volunteerType !== VOLUNTEER_TYPE.ADMIN && formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
+      {user.volunteerType !== VolunteerType.ADMIN && formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <EventPaper>

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
 import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
@@ -50,7 +50,7 @@ const volunteerSlice = createSlice({
       if (payload.status == CommitmentApplicationStatus.Accepted) {
         state.data[payload.volunteerId] = {
           ...volunteer,
-          volunteerType: VOLUNTEER_TYPE.COMMITED,
+          volunteerType: VolunteerType.COMMITTED,
         };
       }
       // no longer a pending request with either accept or reject

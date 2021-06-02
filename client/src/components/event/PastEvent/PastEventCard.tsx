@@ -8,7 +8,7 @@ import {
 import React, { FC, useState } from 'react';
 import { EventData } from '@type/event';
 import { parseDate } from '@utils/helpers/event/EventsPageBody';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import { EventTypography } from '@components/common/event/EventTypography';
 import { testEventImage3 } from '@constants/imagePaths';
 import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
@@ -89,16 +89,16 @@ const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
       />
 
       <CardActions className={classes.cardAction}>
-        {event?.volunteerType === VOLUNTEER_TYPE.COMMITED
+        {event?.volunteerType === VolunteerType.COMMITTED
           && (
-          <Chip
-            color="secondary"
-            size="small"
-            label={COMMITTED_VOLUNTEER_TAG}
-            className={classes.committedTag}
-          />
+            <Chip
+              color="secondary"
+              size="small"
+              label={COMMITTED_VOLUNTEER_TAG}
+              className={classes.committedTag}
+            />
           )}
-        {event?.volunteerType === VOLUNTEER_TYPE.ADHOC
+        {event?.volunteerType === VolunteerType.ADHOC
           && <Chip color="primary" size="small" label={ADHOC_VOLUNTEER_TAG} />}
       </CardActions>
     </Card>

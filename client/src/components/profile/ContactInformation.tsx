@@ -19,7 +19,6 @@ const ContactInformation: FC<props> = ({ profilePageData }) => (
     </Grid>
     <DataRow header="Tel. No." data={profilePageData.mobileNumber} xs1={3} xs2={9} />
     <DataRow header="E-mail" data={profilePageData.email} xs1={3} xs2={9} />
-    <DataRow header="Lorem" data={profilePageData.description} xs1={3} xs2={9} />
   </PaddedGrid>
 );
 

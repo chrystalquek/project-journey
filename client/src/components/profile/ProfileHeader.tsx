@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
-import { VolunteerData, VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@redux/store';
 import ProfilePicture from './ProfilePicture';
@@ -46,9 +46,9 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
   const user = useSelector((state: StoreState) => state.user);
   const userData = user?.user;
 
-  const length = profilePageData?.commitmentApplicationIds?.length 
+  const length = profilePageData?.commitmentApplicationIds?.length
   const commitmentApplication: any = length
-    ? profilePageData.commitmentApplicationIds[length-1]
+    ? profilePageData.commitmentApplicationIds[length - 1]
     : null
 
   return (
@@ -77,20 +77,20 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
             </Typography>
           </Grid>
           <Grid item>
-            { userData.volunteerType === VOLUNTEER_TYPE.ADMIN 
-            && <ChangeVolunteerType/> }
+            {userData.volunteerType === VolunteerType.ADMIN
+              && <ChangeVolunteerType />}
           </Grid>
         </Grid>
         {/* Only shows the option to become committed if the loggedInUser
         is viewing own profile and is still an adhoc volunteer */}
-        { profilePageData.volunteerType === VOLUNTEER_TYPE.ADHOC
-        && userData.email === profilePageData.email
-        && <BecomeCommitedDialog/> }
+        {profilePageData.volunteerType === VolunteerType.ADHOC
+          && userData.email === profilePageData.email
+          && <BecomeCommitedDialog />}
         {/* Approval button if loggedInUser is admin and volunteerProfile
         has a pending commitmentApplication*/}
-        { userData.volunteerType === VOLUNTEER_TYPE.ADMIN 
-        && commitmentApplication?.status === CommitmentApplicationStatus.Pending
-        && <ApproveCommitmentApplication commitmentApplication={commitmentApplication}/>}
+        {userData.volunteerType === VolunteerType.ADMIN
+          && commitmentApplication?.status === CommitmentApplicationStatus.Pending
+          && <ApproveCommitmentApplication commitmentApplication={commitmentApplication} />}
       </Grid>
     </Grid>
   );

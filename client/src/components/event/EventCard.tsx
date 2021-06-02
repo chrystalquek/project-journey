@@ -7,7 +7,7 @@ import { CardActions, Chip, makeStyles } from '@material-ui/core';
 import { FC } from 'react';
 import { EventData } from '@type/event';
 import { getEventVacancies, parseDate } from '@utils/helpers/event/EventsPageBody';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import { EventTypography } from '@components/common/event/EventTypography';
 import { testEventImage3 } from '@constants/imagePaths';
 import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
@@ -91,7 +91,7 @@ const EventCard: FC<EventCardProps> = ({ event, upcomingSignUps, onCardClick }) 
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.cardAction}>
-        {event?.volunteerType === VOLUNTEER_TYPE.COMMITED
+        {event?.volunteerType === VolunteerType.COMMITTED
           && (
             <Chip
               color="secondary"
@@ -100,7 +100,7 @@ const EventCard: FC<EventCardProps> = ({ event, upcomingSignUps, onCardClick }) 
               className={classes.committedTag}
             />
           )}
-        {event?.volunteerType === VOLUNTEER_TYPE.ADHOC
+        {event?.volunteerType === VolunteerType.ADHOC
           && <Chip color="primary" size="small" label={ADHOC_VOLUNTEER_TAG} />}
       </CardActions>
     </Card>

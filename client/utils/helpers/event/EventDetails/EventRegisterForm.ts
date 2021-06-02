@@ -1,7 +1,6 @@
 import { RoleData } from '@type/event';
 
 export type FormSelectRow = {
-  id: string,
   value: string,
   description: string,
   isDisabled: boolean
@@ -13,7 +12,6 @@ export function parseRoles(roles: Array<RoleData>): Array<FormSelectRow> {
   return roles.map((role) => {
     const { remaining, total } = getRoleVacancies(role);
     return {
-      id: role._id,
       value: role.name,
       description: `${role.name} (${remaining}/${total} ${remaining === 1 ? 'vacancy' : 'vacancies'} available)`,
       isDisabled: remaining === 0,

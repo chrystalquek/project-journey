@@ -22,8 +22,7 @@ const SignUpInformation: FC<props> = ({ profilePageData }) => {
       </Grid>
       <DataRow header="Buddy" data={profilePageData.name} xs1={3} xs2={9} />
       <DataRow header="Date of birth" data={birthday} xs1={3} xs2={9} />
-      <DataRow header="Lorem" data={profilePageData.description} xs1={3} xs2={9} />
-      <DataRow header="Lorem ipsum" data={profilePageData.volunteerReason} xs1={3} xs2={9} />
+      <DataRow header="Volunteer reason" data={profilePageData.volunteerReason} xs1={3} xs2={9} />
       <DataRow header="Member since" data={createdAt} xs1={3} xs2={9} />
     </PaddedGrid>
   );

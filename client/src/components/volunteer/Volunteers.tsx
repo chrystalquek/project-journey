@@ -24,7 +24,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { VOLUNTEER_TYPE } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
 import { StoreState } from '@redux/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -72,14 +72,12 @@ const Volunteers: FC<{}> = ({ }) => {
   const { sort } = volunteerState.collate;
   const { volunteers } = volunteerState;
   const { total, pageNo } = volunteerState.pagination;
-
   const { loadingStatus } = volunteerState
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
     dispatch(getPaginatedVolunteers({}));
   }, []);
-
 
 
   // filter functions
@@ -95,7 +93,7 @@ const Volunteers: FC<{}> = ({ }) => {
   };
   const handleClearAllFilters = () => {
     var clearedVolunteerTypeFilters = Object.assign({}, volunteerType);
-    Object.values(VOLUNTEER_TYPE).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
+    Object.values(VolunteerType).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
 
     dispatch(getPaginatedVolunteers({
       filters: {
@@ -105,7 +103,7 @@ const Volunteers: FC<{}> = ({ }) => {
   }
 
   // filter state and components
-  const isDisableClearFilters = Object.values(VOLUNTEER_TYPE).every(volType => !volunteerType[volType]);
+  const isDisableClearFilters = Object.values(VolunteerType).every(volType => !volunteerType[volType]);
   const [openFilter, setOpenFilter] = React.useState(isMobile);
   const filterOptions = (
     <TableContainer>
@@ -123,7 +121,7 @@ const Volunteers: FC<{}> = ({ }) => {
               && (
                 <>
                   <FormGroup>
-                    {Object.values(VOLUNTEER_TYPE).map((volType) => (
+                    {Object.values(VolunteerType).map((volType) => (
                       <FormControlLabel
                         control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} key={volType} />}
                         label={<Typography variant="body1">{capitalize(volType)}</Typography>}

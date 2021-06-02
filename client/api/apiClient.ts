@@ -117,7 +117,7 @@ class AxiosApiClient implements ApiClient {
           status: ['accepted', acceptedRole],
         };
         const newQuery = {
-          id: res.signUpId,
+          id: res._id,
           idType: 'signUpId' as SignUpIdType,
         };
         return this.updateSignUp(newQuery, newRequest);
@@ -185,7 +185,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {
-    return this.send(request, 'volunteer', 'put');
+    return this.send(request, `volunteer/${request.id}`, 'put');
   }
 
   async updateProfilePicture(request: UploadImageRequest): Promise<VolunteerData> {
@@ -210,7 +210,7 @@ class AxiosApiClient implements ApiClient {
   }
 
   async getVolunteersById(ids) {
-    return this.send({ ids }, 'volunteer/ids', 'post');
+    return this.send({ ids }, 'volunteer/ids', 'get');
   }
 
   async getSignUpsByEventId(eid) {
