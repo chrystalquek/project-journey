@@ -9,7 +9,7 @@ const insertQuestions = async (questions: Array<Omit<QuestionData, '_id'>>): Pro
   const questionIds: string[] = [];
   const bulkQuestions = questions.map((question) => {
     const questionId = new mongoose.Types.ObjectId();
-    questionIds.push(String(questionId));
+    questionIds.push(questionId.toHexString());
     return {
       _id: questionId,
       formId: question.formId,
