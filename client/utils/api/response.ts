@@ -52,7 +52,7 @@ export type GetCountResponse = {
 
 export type GetEventFeedbackQuestionsResponse = Array<QuestionItem>
 export type CreateSignUpResponse = {
-  signUpId: string
+  _id: string
 }
 
 export type UpdateSignUpResponse = {

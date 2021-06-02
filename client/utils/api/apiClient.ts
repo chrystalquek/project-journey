@@ -109,7 +109,7 @@ class AxiosApiClient implements ApiClient {
           status: ['accepted', acceptedRole],
         };
         const newQuery = {
-          id: res.signUpId,
+          id: res._id,
           idType: 'signUpId' as SignUpIdType,
         };
         return this.updateSignUp(newQuery, newRequest);

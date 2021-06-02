@@ -17,6 +17,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { getEvent } from '@redux/actions/event';
 import CheckIcon from '@material-ui/icons/Check';
 import SearchBar from '@components/common/SearchBar';
+import { VolunteerData } from '@type/volunteer';
 
 export const rowsPerPage = 10;
 
@@ -77,14 +78,14 @@ const EventVolunteers = ({ eid }) => {
   const event = useSelector((state: StoreState) => state.event.form);
   const roles = event?.roles;
 
-  const [allVolunteerIds, setAllVolunteerIds] = useState([]);
+  const [allVolunteerIds, setAllVolunteerIds] = useState<string[]>([]);
   const [allVolunteerData, setAllVolunteerData] = useState({});
-  const [approvedSignUps, setApprovedSignUps] = useState([]);
-  const [nonApprovedSignUps, setNonApprovedSignUps] = useState([]);
+  const [approvedSignUps, setApprovedSignUps] = useState<SignUpData[]>([]);
+  const [nonApprovedSignUps, setNonApprovedSignUps] = useState<SignUpData[]>([]);
   const [selectedRoles, setSelectedRoles] = useState({});
   const [roleVacancies, setRoleVacancies] = useState({});
-  const [displayedApprovedSignUps, setDisplayedApprovedSignUps] = useState([]);
-  const [displayedNonApprovedSignUps, setDisplayedNonApprovedSignUps] = useState([]);
+  const [displayedApprovedSignUps, setDisplayedApprovedSignUps] = useState<SignUpData[]>([]);
+  const [displayedNonApprovedSignUps, setDisplayedNonApprovedSignUps] = useState<SignUpData[]>([]);
 
   useEffect(() => {
     if (eid) {
@@ -105,7 +106,7 @@ const EventVolunteers = ({ eid }) => {
 
   const getVolunteerData = async () => {
     const volunteerData = await dispatch(getVolunteersById(allVolunteerIds))
-    // @ts-ignore type exists
+      // @ts-ignore type exists
       .then(unwrapResult)
       .then((result) => result.data);
     return volunteerData;
@@ -188,12 +189,12 @@ const EventVolunteers = ({ eid }) => {
   };
 
   /** Get roles select menu */
-  const getRoleSelectMenu = (signUp) => (
+  const getRoleSelectMenu = (signUp: SignUpData) => (
     <FormControl variant="outlined" className={classes.selectRole}>
       <Select
         defaultValue={signUp && isStatusApproved(signUp.status) ? signUp.status[1] : 'Role'}
-        value={selectedRoles[signUp.signUpId]}
-        onChange={(e) => handleSelectedRoleChange(signUp.signUpId, e)}
+        value={selectedRoles[signUp._id]}
+        onChange={(e) => handleSelectedRoleChange(signUp._id, e)}
       >
         <MenuItem value="" disabled>
           Preferences
@@ -218,21 +219,21 @@ const EventVolunteers = ({ eid }) => {
     </FormControl>
   );
 
-  const onAssignRole = (signUp) => {
-    const selectedRole = selectedRoles[signUp.signUpId];
+  const onAssignRole = (signUp: SignUpData) => {
+    const selectedRole = selectedRoles[signUp._id];
 
     dispatch(updateSignUpInstant({
       request: { ...signUp, status: ['accepted', selectedRole] },
       query: {
-        id: signUp.signUpId,
+        id: signUp._id,
         idType: 'signUpId',
       },
     }));
   };
 
-  const handleEditingButtonClick = (signUp) => {
+  const handleEditingButtonClick = (signUp: SignUpData) => {
     const signUpIdOfRolesBeingEditedCopy = [...signUpIdOfRolesBeingEdited];
-    const idx = signUpIdOfRolesBeingEditedCopy.indexOf(signUp.signUpId);
+    const idx = signUpIdOfRolesBeingEditedCopy.indexOf(signUp._id);
     if (idx > -1) signUpIdOfRolesBeingEditedCopy.splice(idx, 1);
     setSignUpIdOfRolesBeingEdited(signUpIdOfRolesBeingEditedCopy);
   };
@@ -256,12 +257,12 @@ const EventVolunteers = ({ eid }) => {
 
     const moreButton = (
       <div>
-        <IconButton onClick={(e) => handleClickMoreButton(e, signUp.signUpId)} ref={anchorEl}>
+        <IconButton onClick={(e) => handleClickMoreButton(e, signUp._id)} ref={anchorEl}>
           <MoreVertIcon />
         </IconButton>
         <Popover
-          id={signUp.signUpId}
-          open={openedPopoverId === signUp.signUpId}
+          id={signUp._id}
+          open={openedPopoverId === signUp._id}
           anchorEl={anchorEl}
           onClose={handleCloseMoreButton}
           anchorOrigin={{
@@ -283,7 +284,7 @@ const EventVolunteers = ({ eid }) => {
                 buttonOnClick={() => onUpdateSignUp({
                   request: { ...signUp, status: 'pending' },
                   query: {
-                    id: signUp.signUpId,
+                    id: signUp._id,
                     idType: 'signUpId',
                   },
                 })}
@@ -293,7 +294,7 @@ const EventVolunteers = ({ eid }) => {
               />
             </Grid>
             <Grid item>
-              {getEditRoleButton(signUp.signUpId)}
+              {getEditRoleButton(signUp._id)}
             </Grid>
           </Grid>
         </Popover>
@@ -306,7 +307,7 @@ const EventVolunteers = ({ eid }) => {
         <Grid item>
           <IconButton
             className={classes.tickButton}
-            disabled={roleVacancies[selectedRoles[signUp.signUpId]] === 0}
+            disabled={roleVacancies[selectedRoles[signUp._id]] === 0}
             onClick={() => onAssignRole(signUp)}
           >
             <CheckIcon className={classes.whiteCancelIcon} />
@@ -325,7 +326,7 @@ const EventVolunteers = ({ eid }) => {
 
     return (
       <div>
-        {signUpIdOfRolesBeingEdited.includes(signUp.signUpId) ? editingButtons : moreButton}
+        {signUpIdOfRolesBeingEdited.includes(signUp._id) ? editingButtons : moreButton}
       </div>
     );
   };
@@ -336,7 +337,7 @@ const EventVolunteers = ({ eid }) => {
       <Button
         className={classes.assignButton}
         onClick={() => onAssignRole(signUp)}
-        disabled={!selectedRoles[signUp.signUpId]}
+        disabled={!selectedRoles[signUp._id]}
       >
         Assign
       </Button>
@@ -377,9 +378,9 @@ const EventVolunteers = ({ eid }) => {
 
   const [selectedSort, setSelectedSort] = useState(null);
 
-  const sortByName = (array: SignUpData[]) : SignUpData[] => array
+  const sortByName = (array: SignUpData[]): SignUpData[] => array
     .sort((a, b) => allVolunteerData[a.userId].name.localeCompare(allVolunteerData[b.userId].name));
-  const sortByRole = (array: SignUpData[]) : SignUpData[] => array
+  const sortByRole = (array: SignUpData[]): SignUpData[] => array
     .sort((a, b) => a.status[1].localeCompare(b.status[1]));
 
   /** Search */
@@ -433,11 +434,11 @@ const EventVolunteers = ({ eid }) => {
   const getApprovedVolunteersTableBody = () => displayedApprovedSignUps.map((signUp) => {
     const volunteer = allVolunteerData[signUp.userId];
     return (
-      <TableRow key={signUp.signUpId}>
+      <TableRow key={signUp._id}>
         <TableCell><b>{volunteer?.name}</b></TableCell>
         <TableCell>{volunteer?.mobileNumber}</TableCell>
         <TableCell>
-          {signUpIdOfRolesBeingEdited.includes(signUp.signUpId)
+          {signUpIdOfRolesBeingEdited.includes(signUp._id)
             ? getRoleSelectMenu(signUp)
             : signUp?.status[1]}
         </TableCell>
@@ -451,7 +452,7 @@ const EventVolunteers = ({ eid }) => {
     (signUp) => {
       const volunteer = allVolunteerData[signUp.userId];
       return (
-        <TableRow key={signUp.signUpId}>
+        <TableRow key={signUp._id}>
           <TableCell><b>{volunteer?.name}</b></TableCell>
           <TableCell>{volunteer?.mobileNumber}</TableCell>
           <TableCell>{getRoleSelectMenu(signUp)}</TableCell>
@@ -502,7 +503,7 @@ const EventVolunteers = ({ eid }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                { isApprovedTab
+                {isApprovedTab
                   ? getApprovedVolunteersTableBody()
                   : getNonApprovedSignUpsVolunteersTableBody()}
               </TableBody>

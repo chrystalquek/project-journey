@@ -36,7 +36,7 @@ const initialState: SignUpState = {
 
 // parse all Dates etc before saving to store
 const addToData = (signUps: Array<SignUpData>, state: SignUpState) => {
-  signUps.forEach((signUp) => { state.data[signUp.signUpId] = signUp; });
+  signUps.forEach((signUp) => { state.data[signUp._id] = signUp; });
 };
 
 const signUpSlice = createSlice({
@@ -49,12 +49,12 @@ const signUpSlice = createSlice({
     builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state);
-      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map((signUp) => signUp.signUpId);
+      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map((signUp) => signUp._id);
     });
     builder.addCase(getPendingSignUps.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state);
-      state.pendingSignUps.ids = payload.data.map((signUp) => signUp.signUpId);
+      state.pendingSignUps.ids = payload.data.map((signUp) => signUp._id);
     });
 
     builder.addCase(getSignUps.fulfilled, (state, action) => {
