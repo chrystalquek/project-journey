@@ -1,10 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-
 import SignUp, { SignUpData, SignUpIdType, SignUpStatus } from '../models/SignUp';
 import Event, { RoleData } from '../models/Event';
 import emailService from './email';
-import mongoose from 'mongoose';
-import { Id } from '../types';
 
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
@@ -30,7 +27,7 @@ const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
   }
 };
 
-const readSignUps = async (id: Id, idType: SignUpIdType): Promise<[SignUpData]> => {
+const readSignUps = async (id: string, idType: SignUpIdType): Promise<[SignUpData]> => {
   try {
     let signUp;
     switch (idType) {
@@ -72,7 +69,7 @@ export const checkIfAccepted = (status: SignUpStatus): boolean => Array.isArray(
  * @param newRoleName name of the new role
  * @param volunteerId user id of the volunteer to be added
  */
-const addEventVolunteers = (roles: Array<RoleData>, newRoleName: string, volunteerId: mongoose.Types.ObjectId) => {
+const addEventVolunteers = (roles: Array<RoleData>, newRoleName: string, volunteerId: string) => {
   const updatedRoles = roles.map((role) => {
     if (role.name === newRoleName) {
       role.volunteers.push(volunteerId);
@@ -89,7 +86,7 @@ const addEventVolunteers = (roles: Array<RoleData>, newRoleName: string, volunte
  * @param volunteerId user id of the volunteer to be removed
  */
 const removeEventVolunteers = (roles: Array<RoleData>, oldRoleName: string,
-  volunteerId: mongoose.Types.ObjectId) => {
+  volunteerId: string) => {
   const updatedRoles = roles.map((role) => {
     if (role.name === oldRoleName) {
       const index = role.volunteers.indexOf(volunteerId);
@@ -113,7 +110,7 @@ const removeEventVolunteers = (roles: Array<RoleData>, oldRoleName: string,
  * @param newRoleName new accepted role, if any
  * @param actionType either 'add', 'remove', or 'replace'
  */
-const updateEventRoles = async (eventId: mongoose.Types.ObjectId, volunteerId: mongoose.Types.ObjectId, oldRoleName: string | null,
+const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleName: string | null,
   newRoleName: string | null, actionType: UpdateEventVolunteersAction) => {
   try {
     const unupdatedEvent = await Event.findById(eventId);
@@ -149,7 +146,7 @@ const updateEventRoles = async (eventId: mongoose.Types.ObjectId, volunteerId: m
  * @param idType type of the specified id
  * @param updatedFields updated sign up data
  */
-const updateSignUp = async (id: Id, idType: SignUpIdType,
+const updateSignUp = async (id: string, idType: SignUpIdType,
   updatedFields: SignUpData): Promise<void> => {
   try {
     let oldFields;
@@ -209,7 +206,7 @@ const updateSignUp = async (id: Id, idType: SignUpIdType,
   }
 };
 
-const deleteSignUp = async (id: Id, idType: SignUpIdType): Promise<void> => {
+const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => {
   try {
     let deletedSignUp: SignUpData | null;
     switch (idType) {

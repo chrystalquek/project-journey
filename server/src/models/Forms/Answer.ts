@@ -1,4 +1,5 @@
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
 const AnswerSchema = createSchema({
   questionId: Type.objectId({
@@ -16,6 +17,11 @@ const AnswerSchema = createSchema({
   content: Type.string({ required: true }),
 });
 
-export type AnswerData = Omit<ExtractProps<typeof AnswerSchema>, "__v">;
+export type AnswerData = Omit<ExtractProps<typeof AnswerSchema>, "__v" | "_id" | "questionId" | "userId" | "formId"> & {
+  questionId: string,
+  userId: string,
+  formId?: string
+};
 
-export default typedModel('Answer', AnswerSchema);
+type AnswerModel = AnswerData & mongoose.Document
+export default mongoose.model<AnswerModel>('Answer', AnswerSchema);

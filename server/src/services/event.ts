@@ -1,11 +1,9 @@
 import mongoose from 'mongoose';
-
 import Event, { EventData, EventSearchType } from '../models/Event';
 import util from '../helpers/util';
 import { VolunteerType } from '../models/Volunteer';
-import { Id } from '../types';
 
-const createEvent = async (eventData: EventData): Promise<mongoose.Types.ObjectId> => {
+const createEvent = async (eventData: EventData): Promise<string> => {
   try {
     const eventSchemaData: mongoose.Document = new Event({
       name: eventData.name,
@@ -37,7 +35,7 @@ const createEvent = async (eventData: EventData): Promise<mongoose.Types.ObjectI
  * Retrieves the event with the specified id.
  * @param id event id
  */
-const readEvent = async (id: Id): Promise<EventData> => {
+const readEvent = async (id: string): Promise<EventData> => {
   try {
     const event = await Event.findById(id);
 
@@ -58,7 +56,7 @@ const readEvent = async (id: Id): Promise<EventData> => {
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEventsByIds = async (ids: Id[], eventType: EventSearchType): Promise<EventData[]> => {
+const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promise<EventData[]> => {
   try {
     let events;
     switch (eventType) {
@@ -137,7 +135,7 @@ const readEvents = async (eventType: EventSearchType, volunteerType: VolunteerTy
 };
 
 const updateEvent = async (
-  id: Id,
+  id: string,
   updatedFields: Partial<EventData>,
 ): Promise<void> => {
   try {
@@ -152,7 +150,7 @@ const updateEvent = async (
 };
 
 const cancelEvent = async (
-  id: Id,
+  id: string,
 ): Promise<void> => {
   try {
     await Event.findOneAndUpdate(
@@ -169,7 +167,7 @@ const cancelEvent = async (
   }
 };
 
-const deleteEvent = async (id: Id): Promise<void> => {
+const deleteEvent = async (id: string): Promise<void> => {
   try {
     const event = await Event.findById(id);
 

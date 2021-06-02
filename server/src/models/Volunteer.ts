@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
 export const setPassword = (value: string) => bcrypt.hashSync(value, 10);
 
@@ -170,7 +171,7 @@ export const VolunteerSchema = createSchema({
   })
 });
 
-export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, "__v">;
+export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, "__v" | "_id" | "commitmentApplicationIds"> & { _id: string, commitmentApplicationIds: string[] };
 
 export type VolunteerPublicData = Omit<
   VolunteerData,
@@ -179,4 +180,5 @@ export type VolunteerPublicData = Omit<
   'administratorRemarks'
 >
 
-export default typedModel('Volunteer', VolunteerSchema);
+type VolunteerModel = VolunteerData & mongoose.Document
+export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);

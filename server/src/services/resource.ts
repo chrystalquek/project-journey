@@ -1,6 +1,4 @@
-import mongoose from 'mongoose';
 import Resource, { ResourceData } from '../models/Resource';
-import { Id } from '../types';
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
@@ -15,7 +13,7 @@ const createResource = async (resourceData: ResourceData): Promise<void> => {
   }
 };
 
-const readResource = async (id: Id): Promise<ResourceData> => {
+const readResource = async (id: string): Promise<ResourceData> => {
   try {
     const resource = await Resource.findById(id);
 
@@ -30,7 +28,7 @@ const readResource = async (id: Id): Promise<ResourceData> => {
 };
 
 const updateResource = async (
-  id: Id,
+  id: string,
   updatedFields: ResourceData,
 ): Promise<void> => {
   try {
@@ -44,7 +42,7 @@ const updateResource = async (
   }
 };
 
-const deleteResource = async (id: Id): Promise<void> => {
+const deleteResource = async (id: string): Promise<void> => {
   try {
     const resource = await Resource.findById(id);
 

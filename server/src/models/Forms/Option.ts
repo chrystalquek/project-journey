@@ -1,4 +1,5 @@
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
 const OptionSchema = createSchema({
   questionId: Type.objectId({
@@ -8,6 +9,10 @@ const OptionSchema = createSchema({
   text: Type.string({ required: true }),
 });
 
-export type OptionData = Omit<ExtractProps<typeof OptionSchema>, "__v">;
+export type OptionData = Omit<ExtractProps<typeof OptionSchema>, "__v" | "_id" | "questionId"> & {
+  _id: string,
+  questionId: string
+};
 
-export default typedModel('Option', OptionSchema);
+type OptionModel = OptionData & mongoose.Document
+export default mongoose.model<OptionModel>('Option', OptionSchema);

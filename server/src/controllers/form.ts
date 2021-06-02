@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
 import express from 'express';
-import mongoose from 'mongoose';
 import HTTP_CODES from '../constants/httpCodes';
 import formService from '../services/forms/form';
 import optionsService from '../services/forms/option';
@@ -16,7 +15,7 @@ const createForm = async (req: express.Request, res: express.Response): Promise<
     const { questions, eventId } = req.body as CreateFormQuestionsRequest;
 
     const formId = await formService.createForm({
-      eventId: mongoose.Types.ObjectId(eventId),
+      eventId
     });
 
     const questionsData = questions.map((questionData) => ({

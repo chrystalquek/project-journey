@@ -1,4 +1,5 @@
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
 export const FORM_QUESTION_TYPE = ['shortAnswer', 'mcq', 'checkboxes'] as const
 export type FormQuestionType = (typeof FORM_QUESTION_TYPE)[number]
@@ -17,7 +18,11 @@ const QuestionSchema = createSchema({
   // TODO FE QuestionData has options?: Array<string>;
 });
 
-export type QuestionData = Omit<ExtractProps<typeof QuestionSchema>, "__v">;
+export type QuestionData = Omit<ExtractProps<typeof QuestionSchema>, "__v" | "_id" | "formId"> & {
+  _id: string,
+  formId: string
+};
 
-export default typedModel('Question', QuestionSchema);
+type QuestionModel = QuestionData & mongoose.Document
+export default mongoose.model<QuestionModel>('Question', QuestionSchema);
 

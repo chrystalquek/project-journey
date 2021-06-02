@@ -1,4 +1,5 @@
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
 // types in schema
 export const SIGN_UP_STATUS = ['pending', ['accepted', String], 'rejected'] as const;
@@ -23,6 +24,7 @@ const SignUpSchema = createSchema({
   }),
 });
 
-export type SignUpData = Omit<ExtractProps<typeof SignUpSchema>, "__v">;
+export type SignUpData = Omit<ExtractProps<typeof SignUpSchema>, "__v" | "_id" | "eventId" | "userId"> & { _id: string, eventId: string, userId: string };
 
-export default typedModel('SignUp', SignUpSchema);
+type SignUpModel = SignUpData & mongoose.Document
+export default mongoose.model<SignUpModel>('SignUp', SignUpSchema);

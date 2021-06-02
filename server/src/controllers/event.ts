@@ -5,7 +5,6 @@ import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
 import { EventData, EventSearchType } from '../models/Event';
 import { VolunteerType } from '../models/Volunteer';
-import { Id } from '../types';
 
 const createEvent = async (
   req: express.Request,
@@ -92,7 +91,7 @@ const readSignedUpEvents = async (req: express.Request, res: express.Response) =
       ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
       : signUps;
 
-    const signedUpEventsIds: Id[] = filteredSignUps.map((signUp) => signUp.eventId);
+    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.eventId);
 
     const signedUpEvents = await eventService
       .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);

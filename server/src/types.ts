@@ -1,8 +1,5 @@
 // NOTE do not abuse this file. Most types should be in models/controller files
 import { VolunteerData } from "./models/Volunteer"
-import mongoose from 'mongoose'
-
-export type Id = string | mongoose.Types.ObjectId
 
 export type EnvironmentConstants = {
     port: number,

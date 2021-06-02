@@ -1,4 +1,5 @@
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
 const FormSchema = createSchema({
   eventId: Type.objectId({
@@ -7,7 +8,11 @@ const FormSchema = createSchema({
   }),
 });
 
-export type FormData = Omit<ExtractProps<typeof FormSchema>, "__v">;
+export type FormData = Omit<ExtractProps<typeof FormSchema>, "__v" | "_id" | "eventId"> & {
+  _id: string,
+  eventId: string
+};
 
-export default typedModel('Form', FormSchema);
+type FormModel = FormData & mongoose.Document
+export default mongoose.model<FormModel>('Form', FormSchema);
 

@@ -9,6 +9,6 @@ const OpportunitySchema = createSchema({
   photo: Type.string({ required: true }),
 });
 
-export type OpportunityData = EventData & Omit<ExtractProps<typeof OpportunitySchema>, "__v">;
+export type OpportunityData = EventData & ExtractProps<typeof OpportunitySchema>;
 
 export default Event.discriminator('Opportunity', OpportunitySchema) as mongoose.Model<OpportunityModel>;

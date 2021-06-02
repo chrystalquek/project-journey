@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 import CommitmentApplication, { CommitmentApplicationData, CommitmentApplicationStatus } from '../models/CommitmentApplication';
-import { Id } from '../types';
 
 const createCommitmentApplication = async (
   commitmentApplicationData: Partial<CommitmentApplicationData>,
 ): Promise<CommitmentApplicationData> => {
   const commitmentApplicationSchemaData: mongoose.Document = new CommitmentApplication({
-    volunteerId: commitmentApplicationData.volunteerId,
+    volunteerId: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId)
   });
   const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
   return savedCommitmentApplication.toObject();
@@ -21,7 +20,7 @@ const readCommitmentApplications = async (status?: CommitmentApplicationStatus):
 };
 
 const updateCommitmentApplication = async (
-  id: Id,
+  id: string,
   updatedFields: Partial<CommitmentApplicationData>,
 ): Promise<CommitmentApplicationData> => {
   try {

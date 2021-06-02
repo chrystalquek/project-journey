@@ -1,17 +1,15 @@
 import mongoose from 'mongoose';
 import Question, { QuestionData } from '../../models/Forms/Question';
-import { Id } from '../../types';
-
 
 /**
  * Bulk-insert questions attached to form
  * @param questions question data to be created
  */
-const insertQuestions = async (questions: Array<Omit<QuestionData, '_id'>>): Promise<Array<mongoose.Types.ObjectId>> => {
-  const questionIds: mongoose.Types.ObjectId[] = [];
+const insertQuestions = async (questions: Array<Omit<QuestionData, '_id'>>): Promise<Array<string>> => {
+  const questionIds: string[] = [];
   const bulkQuestions = questions.map((question) => {
     const questionId = new mongoose.Types.ObjectId();
-    questionIds.push(questionId);
+    questionIds.push(String(questionId));
     return {
       _id: questionId,
       formId: question.formId,
@@ -41,7 +39,7 @@ const updateQuestions = async (updatedQuestions: Array<Partial<QuestionData>>): 
  * Retrieve all questsions from specified form id
  * @param formId Mongoose form id
  */
-const getQuestions = async (formId: Id): Promise<Array<QuestionData>> => {
+const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
   const questions = await Question.find({
     formId,
   }).lean().exec();

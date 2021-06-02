@@ -1,7 +1,6 @@
 import express from 'express';
 import volunteerService from '../services/volunteer';
 import commitmentApplicationService from '../services/commitmentApplication';
-
 import HTTP_CODES from '../constants/httpCodes';
 import { VolunteerData, VolunteerType, VOLUNTEER_TYPE } from '../models/Volunteer';
 
@@ -81,8 +80,8 @@ const getAllVolunteerDetails = async (
   try {
     // handles both searching volunteers and returning all volunteers
 
-    const volunteerType = req.query.volunteerType
-      ? ((req.query.volunteerType as string).split(',')).map((volType) => volType as VolunteerType)
+    const volunteerTypes = req.query.volunteerTypes
+      ? ((req.query.volunteerTypes as string).split(',')).map((volType) => volType as VolunteerType)
       : VOLUNTEER_TYPE;
 
     const pageNo = Number(req.query.pageNo);
@@ -95,7 +94,7 @@ const getAllVolunteerDetails = async (
     const limit = withPagination ? size : 0;
 
     const volunteersDetails = await volunteerService.getAllVolunteers(
-      volunteerType, req.query.name as string, req.query.sort as string, skip, limit,
+      volunteerTypes, req.query.name as string, req.query.sort as string, skip, limit,
     );
     res.status(HTTP_CODES.OK).json(volunteersDetails);
   } catch (error) {

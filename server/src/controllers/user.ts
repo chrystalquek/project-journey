@@ -2,8 +2,6 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { getUser } from '../services/user';
-
-
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
 import volunteerService from '../services/volunteer';

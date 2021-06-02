@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
 import { VOLUNTEER_TYPE } from './Volunteer';
 
 const options = { discriminatorKey: 'eventType' };
@@ -12,7 +12,7 @@ export type RoleData = {
   name: string;
   description: string;
   capacity: number;
-  volunteers: mongoose.Types.ObjectId[];
+  volunteers: string[];
 }
 
 const CONTENT_TYPE = ['pdf', 'video', 'image', 'links', 'document']
@@ -65,6 +65,10 @@ const EventSchema = createSchema(
   }, options
 )
 
-export type EventData = Omit<ExtractProps<typeof EventSchema>, "__v">;
+export type EventData = Omit<ExtractProps<typeof EventSchema>, "__v" | "_id" | "roles"> & {
+  _id: string,
+  roles: RoleData[]
+};
 
-export default typedModel('Event', EventSchema);
+type EventModel = EventData & mongoose.Document
+export default mongoose.model<EventModel>('Event', EventSchema);

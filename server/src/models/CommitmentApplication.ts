@@ -1,4 +1,5 @@
-import { Type, createSchema, typedModel, ExtractProps } from 'ts-mongoose';
+import { Type, createSchema, ExtractProps } from 'ts-mongoose';
+import mongoose from 'mongoose';
 
 export const COMMITMENT_APPLICATION_STATUS = ['pending', 'accepted', 'rejected'] as const;
 export type CommitmentApplicationStatus = (typeof COMMITMENT_APPLICATION_STATUS)[number]
@@ -19,6 +20,7 @@ const CommitmentApplicationSchema = createSchema({
   }),
 });
 
-export type CommitmentApplicationData = Omit<ExtractProps<typeof CommitmentApplicationSchema>, "__v">;
+export type CommitmentApplicationData = Omit<ExtractProps<typeof CommitmentApplicationSchema>, "__v" | "_id" | "volunteerId"> & { _id: string, volunteerId: string };
 
-export default typedModel('CommitmentApplication', CommitmentApplicationSchema);
+type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document
+export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema)
