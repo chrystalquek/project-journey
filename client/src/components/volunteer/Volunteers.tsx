@@ -35,6 +35,8 @@ import { getPaginatedVolunteers } from '@redux/actions/volunteer/index';
 import { formatDDMMYYYY } from '@utils/helpers/date';
 import { VolunteerSortFieldsType } from '@redux/reducers/volunteer/index';
 import LoadingIndicator from '@components/common/LoadingIndicator';
+import ErrorPage from '@components/common/ErrorPage';
+
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -71,23 +73,23 @@ const Volunteers: FC<{}> = ({ }) => {
   const { volunteerType } = volunteerState.collate.filters;
   const { sort } = volunteerState.collate;
   const { volunteers } = volunteerState;
-  const { total, pageNo } = volunteerState.pagination;
-  const { loadingStatus } = volunteerState
+  const { count: total, pageNo } = volunteerState.pagination;
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getPaginatedVolunteers({}));
+    dispatch(getPaginatedVolunteers({}))
   }, []);
-
 
   // filter functions
   const handleFilterVolunteerTypeChange = (event) => {
     dispatch(getPaginatedVolunteers({
-      filters: {
-        volunteerType: {
-          ...volunteerType,
-          [event.target.name]: !volunteerType[event.target.name],
-        },
+      newCollate: {
+        filters: {
+          volunteerType: {
+            ...volunteerType,
+            [event.target.name]: !volunteerType[event.target.name],
+          },
+        }
       }
     }))
   };
@@ -96,8 +98,10 @@ const Volunteers: FC<{}> = ({ }) => {
     Object.values(VolunteerType).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
 
     dispatch(getPaginatedVolunteers({
-      filters: {
-        volunteerType: clearedVolunteerTypeFilters
+      newCollate: {
+        filters: {
+          volunteerType: clearedVolunteerTypeFilters
+        }
       }
     }))
   }
@@ -140,14 +144,16 @@ const Volunteers: FC<{}> = ({ }) => {
   );
 
   // search function
-  const onSearch = (newNameToSearch: string) => dispatch(getPaginatedVolunteers({ search: { name: newNameToSearch } }))
+  const onSearch = (newNameToSearch: string) => {
+    dispatch(getPaginatedVolunteers({ newCollate: { search: { name: newNameToSearch } } }))
+  }
 
   // search component
   const searchBar = <SearchBar setFilterFunction={onSearch} />;
 
   // sort function
   const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
-    dispatch(getPaginatedVolunteers({ sort: event.target.value as VolunteerSortFieldsType }));
+    dispatch(getPaginatedVolunteers({ newCollate: { sort: event.target.value as VolunteerSortFieldsType } }));
   };
 
   // sort component
@@ -167,7 +173,7 @@ const Volunteers: FC<{}> = ({ }) => {
 
   // change page function
   const handleChangePage = (event, newPage: number) => {
-    dispatch(getPaginatedVolunteers({ pageNo: newPage }));
+    dispatch(getPaginatedVolunteers({ newPagination: { pageNo: newPage } }));
   };
 
 
@@ -204,9 +210,17 @@ const Volunteers: FC<{}> = ({ }) => {
     </>
   );
 
+  // use these for all pages
+  const { isLoading, error } = volunteerState
+  if (isLoading) {
+    return <LoadingIndicator status={isLoading} />
+  }
+  if (error) {
+    return <ErrorPage message={error.message} />
+  }
+
   return (
     <>
-      <LoadingIndicator status={loadingStatus} />
       {!isMobile
         ? (
           <Grid >

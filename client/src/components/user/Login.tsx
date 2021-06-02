@@ -11,6 +11,7 @@ import { TextField } from 'formik-material-ui';
 
 import { LoginArgs } from '@redux/actions/user';
 import { UserState } from '@redux/reducers/user';
+import { HOME_ROUTE } from '@constants/routes';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -79,13 +80,13 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
 
   useEffect(() => {
     if (user.token) {
-      router.push('/');
+      router.push(HOME_ROUTE);
     }
   }, [user]);
 
   useEffect(() => {
     if (user.status === 'fulfilled') {
-      router.push('/');
+      router.push(HOME_ROUTE);
     }
   }, [user.status]);
 

@@ -1,6 +1,6 @@
 
 export type Pagination = {
-    total: number;
+    count: number;
     pageNo: number;
     size: number;
 };

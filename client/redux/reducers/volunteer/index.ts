@@ -1,15 +1,16 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { VolunteerData, VOLUNTEER_TYPE } from 'types/volunteer';
+import { createSlice, SerializedError } from '@reduxjs/toolkit';
+import { VolunteerData, VolunteerType } from 'types/volunteer';
 import { initializeFilterObject } from '@utils/helpers/filterObject';
 import { getPaginatedVolunteers } from '@redux/actions/volunteer/index';
-import { GetVolunteersPaginatedRequest } from 'api/request';
 import { rowsPerPage } from '@components/volunteer/Volunteers';
 import { Pagination } from '../../../types/Pagination';
 
 export type VolunteerSortFieldsType = 'name' | 'createdAt';
+
+// collate objects can be defined later on and should have filters, search, sort fields too
 export type VolunteerCollate = {
     filters: {
-        volunteerType: Record<VOLUNTEER_TYPE, boolean>
+        volunteerType: Record<VolunteerType, boolean>
     },
     search: {
         name: string
@@ -17,19 +18,24 @@ export type VolunteerCollate = {
     sort: VolunteerSortFieldsType
 }
 
+// all state should have a loadingStatus and error
+// state should contain most of state of the component, including collate and pagination
 export type VolunteerState = {
-    loadingStatus: boolean,
+    isLoading: boolean,
+    error: SerializedError,
     volunteers: VolunteerData[],
     collate: VolunteerCollate,
     pagination: Pagination
 }
 
 const initialState: VolunteerState = {
-    loadingStatus: false,
+    isLoading: false,
+    error: null,
     volunteers: [],
     collate: {
         filters: {
-            volunteerType: initializeFilterObject(VOLUNTEER_TYPE),
+            // use these helper function for filter objects
+            volunteerType: initializeFilterObject(VolunteerType),
         },
         search: {
             name: '',
@@ -37,7 +43,7 @@ const initialState: VolunteerState = {
         sort: 'name',
     },
     pagination: {
-        total: 0,
+        count: 0,
         pageNo: 0,
         size: rowsPerPage
     },
@@ -49,28 +55,19 @@ const volunteerSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getPaginatedVolunteers.pending, (state) => {
-            state.volunteers = [];
-            state.loadingStatus = true;
+            state.isLoading = true;
         });
         builder.addCase(getPaginatedVolunteers.fulfilled, (state, action) => {
             const { payload } = action;
             state.volunteers = payload.response.data
-            state.pagination.size = payload.response.count
-            state.collate = {
-                filters: payload.query.filters ?? state.collate.filters,
-                search: payload.query.search ?? state.collate.search,
-                sort: payload.query.sort ?? state.collate.sort
-            }
-            state.pagination = {
-                total: payload.response.count,
-                pageNo: payload.query.pageNo ?? state.pagination.pageNo,
-                size: rowsPerPage
-            }
-            state.loadingStatus = false;
+            state.collate = Object.assign(state.collate, payload.newCollate)
+            state.pagination = Object.assign(state.pagination, payload.newPagination)
+            state.pagination.count = payload.response.count
+            state.isLoading = false;
         });
-        builder.addCase(getPaginatedVolunteers.rejected, (state) => {
-            state.volunteers = [];
-            state.loadingStatus = false;
+        builder.addCase(getPaginatedVolunteers.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error; // catches http errors too (other than 404 which is caught by NEXT)
         });
     },
 });
