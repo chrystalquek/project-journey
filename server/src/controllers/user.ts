@@ -1,4 +1,4 @@
-import express from 'express';
+import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { getUser } from '../services/user';
@@ -7,7 +7,7 @@ import { accessTokenSecret } from '../helpers/auth';
 import volunteerService from '../services/volunteer';
 import { VolunteerData } from '../models/Volunteer';
 
-const login = async (req: express.Request, res: express.Response) => {
+const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   try {
@@ -40,7 +40,7 @@ const login = async (req: express.Request, res: express.Response) => {
 };
 
 // TODO can remove?
-const updatePassword = async (req: express.Request, res: express.Response) => {
+const updatePassword = async (req: Request, res: Response): Promise<void> => {
   const {
     email,
     password,

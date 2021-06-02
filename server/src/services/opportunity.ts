@@ -28,7 +28,7 @@ const createOpportunity = async (opportunityData: OpportunityData): Promise<void
   }
 };
 
-const readOpportunity = async (id: string) => {
+const getOpportunity = async (id: string) => {
   try {
     const opportunity = await Opportunity.findById(id);
 
@@ -67,7 +67,7 @@ const deleteOpportunity = async (id: string): Promise<void> => {
 
 export default {
   createOpportunity,
-  readOpportunity,
+  getOpportunity,
   updateOpportunity,
   deleteOpportunity,
 };

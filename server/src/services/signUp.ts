@@ -27,29 +27,29 @@ const createSignUp = async (signUpData: Omit<SignUpData, 'signUpId'>) => {
   }
 };
 
-const readSignUps = async (id: string, idType: SignUpIdType): Promise<[SignUpData]> => {
+const getSignUps = async (id: string, idType: SignUpIdType): Promise<SignUpData[]> => {
   try {
-    let signUp;
+    let signUps: SignUpData[];
     switch (idType) {
       case 'signUpId':
-        signUp = await SignUp.find({ signUpId: id });
+        signUps = await SignUp.find({ signUpId: id });
         break;
       case 'eventId':
-        signUp = await SignUp.find({ eventId: id });
+        signUps = await SignUp.find({ eventId: id });
         break;
       case 'userId':
-        signUp = await SignUp.find({ userId: id });
+        signUps = await SignUp.find({ userId: id });
         break;
       default: throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
 
-    return signUp;
+    return signUps;
   } catch (err) {
     throw new Error(err.msg);
   }
 };
 
-const readPendingSignUps = async () => {
+const getPendingSignUps = async () => {
   try {
     return SignUp.find({ status: 'pending' });
   } catch (err) {
@@ -85,14 +85,14 @@ const addEventVolunteers = (roles: Array<RoleData>, newRoleName: string, volunte
  * @param oldRoleName name of the previous role
  * @param volunteerId user id of the volunteer to be removed
  */
-const removeEventVolunteers = (roles: Array<RoleData>, oldRoleName: string,
-  volunteerId: string) => {
+const removeEventVolunteers = (roles: RoleData[], oldRoleName: string,
+  volunteerId: string): RoleData[] => {
   const updatedRoles = roles.map((role) => {
     if (role.name === oldRoleName) {
       const index = role.volunteers.indexOf(volunteerId);
 
       if (index === -1) {
-        return new Error('Volunteer is not found in the specified event.');
+        throw new Error('Volunteer is not found in the specified event.');
       }
 
       role.volunteers.splice(index, 1);
@@ -110,24 +110,23 @@ const removeEventVolunteers = (roles: Array<RoleData>, oldRoleName: string,
  * @param newRoleName new accepted role, if any
  * @param actionType either 'add', 'remove', or 'replace'
  */
-const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleName: string | null,
-  newRoleName: string | null, actionType: UpdateEventVolunteersAction) => {
+const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleName: string,
+  newRoleName: string, actionType: UpdateEventVolunteersAction): Promise<void> => {
   try {
     const unupdatedEvent = await Event.findById(eventId);
-    let eventRoles;
+    let eventRoles: RoleData[];
 
     if (unupdatedEvent && unupdatedEvent.roles) {
       switch (actionType) {
         case 'add':
-          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName as string, volunteerId);
+          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName, volunteerId);
           break;
         case 'remove':
-          eventRoles = removeEventVolunteers(unupdatedEvent.roles, oldRoleName as string,
-            volunteerId);
+          eventRoles = removeEventVolunteers(unupdatedEvent.roles, oldRoleName, volunteerId);
           break;
         case 'replace':
-          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName as string, volunteerId);
-          eventRoles = removeEventVolunteers(eventRoles, oldRoleName as string, volunteerId);
+          eventRoles = addEventVolunteers(unupdatedEvent.roles, newRoleName, volunteerId);
+          eventRoles = removeEventVolunteers(eventRoles, oldRoleName, volunteerId);
           break;
         default:
           throw new Error('Invalid action type');
@@ -184,7 +183,7 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
     /** Not accepted --> Accepted : Add */
     if (!checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)) {
       updateEventRoles(oldFields.eventId, oldFields.userId,
-        null, updatedFields.status[1], 'add');
+        '', updatedFields.status[1], 'add');
 
       emailService.sendEmail('WAITLIST_TO_CONFIRMED', updatedFields.userId, updatedFields.eventId);
     }
@@ -192,7 +191,7 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
     /** Accepted --> Not Accepted : Remove */
     if (checkIfAccepted(oldFields.status) && !checkIfAccepted(updatedFields.status)) {
       updateEventRoles(oldFields.eventId, oldFields.userId,
-        oldFields.status[1], null, 'remove');
+        oldFields.status[1], '', 'remove');
     }
 
     /** Accepted --> Accepted but acceptedRole changed : Replace */
@@ -224,7 +223,7 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
     }
 
     if (deletedSignUp && checkIfAccepted(deletedSignUp.status)) {
-      updateEventRoles(deletedSignUp.eventId, deletedSignUp.userId, deletedSignUp.status[1], null, 'remove');
+      updateEventRoles(deletedSignUp.eventId, deletedSignUp.userId, deletedSignUp.status[1], '', 'remove');
     }
   } catch (err) {
     throw new Error(err.msg);
@@ -233,8 +232,8 @@ const deleteSignUp = async (id: string, idType: SignUpIdType): Promise<void> => 
 
 export default {
   createSignUp,
-  readSignUps,
-  readPendingSignUps,
+  getSignUps,
+  getPendingSignUps,
   updateSignUp,
   deleteSignUp,
 };

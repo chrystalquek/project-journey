@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response } from 'express';
 import imageService from '../services/image';
 import volunteerService from '../services/volunteer';
 
@@ -6,12 +6,11 @@ import HTTP_CODES from '../constants/httpCodes';
 import { VolunteerData } from '../models/Volunteer';
 
 // TODO authentication not done in anticipation of changes made here
-
-const uploadImage = async (req, res: express.Response) => {
+const uploadImage = async (req: Request, res: Response): Promise<void> => {
   try {
     const imageData: ImageRequest = {
       email: req.body.email,
-      imageName: req.file.filename,
+      imageName: req.body.file.filename,
     };
     const response = await imageService.uploadImage(imageData);
     res.status(HTTP_CODES.OK).json(response);
@@ -20,11 +19,11 @@ const uploadImage = async (req, res: express.Response) => {
   }
 };
 
-const updateProfilePicture = async (req, res: express.Response) => {
+const updateProfilePicture = async (req: Request, res: Response): Promise<void> => {
   try {
     const imageData: ImageRequest = {
       email: req.body.email,
-      imageName: req.file.filename,
+      imageName: req.body.file.filename,
     };
     const imageResponse = await imageService.uploadImage(imageData);
     const response = await volunteerService.updateVolunteerDetails(
@@ -37,7 +36,7 @@ const updateProfilePicture = async (req, res: express.Response) => {
   }
 };
 
-const deleteImageWithEmail = async (req: express.Request, res: express.Response) => {
+const deleteImageWithEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     // if (typeof req.query.email !== 'string') {
     //   throw new Error("Email field is not string");

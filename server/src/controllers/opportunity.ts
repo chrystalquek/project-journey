@@ -1,14 +1,12 @@
-import express from 'express';
+import { Request, Response } from 'express';
 import HTTP_CODES from '../constants/httpCodes';
 import { OpportunityData } from '../models/Opportunity';
 import opportunityService from '../services/opportunity';
 
-const createOpportunity = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const createOpportunity = async (req: Request, res: Response): Promise<void> => {
   try {
-    await opportunityService.createOpportunity(req.body as OpportunityData);
+    const opportunityData: OpportunityData = req.body;
+    await opportunityService.createOpportunity(opportunityData);
     res.status(HTTP_CODES.OK).send('Opportunity data created');
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -17,12 +15,9 @@ const createOpportunity = async (
   }
 };
 
-const readOpportunity = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const getOpportunity = async (req: Request, res: Response): Promise<void> => {
   try {
-    const opportunity = await opportunityService.readOpportunity(req.params.id);
+    const opportunity = await opportunityService.getOpportunity(req.params.id);
 
     if (req.user.volunteerType === 'ad-hoc' && opportunity.volunteerType === 'committed') {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
@@ -36,10 +31,10 @@ const readOpportunity = async (
   }
 };
 
-const updateOpportunity = async (req: express.Request, res: express.Response) => {
+const updateOpportunity = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const updatedFields = req.body as OpportunityData;
+    const updatedFields: OpportunityData = req.body;
 
     await opportunityService.updateOpportunity(id, updatedFields);
 
@@ -51,7 +46,7 @@ const updateOpportunity = async (req: express.Request, res: express.Response) =>
   }
 };
 
-const deleteOpportunity = async (req: express.Request, res: express.Response) => {
+const deleteOpportunity = async (req: Request, res: Response): Promise<void> => {
   try {
     await opportunityService.deleteOpportunity(req.params.id);
     res.status(HTTP_CODES.OK).send('Opportunity data deleted');
@@ -64,7 +59,7 @@ const deleteOpportunity = async (req: express.Request, res: express.Response) =>
 
 export default {
   createOpportunity,
-  readOpportunity,
+  getOpportunity,
   updateOpportunity,
   deleteOpportunity,
 };

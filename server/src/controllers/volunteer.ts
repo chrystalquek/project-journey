@@ -1,21 +1,18 @@
-import express from 'express';
+import { Response, Request } from 'express';
 import volunteerService from '../services/volunteer';
 import commitmentApplicationService from '../services/commitmentApplication';
 import HTTP_CODES from '../constants/httpCodes';
 import { VolunteerData, VolunteerType, VOLUNTEER_TYPE } from '../models/Volunteer';
 
-const createNewVolunteer = async (
-  req: express.Request,
-  res: express.Response,
-) => {
+const createVolunteer = async (req: Request, res: Response): Promise<void> => {
   try {
+    const volunteerData: VolunteerData = req.body;
     // assuming we create a few fixed admin accounts for biab, should only be able to create ad-hoc
-    if (req.body.volunteerType !== 'ad-hoc') {
+    if (volunteerData.volunteerType !== 'ad-hoc') {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
       return;
     }
-
-    await volunteerService.addNewVolunteer(req.body as VolunteerData);
+    await volunteerService.createVolunteer(volunteerData);
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
@@ -25,10 +22,7 @@ const createNewVolunteer = async (
 };
 
 // BY EMAIL
-const getVolunteerDetails = async (
-  req: express.Request,
-  res: express.Response,
-) => {
+const getVolunteerDetailsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const volunteerDetails = await volunteerService.getVolunteer(
       req.params.email,
@@ -50,10 +44,7 @@ const getVolunteerDetails = async (
 };
 
 // BY ID
-const getVolunteerDetailsById = async (
-  req: express.Request,
-  res: express.Response,
-) => {
+const getVolunteerDetailsById = async (req: Request, res: Response): Promise<void> => {
   try {
     if (String(req.user._id) !== req.params.id) {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
@@ -73,10 +64,7 @@ const getVolunteerDetailsById = async (
   }
 };
 
-const getAllVolunteerDetails = async (
-  req: express.Request,
-  res: express.Response,
-) => {
+const getAllVolunteerDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     // handles both searching volunteers and returning all volunteers
 
@@ -108,13 +96,10 @@ const getAllVolunteerDetails = async (
  * Retrieves sign ups that are pending approval
  * @return number of pending sign ups
  */
-const getPendingVolunteers = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const getPendingVolunteers = async (req: Request, res: Response): Promise<void> => {
   try {
     const pendingCommitmentApplications = await
-      commitmentApplicationService.readCommitmentApplications(
+      commitmentApplicationService.getCommitmentApplications(
         'pending',
       );
 
@@ -122,7 +107,7 @@ const getPendingVolunteers = async (
       (commitmentApplication) => commitmentApplication.volunteerId,
     );
 
-    const pendingVolunteers = await volunteerService.readVolunteersByIds(
+    const pendingVolunteers = await volunteerService.getVolunteersByIds(
       pendingVolunteersIds,
     );
 
@@ -134,13 +119,10 @@ const getPendingVolunteers = async (
   }
 };
 
-const readVolunteersByIds = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<void> => {
+const getVolunteersByIds = async (req: Request, res: Response): Promise<void> => {
   try {
     const { ids } = req.body;
-    const volunteers = await volunteerService.readVolunteersByIds(ids);
+    const volunteers = await volunteerService.getVolunteersByIds(ids);
 
     res.status(HTTP_CODES.OK).json({ data: volunteers });
   } catch (err) {
@@ -150,7 +132,7 @@ const readVolunteersByIds = async (
   }
 };
 
-const updateVolunteer = async (req: express.Request, res: express.Response) => {
+const updateVolunteer = async (req: Request, res: Response): Promise<void> => {
   try {
     const volunteerId = req.params.id;
     if (String(req.user._id) !== volunteerId) {
@@ -158,8 +140,10 @@ const updateVolunteer = async (req: express.Request, res: express.Response) => {
       return;
     }
 
+    const { updatedVolunteerData }: { updatedVolunteerData: Partial<VolunteerData> } = req.body;
+
     const savedVolunteerData = await volunteerService.updateVolunteer(
-      volunteerId, req.body.updatedVolunteerData as Partial<VolunteerData>,
+      volunteerId, updatedVolunteerData,
     );
     res.status(HTTP_CODES.OK).json(savedVolunteerData);
   } catch (error) {
@@ -169,7 +153,7 @@ const updateVolunteer = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const removeVolunteer = async (req: express.Request, res: express.Response) => {
+const deleteVolunteer = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body;
     await volunteerService.deleteVolunteer(email);
@@ -182,12 +166,12 @@ const removeVolunteer = async (req: express.Request, res: express.Response) => {
 };
 
 export default {
-  createNewVolunteer,
-  getVolunteerDetails,
+  createVolunteer,
+  getVolunteerDetailsByEmail,
   getVolunteerDetailsById,
   getAllVolunteerDetails,
   getPendingVolunteers,
-  removeVolunteer,
+  deleteVolunteer,
   updateVolunteer,
-  readVolunteersByIds,
+  getVolunteersByIds,
 };

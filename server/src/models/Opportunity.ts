@@ -10,5 +10,6 @@ const OpportunitySchema = createSchema({
 });
 
 export type OpportunityData = EventData & ExtractProps<typeof OpportunitySchema>;
+const opportunityModel: mongoose.Model<OpportunityModel> = Event.discriminator('Opportunity', OpportunitySchema);
 
-export default Event.discriminator('Opportunity', OpportunitySchema) as mongoose.Model<OpportunityModel>;
+export default opportunityModel;

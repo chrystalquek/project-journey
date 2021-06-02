@@ -13,7 +13,7 @@ router.post(
 );
 
 router.get('/',
-  commitmentApplicationController.readCommitmentApplications);
+  commitmentApplicationController.getCommitmentApplications);
 
 // @route   PUT /commitment-application
 // @desc    Update a commitmentApplication by id
