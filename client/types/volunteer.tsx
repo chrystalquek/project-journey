@@ -111,9 +111,6 @@ export type VolunteerData = {
   workshopsCount: number;
   hangoutsCount: number;
 
-  // Record of past events
-  pastEventIds: Array<string>;
-
   // Record of commitment applications
   commitmentApplicationIds: Array<string>;
 
