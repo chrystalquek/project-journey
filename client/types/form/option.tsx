@@ -4,4 +4,7 @@ export type OptionData = {
     text: string;
 }
 
-export type OptionType = { value: any; label: string };
+export type OptionType = {
+    value: any;
+    label: string;
+}

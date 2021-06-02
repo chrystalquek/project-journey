@@ -22,4 +22,3 @@ export type FormStatus = {
         acceptedSignUp: SignUpData | null,
     }
 }
-

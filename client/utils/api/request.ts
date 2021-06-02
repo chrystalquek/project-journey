@@ -30,7 +30,7 @@ export type CommitmentApplicationQueryParams = {
   status: CommitmentApplicationStatus
 }
 
-type EventPostData = Omit<EventData, '_id'> & { questions: Array<QuestionsOptionsRequestData> }
+type EventPostData = Omit<EventData, '_id' | 'createdAt'> & { questions: Array<QuestionsOptionsRequestData> }
 
 export type CreateEventRequest = EventPostData;
 
