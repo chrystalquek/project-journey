@@ -113,7 +113,6 @@ const administratorRemarks = body('administratorRemarks').isString();
 const volunteeringSessionsCount = body('volunteeringSessionsCount').isInt();
 const workshopsCount = body('workshopsCount').isInt();
 const hangoutsCount = body('hangoutsCount').isInt();
-const pastEventIds = body('pastEventIds').isArray();
 const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
 const sessionPreference = body('sessionPreference').isString().optional();
 
@@ -163,7 +162,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         volunteeringSessionsCount,
         workshopsCount,
         hangoutsCount,
-        pastEventIds,
         sessionsPerMonth,
         sessionPreference,
 

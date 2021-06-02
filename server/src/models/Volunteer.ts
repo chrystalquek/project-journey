@@ -144,17 +144,6 @@ export const VolunteerSchema = createSchema({
     default: 0
   }),
 
-  // Past Events
-  // TODO how is this even updated?
-  pastEventIds: Type.array({
-    required: true,
-    default: []
-  })
-    .of(Type.objectId({
-      required: true,
-      ref: 'Event'
-    })),
-
   // Submitted Commitment Application
   commitmentApplicationIds: Type.array({
     required: true,
