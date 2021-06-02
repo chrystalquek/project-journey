@@ -9,7 +9,6 @@ export type SignUpStatus = (typeof SIGN_UP_STATUS)[number]
 export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
 
 const SignUpSchema = createSchema({
-  signUpId: Type.objectId({ required: true }), // TODO change to _id
   eventId: Type.objectId({ required: true }),
   userId: Type.objectId({ required: true }),
   status: Type.mixed({
