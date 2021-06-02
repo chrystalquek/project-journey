@@ -7,7 +7,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
 import { VolunteerType } from '@type/volunteer';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@redux/store';
 import { uploadImage } from '@redux/actions/image';
 import { useRouter } from 'next/router';
 import { SignUpResponse } from 'api/response';
@@ -64,7 +64,7 @@ const SignUpFormGenerator = ({
 }: FormGeneratorProps) => {
   const classes = useStyles();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');

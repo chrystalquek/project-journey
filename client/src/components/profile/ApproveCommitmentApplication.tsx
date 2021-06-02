@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { ActionableDialog } from '@components/common/ActionableDialog';
-import { useDispatch, useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { VolunteerType } from '@type/volunteer';
@@ -21,9 +20,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ApproveCommitmentApplication = ({ commitmentApplication }) => {
   const classes = useStyles()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const profilePageData = useSelector((state: StoreState) => state.profilePage.data);
+  const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   const DialogContent = "Are you sure you want to approve " + profilePageData.name + "?"
 

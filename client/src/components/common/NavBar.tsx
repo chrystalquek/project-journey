@@ -7,9 +7,7 @@ import {
   useTheme,
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { VolunteerData } from 'types/volunteer';
-import { useDispatch, useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { reset } from '@redux/reducers/loading';
 import DesktopNavBar from './navbar-component/DesktopNavBar';
 import MobileNavBar from './navbar-component/MobileNavBar';
@@ -27,9 +25,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 function NavBar() {
   const classes = useStyles();
   const theme = useTheme();
-  const userData = useSelector((state: StoreState) => state.user.user);
+  const userData = useAppSelector((state) => state.user.user);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   dispatch(reset());
 
   return (

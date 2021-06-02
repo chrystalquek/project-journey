@@ -4,8 +4,7 @@ import {
   DialogTitle, Link, Typography, useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import CommittedConversionForm from '@components/form/CommittedConversionForm';
 import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { CreateCommitmentApplicationRequest } from 'api/request';
@@ -33,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BecomeCommited: FC = () => {
-  const user = useSelector((state: StoreState) => state.user);
+  const user = useAppSelector((state) => state.user);
   const userData = user.user
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const length = userData?.commitmentApplicationIds?.length
   const commitmentApplication: any = length

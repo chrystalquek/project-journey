@@ -18,9 +18,8 @@ import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData } from '@type/volunteer';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getSignedUpEventsPastEvent } from '@redux/actions/event';
-import { StoreState } from '@redux/store';
 import { EVENTS_ROUTE, LOGIN_ROUTE } from '@constants/routes';
 import PastEventCard from './PastEventCard';
 
@@ -47,11 +46,11 @@ const PastEventsPageBody: FC<{}> = () => {
   const router = useRouter();
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
-  const dispatch = useDispatch();
-  const events: Array<EventData> = useSelector((state: StoreState) => state.event.pastEvents.ids
+  const dispatch = useAppDispatch();
+  const events: Array<EventData> = useAppSelector((state) => state.event.pastEvents.ids
     .map((eid) => state.event.data[eid])
     .filter((event) => event));
-  const user: VolunteerData | null = useSelector((state: StoreState) => state.user.user);
+  const user: VolunteerData | null = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
     dispatch(getSignedUpEventsPastEvent({ userId: user._id, eventType: "past" }));

@@ -7,10 +7,9 @@ import { FormState } from '@components/event/EventDetails/EventDetailsParts/Even
 import {
   createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
 } from '@redux/actions/signUp';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { CreateSignUpRequest } from 'api/request';
 import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
-import { StoreState } from '@redux/store';
 import { SignUpData, SignUpIdType } from '@type/signUp';
 import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
 import { ActionableDialog } from '@components/common/ActionableDialog';
@@ -39,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
-  const dispatch = useDispatch();
-  const currSignUps = useSelector((state: StoreState) => state.signUp.getSignUps.currSignUps);
+  const dispatch = useAppDispatch();
+  const currSignUps = useAppSelector((state) => state.signUp.getSignUps.currSignUps);
 
   useEffect(() => {
     dispatch(getSignUps({ id: user._id, idType: 'userId' as SignUpIdType }));

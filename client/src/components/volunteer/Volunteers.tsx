@@ -24,10 +24,9 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { VolunteerType } from '@type/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
 import { checkLoggedIn } from '@utils/helpers/auth';
@@ -64,12 +63,12 @@ const useStyles = makeStyles((theme) => ({
 const Volunteers: FC<{}> = ({ }) => {
   checkLoggedIn()
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const volunteerState = useSelector((state: StoreState) => state.volunteer);
+  const volunteerState = useAppSelector((state) => state.volunteer);
   const { volunteerType } = volunteerState.collate.filters;
   const { sort } = volunteerState.collate;
   const { volunteers } = volunteerState;
@@ -157,7 +156,7 @@ const Volunteers: FC<{}> = ({ }) => {
   };
 
   // sort component
-  const volunteerSortFields = [{ label: 'Name', value: 'name' }, { label: 'Member Since', value: 'createdAt' }];
+  const volunteerSortFields: { label: string, value: keyof VolunteerData }[] = [{ label: 'Name', value: 'name' }, { label: 'Member Since', value: 'createdAt' }];
   const sortMenu = (
     <FormControl fullWidth variant="outlined" size="small" margin="dense">
       <InputLabel>Sort By:</InputLabel>
@@ -172,7 +171,7 @@ const Volunteers: FC<{}> = ({ }) => {
   );
 
   // change page function
-  const handleChangePage = (event, newPage: number) => {
+  const handleChangePage = (_, newPage: number) => {
     dispatch(getPaginatedVolunteers({ newPagination: { pageNo: newPage } }));
   };
 
@@ -219,6 +218,7 @@ const Volunteers: FC<{}> = ({ }) => {
     return <ErrorPage message={error.message} />
   }
 
+  // define components needed above, piece them tog for mobile and comp versions
   return (
     <>
       {!isMobile

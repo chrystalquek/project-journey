@@ -5,7 +5,6 @@ import {
 } from '@material-ui/core';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import ClearIcon from '@material-ui/icons/Clear';
-import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {

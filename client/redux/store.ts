@@ -1,12 +1,17 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import userReducer, { UserState } from '@redux/reducers/user';
-import EventReducer, { EventState } from '@redux/reducers/event';
-import imageReducer, { ImageState } from '@redux/reducers/image';
-import volunteerReducer, { VolunteerState } from '@redux/reducers/volunteer/index';
-import profilePageReducer, { ProfilePageState } from '@redux/reducers/profilePage';
-import loadingReducer, { LoadingState } from '@redux/reducers/loading';
-import pendingVolunteerReducer, { PendingVolunteerState } from './reducers/volunteer';
+import userReducer from '@redux/reducers/user';
+import EventReducer from '@redux/reducers/event';
+import imageReducer from '@redux/reducers/image';
+import volunteerReducer from '@redux/reducers/volunteer/index';
+import profilePageReducer from '@redux/reducers/profilePage';
+import loadingReducer from '@redux/reducers/loading';
+import pendingVolunteerReducer from './reducers/volunteer';
+import signUpReducer from './reducers/signUp';
+import formReducer from './reducers/form';
+import commitmentApplicationReducer from './reducers/commitmentApplication';
+
+import storage from 'redux-persist/lib/storage';
 import {
   persistStore,
   persistReducer,
@@ -17,24 +22,9 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import signUpReducer, { SignUpState } from './reducers/signUp';
-import formReducer, { FormState } from './reducers/form';
-import commitmentApplicationReducer, { CommitmentApplicationState } from './reducers/commitmentApplication';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-
-export type StoreState = {
-  user: UserState
-  event: EventState
-  volunteer: VolunteerState
-  pendingVolunteersState: PendingVolunteerState
-  signUp: SignUpState
-  form: FormState
-  commitmentApplication: CommitmentApplicationState,
-  image: ImageState,
-  profilePage: ProfilePageState,
-  loading: LoadingState
-}
+export type StoreState = ReturnType<typeof reducers>
 
 const reducers = combineReducers({
   user: userReducer,
@@ -63,12 +53,14 @@ const store = configureStore({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
-  }).concat(logger) : getDefaultMiddleware()),
+  }) : getDefaultMiddleware()),
   devTools: process.env.NODE_ENV === 'development',
 });
 
-const persistor = persistStore(store);
-export default {
-  store,
-  persistor,
-};
+export const persistor = persistStore(store);
+
+export type AppDispatch = typeof store.dispatch
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector
+
+export default { store, persistor }

@@ -4,8 +4,7 @@ import {
 import { isAdmin } from '@utils/helpers/auth';
 import React, { FC, useEffect } from 'react';
 import { EventData } from 'types/event';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
 import { getSignUpsUpcomingEvent } from '@redux/actions/signUp';
 import { formatDateStartEndTime } from '@utils/helpers/date';
@@ -48,10 +47,10 @@ const useStyles = makeStyles((theme) => ({
 
 const UpcomingEvent: FC<{}> = ({ }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const user = useSelector((state: StoreState) => state.user);
+  const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
     if (isAdmin(user)) {
@@ -62,8 +61,8 @@ const UpcomingEvent: FC<{}> = ({ }) => {
     }
   }, []);
 
-  const events = useSelector((state: StoreState) => state.event);
-  const signUps = useSelector((state: StoreState) => state.signUp); // only relevant if user is volunteer
+  const events = useAppSelector((state) => state.event);
+  const signUps = useAppSelector((state) => state.signUp); // only relevant if user is volunteer
 
   const upcomingEventsIds = events.upcomingEvent.ids;
   const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;

@@ -11,9 +11,8 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 import dayjs from 'dayjs';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventFeedbackFormQuestions, submitEventFeedbackFormQuestions } from '@redux/actions/form';
-import { StoreState } from '@redux/store';
 import FormGenerator from '@components/form/FormGenerator';
 
 export type FEEDBACK_STATE = 'prompt' | 'fields' | 'success'
@@ -117,12 +116,12 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
   onClose,
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [feedbackState, setFeedbackState] = useState<FEEDBACK_STATE>(initialState);
   const [checked, setChecked] = useState<boolean>(false);
 
-  const user = useSelector((state: StoreState) => state.user.user);
-  const questions = useSelector((state: StoreState) => state.form.questions);
+  const user = useAppSelector((state) => state.user.user);
+  const questions = useAppSelector((state) => state.form.questions);
 
   // Load form when opening modal
   useEffect(() => {

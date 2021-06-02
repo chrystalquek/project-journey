@@ -5,14 +5,13 @@ import UpcomingEvent from '@components/home/UpcomingEvent';
 import { Grid, useMediaQuery, useTheme } from '@material-ui/core';
 import React, { FC } from 'react';
 import { isAdmin } from '@utils/helpers/auth';
-import { StoreState } from '@redux/store';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@redux/store';
 
 const Home: FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const user = useSelector((state: StoreState) => state?.user);
+  const user = useAppSelector((state) => state?.user);
 
   return (
     <>

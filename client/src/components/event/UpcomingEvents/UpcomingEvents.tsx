@@ -18,9 +18,8 @@ import EventsFilter from '@components/event/EventsFilter';
 import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData } from '@type/volunteer';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
-import { StoreState } from '@redux/store';
 import { EVENTS_ROUTE, LOGIN_ROUTE } from '@constants/routes';
 import EventCard from '../EventCard';
 
@@ -47,13 +46,13 @@ const UpcomingEvents: FC<{}> = () => {
   const router = useRouter();
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
-  const dispatch = useDispatch();
-  const events: Array<EventData> = useSelector((state: StoreState) => state.event.upcomingEvent.ids
+  const dispatch = useAppDispatch();
+  const events: Array<EventData> = useAppSelector((state) => state.event.upcomingEvent.ids
     .map((eid) => state.event.data[eid])
     .filter((event) => event));
-  const user: VolunteerData | null = useSelector((state: StoreState) => state.user.user);
+  const user: VolunteerData | null = useAppSelector((state) => state.user.user);
 
-  const signUps = useSelector((state: StoreState) => state.signUp);
+  const signUps = useAppSelector((state) => state.signUp);
   const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;
   const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
 

@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getCommitmentApplications } from '@redux/actions/commitmentApplication';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
@@ -17,7 +16,7 @@ interface TabsProps {
 const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
     const { clickedOn } = props;
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const router = useRouter();
 
     useEffect(() => {
@@ -27,12 +26,12 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
     }, []);
 
     // volunteer no
-    const volunteers = useSelector((state: StoreState) => state.pendingVolunteersState);
+    const volunteers = useAppSelector((state) => state.pendingVolunteer);
     const upcomingVolunteersIds = volunteers.pendingVolunteers.ids;
 
     // event no
-    const events = useSelector((state: StoreState) => state.event);
-    const signUps = useSelector((state: StoreState) => state.signUp);
+    const events = useAppSelector((state) => state.event);
+    const signUps = useAppSelector((state) => state.signUp);
 
     const upcomingEventsIds = events.upcomingEvent.ids;
     const upcomingSignUpsIds = signUps.pendingSignUps.ids;

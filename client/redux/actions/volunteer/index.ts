@@ -9,7 +9,7 @@ import { GetVolunteersPaginatedResponse } from "api/response";
 // functions
 
 // define generics for createAsyncThunk: return type, parameters and empty object: https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk
-export const getPaginatedVolunteers = createAsyncThunk<GetPaginatedVolunteersReturnType, GetPaginatedVolunteersParam, {}>(
+export const getPaginatedVolunteers = createAsyncThunk<GetPaginatedVolunteersReturnType, GetPaginatedVolunteersParam, { state }>(
     'volunteer/getVolunteers',
     async ({ newPagination, newCollate }: GetPaginatedVolunteersParam, { getState }) => {
         const { volunteer } = getState() as { volunteer: VolunteerState }; // need to typecast state if getting state
