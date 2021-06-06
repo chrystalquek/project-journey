@@ -30,7 +30,7 @@ import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
 import { checkLoggedIn } from '@utils/helpers/auth';
-import { getPaginatedVolunteers } from '@redux/actions/volunteer/index';
+import { getVolunteers } from '@redux/actions/volunteer/index';
 import { formatDDMMYYYY } from '@utils/helpers/date';
 import { VolunteerSortFieldsType } from '@redux/reducers/volunteer/index';
 import LoadingIndicator from '@components/common/LoadingIndicator';
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Volunteers: FC<{}> = ({ }) => {
+const Index: FC<{}> = ({ }) => {
   checkLoggedIn()
   const classes = useStyles();
   const dispatch = useAppDispatch();
@@ -76,12 +76,12 @@ const Volunteers: FC<{}> = ({ }) => {
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getPaginatedVolunteers({}))
+    dispatch(getVolunteers({}))
   }, []);
 
   // filter functions
   const handleFilterVolunteerTypeChange = (event) => {
-    dispatch(getPaginatedVolunteers({
+    dispatch(getVolunteers({
       newCollate: {
         filters: {
           volunteerType: {
@@ -96,7 +96,7 @@ const Volunteers: FC<{}> = ({ }) => {
     var clearedVolunteerTypeFilters = Object.assign({}, volunteerType);
     Object.values(VolunteerType).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
 
-    dispatch(getPaginatedVolunteers({
+    dispatch(getVolunteers({
       newCollate: {
         filters: {
           volunteerType: clearedVolunteerTypeFilters
@@ -144,7 +144,7 @@ const Volunteers: FC<{}> = ({ }) => {
 
   // search function
   const onSearch = (newNameToSearch: string) => {
-    dispatch(getPaginatedVolunteers({ newCollate: { search: { name: newNameToSearch } } }))
+    dispatch(getVolunteers({ newCollate: { search: { name: newNameToSearch } } }))
   }
 
   // search component
@@ -152,7 +152,7 @@ const Volunteers: FC<{}> = ({ }) => {
 
   // sort function
   const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
-    dispatch(getPaginatedVolunteers({ newCollate: { sort: event.target.value as VolunteerSortFieldsType } }));
+    dispatch(getVolunteers({ newCollate: { sort: event.target.value as VolunteerSortFieldsType } }));
   };
 
   // sort component
@@ -172,7 +172,7 @@ const Volunteers: FC<{}> = ({ }) => {
 
   // change page function
   const handleChangePage = (_, newPage: number) => {
-    dispatch(getPaginatedVolunteers({ newPagination: { pageNo: newPage } }));
+    dispatch(getVolunteers({ newPagination: { pageNo: newPage } }));
   };
 
 
@@ -267,4 +267,4 @@ const Volunteers: FC<{}> = ({ }) => {
   );
 };
 
-export default Volunteers;
+export default Index;

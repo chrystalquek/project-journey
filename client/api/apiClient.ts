@@ -15,7 +15,7 @@ import {
   CreateCommitmentApplicationRequest,
   CommitmentApplicationQueryParams,
   EventQueryParams,
-  GetVolunteersPaginatedRequest,
+  GetVolunteersRequest,
   AnswerFormQuestionsRequest,
   CreateFormQuestionsRequest,
   CancelEventParams,
@@ -48,7 +48,7 @@ export interface ApiClient {
   createForm(request: CreateFormQuestionsRequest): Promise<void>
 
   // volunteers
-  getVolunteersPaginated(query: GetVolunteersPaginatedRequest): Promise<GetVolunteersPaginatedResponse>
+  getVolunteersPaginated(query: GetVolunteersRequest): Promise<GetVolunteersPaginatedResponse>
   getPendingVolunteers(): Promise<GetVolunteersResponse>
   updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
 
@@ -163,7 +163,7 @@ class AxiosApiClient implements ApiClient {
     return this.send({}, `volunteer/id/${id}`, 'get');
   }
 
-  async getVolunteersPaginated(query: GetVolunteersPaginatedRequest):
+  async getVolunteersPaginated(query: GetVolunteersRequest):
     Promise<GetVolunteersPaginatedResponse> {
     return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
   }

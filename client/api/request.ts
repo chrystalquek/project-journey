@@ -13,7 +13,7 @@ export type LoginRequest = {
   password: string;
 };
 
-export type GetVolunteersPaginatedRequest = {
+export type GetVolunteersRequest = {
   pageNo: number,
   size: number
   volunteerType: string,

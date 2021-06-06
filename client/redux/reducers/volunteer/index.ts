@@ -1,8 +1,8 @@
 import { createSlice, SerializedError } from '@reduxjs/toolkit';
 import { VolunteerData, VolunteerType } from 'types/volunteer';
 import { initializeFilterObject } from '@utils/helpers/filterObject';
-import { getPaginatedVolunteers } from '@redux/actions/volunteer/index';
-import { rowsPerPage } from '@components/volunteer/Volunteers';
+import { getVolunteers } from '@redux/actions/volunteer/index';
+import { rowsPerPage } from '@components/volunteer/Index';
 import { Pagination } from '../../../utils/types/Pagination';
 
 export type VolunteerSortFieldsType = 'name' | 'createdAt';
@@ -54,10 +54,10 @@ const volunteerSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getPaginatedVolunteers.pending, (state) => {
+        builder.addCase(getVolunteers.pending, (state) => {
             state.isLoading = true;
         });
-        builder.addCase(getPaginatedVolunteers.fulfilled, (state, action) => {
+        builder.addCase(getVolunteers.fulfilled, (state, action) => {
             const { payload } = action;
             state.volunteers = payload.response.data
             state.collate = Object.assign(state.collate, payload.newCollate)
@@ -65,7 +65,7 @@ const volunteerSlice = createSlice({
             state.pagination.count = payload.response.count
             state.isLoading = false;
         });
-        builder.addCase(getPaginatedVolunteers.rejected, (state, action) => {
+        builder.addCase(getVolunteers.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error; // catches http errors too (other than 404 which is caught by NEXT)
         });
