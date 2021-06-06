@@ -25,7 +25,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { VolunteerData, VolunteerType } from 'types/volunteer';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@redux/store';
 import { resetUser } from '@redux/reducers/user';
 import {
   EVENTS_ROUTE,
@@ -88,7 +88,7 @@ type NavBarProps = {
 
 export default function MobileNavBar({ userData }: NavBarProps) {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const classes = useStyles();
 
   const [drawer, setDrawer] = useState<boolean>(false);

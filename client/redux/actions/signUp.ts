@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   CreateSignUpRequest, SignUpQueryParams, UpdateSignUpRequest,
-} from '@utils/api/request';
-import { GetSignUpsResponse } from '@utils/api/response';
-import apiClient from '@utils/api/apiClient';
+} from '@api/request';
+import { GetSignUpsResponse } from '@api/response';
+import apiClient from '@api/apiClient';
 import { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
 import { SignUpData } from '@type/signUp';
 
@@ -45,7 +45,7 @@ export const updateSignUp = createAsyncThunk(
 
 export const updateSignUpInstant = createAsyncThunk(
   'signUp/updateSignUpInstant',
-  async (payloadCreator: {query: SignUpQueryParams, request: SignUpData}) => {
+  async (payloadCreator: { query: SignUpQueryParams, request: SignUpData }) => {
     await apiClient
       .updateSignUp(payloadCreator.query, payloadCreator.request);
     const response = {

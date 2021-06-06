@@ -5,8 +5,7 @@ import Remarks from '@components/profile/Remarks';
 import ContactInformation from '@components/profile/ContactInformation';
 import SignUpInformation from '@components/profile/SignUpInformation';
 import EventCount from '@components/profile/EventCount';
-import { useDispatch, useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import ErrorPage from 'next/error';
 import { useRouter } from 'next/router';
 import { VolunteerType } from '@type/volunteer';
@@ -17,12 +16,12 @@ import { checkLoggedIn } from '@utils/helpers/auth';
 const Profile = () => {
   checkLoggedIn();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   let profilePageId = router.query.volunteer_id as string;
 
-  const loggedInUser = useSelector((state: StoreState) => state.user);
-  const profilePageData = useSelector((state: StoreState) => state.profilePage.data);
+  const loggedInUser = useAppSelector((state) => state.user);
+  const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   // First time load page, send request to receive data
   useEffect(() => {

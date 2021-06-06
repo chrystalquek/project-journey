@@ -110,6 +110,10 @@
           [
             "@type",
             "./types/"
+          ],
+          [
+            "@api",
+            "./api/"
           ]
         ],
         "extensions": [

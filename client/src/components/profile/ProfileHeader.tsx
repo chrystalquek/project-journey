@@ -5,12 +5,11 @@ import {
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
 import ProfilePicture from './ProfilePicture';
 import ApproveCommitmentApplication from './ApproveCommitmentApplication';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 import ChangeVolunteerType from './ChangeVolunteerType';
+import { useAppSelector } from '@redux/store';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -43,7 +42,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const direction = isMobile ? 'column' : 'row';
   const justify = isMobile ? 'center' : 'flex-start';
-  const user = useSelector((state: StoreState) => state.user);
+  const user = useAppSelector((state) => state.user);
   const userData = user?.user;
 
   const length = profilePageData?.commitmentApplicationIds?.length

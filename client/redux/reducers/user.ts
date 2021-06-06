@@ -2,7 +2,7 @@ import { createCommitmentApplication } from '@redux/actions/commitmentApplicatio
 import { createSlice } from '@reduxjs/toolkit';
 import { VolunteerData } from '@type/volunteer';
 import jwt from 'jsonwebtoken';
-import apiClient from '@utils/api/apiClient';
+import apiClient from '@api/apiClient';
 import { REHYDRATE } from 'redux-persist';
 import { updateProfilePicture } from '@redux/actions/image';
 import user, { updateVolunteer } from '../actions/user';

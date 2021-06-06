@@ -19,7 +19,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import { VolunteerData, VolunteerType } from 'types/volunteer';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@redux/store';
 import { resetUser } from '@redux/reducers/user';
 import {
   EVENTS_ROUTE,
@@ -95,7 +95,7 @@ type NavBarProps = {
 
 export default function DesktopNavBar({ userData }: NavBarProps) {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const eventRef = useRef<HTMLButtonElement>(null);

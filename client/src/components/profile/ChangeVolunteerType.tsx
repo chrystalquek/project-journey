@@ -2,8 +2,7 @@ import React, { FC, useCallback, useState } from 'react';
 import {
   IconButton, MenuItem, Dialog, DialogTitle, Typography, DialogContent, DialogActions, makeStyles, FormControl, InputLabel, Select, Input, Button,
 } from '@material-ui/core';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { VolunteerType } from '@type/volunteer';
 import EditIcon from '@material-ui/icons/Edit';
 import { updateVolunteer } from '@redux/actions/user';
@@ -25,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ChangeVolunteerType: FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const profilePageData = useSelector((state: StoreState) => state.profilePage.data);
+  const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [volunteerType, setVolunteerType] = useState<VolunteerType>(profilePageData.volunteerType)

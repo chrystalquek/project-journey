@@ -9,11 +9,10 @@ import {
   Button, makeStyles, MenuItem, Paper, Typography,
 } from '@material-ui/core';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
 import { OptionType } from '@type/form/option';
 import { QuestionList } from '@type/form/form';
 import { InputType } from '@type/form/question';
+import { useAppSelector } from '@redux/store';
 
 type FormGeneratorType = {
   handleSubmit: (values: Record<string, any>) => Promise<void>
@@ -192,7 +191,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
 }) => {
   const classes = useStyles();
   const initialValues: Record<string, any> = {};
-  const userData = useSelector((state: StoreState) => state.user.user);
+  const userData = useAppSelector((state) => state.user.user);
 
   questionsList.forEach(({ name, type, initialValue }) => {
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;

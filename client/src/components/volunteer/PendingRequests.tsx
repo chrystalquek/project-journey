@@ -6,8 +6,7 @@ import {
 import CancelIcon from '@material-ui/icons/Cancel';
 import React, { FC, useEffect } from 'react';
 import { VolunteerData } from 'types/volunteer';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import Head from 'next/head';
 import { getCommitmentApplications, updateCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
@@ -30,15 +29,15 @@ const useStyles = makeStyles((theme) => ({
 
 const PendingRequests: FC<{}> = ({ }) => {
   checkLoggedIn()
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getPendingVolunteers());
     dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }));
   }, []);
 
-  const volunteers = useSelector((state: StoreState) => state.volunteer);
-  const commitmentApplications = useSelector((state: StoreState) => state.commitmentApplication);
+  const volunteers = useAppSelector((state) => state.pendingVolunteer);
+  const commitmentApplications = useAppSelector((state) => state.commitmentApplication);
 
   const upcomingVolunteersIds = volunteers.pendingVolunteers.ids;
   const upcomingCommitmentApplicationsIds = commitmentApplications.pendingCommitmentApplications.ids;

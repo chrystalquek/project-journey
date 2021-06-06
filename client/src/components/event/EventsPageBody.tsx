@@ -20,9 +20,8 @@ import { withFilters } from '@utils/helpers/event/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { EventButton } from '@components/common/event/EventButton';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getUpcomingEvents } from '@redux/actions/event';
-import { StoreState } from '@redux/store';
 import { EVENTS_ROUTE, LOGIN_ROUTE } from '@constants/routes';
 
 type EventsPageBodyProps = {
@@ -52,11 +51,11 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   const router = useRouter();
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
-  const dispatch = useDispatch();
-  const events: Array<EventData> = useSelector((state: StoreState) => state.event.browseEvents.ids
+  const dispatch = useAppDispatch();
+  const events: Array<EventData> = useAppSelector((state) => state.event.browseEvents.ids
     .map((eid) => state.event.data[eid])
     .filter((event) => event));
-  const user: VolunteerData | null = useSelector((state: StoreState) => state.user.user);
+  const user: VolunteerData | null = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
     dispatch(getUpcomingEvents());

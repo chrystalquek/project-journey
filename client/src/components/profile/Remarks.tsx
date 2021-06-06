@@ -4,17 +4,16 @@ import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { updateVolunteer } from '@redux/actions/user';
-import { StoreState } from '@redux/store';
 
 type props = {
   profilePageData: VolunteerData
 }
 
 const Remarks: FC<props> = ({ profilePageData }) => {
-  const dispatch = useDispatch();
-  const user = useSelector((state: StoreState) => state.user);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
   const userData = user.user;
   const isAdmin = user.user.volunteerType === VolunteerType.ADMIN;
 

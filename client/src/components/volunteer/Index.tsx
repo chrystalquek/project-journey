@@ -1,6 +1,4 @@
 import React, { FC, useEffect } from 'react';
-import Head from 'next/head';
-
 import {
   Button,
   capitalize,
@@ -26,14 +24,18 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { VolunteerType } from '@type/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { getVolunteersVolunteerProfile } from '@redux/actions/volunteer';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
 import { checkLoggedIn } from '@utils/helpers/auth';
+import { getVolunteers } from '@redux/actions/volunteer/index';
+import { formatDDMMYYYY } from '@utils/helpers/date';
+import { VolunteerSortFieldsType } from '@redux/reducers/volunteer/index';
+import LoadingIndicator from '@components/common/LoadingIndicator';
+import ErrorPage from '@components/common/ErrorPage';
+
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -58,74 +60,62 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const volunteerSortFields = [{ label: 'Name', value: 'name' }, { label: 'Member Since', value: 'createdAt' }]; // what is "Last Activity"
-export type VolunteerSortFieldsType = 'name' | 'createdAt';
-
-const VolunteerProfile: FC<{}> = ({ }) => {
+const Index: FC<{}> = ({ }) => {
   checkLoggedIn()
   const classes = useStyles();
-  const dispatch = useDispatch();
-
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const volunteers = useSelector((state: StoreState) => state.volunteer);
-
-  const { volunteerType } = volunteers.volunteerProfile.filters;
-  const { name } = volunteers.volunteerProfile.search;
-  const { sort } = volunteers.volunteerProfile;
-
-  const fillOtherParams = (params: { pageNo?: number, volunteerType?: Record<VolunteerType, boolean>, name?: string, sort?: VolunteerSortFieldsType }) => ({
-    pageNo: params.pageNo || 0,
-    filters: {
-      volunteerType: params.volunteerType || volunteerType,
-    },
-    search: {
-      name: params.name || name,
-    },
-    sort: params.sort || sort,
-  });
+  const volunteerState = useAppSelector((state) => state.volunteer);
+  const { volunteerType } = volunteerState.collate.filters;
+  const { sort } = volunteerState.collate;
+  const { volunteers } = volunteerState;
+  const { count: total, pageNo } = volunteerState.pagination;
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ volunteerType, name, sort })));
+    dispatch(getVolunteers({}))
   }, []);
 
-  // filter
+  // filter functions
   const handleFilterVolunteerTypeChange = (event) => {
-    dispatch(getVolunteersVolunteerProfile(
-      fillOtherParams({
-        volunteerType: {
-          ...volunteerType,
-          [event.target.name]: !volunteerType[event.target.name],
-        },
-      }),
-    ));
+    dispatch(getVolunteers({
+      newCollate: {
+        filters: {
+          volunteerType: {
+            ...volunteerType,
+            [event.target.name]: !volunteerType[event.target.name],
+          },
+        }
+      }
+    }))
   };
-
-  const allFiltersCleared = Object.values(VolunteerType).every(volType => !volunteerType[volType]);
-
-  const clearallFilters = () => {
+  const handleClearAllFilters = () => {
     var clearedVolunteerTypeFilters = Object.assign({}, volunteerType);
     Object.values(VolunteerType).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
 
-    dispatch(getVolunteersVolunteerProfile(
-      fillOtherParams({
-        volunteerType: clearedVolunteerTypeFilters
-      }),
-    ));
+    dispatch(getVolunteers({
+      newCollate: {
+        filters: {
+          volunteerType: clearedVolunteerTypeFilters
+        }
+      }
+    }))
   }
 
+  // filter state and components
+  const isDisableClearFilters = Object.values(VolunteerType).every(volType => !volunteerType[volType]);
   const [openFilter, setOpenFilter] = React.useState(isMobile);
-
   const filterOptions = (
     <TableContainer>
       <Table>
-        <TableRow>
+        <TableHead>
           <TableCell>
             <b>Filter By</b>
           </TableCell>
-        </TableRow>
+        </TableHead>
         <TableRow>
           <TableCell>
             Volunteer Type
@@ -136,13 +126,13 @@ const VolunteerProfile: FC<{}> = ({ }) => {
                   <FormGroup>
                     {Object.values(VolunteerType).map((volType) => (
                       <FormControlLabel
-                        control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} />}
+                        control={<Checkbox size="small" checked={volunteerType[volType]} onChange={handleFilterVolunteerTypeChange} name={volType} key={volType} />}
                         label={<Typography variant="body1">{capitalize(volType)}</Typography>}
                       />
                     ))}
 
                   </FormGroup>
-                  <Button className={classes.link} disabled={allFiltersCleared} onClick={clearallFilters}><u>Clear</u></Button>
+                  <Button className={classes.link} disabled={isDisableClearFilters} onClick={handleClearAllFilters}><u>Clear</u></Button>
                 </>
               )}
           </TableCell>
@@ -152,37 +142,40 @@ const VolunteerProfile: FC<{}> = ({ }) => {
 
   );
 
-  // search
-  const onSearch = (name: string) => dispatch(getVolunteersVolunteerProfile(fillOtherParams({ name })));
+  // search function
+  const onSearch = (newNameToSearch: string) => {
+    dispatch(getVolunteers({ newCollate: { search: { name: newNameToSearch } } }))
+  }
+
+  // search component
   const searchBar = <SearchBar setFilterFunction={onSearch} />;
 
-  // sort
+  // sort function
   const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
-    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ sort: event.target.value as VolunteerSortFieldsType })));
+    dispatch(getVolunteers({ newCollate: { sort: event.target.value as VolunteerSortFieldsType } }));
   };
 
+  // sort component
+  const volunteerSortFields: { label: string, value: keyof VolunteerData }[] = [{ label: 'Name', value: 'name' }, { label: 'Member Since', value: 'createdAt' }];
   const sortMenu = (
     <FormControl fullWidth variant="outlined" size="small" margin="dense">
       <InputLabel>Sort By:</InputLabel>
       <Select
-        value={volunteers.volunteerProfile.sort}
+        value={sort}
         onChange={handleSortChange}
       >
-        {volunteerSortFields.map((field) => <MenuItem value={field.value}>{field.label}</MenuItem>)}
+        {volunteerSortFields.map((field) => <MenuItem value={field.value} key={field.value}>{field.label}</MenuItem>)}
 
       </Select>
     </FormControl>
   );
 
-  // change page
-  const handleChangePage = (event, newPage: number) => {
-    dispatch(getVolunteersVolunteerProfile(fillOtherParams({ pageNo: newPage })));
+  // change page function
+  const handleChangePage = (_, newPage: number) => {
+    dispatch(getVolunteers({ newPagination: { pageNo: newPage } }));
   };
 
-  // display table
-  const currentPageVolunteers = volunteers.volunteerProfile.ids.map((id) => volunteers.data[id]);
 
-  const router = useRouter();
   const volunteerTable = (
     <>
       <TableContainer>
@@ -195,11 +188,11 @@ const VolunteerProfile: FC<{}> = ({ }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentPageVolunteers.map((vol) => (
+            {volunteers.map((vol) => (
               <TableRow key={vol.email}>
                 <TableCell onClick={() => router.push(`/profile/${vol._id}`)} className={classes.nameRow}><b>{vol.name}</b></TableCell>
                 <TableCell>{capitalize(vol.volunteerType)}</TableCell>
-                <TableCell>{new Date(vol.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{formatDDMMYYYY(vol.createdAt)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -208,23 +201,29 @@ const VolunteerProfile: FC<{}> = ({ }) => {
       <TablePagination
         rowsPerPageOptions={[rowsPerPage]}
         component="div"
-        count={volunteers.volunteerProfile.count}
+        count={total}
         rowsPerPage={rowsPerPage}
-        page={volunteers.volunteerProfile.pageNo}
+        page={pageNo}
         onChangePage={handleChangePage}
       />
     </>
   );
 
+  // use these for all pages
+  const { isLoading, error } = volunteerState
+  if (isLoading) {
+    return <LoadingIndicator />
+  }
+  if (error) {
+    return <ErrorPage message={error.message} />
+  }
+
+  // define components needed above, piece them tog for mobile and comp versions
   return (
     <>
-      <Head>
-        <title>Volunteer Profiles</title>
-      </Head>
-
       {!isMobile
         ? (
-          <Grid>
+          <Grid >
             <Grid direction="row" container spacing={6}>
               <Grid item xs={2} />
               <Grid item xs={4}>
@@ -268,4 +267,4 @@ const VolunteerProfile: FC<{}> = ({ }) => {
   );
 };
 
-export default VolunteerProfile;
+export default Index;

@@ -1,8 +1,7 @@
 import React, { FC, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getEvent } from '@redux/actions/event';
 import { VolunteerData } from '@type/volunteer';
-import { StoreState } from '@redux/store';
 import { EventData } from '@type/event';
 import EventDetailsRegistered from '@components/event/EventDetails/EventDetailsRegistered/eventDetails';
 import EventDetailsUnregistered from '@components/event/EventDetails/EventDetailsUnregistered';
@@ -14,7 +13,7 @@ type EventDetailsProps = {
 }
 
 const EventDetails: FC<EventDetailsProps> = ({ eid }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (eid) {
@@ -22,8 +21,8 @@ const EventDetails: FC<EventDetailsProps> = ({ eid }) => {
     }
   }, [eid]);
 
-  const userData: VolunteerData = useSelector((state: StoreState) => state.user.user);
-  const eventData: EventData | null = useSelector((state: StoreState) => state.event.form);
+  const userData: VolunteerData = useAppSelector((state) => state.user.user);
+  const eventData: EventData | null = useAppSelector((state) => state.event.form);
 
   if (userData && eventData) {
     return (

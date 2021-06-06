@@ -1,8 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { StoreState } from '@redux/store';
+import { useAppSelector } from '@redux/store';
 import ErrorPage from 'next/error';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Loading = () => {
   const classes = useStyles();
-  const status = useSelector((state: StoreState) => state.loading.status);
+  const status = useAppSelector((state) => state.loading.status);
 
   return status === 'failed'
     ? <ErrorPage statusCode={404} />

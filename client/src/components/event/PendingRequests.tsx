@@ -3,8 +3,7 @@ import {
 } from '@material-ui/core';
 import React, { FC, useEffect } from 'react';
 import { EventData } from 'types/event';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { getPendingSignUps } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 const PendingRequests: FC = () => {
   checkLoggedIn()
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter()
 
   useEffect(() => {
@@ -42,8 +41,8 @@ const PendingRequests: FC = () => {
     dispatch(getPendingSignUps());
   }, []);
 
-  const events = useSelector((state: StoreState) => state.event);
-  const signUps = useSelector((state: StoreState) => state.signUp);
+  const events = useAppSelector((state) => state.event);
+  const signUps = useAppSelector((state) => state.signUp);
 
   const upcomingEventsIds = events.upcomingEvent.ids;
   const upcomingSignUpsIds = signUps.pendingSignUps.ids;

@@ -6,7 +6,7 @@ import {
 import { EventTypography } from '@components/common/event/EventTypography';
 import { useRouter } from 'next/router';
 import { deleteEvent } from '@redux/actions/event';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@redux/store';
 
 const useStyles = makeStyles((theme) => ({
   editButton: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const EventDetailsAdminButtons = ({ event }) => {
   const classes = useStyles();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleDeleteEvent = async () => {
     dispatch(deleteEvent(event._id));

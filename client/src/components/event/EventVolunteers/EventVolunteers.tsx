@@ -4,8 +4,7 @@ import {
   Button, Popover, FormControl, TablePagination, Select, MenuItem, Badge, InputLabel,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { StoreState } from '@redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getVolunteersById } from '@redux/actions/volunteer';
 import { getSignUpsUpcomingEvent, updateSignUpInstant } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
@@ -72,10 +71,10 @@ const isStatusApproved = (status: string | string[]) => typeof status !== 'strin
 
 const EventVolunteers = ({ eid }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const signUps = useSelector((state: StoreState) => state.signUp);
-  const event = useSelector((state: StoreState) => state.event.form);
+  const signUps = useAppSelector((state) => state.signUp);
+  const event = useAppSelector((state) => state.event.form);
   const roles = event?.roles;
 
   const [allVolunteerIds, setAllVolunteerIds] = useState<string[]>([]);

@@ -17,12 +17,11 @@ import {
 } from '@material-ui/pickers';
 import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { createEvent, getEvent, editEvent } from '@redux/actions/event';
 import { uploadImage } from '@redux/actions/image';
 import { resetImages } from '@redux/reducers/image';
 import dayjs from 'dayjs';
-import { StoreState } from '@redux/store';
 import { Formik, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
@@ -160,10 +159,10 @@ const emptyForm = {
 
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
-  const event = useSelector((state: StoreState) => state.event);
-  const eventForm: any = useSelector((state: StoreState) => state.event.form);
-  const user = useSelector((state: StoreState) => state.user);
-  const dispatch = useDispatch();
+  const event = useAppSelector((state) => state.event);
+  const eventForm: any = useAppSelector((state) => state.event.form);
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
@@ -328,9 +327,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       const newForm = { ...form, questions: feedbackFormEventQuestions.map((element) => ({ ...element, name: element.displayText })) };
 
-      dispatch(
-        isNew ? createEvent(newForm) : editEvent({ data: form, id }),
-      );
+      if (isNew) {
+        dispatch(createEvent(newForm))
+      } else {
+        dispatch(editEvent({ data: form, id }))
+      }
     },
     enableReinitialize: true,
   });
