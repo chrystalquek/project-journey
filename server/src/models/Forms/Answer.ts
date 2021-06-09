@@ -23,5 +23,7 @@ export type AnswerData = Omit<ExtractProps<typeof AnswerSchema>, "__v" | "_id" |
   formId?: string
 };
 
+export type NewAnswerData = Omit<AnswerData, "_id" | "createdAt">
+
 type AnswerModel = AnswerData & mongoose.Document
 export default mongoose.model<AnswerModel>('Answer', AnswerSchema);

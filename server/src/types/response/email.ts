@@ -1,4 +1,3 @@
-import { VolunteerPublicData } from '../../models/Volunteer';
 import { Response } from '../response/common';
 
 type SendFeedbackRequestResponseBody = {

@@ -1,6 +1,6 @@
 
 import { NewOpportunityData, OpportunityData } from "../../models/Opportunity";
-import { EmptyBody, EmptyQuery, Request, IdParams, IdRequest } from "./common";
+import { EmptyQuery, Request, IdParams, IdRequest } from "./common";
 
 export type CreateOpportunityRequest = Request<NewOpportunityData>
 

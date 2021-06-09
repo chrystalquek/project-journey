@@ -9,7 +9,6 @@ import { CancelEventResponse, CreateEventResponse, DeleteEventResponse, GetEvent
 
 const createEvent = async (req: CreateEventRequest, res: CreateEventResponse): Promise<void> => {
   try {
-    // TODO Array<QuestionsOptionsRequestData> also sent along to create form
     const eventData = req.body;
     const event = await eventService.createEvent(eventData);
     res.status(HTTP_CODES.OK).send(event);

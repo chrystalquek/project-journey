@@ -1,8 +1,6 @@
-
-
-import { AnswerData } from "../../models/Forms/Answer";
+import { NewAnswerData } from "../../models/Forms/Answer";
 import { FormQuestionType } from "../../models/Forms/Question";
-import { EmptyBody, EmptyQuery, Request, IdParams, IdRequest } from "./common";
+import { EmptyBody, EmptyQuery, Request } from "./common";
 
 export type QuestionsOptionsRequestData = {
     displayText: string;
@@ -13,8 +11,8 @@ export type QuestionsOptionsRequestData = {
 }
 
 type CreateFormRequestBody = {
+    eventId: string,
     questions: QuestionsOptionsRequestData[],
-    eventId: string
 }
 
 export type CreateFormRequest = Request<CreateFormRequestBody>
@@ -24,8 +22,8 @@ type GetEventFormRequestParams = { eventId: string }
 export type GetEventFormRequest = Request<EmptyBody, EmptyQuery, GetEventFormRequestParams>
 
 type AnswerFormQuestionsRequestBody = {
-    answers: AnswerData[],
-    eventId: string
+    eventId: string,
+    answers: NewAnswerData[],
 }
 
 export type AnswerFormQuestionsRequest = Request<AnswerFormQuestionsRequestBody>

@@ -1,6 +1,6 @@
 
 import { NewSignUpData, SignUpData, SignUpIdType } from "../../models/SignUp";
-import { EmptyBody, EmptyQuery, Request, IdParams, IdRequest } from "./common";
+import { EmptyBody, EmptyQuery, Request, IdParams } from "./common";
 
 type SignUpIdParams = IdParams & { idType: SignUpIdType }
 

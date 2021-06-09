@@ -1,4 +1,4 @@
-import { CommitmentApplicationData } from '../../models/commitmentApplication';
+import { CommitmentApplicationData } from '../../models/CommitmentApplication';
 import { Response } from '../response/common';
 
 export type CreateCommitmentApplicationResponse = Response<CommitmentApplicationData>

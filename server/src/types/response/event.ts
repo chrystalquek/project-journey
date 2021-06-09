@@ -1,4 +1,4 @@
-import { EventData } from '../../models/event';
+import { EventData } from '../../models/Event';
 import { Response } from '../response/common';
 
 export type CreateEventResponse = Response<EventData>
