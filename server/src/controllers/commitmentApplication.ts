@@ -1,14 +1,13 @@
-import { Request, Response } from 'express';
 import commitmentApplicationService from '../services/commitmentApplication';
 import HTTP_CODES from '../constants/httpCodes';
 import volunteerService from '../services/volunteer';
-import { CommitmentApplicationData, CommitmentApplicationStatus } from '../models/CommitmentApplication';
-import { VolunteerData } from '../models/Volunteer';
+import { CreateCommitmentApplicationRequest, GetCommitmentApplicationsRequest, UpdateCommitmentApplicationRequest } from '../types/request/commitmentApplication';
+import { CreateCommitmentApplicationResponse, GetCommitmentApplicationsResponse, UpdateCommitmentApplicationResponse } from '../types/response/commitmentApplication';
 
-const createCommitmentApplication = async (req: Request, res: Response): Promise<void> => {
+const createCommitmentApplication = async (req: CreateCommitmentApplicationRequest, res: CreateCommitmentApplicationResponse): Promise<void> => {
   try {
-    const commitmentApplicationData: CommitmentApplicationData = req.body;
-    const volunteerData: VolunteerData = req.user;
+    const commitmentApplicationData = req.body;
+    const volunteerData = req.user;
     const { volunteerId } = commitmentApplicationData;
 
     if (volunteerData._id !== volunteerId) {
@@ -38,15 +37,13 @@ const createCommitmentApplication = async (req: Request, res: Response): Promise
   }
 };
 
-const getCommitmentApplications = async (req: Request, res: Response): Promise<void> => {
+const getCommitmentApplications = async (req: GetCommitmentApplicationsRequest, res: GetCommitmentApplicationsResponse): Promise<void> => {
   try {
-    // TODO: fix after chrystal's merged
-    // const comAppStatus: CommitmentApplicationStatus | undefined = req.query.status;
-    const comAppStatus = req.query.status as CommitmentApplicationStatus | undefined;
+    const comAppStatus = req.query.status;
     const commitmentApplications = await commitmentApplicationService
       .getCommitmentApplications(comAppStatus);
     res.status(HTTP_CODES.OK).json({
-      data: commitmentApplications,
+      data: commitmentApplications
     });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -55,10 +52,10 @@ const getCommitmentApplications = async (req: Request, res: Response): Promise<v
   }
 };
 
-const updateCommitmentApplication = async (req: Request, res: Response): Promise<void> => {
+const updateCommitmentApplication = async (req: UpdateCommitmentApplicationRequest, res: UpdateCommitmentApplicationResponse): Promise<void> => {
   try {
     const commitmentId = req.params.id;
-    const updatedFields: Partial<CommitmentApplicationData> = req.body;
+    const updatedFields = req.body;
     const { volunteerId } = updatedFields;
 
     if (!volunteerId) {
@@ -70,7 +67,7 @@ const updateCommitmentApplication = async (req: Request, res: Response): Promise
       throw Error('Invalid volunteer type');
     }
 
-    await commitmentApplicationService.updateCommitmentApplication(commitmentId, updatedFields);
+    const commitmentApplication = await commitmentApplicationService.updateCommitmentApplication(commitmentId, updatedFields);
 
     if (updatedFields.status === 'accepted') {
       await volunteerService.updateVolunteer(
@@ -78,7 +75,7 @@ const updateCommitmentApplication = async (req: Request, res: Response): Promise
       );
     }
 
-    res.status(HTTP_CODES.OK).send('Commitment Application and Volunteer updated');
+    res.status(HTTP_CODES.OK).send(commitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

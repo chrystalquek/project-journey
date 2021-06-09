@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import Event, { EventData, EventSearchType } from '../models/Event';
+import Event, { EventData, EventSearchType, NewEventData } from '../models/Event';
 import { VolunteerType } from '../models/Volunteer';
 
-const createEvent = async (eventData: EventData): Promise<string> => {
+const createEvent = async (eventData: NewEventData): Promise<EventData> => {
   try {
-    const eventSchemaData: mongoose.Document = new Event({
+    const eventSchemaData = new Event({
       name: eventData.name,
       coverImage: eventData.coverImage,
       eventType: eventData.eventType,
@@ -22,8 +22,8 @@ const createEvent = async (eventData: EventData): Promise<string> => {
       contentType: eventData.contentType,
       location: eventData.location,
     });
-    await eventSchemaData.save();
-    return eventSchemaData._id;
+    const event = await eventSchemaData.save();
+    return event;
   } catch (err) {
     throw new Error(err.msg);
 
@@ -136,13 +136,19 @@ const getEvents = async (eventType: EventSearchType, volunteerType: VolunteerTyp
 const updateEvent = async (
   id: string,
   updatedFields: Partial<EventData>,
-): Promise<void> => {
+): Promise<EventData> => {
   try {
-    await Event.findOneAndUpdate(
+    const event = await Event.findOneAndUpdate(
       { _id: id },
       { $set: updatedFields },
       { new: true },
     );
+
+    if (!event) {
+      throw new Error('Event is not found.');
+    }
+
+    return event
   } catch (err) {
     throw new Error(err.msg);
   }

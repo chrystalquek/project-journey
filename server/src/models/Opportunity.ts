@@ -10,6 +10,9 @@ const OpportunitySchema = createSchema({
 });
 
 export type OpportunityData = EventData & ExtractProps<typeof OpportunitySchema>;
+
+export type NewOpportunityData = Omit<OpportunityData, "_id" | "createdAt">
+
 const opportunityModel: mongoose.Model<OpportunityModel> = Event.discriminator('Opportunity', OpportunitySchema);
 
 export default opportunityModel;

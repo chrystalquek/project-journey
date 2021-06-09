@@ -70,5 +70,7 @@ export type EventData = Omit<ExtractProps<typeof EventSchema>, "__v" | "_id" | "
   roles: RoleData[]
 };
 
+export type NewEventData = Omit<EventData, "_id" | "createdAt">
+
 type EventModel = EventData & mongoose.Document
 export default mongoose.model<EventModel>('Event', EventSchema);

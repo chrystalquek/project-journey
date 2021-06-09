@@ -51,6 +51,7 @@ router.get(
 router.get(
   '/',
   authorize(['admin']),
+  validate(getValidations('getVolunteers')),
   volunteerController.getAllVolunteerDetails,
 );
 

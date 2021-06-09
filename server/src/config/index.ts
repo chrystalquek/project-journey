@@ -1,4 +1,4 @@
-import { EnvironmentConstants } from '../types';
+import { EnvironmentConstants } from '../types/types';
 
 const config: EnvironmentConstants = {
   port: Number(process.env.PORT) || 5000,

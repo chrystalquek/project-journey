@@ -1,0 +1,18 @@
+import { VolunteerPublicData } from '../../models/Volunteer';
+import { Response } from '../response/common';
+
+type SendFeedbackRequestResponseBody = {
+    userId: string,
+    eventId: string
+}
+
+export type SendFeedbackRequestResponse = Response<SendFeedbackRequestResponseBody>
+
+export type SendMassFeedbackRequestResponse = Response
+
+type SendCancelEventResponseBody = {
+    userId: string,
+    eventId: string
+}
+
+export type SendCancelEventResponse = Response<SendCancelEventResponseBody>
