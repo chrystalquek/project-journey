@@ -1,8 +1,6 @@
-import bcrypt from 'bcrypt';
 import { Type, createSchema, ExtractProps } from 'ts-mongoose';
 import mongoose from 'mongoose';
-
-export const setPassword = (value: string) => bcrypt.hashSync(value, 10);
+import { UserData } from './User';
 
 export const GENDER = ['male', 'female'] as const;
 export type Gender = (typeof GENDER)[number]
@@ -35,19 +33,19 @@ export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'admin'];
 export type VolunteerType = (typeof VOLUNTEER_TYPE)[number]
 
 export const VolunteerSchema = createSchema({
+  userId: Type.objectId({
+    required: true,
+    ref: 'User',
+  }),
   volunteerType: Type.string({
     required: true,
     enum: VOLUNTEER_TYPE,
   }),
   name: Type.string({ required: true }),
-  password: Type.string({
-    required: true,
-    set: setPassword,
-  }),
   nickname: Type.string({ required: false }),
   gender: Type.string({
     required: true,
-    enum: GENDER
+    enum: GENDER,
   }),
   citizenship: Type.string({
     required: true,
@@ -74,11 +72,11 @@ export const VolunteerSchema = createSchema({
 
   languages: Type.array({
     required: true,
-    default: []
+    default: [],
   }).of(Type.string({ required: true })),
   referralSources: Type.array({
     required: true,
-    default: []
+    default: [],
   }).of(Type.string({ required: true })),
 
   hasVolunteered: Type.boolean({ required: true }),
@@ -96,7 +94,7 @@ export const VolunteerSchema = createSchema({
   hasFirstAidCertification: Type.boolean({ required: false }),
   leadershipInterest: Type.string({
     required: false,
-    enum: LEADERSHIP_INTEREST
+    enum: LEADERSHIP_INTEREST,
   }),
   interests: Type.string({ required: false }), // short-ans
 
@@ -128,47 +126,42 @@ export const VolunteerSchema = createSchema({
 
   // Remarks
   volunteerRemarks: Type.string({ required: false }),
-  administratorRemarks: Type.string({ required: false }),
 
   // Event count
   volunteeringSessionsCount: Type.number({
     required: true,
-    default: 0
+    default: 0,
   }),
   workshopsCount: Type.number({
     required: true,
-    default: 0
+    default: 0,
   }),
   hangoutsCount: Type.number({
     required: true,
-    default: 0
+    default: 0,
   }),
 
   // Submitted Commitment Application
   commitmentApplicationIds: Type.array({
     required: true,
-    default: []
+    default: [],
   })
     .of(Type.objectId({
       required: true,
-      ref: 'CommitmentApplication'
+      ref: 'CommitmentApplication',
     })),
 
   createdAt: Type.date({
     required: true,
     default: Date.now,
-  })
+  }),
 });
 
-export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, "__v" | "_id" | "commitmentApplicationIds"> & { _id: string, commitmentApplicationIds: string[] };
+export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, '__v' | '_id' | 'commitmentApplicationIds' | 'userId'> & { _id: string, commitmentApplicationIds: string[], userId: string };
 
-export type VolunteerPublicData = Omit<
-  VolunteerData,
-  'password' |
-  'administratorRemarks'
->
+export type VolunteerUserData = VolunteerData & { administratorRemarks?: string }
 
-export type NewVolunteerData = Omit<VolunteerData, "_id" | "createdAt">
+export type NewVolunteerData = Omit<VolunteerData & UserData, '_id' | 'createdAt'>
 
 type VolunteerModel = VolunteerData & mongoose.Document
 export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);

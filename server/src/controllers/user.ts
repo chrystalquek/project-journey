@@ -1,25 +1,22 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { getUser } from '../services/user';
 import HTTP_CODES from '../constants/httpCodes';
 import { accessTokenSecret } from '../helpers/auth';
 import volunteerService from '../services/volunteer';
-import { VolunteerData } from '../models/Volunteer';
 import { LoginRequest, UpdatePasswordRequest } from '../types/request/user';
 import { LoginResponse, UpdatePasswordResponse } from '../types/response/user';
+import userService from '../services/user';
 
 const login = async (req: LoginRequest, res: LoginResponse): Promise<void> => {
   const { email, password } = req.body;
 
   try {
-    const user = await getUser(email);
+    const user = await userService.getUser(email);
     if (bcrypt.compareSync(password, user.password)) {
-      const userCopy = Object.assign(user);
-      delete userCopy.password;
+      // TODO need to remove userId form VolunteerData object?
+      const volunteer = await volunteerService.getVolunteer(email);
 
-      const userWithoutPassword: Omit<VolunteerData, 'password'> = userCopy;
-
-      const token = jwt.sign(JSON.parse(JSON.stringify(userWithoutPassword)), accessTokenSecret, {
+      const token = jwt.sign(JSON.parse(JSON.stringify(volunteer)), accessTokenSecret, {
         expiresIn: '24h',
       });
 
@@ -41,7 +38,8 @@ const login = async (req: LoginRequest, res: LoginResponse): Promise<void> => {
 };
 
 // TODO can remove?
-const updatePassword = async (req: UpdatePasswordRequest, res: UpdatePasswordResponse): Promise<void> => {
+const updatePassword = async (req: UpdatePasswordRequest,
+  res: UpdatePasswordResponse): Promise<void> => {
   const {
     email,
     password,
@@ -49,15 +47,16 @@ const updatePassword = async (req: UpdatePasswordRequest, res: UpdatePasswordRes
   } = req.body;
 
   try {
-    const user = await getUser(email);
+    const user = await userService.getUser(email);
+    const volunteer = await volunteerService.getVolunteer(email)
 
-    if (req.user._id !== user._id) {
+    if (req.user._id !== volunteer._id) {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
     }
 
     // should not be same as old password
     if (!bcrypt.compareSync(newPassword, user.password)) {
-      await volunteerService.updateVolunteer(user._id, { password: newPassword });
+      await userService.updateUser(user._id, { password: newPassword })
       res.status(HTTP_CODES.OK).send();
     } else {
       res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
