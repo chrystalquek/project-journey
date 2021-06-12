@@ -1,6 +1,6 @@
-import Opportunity, { OpportunityData } from '../models/Opportunity';
+import Opportunity, { NewOpportunityData, OpportunityData } from '../models/Opportunity';
 
-const createOpportunity = async (opportunityData: OpportunityData): Promise<void> => {
+const createOpportunity = async (opportunityData: NewOpportunityData): Promise<OpportunityData> => {
   try {
     const opportunitySchemeData = new Opportunity({
       // Inherited
@@ -22,7 +22,7 @@ const createOpportunity = async (opportunityData: OpportunityData): Promise<void
       positions: opportunityData.positions,
 
     });
-    await opportunitySchemeData.save();
+    return await opportunitySchemeData.save();
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -44,14 +44,20 @@ const getOpportunity = async (id: string) => {
 
 const updateOpportunity = async (
   id: string,
-  updatedFields: OpportunityData,
-): Promise<void> => {
+  updatedFields: Partial<OpportunityData>,
+): Promise<OpportunityData> => {
   try {
-    await Opportunity.findOneAndUpdate(
+    const opportunity = await Opportunity.findOneAndUpdate(
       { _id: id },
       { $set: updatedFields },
       { new: true },
     );
+
+    if (!opportunity) {
+      throw new Error('Opportunity is not found.');
+    }
+
+    return opportunity;
   } catch (err) {
     throw new Error(err.msg);
   }

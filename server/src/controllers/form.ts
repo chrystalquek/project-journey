@@ -1,23 +1,24 @@
 /* eslint-disable no-await-in-loop */
-import { Request, Response } from 'express';
 import HTTP_CODES from '../constants/httpCodes';
 import formService from '../services/forms/form';
 import optionsService from '../services/forms/option';
 import questionService from '../services/forms/question';
 import answerService from '../services/forms/answer';
-import { QuestionsOptionsRequestData } from '../questionTypes';
-import { AnswerData } from '../models/Forms/Answer';
+import { AnswerFormQuestionsRequest, CreateFormRequest, GetEventFormRequest } from '../types/request/form';
+import { AnswerFormQuestionsResponse, CreateFormResponse, GetEventFormResponse, QuestionsOptionsResponseData } from '../types/response/form';
 
-const createForm = async (req: Request, res: Response): Promise<void> => {
+const createForm = async (req: CreateFormRequest, res: CreateFormResponse): Promise<void> => {
   try {
     const {
       questions,
       eventId,
-    }: { questions: QuestionsOptionsRequestData[], eventId: string } = req.body;
+    } = req.body;
 
-    const formId = await formService.createForm({
+    const form = await formService.createForm({
       eventId
     });
+
+    const formId = form._id
 
     const questionsData = questions.map((questionData) => ({
       formId,
@@ -37,7 +38,7 @@ const createForm = async (req: Request, res: Response): Promise<void> => {
       // Fill up options for the question
       await optionsService.createOptionsForQuestion(optionsData);
     }
-    res.status(HTTP_CODES.OK).send();
+    res.status(HTTP_CODES.OK).send(form);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -45,7 +46,7 @@ const createForm = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getEventFormDetails = async (req: Request, res: Response): Promise<void> => {
+const getEventFormDetails = async (req: GetEventFormRequest, res: GetEventFormResponse): Promise<void> => {
   const { eventId } = req.params;
 
   try {
@@ -53,7 +54,7 @@ const getEventFormDetails = async (req: Request, res: Response): Promise<void> =
     const questions = await questionService.getQuestions(form._id);
 
     // TODO: Replace <any> with custom Question Option type
-    const questionsWithOptions: Array<any> = [];
+    const questionsWithOptions: Array<QuestionsOptionsResponseData> = [];
     for (let i = 0; i < questions.length; i += 1) {
       const question = questions[i];
       const optionsForQuestion = await optionsService.getOptionsForQuestion(question._id);
@@ -74,9 +75,9 @@ const getEventFormDetails = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-const answerFormQuestions = async (req: Request, res: Response): Promise<void> => {
-  let { answers }: { answers: AnswerData[] } = req.body;
-  const { eventId }: { eventId: string } = req.body;
+const answerFormQuestions = async (req: AnswerFormQuestionsRequest, res: AnswerFormQuestionsResponse): Promise<void> => {
+  let { answers } = req.body;
+  const { eventId } = req.body;
 
   if (answers.some((answer) => answer.userId !== req.user._id)) {
     // trying to submit responses that are not your user id is not allowed

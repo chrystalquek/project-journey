@@ -13,6 +13,8 @@ export type FormData = Omit<ExtractProps<typeof FormSchema>, "__v" | "_id" | "ev
   eventId: string
 };
 
+export type NewFormData = Omit<FormData, "_id">
+
 type FormModel = FormData & mongoose.Document
 export default mongoose.model<FormModel>('Form', FormSchema);
 

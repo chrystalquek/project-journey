@@ -25,5 +25,7 @@ const SignUpSchema = createSchema({
 
 export type SignUpData = Omit<ExtractProps<typeof SignUpSchema>, "__v" | "_id" | "eventId" | "userId"> & { _id: string, eventId: string, userId: string };
 
+export type NewSignUpData = Omit<SignUpData, "_id" | "createdAt">
+
 type SignUpModel = SignUpData & mongoose.Document
 export default mongoose.model<SignUpModel>('SignUp', SignUpSchema);

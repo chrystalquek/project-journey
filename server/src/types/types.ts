@@ -1,5 +1,5 @@
 // NOTE do not abuse this file. Most types should be in models/controller files
-import { VolunteerData } from "./models/Volunteer"
+import { VolunteerData } from "../models/Volunteer"
 
 export type EnvironmentConstants = {
     port: number,

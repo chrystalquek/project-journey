@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import Volunteer, { VolunteerData, VolunteerType, VOLUNTEER_TYPE } from '../models/Volunteer';
+import Volunteer, { NewVolunteerData, VolunteerData, VolunteerPublicData, VolunteerType, VOLUNTEER_TYPE } from '../models/Volunteer';
 import volunteerUtil from '../helpers/volunteer';
 
 // Helper methods
@@ -14,12 +14,14 @@ export const doesUserEmailExist = async (email: string): Promise<boolean> => {
  * Creates new volunteer for both ad-hoc/committed
  * @param volunteerData new volunteer data
  */
-const createVolunteer = async (volunteerData: VolunteerData): Promise<void> => {
+const createVolunteer = async (volunteerData: NewVolunteerData): Promise<VolunteerPublicData> => {
   const volunteerSchemaData = new Volunteer({
     ...volunteerData,
   });
 
-  await volunteerSchemaData.save();
+  const volunteer = await volunteerSchemaData.save();
+
+  return volunteerUtil.extractVolunteerDetails(volunteer)
 };
 
 /**
@@ -27,7 +29,7 @@ const createVolunteer = async (volunteerData: VolunteerData): Promise<void> => {
  * Throws error if user doesn't exist
  * @param email User email to be searched
  */
-const getVolunteer = async (email: string): Promise<Partial<VolunteerData>> => {
+const getVolunteer = async (email: string): Promise<VolunteerPublicData> => {
   const volunteer = await Volunteer.findOne({
     email,
   }).lean().exec();
@@ -44,7 +46,7 @@ const getVolunteer = async (email: string): Promise<Partial<VolunteerData>> => {
  * Throws error if user doesn't exist
  * @param id User id to be searched
  */
-const getVolunteerById = async (id: string): Promise<Partial<VolunteerData>> => {
+const getVolunteerById = async (id: string): Promise<VolunteerPublicData> => {
   const volunteer = await Volunteer.findById(id).populate('commitmentApplicationIds').lean().exec();
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
@@ -58,15 +60,15 @@ const getVolunteerById = async (id: string): Promise<Partial<VolunteerData>> => 
  * Filter by volunteerType and name inclusive
  * Sort by field specified if any
  */
-const getAllVolunteers = async (volunteerTypes?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number) => {
+const getAllVolunteers = async (volunteerType?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number) => {
   // no of volunteers that match name (if any)
   const count = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
-    .find({ volunteerType: { $in: volunteerTypes ?? VOLUNTEER_TYPE } })
+    .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
     .countDocuments();
 
   // get only part of the collection cos of pagination
   const volunteers = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
-    .find({ volunteerType: { $in: volunteerTypes ?? VOLUNTEER_TYPE } })
+    .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
     .sort({ [sort ?? '']: 1 })
     .skip(skip ?? 0).limit(limit ?? 0)
     .lean()
@@ -83,11 +85,12 @@ const getAllVolunteers = async (volunteerTypes?: VolunteerType[], name?: string,
  * @param ids array of volunteer ids
  * @return corresponding volunteers
  */
-const getVolunteersByIds = async (ids: string[]): Promise<VolunteerData[]> => {
+const getVolunteersByIds = async (ids: string[]): Promise<VolunteerPublicData[]> => {
   try {
-    return await Volunteer.find({
+    const volunteers = await Volunteer.find({
       _id: { $in: ids },
     });
+    return volunteers.map((volunteer: VolunteerData) => (volunteerUtil.extractVolunteerDetails(volunteer)));
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -114,14 +117,18 @@ const updateVolunteerDetails = async (email: string, updatedVolunteerData: Parti
  * @param id
  * @param updatedVolunteerData
  */
-const updateVolunteer = async (id: string, updatedVolunteerData: Partial<VolunteerData>) => {
-  await getVolunteerById(id);
+const updateVolunteer = async (id: string, updatedVolunteerData: Partial<VolunteerData>): Promise<VolunteerPublicData> => {
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
     { _id: id },
     updatedVolunteerData,
     { new: true },
   );
-  return savedVolunteerData;
+
+  if (!savedVolunteerData) {
+    throw new Error(`Volunteer not found`);
+  }
+
+  return volunteerUtil.extractVolunteerDetails(savedVolunteerData);
 };
 
 /**

@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import Team, { TeamModel } from '../models/Team';
-import { TeamData } from '../types';
+import { TeamData } from '../types/types';
 
 /**
  * Creates a single team from its given team members.

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { TeamData } from '../types';
+import { TeamData } from '../types/types';
 
 const { Schema } = mongoose;
 

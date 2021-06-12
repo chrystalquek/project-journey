@@ -1,15 +1,15 @@
-import Form, { FormData } from '../../models/Forms/Form';
+import Form, { FormData, NewFormData } from '../../models/Forms/Form';
 
 /**
  * Create form attached to event
  * @param formData form data created
  */
-const createForm = async (formData: Omit<FormData, "_id">): Promise<string> => {
+const createForm = async (formData: NewFormData): Promise<FormData> => {
   const formSchemaData = new Form({
     eventId: formData.eventId,
   });
-  await formSchemaData.save();
-  return formSchemaData._id;
+  const form = await formSchemaData.save();
+  return form;
 };
 
 /**

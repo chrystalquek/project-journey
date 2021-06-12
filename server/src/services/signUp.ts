@@ -1,11 +1,11 @@
-import SignUp, { SignUpData, SignUpIdType, SignUpStatus } from '../models/SignUp';
+import SignUp, { NewSignUpData, SignUpData, SignUpIdType, SignUpStatus } from '../models/SignUp';
 import Event, { RoleData } from '../models/Event';
 import emailService from './email';
 
 const INVALID_SIGN_UP_ID_TYPE = 'Invalid sign up id type';
 type UpdateEventVolunteersAction = 'add' | 'remove' | 'replace'
 
-const createSignUp = async (signUpData: Omit<SignUpData, '_id'>) => {
+const createSignUp = async (signUpData: NewSignUpData): Promise<SignUpData> => {
   try {
     const signUpSchemaData = new SignUp({
       eventId: signUpData.eventId,
@@ -14,10 +14,10 @@ const createSignUp = async (signUpData: Omit<SignUpData, '_id'>) => {
       preferences: signUpData.preferences,
       isRestricted: signUpData.isRestricted,
     });
-    await signUpSchemaData.save();
+    const signUp = await signUpSchemaData.save();
 
     emailService.sendEmail('WAITLIST_TO_CONFIRMED', signUpData.userId, signUpData.eventId);
-    return { signUpId: signUpSchemaData._id };
+    return signUp;
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -142,9 +142,9 @@ const updateEventRoles = async (eventId: string, volunteerId: string, oldRoleNam
  * @param updatedFields updated sign up data
  */
 const updateSignUp = async (id: string, idType: SignUpIdType,
-  updatedFields: SignUpData): Promise<void> => {
+  updatedFields: Partial<SignUpData>): Promise<SignUpData> => {
   try {
-    let oldFields;
+    let oldFields: SignUpData | null;
     switch (idType) {
       case 'signUpId':
         oldFields = await SignUp.findOneAndUpdate(
@@ -168,16 +168,20 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
         throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
 
+    if (!oldFields) {
+      throw new Error('SignUp not found');
+    }
+
     /** Add, remove, or replace volunteer from Event.volunteers array if SignUp.status changes */
     /** status is an array if the sign up is accepted i.e. ["accepted", string] */
 
     /** Not accepted --> Not accepted : No change */
     if (!checkIfAccepted(oldFields.status) && !checkIfAccepted(updatedFields.status)) {
-      return;
+      return oldFields;
     }
 
     /** Not accepted --> Accepted : Add */
-    if (!checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status)) {
+    if (!checkIfAccepted(oldFields.status) && checkIfAccepted(updatedFields.status) && updatedFields.userId) {
       updateEventRoles(oldFields.eventId, oldFields.userId,
         '', updatedFields.status[1], 'add');
 
@@ -196,6 +200,8 @@ const updateSignUp = async (id: string, idType: SignUpIdType,
       updateEventRoles(oldFields.eventId, oldFields.userId,
         oldFields.status[1], updatedFields.status[1], 'replace');
     }
+
+    return oldFields
   } catch (err) {
     throw new Error(err.msg);
   }

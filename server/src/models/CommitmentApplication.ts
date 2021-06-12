@@ -22,5 +22,7 @@ const CommitmentApplicationSchema = createSchema({
 
 export type CommitmentApplicationData = Omit<ExtractProps<typeof CommitmentApplicationSchema>, "__v" | "_id" | "volunteerId"> & { _id: string, volunteerId: string };
 
+export type NewCommitmentApplicationData = Omit<CommitmentApplicationData, "_id" | "createdAt">
+
 type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document
 export default mongoose.model<CommitmentApplicationModel>('CommitmentApplication', CommitmentApplicationSchema)

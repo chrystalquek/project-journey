@@ -1,16 +1,17 @@
-import { Request, Response } from 'express';
 import signUpService, { checkIfAccepted } from '../services/signUp';
 import answerService from '../services/forms/answer';
 import HTTP_CODES from '../constants/httpCodes';
 import eventService from '../services/event';
 import { EventData, EventSearchType } from '../models/Event';
 import { VolunteerType } from '../models/Volunteer';
+import { CancelEventRequest, CreateEventRequest, DeleteEventRequest, GetEventRequest, GetEventsRequest, GetSignedUpEventsRequest, UpdateEventRequest } from '../types/request/event';
+import { CancelEventResponse, CreateEventResponse, DeleteEventResponse, GetEventResponse, GetEventsResponse, GetSignedUpEventsResponse, UpdateEventResponse } from '../types/response/event';
 
-const createEvent = async (req: Request, res: Response): Promise<void> => {
+const createEvent = async (req: CreateEventRequest, res: CreateEventResponse): Promise<void> => {
   try {
-    const eventData: EventData = req.body;
-    const eventId = await eventService.createEvent(eventData);
-    res.status(HTTP_CODES.OK).send({ eventId });
+    const eventData = req.body;
+    const event = await eventService.createEvent(eventData);
+    res.status(HTTP_CODES.OK).send(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -18,7 +19,7 @@ const createEvent = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getEvent = async (req: Request, res: Response): Promise<void> => {
+const getEvent = async (req: GetEventRequest, res: GetEventResponse): Promise<void> => {
   try {
     const event = await eventService.getEvent(req.params.id);
 
@@ -38,26 +39,24 @@ const getEvent = async (req: Request, res: Response): Promise<void> => {
 /**
  * Retrieves either all, upcoming, or past events.
  */
-const getEvents = async (req: Request, res: Response): Promise<void> => {
+const getEvents = async (req: GetEventsRequest, res: GetEventsResponse): Promise<void> => {
   try {
-    const searchType = req.params.eventType as EventSearchType;
-    const pageNo = Number(req.query.pageNo);
-    const size = Number(req.query.size);
-
-    if (pageNo < 0 || size < 0) {
-      throw new Error('Invalid page or size number');
-    }
+    const { eventType } = req.params
+    const { pageNo, size } = req.query
 
     const volunteerType: VolunteerType[] = req.user.volunteerType === 'ad-hoc'
       ? ['ad-hoc']
       : ['ad-hoc', 'committed'];
 
     let events: EventData[];
-    if (Number.isNaN(pageNo) || Number.isNaN(size)) {
-      events = await eventService.getEvents(searchType, volunteerType);
+    if (!size || !pageNo) {
+      events = await eventService.getEvents(eventType, volunteerType);
     } else {
-      events = await eventService.getEvents(searchType, volunteerType, size * pageNo, size);
+      const pageNoNum = parseInt(pageNo)
+      const sizeNum = parseInt(size)
+      events = await eventService.getEvents(eventType, volunteerType, sizeNum * pageNoNum, sizeNum);
     }
+
     res.status(HTTP_CODES.OK).json({
       data: events,
     });
@@ -75,7 +74,7 @@ const getEvents = async (req: Request, res: Response): Promise<void> => {
  * @param req.params.userId userId in SignUpData
  * @param req.params.eventType event type based on time period - all, upcoming, past
  */
-const getSignedUpEvents = async (req: Request, res: Response): Promise<void> => {
+const getSignedUpEvents = async (req: GetSignedUpEventsRequest, res: GetSignedUpEventsResponse): Promise<void> => {
   try {
     const { userId, eventType } = req.params;
     const signUps = await signUpService.getSignUps(userId, 'userId');
@@ -116,14 +115,14 @@ const getSignedUpEvents = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-const updateEvent = async (req: Request, res: Response): Promise<void> => {
+const updateEvent = async (req: UpdateEventRequest, res: UpdateEventResponse): Promise<void> => {
   try {
     const { id } = req.params;
-    const updatedFields: EventData = req.body;
+    const updatedFields = req.body;
 
-    await eventService.updateEvent(id, updatedFields);
+    const event = await eventService.updateEvent(id, updatedFields);
 
-    res.status(HTTP_CODES.OK).send('Event data updated');
+    res.status(HTTP_CODES.OK).send(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -131,7 +130,7 @@ const updateEvent = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const cancelEvent = async (req: Request, res: Response): Promise<void> => {
+const cancelEvent = async (req: CancelEventRequest, res: CancelEventResponse): Promise<void> => {
   try {
     const { id } = req.params;
 
@@ -145,7 +144,7 @@ const cancelEvent = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const deleteEvent = async (req: Request, res: Response): Promise<void> => {
+const deleteEvent = async (req: DeleteEventRequest, res: DeleteEventResponse): Promise<void> => {
   try {
     await eventService.deleteEvent(req.params.id);
     res.status(HTTP_CODES.OK).send('Event data deleted');

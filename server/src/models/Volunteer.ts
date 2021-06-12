@@ -165,9 +165,10 @@ export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, "__v" | "
 export type VolunteerPublicData = Omit<
   VolunteerData,
   'password' |
-  '_id' |
   'administratorRemarks'
 >
+
+export type NewVolunteerData = Omit<VolunteerData, "_id" | "createdAt">
 
 type VolunteerModel = VolunteerData & mongoose.Document
 export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);

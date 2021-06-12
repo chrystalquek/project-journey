@@ -1,4 +1,4 @@
-import { body, param } from 'express-validator';
+import { body, param, query } from 'express-validator';
 import {
   email, password, regexValidator, stringEnumValidator,
 } from './global';
@@ -16,7 +16,8 @@ type VolunteerValidatorMethod =
   | 'createVolunteer'
   | 'getVolunteer'
   | 'deleteVolunteer'
-  | 'updateVolunteer';
+  | 'updateVolunteer'
+  | 'getVolunteers';
 
 /**
  * Handles route request validation for controllers
@@ -180,6 +181,13 @@ const getValidations = (method: VolunteerValidatorMethod) => {
     }
     case 'getVolunteer': {
       return [param('email').isEmail()];
+    }
+    case 'getVolunteers': {
+      return [
+        query(['pageNo', 'size']).isInt({ min: 0 }).optional(),
+        query(['name', 'sort']).isString().optional(),
+        query('volunteerType').isArray().custom((volTypes: string[]) => volTypes.every((volType: string) => stringEnumValidator(VOLUNTEER_TYPE, 'volunteer type', volType))).optional()
+      ]
     }
     case 'deleteVolunteer': {
       return [body('email').isEmail()];
