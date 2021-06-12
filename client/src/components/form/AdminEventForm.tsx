@@ -330,7 +330,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       if (isNew) {
         dispatch(createEvent(newForm))
       } else {
-        dispatch(editEvent({ data: form, id }))
+        dispatch(editEvent({ data: form, _id: id }))
       }
     },
     enableReinitialize: true,

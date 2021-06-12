@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GetVolunteersResponse } from '@api/response';
 import apiClient from '@api/apiClient';
+import { GetVolunteersByIdRequest } from '@api/request';
 
-export const getPendingVolunteers = createAsyncThunk<GetVolunteersResponse, void, { state }>(
+export const getPendingVolunteers = createAsyncThunk(
   'volunteer/getPendingVolunteers',
   async () => {
     const response = await apiClient.getPendingVolunteers();
@@ -10,10 +10,10 @@ export const getPendingVolunteers = createAsyncThunk<GetVolunteersResponse, void
   },
 );
 
-export const getVolunteersById = createAsyncThunk<GetVolunteersResponse, any, { state }>(
+export const getVolunteersById = createAsyncThunk(
   'volunteer/getVolunteersById',
-  async (ids) => {
-    const response = await apiClient.getVolunteersById(ids);
+  async (request: GetVolunteersByIdRequest) => {
+    const response = await apiClient.getVolunteersById(request);
     return response;
   },
 );

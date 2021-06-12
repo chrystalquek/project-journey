@@ -140,7 +140,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const withdrawCommitment = () => {
     const acceptedSignUp = signUpInfo.find((signUp) => Array.isArray(signUp.status) && signUp.status[0] === 'accepted');
     dispatch(deleteSignUp({
-      id: acceptedSignUp._id, idType: 'signUpId', eventId: acceptedSignUp.eventId, userId: acceptedSignUp.userId,
+      id: acceptedSignUp._id, idType: 'signUpId'
     }));
     router.push('/event');
   };

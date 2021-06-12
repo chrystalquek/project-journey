@@ -153,6 +153,7 @@ const SignUpFormGenerator = ({
 
       volunteerReason: values.volunteerReason,
       volunteerContribution: values.volunteerContribution,
+      hasCriminalRecord: values.hasCriminalRecord,
 
       // WCA Registration: Medical Information
       hasMedicalNeeds: values.hasMedicalNeeds,

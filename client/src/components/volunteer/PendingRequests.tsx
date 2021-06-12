@@ -50,7 +50,7 @@ const PendingRequests: FC<{}> = ({ }) => {
   const [openReject, setOpenReject] = React.useState(false);
 
   const onApproveReject = (commitmentApplication: CommitmentApplicationData) => {
-    dispatch(updateCommitmentApplication(commitmentApplication));
+    dispatch(updateCommitmentApplication({ _id: commitmentApplication._id, data: commitmentApplication }));
     setOpenApprove(false);
     setOpenReject(false);
   };

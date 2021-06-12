@@ -1,11 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { VolunteerData } from '@type/volunteer';
 import apiClient from '@api/apiClient';
 
-export const getVolunteerById = createAsyncThunk<VolunteerData, string, { state }>(
+export const getVolunteerById = createAsyncThunk(
   'profilePageData/getVolunteerById',
-  async (id: string) => {
-    const response = await apiClient.getVolunteerById(id);
+  async (_id: string) => {
+    const response = await apiClient.getVolunteer({ _id });
     return response;
   },
 );

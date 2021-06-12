@@ -1,50 +1,30 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { SignUpRequest, LoginRequest } from '@api/request';
-import { SignUpResponse, LoginResponse } from '@api/response';
+import { CreateVolunteerRequest, LoginRequest, UpdateVolunteerRequest } from '@api/request';
 import apiClient from '@api/apiClient';
-import {
-  VolunteerData,
-} from '@type/volunteer';
+
 
 export type LoginArgs = {
   email: string;
   password: string;
 };
 
-export const signUp = createAsyncThunk<SignUpResponse, VolunteerData, { state }>(
+export const signUp = createAsyncThunk(
   'volunteer/',
-  async (volunteer) => {
-    const response = apiClient.signUp(volunteer);
+  async (request: CreateVolunteerRequest) => {
+    const response = apiClient.createVolunteer(request);
     return response;
   },
 );
 
-const login = createAsyncThunk<LoginResponse, LoginArgs, { state }>(
+const login = createAsyncThunk(
   'user/login',
-  async ({ email, password }) => {
-    const request: LoginRequest = {
-      email,
-      password,
-    };
-    const response = (await apiClient.login(request)) as LoginResponse;
+  async (request: LoginRequest) => {
+    const response = await apiClient.login(request)
     return response;
   },
 );
 
-type UpdateVolunteerArgs = {
-  id: string;
-  updatedVolunteerData: Partial<VolunteerData>;
-};
-
-export const updateVolunteer = createAsyncThunk<
-  VolunteerData,
-  UpdateVolunteerArgs
->('user/updateVolunteer', async ({ id, updatedVolunteerData }) => {
-  const request = {
-    id,
-    updatedVolunteerData,
-  };
-
+export const updateVolunteer = createAsyncThunk('user/updateVolunteer', async (request: UpdateVolunteerRequest) => {
   const response = await apiClient.updateVolunteer(request);
   return response;
 });

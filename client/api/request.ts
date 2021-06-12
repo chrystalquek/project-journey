@@ -1,92 +1,87 @@
-import {
-  Race,
-  VolunteerData,
-} from '@type/volunteer';
+import { VolunteerData } from '@type/volunteer';
 import { SignUpData, SignUpIdType } from '@type/signUp';
-import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { CommitmentApplicationData, CommitmentApplicationStatus } from '@type/commitmentApplication';
 import { EventData, EventSearchType } from '@type/event';
+import { AnswerData } from '@type/form/answer';
 
-export type SignUpRequest = VolunteerData
+// login
 
 export type LoginRequest = {
   email: string;
   password: string;
 };
 
-export type GetVolunteersRequest = {
-  pageNo: number,
-  size: number
-  volunteerType: string,
-  name?: string
-  sort: string
-}
+// events
 
-export type EventQueryParams = {
-  userId?: string
+export type CreateEventRequest = Omit<EventData, '_id' | 'createdAt'> & { questions: Array<QuestionsOptionsRequestData> }
+
+export type GetEventsRequest = {
   eventType: EventSearchType
 }
 
-export type CommitmentApplicationQueryParams = {
-  status: CommitmentApplicationStatus
-}
+export type GetSignedUpEventsRequest = {
+  userId: string
+} & GetEventsRequest
 
-type EventPostData = Omit<EventData, '_id' | 'createdAt'> & { questions: Array<QuestionsOptionsRequestData> }
+export type GetEventRequest = IdRequest
 
-export type CreateEventRequest = EventPostData;
-
-export type EditEventRequest = {
-  id: string;
-  data: EventPostData;
+export type UpdateEventRequest = {
+  _id: string;
+  data: Partial<EventData>;
 };
 
-export type GetEventParams = string;
+export type DeleteEventRequest = IdRequest
 
-export type CancelEventParams = {
-  eventId: string
+export type CancelEventRequest = IdRequest
+
+// volunteers
+
+export type CreateVolunteerRequest = Omit<VolunteerData, "_id" | "createdAt">
+
+export type GetVolunteersPaginatedRequest = {
+  pageNo?: number,
+  size?: number
+  volunteerType?: string[],
+  name?: string
+  sort?: string
 }
 
-export type DeleteEventRequest = {
-  eventId: string
+export type GetVolunteersByIdRequest = {
+  ids: string[]
 }
 
-export type GetEventFeedbackFormQuestionsRequest = {
-  eventId: string
-}
-export type UploadImageRequest = FormData;
-
-export type UploadImageRequestWithField = {
-  name: string;
-  form: FormData;
-};
-export type CreateCommitmentApplicationRequest = {
-  volunteerId: string;
-  homeAddress: string,
-  race: Race,
-  biabVolunteeringDuration: string,
-  hasVolunteeredExternally: boolean,
-  volunteeringExperience: string,
-  hasChildrenExperience: boolean,
-  childrenExperience: string,
-  sessionsPerMonth: boolean,
-  sessionPreference: string,
-  hasFirstAidCertification: boolean,
-  leadershipInterest: string,
-  interests: string,
-  skills: [string],
-  personality: string,
-  strengths: string,
-  volunteerContribution: string,
-  hasCriminalRecord: boolean
-};
+export type GetVolunteerRequest = IdRequest
 
 export type UpdateVolunteerRequest = {
-  id: string;
-  updatedVolunteerData: Partial<VolunteerData>;
+  _id: string;
+  data: Partial<VolunteerData>;
 };
-export interface AnswerFormQuestionsRequest {
-  eventId: string
-  answers: Array<AnswerData>
+
+// sign up
+
+export type CreateSignUpRequest = Omit<SignUpData, '_id' | 'createdAt'>;
+
+export type GetSignUpsRequest = SignUpIdRequest
+
+export type UpdateSignUpRequest = {
+  data: Partial<SignUpData>
+} & SignUpIdRequest
+
+export type DeleteSignUpRequest = SignUpIdRequest
+
+// commitment application
+
+export type CreateCommitmentApplicationRequest = Omit<CommitmentApplicationData, '_id' | 'createdAt'>
+
+export type GetCommitmentApplicationsRequest = {
+  status?: CommitmentApplicationStatus
 }
+
+export type UpdateCommitmentApplicationRequest = {
+  data: Partial<CommitmentApplicationData>
+} & IdRequest
+
+// form
 
 export type FormQuestionType = 'shortAnswer' | 'mcq' | 'checkboxes'
 
@@ -97,28 +92,35 @@ export type QuestionsOptionsRequestData = {
   name: string;
   options: Array<{ content: string }>
 }
-
 export interface CreateFormQuestionsRequest {
   eventId: string,
   questions: Array<QuestionsOptionsRequestData>
 }
 
-export type AnswerData = {
-  questionId: string;
-  userId: string;
-  content: string;
+export type GetEventFeedbackQuestionsRequest = IdRequest
+
+export interface AnswerFormQuestionsRequest {
+  eventId: string
+  answers: Array<Omit<AnswerData, "_id" | "createdAt">>
 }
 
-// SIGN-UPS
-export type SignUpQueryParams = {
+// image
+
+export type UploadImageRequest = FormData;
+
+export type UploadImageRequestWithField = {
+  name: string;
+  form: FormData;
+};
+
+
+// some commonly used types
+
+type IdRequest = {
+  _id: string
+}
+
+type SignUpIdRequest = {
   id: string; // id to match against once idType is known
   idType: SignUpIdType;
-  eventId?: string; // eg use case is when signup is deleted and eventId and userId is needed to update specific event and roledata in redux
-  userId?: string;
 }
-
-export type CreateSignUpRequest = Omit<SignUpData, '_id' | 'createdAt'>;
-
-export type UpdateSignUpRequest = Omit<SignUpData, '_id' | 'createdAt'>;
-
-export type GetVolunteerRequest = string;

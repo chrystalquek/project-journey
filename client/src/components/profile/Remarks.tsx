@@ -38,8 +38,8 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   const saveVolunteerRemarks = () => {
     dispatch(
       updateVolunteer({
-        id: profilePageData._id,
-        updatedVolunteerData: {
+        _id: profilePageData._id,
+        data: {
           volunteerRemarks,
         },
       }),
@@ -51,8 +51,8 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   const saveAdministratorRemarks = () => {
     dispatch(
       updateVolunteer({
-        id: profilePageData._id,
-        updatedVolunteerData: {
+        _id: profilePageData._id,
+        data: {
           administratorRemarks,
         },
       }),

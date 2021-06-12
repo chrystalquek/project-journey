@@ -1,29 +1,27 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { CreateCommitmentApplicationRequest, CommitmentApplicationQueryParams } from '@api/request';
-import { GetCommitmentApplicationResponse } from '@api/response';
+import { CreateCommitmentApplicationRequest, GetCommitmentApplicationsRequest, UpdateCommitmentApplicationRequest } from '@api/request';
 import apiClient from '@api/apiClient';
-import { CommitmentApplicationData } from '@type/commitmentApplication';
 
-export const createCommitmentApplication = createAsyncThunk<CommitmentApplicationData, CreateCommitmentApplicationRequest, { state }>(
+export const createCommitmentApplication = createAsyncThunk(
   'commitmentApplication/createCommitmentApplication',
-  async (data: CreateCommitmentApplicationRequest) => {
-    const response = await apiClient.createCommitmentApplication(data);
+  async (request: CreateCommitmentApplicationRequest) => {
+    const response = await apiClient.createCommitmentApplication(request);
     return response;
   },
 );
 
-export const getCommitmentApplications = createAsyncThunk<GetCommitmentApplicationResponse, CommitmentApplicationQueryParams, { state }>(
+export const getCommitmentApplications = createAsyncThunk(
   'commitmentApplication/getCommitmentApplication',
-  async ({ status }) => {
-    const response = await apiClient.getCommitmentApplications({ status });
+  async (request: GetCommitmentApplicationsRequest) => {
+    const response = await apiClient.getCommitmentApplications(request);
     return response;
   },
 );
 
-export const updateCommitmentApplication = createAsyncThunk<CommitmentApplicationData, CommitmentApplicationData, { state }>(
+export const updateCommitmentApplication = createAsyncThunk(
   'commitmentApplication/updateCommitmentApplication',
-  async (data: CommitmentApplicationData) => {
-    await apiClient.updateCommitmentApplication(data);
-    return data;
+  async (request: UpdateCommitmentApplicationRequest) => {
+    const response = await apiClient.updateCommitmentApplication(request);
+    return response;
   },
 );

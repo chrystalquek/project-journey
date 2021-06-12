@@ -45,7 +45,7 @@ const ChangeVolunteerType: FC = () => {
 
   const handleSubmit = () => {
     const updatedVolunteerData = { ...profilePageData, volunteerType: volunteerType }
-    dispatch(updateVolunteer({ id: profilePageData._id, updatedVolunteerData: updatedVolunteerData }))
+    dispatch(updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData }))
     handleCloseDialog()
   }
 

@@ -26,7 +26,7 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
 import RightDrawer from '@components/common/RightDrawer';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import SearchBar from '@components/common/SearchBar';
 import { useRouter } from 'next/router';
 import { checkLoggedIn } from '@utils/helpers/auth';

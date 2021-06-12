@@ -1,68 +1,15 @@
-import { CommitmentApplicationData } from '@type/commitmentApplication';
+
 import { VolunteerData } from '@type/volunteer';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import {
-  LoginRequest,
-  CreateEventRequest,
-  EditEventRequest,
-  GetEventParams,
-  SignUpRequest,
-  UploadImageRequest,
-  CreateSignUpRequest,
-  UpdateSignUpRequest,
-  SignUpQueryParams,
-  UpdateVolunteerRequest,
-  CreateCommitmentApplicationRequest,
-  CommitmentApplicationQueryParams,
-  EventQueryParams,
-  GetVolunteersRequest,
-  AnswerFormQuestionsRequest,
-  CreateFormQuestionsRequest,
-  CancelEventParams,
-  DeleteEventRequest,
-} from '@api/request';
-
-import {
-  GetEventsResponse, GetSignUpsResponse, GetVolunteersResponse, LoginResponse, CreateEventResponse,
-  EditEventResponse, GetEventResponse, SignUpResponse, UploadImageResponse,
-  CreateSignUpResponse, UpdateSignUpResponse,
-  GetVolunteersPaginatedResponse, GetCommitmentApplicationResponse, CreateUpdateSignUpResponse, GetEventFeedbackQuestionsResponse,
-} from '@api/response';
 import { SignUpIdType } from '@type/signUp';
+import { LoginRequest, CreateEventRequest, GetEventsRequest, GetSignedUpEventsRequest, GetEventRequest, UpdateEventRequest, DeleteEventRequest, CancelEventRequest, CreateVolunteerRequest, GetVolunteersPaginatedRequest, GetVolunteersByIdRequest, GetVolunteerRequest, UpdateVolunteerRequest, CreateSignUpRequest, GetSignUpsRequest, UpdateSignUpRequest, DeleteSignUpRequest, CreateCommitmentApplicationRequest, GetCommitmentApplicationsRequest, UpdateCommitmentApplicationRequest, AnswerFormQuestionsRequest, CreateFormQuestionsRequest, UploadImageRequest, GetEventFeedbackQuestionsRequest } from './request';
+import { LoginResponse, CreateEventResponse, GetEventsResponse, GetEventResponse, UpdateEventResponse, CreateVolunteerResponse, GetVolunteersPaginatedResponse, GetVolunteersResponse, GetVolunteerResponse, UpdateVolunteerResponse, CreateSignUpResponse, GetSignUpsResponse, UpdateSignUpResponse, CreateUpdateSignUpResponse, CreateCommitmentApplicationResponse, GetCommitmentApplicationsResponse, UpdateCommitmentApplicationResponse, GetEventFeedbackQuestionsResponse, UploadImageResponse } from './response';
+import querystring from 'querystring';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
-export interface ApiClient {
-  login(request: LoginRequest): Promise<LoginResponse>
 
-  // event
-  createEvent(request: CreateEventRequest): Promise<CreateEventResponse>
-  getEvent(request: GetEventParams): Promise<GetEventResponse>
-  editEvent(request: EditEventRequest): Promise<EditEventResponse>
-  deleteEvent(eventId: string): Promise<void>
-  cancelEvent(eventId: string): Promise<void>
-  getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse>
-  getEvents(query: EventQueryParams): Promise<GetEventsResponse>
-  getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse>
-  submitEventFeedback(request: AnswerFormQuestionsRequest): Promise<void>
-  createForm(request: CreateFormQuestionsRequest): Promise<void>
-
-  // volunteers
-  getVolunteersPaginated(query: GetVolunteersRequest): Promise<GetVolunteersPaginatedResponse>
-  getPendingVolunteers(): Promise<GetVolunteersResponse>
-  updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData>
-
-  // signup
-  getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse>
-  deleteSignUp(query: SignUpQueryParams): Promise<void>
-  getPendingSignUps(): Promise<GetSignUpsResponse>
-
-  // commitment application
-  getCommitmentApplications(query: CommitmentApplicationQueryParams):
-    Promise<GetCommitmentApplicationResponse>
-}
-
-class AxiosApiClient implements ApiClient {
+class AxiosApiClient {
   private axiosInstance: AxiosInstance;
 
   private token: string = '';
@@ -73,152 +20,153 @@ class AxiosApiClient implements ApiClient {
     });
   }
 
-  private toURLParams = (query) => `?${new URLSearchParams(query).toString()}`
+  private toURLParams = (query) => `?${querystring.stringify(query)}`
 
   public setAuthToken(token: string): void {
     this.token = token;
   }
 
-  // create user
-  async signUp(request: SignUpRequest): Promise<SignUpResponse> {
-    return this.send(request, 'volunteer', 'post');
-  }
-
-  // user auth
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, 'user/login', 'post');
   }
 
-  // sign up
-  async getSignUps(query: SignUpQueryParams): Promise<GetSignUpsResponse> {
-    return this.send({}, `signup/${query.id}/${query.idType}`, 'get');
-  }
-
-  async getPendingSignUps(): Promise<GetSignUpsResponse> {
-    return this.send({}, 'signup/pending', 'get');
-  }
-
-  async createSignUp(
-    request: CreateSignUpRequest,
-  ): Promise<CreateSignUpResponse> {
-    return this.send(request, 'signup', 'post');
-  }
-
-  async updateSignUp(query: SignUpQueryParams, request: UpdateSignUpRequest):
-    Promise<UpdateSignUpResponse> {
-    return this.send(request, `signup/${query.id}/${query.idType}`, 'put');
-  }
-
-  async createAndUpdateSignUp(acceptedRole: string, request: CreateSignUpRequest): Promise<CreateUpdateSignUpResponse> {
-    return this.createSignUp(request)
-      .then((res) => {
-        const newRequest: UpdateSignUpRequest = {
-          ...request,
-          status: ['accepted', acceptedRole],
-        };
-        const newQuery = {
-          id: res._id,
-          idType: 'signUpId' as SignUpIdType,
-        };
-        return this.updateSignUp(newQuery, newRequest);
-      });
-  }
-
-  async deleteSignUp(query: SignUpQueryParams): Promise<void> {
-    return this.send({}, `signup/${query.id}/${query.idType}`, 'delete');
-  }
-
   // event
-  async getSignedUpEvents(query: EventQueryParams): Promise<GetEventsResponse> {
-    return this.send({}, `event/signup/${query.userId}/${query.eventType}`, 'get');
-  }
-
-  // admin post event
   async createEvent(request: CreateEventRequest): Promise<CreateEventResponse> {
     return this.send(request, 'event', 'post');
   }
 
-  async getEvent(query: GetEventParams): Promise<GetEventResponse> {
-    return this.send({}, `event/single/${query}`, 'get');
+  async getEvents(request: GetEventsRequest): Promise<GetEventsResponse> {
+    return this.send({}, `event/multiple/${request.eventType}`, 'get');
   }
 
-  async editEvent({ id, data }: EditEventRequest): Promise<EditEventResponse> {
-    return this.send(data, `event/${id}`, 'put');
+  async getSignedUpEvents(request: GetSignedUpEventsRequest): Promise<GetEventsResponse> {
+    return this.send({}, `event/signup/${request.userId}/${request.eventType}`, 'get');
   }
 
-  async deleteEvent(signUpId: string): Promise<void> {
-    return this.send({}, `event/${signUpId}`, 'delete');
+  async getEvent(request: GetEventRequest): Promise<GetEventResponse> {
+    return this.send({}, `event/single/${request._id}`, 'get');
   }
 
-  async cancelEvent(eventId: string): Promise<void> {
-    return this.send({}, `event/cancel/${eventId}`, 'put');
+  async updateEvent(request: UpdateEventRequest): Promise<UpdateEventResponse> {
+    return this.send(request.data, `event/${request._id}`, 'put');
   }
 
-  async getEvents(query: EventQueryParams): Promise<GetEventsResponse> {
-    return this.send({}, `event/multiple/${query.eventType}`, 'get');
+  async deleteEvent(request: DeleteEventRequest): Promise<void> {
+    return this.send({}, `event/${request._id}`, 'delete');
+  }
+
+  async cancelEvent(request: CancelEventRequest): Promise<void> {
+    return this.send({}, `event/cancel/${request._id}`, 'put');
   }
 
   // volunteer
-  async getVolunteerById(id: string): Promise<VolunteerData> {
-    return this.send({}, `volunteer/id/${id}`, 'get');
+
+  async createVolunteer(request: CreateVolunteerRequest): Promise<CreateVolunteerResponse> {
+    return this.send(request, 'volunteer', 'post');
   }
 
-  async getVolunteersPaginated(query: GetVolunteersRequest):
+  async getVolunteers(request: GetVolunteersPaginatedRequest):
     Promise<GetVolunteersPaginatedResponse> {
-    return this.send({}, `volunteer/${this.toURLParams(query)}`, 'get');
+    return this.send({}, `volunteer/${this.toURLParams(request)}`, 'get');
+  }
+
+  async getVolunteersById(request: GetVolunteersByIdRequest): Promise<GetVolunteersResponse> {
+    return this.send(request, 'volunteer/ids', 'get');
   }
 
   async getPendingVolunteers(): Promise<GetVolunteersResponse> {
     return this.send({}, 'volunteer/pending', 'get');
   }
 
-  async getEventFeedbackQuestions(eventId: string): Promise<GetEventFeedbackQuestionsResponse> {
-    return this.send({}, `form/${eventId}`, 'get');
+  async getVolunteer(request: GetVolunteerRequest): Promise<GetVolunteerResponse> {
+    return this.send({}, `volunteer/id/${request._id}`, 'get');
+  }
+
+  async updateVolunteer(request: UpdateVolunteerRequest): Promise<UpdateVolunteerResponse> {
+    return this.send(request.data, `volunteer/${request._id}`, 'put');
+  }
+
+  // sign up
+  async createSignUp(
+    request: CreateSignUpRequest,
+  ): Promise<CreateSignUpResponse> {
+    return this.send(request, 'signup', 'post');
+  }
+
+  async getSignUps(request: GetSignUpsRequest): Promise<GetSignUpsResponse> {
+    return this.send({}, `signup/${request.id}/${request.idType}`, 'get');
+  }
+
+  async getPendingSignUps(): Promise<GetSignUpsResponse> {
+    return this.send({}, 'signup/pending', 'get');
+  }
+
+  async updateSignUp(request: UpdateSignUpRequest):
+    Promise<UpdateSignUpResponse> {
+    return this.send(request.data, `signup/${request.id}/${request.idType}`, 'put');
+  }
+
+  // TODO change this to 1 api call
+  async createAndUpdateSignUp(acceptedRole: string, request: CreateSignUpRequest): Promise<CreateUpdateSignUpResponse> {
+    return this.createSignUp(request)
+      .then((res) => {
+        const newRequest: UpdateSignUpRequest = {
+          id: res._id,
+          idType: 'signUpId' as SignUpIdType,
+          data: {
+            ...request,
+            status: ['accepted', acceptedRole],
+          }
+        };
+        return this.updateSignUp(newRequest);
+      });
+  }
+
+  async deleteSignUp(request: DeleteSignUpRequest): Promise<void> {
+    return this.send({}, `signup/${request.id}/${request.idType}`, 'delete');
+  }
+
+  // commitment application
+  async createCommitmentApplication(request: CreateCommitmentApplicationRequest):
+    Promise<CreateCommitmentApplicationResponse> {
+    return this.send(request, 'commitment-application', 'post');
+  }
+
+  async getCommitmentApplications(request: GetCommitmentApplicationsRequest):
+    Promise<GetCommitmentApplicationsResponse> {
+    return this.send({}, `commitment-application/${this.toURLParams(request)}`, 'get');
+  }
+
+  async updateCommitmentApplication(
+    request: UpdateCommitmentApplicationRequest,
+  ): Promise<UpdateCommitmentApplicationResponse> {
+    return this.send(request.data, `commitment-application/${request._id}`, 'put');
+  }
+
+  // form
+
+  // TODO change this to 1 api call
+  async createForm(request: CreateFormQuestionsRequest): Promise<void> {
+    return this.send(request, 'form', 'post');
+  }
+
+  async getEventFeedbackQuestions(request: GetEventFeedbackQuestionsRequest): Promise<GetEventFeedbackQuestionsResponse> {
+    return this.send({}, `form/${request._id}`, 'get');
   }
 
   async submitEventFeedback(request: AnswerFormQuestionsRequest): Promise<void> {
     return this.send(request, 'form/answer', 'post');
   }
 
-  async createForm(request: CreateFormQuestionsRequest): Promise<void> {
-    return this.send(request, 'form', 'post');
-  }
-
-  async updateVolunteer(request: UpdateVolunteerRequest): Promise<VolunteerData> {
-    return this.send(request, `volunteer/${request.id}`, 'put');
-  }
-
-  async updateProfilePicture(request: UploadImageRequest): Promise<VolunteerData> {
-    return this.send(request, 'image/profile-picture', 'post', true);
-  }
-
-  // commitment application
-  async createCommitmentApplication(request: CreateCommitmentApplicationRequest):
-    Promise<CommitmentApplicationData> {
-    return this.send(request, 'commitment-application', 'post');
-  }
-
-  async getCommitmentApplications(query: CommitmentApplicationQueryParams):
-    Promise<GetCommitmentApplicationResponse> {
-    return this.send({}, `commitment-application/${this.toURLParams(query)}`, 'get');
-  }
-
-  async updateCommitmentApplication(
-    data: CommitmentApplicationData,
-  ): Promise<void> {
-    return this.send(data, `commitment-application/${data._id}`, 'put');
-  }
-
-  async getVolunteersById(ids) {
-    return this.send({ ids }, 'volunteer/ids', 'get');
-  }
-
-  async getSignUpsByEventId(eid) {
-    return this.send({ eid }, `signup/${eid}/eventId`, 'get');
-  }
+  // image
 
   async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
     return this.send(request, 'image', 'post', true);
+  }
+
+
+  async updateProfilePicture(request: UploadImageRequest): Promise<VolunteerData> {
+    return this.send(request, 'image/profile-picture', 'post', true);
   }
 
   protected async send(

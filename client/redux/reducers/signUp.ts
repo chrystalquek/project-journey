@@ -92,7 +92,7 @@ const signUpSlice = createSlice({
     });
     builder.addCase(updateSignUpInstant.fulfilled, (state, action) => {
       const { payload } = action;
-      addToData(payload.data, state);
+      state.data[payload._id] = payload
     });
     builder.addCase(deleteSignUp.fulfilled, (state, action) => {
       const { meta } = action;

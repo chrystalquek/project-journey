@@ -17,6 +17,7 @@ import { getEvent } from '@redux/actions/event';
 import CheckIcon from '@material-ui/icons/Check';
 import SearchBar from '@components/common/SearchBar';
 import { VolunteerData } from '@type/volunteer';
+import { UpdateSignUpRequest } from '@api/request';
 
 export const rowsPerPage = 10;
 
@@ -104,7 +105,7 @@ const EventVolunteers = ({ eid }) => {
   }, [signUps]);
 
   const getVolunteerData = async () => {
-    const volunteerData = await dispatch(getVolunteersById(allVolunteerIds))
+    const volunteerData = await dispatch(getVolunteersById({ ids: allVolunteerIds }))
       // @ts-ignore type exists
       .then(unwrapResult)
       .then((result) => result.data);
@@ -178,8 +179,8 @@ const EventVolunteers = ({ eid }) => {
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
   const [signUpIdOfRolesBeingEdited, setSignUpIdOfRolesBeingEdited] = useState([]);
 
-  const onUpdateSignUp = ({ request, query }) => {
-    dispatch(updateSignUpInstant({ request, query }));
+  const onUpdateSignUp = (request: UpdateSignUpRequest) => {
+    dispatch(updateSignUpInstant(request));
     setOpenRemoveDialog(false);
   };
 
@@ -222,11 +223,9 @@ const EventVolunteers = ({ eid }) => {
     const selectedRole = selectedRoles[signUp._id];
 
     dispatch(updateSignUpInstant({
-      request: { ...signUp, status: ['accepted', selectedRole] },
-      query: {
-        id: signUp._id,
-        idType: 'signUpId',
-      },
+      data: { ...signUp, status: ['accepted', selectedRole] },
+      id: signUp._id,
+      idType: 'signUpId',
     }));
   };
 
@@ -281,11 +280,9 @@ const EventVolunteers = ({ eid }) => {
                 content={`Are you sure you want to remove ${volunteerName} as a volunteer?`}
                 buttonTitle="Delete"
                 buttonOnClick={() => onUpdateSignUp({
-                  request: { ...signUp, status: 'pending' },
-                  query: {
-                    id: signUp._id,
-                    idType: 'signUpId',
-                  },
+                  data: { ...signUp, status: 'pending' },
+                  id: signUp._id,
+                  idType: 'signUpId'
                 })}
                 openCloseButtonStyle="popUpButton"
                 openCloseButtonTitle="Remove Volunteer from Event"

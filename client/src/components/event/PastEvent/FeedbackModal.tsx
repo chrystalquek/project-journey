@@ -125,7 +125,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
 
   // Load form when opening modal
   useEffect(() => {
-    dispatch(getEventFeedbackFormQuestions({ eventId }));
+    dispatch(getEventFeedbackFormQuestions(eventId));
   }, []);
 
   const navigateToFeedback = () => {

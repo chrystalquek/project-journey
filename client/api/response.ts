@@ -4,19 +4,27 @@ import { QuestionItem } from '@type/form/question';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData } from '@type/volunteer';
 
-export type SignUpResponse = Record<string, any>
+export type SignUpResponse = Record<string, any> // TODO remove this by refactoring SignUpFormGenerator
 
 export type LoginResponse = {
   token: string
 }
 
-export type GetAllEventsResponse = {
-  data: Array<EventData>
-}
+// event
+
+export type CreateEventResponse = EventData
 
 export type GetEventsResponse = {
   data: Array<EventData>
 }
+
+export type GetEventResponse = EventData
+
+export type UpdateEventResponse = EventData
+
+// volunteers
+
+export type CreateVolunteerResponse = VolunteerData
 
 export type GetVolunteersResponse = {
   data: Array<VolunteerData>
@@ -26,40 +34,39 @@ export type GetVolunteersPaginatedResponse = GetVolunteersResponse & {
   count: number
 }
 
-export type GetCommitmentApplicationResponse = {
-  data: Array<CommitmentApplicationData>
-}
+export type GetVolunteerResponse = VolunteerData
 
-export type EditEventResponse = {}
+export type UpdateVolunteerResponse = VolunteerData
 
-export type GetEventResponse = EventData;
+// sign up
+
+export type CreateSignUpResponse = SignUpData
+
 export type GetSignUpsResponse = {
   data: Array<SignUpData>
 }
 
-export type CreateEventResponse = {
-  eventId: string
+export type UpdateSignUpResponse = SignUpData
+
+export type CreateUpdateSignUpResponse = SignUpData
+
+// commitment application
+
+export type CreateCommitmentApplicationResponse = CommitmentApplicationData
+
+export type GetCommitmentApplicationsResponse = {
+  data: Array<CommitmentApplicationData>
 }
+
+export type UpdateCommitmentApplicationResponse = CommitmentApplicationData
+
+// image
 
 export type UploadImageResponse = {
   name: string,
   url: string
 }
-// general response just to get a number
-export type GetCountResponse = {
-  count: number
-}
+
+// form
 
 export type GetEventFeedbackQuestionsResponse = Array<QuestionItem>
-export type CreateSignUpResponse = {
-  _id: string
-}
-
-export type UpdateSignUpResponse = {
-  data: SignUpData
-  success: boolean,
-}
-
-export type CreateUpdateSignUpResponse = {
-  success: boolean,
-}

@@ -8,9 +8,3 @@ export function initializeFilterObject<T extends { [key: number]: string }>(enum
   keys.forEach((key) => filterObject[key] = true);
   return filterObject;
 }
-
-// takes in a filter object and returns a comma-separated string representation
-// e.g. {"a": true, "b": false, "c": true} => ",a,c"
-export function convertFilterObjectToQueryString(filterObj: Record<string, boolean>): string {
-  return Object.keys(filterObj).reduce((a, b) => (filterObj[b] ? `${a},${b}` : a), '');
-}

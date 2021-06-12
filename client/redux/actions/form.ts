@@ -1,37 +1,28 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '@api/apiClient';
 import { AnswerFormQuestionsRequest, CreateFormQuestionsRequest } from '@api/request';
-import { GetEventFeedbackQuestionsResponse } from '@api/response';
 
-export const getEventFeedbackFormQuestions = createAsyncThunk<
-  GetEventFeedbackQuestionsResponse,
-  { eventId },
-  { state }
->(
+export const createForm = createAsyncThunk(
+  'form/createForm',
+  async (request: CreateFormQuestionsRequest) => {
+    const response = await apiClient.createForm(request);
+    return response;
+  }
+)
+
+export const getEventFeedbackFormQuestions = createAsyncThunk(
   'form/getQuestions',
-  async ({ eventId }) => {
-    const response = await apiClient.getEventFeedbackQuestions(eventId);
+  async (_id: string) => {
+    const response = await apiClient.getEventFeedbackQuestions({ _id });
     return response;
   },
 );
 
-export const submitEventFeedbackFormQuestions = createAsyncThunk<
-  void, AnswerFormQuestionsRequest>(
-    'form/submitQuestions',
-    async ({ eventId, answers }) => {
-      const response = await apiClient.submitEventFeedback({
-        eventId, answers,
-      });
-      return response;
-    },
-  );
-
-export const createForm = createAsyncThunk<void, CreateFormQuestionsRequest>(
-  'form/createForm',
-  async ({ eventId, questions }) => {
-    const response = await apiClient.createForm({
-      eventId, questions,
-    });
+export const submitEventFeedbackFormQuestions = createAsyncThunk(
+  'form/submitQuestions',
+  async (request: AnswerFormQuestionsRequest) => {
+    const response = await apiClient.submitEventFeedback(request);
     return response;
-  }
-)
+  },
+);
+
