@@ -187,7 +187,7 @@ export const FormQuestionMapper = ({
 const FormGenerator: FC<FormGeneratorType> = ({
   handleSubmit,
   questionsList,
-  validationObj
+  validationObj,
 }) => {
   const classes = useStyles();
   const initialValues: Record<string, any> = {};
@@ -199,8 +199,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
     if (userData.hasOwnProperty(name)) {
       initialValues[name] = userData[name];
     }
-  })
-
+  });
 
   const validationSchema = Yup.object().shape(validationObj);
 
@@ -214,7 +213,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
           validationSchema={validationSchema}
         >
           {({
-            isSubmitting, setFieldValue
+            isSubmitting, setFieldValue,
           }) => (
             <Form>
               {questionsList.map((questionItem) => {

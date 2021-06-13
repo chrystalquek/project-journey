@@ -107,7 +107,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
               onDiscard={discardAdministratorRemarks}
               disabled={!isAdmin}
             />
-          )}
+        )}
       </Grid>
     </PaddedGrid>
   );

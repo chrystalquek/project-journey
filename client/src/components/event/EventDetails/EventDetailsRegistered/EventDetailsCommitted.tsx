@@ -4,17 +4,17 @@ import { VolunteerType, VolunteerData } from '@type/volunteer';
 import {
   Chip, Grid, makeStyles,
 } from '@material-ui/core';
-import { testEventImage1 } from '@constants/imagePaths';
+import { testEventImage1 } from '@utils/constants/imagePaths';
 import EventInformation from '@components/event/EventDetails/EventDetailsParts/EventInformation';
 import VolunteerRoles from '@components/event/EventDetails/EventDetailsParts/VolunteerRoles';
 import EventRegisterForm, { FormState } from '@components/event/EventDetails/EventDetailsParts/EventRegisterForm';
-import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
-import { FormDisabledReason } from '@utils/helpers/event/EventDetails/EventDetails';
+import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@components/event/index';
+import { FormDisabledReason } from '@components/event/helpers/EventDetails/EventDetails';
 import { EventPaper } from '@components/common/event/EventPaper';
 import { EventTypography } from '@components/common/event/EventTypography';
-import { getAcceptedSignUp } from '@utils/helpers/event';
-import ResizedImage from '../ResizedImage';
+import { getAcceptedSignUp } from '@components/event/helpers';
 import { FormStatus } from '@type/form/form';
+import ResizedImage from '../ResizedImage';
 
 type EventDetailsCommittedProps = {
   event: EventData,

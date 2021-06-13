@@ -7,11 +7,11 @@ import {
 } from '@material-ui/core';
 import React, { FC, useState } from 'react';
 import { EventData } from '@type/event';
-import { parseDate } from '@utils/helpers/event/EventsPageBody';
+import { parseDate } from '@components/event/helpers/EventsPageBody';
 import { VolunteerType } from '@type/volunteer';
 import { EventTypography } from '@components/common/event/EventTypography';
-import { testEventImage3 } from '@constants/imagePaths';
-import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
+import { testEventImage3 } from '@utils/constants/imagePaths';
+import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@components/event/index';
 import FeedbackModal from './FeedbackModal';
 
 type EventCardProps = {

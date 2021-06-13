@@ -4,8 +4,8 @@ import { VolunteerType, VolunteerData } from '@type/volunteer';
 import {
   Chip, Grid, makeStyles,
 } from '@material-ui/core';
-import { testEventImage1 } from '@constants/imagePaths';
-import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
+import { testEventImage1 } from '@utils/constants/imagePaths';
+import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@components/event/index';
 import EventInformation from '@components/event/EventDetails/EventDetailsParts/EventInformation';
 import FacilitatorInfo from '@components/event/EventDetails/EventDetailsParts/FacilitatorInfo';
 import CreateAccountNotice from '@components/event/EventDetails/EventDetailsParts/CreateAccountNotice';

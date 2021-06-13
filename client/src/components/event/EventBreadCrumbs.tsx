@@ -1,8 +1,8 @@
 import { Breadcrumbs, Link, Typography } from '@material-ui/core';
 import { FC } from 'react';
-import { EVENTS_ROUTE } from '@constants/routes';
+import { EVENTS_ROUTE } from '@utils/constants/routes';
 import { EventData } from '@type/event';
-import { getStoreEvent } from '@utils/helpers/event';
+import { getStoreEvent } from '@components/event/helpers';
 
 type EventBreadCrumbsProps = {
   eid?: string

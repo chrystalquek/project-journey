@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import React, { FC, useEffect } from 'react';
-import { VolunteerData } from 'types/volunteer';
+import { VolunteerData } from '@type/volunteer';
 import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import Head from 'next/head';
 import { getCommitmentApplications, updateCommitmentApplication } from '@redux/actions/commitmentApplication';
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingRequests: FC<{}> = ({ }) => {
-  checkLoggedIn()
+  checkLoggedIn();
   const dispatch = useAppDispatch();
 
   useEffect(() => {

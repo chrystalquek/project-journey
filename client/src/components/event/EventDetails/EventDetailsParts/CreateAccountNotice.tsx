@@ -3,7 +3,7 @@ import {
   Box, Button, makeStyles, Paper, Typography,
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@constants/routes';
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@utils/constants/routes';
 import { EventTypography } from '@components/common/event/EventTypography';
 import PersonIcon from '@material-ui/icons/Person';
 import { EventButton } from '@components/common/event/EventButton';

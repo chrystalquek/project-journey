@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { EventData } from '@type/event';
-import { getEventInfo, TableData } from '@utils/helpers/event/EventDetails/EventDetails';
+import { getEventInfo, TableData } from '@components/event/helpers/EventDetails/EventDetails';
 import {
   Grid,
   makeStyles,

@@ -18,7 +18,7 @@ import {
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
-import { VolunteerData, VolunteerType } from 'types/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { useAppDispatch } from '@redux/store';
 import { resetUser } from '@redux/reducers/user';
 import {
@@ -31,63 +31,61 @@ import {
   LOGIN_ROUTE,
   SIGNUP_ROUTE,
   HOME_ROUTE,
-} from '@constants/routes';
+} from '@utils/constants/routes';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    buttonsContainer: {
-      flexGrow: 1,
-      marginLeft: theme.spacing(4),
-    },
-    button: {
-      textTransform: 'none',
-      marginLeft: theme.spacing(2),
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: 'bold',
-    },
-    buttonRight: {
-      textTransform: 'none',
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: 'bold',
-    },
-    nameContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      marginLeft: theme.spacing(2),
-    },
-    nameStyle: {
-      color: '#000000',
-      flex: 1,
-    },
-    loginButtonContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      marginRight: theme.spacing(2),
-    },
-    signUpButtonContainer: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    editProfileButton: {
-      margin: 0,
-      padding: 0,
-      textAlign: 'left',
-    },
-    editProfileText: {
-      flex: 1,
-      fontWeight: 'bold',
-    },
-    iconSize24: {
-      fontSize: '24px',
-    },
-    iconSize40: {
-      fontSize: '40px',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    flexGrow: 1,
+  },
+  buttonsContainer: {
+    flexGrow: 1,
+    marginLeft: theme.spacing(4),
+  },
+  button: {
+    textTransform: 'none',
+    marginLeft: theme.spacing(2),
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+  buttonRight: {
+    textTransform: 'none',
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+  nameContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: theme.spacing(2),
+  },
+  nameStyle: {
+    color: '#000000',
+    flex: 1,
+  },
+  loginButtonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: theme.spacing(2),
+  },
+  signUpButtonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  editProfileButton: {
+    margin: 0,
+    padding: 0,
+    textAlign: 'left',
+  },
+  editProfileText: {
+    flex: 1,
+    fontWeight: 'bold',
+  },
+  iconSize24: {
+    fontSize: '24px',
+  },
+  iconSize40: {
+    fontSize: '40px',
+  },
+}));
 
 type NavBarProps = {
   userData: null | VolunteerData;
@@ -224,22 +222,18 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   <MenuList>
                     {/* Requires changes for the router */}
                     <MenuItem
-                      onClick={() =>
-                        closeMenuNavigateTo(
-                          handleCloseVolunteerMenu,
-                          VOLUNTEER_PROFILES_ROUTE
-                        )
-                      }
+                      onClick={() => closeMenuNavigateTo(
+                        handleCloseVolunteerMenu,
+                        VOLUNTEER_PROFILES_ROUTE,
+                      )}
                     >
                       Volunteers List
                     </MenuItem>
                     <MenuItem
-                      onClick={() =>
-                        closeMenuNavigateTo(
-                          handleCloseVolunteerMenu,
-                          VOLUNTEER_PENDING_REQUESTS_ROUTE
-                        )
-                      }
+                      onClick={() => closeMenuNavigateTo(
+                        handleCloseVolunteerMenu,
+                        VOLUNTEER_PENDING_REQUESTS_ROUTE,
+                      )}
                     >
                       Pending Approvals
                     </MenuItem>
@@ -257,9 +251,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         {homeButton}
         {eventButton}
         {eventMenuWrapper}
-        {userData &&
-          userData.volunteerType === VolunteerType.ADMIN &&
-          volunteer}
+        {userData
+          && userData.volunteerType === VolunteerType.ADMIN
+          && volunteer}
       </>
     );
   };
@@ -269,7 +263,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
       return (
         <>
           <div className={classes.loginButtonContainer}>
-            <ExitToAppIcon className={classes.iconSize24} color='primary' />
+            <ExitToAppIcon className={classes.iconSize24} color="primary" />
             <Button
               className={classes.buttonRight}
               onClick={() => {
@@ -280,7 +274,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
             </Button>
           </div>
           <div className={classes.signUpButtonContainer}>
-            <PersonIcon className={classes.iconSize24} color='primary' />
+            <PersonIcon className={classes.iconSize24} color="primary" />
             <Button
               className={classes.buttonRight}
               onClick={() => {
@@ -294,14 +288,14 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
       );
     }
     const profilePicture = !userData?.photoUrl ? (
-      <AccountCircleIcon className={classes.iconSize40} color='primary' />
+      <AccountCircleIcon className={classes.iconSize40} color="primary" />
     ) : (
       <Avatar alt={userData?.name} src={userData?.photoUrl} />
     );
 
     return (
       <>
-        <IconButton edge='start' onClick={toggleLogoutMenu} ref={logoutRef}>
+        <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
           {profilePicture}
           <Popper open={openLogout} anchorEl={logoutRef.current} transition>
             {({ TransitionProps }) => (
@@ -333,7 +327,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   return (
     <>
-      <Image src='/blessings-in-a-bag.png' width={100} height={100} />
+      <Image src="/blessings-in-a-bag.png" width={100} height={100} />
       <div className={classes.buttonsContainer}>{navigationRender()}</div>
       {loggedInRender()}
     </>

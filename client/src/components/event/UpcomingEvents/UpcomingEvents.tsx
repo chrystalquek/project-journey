@@ -15,12 +15,12 @@ import React, {
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import EventsFilter from '@components/event/EventsFilter';
-import { withFilters } from '@utils/helpers/event/EventsPageBody';
+import { withFilters } from '@components/event/helpers/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData } from '@type/volunteer';
 import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
-import { EVENTS_ROUTE, LOGIN_ROUTE } from '@constants/routes';
+import { EVENTS_ROUTE, LOGIN_ROUTE } from '@utils/constants/routes';
 import EventCard from '../EventCard';
 
 const useStyles = makeStyles((theme) => ({

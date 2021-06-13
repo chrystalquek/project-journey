@@ -91,7 +91,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: 'sessionPreference',
     displayText: [
-      'We run weekly sessions, which sessions are you most able to commit to on a regular basis?'
+      'We run weekly sessions, which sessions are you most able to commit to on a regular basis?',
     ],
     type: 'mcq',
     initialValue: '',
@@ -100,7 +100,7 @@ export const conversionFormQuestions: QuestionList = [
       { value: 'Saturday 2.30PM-6PM', label: 'Saturday 2.30PM-6PM' },
       { value: 'Either', label: 'Either' },
     ],
-    isRequired: true
+    isRequired: true,
   },
   {
     name: 'hasFirstAidCertification',
@@ -191,7 +191,7 @@ export const conversionFormQuestions: QuestionList = [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
     ],
-    isRequired: true
+    isRequired: true,
   },
   {
     name: 'isAwareOfGroupInvite',
@@ -204,7 +204,7 @@ export const conversionFormQuestions: QuestionList = [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
     ],
-    isRequired: true
+    isRequired: true,
   },
   {
     name: 'isAwareOfCommitmentExpectation',
@@ -217,7 +217,7 @@ export const conversionFormQuestions: QuestionList = [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
     ],
-    isRequired: true
+    isRequired: true,
   },
   {
     name: 'isAwareOfConfidentiality',
@@ -230,7 +230,7 @@ export const conversionFormQuestions: QuestionList = [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
     ],
-    isRequired: true
+    isRequired: true,
   },
   {
     name: 'isAwareOfBackgroundCheck',
@@ -243,6 +243,6 @@ export const conversionFormQuestions: QuestionList = [
       { value: true, label: 'Yes' },
       { value: false, label: 'No' },
     ],
-    isRequired: true
+    isRequired: true,
   },
 ];

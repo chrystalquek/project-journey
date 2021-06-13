@@ -9,9 +9,9 @@ import { useRouter } from 'next/dist/client/router';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import { LoginArgs } from '@redux/actions/user';
-import { UserState } from '@redux/reducers/user';
-import { HOME_ROUTE } from '@constants/routes';
+import login, { LoginArgs } from '@redux/actions/user';
+import { useAppDispatch, useAppSelector } from '@redux/store';
+import { HOME_ROUTE } from '@utils/constants/routes';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -68,15 +68,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type LoginProps = {
-  user: UserState;
-  handleFormSubmit: (formData: LoginArgs) => Promise<void>;
   resetStatus: () => void;
 };
 
-const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginProps) => {
+const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   const router = useRouter();
   const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (user.token) {
@@ -102,7 +102,7 @@ const Login: FC<LoginProps> = ({ user, handleFormSubmit, resetStatus }: LoginPro
       email: values.email,
       password: values.password,
     };
-    const response = await handleFormSubmit(loginArgs);
+    const response = await dispatch(login(loginArgs));
     // @ts-ignore type exists
     if (response?.type === 'user/login/rejected') {
       setInvalid(true);

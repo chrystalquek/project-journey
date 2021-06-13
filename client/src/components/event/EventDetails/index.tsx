@@ -1,12 +1,12 @@
 import React, { FC, useEffect } from 'react';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getEvent } from '@redux/actions/event';
 import { VolunteerData } from '@type/volunteer';
 import { EventData } from '@type/event';
 import EventDetailsRegistered from '@components/event/EventDetails/EventDetailsRegistered/eventDetails';
 import EventDetailsUnregistered from '@components/event/EventDetails/EventDetailsUnregistered';
 import { EventDetailsWrapper } from '@components/event/EventDetails/EventDetailsWrapper';
-import Loading from '@components/common/Loading';
+import LoadingIndicator from '@components/common/LoadingIndicator';
 
 type EventDetailsProps = {
   eid: string,
@@ -38,7 +38,7 @@ const EventDetails: FC<EventDetailsProps> = ({ eid }) => {
       </EventDetailsWrapper>
     );
   }
-  return <Loading />;
+  return <LoadingIndicator />;
 };
 
 export { EventDetails };

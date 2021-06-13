@@ -29,30 +29,30 @@ const ChangeVolunteerType: FC = () => {
   const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [volunteerType, setVolunteerType] = useState<VolunteerType>(profilePageData.volunteerType)
+  const [volunteerType, setVolunteerType] = useState<VolunteerType>(profilePageData.volunteerType);
 
   const handleOpenDialog = useCallback(() => {
     setOpenDialog(true);
-  }, [openDialog])
+  }, [openDialog]);
 
   const handleCloseDialog = useCallback(() => {
     setOpenDialog(false);
-  }, [openDialog])
+  }, [openDialog]);
 
   const handleChange = useCallback((event) => {
-    setVolunteerType(event.target.value || profilePageData.volunteerType)
-  }, [volunteerType])
+    setVolunteerType(event.target.value || profilePageData.volunteerType);
+  }, [volunteerType]);
 
   const handleSubmit = () => {
-    const updatedVolunteerData = { ...profilePageData, volunteerType: volunteerType }
-    dispatch(updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData }))
-    handleCloseDialog()
-  }
+    const updatedVolunteerData = { ...profilePageData, volunteerType };
+    dispatch(updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData }));
+    handleCloseDialog();
+  };
 
   return (
     <div>
       <IconButton onClick={handleOpenDialog}>
-        <EditIcon fontSize='small' />
+        <EditIcon fontSize="small" />
       </IconButton>
 
       <Dialog
@@ -90,7 +90,7 @@ const ChangeVolunteerType: FC = () => {
         </DialogActions>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default ChangeVolunteerType
+export default ChangeVolunteerType;

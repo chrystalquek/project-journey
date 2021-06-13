@@ -10,7 +10,7 @@ import {
   makeStyles,
   Grid,
 } from '@material-ui/core';
-import { FormSelectRow, parseRoles } from '@utils/helpers/event/EventDetails/EventRegisterForm';
+import { FormSelectRow, parseRoles } from '@components/event/helpers/EventDetails/EventRegisterForm';
 import { VolunteerData } from '@type/volunteer';
 import { useRouter } from 'next/router';
 import { EventTypography } from '@components/common/event/EventTypography';

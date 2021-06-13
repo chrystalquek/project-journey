@@ -27,21 +27,21 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'scroll',
     overflowX: 'hidden',
     msOverflowStyle: '-ms-autohiding-scrollbar',
-    height: '100%'
-  }
+    height: '100%',
+  },
 }));
 
 const BecomeCommited: FC = () => {
   const user = useAppSelector((state) => state.user);
-  const userData = user.user
+  const userData = user.user;
   const dispatch = useAppDispatch();
 
-  const length = userData?.commitmentApplicationIds?.length
+  const length = userData?.commitmentApplicationIds?.length;
   const commitmentApplication: any = length
     ? userData.commitmentApplicationIds[length - 1]
-    : null
+    : null;
   // Check if there is pending application
-  const isPending: boolean = commitmentApplication?.status == CommitmentApplicationStatus.Pending
+  const isPending: boolean = commitmentApplication?.status == CommitmentApplicationStatus.Pending;
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();
@@ -56,9 +56,9 @@ const BecomeCommited: FC = () => {
   }, [open]);
 
   const handleSubmit = async (formValues: Record<string, any>) => {
-    formValues.volunteerId = user.user._id
+    formValues.volunteerId = user.user._id;
     // Drop the acknowledgement attributes before sending api call\
-    const request = { ...formValues }
+    const request = { ...formValues };
     request.volunteerId = user.user._id;
     delete request.isAwareOfGroupInvite;
     delete request.isAwareOfCommitmentExpectation;
@@ -67,7 +67,7 @@ const BecomeCommited: FC = () => {
 
     await dispatch(createCommitmentApplication(request as CreateCommitmentApplicationRequest));
     handleClose();
-  }
+  };
 
   return (
     <div>

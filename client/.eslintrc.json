@@ -88,20 +88,16 @@
             "./src/components/"
           ],
           [
-            "@containers",
-            "./src/containers/"
-          ],
-          [
             "@constants",
-            "./utils/constants/"
+            "./src/utils/constants/"
           ],
           [
             "@redux",
-            "./redux/"
+            "./src/redux/"
           ],
           [
             "@utils",
-            "./utils/"
+            "./src/utils/"
           ],
           [
             "@public",
@@ -109,11 +105,15 @@
           ],
           [
             "@type",
-            "./types/"
+            "./src/types/"
           ],
           [
             "@api",
-            "./api/"
+            "./src/api/"
+          ],
+          [
+            "@styles",
+            "./src/styles/"
           ]
         ],
         "extensions": [

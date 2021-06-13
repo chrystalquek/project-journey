@@ -5,11 +5,11 @@ import {
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
+import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { useAppSelector } from '@redux/store';
 import ProfilePicture from './ProfilePicture';
 import ApproveCommitmentApplication from './ApproveCommitmentApplication';
-import { CommitmentApplicationStatus } from '@type/commitmentApplication';
 import ChangeVolunteerType from './ChangeVolunteerType';
-import { useAppSelector } from '@redux/store';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -45,10 +45,10 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
   const user = useAppSelector((state) => state.user);
   const userData = user?.user;
 
-  const length = profilePageData?.commitmentApplicationIds?.length
+  const length = profilePageData?.commitmentApplicationIds?.length;
   const commitmentApplication: any = length
     ? profilePageData.commitmentApplicationIds[length - 1]
-    : null
+    : null;
 
   return (
     <Grid
@@ -68,9 +68,9 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
       {/* User details */}
       <Grid item xs={12} sm="auto">
         <Typography variant="h2" className={classes.header}>{profilePageData.name}</Typography>
-        <Grid item container alignItems='center'>
+        <Grid item container alignItems="center">
           <Grid item>
-            <Typography className={classes.header} >
+            <Typography className={classes.header}>
               <strong>Volunteer Type: </strong>
               {profilePageData?.volunteerType?.toString()}
             </Typography>
@@ -86,7 +86,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
           && userData.email === profilePageData.email
           && <BecomeCommitedDialog />}
         {/* Approval button if loggedInUser is admin and volunteerProfile
-        has a pending commitmentApplication*/}
+        has a pending commitmentApplication */}
         {userData.volunteerType === VolunteerType.ADMIN
           && commitmentApplication?.status === CommitmentApplicationStatus.Pending
           && <ApproveCommitmentApplication commitmentApplication={commitmentApplication} />}

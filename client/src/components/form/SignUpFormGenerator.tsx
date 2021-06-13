@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Paper, Typography, Button, makeStyles } from '@material-ui/core';
+import {
+  Paper, Typography, Button, makeStyles,
+} from '@material-ui/core';
 import { Formik, Form } from 'formik';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -16,8 +18,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import { objectFilter } from '@utils/helpers/objectFilter';
 import { ToastStatus } from '@type/common';
-import { FormQuestionMapper } from './FormGenerator';
 import { HeaderQuestionList, QuestionList, QuestionsWithHeader } from '@type/form/form';
+import { FormQuestionMapper } from './FormGenerator';
 
 const useStyles = makeStyles((theme) => ({
   // The following style make sure that the error message shows consistently for 'photo'
@@ -89,9 +91,7 @@ const SignUpFormGenerator = ({
 
   const handleSubmit = async (formValues: Record<string, any>) => {
     // @ts-ignore type exists
-    const values = objectFilter(formValues, (element) =>
-      typeof element === 'boolean' || element
-    );
+    const values = objectFilter(formValues, (element) => typeof element === 'boolean' || element);
 
     // Upload and get cover image URL
     if (values.photoUrl && typeof values.photoUrl !== 'string') {
@@ -205,7 +205,7 @@ const SignUpFormGenerator = ({
       then: Yup.string()
         .oneOf(
           [Yup.ref('password')],
-          'Confirm Password need to be the same as Password fields'
+          'Confirm Password need to be the same as Password fields',
         )
         .required('Required'),
     }),
@@ -256,81 +256,80 @@ const SignUpFormGenerator = ({
           validationSchema={SignUpSchema}
           validateOnChange={false}
         >
-          {({ isSubmitting, setFieldValue, values, errors, touched }) => (
+          {({
+            isSubmitting, setFieldValue, values, errors, touched,
+          }) => (
             <Form>
-              {questionWithHeader.map(({ header, info, questionList }, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <Typography
-                      className={classes.headerStyle}
-                      align='center'
-                      variant='h2'
-                    >
-                      {header}
-                    </Typography>
-                    {info && (
-                      <Typography
-                        variant='body2'
-                        className={classes.infoStyle}
-                      >
-                        {info}
-                      </Typography>
-                    )}
-                    {questionList.map((questionItem, index) => {
-                      const {
-                        name,
-                        displayText,
-                        type,
-                        isRequired,
-                      } = questionItem;
-                      const options =
-                        type === 'mcq' || type === 'checkboxes'
-                          ? questionItem.options
-                          : null;
+              {questionWithHeader.map(({ header, info, questionList }, index) => (
+                <React.Fragment key={index}>
+                  <Typography
+                    className={classes.headerStyle}
+                    align="center"
+                    variant="h2"
+                  >
+                    {header}
+                  </Typography>
+                  {info && (
+                  <Typography
+                    variant="body2"
+                    className={classes.infoStyle}
+                  >
+                    {info}
+                  </Typography>
+                  )}
+                  {questionList.map((questionItem, index) => {
+                    const {
+                      name,
+                      displayText,
+                      type,
+                      isRequired,
+                    } = questionItem;
+                    const options = type === 'mcq' || type === 'checkboxes'
+                      ? questionItem.options
+                      : null;
 
-                      return (
-                        <div
-                          key={index}
-                          style={{
-                            marginBottom: '32px',
-                          }}
-                        >
-                          {displayText.map((text, index) => (
-                            <Typography
-                              key={index}
-                              style={{
-                                marginBottom: '16px',
-                                fontWeight: 500,
-                              }}
-                            >
-                              {text}
-                              {index === displayText.length - 1 &&
-                                isRequired &&
-                                ' *'}
-                            </Typography>
-                          ))}
-                          <FormQuestionMapper
-                            formType={type}
-                            name={name}
-                            options={options}
-                            setFieldValue={setFieldValue}
-                            props={{
-                              error: touched[name] && !!errors[name],
-                              helperText: touched[name] ? errors[name] : null
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          marginBottom: '32px',
+                        }}
+                      >
+                        {displayText.map((text, index) => (
+                          <Typography
+                            key={index}
+                            style={{
+                              marginBottom: '16px',
+                              fontWeight: 500,
                             }}
-                          />
-                        </div>
-                      );
-                    })}
-                  </React.Fragment>
-                );
-              })}
+                          >
+                            {text}
+                            {index === displayText.length - 1
+                                && isRequired
+                                && ' *'}
+                          </Typography>
+                        ))}
+                        <FormQuestionMapper
+                          formType={type}
+                          name={name}
+                          options={options}
+                          setFieldValue={setFieldValue}
+                          props={{
+                            error: touched[name] && !!errors[name],
+                            helperText: touched[name] ? errors[name] : null,
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
               <Button
-                variant='contained'
-                color='primary'
-                type='submit'
+                variant="contained"
+                color="primary"
+                type="submit"
                 disabled={isSubmitting}
-                size='large'
+                size="large"
                 style={{ margin: 'auto', display: 'block' }}
               >
                 Submit

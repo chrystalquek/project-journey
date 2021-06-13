@@ -2,7 +2,7 @@ import {
   makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@material-ui/core';
 import React, { FC, useEffect } from 'react';
-import { EventData } from 'types/event';
+import { EventData } from '@type/event';
 import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { getPendingSignUps } from '@redux/actions/signUp';
@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingRequests: FC = () => {
-  checkLoggedIn()
+  checkLoggedIn();
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
@@ -58,7 +58,7 @@ const PendingRequests: FC = () => {
     return result;
   };
 
-  const upcomingEventsWithPendingSignUps = upcomingEvents.filter(event => (pendingRequestsForEventCount(event) != 0))
+  const upcomingEventsWithPendingSignUps = upcomingEvents.filter((event) => (pendingRequestsForEventCount(event) != 0));
 
   return (
     <>

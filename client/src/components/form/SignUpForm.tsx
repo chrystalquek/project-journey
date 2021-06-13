@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 import { useAppDispatch } from '@redux/store';
 import { signUp } from '@redux/actions/user';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
-import SignUpFormGenerator from './SignUpFormGenerator';
 import { HeaderQuestionList } from '@type/form/form';
+import SignUpFormGenerator from './SignUpFormGenerator';
 
 type SignUpFormProps = {
   type: VolunteerType;

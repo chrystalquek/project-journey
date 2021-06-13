@@ -36,7 +36,6 @@ import { VolunteerSortFieldsType } from '@redux/reducers/volunteer/index';
 import LoadingIndicator from '@components/common/LoadingIndicator';
 import ErrorPage from '@components/common/ErrorPage';
 
-
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
 
@@ -61,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Index: FC<{}> = ({ }) => {
-  checkLoggedIn()
+  checkLoggedIn();
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -76,7 +75,7 @@ const Index: FC<{}> = ({ }) => {
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
-    dispatch(getVolunteers({}))
+    dispatch(getVolunteers({}));
   }, []);
 
   // filter functions
@@ -88,25 +87,25 @@ const Index: FC<{}> = ({ }) => {
             ...volunteerType,
             [event.target.name]: !volunteerType[event.target.name],
           },
-        }
-      }
-    }))
+        },
+      },
+    }));
   };
   const handleClearAllFilters = () => {
-    var clearedVolunteerTypeFilters = Object.assign({}, volunteerType);
-    Object.values(VolunteerType).forEach(function (key) { clearedVolunteerTypeFilters[key] = false });
+    const clearedVolunteerTypeFilters = { ...volunteerType };
+    Object.values(VolunteerType).forEach((key) => { clearedVolunteerTypeFilters[key] = false; });
 
     dispatch(getVolunteers({
       newCollate: {
         filters: {
-          volunteerType: clearedVolunteerTypeFilters
-        }
-      }
-    }))
-  }
+          volunteerType: clearedVolunteerTypeFilters,
+        },
+      },
+    }));
+  };
 
   // filter state and components
-  const isDisableClearFilters = Object.values(VolunteerType).every(volType => !volunteerType[volType]);
+  const isDisableClearFilters = Object.values(VolunteerType).every((volType) => !volunteerType[volType]);
   const [openFilter, setOpenFilter] = React.useState(isMobile);
   const filterOptions = (
     <TableContainer>
@@ -144,8 +143,8 @@ const Index: FC<{}> = ({ }) => {
 
   // search function
   const onSearch = (newNameToSearch: string) => {
-    dispatch(getVolunteers({ newCollate: { search: { name: newNameToSearch } } }))
-  }
+    dispatch(getVolunteers({ newCollate: { search: { name: newNameToSearch } } }));
+  };
 
   // search component
   const searchBar = <SearchBar setFilterFunction={onSearch} />;
@@ -174,7 +173,6 @@ const Index: FC<{}> = ({ }) => {
   const handleChangePage = (_, newPage: number) => {
     dispatch(getVolunteers({ newPagination: { pageNo: newPage } }));
   };
-
 
   const volunteerTable = (
     <>
@@ -210,12 +208,12 @@ const Index: FC<{}> = ({ }) => {
   );
 
   // use these for all pages
-  const { isLoading, error } = volunteerState
+  const { isLoading, error } = volunteerState;
   if (isLoading) {
-    return <LoadingIndicator />
+    return <LoadingIndicator />;
   }
   if (error) {
-    return <ErrorPage message={error.message} />
+    return <ErrorPage message={error.message} />;
   }
 
   // define components needed above, piece them tog for mobile and comp versions
@@ -223,7 +221,7 @@ const Index: FC<{}> = ({ }) => {
     <>
       {!isMobile
         ? (
-          <Grid >
+          <Grid>
             <Grid direction="row" container spacing={6}>
               <Grid item xs={2} />
               <Grid item xs={4}>

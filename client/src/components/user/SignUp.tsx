@@ -114,12 +114,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SignUpProps = {
-  user: UserState;
-  handleFormSubmit: (formData: VolunteerData) => Promise<void>;
-};
-
-const SignUp: FC<SignUpProps> = ({ user, handleFormSubmit }: SignUpProps) => {
+const SignUp = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [volunteerType, setVolunteerType] = useState<VolunteerType>(VolunteerType.ADHOC); // default set as ad-hoc
   const [invalid, setInvalid] = useState<boolean>(false);

@@ -9,9 +9,9 @@ import {
 } from '@redux/actions/signUp';
 import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { CreateSignUpRequest } from '@api/request';
-import { FormDisabledReason, getFormData } from '@utils/helpers/event/EventDetails/EventDetails';
+import { FormDisabledReason, getFormData } from '@components/event/helpers/EventDetails/EventDetails';
 import { SignUpData, SignUpIdType } from '@type/signUp';
-import { getEventVacancies } from '@utils/helpers/event/EventsPageBody';
+import { getEventVacancies } from '@components/event/helpers/EventsPageBody';
 import { ActionableDialog } from '@components/common/ActionableDialog';
 import { useRouter } from 'next/router';
 import { isAdmin } from '@utils/helpers/auth';
@@ -140,7 +140,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   const withdrawCommitment = () => {
     const acceptedSignUp = signUpInfo.find((signUp) => Array.isArray(signUp.status) && signUp.status[0] === 'accepted');
     dispatch(deleteSignUp({
-      id: acceptedSignUp._id, idType: 'signUpId'
+      id: acceptedSignUp._id, idType: 'signUpId',
     }));
     router.push('/event');
   };

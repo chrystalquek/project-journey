@@ -4,7 +4,7 @@ import {
 import React, {
   FC, useCallback, useEffect, useState,
 } from 'react';
-import { testEventImage1 } from '@constants/imagePaths';
+import { testEventImage1 } from '@utils/constants/imagePaths';
 import { EventButton } from '@components/common/event/EventButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';

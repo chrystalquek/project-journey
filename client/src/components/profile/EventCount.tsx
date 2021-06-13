@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
-import { Grid, Link, makeStyles, Typography } from '@material-ui/core';
+import {
+  Grid, Link, makeStyles, Typography,
+} from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
 import PaddedGrid from '@components/common/PaddedGrid';
@@ -22,7 +24,7 @@ const EventCount: FC<props> = ({ profilePageData }) => {
 
   const handleViewPastEvents = () => {
     router.push('/event/my-past-events');
-  }
+  };
 
   return (
     <PaddedGrid>

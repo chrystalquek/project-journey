@@ -6,11 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import { CardActions, Chip, makeStyles } from '@material-ui/core';
 import { FC } from 'react';
 import { EventData } from '@type/event';
-import { getEventVacancies, parseDate } from '@utils/helpers/event/EventsPageBody';
+import { getEventVacancies, parseDate } from '@components/event/helpers/EventsPageBody';
 import { VolunteerType } from '@type/volunteer';
 import { EventTypography } from '@components/common/event/EventTypography';
-import { testEventImage3 } from '@constants/imagePaths';
-import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@constants/index';
+import { testEventImage3 } from '@utils/constants/imagePaths';
+import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@components/event/index';
 import { SignUpData } from '@type/signUp';
 
 type EventCardProps = {

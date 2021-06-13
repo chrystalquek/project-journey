@@ -282,7 +282,7 @@ const EventVolunteers = ({ eid }) => {
                 buttonOnClick={() => onUpdateSignUp({
                   data: { ...signUp, status: 'pending' },
                   id: signUp._id,
-                  idType: 'signUpId'
+                  idType: 'signUpId',
                 })}
                 openCloseButtonStyle="popUpButton"
                 openCloseButtonTitle="Remove Volunteer from Event"

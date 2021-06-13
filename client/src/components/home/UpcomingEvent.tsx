@@ -3,7 +3,7 @@ import {
 } from '@material-ui/core';
 import { isAdmin } from '@utils/helpers/auth';
 import React, { FC, useEffect } from 'react';
-import { EventData } from 'types/event';
+import { EventData } from '@type/event';
 import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
 import { getSignUpsUpcomingEvent } from '@redux/actions/signUp';

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { ActionableDialog } from '@components/common/ActionableDialog';
@@ -22,22 +22,22 @@ type ApproveCommitmentApplicationProps = {
 }
 
 const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (props: ApproveCommitmentApplicationProps) => {
-  const classes = useStyles()
-  const dispatch = useAppDispatch()
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const profilePageData = useAppSelector((state) => state.profilePage.data);
-  const { commitmentApplication } = props
+  const { commitmentApplication } = props;
 
-  const DialogContent = "Are you sure you want to approve " + profilePageData.name + "?"
+  const DialogContent = `Are you sure you want to approve ${profilePageData.name}?`;
 
   const handleApproveEvent = () => {
     // Change the status of the commitment Application
-    const updatedCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Accepted }
+    const updatedCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Accepted };
     dispatch(updateCommitmentApplication({
       data: updatedCommitmentApplication,
-      _id: commitmentApplication._id
-    }))
-  }
+      _id: commitmentApplication._id,
+    }));
+  };
 
   return (
     <div className={classes.header}>
@@ -52,7 +52,7 @@ const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (pro
         recommendedAction="cancel"
       />
     </div>
-  )
-}
+  );
+};
 
-export default ApproveCommitmentApplication
+export default ApproveCommitmentApplication;

@@ -14,57 +14,57 @@ interface TabsProps {
 }
 
 const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
-    const { clickedOn } = props;
+  const { clickedOn } = props;
 
-    const dispatch = useAppDispatch();
-    const router = useRouter();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-    useEffect(() => {
-        dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
-        dispatch(getPendingVolunteers());
-        dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }));
-    }, []);
+  useEffect(() => {
+    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
+    dispatch(getPendingVolunteers());
+    dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }));
+  }, []);
 
-    // volunteer no
-    const volunteers = useAppSelector((state) => state.pendingVolunteer);
-    const upcomingVolunteersIds = volunteers.pendingVolunteers.ids;
+  // volunteer no
+  const volunteers = useAppSelector((state) => state.pendingVolunteer);
+  const upcomingVolunteersIds = volunteers.pendingVolunteers.ids;
 
-    // event no
-    const events = useAppSelector((state) => state.event);
-    const signUps = useAppSelector((state) => state.signUp);
+  // event no
+  const events = useAppSelector((state) => state.event);
+  const signUps = useAppSelector((state) => state.signUp);
 
-    const upcomingEventsIds = events.upcomingEvent.ids;
-    const upcomingSignUpsIds = signUps.pendingSignUps.ids;
+  const upcomingEventsIds = events.upcomingEvent.ids;
+  const upcomingSignUpsIds = signUps.pendingSignUps.ids;
 
-    const upcomingEvents = upcomingEventsIds.map((id) => events.data[id]);
-    const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
+  const upcomingEvents = upcomingEventsIds.map((id) => events.data[id]);
+  const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
 
-    const pendingRequestsForEventCount = (event: EventData) => {
-        let result = 0;
-        upcomingSignUps.forEach((signUp: SignUpData) => {
-            if (signUp.eventId == event._id && signUp.status == 'pending') result++;
-        });
-        return result;
-    };
+  const pendingRequestsForEventCount = (event: EventData) => {
+    let result = 0;
+    upcomingSignUps.forEach((signUp: SignUpData) => {
+      if (signUp.eventId == event._id && signUp.status == 'pending') result++;
+    });
+    return result;
+  };
 
-    const upcomingEventsWithPendingSignUps = upcomingEvents.filter(event => (pendingRequestsForEventCount(event) != 0))
+  const upcomingEventsWithPendingSignUps = upcomingEvents.filter((event) => (pendingRequestsForEventCount(event) != 0));
 
-    const tabs = [
-        {
-            label: `Volunteers (${upcomingVolunteersIds.length})`,
-            onClick: () => router.push('/volunteer/pending-requests'),
-        },
-        {
-            label: `Events (${upcomingEventsWithPendingSignUps.length})`,
-            onClick: () => router.push('/event/pending-requests'),
-        },
-    ];
+  const tabs = [
+    {
+      label: `Volunteers (${upcomingVolunteersIds.length})`,
+      onClick: () => router.push('/volunteer/pending-requests'),
+    },
+    {
+      label: `Events (${upcomingEventsWithPendingSignUps.length})`,
+      onClick: () => router.push('/event/pending-requests'),
+    },
+  ];
 
-    return (
+  return (
 
-        <Tabs tabs={tabs} clickedOn={clickedOn} />
+    <Tabs tabs={tabs} clickedOn={clickedOn} />
 
-    );
+  );
 };
 
 export default PendingRequestsTabs;

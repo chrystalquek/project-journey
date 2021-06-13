@@ -24,7 +24,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { VolunteerData, VolunteerType } from 'types/volunteer';
+import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { useAppDispatch } from '@redux/store';
 import { resetUser } from '@redux/reducers/user';
 import {
@@ -37,50 +37,48 @@ import {
   LOGIN_ROUTE,
   SIGNUP_ROUTE,
   HOME_ROUTE,
-} from '@constants/routes';
+} from '@utils/constants/routes';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    headerContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-    },
-    drawerContainer: {
-      minWidth: '200px',
-      width: '30%',
-    },
-    drawerFrame: {
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    iconSize: {
-      fontSize: '40px',
-    },
-    imageContainer: {
-      flex: 1,
-      textAlign: 'center',
-    },
-    listButton: {
-      textTransform: 'none',
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: 'bold',
-    },
-    nested: {
-      paddingLeft: theme.spacing(6),
-    },
-    drawerWhitespace: {
-      flex: 1,
-    },
-    primaryTextStyle: {
-      color: '#000', // black
-      textTransform: 'none',
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: 'bold',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  headerContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+  },
+  drawerContainer: {
+    minWidth: '200px',
+    width: '30%',
+  },
+  drawerFrame: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  iconSize: {
+    fontSize: '40px',
+  },
+  imageContainer: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  listButton: {
+    textTransform: 'none',
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+  nested: {
+    paddingLeft: theme.spacing(6),
+  },
+  drawerWhitespace: {
+    flex: 1,
+  },
+  primaryTextStyle: {
+    color: '#000', // black
+    textTransform: 'none',
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
+  },
+}));
 
 type NavBarProps = {
   userData: null | VolunteerData;
@@ -165,33 +163,29 @@ export default function MobileNavBar({ userData }: NavBarProps) {
           onClick={toggleVolunteerMenu}
         >
           <ListItemText
-            primary='Volunteer'
+            primary="Volunteer"
             primaryTypographyProps={{ className: classes.primaryTextStyle }}
           />
           {openVolunteerMenu ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={openVolunteerMenu} timeout='auto' unmountOnExit>
-          <List component='div' disablePadding>
+        <Collapse in={openVolunteerMenu} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
             <ListItem
               button
               className={classes.nested}
-              onClick={() =>
-                closeMenuNavigateTo(handleCloseAll, VOLUNTEER_PROFILES_ROUTE)
-              }
+              onClick={() => closeMenuNavigateTo(handleCloseAll, VOLUNTEER_PROFILES_ROUTE)}
             >
-              <ListItemText primary='Volunteers List' />
+              <ListItemText primary="Volunteers List" />
             </ListItem>
             <ListItem
               button
               className={classes.nested}
-              onClick={() =>
-                closeMenuNavigateTo(
-                  handleCloseAll,
-                  VOLUNTEER_PENDING_REQUESTS_ROUTE
-                )
-              }
+              onClick={() => closeMenuNavigateTo(
+                handleCloseAll,
+                VOLUNTEER_PENDING_REQUESTS_ROUTE,
+              )}
             >
-              <ListItemText primary='Pending Approvals' />
+              <ListItemText primary="Pending Approvals" />
             </ListItem>
           </List>
         </Collapse>
@@ -207,7 +201,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             onClick={() => closeMenuNavigateTo(handleCloseAll, HOME_ROUTE)}
           >
             <ListItemText
-              primary='Home'
+              primary="Home"
               primaryTypographyProps={{ className: classes.primaryTextStyle }}
             />
           </ListItem>
@@ -217,13 +211,13 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             onClick={toggleEventMenu}
           >
             <ListItemText
-              primary='Events'
+              primary="Events"
               primaryTypographyProps={{ className: classes.primaryTextStyle }}
             />
             {openEventMenu ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse in={openEventMenu} timeout='auto' unmountOnExit>
-            <List component='div' disablePadding>
+          <Collapse in={openEventMenu} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
               {/* Requires changes for the router */}
               {eventMenuArray.map(({ title, route }) => (
                 <ListItem
@@ -237,9 +231,9 @@ export default function MobileNavBar({ userData }: NavBarProps) {
               ))}
             </List>
           </Collapse>
-          {userData &&
-            userData.volunteerType === VolunteerType.ADMIN &&
-            volunteerMenu}
+          {userData
+            && userData.volunteerType === VolunteerType.ADMIN
+            && volunteerMenu}
         </List>
         <div className={classes.drawerWhitespace} />
         {!userData && (
@@ -250,10 +244,10 @@ export default function MobileNavBar({ userData }: NavBarProps) {
               onClick={() => router.push(LOGIN_ROUTE)}
             >
               <ListItemIcon>
-                <ExitToAppIcon color='primary' />
+                <ExitToAppIcon color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary='Login'
+                primary="Login"
                 primaryTypographyProps={{ className: classes.primaryTextStyle }}
               />
             </ListItem>
@@ -263,10 +257,10 @@ export default function MobileNavBar({ userData }: NavBarProps) {
               onClick={() => router.push(SIGNUP_ROUTE)}
             >
               <ListItemIcon>
-                <PersonIcon color='primary' />
+                <PersonIcon color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary='Sign Up'
+                primary="Sign Up"
                 primaryTypographyProps={{ className: classes.primaryTextStyle }}
               />
             </ListItem>
@@ -278,17 +272,17 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const loggedInRender = () => {
     if (!userData) {
-      return <AccountCircleIcon className={classes.iconSize} color='primary' />;
+      return <AccountCircleIcon className={classes.iconSize} color="primary" />;
     }
 
     const profileIcon = !userData.photoUrl ? (
-      <AccountCircleIcon className={classes.iconSize} color='primary' />
+      <AccountCircleIcon className={classes.iconSize} color="primary" />
     ) : (
       <Avatar alt={userData.name} src={userData.photoUrl} />
     );
 
     return (
-      <IconButton edge='start' onClick={toggleLogoutMenu} ref={logoutRef}>
+      <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
         {profileIcon}
         <Popper open={openLogout} anchorEl={logoutRef.current} transition>
           {({ TransitionProps }) => (
@@ -314,11 +308,11 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   return (
     <div className={classes.headerContainer}>
-      <IconButton edge='start' onClick={openDrawer}>
+      <IconButton edge="start" onClick={openDrawer}>
         <MenuIcon className={classes.iconSize} />
       </IconButton>
       <Drawer
-        anchor='left'
+        anchor="left"
         open={drawer}
         onClose={closeDrawer}
         classes={{ paper: classes.drawerContainer }}
@@ -326,7 +320,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
         {navigationRender()}
       </Drawer>
       <div className={classes.imageContainer}>
-        <Image src='/blessings-in-a-bag.png' width={75} height={75} />
+        <Image src="/blessings-in-a-bag.png" width={75} height={75} />
       </div>
       {loggedInRender()}
     </div>
