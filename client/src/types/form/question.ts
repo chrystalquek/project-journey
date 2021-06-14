@@ -1,4 +1,4 @@
-import { OptionType } from "./option";
+import { OptionType } from './option';
 
 export type FormQuestionType = 'short-answer' | 'mcq' | 'check-box'
 

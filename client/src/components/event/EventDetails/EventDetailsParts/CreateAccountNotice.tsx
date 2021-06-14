@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-  Box, Button, makeStyles, Paper, Typography,
+  Box, Button, makeStyles, Typography,
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@utils/constants/routes';

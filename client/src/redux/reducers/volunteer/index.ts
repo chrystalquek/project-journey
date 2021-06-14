@@ -72,7 +72,7 @@ const volunteerSlice = createSlice({
     });
     builder.addCase(getVolunteers.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error; // catches http errors too (other than 404 which is caught by NEXT)
+      state.error = action.error; // catches http errors too (except 404 which is caught by NEXT)
     });
   },
 });

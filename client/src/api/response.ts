@@ -4,7 +4,8 @@ import { QuestionItem } from '@type/form/question';
 import { SignUpData } from '@type/signUp';
 import { VolunteerData } from '@type/volunteer';
 
-export type SignUpResponse = Record<string, any> // TODO remove this by refactoring SignUpFormGenerator
+// TODO remove this by refactoring SignUpFormGenerator
+export type SignUpResponse = Record<string, any>
 
 export type LoginResponse = {
   token: string

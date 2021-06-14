@@ -7,7 +7,8 @@ interface ErrorPageProps {
 
 // not done styling
 const ErrorPage: FC<ErrorPageProps> = (props: ErrorPageProps) => {
-    return <Typography variant='h1' align='center'>{props.message}</Typography>
+  const { message } = props;
+  return <Typography variant="h1" align="center">{message}</Typography>;
 };
 
 export default ErrorPage;

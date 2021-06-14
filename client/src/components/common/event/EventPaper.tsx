@@ -19,10 +19,10 @@ const useStyles = makeStyles({
 
 const EventPaper: FC<EventPaperProps> = (props) => {
   const classes = useStyles(props);
-
+  const { children } = props;
   return (
     <Paper className={classes.root} variant="outlined">
-      {props.children}
+      {children}
     </Paper>
   );
 };

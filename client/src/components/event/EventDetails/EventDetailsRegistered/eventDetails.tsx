@@ -7,7 +7,7 @@ import { FormState } from '@components/event/EventDetails/EventDetailsParts/Even
 import {
   createAndAcceptSignUp, createSignUp, deleteSignUp, getSignUps,
 } from '@redux/actions/signUp';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { CreateSignUpRequest } from '@api/request';
 import { FormDisabledReason, getFormData } from '@components/event/helpers/EventDetails/EventDetails';
 import { SignUpData, SignUpIdType } from '@type/signUp';
@@ -45,7 +45,9 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     dispatch(getSignUps({ id: user._id, idType: 'userId' as SignUpIdType }));
   }, []);
 
-  const signUpInfo: Array<SignUpData> = currSignUps.filter((signUp) => signUp.eventId === event._id);
+  const signUpInfo: Array<SignUpData> = currSignUps.filter(
+    (signUp) => signUp.eventId === event._id,
+  );
   const isEventFull = getEventVacancies(event).remaining === 0;
   const hasPendingSignUp = signUpInfo.length > 0
     && signUpInfo[0].status === 'pending';

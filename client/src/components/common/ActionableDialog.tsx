@@ -50,7 +50,9 @@ export interface ActionableDialogProps {
   recommendedAction?: 'cancel' | 'other';
 }
 
-// only for dialogs with a question + 2 buttons (cancel on left, some other button on right thats defined by props)
+/* only for dialogs with a question + 2 buttons
+(cancel on left, some other button on right thats defined by props)
+*/
 export function ActionableDialog(props: ActionableDialogProps) {
   const classes = useStyles();
   const {

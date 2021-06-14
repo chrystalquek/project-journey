@@ -12,12 +12,11 @@ import {
   IconButton,
 } from '@material-ui/core';
 import {
-  KeyboardDatePicker,
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
 import PaddedGrid from '@components/common/PaddedGrid';
 import DropZoneCard from '@components/common/DropZoneCard';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { createEvent, getEvent, editEvent } from '@redux/actions/event';
 import { uploadImage } from '@redux/actions/image';
 import { resetImages } from '@redux/reducers/image';
@@ -184,6 +183,27 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     setFeedbackFormEventQuestions([...feedbackFormEventQuestions, newQuestion]);
   }, [feedbackFormEventQuestions]);
 
+  const handleChangeQuestion = useCallback(
+    (value: string | Array<string> | boolean, key: KeyType, index: number) => {
+      const newQuestion: QuestionData = {
+        ...feedbackFormEventQuestions[index],
+        [key]: value,
+      };
+
+      if (key === 'type') {
+        newQuestion.displayText = '';
+        newQuestion.options = [];
+      }
+
+      setFeedbackFormEventQuestions([
+        ...feedbackFormEventQuestions.slice(0, index),
+        newQuestion,
+        ...feedbackFormEventQuestions.slice(index + 1),
+      ]);
+    },
+    [feedbackFormEventQuestions],
+  );
+
   const handleAddOption = useCallback(
     (index: number) => {
       const newOption: Array<string> = [
@@ -215,27 +235,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       ];
 
       handleChangeQuestion(newOption, 'options', questionIndex);
-    },
-    [feedbackFormEventQuestions],
-  );
-
-  const handleChangeQuestion = useCallback(
-    (value: string | Array<string> | boolean, key: KeyType, index: number) => {
-      const newQuestion: QuestionData = {
-        ...feedbackFormEventQuestions[index],
-        [key]: value,
-      };
-
-      if (key === 'type') {
-        newQuestion.displayText = '';
-        newQuestion.options = [];
-      }
-
-      setFeedbackFormEventQuestions([
-        ...feedbackFormEventQuestions.slice(0, index),
-        newQuestion,
-        ...feedbackFormEventQuestions.slice(index + 1),
-      ]);
     },
     [feedbackFormEventQuestions],
   );
@@ -325,7 +324,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           });
       }
 
-      const newForm = { ...form, questions: feedbackFormEventQuestions.map((element) => ({ ...element, name: element.displayText })) };
+      const newForm = {
+        ...form,
+        questions: feedbackFormEventQuestions.map(
+          (element) => ({ ...element, name: element.displayText }),
+        ),
+      };
 
       if (isNew) {
         dispatch(createEvent(newForm));
@@ -342,6 +346,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       setFieldValue(fieldName, imageFile);
       return URL.createObjectURL(imageFile);
     }
+    return null;
   };
 
   const {
@@ -676,7 +681,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               onSubmit={() => { }}
               enableReinitialize
             >
-              {({ isSubmitting, values }) => (
+              {() => (
                 <>
                   <div>
                     <Typography variant="h2">Volunteer Response Form</Typography>
@@ -728,7 +733,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                               onSubmit={() => { }}
                               enableReinitialize
                             >
-                              {({ isSubmitting, values }) => (
+                              {() => (
                                 <>
                                   <Typography className={classes.optionStyle}>
                                     Options:
@@ -736,7 +741,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                   </Typography>
                                   {question.options.map((option, optionIndex) => (
                                     <div
-                                      key={optionIndex}
+                                      key={option}
                                       style={{
                                         display: 'flex',
                                         alignContent: 'center',
@@ -745,7 +750,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                       <FormQuestionMapper
                                         formType="shortAnswer"
                                         name={String(optionIndex)}
-                                        key={optionIndex}
+                                        key={option}
                                         props={{
                                           style: {
                                             width: '500px',

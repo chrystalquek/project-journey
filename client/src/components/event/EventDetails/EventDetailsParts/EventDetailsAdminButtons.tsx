@@ -1,9 +1,7 @@
-import React, { FC } from 'react';
-import { EventData, RoleData } from '@type/event';
+import React from 'react';
 import {
-  Box, Button, Grid, makeStyles, Typography,
+  Button, Grid, makeStyles, Typography,
 } from '@material-ui/core';
-import { EventTypography } from '@components/common/event/EventTypography';
 import { useRouter } from 'next/router';
 import { deleteEvent } from '@redux/actions/event';
 import { useAppDispatch } from '@redux/store';

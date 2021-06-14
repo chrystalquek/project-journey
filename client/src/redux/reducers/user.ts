@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken';
 import apiClient from '@api/apiClient';
 import { REHYDRATE } from 'redux-persist';
 import { updateProfilePicture } from '@redux/actions/image';
-import { CommitmentApplicationData } from '@type/commitmentApplication';
 import user, { updateVolunteer } from '../actions/user';
 
 type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
@@ -65,20 +64,23 @@ const userSlice = createSlice({
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload;
       // Update the loggedInUser data
-      if (state.user._id == updatedVolunteerData._id) {
+      if (state.user._id === updatedVolunteerData._id) {
         state.user = updatedVolunteerData;
       }
     });
     builder.addCase(updateProfilePicture.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload;
       // Update the loggedInUser data
-      if (state.user.email == updatedVolunteerData.email) {
+      if (state.user.email === updatedVolunteerData.email) {
         state.user = updatedVolunteerData;
       }
     });
     builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
       const { payload } = action;
-      const newCommitmentApplication = { ...payload, createdAt: new Date(payload.createdAt) } as any;
+      const newCommitmentApplication = {
+        ...payload,
+        createdAt: new Date(payload.createdAt),
+      } as any;
       state.user.commitmentApplicationIds.push(newCommitmentApplication);
     });
   },

@@ -1,10 +1,10 @@
 import React, { FC, useState, useCallback } from 'react';
 import {
   Dialog, DialogContent,
-  DialogTitle, Link, Typography, useMediaQuery,
+  DialogTitle, Button, Typography, useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import CommittedConversionForm from '@components/form/CommittedConversionForm';
 import { createCommitmentApplication } from '@redux/actions/commitmentApplication';
 import { CreateCommitmentApplicationRequest } from '@api/request';
@@ -41,7 +41,7 @@ const BecomeCommited: FC = () => {
     ? userData.commitmentApplicationIds[length - 1]
     : null;
   // Check if there is pending application
-  const isPending: boolean = commitmentApplication?.status == CommitmentApplicationStatus.Pending;
+  const isPending: boolean = commitmentApplication?.status === CommitmentApplicationStatus.Pending;
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
   const theme = useTheme();
@@ -77,9 +77,9 @@ const BecomeCommited: FC = () => {
           isPending
             ? (<Typography variant="body2"> Your application is pending </Typography>)
             : (
-              <Link color="secondary" onClick={handleClickOpen}>
+              <Button color="secondary" onClick={handleClickOpen}>
                 <u>Become a committed volunteer</u>
-              </Link>
+              </Button>
             )
         }
       </Typography>

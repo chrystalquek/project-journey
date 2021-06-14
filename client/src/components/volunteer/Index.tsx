@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Index: FC<{}> = ({ }) => {
+const Index: FC<{}> = () => {
   checkLoggedIn();
   const classes = useStyles();
   const dispatch = useAppDispatch();
@@ -105,7 +105,9 @@ const Index: FC<{}> = ({ }) => {
   };
 
   // filter state and components
-  const isDisableClearFilters = Object.values(VolunteerType).every((volType) => !volunteerType[volType]);
+  const isDisableClearFilters = Object.values(VolunteerType).every(
+    (volType) => !volunteerType[volType],
+  );
   const [openFilter, setOpenFilter] = React.useState(isMobile);
   const filterOptions = (
     <TableContainer>
@@ -131,7 +133,14 @@ const Index: FC<{}> = ({ }) => {
                     ))}
 
                   </FormGroup>
-                  <Button className={classes.link} disabled={isDisableClearFilters} onClick={handleClearAllFilters}><u>Clear</u></Button>
+                  <Button
+                    className={classes.link}
+                    disabled={isDisableClearFilters}
+                    onClick={handleClearAllFilters}
+                  >
+                    <u>Clear</u>
+
+                  </Button>
                 </>
               )}
           </TableCell>
@@ -151,7 +160,9 @@ const Index: FC<{}> = ({ }) => {
 
   // sort function
   const handleSortChange = (event: React.ChangeEvent<{ value: VolunteerSortFieldsType }>) => {
-    dispatch(getVolunteers({ newCollate: { sort: event.target.value as VolunteerSortFieldsType } }));
+    dispatch(getVolunteers(
+      { newCollate: { sort: event.target.value as VolunteerSortFieldsType } },
+    ));
   };
 
   // sort component
@@ -163,7 +174,9 @@ const Index: FC<{}> = ({ }) => {
         value={sort}
         onChange={handleSortChange}
       >
-        {volunteerSortFields.map((field) => <MenuItem value={field.value} key={field.value}>{field.label}</MenuItem>)}
+        {volunteerSortFields.map(
+          (field) => <MenuItem value={field.value} key={field.value}>{field.label}</MenuItem>,
+        )}
 
       </Select>
     </FormControl>
@@ -253,7 +266,16 @@ const Index: FC<{}> = ({ }) => {
               {sortMenu}
             </Grid>
             <Grid item>
-              <RightDrawer buttonTitle={<div className={classes.link}>Filter results</div>} content={filterOptions} />
+              <RightDrawer
+                buttonTitle={(
+                  <div
+                    className={classes.link}
+                  >
+                    Filter results
+                  </div>
+                )}
+                content={filterOptions}
+              />
             </Grid>
             <Grid item>
               {volunteerTable}

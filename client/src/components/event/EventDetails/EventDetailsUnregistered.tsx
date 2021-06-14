@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event, user }) => {
+const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({ event }) => {
   const classes = useStyles();
 
   return (

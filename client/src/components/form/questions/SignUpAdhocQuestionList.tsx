@@ -1,6 +1,6 @@
 import { Link } from '@material-ui/core';
 import { HeaderQuestionList } from '@type/form/form';
-import { Citizenship, Gender, Race } from '@type/volunteer';
+import { Citizenship, Gender } from '@type/volunteer';
 
 export const questions: HeaderQuestionList = [
   {
@@ -326,11 +326,16 @@ export const questions: HeaderQuestionList = [
           '(c) To respect the value the rights, religious beliefs and practices of individuals. Refrain from actions and behaviours that constitute harassment or discrimination and strive to be sensitive to the feelings of others.',
 
           // A bit nasty, but it needs link here.
-          (<>
-            (d) To report any accidents or situations involving any member of the community (Student, WCA, etc) and to record this in our record book as soon as practically possible (Including incidents such as misbehaviour on the bus, during program, having a personal challenge that directly impacts the safety and well being of the community (eg a stalker), etc:
-            {' '}
-            <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdaVJ4OTtXyuucvL4U59TifnIsXhQB6a93zmFhdmcjJIiIS-Q/viewform" color="secondary">Click here</Link>
-          </>),
+          (
+            <>
+              (d) To report any accidents or situations involving any member of the community
+              (Student, WCA, etc) and to record this in our record book as soon as practically
+              possible (Including incidents such as misbehaviour on the bus, during program,
+              having a personal challenge that directly impacts the safety and well being
+              of the community (eg a stalker), etc:
+              <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdaVJ4OTtXyuucvL4U59TifnIsXhQB6a93zmFhdmcjJIiIS-Q/viewform" color="secondary">Click here</Link>
+            </>
+          ),
 
           '(e) To be responsible for familiarising myself with building/facility safety issues, such as, fire procedures, location of emergency exits, location of emergency telephones and first aid equipment.',
 

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-  Grid, Link, makeStyles, Typography,
+  Grid, Button, makeStyles, Typography,
 } from '@material-ui/core';
 import ProfileDivider from '@components/common/ProfileDivider';
 import DataRow from '@components/common/DataRow';
@@ -12,7 +12,7 @@ type props = {
   profilePageData: VolunteerData
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   link: {
     cursor: 'pointer',
   },
@@ -39,7 +39,7 @@ const EventCount: FC<props> = ({ profilePageData }) => {
       <DataRow header="Hangouts" data={profilePageData.hangoutsCount?.toString()} xs1={11} xs2={1} />
       <Grid item>
         <Typography className={classes.link}>
-          <Link color="secondary" onClick={handleViewPastEvents}><u>View past events</u></Link>
+          <Button color="secondary" onClick={handleViewPastEvents}><u>View past events</u></Button>
         </Typography>
       </Grid>
     </PaddedGrid>

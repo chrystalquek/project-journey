@@ -63,49 +63,32 @@ const ProfilePicture = ({ profilePageData }) => {
     setImageRef(image);
   };
 
-  const onCropComplete = (newCrop) => {
-    makeClientCrop(newCrop);
-  };
-
-  const onCropChange = (newCrop) => {
-    setCrop(newCrop);
-  };
-
-  const makeClientCrop = async (crop) => {
-    if (imageRef && crop.width && crop.height) {
-      const croppedImageUrl = await getCroppedImg(
-        imageRef,
-        crop,
-      );
-      setNewImageUrl(croppedImageUrl);
-    }
-  };
-
-  const getCroppedImg = async (image, crop) => {
+  const getCroppedImg = async (image, {
+    x, y, width, height,
+  }) => {
     const canvas = document.createElement('canvas');
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
 
     ctx.drawImage(
       image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
+      x * scaleX,
+      y * scaleY,
+      width * scaleX,
+      height * scaleY,
       0,
       0,
-      crop.width,
-      crop.height,
+      width,
+      height,
     );
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve) => {
       canvas.toBlob((blob) => {
         if (!blob) {
-          console.error('Canvas is empty');
-          return;
+          throw new Error('Canvas is empty');
         }
         window.URL.revokeObjectURL(fileUrl);
         fileUrl = window.URL.createObjectURL(blob);
@@ -114,8 +97,25 @@ const ProfilePicture = ({ profilePageData }) => {
     });
   };
 
+  const makeClientCrop = async (clientCrop) => {
+    if (imageRef && crop.width && clientCrop.height) {
+      const croppedImageUrl = await getCroppedImg(
+        imageRef,
+        clientCrop,
+      );
+      setNewImageUrl(croppedImageUrl);
+    }
+  };
+
+  const onCropComplete = (newCrop) => {
+    makeClientCrop(newCrop);
+  };
+
+  const onCropChange = (newCrop) => {
+    setCrop(newCrop);
+  };
+
   const handleSave = async () => {
-    const FormData = require('form-data');
     const blob = await fetch(newImageUrl).then((res) => res.blob());
     const metadata = { type: 'image/jpeg' };
     const imageFile = new File([blob], 'profile.jpg', metadata);
@@ -146,18 +146,22 @@ const ProfilePicture = ({ profilePageData }) => {
               <Avatar className={classes.button}>
                 <PhotoCamera className={classes.icon} />
               </Avatar>
+              <input
+                id="file-input"
+                className={classes.input}
+                type="file"
+                accept="image/jpg, image/png"
+                onChange={onSelectFile}
+              />
             </label>
-            <input
-              id="file-input"
-              className={classes.input}
-              type="file"
-              accept="image/jpg, image/png"
-              onChange={onSelectFile}
-            />
           </div>
         )}
       >
-        <Avatar alt={profilePageData.name} className={classes.avatar} src={profilePageData.photoUrl} />
+        <Avatar
+          alt={profilePageData.name}
+          className={classes.avatar}
+          src={profilePageData.photoUrl}
+        />
       </Badge>
       <Dialog
         open={src !== null}

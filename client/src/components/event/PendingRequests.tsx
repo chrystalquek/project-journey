@@ -3,7 +3,7 @@ import {
 } from '@material-ui/core';
 import React, { FC, useEffect } from 'react';
 import { EventData } from '@type/event';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventsUpcomingEvent } from '@redux/actions/event';
 import { getPendingSignUps } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
@@ -53,12 +53,14 @@ const PendingRequests: FC = () => {
   const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
     upcomingSignUps.forEach((signUp: SignUpData) => {
-      if (signUp.eventId == event._id && signUp.status == 'pending') result++;
+      if (signUp.eventId === event._id && signUp.status === 'pending') result += 1;
     });
     return result;
   };
 
-  const upcomingEventsWithPendingSignUps = upcomingEvents.filter((event) => (pendingRequestsForEventCount(event) != 0));
+  const upcomingEventsWithPendingSignUps = upcomingEvents.filter(
+    (event) => (pendingRequestsForEventCount(event) !== 0),
+  );
 
   return (
     <>
@@ -88,7 +90,11 @@ const PendingRequests: FC = () => {
 
                     </TableCell>
                     <TableCell>{new Date(event.startDate).toLocaleDateString()}</TableCell>
-                    <TableCell><div className={classes.shapeCircle}>{pendingRequestsForEventCount(event)}</div></TableCell>
+                    <TableCell>
+                      <div className={classes.shapeCircle}>
+                        {pendingRequestsForEventCount(event)}
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

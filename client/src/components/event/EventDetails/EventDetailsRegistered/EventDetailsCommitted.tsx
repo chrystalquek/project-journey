@@ -26,7 +26,7 @@ type EventDetailsCommittedProps = {
   }
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   gutterBottom: {
     marginBottom: '1em',
   },
@@ -68,7 +68,8 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
           </Grid>
         )}
 
-      {user.volunteerType !== VolunteerType.ADMIN && formStatus.reason === FormDisabledReason.SIGNUP_PENDING
+      {user.volunteerType !== VolunteerType.ADMIN
+      && formStatus.reason === FormDisabledReason.SIGNUP_PENDING
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <EventPaper>
@@ -77,7 +78,8 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
             </EventPaper>
           </Grid>
         )}
-      {user.volunteerType !== VolunteerType.ADMIN && formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
+      {user.volunteerType !== VolunteerType.ADMIN
+      && formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED
         && (
           <Grid className={classes.gutterBottom} item xs={12}>
             <EventPaper>

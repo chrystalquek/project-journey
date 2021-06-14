@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
+    "build": "npm run lint && cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
     "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
     "deploy-staging": "npm run build && npm run gcp-predeploy && gcloud app deploy app-staging.yaml",
     "deploy-prod": "npm run build && npm run gcp-predeploy && gcloud app deploy app-prod.yaml",

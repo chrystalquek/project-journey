@@ -107,20 +107,23 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   /**
    * Navigation for Event menu.
    */
-  const eventMenuArray = !userData
-    ? [{ title: 'Upcoming Events', route: EVENTS_ROUTE }]
-    : userData.volunteerType === VolunteerType.ADMIN
-      ? [
-        { title: 'Browse Events', route: EVENTS_ROUTE },
-        { title: 'Past Events', route: PAST_EVENTS_ROUTE },
-        { title: 'Pending Requests', route: EVENT_PENDING_REQUESTS_ROUTE },
-      ]
-      : [
-        // Adhoc / Committed
-        { title: 'Browse Events', route: EVENTS_ROUTE },
-        { title: 'My Upcoming Events', route: UPCOMING_EVENTS_ROUTE },
-        { title: 'My Past Events', route: PAST_EVENTS_ROUTE },
-      ];
+  let eventMenuArray;
+
+  if (!userData) {
+    eventMenuArray = [{ title: 'Upcoming Events', route: EVENTS_ROUTE }];
+  } else if (userData.volunteerType === VolunteerType.ADMIN) {
+    eventMenuArray = [
+      { title: 'Browse Events', route: EVENTS_ROUTE },
+      { title: 'Past Events', route: PAST_EVENTS_ROUTE },
+      { title: 'Pending Requests', route: EVENT_PENDING_REQUESTS_ROUTE },
+    ];
+  } else { // Adhoc / Committed
+    eventMenuArray = [
+      { title: 'Browse Events', route: EVENTS_ROUTE },
+      { title: 'My Upcoming Events', route: UPCOMING_EVENTS_ROUTE },
+      { title: 'My Past Events', route: PAST_EVENTS_ROUTE },
+    ];
+  }
 
   const toggleEventMenu = () => {
     setOpenEventMenu((prevOpen) => !prevOpen);

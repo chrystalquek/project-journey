@@ -15,7 +15,7 @@ type SectionTitleProps = {
   gutterTop?: boolean,
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   root: (props: SectionTitleProps) => ({
     textAlign: props.textCenter ? 'center' : 'initial',
     paddingBottom: '0.1rem',
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const EventTypography: FC<SectionTitleProps> = (props) => {
-  const fontSize = props.fontSize || 'body1';
+  const { fontSize, text } = props;
   const classes = useStyles(props);
   const theme = useTheme<Theme>();
 
@@ -37,9 +37,9 @@ const EventTypography: FC<SectionTitleProps> = (props) => {
     <Box
       className={classes.root}
       fontFamily={theme.typography.fontFamily}
-      fontSize={theme.typography[fontSize].fontSize}
+      fontSize={theme.typography[fontSize ?? 'body1'].fontSize}
     >
-      {props.text}
+      {text}
     </Box>
   );
 };

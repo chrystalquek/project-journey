@@ -1,16 +1,10 @@
-import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import logger from 'redux-logger';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userReducer from '@redux/reducers/user';
 import EventReducer from '@redux/reducers/event';
 import imageReducer from '@redux/reducers/image';
 import volunteerReducer from '@redux/reducers/volunteer/index';
 import profilePageReducer from '@redux/reducers/profilePage';
 import loadingReducer from '@redux/reducers/loading';
-import pendingVolunteerReducer from './reducers/volunteer';
-import signUpReducer from './reducers/signUp';
-import formReducer from './reducers/form';
-import commitmentApplicationReducer from './reducers/commitmentApplication';
-
 import storage from 'redux-persist/lib/storage';
 import {
   persistStore,
@@ -23,6 +17,10 @@ import {
   REGISTER,
 } from 'redux-persist';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import pendingVolunteerReducer from './reducers/volunteer';
+import signUpReducer from './reducers/signUp';
+import formReducer from './reducers/form';
+import commitmentApplicationReducer from './reducers/commitmentApplication';
 
 export type StoreState = ReturnType<typeof reducers>
 
@@ -60,7 +58,7 @@ const store = configureStore({
 export const persistor = persistStore(store);
 
 export type AppDispatch = typeof store.dispatch
-export const useAppDispatch = () => useDispatch<AppDispatch>()
-export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
 
-export default { store, persistor }
+export default { store, persistor };

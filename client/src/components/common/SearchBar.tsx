@@ -1,5 +1,5 @@
 import { TextField } from '@material-ui/core';
-import React, { FC, useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 

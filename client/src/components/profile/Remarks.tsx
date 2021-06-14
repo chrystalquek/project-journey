@@ -4,7 +4,7 @@ import ProfileDivider from '@components/common/ProfileDivider';
 import PaddedGrid from '@components/common/PaddedGrid';
 import RemarksTextField from '@components/profile/RemarksTextField';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { updateVolunteer } from '@redux/actions/user';
 
 type props = {
@@ -21,7 +21,9 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   let originalAdministratorRemarks = profilePageData.administratorRemarks;
 
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
-  const [administratorRemarks, setAdministratorRemarks] = useState<string>(originalAdministratorRemarks);
+  const [administratorRemarks, setAdministratorRemarks] = useState<string>(
+    originalAdministratorRemarks,
+  );
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
   const [administratorRemarksChanged, setAdministratorRemarksChanged] = useState<boolean>(false);
 

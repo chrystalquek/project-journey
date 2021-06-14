@@ -61,11 +61,10 @@ const EventCard: FC<EventCardProps> = ({ event, upcomingSignUps, onCardClick }) 
       case 'unknown':
         return <Typography>-</Typography>;
       default:
-        const roleAssigned = status[1];
         return (
           <Typography className={classes.greenText}>
             Volunteer role assigned -
-            {roleAssigned}
+            {status[1]}
           </Typography>
         );
     }

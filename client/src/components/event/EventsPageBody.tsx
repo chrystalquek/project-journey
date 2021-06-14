@@ -20,7 +20,7 @@ import { withFilters } from '@components/event/helpers/EventsPageBody';
 import { useRouter } from 'next/router';
 import { VolunteerData, VolunteerType } from '@type/volunteer';
 import { EventButton } from '@components/common/event/EventButton';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getUpcomingEvents } from '@redux/actions/event';
 import { EVENTS_ROUTE, LOGIN_ROUTE } from '@utils/constants/routes';
 
@@ -79,7 +79,9 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
 
   // TODO move filters search to redux
   const [search, setSearch] = useState('');
-  const filteredSearchedEvents = filteredEvents.filter((event) => event.name.toLowerCase().includes(search.toLowerCase()));
+  const filteredSearchedEvents = filteredEvents.filter(
+    (event) => event.name.toLowerCase().includes(search.toLowerCase()),
+  );
 
   const handleCardClick = useCallback((eventId: string) => {
     if (user) {

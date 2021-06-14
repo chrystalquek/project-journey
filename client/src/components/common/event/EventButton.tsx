@@ -18,14 +18,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const EventButton: FC<EventButtonProps> = (props) => {
+export const EventButton: FC<EventButtonProps> = (props) => {
   const classes = useStyles();
 
+  const { children } = props;
   return (
     <Button className={classes.root} {...props}>
-      {props.children}
+      {children}
     </Button>
   );
 };
-
-export { EventButton };

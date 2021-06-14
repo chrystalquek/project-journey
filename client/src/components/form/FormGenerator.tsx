@@ -68,12 +68,13 @@ export const FormQuestionMapper = ({
 }) => {
   const classes = useStyles();
 
-  const onChangeImage = (e, fieldName, setFieldValue) => {
+  const onChangeImage = (e, fieldName, setImageFieldValue) => {
     if (e.target.files && e.target.files[0]) {
       const imageFile = e.target.files[0];
-      setFieldValue(fieldName, imageFile);
+      setImageFieldValue(fieldName, imageFile);
       return URL.createObjectURL(imageFile);
     }
+    return null;
   };
 
   switch (formType) {
@@ -196,7 +197,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
   questionsList.forEach(({ name, type, initialValue }) => {
     initialValues[name] = type === 'checkboxes' ? [] : initialValue;
     // Autofill with user data
-    if (userData.hasOwnProperty(name)) {
+    if (userData && userData[name]) {
       initialValues[name] = userData[name];
     }
   });
@@ -228,7 +229,6 @@ const FormGenerator: FC<FormGeneratorType> = ({
                   <div key={name} className={classes.questionContainer}>
                     {displayText.map((text, index) => (
                       <Typography
-                        key={index}
                         className={classes.questionTitle}
                       >
                         {text}
@@ -262,6 +262,11 @@ const FormGenerator: FC<FormGeneratorType> = ({
       </MuiPickersUtilsProvider>
     </Paper>
   );
+};
+FormQuestionMapper.defaultProps = {
+  options: null,
+  setFieldValue: () => null,
+  props: [],
 };
 
 export default FormGenerator;

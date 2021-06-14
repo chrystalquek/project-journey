@@ -579,11 +579,16 @@ export const questions: HeaderQuestionList = [
           '(d) To respect the confidential nature of information gained, or behaviour observed, whilst participating in the program, in relation to children and adults.  I am aware that there are some individuals who are present that may be under the child protection services program.',
 
           // A bit nasty, but it needs link here.
-          (<>
-            (e) To report any accidents or situations involving any member of the community (Student, WCA, etc) and to record this in our record book as soon as practically possible (Including incidents such as misbehaviour on the bus, during program, having a personal challenge that directly impacts the safety and well being of the community (eg a stalker), etc:
-            {' '}
-            <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdaVJ4OTtXyuucvL4U59TifnIsXhQB6a93zmFhdmcjJIiIS-Q/viewform" color="secondary">Click here</Link>
-           </>),
+          (
+            <>
+              (e) To report any accidents or situations involving any member of the community
+              (Student, WCA, etc) and to record this in our record book as soon as practically
+              possible (Including incidents such as misbehaviour on the bus, during program,
+              having a personal challenge that directly impacts the safety and well
+              being of the community (eg a stalker), etc:
+              <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdaVJ4OTtXyuucvL4U59TifnIsXhQB6a93zmFhdmcjJIiIS-Q/viewform" color="secondary">Click here</Link>
+            </>
+          ),
 
           '(f) To be responsible for familiarising myself with building/facility safety issues, such as, fire procedures, location of emergency exits, location of emergency telephones and first aid equipment.',
 
@@ -597,11 +602,14 @@ export const questions: HeaderQuestionList = [
 
           '(k) To encourage good behaviour  - amongst children and the WCA community',
 
-          (<>
-            (l) To not physically or verbally punish any young person.  Our program follows Restorative Care practices, please see:
-            {' '}
-            <Link href="https://www.edutopia.org/blog/restorative-justice-resources-matt-davis" color="secondary">https://www.edutopia.org/blog/restorative-justice-resources-matt-davis</Link>
-           </>),
+          (
+            <>
+              (l) To not physically or verbally punish any young person.
+              Our program follows Restorative Care practices, please see:
+              {' '}
+              <Link href="https://www.edutopia.org/blog/restorative-justice-resources-matt-davis" color="secondary">https://www.edutopia.org/blog/restorative-justice-resources-matt-davis</Link>
+            </>
+          ),
 
           '(m) To seek for assistance, guidance or clarification from any of the program captains and/or Emily Teng.',
         ],

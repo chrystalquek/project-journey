@@ -1,8 +1,6 @@
 // IGNORE
 import { FC } from 'react';
-import {
-  Box, makeStyles, Theme, useTheme,
-} from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 
 type EventDividerProps = {
   fontBold?: boolean,
@@ -33,12 +31,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const EventDivider: FC<EventDividerProps> = (props) => {
   const classes = useStyles(props);
-
+  const { children } = props;
   return (
     <div className={classes.container}>
       <div className={classes.border} />
       <div className={classes.content}>
-        {props.children}
+        {children}
       </div>
       <div className={classes.border} />
     </div>

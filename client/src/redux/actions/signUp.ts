@@ -57,7 +57,10 @@ export const updateSignUpInstant = createAsyncThunk(
 
 export const createAndAcceptSignUp = createAsyncThunk(
   'signUp/createAndAcceptSignUp',
-  async (payloadCreator: { request: CreateSignUpRequest, form: FormState }, thunkAPI) => await apiClient.createAndUpdateSignUp(payloadCreator.form.firstChoice, payloadCreator.request),
+  async (payloadCreator: { request: CreateSignUpRequest, form: FormState }) => apiClient
+    .createAndUpdateSignUp(
+      payloadCreator.form.firstChoice, payloadCreator.request,
+    ),
 );
 
 export const deleteSignUp = createAsyncThunk(

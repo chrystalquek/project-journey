@@ -6,6 +6,17 @@ export type FormSelectRow = {
   isDisabled: boolean
 }
 
+export function getRoleVacancies(role: RoleData):
+{ remaining: number, filled: number, total: number } {
+  if (!role || !role.volunteers) {
+    return { filled: 0, total: 0, remaining: 0 };
+  }
+  const filled = role.volunteers.length;
+  const total = role.capacity;
+  const remaining = total - filled;
+  return { remaining, filled, total };
+}
+
 export function parseRoles(roles: Array<RoleData>): Array<FormSelectRow> {
   // most vacancies come first
   // roles.sort((a, b) => b.volunteers.length - a.volunteers.length);
@@ -17,14 +28,4 @@ export function parseRoles(roles: Array<RoleData>): Array<FormSelectRow> {
       isDisabled: remaining === 0,
     };
   });
-}
-
-export function getRoleVacancies(role: RoleData): { remaining: number, filled: number, total: number } {
-  if (!role || !role.volunteers) {
-    return { filled: 0, total: 0, remaining: 0 };
-  }
-  const filled = role.volunteers.length;
-  const total = role.capacity;
-  const remaining = total - filled;
-  return { remaining, filled, total };
 }

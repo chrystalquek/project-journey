@@ -11,7 +11,7 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 import dayjs from 'dayjs';
 import Checkbox from '@material-ui/core/Checkbox';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventFeedbackFormQuestions, submitEventFeedbackFormQuestions } from '@redux/actions/form';
 import FormGenerator from '@components/form/FormGenerator';
 
@@ -267,8 +267,6 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
         );
     }
   };
-
-
 
   return (
 

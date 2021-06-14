@@ -10,7 +10,8 @@ import { Pagination } from '@utils/helpers/pagination';
 export const getVolunteers = createAsyncThunk(
   'volunteer/getVolunteers',
   async (param: GetVolunteersParam, { getState }) => {
-    const { volunteer } = getState() as { volunteer: VolunteerState }; // need to typecast state if getting state
+    const { volunteer } = getState() as
+    { volunteer: VolunteerState }; // need to typecast state if getting state
     const { collate, pagination } = volunteer; // grab state from store if does not exist in params
     const { newPagination, newCollate } = param;
 
@@ -18,7 +19,8 @@ export const getVolunteers = createAsyncThunk(
     const request: GetVolunteersPaginatedRequest = {
       pageNo: newPagination?.pageNo ?? pagination.pageNo,
       size: newPagination?.size ?? pagination.size,
-      volunteerType: Object.keys(newCollate?.filters?.volunteerType ?? collate.filters.volunteerType),
+      volunteerType: Object.keys(newCollate
+        ?.filters?.volunteerType ?? collate.filters.volunteerType),
       name: newCollate?.search?.name ?? collate.search.name,
       sort: newCollate?.sort ?? collate.sort,
     };
@@ -32,4 +34,7 @@ export const getVolunteers = createAsyncThunk(
 // other funcions...
 
 // parameter types
-type GetVolunteersParam = { newPagination?: Partial<Pagination>, newCollate?: Partial<VolunteerCollate> }
+type GetVolunteersParam = {
+  newPagination?: Partial<Pagination>,
+  newCollate?: Partial<VolunteerCollate>
+}

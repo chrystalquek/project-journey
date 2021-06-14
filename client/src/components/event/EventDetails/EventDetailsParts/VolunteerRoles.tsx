@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { EventData, RoleData } from '@type/event';
-import { Box, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { EventTypography } from '@components/common/event/EventTypography';
 
 type VolunteerRolesProps = {

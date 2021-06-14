@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getCommitmentApplications } from '@redux/actions/commitmentApplication';
 import { getPendingVolunteers } from '@redux/actions/volunteer';
 import { CommitmentApplicationStatus } from '@type/commitmentApplication';
@@ -42,12 +42,14 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
   const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
     upcomingSignUps.forEach((signUp: SignUpData) => {
-      if (signUp.eventId == event._id && signUp.status == 'pending') result++;
+      if (signUp.eventId === event._id && signUp.status === 'pending') result += 1;
     });
     return result;
   };
 
-  const upcomingEventsWithPendingSignUps = upcomingEvents.filter((event) => (pendingRequestsForEventCount(event) != 0));
+  const upcomingEventsWithPendingSignUps = upcomingEvents.filter(
+    (event) => (pendingRequestsForEventCount(event) !== 0),
+  );
 
   const tabs = [
     {

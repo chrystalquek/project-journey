@@ -1,8 +1,19 @@
 import React, { FC, useCallback, useState } from 'react';
 import {
-  IconButton, MenuItem, Dialog, DialogTitle, Typography, DialogContent, DialogActions, makeStyles, FormControl, InputLabel, Select, Input, Button,
+  IconButton,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  Typography,
+  DialogContent,
+  DialogActions,
+  makeStyles,
+  FormControl,
+  Select,
+  Input,
+  Button,
 } from '@material-ui/core';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { VolunteerType } from '@type/volunteer';
 import EditIcon from '@material-ui/icons/Edit';
 import { updateVolunteer } from '@redux/actions/user';
@@ -72,9 +83,24 @@ const ChangeVolunteerType: FC = () => {
                 onChange={handleChange}
                 input={<Input />}
               >
-                <MenuItem className={classes.centralize} value={VolunteerType.ADHOC}>Ad-hoc Volunteer</MenuItem>
-                <MenuItem className={classes.centralize} value={VolunteerType.COMMITTED}>Committed Volunteer</MenuItem>
-                <MenuItem className={classes.centralize} value={VolunteerType.ADMIN}>Admin</MenuItem>
+                <MenuItem
+                  className={classes.centralize}
+                  value={VolunteerType.ADHOC}
+                >
+                  Ad-hoc Volunteer
+                </MenuItem>
+                <MenuItem
+                  className={classes.centralize}
+                  value={VolunteerType.COMMITTED}
+                >
+                  Committed Volunteer
+                </MenuItem>
+                <MenuItem
+                  className={classes.centralize}
+                  value={VolunteerType.ADMIN}
+                >
+                  Admin
+                </MenuItem>
               </Select>
             </FormControl>
           </form>

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-  Grid, Typography, Avatar, useMediaQuery,
+  Grid, Typography, useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import BecomeCommitedDialog from '@components/profile/BecomeCommitedDialog';

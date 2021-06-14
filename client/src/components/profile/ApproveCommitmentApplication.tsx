@@ -2,11 +2,9 @@ import React, { FC, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { ActionableDialog } from '@components/common/ActionableDialog';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { CommitmentApplicationData, CommitmentApplicationStatus } from '@type/commitmentApplication';
 import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
-import { VolunteerType } from '@type/volunteer';
-import { updateVolunteer } from '@redux/actions/user';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -21,7 +19,9 @@ type ApproveCommitmentApplicationProps = {
   commitmentApplication: CommitmentApplicationData
 }
 
-const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (props: ApproveCommitmentApplicationProps) => {
+const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (
+  props: ApproveCommitmentApplicationProps,
+) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -32,7 +32,10 @@ const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (pro
 
   const handleApproveEvent = () => {
     // Change the status of the commitment Application
-    const updatedCommitmentApplication = { ...commitmentApplication, status: CommitmentApplicationStatus.Accepted };
+    const updatedCommitmentApplication = {
+      ...commitmentApplication,
+      status: CommitmentApplicationStatus.Accepted,
+    };
     dispatch(updateCommitmentApplication({
       data: updatedCommitmentApplication,
       _id: commitmentApplication._id,

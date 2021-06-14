@@ -30,7 +30,8 @@ export function parseDate(startDate: Date, endDate: Date) {
 }
 
 // Returns an object of (filled vacancies, total vacancies) for an event.
-export function getEventVacancies(data: EventData): { filled: number, total: number, remaining: number } {
+export function getEventVacancies(data: EventData):
+{ filled: number, total: number, remaining: number } {
   if (!data || !data.roles) {
     return { filled: 0, total: 0, remaining: 0 };
   }

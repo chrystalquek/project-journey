@@ -47,7 +47,14 @@ export function Tabs(props: TabsProps) {
   return (
 
     <Grid direction="row">
-      {tabs.map((tab, idx) => <Button className={idx == clickedOn ? classes.clickedButton : classes.otherButton} onClick={tab.onClick}>{tab.label}</Button>)}
+      {tabs.map((tab, idx) => (
+        <Button
+          className={idx === clickedOn ? classes.clickedButton : classes.otherButton}
+          onClick={tab.onClick}
+        >
+          {tab.label}
+        </Button>
+      ))}
     </Grid>
 
   );

@@ -74,11 +74,12 @@ const SignUpFormGenerator = ({
   const initialValues: Record<string, any> = {};
 
   // Basically concatenates all the question lists from each section
-  const reducer = (accumulator: QuestionList, currentValue: QuestionsWithHeader): QuestionList => accumulator.concat(currentValue.questionList);
+  const reducer = (accumulator: QuestionList, currentValue: QuestionsWithHeader):
+    QuestionList => accumulator.concat(currentValue.questionList);
   const questionList: QuestionList = questionWithHeader.reduce(reducer, []);
 
-  questionList.forEach(({ name, type, initialValue }) => {
-    initialValues[name] = type === 'checkboxes' ? [] : initialValue;
+  questionList.forEach(({ name, type: questionType, initialValue }) => {
+    initialValues[name] = questionType === 'checkboxes' ? [] : initialValue;
   });
 
   const onUploadImage = (imageFile, name) => {
@@ -257,11 +258,13 @@ const SignUpFormGenerator = ({
           validateOnChange={false}
         >
           {({
-            isSubmitting, setFieldValue, values, errors, touched,
+            isSubmitting, setFieldValue, errors, touched,
           }) => (
             <Form>
-              {questionWithHeader.map(({ header, info, questionList }, index) => (
-                <React.Fragment key={index}>
+              {questionWithHeader.map((
+                { header, info, questionList: questionWithHeaderList }, index,
+              ) => (
+                <React.Fragment key={header}>
                   <Typography
                     className={classes.headerStyle}
                     align="center"
@@ -277,27 +280,27 @@ const SignUpFormGenerator = ({
                     {info}
                   </Typography>
                   )}
-                  {questionList.map((questionItem, index) => {
+                  {questionWithHeaderList.map((questionItem) => {
                     const {
                       name,
                       displayText,
-                      type,
+                      type: questionWithHeaderType,
                       isRequired,
                     } = questionItem;
-                    const options = type === 'mcq' || type === 'checkboxes'
+                    const options = questionWithHeaderType === 'mcq'
+                    || questionWithHeaderType === 'checkboxes'
                       ? questionItem.options
                       : null;
 
                     return (
                       <div
-                        key={index}
+                        key={name}
                         style={{
                           marginBottom: '32px',
                         }}
                       >
-                        {displayText.map((text, index) => (
+                        {displayText.map((text) => (
                           <Typography
-                            key={index}
                             style={{
                               marginBottom: '16px',
                               fontWeight: 500,
@@ -310,7 +313,7 @@ const SignUpFormGenerator = ({
                           </Typography>
                         ))}
                         <FormQuestionMapper
-                          formType={type}
+                          formType={questionWithHeaderType}
                           name={name}
                           options={options}
                           setFieldValue={setFieldValue}

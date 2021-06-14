@@ -24,7 +24,7 @@ export const getEventsUpcomingEvent = createAsyncThunk(
 
 export const getUpcomingEvents = createAsyncThunk(
   'event/getEvents',
-  async () => await apiClient.getEvents({ eventType: 'upcoming' }),
+  async () => apiClient.getEvents({ eventType: 'upcoming' }),
 );
 
 export const getSignedUpEventsUpcomingEvent = createAsyncThunk(

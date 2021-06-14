@@ -47,14 +47,15 @@ const volunteerSlice = createSlice({
       const { payload } = action;
       // update that volunteer's status
       const volunteer = state.data[payload.volunteerId];
-      if (payload.status == CommitmentApplicationStatus.Accepted) {
+      if (payload.status === CommitmentApplicationStatus.Accepted) {
         state.data[payload.volunteerId] = {
           ...volunteer,
           volunteerType: VolunteerType.COMMITTED,
         };
       }
       // no longer a pending request with either accept or reject
-      state.pendingVolunteers.ids = state.pendingVolunteers.ids.filter((volunteerId) => volunteerId != payload.volunteerId);
+      state.pendingVolunteers.ids = state.pendingVolunteers.ids
+        .filter((volunteerId) => volunteerId !== payload.volunteerId);
     });
   },
 });

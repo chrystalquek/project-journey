@@ -10,7 +10,8 @@ import { SignUpData } from '@type/signUp';
 
 export type SignUpState = {
   data: Record<string, SignUpData>;
-  volunteerSignUpsForUpcomingEvent: { // signups for a volunteer's upcoming events // used for dashboard
+  volunteerSignUpsForUpcomingEvent: {
+    // signups for a volunteer's upcoming events // used for dashboard
     ids: Array<string> // signed up events
   },
   pendingSignUps: { // pending sign ups // used for events > pending requests
@@ -63,31 +64,31 @@ const signUpSlice = createSlice({
     });
 
     // Using redux for logging purposes
-    builder.addCase(createAndAcceptSignUp.pending, (state, action) => {
+    builder.addCase(createAndAcceptSignUp.pending, () => {
       // do nothing yet
     });
-    builder.addCase(createAndAcceptSignUp.fulfilled, (state, action) => {
-      location.reload();
+    builder.addCase(createAndAcceptSignUp.fulfilled, () => {
+      window.location.reload();
     });
-    builder.addCase(createAndAcceptSignUp.rejected, (state, action) => {
-      location.reload();
+    builder.addCase(createAndAcceptSignUp.rejected, () => {
+      window.location.reload();
     });
-    builder.addCase(createSignUp.pending, (state, action) => {
+    builder.addCase(createSignUp.pending, () => {
       // do nothing yet
     });
-    builder.addCase(createSignUp.fulfilled, (state, action) => {
+    builder.addCase(createSignUp.fulfilled, () => {
       // do nothing yet
     });
-    builder.addCase(createSignUp.rejected, (state, action) => {
+    builder.addCase(createSignUp.rejected, () => {
       // do nothing yet
     });
-    builder.addCase(updateSignUp.pending, (state, action) => {
+    builder.addCase(updateSignUp.pending, () => {
       // do nothing yet
     });
-    builder.addCase(updateSignUp.fulfilled, (state, action) => {
+    builder.addCase(updateSignUp.fulfilled, () => {
       // do nothing yet
     });
-    builder.addCase(updateSignUp.rejected, (state, action) => {
+    builder.addCase(updateSignUp.rejected, () => {
       // do nothing yet
     });
     builder.addCase(updateSignUpInstant.fulfilled, (state, action) => {

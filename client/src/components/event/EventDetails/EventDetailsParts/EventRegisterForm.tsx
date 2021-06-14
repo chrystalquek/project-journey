@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react';
 import { EventData, EventType } from '@type/event';
 import {
-  Select,
   Box,
   FormControl,
-  InputLabel,
   MenuItem,
   TextField,
   makeStyles,
@@ -12,7 +10,6 @@ import {
 } from '@material-ui/core';
 import { FormSelectRow, parseRoles } from '@components/event/helpers/EventDetails/EventRegisterForm';
 import { VolunteerData } from '@type/volunteer';
-import { useRouter } from 'next/router';
 import { EventTypography } from '@components/common/event/EventTypography';
 import { EventDivider } from '@components/common/event/EventDivider';
 import { EventButton } from '@components/common/event/EventButton';
@@ -63,8 +60,8 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
     additionalInfo: '',
   };
   const [formState, setFormState] = useState(defaultForm);
-  const handleChange = (event) => {
-    setFormState({ ...formState, [event.target.name]: event.target.value });
+  const handleChange = (e) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
   };
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -77,7 +74,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
         formHandlers.signUpAndAccept(user._id, event._id, formState);
         break;
       default:
-        console.error("You shouldn't be here!");
+        throw new Error("You shouldn't be here!");
     }
   };
 

@@ -1,10 +1,10 @@
 import {
-  makeStyles, Grid, Card, CardContent, Typography, Button,
+  makeStyles, Card, CardContent, Typography, Button,
 } from '@material-ui/core';
 import { isAdmin } from '@utils/helpers/auth';
 import React, { FC, useEffect } from 'react';
 import { EventData } from '@type/event';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
 import { getSignUpsUpcomingEvent } from '@redux/actions/signUp';
 import { formatDateStartEndTime } from '@utils/helpers/date';
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpcomingEvent: FC<{}> = ({ }) => {
+const UpcomingEvent: FC<{}> = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -72,7 +72,9 @@ const UpcomingEvent: FC<{}> = ({ }) => {
 
   const generateNotification = (event: EventData) => {
     if (isAdmin(user)) {
-      const moreVolunteersCount = event.roles.map((role) => role.capacity - role.volunteers.length).reduce((a, b) => a + b, 0);
+      const moreVolunteersCount = event.roles.map(
+        (role) => role.capacity - role.volunteers.length,
+      ).reduce((a, b) => a + b, 0);
       return (
         <Typography className={(moreVolunteersCount > 0) ? classes.greenText : classes.orangeText}>
           {moreVolunteersCount}
@@ -82,7 +84,7 @@ const UpcomingEvent: FC<{}> = ({ }) => {
       );
     }
     // is volunteer
-    const status = upcomingSignUps.find((signUp) => signUp.eventId == event._id)?.status || 'unknown';
+    const status = upcomingSignUps.find((signUp) => signUp.eventId === event._id)?.status || 'unknown';
     switch (status) {
       case 'pending':
         return <Typography><i>Sign-up pending</i></Typography>;
@@ -91,11 +93,10 @@ const UpcomingEvent: FC<{}> = ({ }) => {
       case 'unknown':
         return <Typography>-</Typography>;
       default:
-        const roleAssigned = status[1];
         return (
           <Typography className={classes.greenText}>
             Volunteer role assigned -
-            {roleAssigned}
+            {status[1]}
           </Typography>
         );
     }
@@ -127,12 +128,19 @@ const UpcomingEvent: FC<{}> = ({ }) => {
         {isAdmin(user) ? '' : 'My '}
         Upcoming Events
       </Typography>
-      {upcomingEvents.length == 0
-        ? <div className={classes.noEvents}>{isAdmin(user) ? adminNoEventsUpcoming : volunteerNoEventsUpcoming}</div>
+      {upcomingEvents.length === 0
+        ? (
+          <div className={classes.noEvents}>
+            {isAdmin(user) ? adminNoEventsUpcoming : volunteerNoEventsUpcoming}
+          </div>
+        )
         : upcomingEvents.map((event) => (
           <Card className={classes.card} key={event._id} onClick={() => router.push(`/event/${event._id}`)}>
             <CardContent>
-              <Typography>{formatDateStartEndTime(new Date(event.startDate), new Date(event.endDate)).date}</Typography>
+              <Typography>
+                {formatDateStartEndTime(new Date(event.startDate), new Date(event.endDate)).date}
+
+              </Typography>
               <Typography variant="h4">{event.name}</Typography>
               <Typography>
                 Time:

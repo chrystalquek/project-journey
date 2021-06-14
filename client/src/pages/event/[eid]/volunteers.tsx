@@ -6,7 +6,7 @@ import { checkLoggedIn } from '@utils/helpers/auth';
 
 // Handles checking that user is logged in and event detail validity
 const EventVolunteersPage = () => {
-  checkLoggedIn()
+  checkLoggedIn();
   const router = useRouter();
   const { eid } = router.query;
 

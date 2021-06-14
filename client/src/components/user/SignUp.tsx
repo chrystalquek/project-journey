@@ -11,13 +11,12 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
-import { UserState } from '@redux/reducers/user';
 import SignUpForm from '@components/form/SignUpForm';
-import { VolunteerData, VolunteerType } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import { questions as SignUpAdhocQuestionList } from '@components/form/questions/SignUpAdhocQuestionList';
 import { questions as SignUpCommittedQuestionList } from '@components/form/questions/SignUpCommittedQuestionList';
 
@@ -116,8 +115,9 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [volunteerType, setVolunteerType] = useState<VolunteerType>(VolunteerType.ADHOC); // default set as ad-hoc
-  const [invalid, setInvalid] = useState<boolean>(false);
+  const [volunteerType, setVolunteerType] = useState<VolunteerType>(
+    VolunteerType.ADHOC,
+  ); // default set as ad-hoc
   const classes = useStyles();
 
   // Proceed to next step
@@ -173,7 +173,7 @@ const SignUp = () => {
     );
   };
 
-  const VolunteerTypeSelection = (props) => (
+  const VolunteerTypeSelection = () => (
     <Box>
       <Box className={classes.content}>
         <div>
@@ -276,18 +276,7 @@ const SignUp = () => {
     </Box>
   );
 
-  const InvalidCredentials = (props) => {
-    if (invalid) {
-      return (
-        <Typography className={classes.invalidText}>
-          Email address already exists
-        </Typography>
-      );
-    }
-    return <></>;
-  };
-
-  const VolunteerInfo = (props) => (
+  const VolunteerInfo = () => (
     <>
       <Box>
         <Box className={classes.content}>
@@ -326,7 +315,7 @@ const SignUp = () => {
     </>
   );
 
-  const VolunteerSignUp = (props) => {
+  const VolunteerSignUp = () => {
     if (currentStep === 0) {
       return (
         <div>

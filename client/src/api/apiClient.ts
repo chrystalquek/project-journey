@@ -3,10 +3,51 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { SignUpIdType } from '@type/signUp';
 import querystring from 'querystring';
 import {
-  LoginRequest, CreateEventRequest, GetEventsRequest, GetSignedUpEventsRequest, GetEventRequest, UpdateEventRequest, DeleteEventRequest, CancelEventRequest, CreateVolunteerRequest, GetVolunteersPaginatedRequest, GetVolunteersByIdRequest, GetVolunteerRequest, UpdateVolunteerRequest, CreateSignUpRequest, GetSignUpsRequest, UpdateSignUpRequest, DeleteSignUpRequest, CreateCommitmentApplicationRequest, GetCommitmentApplicationsRequest, UpdateCommitmentApplicationRequest, AnswerFormQuestionsRequest, CreateFormQuestionsRequest, UploadImageRequest, GetEventFeedbackQuestionsRequest,
+  LoginRequest,
+  CreateEventRequest,
+  GetEventsRequest,
+  GetSignedUpEventsRequest,
+  GetEventRequest,
+  UpdateEventRequest,
+  DeleteEventRequest,
+  CancelEventRequest,
+  CreateVolunteerRequest,
+  GetVolunteersPaginatedRequest,
+  GetVolunteersByIdRequest,
+  GetVolunteerRequest,
+  UpdateVolunteerRequest,
+  CreateSignUpRequest,
+  GetSignUpsRequest,
+  UpdateSignUpRequest,
+  DeleteSignUpRequest,
+  CreateCommitmentApplicationRequest,
+  GetCommitmentApplicationsRequest,
+  UpdateCommitmentApplicationRequest,
+  AnswerFormQuestionsRequest,
+  CreateFormQuestionsRequest,
+  UploadImageRequest,
+  GetEventFeedbackQuestionsRequest,
 } from './request';
 import {
-  LoginResponse, CreateEventResponse, GetEventsResponse, GetEventResponse, UpdateEventResponse, CreateVolunteerResponse, GetVolunteersPaginatedResponse, GetVolunteersResponse, GetVolunteerResponse, UpdateVolunteerResponse, CreateSignUpResponse, GetSignUpsResponse, UpdateSignUpResponse, CreateUpdateSignUpResponse, CreateCommitmentApplicationResponse, GetCommitmentApplicationsResponse, UpdateCommitmentApplicationResponse, GetEventFeedbackQuestionsResponse, UploadImageResponse,
+  LoginResponse,
+  CreateEventResponse,
+  GetEventsResponse,
+  GetEventResponse,
+  UpdateEventResponse,
+  CreateVolunteerResponse,
+  GetVolunteersPaginatedResponse,
+  GetVolunteersResponse,
+  GetVolunteerResponse,
+  UpdateVolunteerResponse,
+  CreateSignUpResponse,
+  GetSignUpsResponse,
+  UpdateSignUpResponse,
+  CreateUpdateSignUpResponse,
+  CreateCommitmentApplicationResponse,
+  GetCommitmentApplicationsResponse,
+  UpdateCommitmentApplicationResponse,
+  GetEventFeedbackQuestionsResponse,
+  UploadImageResponse,
 } from './response';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
@@ -109,7 +150,8 @@ class AxiosApiClient {
   }
 
   // TODO change this to 1 api call
-  async createAndUpdateSignUp(acceptedRole: string, request: CreateSignUpRequest): Promise<CreateUpdateSignUpResponse> {
+  async createAndUpdateSignUp(acceptedRole: string,
+    request: CreateSignUpRequest): Promise<CreateUpdateSignUpResponse> {
     return this.createSignUp(request)
       .then((res) => {
         const newRequest: UpdateSignUpRequest = {
@@ -152,7 +194,8 @@ class AxiosApiClient {
     return this.send(request, 'form', 'post');
   }
 
-  async getEventFeedbackQuestions(request: GetEventFeedbackQuestionsRequest): Promise<GetEventFeedbackQuestionsResponse> {
+  async getEventFeedbackQuestions(request: GetEventFeedbackQuestionsRequest):
+  Promise<GetEventFeedbackQuestionsResponse> {
     return this.send({}, `form/${request._id}`, 'get');
   }
 
@@ -207,6 +250,18 @@ class AxiosApiClient {
   }
 }
 
-const urlBaseEndpoint = process.env.NEXT_PUBLIC_ENV === 'development' ? 'http://localhost:5000' : (process.env.NEXT_PUBLIC_ENV === 'production' ? 'https://api-prod-dot-journey-288113.et.r.appspot.com/' : 'https://api-dot-journey-288113.et.r.appspot.com/');
+let urlBaseEndpoint;
+
+switch (process.env.NEXT_PUBLIC_ENV) {
+  case 'development':
+    urlBaseEndpoint = 'http://localhost:5000';
+    break;
+  case 'production':
+    urlBaseEndpoint = 'https://api-prod-dot-journey-288113.et.r.appspot.com/';
+    break;
+  default:
+    urlBaseEndpoint = 'https://api-dot-journey-288113.et.r.appspot.com/';
+}
+
 const sharedClient: AxiosApiClient = new AxiosApiClient(urlBaseEndpoint);
 export default sharedClient;

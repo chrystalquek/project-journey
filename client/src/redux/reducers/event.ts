@@ -47,12 +47,14 @@ const initialState: EventState = {
 // parse all Dates etc before saving to store
 const addToData = (events: Array<EventData>, state: EventState) => {
   events?.forEach(
-    (event) => (state.data[event._id] = {
-      ...event,
-      startDate: event.startDate,
-      endDate: event.endDate,
-      deadline: event.deadline,
-    }),
+    (event) => {
+      state.data[event._id] = {
+        ...event,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        deadline: event.deadline,
+      };
+    },
   );
 };
 

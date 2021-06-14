@@ -22,7 +22,8 @@ export function formatDateStartEndTime(startDate: Date, endDate: Date) {
   }
 
   // assume single day events
-  if (!(startDate.getFullYear() === endDate.getFullYear() && startDate.getMonth() === endDate.getMonth() && startDate.getDate() === endDate.getDate())) {
+  if (!(startDate.getFullYear() === endDate.getFullYear()
+  && startDate.getMonth() === endDate.getMonth() && startDate.getDate() === endDate.getDate())) {
     return { date: null, time: null };
   }
 
@@ -33,5 +34,5 @@ export function formatDateStartEndTime(startDate: Date, endDate: Date) {
 
 // to 26/08/2018
 export function formatDDMMYYYY(date: string): string {
-  return new Date(date).toLocaleDateString()
+  return new Date(date).toLocaleDateString();
 }

@@ -4,7 +4,7 @@ import {
   Button, Popover, FormControl, TablePagination, Select, MenuItem, Badge, InputLabel,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getVolunteersById } from '@redux/actions/volunteer';
 import { getSignUpsUpcomingEvent, updateSignUpInstant } from '@redux/actions/signUp';
 import { SignUpData } from '@type/signUp';
@@ -16,7 +16,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import { getEvent } from '@redux/actions/event';
 import CheckIcon from '@material-ui/icons/Check';
 import SearchBar from '@components/common/SearchBar';
-import { VolunteerData } from '@type/volunteer';
 import { UpdateSignUpRequest } from '@api/request';
 
 export const rowsPerPage = 10;
@@ -165,9 +164,9 @@ const EventVolunteers = ({ eid }) => {
   /** Id of an opened more button popoover */
   const [openedPopoverId, setOpenedPopoverId] = useState(null);
 
-  const handleClickMoreButton = (event, popoverId) => {
+  const handleClickMoreButton = (e, popoverId) => {
     setOpenedPopoverId(popoverId);
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(e.currentTarget);
   };
 
   const handleCloseMoreButton = () => {
@@ -184,8 +183,8 @@ const EventVolunteers = ({ eid }) => {
     setOpenRemoveDialog(false);
   };
 
-  const handleSelectedRoleChange = (signUpId, event) => {
-    setSelectedRoles({ ...selectedRoles, [signUpId]: event.target.value });
+  const handleSelectedRoleChange = (signUpId, e) => {
+    setSelectedRoles({ ...selectedRoles, [signUpId]: e.target.value });
   };
 
   /** Get roles select menu */
@@ -363,7 +362,7 @@ const EventVolunteers = ({ eid }) => {
   /** Pagination */
   const [pageNumber, setPageNumber] = useState(0);
 
-  const handleChangePageNumber = (event, newPageNumber) => {
+  const handleChangePageNumber = (e, newPageNumber) => {
     setPageNumber(newPageNumber);
   };
 

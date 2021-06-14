@@ -7,7 +7,7 @@ import {
   useTheme,
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { StoreState, useAppDispatch, useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { reset } from '@redux/reducers/loading';
 import DesktopNavBar from './DesktopNavBar';
 import MobileNavBar from './MobileNavBar';

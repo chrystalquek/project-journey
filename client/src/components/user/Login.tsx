@@ -108,7 +108,7 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
       setInvalid(true);
     }
   };
-  const InvalidCredentials = (props) => {
+  const InvalidCredentials = () => {
     if (invalid) {
       return (
         <Typography className={classes.invalidText}>
