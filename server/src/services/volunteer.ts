@@ -68,7 +68,7 @@ const getVolunteerById = async (id: string): Promise<VolunteerData> => {
  * Filter by volunteerType and name inclusive
  * Sort by field specified if any
  */
-const getAllVolunteers = async (volunteerType?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number) => {
+const getAllVolunteers = async (volunteerType?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number): Promise<{ data: VolunteerData[], count: number }> => {
   // no of volunteers that match name (if any)
   const count = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
     .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })

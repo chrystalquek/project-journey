@@ -12,18 +12,22 @@ import {
   GetVolunteerDetailsByEmailResponse, GetVolunteerResponse,
   GetVolunteersByIdsResponse, GetVolunteersResponse, UpdateVolunteerResponse,
 } from '../types/response/volunteer';
+import { removeUserId } from '../helpers/volunteer';
 
 const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteerResponse):
   Promise<void> => {
   try {
     const volunteerData = req.body;
-    // assuming we create a few fixed admin accounts for biab, should only be able to create ad-hoc
-    if (volunteerData.volunteerType !== 'ad-hoc') {
+    // assuming we create a few fixed admin accounts for biab, 
+    // should only be able to create ad-hoc and commited
+    if (volunteerData.volunteerType === 'admin') {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
       return;
     }
+
     const volunteer = await volunteerService.createVolunteer(volunteerData);
-    res.status(HTTP_CODES.OK).send(volunteer);
+    const volunteerWithoutUserId = removeUserId(volunteer);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       ...error,
@@ -49,7 +53,8 @@ const getVolunteerDetailsByEmail = async (req: GetVolunteerDetailsByEmailRequest
       volunteer = await userService.addAdminRemarks(volunteer);
     }
 
-    res.status(HTTP_CODES.OK).json(volunteer);
+    const volunteerWithoutUserId = removeUserId(volunteer);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
@@ -75,7 +80,8 @@ const getVolunteerDetailsById = async (req: GetVolunteerRequest, res: GetVolunte
       volunteer = await userService.addAdminRemarks(volunteer);
     }
 
-    res.status(HTTP_CODES.OK).json(volunteer);
+    const volunteerWithoutUserId = removeUserId(volunteer);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
@@ -101,11 +107,15 @@ const getAllVolunteerDetails = async (req: GetVolunteersRequest, res: GetVolunte
     );
 
     if (req.user.volunteerType === 'admin') {
-      volunteers.data = await
-        Promise.all(volunteers.data.map((vol) => userService.addAdminRemarks(vol)));
+      volunteers.data = await Promise.all(volunteers.data.map((vol) => userService.addAdminRemarks(vol)));
     }
 
-    res.status(HTTP_CODES.OK).json(volunteers);
+    const response = {
+      ...volunteers,
+      data: volunteers.data.map((vol) => removeUserId(vol)),
+    };
+
+    res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
@@ -137,7 +147,9 @@ const getPendingVolunteers = async (req: GetPendingVolunteersRequest,
       pendingVolunteers = await Promise.all(pendingVolunteers.map((vol) => userService.addAdminRemarks(vol)));
     }
 
-    res.status(HTTP_CODES.OK).json({ data: pendingVolunteers });
+    const volunteersWithoutUserId = pendingVolunteers.map((vol) => removeUserId(vol));
+
+    res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -155,7 +167,9 @@ const getVolunteersByIds = async (req: GetVolunteersByIdsRequest,
       volunteers = await Promise.all(volunteers.map((vol) => userService.addAdminRemarks(vol)));
     }
 
-    res.status(HTTP_CODES.OK).json({ data: volunteers });
+    const volunteersWithoutUserId = volunteers.map((vol) => removeUserId(vol));
+
+    res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -180,7 +194,8 @@ const updateVolunteer = async (req: UpdateVolunteerRequest, res: UpdateVolunteer
       savedVolunteerData = await userService.addAdminRemarks(savedVolunteerData);
     }
 
-    res.status(HTTP_CODES.OK).json(savedVolunteerData);
+    const volunteerWithoutUserId = removeUserId(savedVolunteerData);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,

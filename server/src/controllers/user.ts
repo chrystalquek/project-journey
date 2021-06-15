@@ -6,6 +6,7 @@ import volunteerService from '../services/volunteer';
 import { LoginRequest, UpdatePasswordRequest } from '../types/request/user';
 import { LoginResponse, UpdatePasswordResponse } from '../types/response/user';
 import userService from '../services/user';
+import { removeUserId } from '../helpers/volunteer';
 
 const login = async (req: LoginRequest, res: LoginResponse): Promise<void> => {
   const { email, password } = req.body;
@@ -13,8 +14,8 @@ const login = async (req: LoginRequest, res: LoginResponse): Promise<void> => {
   try {
     const user = await userService.getUserByEmail(email);
     if (bcrypt.compareSync(password, user.password)) {
-      // TODO need to remove userId form VolunteerData object?
-      const volunteer = await volunteerService.getVolunteer(email);
+
+      const volunteer = removeUserId(await volunteerService.getVolunteer(email));
 
       const token = jwt.sign(JSON.parse(JSON.stringify(volunteer)), accessTokenSecret, {
         expiresIn: '24h',

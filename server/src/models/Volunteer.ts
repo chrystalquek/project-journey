@@ -157,11 +157,12 @@ export const VolunteerSchema = createSchema({
   }),
 });
 
-export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, '__v' | '_id' | 'commitmentApplicationIds' | 'userId'> & { _id: string, commitmentApplicationIds: string[], userId: string };
+export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, '__v' | '_id' | 'commitmentApplicationIds' | 'userId'> & { _id: string, commitmentApplicationIds: string[], userId: string }; // whats retrieved from db
 
-export type VolunteerUserData = VolunteerData & { administratorRemarks?: string }
+export type GetVolunteerData = Omit<VolunteerData, 'userId'> & { administratorRemarks?: string }
+// whats retrieved from db + adminRemarks - userId
 
-export type NewVolunteerData = Omit<VolunteerData & UserData, '_id' | 'createdAt'>
+export type NewVolunteerData = Omit<VolunteerData & UserData, '_id' | 'createdAt' | 'userId'>
 
 type VolunteerModel = VolunteerData & mongoose.Document
 export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);

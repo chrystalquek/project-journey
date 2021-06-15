@@ -1,5 +1,5 @@
 import User, { NewUserData, UserData } from '../models/User';
-import { VolunteerData, VolunteerUserData } from '../models/Volunteer';
+import { VolunteerData } from '../models/Volunteer';
 import volunteerService from './volunteer';
 
 const createUser = async (userData: NewUserData): Promise<UserData> => {
@@ -47,7 +47,8 @@ const deleteUser = async (id: string): Promise<void> => {
   });
 };
 
-const addAdminRemarks = async (volunteerData: VolunteerData): Promise<VolunteerUserData> => {
+const addAdminRemarks = async (volunteerData: VolunteerData):
+  Promise<VolunteerData & { administratorRemarks?: string }> => {
   const user = await getUser(volunteerData.userId);
   return { ...volunteerData, administratorRemarks: user.administratorRemarks };
 };
