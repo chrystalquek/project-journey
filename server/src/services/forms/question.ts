@@ -43,7 +43,7 @@ const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
   const questions = await Question.find({
     formId,
   }).lean().exec();
-  return questions
+  return questions;
 };
 
 export default {

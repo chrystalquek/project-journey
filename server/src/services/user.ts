@@ -11,6 +11,15 @@ const createUser = async (userData: NewUserData): Promise<UserData> => {
   return user;
 };
 
+const getUser = async (id: string): Promise<UserData> => {
+  const user = await User.findById(id).lean().exec();
+  if (!user) {
+    throw new Error(`User with id: ${id} not found`);
+  }
+
+  return user;
+};
+
 const getUserByEmail = async (email: string): Promise<UserData> => {
   const volunteer = await volunteerService.getVolunteer(email);
   const user = await User.findOne({ _id: volunteer.userId });
@@ -39,10 +48,10 @@ const deleteUser = async (id: string): Promise<void> => {
 };
 
 const addAdminRemarks = async (volunteerData: VolunteerData): Promise<VolunteerUserData> => {
-  const user = await getUserByEmail(volunteerData.email);
+  const user = await getUser(volunteerData.userId);
   return { ...volunteerData, administratorRemarks: user.administratorRemarks };
 };
 
 export default {
-  createUser, getUser: getUserByEmail, updateUser, deleteUser, addAdminRemarks,
+  createUser, getUser, getUserByEmail, updateUser, deleteUser, addAdminRemarks,
 };

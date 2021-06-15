@@ -11,7 +11,7 @@ const login = async (req: LoginRequest, res: LoginResponse): Promise<void> => {
   const { email, password } = req.body;
 
   try {
-    const user = await userService.getUser(email);
+    const user = await userService.getUserByEmail(email);
     if (bcrypt.compareSync(password, user.password)) {
       // TODO need to remove userId form VolunteerData object?
       const volunteer = await volunteerService.getVolunteer(email);
@@ -47,8 +47,8 @@ const updatePassword = async (req: UpdatePasswordRequest,
   } = req.body;
 
   try {
-    const user = await userService.getUser(email);
-    const volunteer = await volunteerService.getVolunteer(email)
+    const user = await userService.getUserByEmail(email);
+    const volunteer = await volunteerService.getVolunteer(email);
 
     if (req.user._id !== volunteer._id) {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
@@ -56,7 +56,7 @@ const updatePassword = async (req: UpdatePasswordRequest,
 
     // should not be same as old password
     if (!bcrypt.compareSync(newPassword, user.password)) {
-      await userService.updateUser(user._id, { password: newPassword })
+      await userService.updateUser(user._id, { password: newPassword });
       res.status(HTTP_CODES.OK).send();
     } else {
       res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({

@@ -29,7 +29,8 @@ const updateQuestions = async (updatedOptions: Array<Partial<OptionData>>): Prom
  * Retrieve all questsions from specified form id
  * @param questionId Mongoose question id
  */
-const getOptionsForQuestion = async (questionId: string): Promise<Array<{ label: string, value: string }>> => {
+const getOptionsForQuestion = async (questionId: string):
+  Promise<Array<{ label: string, value: string }>> => {
   const options = await Option.find({
     questionId,
   }).lean().exec();
