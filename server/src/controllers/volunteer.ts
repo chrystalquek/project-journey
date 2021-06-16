@@ -107,12 +107,12 @@ const getAllVolunteerDetails = async (req: GetVolunteersRequest, res: GetVolunte
     );
 
     if (req.user.volunteerType === 'admin') {
-      volunteers.data = await Promise.all(volunteers.data.map((vol) => userService.addAdminRemarks(vol)));
+      volunteers.data = await Promise.all(volunteers.data.map(userService.addAdminRemarks));
     }
 
     const response = {
       ...volunteers,
-      data: volunteers.data.map((vol) => removeUserId(vol)),
+      data: volunteers.data.map(removeUserId),
     };
 
     res.status(HTTP_CODES.OK).json(response);
@@ -144,10 +144,10 @@ const getPendingVolunteers = async (req: GetPendingVolunteersRequest,
     );
 
     if (req.user.volunteerType === 'admin') {
-      pendingVolunteers = await Promise.all(pendingVolunteers.map((vol) => userService.addAdminRemarks(vol)));
+      pendingVolunteers = await Promise.all(pendingVolunteers.map(userService.addAdminRemarks));
     }
 
-    const volunteersWithoutUserId = pendingVolunteers.map((vol) => removeUserId(vol));
+    const volunteersWithoutUserId = pendingVolunteers.map(removeUserId);
 
     res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
@@ -164,10 +164,10 @@ const getVolunteersByIds = async (req: GetVolunteersByIdsRequest,
     let volunteers = await volunteerService.getVolunteersByIds(ids);
 
     if (req.user.volunteerType === 'admin') {
-      volunteers = await Promise.all(volunteers.map((vol) => userService.addAdminRemarks(vol)));
+      volunteers = await Promise.all(volunteers.map(userService.addAdminRemarks));
     }
 
-    const volunteersWithoutUserId = volunteers.map((vol) => removeUserId(vol));
+    const volunteersWithoutUserId = volunteers.map(removeUserId);
 
     res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
