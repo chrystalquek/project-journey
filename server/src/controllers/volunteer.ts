@@ -1,19 +1,33 @@
 import volunteerService from '../services/volunteer';
+import userService from '../services/user';
 import commitmentApplicationService from '../services/commitmentApplication';
 import HTTP_CODES from '../constants/httpCodes';
-import { CreateVolunteerRequest, DeleteVolunteerRequest, GetPendingVolunteersRequest, GetVolunteerDetailsByEmailRequest, GetVolunteerRequest, GetVolunteersByIdsRequest, GetVolunteersRequest, UpdateVolunteerRequest } from '../types/request/volunteer';
-import { CreateVolunteerResponse, DeleteVolunteerResponse, GetPendingVolunteersResponse, GetVolunteerDetailsByEmailResponse, GetVolunteerResponse, GetVolunteersByIdsResponse, GetVolunteersResponse, UpdateVolunteerResponse } from '../types/response/volunteer';
+import {
+  CreateVolunteerRequest, DeleteVolunteerRequest, GetPendingVolunteersRequest,
+  GetVolunteerDetailsByEmailRequest, GetVolunteerRequest,
+  GetVolunteersByIdsRequest, GetVolunteersRequest, UpdateVolunteerRequest,
+} from '../types/request/volunteer';
+import {
+  CreateVolunteerResponse, DeleteVolunteerResponse, GetPendingVolunteersResponse,
+  GetVolunteerDetailsByEmailResponse, GetVolunteerResponse,
+  GetVolunteersByIdsResponse, GetVolunteersResponse, UpdateVolunteerResponse,
+} from '../types/response/volunteer';
+import { removeUserId } from '../helpers/volunteer';
 
-const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteerResponse): Promise<void> => {
+const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteerResponse):
+  Promise<void> => {
   try {
     const volunteerData = req.body;
-    // assuming we create a few fixed admin accounts for biab, should only be able to create ad-hoc
-    if (volunteerData.volunteerType !== 'ad-hoc') {
+    // assuming we create a few fixed admin accounts for biab, 
+    // should only be able to create ad-hoc and commited
+    if (volunteerData.volunteerType === 'admin') {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
       return;
     }
+
     const volunteer = await volunteerService.createVolunteer(volunteerData);
-    res.status(HTTP_CODES.OK).send(volunteer);
+    const volunteerWithoutUserId = removeUserId(volunteer);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       ...error,
@@ -22,9 +36,10 @@ const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteer
 };
 
 // BY EMAIL
-const getVolunteerDetailsByEmail = async (req: GetVolunteerDetailsByEmailRequest, res: GetVolunteerDetailsByEmailResponse): Promise<void> => {
+const getVolunteerDetailsByEmail = async (req: GetVolunteerDetailsByEmailRequest,
+  res: GetVolunteerDetailsByEmailResponse): Promise<void> => {
   try {
-    const volunteer = await volunteerService.getVolunteer(
+    let volunteer = await volunteerService.getVolunteer(
       req.params.email,
     );
 
@@ -33,7 +48,13 @@ const getVolunteerDetailsByEmail = async (req: GetVolunteerDetailsByEmailRequest
       return;
     }
 
-    res.status(HTTP_CODES.OK).json(volunteer);
+    // append administrator remarks
+    if (req.user.volunteerType === 'admin') {
+      volunteer = await userService.addAdminRemarks(volunteer);
+    }
+
+    const volunteerWithoutUserId = removeUserId(volunteer);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
@@ -42,17 +63,25 @@ const getVolunteerDetailsByEmail = async (req: GetVolunteerDetailsByEmailRequest
 };
 
 // BY ID
-const getVolunteerDetailsById = async (req: GetVolunteerRequest, res: GetVolunteerResponse): Promise<void> => {
+const getVolunteerDetailsById = async (req: GetVolunteerRequest, res: GetVolunteerResponse):
+  Promise<void> => {
   try {
     if (String(req.user._id) !== req.params.id) {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
       return;
     }
 
-    const volunteerDetails = await volunteerService.getVolunteerById(
+    let volunteer = await volunteerService.getVolunteerById(
       req.params.id,
     );
-    res.status(HTTP_CODES.OK).json(volunteerDetails);
+
+    // append administrator remarks
+    if (req.user.volunteerType === 'admin') {
+      volunteer = await userService.addAdminRemarks(volunteer);
+    }
+
+    const volunteerWithoutUserId = removeUserId(volunteer);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
@@ -60,20 +89,33 @@ const getVolunteerDetailsById = async (req: GetVolunteerRequest, res: GetVolunte
   }
 };
 
-const getAllVolunteerDetails = async (req: GetVolunteersRequest, res: GetVolunteersResponse): Promise<void> => {
+const getAllVolunteerDetails = async (req: GetVolunteersRequest, res: GetVolunteersResponse):
+  Promise<void> => {
   try {
-    const { volunteerType, pageNo, size, name, sort } = req.query
-    const pageNoNum = Number(req.query.pageNo)
-    const sizeNum = Number(req.query.size)
+    const {
+      volunteerType, pageNo, size, name, sort,
+    } = req.query;
+    const pageNoNum = Number(req.query.pageNo);
+    const sizeNum = Number(req.query.size);
 
     const withPagination = pageNo && size && !Number.isNaN(pageNo) && !Number.isNaN(size);
     const skip = pageNo && size && withPagination ? sizeNum * pageNoNum : 0;
     const limit = withPagination ? sizeNum : 0;
 
-    const volunteersDetails = await volunteerService.getAllVolunteers(
+    const volunteers = await volunteerService.getAllVolunteers(
       volunteerType, name, sort, skip, limit,
     );
-    res.status(HTTP_CODES.OK).json(volunteersDetails);
+
+    if (req.user.volunteerType === 'admin') {
+      volunteers.data = await Promise.all(volunteers.data.map(userService.addAdminRemarks));
+    }
+
+    const response = {
+      ...volunteers,
+      data: volunteers.data.map(removeUserId),
+    };
+
+    res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
@@ -85,7 +127,8 @@ const getAllVolunteerDetails = async (req: GetVolunteersRequest, res: GetVolunte
  * Retrieves sign ups that are pending approval
  * @return number of pending sign ups
  */
-const getPendingVolunteers = async (req: GetPendingVolunteersRequest, res: GetPendingVolunteersResponse): Promise<void> => {
+const getPendingVolunteers = async (req: GetPendingVolunteersRequest,
+  res: GetPendingVolunteersResponse): Promise<void> => {
   try {
     const pendingCommitmentApplications = await
       commitmentApplicationService.getCommitmentApplications(
@@ -96,11 +139,17 @@ const getPendingVolunteers = async (req: GetPendingVolunteersRequest, res: GetPe
       (commitmentApplication) => commitmentApplication.volunteerId,
     );
 
-    const pendingVolunteers = await volunteerService.getVolunteersByIds(
+    let pendingVolunteers = await volunteerService.getVolunteersByIds(
       pendingVolunteersIds,
     );
 
-    res.status(HTTP_CODES.OK).json({ data: pendingVolunteers });
+    if (req.user.volunteerType === 'admin') {
+      pendingVolunteers = await Promise.all(pendingVolunteers.map(userService.addAdminRemarks));
+    }
+
+    const volunteersWithoutUserId = pendingVolunteers.map(removeUserId);
+
+    res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -108,12 +157,19 @@ const getPendingVolunteers = async (req: GetPendingVolunteersRequest, res: GetPe
   }
 };
 
-const getVolunteersByIds = async (req: GetVolunteersByIdsRequest, res: GetVolunteersByIdsResponse): Promise<void> => {
+const getVolunteersByIds = async (req: GetVolunteersByIdsRequest,
+  res: GetVolunteersByIdsResponse): Promise<void> => {
   try {
     const { ids } = req.body;
-    const volunteers = await volunteerService.getVolunteersByIds(ids);
+    let volunteers = await volunteerService.getVolunteersByIds(ids);
 
-    res.status(HTTP_CODES.OK).json({ data: volunteers });
+    if (req.user.volunteerType === 'admin') {
+      volunteers = await Promise.all(volunteers.map(userService.addAdminRemarks));
+    }
+
+    const volunteersWithoutUserId = volunteers.map(removeUserId);
+
+    res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -121,7 +177,8 @@ const getVolunteersByIds = async (req: GetVolunteersByIdsRequest, res: GetVolunt
   }
 };
 
-const updateVolunteer = async (req: UpdateVolunteerRequest, res: UpdateVolunteerResponse): Promise<void> => {
+const updateVolunteer = async (req: UpdateVolunteerRequest, res: UpdateVolunteerResponse):
+  Promise<void> => {
   try {
     const volunteerId = req.params.id;
     if (String(req.user._id) !== volunteerId) {
@@ -129,10 +186,16 @@ const updateVolunteer = async (req: UpdateVolunteerRequest, res: UpdateVolunteer
       return;
     }
     const updatedVolunteerData = req.body;
-    const savedVolunteerData = await volunteerService.updateVolunteer(
+    let savedVolunteerData = await volunteerService.updateVolunteer(
       volunteerId, updatedVolunteerData,
     );
-    res.status(HTTP_CODES.OK).json(savedVolunteerData);
+
+    if (req.user.volunteerType === 'admin') {
+      savedVolunteerData = await userService.addAdminRemarks(savedVolunteerData);
+    }
+
+    const volunteerWithoutUserId = removeUserId(savedVolunteerData);
+    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       message: error,
@@ -140,7 +203,8 @@ const updateVolunteer = async (req: UpdateVolunteerRequest, res: UpdateVolunteer
   }
 };
 
-const deleteVolunteer = async (req: DeleteVolunteerRequest, res: DeleteVolunteerResponse): Promise<void> => {
+const deleteVolunteer = async (req: DeleteVolunteerRequest,
+  res: DeleteVolunteerResponse): Promise<void> => {
   try {
     const { email } = req.body;
     await volunteerService.deleteVolunteer(email);
