@@ -43,7 +43,6 @@ export type VolunteerData = {
   _id: string;
   volunteerType: VolunteerType;
   name: string;
-  password: string;
   nickname?: string;
   gender: Gender;
   citizenship: Citizenship;
@@ -105,6 +104,7 @@ export type VolunteerData = {
   // Remarks
   volunteerRemarks?: string;
   administratorRemarks?: string;
+  // administratorRemarks differs from backend type. only admin will receive such info.
 
   // Event count
   volunteeringSessionsCount: number;

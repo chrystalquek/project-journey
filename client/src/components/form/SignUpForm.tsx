@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 import { useAppDispatch } from '@redux/store';
 import { signUp } from '@redux/actions/user';
-import { VolunteerData, VolunteerType } from '@type/volunteer';
+import { VolunteerType } from '@type/volunteer';
 import { HeaderQuestionList } from '@type/form/form';
+import { CreateVolunteerRequest } from '@api/request';
 import SignUpFormGenerator from './SignUpFormGenerator';
 
 type SignUpFormProps = {
@@ -13,7 +14,7 @@ type SignUpFormProps = {
 function SignUpForm({ type, questionWithHeader }: SignUpFormProps) {
   const dispatch = useAppDispatch();
   const handleSignUp = useCallback(
-    (values: VolunteerData) => dispatch(signUp(values)),
+    (values: CreateVolunteerRequest) => dispatch(signUp(values)),
     [dispatch],
   );
 

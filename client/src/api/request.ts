@@ -36,7 +36,8 @@ export type CancelEventRequest = IdRequest
 
 // volunteers
 
-export type CreateVolunteerRequest = Omit<VolunteerData, '_id' | 'createdAt'>
+export type CreateVolunteerRequest = Omit<VolunteerData, '_id' | 'createdAt'> &
+{ password: string, administratorRemarks?: string }
 
 export type GetVolunteersPaginatedRequest = {
   pageNo?: number,
