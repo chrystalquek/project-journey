@@ -23,8 +23,16 @@ const signUpStatusValidator = (value: SignUpStatus) => {
 
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
-    case 'updateSignUp':
     case 'createSignUp': {
+      return [
+        body('eventId', 'event id does not exist').isString(),
+        body('userId', 'user id does not exist').isString(),
+        body('status').custom((status: SignUpStatus) => signUpStatusValidator(status)),
+        body('preferences', 'preferences does not exist').isArray().notEmpty(),
+        body('isRestricted', 'is restricted does not exist').isBoolean(),
+      ];
+    }
+    case 'updateSignUp': {
       return [
         body('eventId', 'event id does not exist').isString(),
         body('userId', 'user id does not exist').isString(),

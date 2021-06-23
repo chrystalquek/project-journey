@@ -19,7 +19,7 @@ const getValidations = (method: EventValidatorMethod) => {
       return [
         body('name', 'name does not exist').exists(),
         body('description', 'description does not exist').exists(),
-        body('contentUrl', 'content url is invaßlid').optional({ checkFalsy: true }).isURL(),
+        body('contentUrl', 'content url is invalid').optional({ checkFalsy: true }).isURL(),
         body('facilitatorName', 'facilitator name does not exist').optional({ checkFalsy: true }).isString(),
         body('facilitatorDescription', 'facilitator description is not a string').optional({ checkFalsy: true }).isString(),
         body('startDate', 'start date does not exist').exists(),
