@@ -4,13 +4,15 @@ import { stringEnumValidator } from './global';
 
 type CommitmentApplicationValidatorMethod = 'createCommitmentApplication' | 'readCommitmentApplication' | 'updateCommitmentApplication'
 
-const commitmentApplicationStatus: ValidationChain = body('status')
+const commitmentApplicationStatus: ValidationChain = body('status','status is not valid')
   .isString()
   .custom((status: string) => stringEnumValidator(
     COMMITMENT_APPLICATION_STATUS,
     'Commitment Application Status',
     status,
   ));
+
+
 
 export const getValidations = (method: CommitmentApplicationValidatorMethod): ValidationChain[] => {
   switch (method) {
@@ -20,7 +22,7 @@ export const getValidations = (method: CommitmentApplicationValidatorMethod): Va
         body('volunteerId', 'volunteer ID is not a object id').isMongoId(),// not sure if the ref to Volunteer needs to be checked as well
         body('status', 'status does not exist').exists(),
         body('status', 'status is not a string').isString(), // not sure if it's redundant as enum is checked on next line and all members of this enum are string
-        body('status', 'status is not a valid commitment application status').custom((value: string, { req }: any) => value in COMMITMENT_APPLICATION_STATUS), // tried to use isIn() but it's for any[], not for readonly[] COMMITMENT_APPLICATION_STATUS
+        commitmentApplicationStatus, 
         body('createdAt', 'time of creation does not exist').exists(),
         body('createdAt', 'time of creation is of wrong date format').isISO8601(),
       ];
@@ -29,7 +31,7 @@ export const getValidations = (method: CommitmentApplicationValidatorMethod): Va
       return [
         body('volunteerId', 'volunteer ID is not a object id').isMongoId(),
         body('status', 'status is not a string').isString(), 
-        body('status', 'status is not a valid commitment application status').custom((value: string, { req }: any) => value in COMMITMENT_APPLICATION_STATUS),
+        commitmentApplicationStatus,
         body('createdAt', 'time of creation is of wrong date format').isISO8601(),
       ];
     }
