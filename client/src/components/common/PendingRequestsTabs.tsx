@@ -1,16 +1,16 @@
-import React, { FC, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { getCommitmentApplications } from '@redux/actions/commitmentApplication';
-import { getPendingVolunteers } from '@redux/actions/volunteer';
-import { CommitmentApplicationStatus } from '@type/commitmentApplication';
-import { Tabs } from '@components/common/Tabs';
-import { useRouter } from 'next/dist/client/router';
-import { getEventsUpcomingEvent } from '@redux/actions/event';
-import { EventData } from '@type/event';
-import { SignUpData } from '@type/signUp';
+import React, { FC, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { getCommitmentApplications } from "@redux/actions/commitmentApplication";
+import { getPendingVolunteers } from "@redux/actions/volunteer";
+import { CommitmentApplicationStatus } from "@type/commitmentApplication";
+import { Tabs } from "@components/common/Tabs";
+import { useRouter } from "next/dist/client/router";
+import { getEventsUpcomingEvent } from "@redux/actions/event";
+import { EventData } from "@type/event";
+import { SignUpData } from "@type/signUp";
 
 interface TabsProps {
-    clickedOn: number
+  clickedOn: number;
 }
 
 const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
@@ -20,9 +20,11 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
+    dispatch(getEventsUpcomingEvent({ eventType: "upcoming" }));
     dispatch(getPendingVolunteers());
-    dispatch(getCommitmentApplications({ status: CommitmentApplicationStatus.Pending }));
+    dispatch(
+      getCommitmentApplications({ status: CommitmentApplicationStatus.Pending })
+    );
   }, []);
 
   // volunteer no
@@ -42,31 +44,28 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
   const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
     upcomingSignUps.forEach((signUp: SignUpData) => {
-      if (signUp.eventId === event._id && signUp.status === 'pending') result += 1;
+      if (signUp.eventId === event._id && signUp.status === "pending")
+        result += 1;
     });
     return result;
   };
 
   const upcomingEventsWithPendingSignUps = upcomingEvents.filter(
-    (event) => (pendingRequestsForEventCount(event) !== 0),
+    (event) => pendingRequestsForEventCount(event) !== 0
   );
 
   const tabs = [
     {
       label: `Volunteers (${upcomingVolunteersIds.length})`,
-      onClick: () => router.push('/volunteer/pending-requests'),
+      onClick: () => router.push("/volunteer/pending-requests"),
     },
     {
       label: `Events (${upcomingEventsWithPendingSignUps.length})`,
-      onClick: () => router.push('/event/pending-requests'),
+      onClick: () => router.push("/event/pending-requests"),
     },
   ];
 
-  return (
-
-    <Tabs tabs={tabs} clickedOn={clickedOn} />
-
-  );
+  return <Tabs tabs={tabs} clickedOn={clickedOn} />;
 };
 
 export default PendingRequestsTabs;

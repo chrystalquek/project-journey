@@ -1,32 +1,36 @@
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { FC } from 'react';
-import { Formik, Form, Field } from 'formik';
-import DateFnsUtils from '@date-io/date-fns';
-import { TextField, CheckboxWithLabel } from 'formik-material-ui';
-import { DatePicker } from 'formik-material-ui-pickers';
-import DropZoneCard from '@components/common/DropZoneCard';
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import React, { FC } from "react";
+import { Formik, Form, Field } from "formik";
+import DateFnsUtils from "@date-io/date-fns";
+import { TextField, CheckboxWithLabel } from "formik-material-ui";
+import { DatePicker } from "formik-material-ui-pickers";
+import DropZoneCard from "@components/common/DropZoneCard";
 import {
-  Button, makeStyles, MenuItem, Paper, Typography,
-} from '@material-ui/core';
-import * as Yup from 'yup';
-import { OptionType } from '@type/form/option';
-import { QuestionList } from '@type/form/form';
-import { InputType } from '@type/form/question';
-import { useAppSelector } from '@redux/store';
+  Button,
+  makeStyles,
+  MenuItem,
+  Paper,
+  Typography,
+} from "@material-ui/core";
+import * as Yup from "yup";
+import { OptionType } from "@type/form/option";
+import { QuestionList } from "@type/form/form";
+import { InputType } from "@type/form/question";
+import { useAppSelector } from "@redux/store";
 
 type FormGeneratorType = {
-  handleSubmit: (values: Record<string, any>) => Promise<void>
-  questionsList: QuestionList
-  validationObj: any
-}
+  handleSubmit: (values: Record<string, any>) => Promise<void>;
+  questionsList: QuestionList;
+  validationObj: any;
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: 'auto',
+    margin: "auto",
     padding: theme.spacing(8),
-    textAlign: 'left',
-    overflowY: 'hidden',
-    maxHeight: '100%',
+    textAlign: "left",
+    overflowY: "hidden",
+    maxHeight: "100%",
   },
   questionContainer: {
     marginBottom: theme.spacing(8),
@@ -36,20 +40,20 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
   },
   button: {
-    margin: 'auto',
-    display: 'block',
+    margin: "auto",
+    display: "block",
   },
   listItem: {
-    whiteSpace: 'normal',
+    whiteSpace: "normal",
   },
   errorStyle: {
     color: theme.palette.error.main,
-    fontWeight: 'normal',
-    fontSize: '0.75rem',
-    lineHeight: '1.66',
-    marginLeft: '14px',
-    marginRight: '14px',
-    marginTop: '4px',
+    fontWeight: "normal",
+    fontSize: "0.75rem",
+    lineHeight: "1.66",
+    marginLeft: "14px",
+    marginRight: "14px",
+    marginTop: "4px",
   },
 }));
 
@@ -78,7 +82,7 @@ export const FormQuestionMapper = ({
   };
 
   switch (formType) {
-    case 'date':
+    case "date":
       return (
         <Field
           component={DatePicker}
@@ -90,20 +94,20 @@ export const FormQuestionMapper = ({
           {...props}
         />
       );
-    case 'shortAnswer':
-    case 'password':
+    case "shortAnswer":
+    case "password":
       return (
         <Field
           component={TextField}
           variant="outlined"
-          type={formType === 'password' ? formType : 'text'}
+          type={formType === "password" ? formType : "text"}
           name={name}
           fullWidth
           margin="dense"
           {...props}
         />
       );
-    case 'longAnswer':
+    case "longAnswer":
       return (
         <Field
           component={TextField}
@@ -115,7 +119,7 @@ export const FormQuestionMapper = ({
           {...props}
         />
       );
-    case 'mcq':
+    case "mcq":
       return (
         <Field
           component={TextField}
@@ -136,10 +140,10 @@ export const FormQuestionMapper = ({
           ))}
         </Field>
       );
-    case 'photo':
+    case "photo":
       return (
         <>
-          <div style={{ width: '100%', height: '200px' }}>
+          <div style={{ width: "100%", height: "200px" }}>
             <DropZoneCard
               id={name}
               initialUrl={null}
@@ -147,10 +151,14 @@ export const FormQuestionMapper = ({
               onChangeImage={(e) => onChangeImage(e, name, setFieldValue)}
             />
           </div>
-          {!!props?.error && <Typography variant="body2" className={classes.errorStyle}>Required</Typography>}
+          {!!props?.error && (
+            <Typography variant="body2" className={classes.errorStyle}>
+              Required
+            </Typography>
+          )}
         </>
       );
-    case 'number':
+    case "number":
       return (
         <Field
           component={TextField}
@@ -162,10 +170,10 @@ export const FormQuestionMapper = ({
           {...props}
         />
       );
-    case 'checkboxes':
+    case "checkboxes":
     default:
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           {(options as Array<OptionType>).map(({ value, label }) => (
             <div style={{ flex: 1 }} key={value + label}>
               <Field
@@ -176,7 +184,7 @@ export const FormQuestionMapper = ({
                 Label={{ label }}
                 color="primary"
                 type="checkbox"
-              // Excluded props here since there's error. Will fix if needed.
+                // Excluded props here since there's error. Will fix if needed.
               />
             </div>
           ))}
@@ -195,7 +203,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
   const userData = useAppSelector((state) => state.user.user);
 
   questionsList.forEach(({ name, type, initialValue }) => {
-    initialValues[name] = type === 'checkboxes' ? [] : initialValue;
+    initialValues[name] = type === "checkboxes" ? [] : initialValue;
     // Autofill with user data
     if (userData && userData[name]) {
       initialValues[name] = userData[name];
@@ -213,28 +221,21 @@ const FormGenerator: FC<FormGeneratorType> = ({
           validateOnChange={false}
           validationSchema={validationSchema}
         >
-          {({
-            isSubmitting, setFieldValue,
-          }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               {questionsList.map((questionItem) => {
-                const {
-                  name, displayText, type, isRequired,
-                } = questionItem;
-                const options = type === 'mcq' || type === 'checkboxes'
-                  ? questionItem.options
-                  : null;
+                const { name, displayText, type, isRequired } = questionItem;
+                const options =
+                  type === "mcq" || type === "checkboxes"
+                    ? questionItem.options
+                    : null;
 
                 return (
                   <div key={name} className={classes.questionContainer}>
                     {displayText.map((text, index) => (
-                      <Typography
-                        className={classes.questionTitle}
-                      >
+                      <Typography className={classes.questionTitle}>
                         {text}
-                        {index === displayText.length - 1
-                          && isRequired
-                          && ' *'}
+                        {index === displayText.length - 1 && isRequired && " *"}
                       </Typography>
                     ))}
                     <FormQuestionMapper

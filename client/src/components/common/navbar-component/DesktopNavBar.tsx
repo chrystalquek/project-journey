@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import React, { useState, useRef } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 import {
   Avatar,
   Box,
@@ -14,13 +14,13 @@ import {
   Fade,
   MenuList,
   IconButton,
-} from '@material-ui/core';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import PersonIcon from '@material-ui/icons/Person';
-import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { useAppDispatch } from '@redux/store';
-import { resetUser } from '@redux/reducers/user';
+} from "@material-ui/core";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import PersonIcon from "@material-ui/icons/Person";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
+import { useAppDispatch } from "@redux/store";
+import { resetUser } from "@redux/reducers/user";
 import {
   EVENTS_ROUTE,
   PAST_EVENTS_ROUTE,
@@ -31,61 +31,63 @@ import {
   LOGIN_ROUTE,
   SIGNUP_ROUTE,
   HOME_ROUTE,
-} from '@utils/constants/routes';
+} from "@utils/constants/routes";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    flexGrow: 1,
-  },
-  buttonsContainer: {
-    flexGrow: 1,
-    marginLeft: theme.spacing(4),
-  },
-  button: {
-    textTransform: 'none',
-    marginLeft: theme.spacing(2),
-    fontSize: theme.typography.h4.fontSize,
-    fontWeight: 'bold',
-  },
-  buttonRight: {
-    textTransform: 'none',
-    fontSize: theme.typography.h4.fontSize,
-    fontWeight: 'bold',
-  },
-  nameContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: theme.spacing(2),
-  },
-  nameStyle: {
-    color: '#000000',
-    flex: 1,
-  },
-  loginButtonContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    marginRight: theme.spacing(2),
-  },
-  signUpButtonContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  editProfileButton: {
-    margin: 0,
-    padding: 0,
-    textAlign: 'left',
-  },
-  editProfileText: {
-    flex: 1,
-    fontWeight: 'bold',
-  },
-  iconSize24: {
-    fontSize: '24px',
-  },
-  iconSize40: {
-    fontSize: '40px',
-  },
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    buttonsContainer: {
+      flexGrow: 1,
+      marginLeft: theme.spacing(4),
+    },
+    button: {
+      textTransform: "none",
+      marginLeft: theme.spacing(2),
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: "bold",
+    },
+    buttonRight: {
+      textTransform: "none",
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: "bold",
+    },
+    nameContainer: {
+      display: "flex",
+      flexDirection: "column",
+      marginLeft: theme.spacing(2),
+    },
+    nameStyle: {
+      color: "#000000",
+      flex: 1,
+    },
+    loginButtonContainer: {
+      display: "flex",
+      alignItems: "center",
+      marginRight: theme.spacing(2),
+    },
+    signUpButtonContainer: {
+      display: "flex",
+      alignItems: "center",
+    },
+    editProfileButton: {
+      margin: 0,
+      padding: 0,
+      textAlign: "left",
+    },
+    editProfileText: {
+      flex: 1,
+      fontWeight: "bold",
+    },
+    iconSize24: {
+      fontSize: "24px",
+    },
+    iconSize40: {
+      fontSize: "40px",
+    },
+  })
+);
 
 type NavBarProps = {
   userData: null | VolunteerData;
@@ -110,18 +112,19 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   let eventMenuArray;
 
   if (!userData) {
-    eventMenuArray = [{ title: 'Upcoming Events', route: EVENTS_ROUTE }];
+    eventMenuArray = [{ title: "Upcoming Events", route: EVENTS_ROUTE }];
   } else if (userData.volunteerType === VolunteerType.ADMIN) {
     eventMenuArray = [
-      { title: 'Browse Events', route: EVENTS_ROUTE },
-      { title: 'Past Events', route: PAST_EVENTS_ROUTE },
-      { title: 'Pending Requests', route: EVENT_PENDING_REQUESTS_ROUTE },
+      { title: "Browse Events", route: EVENTS_ROUTE },
+      { title: "Past Events", route: PAST_EVENTS_ROUTE },
+      { title: "Pending Requests", route: EVENT_PENDING_REQUESTS_ROUTE },
     ];
-  } else { // Adhoc / Committed
+  } else {
+    // Adhoc / Committed
     eventMenuArray = [
-      { title: 'Browse Events', route: EVENTS_ROUTE },
-      { title: 'My Upcoming Events', route: UPCOMING_EVENTS_ROUTE },
-      { title: 'My Past Events', route: PAST_EVENTS_ROUTE },
+      { title: "Browse Events", route: EVENTS_ROUTE },
+      { title: "My Upcoming Events", route: UPCOMING_EVENTS_ROUTE },
+      { title: "My Past Events", route: PAST_EVENTS_ROUTE },
     ];
   }
 
@@ -151,7 +154,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/login');
+    router.push("/login");
   };
 
   const closeMenuNavigateTo = (closeHandler, route) => {
@@ -225,18 +228,22 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                   <MenuList>
                     {/* Requires changes for the router */}
                     <MenuItem
-                      onClick={() => closeMenuNavigateTo(
-                        handleCloseVolunteerMenu,
-                        VOLUNTEER_PROFILES_ROUTE,
-                      )}
+                      onClick={() =>
+                        closeMenuNavigateTo(
+                          handleCloseVolunteerMenu,
+                          VOLUNTEER_PROFILES_ROUTE
+                        )
+                      }
                     >
                       Volunteers List
                     </MenuItem>
                     <MenuItem
-                      onClick={() => closeMenuNavigateTo(
-                        handleCloseVolunteerMenu,
-                        VOLUNTEER_PENDING_REQUESTS_ROUTE,
-                      )}
+                      onClick={() =>
+                        closeMenuNavigateTo(
+                          handleCloseVolunteerMenu,
+                          VOLUNTEER_PENDING_REQUESTS_ROUTE
+                        )
+                      }
                     >
                       Pending Approvals
                     </MenuItem>
@@ -254,9 +261,9 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
         {homeButton}
         {eventButton}
         {eventMenuWrapper}
-        {userData
-          && userData.volunteerType === VolunteerType.ADMIN
-          && volunteer}
+        {userData &&
+          userData.volunteerType === VolunteerType.ADMIN &&
+          volunteer}
       </>
     );
   };
@@ -309,7 +316,10 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
                       <MenuItem dense onClick={handleLogout}>
                         Logout
                       </MenuItem>
-                      <MenuItem dense onClick={() => router.push(`/profile/${userData._id}`)}>
+                      <MenuItem
+                        dense
+                        onClick={() => router.push(`/profile/${userData._id}`)}
+                      >
                         Edit Profile
                       </MenuItem>
                     </MenuList>

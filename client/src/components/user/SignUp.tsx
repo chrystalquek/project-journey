@@ -10,70 +10,70 @@ import {
   CardActionArea,
   useMediaQuery,
   useTheme,
-} from '@material-ui/core';
-import React, { useState } from 'react';
-import Head from 'next/head';
-import { makeStyles } from '@material-ui/core/styles';
-import Link from 'next/link';
-import SignUpForm from '@components/form/SignUpForm';
-import { VolunteerType } from '@type/volunteer';
-import { questions as SignUpAdhocQuestionList } from '@components/form/questions/SignUpAdhocQuestionList';
-import { questions as SignUpCommittedQuestionList } from '@components/form/questions/SignUpCommittedQuestionList';
+} from "@material-ui/core";
+import React, { useState } from "react";
+import Head from "next/head";
+import { makeStyles } from "@material-ui/core/styles";
+import Link from "next/link";
+import SignUpForm from "@components/form/SignUpForm";
+import { VolunteerType } from "@type/volunteer";
+import { questions as SignUpAdhocQuestionList } from "@components/form/questions/SignUpAdhocQuestionList";
+import { questions as SignUpCommittedQuestionList } from "@components/form/questions/SignUpCommittedQuestionList";
 
 const useStyles = makeStyles((theme) => ({
   content: {
     marginTop: 80,
-    textAlign: 'center',
-    minHeight: '90vh',
-    [theme.breakpoints.down('sm')]: {
-      padding: '80px 50px 0px 50px',
+    textAlign: "center",
+    minHeight: "90vh",
+    [theme.breakpoints.down("sm")]: {
+      padding: "80px 50px 0px 50px",
     },
-    [theme.breakpoints.up('md')]: {
-      padding: '80px 100px 0px 100px',
+    [theme.breakpoints.up("md")]: {
+      padding: "80px 100px 0px 100px",
     },
   },
   rowContent: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
-    color: 'black',
-    textTransform: 'none',
-    padding: '5px 50px 5px 50px',
+    color: "black",
+    textTransform: "none",
+    padding: "5px 50px 5px 50px",
     borderRadius: 20,
   },
   backButton: {
     backgroundColor: theme.palette.secondary.main,
-    color: 'black',
-    textTransform: 'none',
-    padding: '5px 50px 5px 50px',
+    color: "black",
+    textTransform: "none",
+    padding: "5px 50px 5px 50px",
     borderRadius: 20,
-    marginBottom: '20px',
+    marginBottom: "20px",
   },
   pageHeader: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    marginBottom: '40px',
+    fontSize: "32px",
+    fontWeight: "bold",
+    marginBottom: "40px",
   },
   loginButtonContainer: {
-    padding: '20px 0px 20px 0px',
+    padding: "20px 0px 20px 0px",
   },
   form: {},
   header: {
-    textAlign: 'left',
-    marginTop: '10px',
-    fontWeight: 'bold',
-    fontSize: '14px',
+    textAlign: "left",
+    marginTop: "10px",
+    fontWeight: "bold",
+    fontSize: "14px",
   },
   formContainer: {
-    padding: '20px',
+    padding: "20px",
   },
   invalidText: {
-    marginBottom: '10px',
-    color: '#e60026',
+    marginBottom: "10px",
+    color: "#e60026",
   },
   dividerLine: {
-    backgroundColor: '#D0DE39',
+    backgroundColor: "#D0DE39",
     height: 1,
   },
   dividerText: {
@@ -81,32 +81,32 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
   },
   card: {
-    borderRadius: '10px',
+    borderRadius: "10px",
   },
   cardHeaderAdhoc: {
-    background: '#D0DE39',
-    color: '#fff',
-    borderRadius: '10px 10px 0px 0px',
+    background: "#D0DE39",
+    color: "#fff",
+    borderRadius: "10px 10px 0px 0px",
   },
   cardHeaderRegular: {
-    background: '#00BADC',
-    color: '#fff',
-    borderRadius: '10px 10px 0px 0px',
+    background: "#00BADC",
+    color: "#fff",
+    borderRadius: "10px 10px 0px 0px",
   },
   signUpInstructions: {
-    justifyContent: 'center',
-    textAlign: 'left',
+    justifyContent: "center",
+    textAlign: "left",
   },
   centerContent: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   cardContainer: {
     padding: 24,
   },
   login: {
-    fontWeight: 'bold',
-    color: '#000',
-    cursor: 'pointer',
+    fontWeight: "bold",
+    color: "#000",
+    cursor: "pointer",
   },
   loginFooter: {
     marginTop: theme.spacing(6),
@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [volunteerType, setVolunteerType] = useState<VolunteerType>(
-    VolunteerType.ADHOC,
+    VolunteerType.ADHOC
   ); // default set as ad-hoc
   const classes = useStyles();
 
@@ -126,7 +126,7 @@ const SignUp = () => {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
     setCurrentStep(currentStep + 1);
   };
@@ -148,7 +148,7 @@ const SignUp = () => {
 
   const TextDivider = ({ children }) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
     if (isMobile) {
       return (
         <Grid container>
@@ -263,13 +263,9 @@ const SignUp = () => {
         </div>
 
         <div className={classes.loginFooter}>
-          <Typography variant="body1">
-            Already have an account?
-          </Typography>
+          <Typography variant="body1">Already have an account?</Typography>
           <Link href="/login">
-            <Typography className={classes.login}>
-              Log in
-            </Typography>
+            <Typography className={classes.login}>Log in</Typography>
           </Link>
         </div>
       </Box>
@@ -293,7 +289,8 @@ const SignUp = () => {
                 type={volunteerType}
                 questionWithHeader={
                   volunteerType === VolunteerType.ADHOC
-                    ? SignUpAdhocQuestionList : SignUpCommittedQuestionList
+                    ? SignUpAdhocQuestionList
+                    : SignUpCommittedQuestionList
                 }
               />
               <div className={classes.loginFooter}>

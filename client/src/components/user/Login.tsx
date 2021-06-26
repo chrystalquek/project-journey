@@ -1,69 +1,67 @@
-import {
-  Box, Grid, Button, Typography, Paper,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React, { FC, useEffect, useState } from 'react';
-import Link from 'next/link';
-import Head from 'next/head';
-import { useRouter } from 'next/dist/client/router';
-import { Formik, Form, Field } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Box, Grid, Button, Typography, Paper } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { FC, useEffect, useState } from "react";
+import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/dist/client/router";
+import { Formik, Form, Field } from "formik";
+import { TextField } from "formik-material-ui";
 
-import login, { LoginArgs } from '@redux/actions/user';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { HOME_ROUTE } from '@utils/constants/routes';
+import login, { LoginArgs } from "@redux/actions/user";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { HOME_ROUTE } from "@utils/constants/routes";
 
 const useStyles = makeStyles((theme) => ({
   content: {
     marginTop: 80,
-    textAlign: 'center',
-    minHeight: '90vh',
-    [theme.breakpoints.down('sm')]: {
-      padding: '80px 50px 0px 50px',
+    textAlign: "center",
+    minHeight: "90vh",
+    [theme.breakpoints.down("sm")]: {
+      padding: "80px 50px 0px 50px",
     },
-    [theme.breakpoints.up('md')]: {
-      padding: '80px 100px 0px 100px',
+    [theme.breakpoints.up("md")]: {
+      padding: "80px 100px 0px 100px",
     },
   },
   rowContent: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
-    color: 'black',
-    textTransform: 'none',
-    padding: '5px 50px',
+    color: "black",
+    textTransform: "none",
+    padding: "5px 50px",
     borderRadius: 20,
   },
   pageHeader: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    marginBottom: '40px',
+    fontSize: "32px",
+    fontWeight: "bold",
+    marginBottom: "40px",
   },
   loginButtonContainer: {
-    padding: '20px 0px 20px 0px',
+    padding: "20px 0px 20px 0px",
   },
   form: {},
   header: {
-    textAlign: 'left',
-    marginTop: '10px',
-    fontWeight: 'bold',
-    fontSize: '14px',
+    textAlign: "left",
+    marginTop: "10px",
+    fontWeight: "bold",
+    fontSize: "14px",
   },
   formContainer: {
-    padding: '20px',
+    padding: "20px",
   },
   signUpText: {
-    fontWeight: 'bold',
-    color: '#000',
-    cursor: 'pointer',
+    fontWeight: "bold",
+    color: "#000",
+    cursor: "pointer",
   },
   invalidText: {
-    marginBottom: '10px',
-    color: '#e60026',
+    marginBottom: "10px",
+    color: "#e60026",
   },
   section: {
-    margin: '20px',
+    margin: "20px",
   },
 }));
 
@@ -85,15 +83,15 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   }, [user]);
 
   useEffect(() => {
-    if (user.status === 'fulfilled') {
+    if (user.status === "fulfilled") {
       router.push(HOME_ROUTE);
     }
   }, [user.status]);
 
   useEffect(() => {
-    window.addEventListener('beforeunload', resetStatus);
+    window.addEventListener("beforeunload", resetStatus);
     return () => {
-      window.removeEventListener('beforeunload', resetStatus);
+      window.removeEventListener("beforeunload", resetStatus);
     };
   }, []);
 
@@ -104,7 +102,7 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
     };
     const response = await dispatch(login(loginArgs));
     // @ts-ignore type exists
-    if (response?.type === 'user/login/rejected') {
+    if (response?.type === "user/login/rejected") {
       setInvalid(true);
     }
   };
@@ -125,15 +123,15 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
     if (!values.email) {
-      errors.email = 'Required';
+      errors.email = "Required";
     } else if (!emailRegex.test(values.email)) {
-      errors.email = 'Invalid email address';
+      errors.email = "Invalid email address";
     }
 
     if (!values.password) {
-      errors.password = 'Required';
+      errors.password = "Required";
     } else if (values.password.length < 8) {
-      errors.password = 'Password must contain at least 8 characters';
+      errors.password = "Password must contain at least 8 characters";
     }
 
     return errors;
@@ -152,15 +150,18 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
               <Paper className={classes.formContainer}>
                 <Formik
                   initialValues={{
-                    email: '',
-                    password: '',
+                    email: "",
+                    password: "",
                   }}
                   validate={validate}
                   onSubmit={handleSubmit}
                 >
                   {({ isSubmitting }) => (
                     <Form>
-                      <Typography className={classes.header}> Email </Typography>
+                      <Typography className={classes.header}>
+                        {" "}
+                        Email{" "}
+                      </Typography>
                       <Field
                         component={TextField}
                         variant="outlined"
@@ -170,7 +171,10 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
                         name="email"
                         autoComplete="email"
                       />
-                      <Typography className={classes.header}> Password </Typography>
+                      <Typography className={classes.header}>
+                        {" "}
+                        Password{" "}
+                      </Typography>
                       <Field
                         component={TextField}
                         variant="outlined"
@@ -202,12 +206,8 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
                 <div>
                   <Typography>Don&apos;t have an account?</Typography>
                 </div>
-                <Link
-                  href="/signup"
-                >
-                  <Typography
-                    className={classes.signUpText}
-                  >
+                <Link href="/signup">
+                  <Typography className={classes.signUpText}>
                     Sign up
                   </Typography>
                 </Link>

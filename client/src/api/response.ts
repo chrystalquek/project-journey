@@ -1,73 +1,73 @@
-import { CommitmentApplicationData } from '@type/commitmentApplication';
-import { EventData } from '@type/event';
-import { QuestionItem } from '@type/form/question';
-import { SignUpData } from '@type/signUp';
-import { VolunteerData } from '@type/volunteer';
+import { CommitmentApplicationData } from "@type/commitmentApplication";
+import { EventData } from "@type/event";
+import { QuestionItem } from "@type/form/question";
+import { SignUpData } from "@type/signUp";
+import { VolunteerData } from "@type/volunteer";
 
 // TODO remove this by refactoring SignUpFormGenerator
-export type SignUpResponse = Record<string, any>
+export type SignUpResponse = Record<string, any>;
 
 export type LoginResponse = {
-  token: string
-}
+  token: string;
+};
 
 // event
 
-export type CreateEventResponse = EventData
+export type CreateEventResponse = EventData;
 
 export type GetEventsResponse = {
-  data: Array<EventData>
-}
+  data: Array<EventData>;
+};
 
-export type GetEventResponse = EventData
+export type GetEventResponse = EventData;
 
-export type UpdateEventResponse = EventData
+export type UpdateEventResponse = EventData;
 
 // volunteers
 
-export type CreateVolunteerResponse = VolunteerData
+export type CreateVolunteerResponse = VolunteerData;
 
 export type GetVolunteersResponse = {
-  data: Array<VolunteerData>
-}
+  data: Array<VolunteerData>;
+};
 
 export type GetVolunteersPaginatedResponse = GetVolunteersResponse & {
-  count: number
-}
+  count: number;
+};
 
-export type GetVolunteerResponse = VolunteerData
+export type GetVolunteerResponse = VolunteerData;
 
-export type UpdateVolunteerResponse = VolunteerData
+export type UpdateVolunteerResponse = VolunteerData;
 
 // sign up
 
-export type CreateSignUpResponse = SignUpData
+export type CreateSignUpResponse = SignUpData;
 
 export type GetSignUpsResponse = {
-  data: Array<SignUpData>
-}
+  data: Array<SignUpData>;
+};
 
-export type UpdateSignUpResponse = SignUpData
+export type UpdateSignUpResponse = SignUpData;
 
-export type CreateUpdateSignUpResponse = SignUpData
+export type CreateUpdateSignUpResponse = SignUpData;
 
 // commitment application
 
-export type CreateCommitmentApplicationResponse = CommitmentApplicationData
+export type CreateCommitmentApplicationResponse = CommitmentApplicationData;
 
 export type GetCommitmentApplicationsResponse = {
-  data: Array<CommitmentApplicationData>
-}
+  data: Array<CommitmentApplicationData>;
+};
 
-export type UpdateCommitmentApplicationResponse = CommitmentApplicationData
+export type UpdateCommitmentApplicationResponse = CommitmentApplicationData;
 
 // image
 
 export type UploadImageResponse = {
-  name: string,
-  url: string
-}
+  name: string;
+  url: string;
+};
 
 // form
 
-export type GetEventFeedbackQuestionsResponse = Array<QuestionItem>
+export type GetEventFeedbackQuestionsResponse = Array<QuestionItem>;

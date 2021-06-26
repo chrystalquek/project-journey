@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
-import { Grid } from '@material-ui/core';
-import ProfileHeader from '@components/profile/ProfileHeader';
-import Remarks from '@components/profile/Remarks';
-import ContactInformation from '@components/profile/ContactInformation';
-import SignUpInformation from '@components/profile/SignUpInformation';
-import EventCount from '@components/profile/EventCount';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import ErrorPage from 'next/error';
-import { useRouter } from 'next/router';
-import { VolunteerType } from '@type/volunteer';
-import { getVolunteerById } from '@redux/actions/profilePage';
-import { checkLoggedIn } from '@utils/helpers/auth';
-import LoadingIndicator from '@components/common/LoadingIndicator';
+import React, { useEffect } from "react";
+import { Grid } from "@material-ui/core";
+import ProfileHeader from "@components/profile/ProfileHeader";
+import Remarks from "@components/profile/Remarks";
+import ContactInformation from "@components/profile/ContactInformation";
+import SignUpInformation from "@components/profile/SignUpInformation";
+import EventCount from "@components/profile/EventCount";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import ErrorPage from "next/error";
+import { useRouter } from "next/router";
+import { VolunteerType } from "@type/volunteer";
+import { getVolunteerById } from "@redux/actions/profilePage";
+import { checkLoggedIn } from "@utils/helpers/auth";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 
 const Profile = () => {
   checkLoggedIn();
@@ -31,41 +31,43 @@ const Profile = () => {
 
   // Guard clause, user cannot view other users
   // Only admin can view other users
-  if (loggedInUser.user === null
-    || (loggedInUser.user.volunteerType !== VolunteerType.ADMIN
-      && loggedInUser.user._id !== profilePageId)) {
+  if (
+    loggedInUser.user === null ||
+    (loggedInUser.user.volunteerType !== VolunteerType.ADMIN &&
+      loggedInUser.user._id !== profilePageId)
+  ) {
     return <ErrorPage statusCode={404} />;
   }
 
-  return (profilePageData === null || profilePageData?._id !== profilePageId ? <LoadingIndicator />
-    : (
-      <Grid container direction="column">
-        <Grid item />
-        <Grid item container>
-          <Grid item md={2} />
-          <Grid item container direction="column" xs={12} md={8}>
-            <Grid item>
-              <ProfileHeader profilePageData={profilePageData} />
+  return profilePageData === null || profilePageData?._id !== profilePageId ? (
+    <LoadingIndicator />
+  ) : (
+    <Grid container direction="column">
+      <Grid item />
+      <Grid item container>
+        <Grid item md={2} />
+        <Grid item container direction="column" xs={12} md={8}>
+          <Grid item>
+            <ProfileHeader profilePageData={profilePageData} />
+          </Grid>
+          <Grid item container>
+            <Grid item xs={12} md={7}>
+              <Remarks profilePageData={profilePageData} />
             </Grid>
-            <Grid item container>
-              <Grid item xs={12} md={7}>
-                <Remarks profilePageData={profilePageData} />
-              </Grid>
-              <Grid item xs={12} md={5}>
-                <ContactInformation profilePageData={profilePageData} />
-              </Grid>
-              <Grid item xs={12} md={7}>
-                <SignUpInformation profilePageData={profilePageData} />
-              </Grid>
-              <Grid item xs={12} md={5}>
-                <EventCount profilePageData={profilePageData} />
-              </Grid>
+            <Grid item xs={12} md={5}>
+              <ContactInformation profilePageData={profilePageData} />
+            </Grid>
+            <Grid item xs={12} md={7}>
+              <SignUpInformation profilePageData={profilePageData} />
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <EventCount profilePageData={profilePageData} />
             </Grid>
           </Grid>
-          <Grid item md={2} />
         </Grid>
+        <Grid item md={2} />
       </Grid>
-    )
+    </Grid>
   );
 };
 export default Profile;

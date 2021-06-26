@@ -1,42 +1,42 @@
 export enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
+  MALE = "male",
+  FEMALE = "female",
 }
 
 export enum Citizenship {
-  SINGAPORE = 'singapore',
-  PR = 'permanent_resident',
-  FOREIGNER = 'foreigner',
+  SINGAPORE = "singapore",
+  PR = "permanent_resident",
+  FOREIGNER = "foreigner",
 }
 
 export enum Race {
-  CHINESE = 'chinese',
-  MALAY = 'malay',
-  INDIAN = 'indian',
-  CAUCASIAN = 'caucasian',
-  OTHER = 'other',
+  CHINESE = "chinese",
+  MALAY = "malay",
+  INDIAN = "indian",
+  CAUCASIAN = "caucasian",
+  OTHER = "other",
 }
 
 export enum LeadershipInterest {
-  YES = 'yes',
-  NO = 'no',
-  MAYBE = 'maybe',
+  YES = "yes",
+  NO = "no",
+  MAYBE = "maybe",
 }
 
 export const PERSONALITY_TYPES_REGEX = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
 
 export enum SocialMediaPlatform {
-  INSTAGRAM = 'instagram',
-  FACEBOOK = 'facebook',
-  SNAPCHAT = 'snapchat',
-  EMAIL = 'email',
-  OTHER = 'other',
+  INSTAGRAM = "instagram",
+  FACEBOOK = "facebook",
+  SNAPCHAT = "snapchat",
+  EMAIL = "email",
+  OTHER = "other",
 }
 
 export enum VolunteerType {
-  ADHOC = 'ad-hoc',
-  COMMITTED = 'committed',
-  ADMIN = 'admin'
+  ADHOC = "ad-hoc",
+  COMMITTED = "committed",
+  ADMIN = "admin",
 }
 
 export type VolunteerData = {

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from "react";
 import {
   IconButton,
   MenuItem,
@@ -12,24 +12,24 @@ import {
   Select,
   Input,
   Button,
-} from '@material-ui/core';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { VolunteerType } from '@type/volunteer';
-import EditIcon from '@material-ui/icons/Edit';
-import { updateVolunteer } from '@redux/actions/user';
+} from "@material-ui/core";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { VolunteerType } from "@type/volunteer";
+import EditIcon from "@material-ui/icons/Edit";
+import { updateVolunteer } from "@redux/actions/user";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 200,
   },
   centralize: {
-    textAlign: 'center',
-    justifyContent: 'center',
+    textAlign: "center",
+    justifyContent: "center",
   },
 }));
 
@@ -40,7 +40,9 @@ const ChangeVolunteerType: FC = () => {
   const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [volunteerType, setVolunteerType] = useState<VolunteerType>(profilePageData.volunteerType);
+  const [volunteerType, setVolunteerType] = useState<VolunteerType>(
+    profilePageData.volunteerType
+  );
 
   const handleOpenDialog = useCallback(() => {
     setOpenDialog(true);
@@ -50,13 +52,18 @@ const ChangeVolunteerType: FC = () => {
     setOpenDialog(false);
   }, [openDialog]);
 
-  const handleChange = useCallback((event) => {
-    setVolunteerType(event.target.value || profilePageData.volunteerType);
-  }, [volunteerType]);
+  const handleChange = useCallback(
+    (event) => {
+      setVolunteerType(event.target.value || profilePageData.volunteerType);
+    },
+    [volunteerType]
+  );
 
   const handleSubmit = () => {
     const updatedVolunteerData = { ...profilePageData, volunteerType };
-    dispatch(updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData }));
+    dispatch(
+      updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData })
+    );
     handleCloseDialog();
   };
 
@@ -66,10 +73,7 @@ const ChangeVolunteerType: FC = () => {
         <EditIcon fontSize="small" />
       </IconButton>
 
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-      >
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>
           <Typography variant="h2" className={classes.centralize}>
             Change volunteer type to
@@ -106,11 +110,7 @@ const ChangeVolunteerType: FC = () => {
           </form>
         </DialogContent>
         <DialogActions className={classes.centralize}>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            color="primary"
-          >
+          <Button onClick={handleSubmit} variant="contained" color="primary">
             Confirm
           </Button>
         </DialogActions>

@@ -1,31 +1,31 @@
-import { getEvent } from '@redux/actions/event';
-import { getVolunteerById } from '@redux/actions/profilePage';
-import { createSlice } from '@reduxjs/toolkit';
+import { getEvent } from "@redux/actions/event";
+import { getVolunteerById } from "@redux/actions/profilePage";
+import { createSlice } from "@reduxjs/toolkit";
 
-export type LoadingStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type LoadingStatus = "idle" | "loading" | "succeeded" | "failed";
 
 export type LoadingState = {
-  status: LoadingStatus
-}
+  status: LoadingStatus;
+};
 
 const initialState: LoadingState = {
-  status: 'idle',
+  status: "idle",
 };
 
 const loadingSlice = createSlice({
-  name: 'loading',
+  name: "loading",
   initialState,
   reducers: {
     reset(state) {
-      state.status = 'idle';
+      state.status = "idle";
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getVolunteerById.rejected, (state) => {
-      state.status = 'failed';
+      state.status = "failed";
     });
     builder.addCase(getEvent.rejected, (state) => {
-      state.status = 'failed';
+      state.status = "failed";
     });
   },
 });

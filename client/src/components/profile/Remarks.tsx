@@ -1,15 +1,15 @@
-import React, { FC, useState } from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import ProfileDivider from '@components/common/ProfileDivider';
-import PaddedGrid from '@components/common/PaddedGrid';
-import RemarksTextField from '@components/profile/RemarksTextField';
-import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { updateVolunteer } from '@redux/actions/user';
+import React, { FC, useState } from "react";
+import { Grid, Typography } from "@material-ui/core";
+import ProfileDivider from "@components/common/ProfileDivider";
+import PaddedGrid from "@components/common/PaddedGrid";
+import RemarksTextField from "@components/profile/RemarksTextField";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { updateVolunteer } from "@redux/actions/user";
 
 type props = {
-  profilePageData: VolunteerData
-}
+  profilePageData: VolunteerData;
+};
 
 const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useAppDispatch();
@@ -20,12 +20,16 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   let originalVolunteerRemarks = profilePageData.volunteerRemarks;
   let originalAdministratorRemarks = profilePageData.administratorRemarks;
 
-  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(originalVolunteerRemarks);
-  const [administratorRemarks, setAdministratorRemarks] = useState<string>(
-    originalAdministratorRemarks,
+  const [volunteerRemarks, setVolunteerRemarks] = useState<string>(
+    originalVolunteerRemarks
   );
-  const [volunteerRemarksChanged, setVolunteerRemarksChanged] = useState<boolean>(false);
-  const [administratorRemarksChanged, setAdministratorRemarksChanged] = useState<boolean>(false);
+  const [administratorRemarks, setAdministratorRemarks] = useState<string>(
+    originalAdministratorRemarks
+  );
+  const [volunteerRemarksChanged, setVolunteerRemarksChanged] =
+    useState<boolean>(false);
+  const [administratorRemarksChanged, setAdministratorRemarksChanged] =
+    useState<boolean>(false);
 
   const handleVolunteerRemarks = (event) => {
     setVolunteerRemarks(event.target.value);
@@ -34,7 +38,9 @@ const Remarks: FC<props> = ({ profilePageData }) => {
 
   const handleAdministratorRemarks = (event) => {
     setAdministratorRemarks(event.target.value);
-    setAdministratorRemarksChanged(event.target.value !== originalAdministratorRemarks);
+    setAdministratorRemarksChanged(
+      event.target.value !== originalAdministratorRemarks
+    );
   };
 
   const saveVolunteerRemarks = () => {
@@ -44,7 +50,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
         data: {
           volunteerRemarks,
         },
-      }),
+      })
     );
 
     originalVolunteerRemarks = volunteerRemarks;
@@ -57,7 +63,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
         data: {
           administratorRemarks,
         },
-      }),
+      })
     );
 
     originalAdministratorRemarks = administratorRemarks;
@@ -82,7 +88,6 @@ const Remarks: FC<props> = ({ profilePageData }) => {
         <ProfileDivider />
       </Grid>
       <Grid item container direction="column" spacing={2}>
-
         {/* Volunteer remarks */}
         <RemarksTextField
           value={volunteerRemarks}
@@ -98,8 +103,8 @@ const Remarks: FC<props> = ({ profilePageData }) => {
 
         {/* Admin remarks not rendered if the profilePageData is admin
         and only shows the admin remarks if the user is admin */}
-        {profilePageData.volunteerType !== VolunteerType.ADMIN
-          && userData.volunteerType === VolunteerType.ADMIN && (
+        {profilePageData.volunteerType !== VolunteerType.ADMIN &&
+          userData.volunteerType === VolunteerType.ADMIN && (
             <RemarksTextField
               value={administratorRemarks}
               onChange={handleAdministratorRemarks}
@@ -109,7 +114,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
               onDiscard={discardAdministratorRemarks}
               disabled={!isAdmin}
             />
-        )}
+          )}
       </Grid>
     </PaddedGrid>
   );

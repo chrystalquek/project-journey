@@ -1,49 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { Paper, Typography, Button, makeStyles } from "@material-ui/core";
+import { Formik, Form } from "formik";
+
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import * as Yup from "yup";
+import { VolunteerType } from "@type/volunteer";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useAppDispatch } from "@redux/store";
+import { uploadImage } from "@redux/actions/image";
+import { useRouter } from "next/router";
+import { SignUpResponse } from "@api/response";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+
+import { objectFilter } from "@utils/helpers/objectFilter";
+import { ToastStatus } from "@type/common";
 import {
-  Paper, Typography, Button, makeStyles,
-} from '@material-ui/core';
-import { Formik, Form } from 'formik';
-
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import * as Yup from 'yup';
-import { VolunteerType } from '@type/volunteer';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { useAppDispatch } from '@redux/store';
-import { uploadImage } from '@redux/actions/image';
-import { useRouter } from 'next/router';
-import { SignUpResponse } from '@api/response';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-
-import { objectFilter } from '@utils/helpers/objectFilter';
-import { ToastStatus } from '@type/common';
-import { HeaderQuestionList, QuestionList, QuestionsWithHeader } from '@type/form/form';
-import { FormQuestionMapper } from './FormGenerator';
+  HeaderQuestionList,
+  QuestionList,
+  QuestionsWithHeader,
+} from "@type/form/form";
+import { FormQuestionMapper } from "./FormGenerator";
 
 const useStyles = makeStyles((theme) => ({
   // The following style make sure that the error message shows consistently for 'photo'
   errorStyle: {
     color: theme.palette.error.main,
-    fontWeight: 'normal',
-    fontSize: '0.75rem',
-    lineHeight: '1.66',
-    marginLeft: '14px',
-    marginRight: '14px',
-    marginTop: '4px',
+    fontWeight: "normal",
+    fontSize: "0.75rem",
+    lineHeight: "1.66",
+    marginLeft: "14px",
+    marginRight: "14px",
+    marginTop: "4px",
   },
   listItem: {
-    whiteSpace: 'normal',
+    whiteSpace: "normal",
   },
   headerStyle: {
-    background: 'rgba(0, 186, 220, 30%)', // Light blue
+    background: "rgba(0, 186, 220, 30%)", // Light blue
     padding: theme.spacing(2),
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(4),
   },
   infoStyle: {
-    fontStyle: 'italic',
-    opacity: '70%',
+    fontStyle: "italic",
+    opacity: "70%",
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
     marginTop: theme.spacing(2),
@@ -69,35 +71,41 @@ const SignUpFormGenerator = ({
   const dispatch = useAppDispatch();
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [toastText, setToastText] = useState<string>('');
-  const [toastStatus, setToastStatus] = useState<ToastStatus>('success');
+  const [toastText, setToastText] = useState<string>("");
+  const [toastStatus, setToastStatus] = useState<ToastStatus>("success");
   const initialValues: Record<string, any> = {};
 
   // Basically concatenates all the question lists from each section
-  const reducer = (accumulator: QuestionList, currentValue: QuestionsWithHeader):
-    QuestionList => accumulator.concat(currentValue.questionList);
+  const reducer = (
+    accumulator: QuestionList,
+    currentValue: QuestionsWithHeader
+  ): QuestionList => accumulator.concat(currentValue.questionList);
   const questionList: QuestionList = questionWithHeader.reduce(reducer, []);
 
   questionList.forEach(({ name, type: questionType, initialValue }) => {
-    initialValues[name] = questionType === 'checkboxes' ? [] : initialValue;
+    initialValues[name] = questionType === "checkboxes" ? [] : initialValue;
   });
 
   const onUploadImage = (imageFile, name) => {
     const form = new FormData();
-    form.append('image', imageFile);
-    form.append('email', 'dummy@dummy.com');
+    form.append("image", imageFile);
+    form.append("email", "dummy@dummy.com");
 
     return dispatch(uploadImage({ name, form }));
   };
 
   const handleSubmit = async (formValues: Record<string, any>) => {
     // @ts-ignore type exists
-    const values = objectFilter(formValues, (element) => typeof element === 'boolean' || element);
+    const values = objectFilter(
+      formValues,
+      (element) => typeof element === "boolean" || element
+    );
 
     // Upload and get cover image URL
-    if (values.photoUrl && typeof values.photoUrl !== 'string') {
+    if (values.photoUrl && typeof values.photoUrl !== "string") {
       // @ts-ignore type exists
-      await onUploadImage(values.photoUrl, 'photoUrl').then(unwrapResult)
+      await onUploadImage(values.photoUrl, "photoUrl")
+        .then(unwrapResult)
         .then((result) => {
           values.photoUrl = result.url;
         });
@@ -124,7 +132,7 @@ const SignUpFormGenerator = ({
       race: values.race,
 
       languages: values.languages
-        ?.split(',')
+        ?.split(",")
         .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
       referralSources: values.referralSources,
 
@@ -148,7 +156,7 @@ const SignUpFormGenerator = ({
 
       personality: values.personality,
       strengths: values.strengths
-        ?.split(',')
+        ?.split(",")
         .map((element) => element.trimStart().trimEnd()),
       volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
 
@@ -170,15 +178,15 @@ const SignUpFormGenerator = ({
       emergencyContactRelationship: values.emergencyContactRelationship,
     });
 
-    if (response.type === 'volunteer//rejected') {
+    if (response.type === "volunteer//rejected") {
       setToastText(`Error: ${response.error.message}`);
-      setToastStatus('error');
+      setToastStatus("error");
       setOpenSnackbar(true);
-    } else if (response.type === 'volunteer//fulfilled') {
-      setToastText('You have signed up successfully.');
-      setToastStatus('success');
+    } else if (response.type === "volunteer//fulfilled") {
+      setToastText("You have signed up successfully.");
+      setToastStatus("success");
       setOpenSnackbar(true);
-      router.push('/login');
+      router.push("/login");
     }
   };
 
@@ -189,65 +197,65 @@ const SignUpFormGenerator = ({
 
   questionList.forEach(({ name, isRequired }) => {
     if (isRequired) {
-      requiredSchema[name] = Yup.mixed().required('Required');
+      requiredSchema[name] = Yup.mixed().required("Required");
     }
   });
 
   const SignUpSchema = Yup.object().shape({
     ...requiredSchema,
-    firstName: Yup.string().required('Required'),
-    lastName: Yup.string().required('Required'),
-    email: Yup.string().email('Invalid email').required('Required'),
+    firstName: Yup.string().required("Required"),
+    lastName: Yup.string().required("Required"),
+    email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string()
-      .min(8, 'Password must be at least 8 characters!')
-      .required('Required'),
-    confirmPassword: Yup.string().when('password', {
+      .min(8, "Password must be at least 8 characters!")
+      .required("Required"),
+    confirmPassword: Yup.string().when("password", {
       is: (val: string) => val && val.length > 0,
       then: Yup.string()
         .oneOf(
-          [Yup.ref('password')],
-          'Confirm Password need to be the same as Password fields',
+          [Yup.ref("password")],
+          "Confirm Password need to be the same as Password fields"
         )
-        .required('Required'),
+        .required("Required"),
     }),
     mobileNumber: Yup.string()
-      .matches(phoneRegExp, 'Mobile phone is not valid')
-      .required('Required'),
+      .matches(phoneRegExp, "Mobile phone is not valid")
+      .required("Required"),
     emergencyContactNumber: Yup.string()
-      .matches(phoneRegExp, 'Mobile phone is not valid')
-      .required('Required'),
+      .matches(phoneRegExp, "Mobile phone is not valid")
+      .required("Required"),
     emergencyContactEmail: Yup.string()
-      .email('Invalid email')
-      .required('Required'),
-    referralSources: Yup.array().required('Required'),
+      .email("Invalid email")
+      .required("Required"),
+    referralSources: Yup.array().required("Required"),
     biabVolunteeringDuration: Yup.number()
-      .integer('Input must be an integer')
-      .positive('Input must be a positive integer'),
+      .integer("Input must be an integer")
+      .positive("Input must be a positive integer"),
     sessionsPerMonth:
       type === VolunteerType.ADHOC
         ? Yup.number()
-          .integer('Input must be an integer')
-          .positive('Input must be a positive integer')
+            .integer("Input must be an integer")
+            .positive("Input must be a positive integer")
         : Yup.number()
-          .integer('Input must be an integer')
-          .positive('Input must be a positive integer')
-          .required('Required'),
+            .integer("Input must be an integer")
+            .positive("Input must be a positive integer")
+            .required("Required"),
     personality:
       type === VolunteerType.ADHOC
         ? Yup.mixed()
         : Yup.string()
-          .matches(personalityRegex, 'Invalid value')
-          .required('Required'),
+            .matches(personalityRegex, "Invalid value")
+            .required("Required"),
   });
 
   return (
     <Paper
       style={{
-        margin: 'auto',
-        padding: '30px',
-        textAlign: 'left',
-        maxHeight: '100%',
-        wordWrap: 'break-word',
+        margin: "auto",
+        padding: "30px",
+        textAlign: "left",
+        maxHeight: "100%",
+        wordWrap: "break-word",
       }}
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -257,83 +265,82 @@ const SignUpFormGenerator = ({
           validationSchema={SignUpSchema}
           validateOnChange={false}
         >
-          {({
-            isSubmitting, setFieldValue, errors, touched,
-          }) => (
+          {({ isSubmitting, setFieldValue, errors, touched }) => (
             <Form>
-              {questionWithHeader.map((
-                { header, info, questionList: questionWithHeaderList }, index,
-              ) => (
-                <React.Fragment key={header}>
-                  <Typography
-                    className={classes.headerStyle}
-                    align="center"
-                    variant="h2"
-                  >
-                    {header}
-                  </Typography>
-                  {info && (
-                  <Typography
-                    variant="body2"
-                    className={classes.infoStyle}
-                  >
-                    {info}
-                  </Typography>
-                  )}
-                  {questionWithHeaderList.map((questionItem) => {
-                    const {
-                      name,
-                      displayText,
-                      type: questionWithHeaderType,
-                      isRequired,
-                    } = questionItem;
-                    const options = questionWithHeaderType === 'mcq'
-                    || questionWithHeaderType === 'checkboxes'
-                      ? questionItem.options
-                      : null;
+              {questionWithHeader.map(
+                (
+                  { header, info, questionList: questionWithHeaderList },
+                  index
+                ) => (
+                  <React.Fragment key={header}>
+                    <Typography
+                      className={classes.headerStyle}
+                      align="center"
+                      variant="h2"
+                    >
+                      {header}
+                    </Typography>
+                    {info && (
+                      <Typography variant="body2" className={classes.infoStyle}>
+                        {info}
+                      </Typography>
+                    )}
+                    {questionWithHeaderList.map((questionItem) => {
+                      const {
+                        name,
+                        displayText,
+                        type: questionWithHeaderType,
+                        isRequired,
+                      } = questionItem;
+                      const options =
+                        questionWithHeaderType === "mcq" ||
+                        questionWithHeaderType === "checkboxes"
+                          ? questionItem.options
+                          : null;
 
-                    return (
-                      <div
-                        key={name}
-                        style={{
-                          marginBottom: '32px',
-                        }}
-                      >
-                        {displayText.map((text) => (
-                          <Typography
-                            style={{
-                              marginBottom: '16px',
-                              fontWeight: 500,
-                            }}
-                          >
-                            {text}
-                            {index === displayText.length - 1
-                                && isRequired
-                                && ' *'}
-                          </Typography>
-                        ))}
-                        <FormQuestionMapper
-                          formType={questionWithHeaderType}
-                          name={name}
-                          options={options}
-                          setFieldValue={setFieldValue}
-                          props={{
-                            error: touched[name] && !!errors[name],
-                            helperText: touched[name] ? errors[name] : null,
+                      return (
+                        <div
+                          key={name}
+                          style={{
+                            marginBottom: "32px",
                           }}
-                        />
-                      </div>
-                    );
-                  })}
-                </React.Fragment>
-              ))}
+                        >
+                          {displayText.map((text) => (
+                            <Typography
+                              style={{
+                                marginBottom: "16px",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {text}
+                              {index === displayText.length - 1 &&
+                                isRequired &&
+                                " *"}
+                            </Typography>
+                          ))}
+                          <FormQuestionMapper
+                            formType={questionWithHeaderType}
+                            name={name}
+                            options={options}
+                            setFieldValue={setFieldValue}
+                            props={{
+                              error: touched[name] && !!errors[name],
+                              helperText: touched[name] ? errors[name] : null,
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
+                  </React.Fragment>
+                )
+              )}
               <Button
                 variant="contained"
                 color="primary"
                 type="submit"
                 disabled={isSubmitting}
                 size="large"
-                style={{ margin: 'auto', display: 'block' }}
+                style={{ margin: "auto", display: "block" }}
               >
                 Submit
               </Button>

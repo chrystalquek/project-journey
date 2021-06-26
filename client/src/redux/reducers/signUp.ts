@@ -1,26 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 import {
-  createAndAcceptSignUp, createSignUp,
+  createAndAcceptSignUp,
+  createSignUp,
   deleteSignUp,
-  getPendingSignUps, getSignUps,
+  getPendingSignUps,
+  getSignUps,
   getSignUpsUpcomingEvent,
-  updateSignUp, updateSignUpInstant,
-} from '@redux/actions/signUp';
-import { SignUpData } from '@type/signUp';
+  updateSignUp,
+  updateSignUpInstant,
+} from "@redux/actions/signUp";
+import { SignUpData } from "@type/signUp";
 
 export type SignUpState = {
   data: Record<string, SignUpData>;
   volunteerSignUpsForUpcomingEvent: {
     // signups for a volunteer's upcoming events // used for dashboard
-    ids: Array<string> // signed up events
-  },
-  pendingSignUps: { // pending sign ups // used for events > pending requests
-    ids: Array<string>
-  },
+    ids: Array<string>; // signed up events
+  };
+  pendingSignUps: {
+    // pending sign ups // used for events > pending requests
+    ids: Array<string>;
+  };
   getSignUps: {
-    currSignUps: Array<SignUpData> // signups from getSignUps action
-  }
-}
+    currSignUps: Array<SignUpData>; // signups from getSignUps action
+  };
+};
 
 const initialState: SignUpState = {
   data: {},
@@ -37,11 +41,13 @@ const initialState: SignUpState = {
 
 // parse all Dates etc before saving to store
 const addToData = (signUps: Array<SignUpData>, state: SignUpState) => {
-  signUps.forEach((signUp) => { state.data[signUp._id] = signUp; });
+  signUps.forEach((signUp) => {
+    state.data[signUp._id] = signUp;
+  });
 };
 
 const signUpSlice = createSlice({
-  name: 'signUp',
+  name: "signUp",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -50,7 +56,9 @@ const signUpSlice = createSlice({
     builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state);
-      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map((signUp) => signUp._id);
+      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map(
+        (signUp) => signUp._id
+      );
     });
     builder.addCase(getPendingSignUps.fulfilled, (state, action) => {
       const { payload } = action;

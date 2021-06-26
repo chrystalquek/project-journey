@@ -1,12 +1,12 @@
-export type SignUpIdType = 'eventId' | 'userId' | 'signUpId'
-export type SignUpStatus = 'pending' | ['accepted', string] | 'rejected'
+export type SignUpIdType = "eventId" | "userId" | "signUpId";
+export type SignUpStatus = "pending" | ["accepted", string] | "rejected";
 
 export type SignUpData = {
-    _id: string,
-    eventId: string,
-    userId: string,
-    status: SignUpStatus,
-    preferences: Array<string>,
-    isRestricted: boolean,
-    createdAt: string
-}
+  _id: string;
+  eventId: string;
+  userId: string;
+  status: SignUpStatus;
+  preferences: Array<string>;
+  isRestricted: boolean;
+  createdAt: string;
+};

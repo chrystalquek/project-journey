@@ -1,23 +1,21 @@
-import React from 'react';
-import {
-  Button, Grid, makeStyles, Typography,
-} from '@material-ui/core';
-import { useRouter } from 'next/router';
-import { deleteEvent } from '@redux/actions/event';
-import { useAppDispatch } from '@redux/store';
+import React from "react";
+import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
+import { useRouter } from "next/router";
+import { deleteEvent } from "@redux/actions/event";
+import { useAppDispatch } from "@redux/store";
 
 const useStyles = makeStyles((theme) => ({
   editButton: {
-    borderRadius: '20px',
-    textTransform: 'none',
+    borderRadius: "20px",
+    textTransform: "none",
   },
   deleteButton: {
-    backgroundColor: 'white',
-    '&:hover': {
-      backgroundColor: 'white',
+    backgroundColor: "white",
+    "&:hover": {
+      backgroundColor: "white",
     },
-    borderRadius: '20px',
-    textTransform: 'none',
+    borderRadius: "20px",
+    textTransform: "none",
     border: `1px solid ${theme.palette.primary.main}`,
   },
 }));
@@ -29,7 +27,7 @@ const EventDetailsAdminButtons = ({ event }) => {
 
   const handleDeleteEvent = async () => {
     dispatch(deleteEvent(event._id));
-    router.push('/event');
+    router.push("/event");
   };
 
   return (
@@ -42,9 +40,7 @@ const EventDetailsAdminButtons = ({ event }) => {
           onClick={() => router.push(`/form/${event._id}`)}
           className={classes.editButton}
         >
-          <Typography variant="body1">
-            Edit Event
-          </Typography>
+          <Typography variant="body1">Edit Event</Typography>
         </Button>
       </Grid>
       <Grid item>
@@ -55,12 +51,9 @@ const EventDetailsAdminButtons = ({ event }) => {
           onClick={() => handleDeleteEvent()}
           className={classes.deleteButton}
         >
-          <Typography variant="body1">
-            Delete Event
-          </Typography>
+          <Typography variant="body1">Delete Event</Typography>
         </Button>
       </Grid>
-
     </Grid>
   );
 };

@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
-import { Typography, makeStyles } from '@material-ui/core';
+import React, { FC } from "react";
+import { Typography, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   footerStyle: {
-    textAlign: 'center',
-    width: '100%',
+    textAlign: "center",
+    width: "100%",
     marginTop: theme.spacing(9),
   },
 }));

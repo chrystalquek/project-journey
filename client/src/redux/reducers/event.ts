@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 import {
   getUpcomingEvents,
   getEvent,
@@ -9,25 +9,26 @@ import {
   getSignedUpEventsUpcomingEvent,
   getSignedUpEventsPastEvent,
   cancelEvent,
-} from '@redux/actions/event';
-import { EventData } from '@type/event';
+} from "@redux/actions/event";
+import { EventData } from "@type/event";
 
-type FetchStatus = 'fetching' | 'fulfilled' | 'rejected' | '';
+type FetchStatus = "fetching" | "fulfilled" | "rejected" | "";
 
 export type EventState = {
   data: Record<string, EventData>;
-  upcomingEvent: { // part of dashboard and events > pending requests
-    ids: Array<string> // if admin, all events. if volunteer, signed up events.
+  upcomingEvent: {
+    // part of dashboard and events > pending requests
+    ids: Array<string>; // if admin, all events. if volunteer, signed up events.
   };
   pastEvents: {
-    ids: Array<string>
-  }
+    ids: Array<string>;
+  };
   browseEvents: {
-    ids: Array<string>
+    ids: Array<string>;
   };
   form: EventData | null;
   status: FetchStatus;
-}
+};
 
 const initialState: EventState = {
   data: {},
@@ -41,29 +42,27 @@ const initialState: EventState = {
     ids: [],
   },
   form: null,
-  status: '',
+  status: "",
 };
 
 // parse all Dates etc before saving to store
 const addToData = (events: Array<EventData>, state: EventState) => {
-  events?.forEach(
-    (event) => {
-      state.data[event._id] = {
-        ...event,
-        startDate: event.startDate,
-        endDate: event.endDate,
-        deadline: event.deadline,
-      };
-    },
-  );
+  events?.forEach((event) => {
+    state.data[event._id] = {
+      ...event,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      deadline: event.deadline,
+    };
+  });
 };
 
 const eventSlice = createSlice({
-  name: 'event',
+  name: "event",
   initialState,
   reducers: {
     resetEventStatus(state) {
-      state.status = '';
+      state.status = "";
       state.form = null;
     },
   },
@@ -80,21 +79,14 @@ const eventSlice = createSlice({
       (state, action) => {
         const { payload } = action;
         addToData(payload.data, state);
-        state.upcomingEvent.ids = payload.data.map(
-          (event) => event._id,
-        );
-      },
+        state.upcomingEvent.ids = payload.data.map((event) => event._id);
+      }
     );
-    builder.addCase(
-      getSignedUpEventsPastEvent.fulfilled,
-      (state, action) => {
-        const { payload } = action;
-        addToData(payload.data, state);
-        state.pastEvents.ids = payload.data.map(
-          (event) => event._id,
-        );
-      },
-    );
+    builder.addCase(getSignedUpEventsPastEvent.fulfilled, (state, action) => {
+      const { payload } = action;
+      addToData(payload.data, state);
+      state.pastEvents.ids = payload.data.map((event) => event._id);
+    });
     builder.addCase(getEvent.fulfilled, (state, action) => {
       const { payload } = action;
       state.form = payload;
@@ -112,40 +104,40 @@ const eventSlice = createSlice({
       state.data[meta.arg].isCancelled = false;
     });
     builder.addCase(createEvent.rejected, (state) => {
-      state.status = 'rejected';
+      state.status = "rejected";
     });
     builder.addCase(createEvent.pending, (state) => {
-      state.status = 'fetching';
+      state.status = "fetching";
     });
     builder.addCase(createEvent.fulfilled, (state) => {
-      state.status = 'fulfilled';
+      state.status = "fulfilled";
     });
     builder.addCase(editEvent.rejected, (state) => {
-      state.status = 'rejected';
+      state.status = "rejected";
     });
     builder.addCase(editEvent.pending, (state) => {
-      state.status = 'fetching';
+      state.status = "fetching";
     });
     builder.addCase(editEvent.fulfilled, (state) => {
-      state.status = 'fulfilled';
+      state.status = "fulfilled";
     });
     builder.addCase(deleteEvent.fulfilled, (state, action) => {
       const { meta } = action;
       delete state.data[meta.arg];
     });
     builder.addCase(getUpcomingEvents.pending, (state) => {
-      state.status = 'fetching';
+      state.status = "fetching";
       state.browseEvents.ids = [];
     });
     builder.addCase(getUpcomingEvents.fulfilled, (state, action) => {
-      state.status = 'fulfilled';
+      state.status = "fulfilled";
       addToData(action.payload?.data, state);
       state.browseEvents.ids = action.payload?.data?.map((event) => event._id);
       // hacky workaround to make create new event work
-      state.status = '';
+      state.status = "";
     });
     builder.addCase(getUpcomingEvents.rejected, (state) => {
-      state.status = 'rejected';
+      state.status = "rejected";
       state.browseEvents.ids = [];
     });
   },

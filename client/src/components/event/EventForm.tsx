@@ -1,6 +1,4 @@
-import React, {
-  FC, useCallback, useEffect, useState,
-} from 'react';
+import React, { FC, useCallback, useEffect, useState } from "react";
 import {
   TextField,
   makeStyles,
@@ -10,27 +8,25 @@ import {
   Button,
   Switch,
   IconButton,
-} from '@material-ui/core';
-import {
-  KeyboardDateTimePicker,
-} from '@material-ui/pickers';
-import PaddedGrid from '@components/common/PaddedGrid';
-import DropZoneCard from '@components/common/DropZoneCard';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { createEvent, getEvent, editEvent } from '@redux/actions/event';
-import { uploadImage } from '@redux/actions/image';
-import { resetImages } from '@redux/reducers/image';
-import dayjs from 'dayjs';
-import { Formik, useFormik } from 'formik';
-import { useRouter } from 'next/router';
-import * as yup from 'yup';
-import { unwrapResult } from '@reduxjs/toolkit';
-import ClearIcon from '@material-ui/icons/Clear';
-import { resetEventStatus } from '@redux/reducers/event';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { ToastStatus } from '@type/common';
-import { FormQuestionMapper } from '../form/FormGenerator';
+} from "@material-ui/core";
+import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import PaddedGrid from "@components/common/PaddedGrid";
+import DropZoneCard from "@components/common/DropZoneCard";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { createEvent, getEvent, editEvent } from "@redux/actions/event";
+import { uploadImage } from "@redux/actions/image";
+import { resetImages } from "@redux/reducers/image";
+import dayjs from "dayjs";
+import { Formik, useFormik } from "formik";
+import { useRouter } from "next/router";
+import * as yup from "yup";
+import { unwrapResult } from "@reduxjs/toolkit";
+import ClearIcon from "@material-ui/icons/Clear";
+import { resetEventStatus } from "@redux/reducers/event";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import { ToastStatus } from "@type/common";
+import { FormQuestionMapper } from "../form/FormGenerator";
 
 type AdminEventFormProps = {
   id: string;
@@ -38,16 +34,16 @@ type AdminEventFormProps = {
 };
 
 const eventTypes = [
-  { value: 'workshop', label: 'Workshop' },
-  { value: 'hangout', label: 'Hangout' },
-  { value: 'volunteering', label: 'Volunteering' },
+  { value: "workshop", label: "Workshop" },
+  { value: "hangout", label: "Hangout" },
+  { value: "volunteering", label: "Volunteering" },
 ];
 
 const volunteerTypes = [
-  { value: 'committed', label: 'Committed' },
-  { value: 'ad-hoc', label: 'Ad-hoc' },
-  { value: 'lead', label: 'Lead' },
-  { value: 'admin', label: 'Admin' },
+  { value: "committed", label: "Committed" },
+  { value: "ad-hoc", label: "Ad-hoc" },
+  { value: "lead", label: "Lead" },
+  { value: "admin", label: "Admin" },
 ];
 
 const TOAST_MESSAGE_LENGTH_MS = 2000;
@@ -55,38 +51,38 @@ const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
 const getEventTypePlaceholder = (eventType) => {
   switch (eventType) {
-    case 'workshop':
-      return 'eg. Workshop: Facilitation 101';
-    case 'hangout':
-      return 'eg. Hangout Session';
-    case 'volunteering':
-      return 'eg. Volunteering: Session 4';
+    case "workshop":
+      return "eg. Workshop: Facilitation 101";
+    case "hangout":
+      return "eg. Hangout Session";
+    case "volunteering":
+      return "eg. Volunteering: Session 4";
     default:
-      return '';
+      return "";
   }
 };
 
 const useStyles = makeStyles((theme) => ({
   coverImage: {
-    width: '1010px',
-    height: '369px',
+    width: "1010px",
+    height: "369px",
   },
   facilPhotograph: {
-    width: '215px',
-    height: '225px',
+    width: "215px",
+    height: "225px",
   },
   submitButton: {
-    borderRadius: '20px',
-    textTransform: 'none',
+    borderRadius: "20px",
+    textTransform: "none",
   },
   addNewFieldButton: {
-    backgroundColor: 'white',
-    borderRadius: '16px',
-    textTransform: 'none',
+    backgroundColor: "white",
+    borderRadius: "16px",
+    textTransform: "none",
     color: theme.palette.secondary.main,
     border: `1px solid ${theme.palette.secondary.main}`,
-    padding: '6px 16px',
-    width: '255px',
+    padding: "6px 16px",
+    width: "255px",
     marginTop: theme.spacing(2),
   },
   questionStyle: {
@@ -106,52 +102,52 @@ const useStyles = makeStyles((theme) => ({
 // Feedback form types
 // TODO should rename this
 type QuestionData = {
-  type: 'shortAnswer' | 'mcq' | 'checkboxes';
+  type: "shortAnswer" | "mcq" | "checkboxes";
   displayText: string;
   options?: Array<string>;
   isRequired: boolean;
 };
 
-type KeyType = 'type' | 'displayText' | 'options' | 'isRequired';
+type KeyType = "type" | "displayText" | "options" | "isRequired";
 
 const validationSchema = yup.object({
-  eventType: yup.string().required('Event type is required'),
-  name: yup.string().required('Name is required'),
-  volunteerType: yup.string().required('Volunteer type is required'),
-  deadline: yup.date().required('Deadline is required'),
-  vacancies: yup.number().required('Vacancies is required'),
-  description: yup.string().required('Description is required'),
-  startDate: yup.date().required('Start date is required'),
-  endDate: yup.date().required('End date is required'),
-  facilitatorName: yup.string().when('eventType', {
-    is: 'volunteering',
-    then: yup.string().required('Facilitator name is required'),
+  eventType: yup.string().required("Event type is required"),
+  name: yup.string().required("Name is required"),
+  volunteerType: yup.string().required("Volunteer type is required"),
+  deadline: yup.date().required("Deadline is required"),
+  vacancies: yup.number().required("Vacancies is required"),
+  description: yup.string().required("Description is required"),
+  startDate: yup.date().required("Start date is required"),
+  endDate: yup.date().required("End date is required"),
+  facilitatorName: yup.string().when("eventType", {
+    is: "volunteering",
+    then: yup.string().required("Facilitator name is required"),
   }),
-  facilitatorDescription: yup.string().when('eventType', {
-    is: 'volunteering',
-    then: yup.string().required('Facilitator description is required'),
+  facilitatorDescription: yup.string().when("eventType", {
+    is: "volunteering",
+    then: yup.string().required("Facilitator description is required"),
   }),
-  roles: yup.array().when('eventType', {
-    is: 'volunteering',
-    then: yup.array().required('Roles is required'),
+  roles: yup.array().when("eventType", {
+    is: "volunteering",
+    then: yup.array().required("Roles is required"),
   }),
 });
 
 const emptyForm = {
-  name: '',
-  coverImage: '',
-  eventType: 'workshop',
-  volunteerType: 'committed',
+  name: "",
+  coverImage: "",
+  eventType: "workshop",
+  volunteerType: "committed",
   deadline: dayjs().toISOString(),
-  vacancies: '',
-  description: '',
-  facilitatorName: '',
-  facilitatorPhoto: '',
-  facilitatorDescription: '',
+  vacancies: "",
+  description: "",
+  facilitatorName: "",
+  facilitatorPhoto: "",
+  facilitatorDescription: "",
   roles: [],
-  contentUrl: '',
-  contentType: 'pdf',
-  location: '',
+  contentUrl: "",
+  contentType: "pdf",
+  location: "",
   startDate: dayjs().toISOString(),
   endDate: dayjs().toISOString(),
 };
@@ -164,8 +160,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const dispatch = useAppDispatch();
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [toastText, setToastText] = useState<string>('');
-  const [toastStatus, setToastStatus] = useState<ToastStatus>('success');
+  const [toastText, setToastText] = useState<string>("");
+  const [toastStatus, setToastStatus] = useState<ToastStatus>("success");
 
   // Store feedback event form
   const [feedbackFormEventQuestions, setFeedbackFormEventQuestions] = useState<
@@ -175,8 +171,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   // Feedback form helper functions
   const handleAddQuestion = useCallback(() => {
     const newQuestion: QuestionData = {
-      type: 'shortAnswer',
-      displayText: '',
+      type: "shortAnswer",
+      displayText: "",
       isRequired: true,
       options: [],
     };
@@ -190,8 +186,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         [key]: value,
       };
 
-      if (key === 'type') {
-        newQuestion.displayText = '';
+      if (key === "type") {
+        newQuestion.displayText = "";
         newQuestion.options = [];
       }
 
@@ -201,19 +197,19 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         ...feedbackFormEventQuestions.slice(index + 1),
       ]);
     },
-    [feedbackFormEventQuestions],
+    [feedbackFormEventQuestions]
   );
 
   const handleAddOption = useCallback(
     (index: number) => {
       const newOption: Array<string> = [
         ...feedbackFormEventQuestions[index].options,
-        '',
+        "",
       ];
 
-      handleChangeQuestion(newOption, 'options', index);
+      handleChangeQuestion(newOption, "options", index);
     },
-    [feedbackFormEventQuestions],
+    [feedbackFormEventQuestions]
   );
 
   const handleRemoveQuestion = useCallback(
@@ -223,7 +219,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         ...feedbackFormEventQuestions.slice(index + 1),
       ]);
     },
-    [feedbackFormEventQuestions],
+    [feedbackFormEventQuestions]
   );
 
   const handleRemoveOption = useCallback(
@@ -234,29 +230,30 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         ...currentOption.slice(optionIndex + 1),
       ];
 
-      handleChangeQuestion(newOption, 'options', questionIndex);
+      handleChangeQuestion(newOption, "options", questionIndex);
     },
-    [feedbackFormEventQuestions],
+    [feedbackFormEventQuestions]
   );
 
   const handleChangeOption = useCallback(
     (value: string, questionIndex: number, optionIndex: number) => {
-      const currentOption: Array<string> = feedbackFormEventQuestions[questionIndex].options;
+      const currentOption: Array<string> =
+        feedbackFormEventQuestions[questionIndex].options;
       const newOption: Array<string> = [
         ...currentOption.slice(0, optionIndex),
         value,
         ...currentOption.slice(optionIndex + 1),
       ];
 
-      handleChangeQuestion(newOption, 'options', questionIndex);
+      handleChangeQuestion(newOption, "options", questionIndex);
     },
-    [feedbackFormEventQuestions],
+    [feedbackFormEventQuestions]
   );
 
   const router = useRouter();
 
   useEffect(() => {
-    if (id && id !== 'new') {
+    if (id && id !== "new") {
       dispatch(getEvent(id));
     }
   }, [id]);
@@ -264,26 +261,28 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   useEffect(() => () => dispatch(resetEventStatus()), []);
 
   useEffect(() => {
-    if (event.status === 'rejected') {
-      setToastText('Event creation failed.');
-      setToastStatus('error');
+    if (event.status === "rejected") {
+      setToastText("Event creation failed.");
+      setToastStatus("error");
       setOpenSnackbar(true);
-    } else if (event.status === 'fulfilled') {
-      setToastText(isNew ? 'Successfully Created Event!' : 'Successfully Edited Event!');
-      setToastStatus('success');
+    } else if (event.status === "fulfilled") {
+      setToastText(
+        isNew ? "Successfully Created Event!" : "Successfully Edited Event!"
+      );
+      setToastStatus("success");
       setOpenSnackbar(true);
 
       dispatch(resetImages());
       setTimeout(() => {
-        router.push('/event');
+        router.push("/event");
       }, TOAST_MESSAGE_LENGTH_MS);
     }
   }, [event.status]);
 
   const onUploadImage = (imageFile, name) => {
     const form = new FormData();
-    form.append('image', imageFile);
-    form.append('email', user.user.email);
+    form.append("image", imageFile);
+    form.append("email", user.user.email);
 
     return dispatch(uploadImage({ name, form }));
   };
@@ -304,9 +303,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       const form = formValues;
 
       // Upload and get cover image URL
-      if (formValues.coverImage && typeof formValues.coverImage !== 'string') {
+      if (formValues.coverImage && typeof formValues.coverImage !== "string") {
         // @ts-ignore type exists
-        await onUploadImage(formValues.coverImage, 'coverImage').then(unwrapResult)
+        await onUploadImage(formValues.coverImage, "coverImage")
+          .then(unwrapResult)
           .then((result) => {
             form.coverImage = result.url;
           });
@@ -314,11 +314,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       // Upload and get facilitator photo URL
       if (
-        formValues.facilitatorPhoto
-        && typeof formValues.facilitatorPhoto !== 'string'
+        formValues.facilitatorPhoto &&
+        typeof formValues.facilitatorPhoto !== "string"
       ) {
         // @ts-ignore type exists
-        await onUploadImage(formValues.facilitatorPhoto, 'facilitatorPhoto').then(unwrapResult)
+        await onUploadImage(formValues.facilitatorPhoto, "facilitatorPhoto")
+          .then(unwrapResult)
           .then((result) => {
             form.facilitatorPhoto = result.url;
           });
@@ -326,9 +327,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       const newForm = {
         ...form,
-        questions: feedbackFormEventQuestions.map(
-          (element) => ({ ...element, name: element.displayText }),
-        ),
+        questions: feedbackFormEventQuestions.map((element) => ({
+          ...element,
+          name: element.displayText,
+        })),
       };
 
       if (isNew) {
@@ -362,7 +364,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     endDate,
   } = values;
 
-  if (id !== 'new' && eventForm === null) {
+  if (id !== "new" && eventForm === null) {
     return <h1>Loading</h1>;
   }
   return (
@@ -371,7 +373,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         <Grid container direction="column" spacing={10}>
           <Grid item>
             <Typography variant="h1">
-              {isNew ? 'Create Event' : 'Edit Event'}
+              {isNew ? "Create Event" : "Edit Event"}
             </Typography>
           </Grid>
 
@@ -411,7 +413,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 id="coverImage"
                 initialUrl={eventForm?.coverImage}
                 isBig
-                onChangeImage={(e) => onChangeImage(e, 'coverImage')}
+                onChangeImage={(e) => onChangeImage(e, "coverImage")}
               />
             </div>
           </Grid>
@@ -488,10 +490,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(startDate)}
                 onError={(error) => {
                   if (error !== errors.startDate) {
-                    setFieldError('startDate', error.toLocaleString());
+                    setFieldError("startDate", error.toLocaleString());
                   }
                 }}
-                onChange={(date) => setFieldValue('startDate', date)}
+                onChange={(date) => setFieldValue("startDate", date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
                 color="secondary"
@@ -515,10 +517,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(endDate)}
                 onError={(error) => {
                   if (error !== errors.endDate) {
-                    setFieldError('endDate', error.toLocaleString());
+                    setFieldError("endDate", error.toLocaleString());
                   }
                 }}
-                onChange={(date) => setFieldValue('endDate', date)}
+                onChange={(date) => setFieldValue("endDate", date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
                 color="secondary"
@@ -547,10 +549,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(deadline)}
                 onError={(error) => {
                   if (error !== errors.deadline) {
-                    setFieldError('deadline', error.toLocaleString());
+                    setFieldError("deadline", error.toLocaleString());
                   }
                 }}
-                onChange={(date) => setFieldValue('deadline', date)}
+                onChange={(date) => setFieldValue("deadline", date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
                 color="secondary"
@@ -608,7 +610,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </Grid>
           </Grid>
 
-          {eventType === 'volunteering' && (
+          {eventType === "volunteering" && (
             <>
               <Grid item container>
                 <Grid item xs={12}>
@@ -640,7 +642,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                     id="facilitatorPhoto"
                     initialUrl={eventForm?.facilitatorPhoto}
                     isBig={false}
-                    onChangeImage={(e) => onChangeImage(e, 'facilitatorPhoto')}
+                    onChangeImage={(e) => onChangeImage(e, "facilitatorPhoto")}
                   />
                 </div>
               </Grid>
@@ -666,8 +668,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                     rows={15}
                     helperText={errors.facilitatorDescription}
                     error={
-                      touched.facilitatorDescription
-                      && Boolean(errors.facilitatorDescription)
+                      touched.facilitatorDescription &&
+                      Boolean(errors.facilitatorDescription)
                     }
                   />
                 </Grid>
@@ -676,28 +678,26 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           )}
 
           <Grid item>
-            <Formik
-              initialValues={{}}
-              onSubmit={() => { }}
-              enableReinitialize
-            >
+            <Formik initialValues={{}} onSubmit={() => {}} enableReinitialize>
               {() => (
                 <>
                   <div>
-                    <Typography variant="h2">Volunteer Response Form</Typography>
+                    <Typography variant="h2">
+                      Volunteer Response Form
+                    </Typography>
                   </div>
 
                   {/* Feedback form generator based on redux state */}
                   {feedbackFormEventQuestions.map(
                     (question: QuestionData, index: number) => (
                       <div key={String(index)}>
-                        <div style={{ display: 'flex' }}>
+                        <div style={{ display: "flex" }}>
                           <Typography className={classes.questionStyle}>
-                            Question
-                            {' '}
-                            {index + 1}
+                            Question {index + 1}
                           </Typography>
-                          <IconButton onClick={() => handleRemoveQuestion(index)}>
+                          <IconButton
+                            onClick={() => handleRemoveQuestion(index)}
+                          >
                             <ClearIcon />
                           </IconButton>
                         </div>
@@ -706,14 +706,19 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                           formType="mcq"
                           name={`type${String(index)}`}
                           options={[
-                            { value: 'shortAnswer', label: 'Short Answer' },
-                            { value: 'checkboxes', label: 'Check Box' },
-                            { value: 'mcq', label: 'MCQ' },
+                            { value: "shortAnswer", label: "Short Answer" },
+                            { value: "checkboxes", label: "Check Box" },
+                            { value: "mcq", label: "MCQ" },
                           ]}
                           props={{
-                            style: { width: '200px' },
+                            style: { width: "200px" },
                             value: question.type,
-                            onChange: (e) => handleChangeQuestion(e.target.value, 'type', index),
+                            onChange: (e) =>
+                              handleChangeQuestion(
+                                e.target.value,
+                                "type",
+                                index
+                              ),
                           }}
                         />
                         <FormQuestionMapper
@@ -721,81 +726,90 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                           name={question.displayText + String(index)}
                           props={{
                             value: question.displayText,
-                            placeholder: 'Type question here...',
-                            onChange: (e) => handleChangeQuestion(e.target.value, 'displayText', index),
+                            placeholder: "Type question here...",
+                            onChange: (e) =>
+                              handleChangeQuestion(
+                                e.target.value,
+                                "displayText",
+                                index
+                              ),
                           }}
                         />
 
-                        {question.type === 'mcq'
-                          || question.type === 'checkboxes' ? (
-                            <Formik
-                              initialValues={{}}
-                              onSubmit={() => { }}
-                              enableReinitialize
-                            >
-                              {() => (
-                                <>
-                                  <Typography className={classes.optionStyle}>
-                                    Options:
-                                    {' '}
-                                  </Typography>
-                                  {question.options.map((option, optionIndex) => (
-                                    <div
+                        {question.type === "mcq" ||
+                        question.type === "checkboxes" ? (
+                          <Formik
+                            initialValues={{}}
+                            onSubmit={() => {}}
+                            enableReinitialize
+                          >
+                            {() => (
+                              <>
+                                <Typography className={classes.optionStyle}>
+                                  Options:{" "}
+                                </Typography>
+                                {question.options.map((option, optionIndex) => (
+                                  <div
+                                    key={option}
+                                    style={{
+                                      display: "flex",
+                                      alignContent: "center",
+                                    }}
+                                  >
+                                    <FormQuestionMapper
+                                      formType="shortAnswer"
+                                      name={String(optionIndex)}
                                       key={option}
-                                      style={{
-                                        display: 'flex',
-                                        alignContent: 'center',
-                                      }}
-                                    >
-                                      <FormQuestionMapper
-                                        formType="shortAnswer"
-                                        name={String(optionIndex)}
-                                        key={option}
-                                        props={{
-                                          style: {
-                                            width: '500px',
-                                          },
-                                          placeholder: 'Type option here...',
-                                          value: option,
-                                          onChange: (e) => handleChangeOption(
+                                      props={{
+                                        style: {
+                                          width: "500px",
+                                        },
+                                        placeholder: "Type option here...",
+                                        value: option,
+                                        onChange: (e) =>
+                                          handleChangeOption(
                                             e.target.value,
                                             index,
-                                            optionIndex,
+                                            optionIndex
                                           ),
-                                        }}
-                                      />
-                                      <IconButton
-                                        onClick={() => handleRemoveOption(index, optionIndex)}
-                                      >
-                                        <ClearIcon />
-                                      </IconButton>
-                                    </div>
-                                  ))}
-                                  <Button
-                                    className={classes.addNewFieldButton}
-                                    onClick={() => handleAddOption(index)}
-                                  >
-                                    + Add another option
-                                  </Button>
-                                </>
-                              )}
-                            </Formik>
-                          ) : null}
+                                      }}
+                                    />
+                                    <IconButton
+                                      onClick={() =>
+                                        handleRemoveOption(index, optionIndex)
+                                      }
+                                    >
+                                      <ClearIcon />
+                                    </IconButton>
+                                  </div>
+                                ))}
+                                <Button
+                                  className={classes.addNewFieldButton}
+                                  onClick={() => handleAddOption(index)}
+                                >
+                                  + Add another option
+                                </Button>
+                              </>
+                            )}
+                          </Formik>
+                        ) : null}
                         <div className={classes.isRequiredStyle}>
-                          <Typography style={{ display: 'inline-block' }}>
+                          <Typography style={{ display: "inline-block" }}>
                             Is question required?
                           </Typography>
                           <Switch
                             checked={question.isRequired}
-                            onChange={(e) => handleChangeQuestion(
-                              e.target.checked,
-                              'isRequired',
-                              index,
-                            )}
+                            onChange={(e) =>
+                              handleChangeQuestion(
+                                e.target.checked,
+                                "isRequired",
+                                index
+                              )
+                            }
                           />
                         </div>
                       </div>
-                    ),
+                    )
                   )}
                   <Button
                     className={classes.addNewFieldButton}
@@ -818,7 +832,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               className={classes.submitButton}
             >
               <Typography variant="body1">
-                {isNew ? 'Create Event' : 'Edit Event'}
+                {isNew ? "Create Event" : "Edit Event"}
               </Typography>
             </Button>
           </Grid>
@@ -827,7 +841,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       <Snackbar
         open={openSnackbar}
         autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
-        onClose={() => { setOpenSnackbar(false); }}
+        onClose={() => {
+          setOpenSnackbar(false);
+        }}
       >
         <MuiAlert elevation={6} severity={toastStatus}>
           {toastText}

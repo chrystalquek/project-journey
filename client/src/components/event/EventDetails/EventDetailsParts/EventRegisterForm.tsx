@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { EventData, EventType } from '@type/event';
+import React, { FC, useState } from "react";
+import { EventData, EventType } from "@type/event";
 import {
   Box,
   FormControl,
@@ -7,37 +7,40 @@ import {
   TextField,
   makeStyles,
   Grid,
-} from '@material-ui/core';
-import { FormSelectRow, parseRoles } from '@components/event/helpers/EventDetails/EventRegisterForm';
-import { VolunteerData } from '@type/volunteer';
-import { EventTypography } from '@components/common/event/EventTypography';
-import { EventDivider } from '@components/common/event/EventDivider';
-import { EventButton } from '@components/common/event/EventButton';
+} from "@material-ui/core";
+import {
+  FormSelectRow,
+  parseRoles,
+} from "@components/event/helpers/EventDetails/EventRegisterForm";
+import { VolunteerData } from "@type/volunteer";
+import { EventTypography } from "@components/common/event/EventTypography";
+import { EventDivider } from "@components/common/event/EventDivider";
+import { EventButton } from "@components/common/event/EventButton";
 
 type EventRegisterProps = {
-  event: EventData
-  user: VolunteerData
-  isDisabled: boolean // true when no vacancies left in event
+  event: EventData;
+  user: VolunteerData;
+  isDisabled: boolean; // true when no vacancies left in event
   formHandlers: {
-    signUpAndAccept: (uid: string, eid: string, form: FormState) => void,
-    signUpOnly: (uid: string, eid: string, form: FormState) => void
-  }
-}
+    signUpAndAccept: (uid: string, eid: string, form: FormState) => void;
+    signUpOnly: (uid: string, eid: string, form: FormState) => void;
+  };
+};
 
 export type FormState = {
-  firstChoice: string,
-  secondChoice: string,
-  thirdChoice: string,
-  additionalInfo: string,
-}
+  firstChoice: string;
+  secondChoice: string;
+  thirdChoice: string;
+  additionalInfo: string;
+};
 
 const useStyles = makeStyles((theme) => ({
   button: {
     backgroundColor: theme.palette.primary.main,
-    borderRadius: '16px',
-    textTransform: 'none',
-    padding: '6px 16px',
-    '&:hover': {
+    borderRadius: "16px",
+    textTransform: "none",
+    padding: "6px 16px",
+    "&:hover": {
       backgroundColor: theme.palette.secondary.main,
     },
   },
@@ -48,16 +51,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventRegisterForm: FC<EventRegisterProps> = ({
-  formHandlers, event, user, isDisabled,
+  formHandlers,
+  event,
+  user,
+  isDisabled,
 }) => {
   const classes = useStyles();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
   const defaultForm: FormState = {
-    firstChoice: '',
-    secondChoice: '',
-    thirdChoice: '',
-    additionalInfo: '',
+    firstChoice: "",
+    secondChoice: "",
+    thirdChoice: "",
+    additionalInfo: "",
   };
   const [formState, setFormState] = useState(defaultForm);
   const handleChange = (e) => {
@@ -81,7 +87,9 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
   return (
     <>
       <form onSubmit={onFormSubmit}>
-        <EventDivider fontBold gutterBottom>Register Here</EventDivider>
+        <EventDivider fontBold gutterBottom>
+          Register Here
+        </EventDivider>
         <Grid container direction="column" spacing={5}>
           <Grid item>
             <EventTypography fontBold text="Position Interested:" />
@@ -89,7 +97,12 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
 
           <Grid item>
             <EventTypography text="First Choice:" gutterBottom />
-            <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
+            <FormControl
+              fullWidth
+              variant="outlined"
+              disabled={isDisabled}
+              className={classes.positionContainer}
+            >
               <TextField
                 select
                 variant="outlined"
@@ -109,7 +122,6 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
                     disabled={v.isDisabled}
                   >
                     {v.description}
-
                   </MenuItem>
                 ))}
               </TextField>
@@ -118,7 +130,12 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
 
           <Grid item>
             <EventTypography text="Second Choice: (optional)" gutterBottom />
-            <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
+            <FormControl
+              fullWidth
+              variant="outlined"
+              disabled={isDisabled}
+              className={classes.positionContainer}
+            >
               <TextField
                 select
                 variant="outlined"
@@ -137,7 +154,6 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
                     disabled={v.isDisabled}
                   >
                     {v.description}
-
                   </MenuItem>
                 ))}
               </TextField>
@@ -146,7 +162,12 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
 
           <Grid item>
             <EventTypography text="Third Choice: (optional)" gutterBottom />
-            <FormControl fullWidth variant="outlined" disabled={isDisabled} className={classes.positionContainer}>
+            <FormControl
+              fullWidth
+              variant="outlined"
+              disabled={isDisabled}
+              className={classes.positionContainer}
+            >
               <TextField
                 select
                 variant="outlined"
@@ -165,7 +186,6 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
                     disabled={v.isDisabled}
                   >
                     {v.description}
-
                   </MenuItem>
                 ))}
               </TextField>
@@ -173,7 +193,11 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
           </Grid>
 
           <Grid item>
-            <EventTypography fontBold text="Anything you would like us to know?" gutterBottom />
+            <EventTypography
+              fontBold
+              text="Anything you would like us to know?"
+              gutterBottom
+            />
             <TextField
               id="additionalInfo"
               name="additionalInfo"

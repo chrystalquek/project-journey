@@ -1,1 +1,1 @@
-export { default } from '@components/event/PendingRequests';
+export { default } from "@components/event/PendingRequests";

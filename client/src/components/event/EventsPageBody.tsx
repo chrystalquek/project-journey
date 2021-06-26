@@ -1,28 +1,26 @@
-import EventBreadCrumbs from '@components/event/EventBreadCrumbs';
-import SearchBar from '@components/common/SearchBar';
+import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
+import SearchBar from "@components/common/SearchBar";
 import {
   Button,
   Drawer,
   Grid,
   makeStyles,
   Typography,
-} from '@material-ui/core';
-import Box from '@material-ui/core/Box';
-import { EventData, EventFilterOptions, EventFilters } from '@type/event';
-import {
-  FC, useCallback, useEffect, useState,
-} from 'react';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
-import EventCard from '@components/event/EventCard';
-import EventsFilter from '@components/event/EventsFilter';
-import { withFilters } from '@components/event/helpers/EventsPageBody';
-import { useRouter } from 'next/router';
-import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { EventButton } from '@components/common/event/EventButton';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { getUpcomingEvents } from '@redux/actions/event';
-import { EVENTS_ROUTE, LOGIN_ROUTE } from '@utils/constants/routes';
+} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import { EventData, EventFilterOptions, EventFilters } from "@type/event";
+import { FC, useCallback, useEffect, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import EventCard from "@components/event/EventCard";
+import EventsFilter from "@components/event/EventsFilter";
+import { withFilters } from "@components/event/helpers/EventsPageBody";
+import { useRouter } from "next/router";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
+import { EventButton } from "@components/common/event/EventButton";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { getUpcomingEvents } from "@redux/actions/event";
+import { EVENTS_ROUTE, LOGIN_ROUTE } from "@utils/constants/routes";
 
 type EventsPageBodyProps = {
   // nothing yet
@@ -30,19 +28,19 @@ type EventsPageBodyProps = {
 
 const useStyles = makeStyles((theme) => ({
   box: {
-    marginBottom: '1rem',
-    lineHeight: '2rem',
+    marginBottom: "1rem",
+    lineHeight: "2rem",
   },
   card: {
-    display: 'flex',
+    display: "flex",
   },
   filterResultsBtn: {
-    background: 'none',
-    textTransform: 'none',
+    background: "none",
+    textTransform: "none",
     color: theme.palette.secondary.main,
   },
   drawer: {
-    padding: '16px',
+    padding: "16px",
   },
 }));
 
@@ -50,11 +48,13 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
-  const screenSm = useMediaQuery(theme.breakpoints.down('sm'));
+  const screenSm = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
-  const events: Array<EventData> = useAppSelector((state) => state.event.browseEvents.ids
-    .map((eid) => state.event.data[eid])
-    .filter((event) => event));
+  const events: Array<EventData> = useAppSelector((state) =>
+    state.event.browseEvents.ids
+      .map((eid) => state.event.data[eid])
+      .filter((event) => event)
+  );
   const user: VolunteerData | null = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
@@ -78,28 +78,30 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   const filteredEvents = withFilters(events || [], filters);
 
   // TODO move filters search to redux
-  const [search, setSearch] = useState('');
-  const filteredSearchedEvents = filteredEvents.filter(
-    (event) => event.name.toLowerCase().includes(search.toLowerCase()),
+  const [search, setSearch] = useState("");
+  const filteredSearchedEvents = filteredEvents.filter((event) =>
+    event.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleCardClick = useCallback((eventId: string) => {
-    if (user) {
-      router.push(`${EVENTS_ROUTE}/${eventId}`);
-    } else {
-      router.push(LOGIN_ROUTE);
-    }
-  }, [user]);
+  const handleCardClick = useCallback(
+    (eventId: string) => {
+      if (user) {
+        router.push(`${EVENTS_ROUTE}/${eventId}`);
+      } else {
+        router.push(LOGIN_ROUTE);
+      }
+    },
+    [user]
+  );
 
   if (screenSm) {
     return (
       <>
-        <Grid
-          container
-          spacing={4}
-        >
+        <Grid container spacing={4}>
           <Grid item xs={12}>
-            <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
+            <SearchBar
+              setFilterFunction={(searchText: string) => setSearch(searchText)}
+            />
           </Grid>
           {user && user.volunteerType === VolunteerType.ADMIN && (
             <Grid
@@ -110,7 +112,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
               justify="center"
               alignItems="center"
             >
-              <EventButton disableRipple onClick={() => router.push('/form/new')}>
+              <EventButton
+                disableRipple
+                onClick={() => router.push("/form/new")}
+              >
                 Create new event
               </EventButton>
             </Grid>
@@ -122,7 +127,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
                   {filteredSearchedEvents ? filteredSearchedEvents.length : 0}
                 </Typography>
                 <Typography display="inline" variant="body2">
-                  {' '}
+                  {" "}
                   Upcoming Events
                 </Typography>
               </Box>
@@ -162,20 +167,22 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   }
   return (
     <>
-      <Grid
-        container
-        spacing={4}
-      >
+      <Grid container spacing={4}>
         <Grid item sm={12}>
           <EventBreadCrumbs />
         </Grid>
         <Grid item container sm={12} alignItems="center" spacing={4}>
           <Grid item sm={9}>
-            <SearchBar setFilterFunction={(searchText: string) => setSearch(searchText)} />
+            <SearchBar
+              setFilterFunction={(searchText: string) => setSearch(searchText)}
+            />
           </Grid>
           {user && user.volunteerType === VolunteerType.ADMIN && (
-            <Grid item sm={3} style={{ textAlign: 'center' }}>
-              <EventButton disableRipple onClick={() => router.push('/form/new')}>
+            <Grid item sm={3} style={{ textAlign: "center" }}>
+              <EventButton
+                disableRipple
+                onClick={() => router.push("/form/new")}
+              >
                 Create new event
               </EventButton>
             </Grid>
@@ -188,7 +195,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
                 {filteredSearchedEvents ? filteredSearchedEvents.length : 0}
               </Typography>
               <Typography display="inline" variant="body2">
-                {' '}
+                {" "}
                 Upcoming Events
               </Typography>
             </Box>
@@ -206,7 +213,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
           </Grid>
         </Grid>
         <Grid item sm={3}>
-          <div style={{ width: '100%' }}>
+          <div style={{ width: "100%" }}>
             <EventsFilter filters={filters} setFilters={setFilters} />
           </div>
         </Grid>

@@ -1,24 +1,31 @@
 import {
-  makeStyles, Card, CardContent, Typography, Button,
-} from '@material-ui/core';
-import { isAdmin } from '@utils/helpers/auth';
-import React, { FC, useEffect } from 'react';
-import { EventData } from '@type/event';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { getEventsUpcomingEvent, getSignedUpEventsUpcomingEvent } from '@redux/actions/event';
-import { getSignUpsUpcomingEvent } from '@redux/actions/signUp';
-import { formatDateStartEndTime } from '@utils/helpers/date';
-import { useRouter } from 'next/router';
+  makeStyles,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+} from "@material-ui/core";
+import { isAdmin } from "@utils/helpers/auth";
+import React, { FC, useEffect } from "react";
+import { EventData } from "@type/event";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import {
+  getEventsUpcomingEvent,
+  getSignedUpEventsUpcomingEvent,
+} from "@redux/actions/event";
+import { getSignUpsUpcomingEvent } from "@redux/actions/signUp";
+import { formatDateStartEndTime } from "@utils/helpers/date";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   pane: {
     background: theme.palette.secondary.light,
-    overflow: 'scroll',
-    height: '70vh',
+    overflow: "scroll",
+    height: "70vh",
   },
   card: {
     margin: theme.spacing(5),
-    cursor: 'pointer',
+    cursor: "pointer",
   },
   greenText: {
     color: theme.palette.text.secondary,
@@ -34,14 +41,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(5),
     backgroundColor: theme.palette.primary.main,
     height: 30,
-    borderRadius: '5em',
-    fontSize: 'small',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: "5em",
+    fontSize: "small",
+    justifyContent: "center",
+    alignItems: "center",
   },
   noEvents: {
-    position: 'relative',
-    top: '30%',
+    position: "relative",
+    top: "30%",
   },
 }));
 
@@ -54,10 +61,17 @@ const UpcomingEvent: FC<{}> = () => {
 
   useEffect(() => {
     if (isAdmin(user)) {
-      dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
+      dispatch(getEventsUpcomingEvent({ eventType: "upcoming" }));
     } else {
-      dispatch(getSignedUpEventsUpcomingEvent({ eventType: 'upcoming', userId: user.user?._id }));
-      dispatch(getSignUpsUpcomingEvent({ id: user.user?._id, idType: 'userId' }));
+      dispatch(
+        getSignedUpEventsUpcomingEvent({
+          eventType: "upcoming",
+          userId: user.user?._id,
+        })
+      );
+      dispatch(
+        getSignUpsUpcomingEvent({ id: user.user?._id, idType: "userId" })
+      );
     }
   }, []);
 
@@ -72,31 +86,42 @@ const UpcomingEvent: FC<{}> = () => {
 
   const generateNotification = (event: EventData) => {
     if (isAdmin(user)) {
-      const moreVolunteersCount = event.roles.map(
-        (role) => role.capacity - role.volunteers.length,
-      ).reduce((a, b) => a + b, 0);
+      const moreVolunteersCount = event.roles
+        .map((role) => role.capacity - role.volunteers.length)
+        .reduce((a, b) => a + b, 0);
       return (
-        <Typography className={(moreVolunteersCount > 0) ? classes.greenText : classes.orangeText}>
-          {moreVolunteersCount}
-          {' '}
-          more volunteers needed
+        <Typography
+          className={
+            moreVolunteersCount > 0 ? classes.greenText : classes.orangeText
+          }
+        >
+          {moreVolunteersCount} more volunteers needed
         </Typography>
       );
     }
     // is volunteer
-    const status = upcomingSignUps.find((signUp) => signUp.eventId === event._id)?.status || 'unknown';
+    const status =
+      upcomingSignUps.find((signUp) => signUp.eventId === event._id)?.status ||
+      "unknown";
     switch (status) {
-      case 'pending':
-        return <Typography><i>Sign-up pending</i></Typography>;
-      case 'rejected':
-        return <Typography className={classes.orangeText}>Sign-up unsuccessful</Typography>;
-      case 'unknown':
+      case "pending":
+        return (
+          <Typography>
+            <i>Sign-up pending</i>
+          </Typography>
+        );
+      case "rejected":
+        return (
+          <Typography className={classes.orangeText}>
+            Sign-up unsuccessful
+          </Typography>
+        );
+      case "unknown":
         return <Typography>-</Typography>;
       default:
         return (
           <Typography className={classes.greenText}>
-            Volunteer role assigned -
-            {status[1]}
+            Volunteer role assigned -{status[1]}
           </Typography>
         );
     }
@@ -108,7 +133,12 @@ const UpcomingEvent: FC<{}> = () => {
       <br />
       Click below to create a new event.
       <br />
-      <Button className={classes.button} onClick={() => router.push('/form/new')}>Create New Event</Button>
+      <Button
+        className={classes.button}
+        onClick={() => router.push("/form/new")}
+      >
+        Create New Event
+      </Button>
     </Typography>
   );
 
@@ -118,39 +148,53 @@ const UpcomingEvent: FC<{}> = () => {
       <br />
       Click below to browse events.
       <br />
-      <Button className={classes.button} onClick={() => router.push('/event')}>Browse Events</Button>
+      <Button className={classes.button} onClick={() => router.push("/event")}>
+        Browse Events
+      </Button>
     </Typography>
   );
 
   return (
     <div className={classes.pane}>
       <Typography className={classes.header} variant="h4" align="center">
-        {isAdmin(user) ? '' : 'My '}
+        {isAdmin(user) ? "" : "My "}
         Upcoming Events
       </Typography>
-      {upcomingEvents.length === 0
-        ? (
-          <div className={classes.noEvents}>
-            {isAdmin(user) ? adminNoEventsUpcoming : volunteerNoEventsUpcoming}
-          </div>
-        )
-        : upcomingEvents.map((event) => (
-          <Card className={classes.card} key={event._id} onClick={() => router.push(`/event/${event._id}`)}>
+      {upcomingEvents.length === 0 ? (
+        <div className={classes.noEvents}>
+          {isAdmin(user) ? adminNoEventsUpcoming : volunteerNoEventsUpcoming}
+        </div>
+      ) : (
+        upcomingEvents.map((event) => (
+          <Card
+            className={classes.card}
+            key={event._id}
+            onClick={() => router.push(`/event/${event._id}`)}
+          >
             <CardContent>
               <Typography>
-                {formatDateStartEndTime(new Date(event.startDate), new Date(event.endDate)).date}
-
+                {
+                  formatDateStartEndTime(
+                    new Date(event.startDate),
+                    new Date(event.endDate)
+                  ).date
+                }
               </Typography>
               <Typography variant="h4">{event.name}</Typography>
               <Typography>
-                Time:
-                {' '}
-                {formatDateStartEndTime(new Date(event.startDate), new Date(event.endDate)).time}
+                Time:{" "}
+                {
+                  formatDateStartEndTime(
+                    new Date(event.startDate),
+                    new Date(event.endDate)
+                  ).time
+                }
               </Typography>
               {generateNotification(event)}
             </CardContent>
           </Card>
-        ))}
+        ))
+      )}
     </div>
   );
 };

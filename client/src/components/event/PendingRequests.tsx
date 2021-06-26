@@ -1,32 +1,39 @@
 import {
-  makeStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-} from '@material-ui/core';
-import React, { FC, useEffect } from 'react';
-import { EventData } from '@type/event';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { getEventsUpcomingEvent } from '@redux/actions/event';
-import { getPendingSignUps } from '@redux/actions/signUp';
-import { SignUpData } from '@type/signUp';
-import Head from 'next/head';
-import { checkLoggedIn } from '@utils/helpers/auth';
-import PendingRequestsTabs from '@components/common/PendingRequestsTabs';
-import { useRouter } from 'next/router';
+  makeStyles,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
+import React, { FC, useEffect } from "react";
+import { EventData } from "@type/event";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { getEventsUpcomingEvent } from "@redux/actions/event";
+import { getPendingSignUps } from "@redux/actions/signUp";
+import { SignUpData } from "@type/signUp";
+import Head from "next/head";
+import { checkLoggedIn } from "@utils/helpers/auth";
+import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
     backgroundColor: theme.palette.primary.main,
     width: 40,
     height: 40,
-    borderRadius: '50%',
-    textAlign: 'center',
-    fontSize: 'large',
-    color: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: "50%",
+    textAlign: "center",
+    fontSize: "large",
+    color: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   eventName: {
-    cursor: 'pointer',
+    cursor: "pointer",
   },
 }));
 
@@ -37,7 +44,7 @@ const PendingRequests: FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(getEventsUpcomingEvent({ eventType: 'upcoming' }));
+    dispatch(getEventsUpcomingEvent({ eventType: "upcoming" }));
     dispatch(getPendingSignUps());
   }, []);
 
@@ -53,13 +60,14 @@ const PendingRequests: FC = () => {
   const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
     upcomingSignUps.forEach((signUp: SignUpData) => {
-      if (signUp.eventId === event._id && signUp.status === 'pending') result += 1;
+      if (signUp.eventId === event._id && signUp.status === "pending")
+        result += 1;
     });
     return result;
   };
 
   const upcomingEventsWithPendingSignUps = upcomingEvents.filter(
-    (event) => (pendingRequestsForEventCount(event) !== 0),
+    (event) => pendingRequestsForEventCount(event) !== 0
   );
 
   return (
@@ -74,22 +82,33 @@ const PendingRequests: FC = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell><b>Event Name</b></TableCell>
-                  <TableCell><b>Date of Event</b></TableCell>
+                  <TableCell>
+                    <b>Event Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Date of Event</b>
+                  </TableCell>
                   <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
                 {upcomingEventsWithPendingSignUps.map((event) => (
-                  <TableRow key={event._id} hover onClick={() => router.push(`/event/${event._id}/volunteers`)}>
+                  <TableRow
+                    key={event._id}
+                    hover
+                    onClick={() =>
+                      router.push(`/event/${event._id}/volunteers`)
+                    }
+                  >
                     <TableCell
                       onClick={() => router.push(`/event/${event._id}`)}
                       className={classes.eventName}
                     >
                       <b>{event.name}</b>
-
                     </TableCell>
-                    <TableCell>{new Date(event.startDate).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {new Date(event.startDate).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>
                       <div className={classes.shapeCircle}>
                         {pendingRequestsForEventCount(event)}
@@ -102,7 +121,6 @@ const PendingRequests: FC = () => {
           </TableContainer>
         </Grid>
       </Grid>
-
     </>
   );
 };

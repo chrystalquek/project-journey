@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import React, { useState, useRef } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 import {
   Avatar,
   Drawer,
@@ -18,15 +18,15 @@ import {
   Paper,
   MenuList,
   MenuItem,
-} from '@material-ui/core';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import PersonIcon from '@material-ui/icons/Person';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { useAppDispatch } from '@redux/store';
-import { resetUser } from '@redux/reducers/user';
+} from "@material-ui/core";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import PersonIcon from "@material-ui/icons/Person";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
+import { useAppDispatch } from "@redux/store";
+import { resetUser } from "@redux/reducers/user";
 import {
   EVENTS_ROUTE,
   PAST_EVENTS_ROUTE,
@@ -37,48 +37,50 @@ import {
   LOGIN_ROUTE,
   SIGNUP_ROUTE,
   HOME_ROUTE,
-} from '@utils/constants/routes';
+} from "@utils/constants/routes";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  headerContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-  },
-  drawerContainer: {
-    minWidth: '200px',
-    width: '30%',
-  },
-  drawerFrame: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  iconSize: {
-    fontSize: '40px',
-  },
-  imageContainer: {
-    flex: 1,
-    textAlign: 'center',
-  },
-  listButton: {
-    textTransform: 'none',
-    fontSize: theme.typography.h4.fontSize,
-    fontWeight: 'bold',
-  },
-  nested: {
-    paddingLeft: theme.spacing(6),
-  },
-  drawerWhitespace: {
-    flex: 1,
-  },
-  primaryTextStyle: {
-    color: '#000', // black
-    textTransform: 'none',
-    fontSize: theme.typography.h4.fontSize,
-    fontWeight: 'bold',
-  },
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    headerContainer: {
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
+    },
+    drawerContainer: {
+      minWidth: "200px",
+      width: "30%",
+    },
+    drawerFrame: {
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+    },
+    iconSize: {
+      fontSize: "40px",
+    },
+    imageContainer: {
+      flex: 1,
+      textAlign: "center",
+    },
+    listButton: {
+      textTransform: "none",
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: "bold",
+    },
+    nested: {
+      paddingLeft: theme.spacing(6),
+    },
+    drawerWhitespace: {
+      flex: 1,
+    },
+    primaryTextStyle: {
+      color: "#000", // black
+      textTransform: "none",
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: "bold",
+    },
+  })
+);
 
 type NavBarProps = {
   userData: null | VolunteerData;
@@ -102,18 +104,19 @@ export default function MobileNavBar({ userData }: NavBarProps) {
   let eventMenuArray;
 
   if (!userData) {
-    eventMenuArray = [{ title: 'Upcoming Events', route: EVENTS_ROUTE }];
+    eventMenuArray = [{ title: "Upcoming Events", route: EVENTS_ROUTE }];
   } else if (userData.volunteerType === VolunteerType.ADMIN) {
     eventMenuArray = [
-      { title: 'Browse Events', route: EVENTS_ROUTE },
-      { title: 'Past Events', route: PAST_EVENTS_ROUTE },
-      { title: 'Pending Requests', route: EVENT_PENDING_REQUESTS_ROUTE },
+      { title: "Browse Events", route: EVENTS_ROUTE },
+      { title: "Past Events", route: PAST_EVENTS_ROUTE },
+      { title: "Pending Requests", route: EVENT_PENDING_REQUESTS_ROUTE },
     ];
-  } else { // Adhoc / Committed
+  } else {
+    // Adhoc / Committed
     eventMenuArray = [
-      { title: 'Browse Events', route: EVENTS_ROUTE },
-      { title: 'My Upcoming Events', route: UPCOMING_EVENTS_ROUTE },
-      { title: 'My Past Events', route: PAST_EVENTS_ROUTE },
+      { title: "Browse Events", route: EVENTS_ROUTE },
+      { title: "My Upcoming Events", route: UPCOMING_EVENTS_ROUTE },
+      { title: "My Past Events", route: PAST_EVENTS_ROUTE },
     ];
   }
 
@@ -143,7 +146,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
 
   const handleLogout = () => {
     dispatch(resetUser());
-    router.push('/login');
+    router.push("/login");
   };
 
   const handleCloseAll = () => {
@@ -176,17 +179,21 @@ export default function MobileNavBar({ userData }: NavBarProps) {
             <ListItem
               button
               className={classes.nested}
-              onClick={() => closeMenuNavigateTo(handleCloseAll, VOLUNTEER_PROFILES_ROUTE)}
+              onClick={() =>
+                closeMenuNavigateTo(handleCloseAll, VOLUNTEER_PROFILES_ROUTE)
+              }
             >
               <ListItemText primary="Volunteers List" />
             </ListItem>
             <ListItem
               button
               className={classes.nested}
-              onClick={() => closeMenuNavigateTo(
-                handleCloseAll,
-                VOLUNTEER_PENDING_REQUESTS_ROUTE,
-              )}
+              onClick={() =>
+                closeMenuNavigateTo(
+                  handleCloseAll,
+                  VOLUNTEER_PENDING_REQUESTS_ROUTE
+                )
+              }
             >
               <ListItemText primary="Pending Approvals" />
             </ListItem>
@@ -234,9 +241,9 @@ export default function MobileNavBar({ userData }: NavBarProps) {
               ))}
             </List>
           </Collapse>
-          {userData
-            && userData.volunteerType === VolunteerType.ADMIN
-            && volunteerMenu}
+          {userData &&
+            userData.volunteerType === VolunteerType.ADMIN &&
+            volunteerMenu}
         </List>
         <div className={classes.drawerWhitespace} />
         {!userData && (
@@ -296,7 +303,10 @@ export default function MobileNavBar({ userData }: NavBarProps) {
                     <MenuItem dense onClick={handleLogout}>
                       Logout
                     </MenuItem>
-                    <MenuItem dense onClick={() => router.push(`/profile/${userData._id}`)}>
+                    <MenuItem
+                      dense
+                      onClick={() => router.push(`/profile/${userData._id}`)}
+                    >
                       Edit Profile
                     </MenuItem>
                   </MenuList>

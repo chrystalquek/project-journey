@@ -1,19 +1,19 @@
-import { updateProfilePicture } from '@redux/actions/image';
-import { getVolunteerById } from '@redux/actions/profilePage';
-import { updateVolunteer } from '@redux/actions/user';
-import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData } from '@type/volunteer';
+import { updateProfilePicture } from "@redux/actions/image";
+import { getVolunteerById } from "@redux/actions/profilePage";
+import { updateVolunteer } from "@redux/actions/user";
+import { createSlice } from "@reduxjs/toolkit";
+import { VolunteerData } from "@type/volunteer";
 
 export type ProfilePageState = {
-  data: VolunteerData
-}
+  data: VolunteerData;
+};
 
 const initialState: ProfilePageState = {
   data: null,
 };
 
 const profilePageDataSlice = createSlice({
-  name: 'profilePage',
+  name: "profilePage",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

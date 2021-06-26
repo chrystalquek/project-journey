@@ -1,13 +1,20 @@
 import {
-  Avatar, Badge, Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery,
-} from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { PhotoCamera } from '@material-ui/icons';
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
-import { useAppDispatch } from '@redux/store';
-import { updateProfilePicture } from '@redux/actions/image';
+  Avatar,
+  Badge,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  useMediaQuery,
+} from "@material-ui/core";
+import React, { useCallback, useState } from "react";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { PhotoCamera } from "@material-ui/icons";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { useAppDispatch } from "@redux/store";
+import { updateProfilePicture } from "@redux/actions/image";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -20,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: theme.palette.primary.main,
-    height: '100px',
-    width: '100px',
-    objectFit: 'cover',
+    height: "100px",
+    width: "100px",
+    objectFit: "cover",
   },
   input: {
-    display: 'none',
+    display: "none",
   },
 }));
 
@@ -36,23 +43,23 @@ const ProfilePicture = ({ profilePageData }) => {
   // ReactCrop documentation
   // https://www.npmjs.com/package/react-image-crop
 
-  let fileUrl = '';
+  let fileUrl = "";
   const [src, setSrc] = useState<string>(null);
   const [imageRef, setImageRef] = useState(null);
-  const [newImageUrl, setNewImageUrl] = useState<string>('');
+  const [newImageUrl, setNewImageUrl] = useState<string>("");
   const [crop, setCrop] = useState({
-    unit: '%',
+    unit: "%",
     width: 30,
     aspect: 1 / 1,
   });
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   const onSelectFile = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
-      reader.addEventListener('load', () => {
+      reader.addEventListener("load", () => {
         setSrc(reader.result as string);
       });
       reader.readAsDataURL(e.target.files[0]);
@@ -63,15 +70,13 @@ const ProfilePicture = ({ profilePageData }) => {
     setImageRef(image);
   };
 
-  const getCroppedImg = async (image, {
-    x, y, width, height,
-  }) => {
-    const canvas = document.createElement('canvas');
+  const getCroppedImg = async (image, { x, y, width, height }) => {
+    const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
     canvas.width = width;
     canvas.height = height;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     ctx.drawImage(
       image,
@@ -82,27 +87,24 @@ const ProfilePicture = ({ profilePageData }) => {
       0,
       0,
       width,
-      height,
+      height
     );
 
     return new Promise<string>((resolve) => {
       canvas.toBlob((blob) => {
         if (!blob) {
-          throw new Error('Canvas is empty');
+          throw new Error("Canvas is empty");
         }
         window.URL.revokeObjectURL(fileUrl);
         fileUrl = window.URL.createObjectURL(blob);
         resolve(fileUrl);
-      }, 'image/jpeg');
+      }, "image/jpeg");
     });
   };
 
   const makeClientCrop = async (clientCrop) => {
     if (imageRef && crop.width && clientCrop.height) {
-      const croppedImageUrl = await getCroppedImg(
-        imageRef,
-        clientCrop,
-      );
+      const croppedImageUrl = await getCroppedImg(imageRef, clientCrop);
       setNewImageUrl(croppedImageUrl);
     }
   };
@@ -117,12 +119,12 @@ const ProfilePicture = ({ profilePageData }) => {
 
   const handleSave = async () => {
     const blob = await fetch(newImageUrl).then((res) => res.blob());
-    const metadata = { type: 'image/jpeg' };
-    const imageFile = new File([blob], 'profile.jpg', metadata);
+    const metadata = { type: "image/jpeg" };
+    const imageFile = new File([blob], "profile.jpg", metadata);
 
     const form = new FormData();
-    form.append('image', imageFile);
-    form.append('email', profilePageData.email);
+    form.append("image", imageFile);
+    form.append("email", profilePageData.email);
 
     dispatch(updateProfilePicture(form));
     setSrc(null);
@@ -137,10 +139,10 @@ const ProfilePicture = ({ profilePageData }) => {
       <Badge
         overlap="circle"
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
-        badgeContent={(
+        badgeContent={
           <div>
             <label htmlFor="file-input">
               <Avatar className={classes.button}>
@@ -155,7 +157,7 @@ const ProfilePicture = ({ profilePageData }) => {
               />
             </label>
           </div>
-        )}
+        }
       >
         <Avatar
           alt={profilePageData.name}
@@ -169,9 +171,7 @@ const ProfilePicture = ({ profilePageData }) => {
         onClose={handleCancel}
         scroll="body"
       >
-        <DialogTitle>
-          Update Profile Picture
-        </DialogTitle>
+        <DialogTitle>Update Profile Picture</DialogTitle>
         <DialogContent>
           {src && (
             <ReactCrop
@@ -182,8 +182,8 @@ const ProfilePicture = ({ profilePageData }) => {
               onImageLoaded={onImageLoaded}
               onComplete={onCropComplete}
               onChange={onCropChange}
-              style={{ maxWidth: '100%' }}
-              imageStyle={{ maxWidth: '100%' }}
+              style={{ maxWidth: "100%" }}
+              imageStyle={{ maxWidth: "100%" }}
             />
           )}
         </DialogContent>

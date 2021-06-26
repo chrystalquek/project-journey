@@ -1,1 +1,1 @@
-export { default } from '@components/volunteer/Index';
+export { default } from "@components/volunteer/Index";

@@ -1,26 +1,29 @@
-import React, { FC, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
-import { ActionableDialog } from '@components/common/ActionableDialog';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { CommitmentApplicationData, CommitmentApplicationStatus } from '@type/commitmentApplication';
-import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
+import React, { FC, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
+import { ActionableDialog } from "@components/common/ActionableDialog";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import {
+  CommitmentApplicationData,
+  CommitmentApplicationStatus,
+} from "@type/commitmentApplication";
+import { updateCommitmentApplication } from "@redux/actions/commitmentApplication";
 
 const useStyles = makeStyles((theme) => ({
   header: {
-    textAlign: 'left',
-    [theme.breakpoints.down('xs')]: {
-      textAlign: 'center',
+    textAlign: "left",
+    [theme.breakpoints.down("xs")]: {
+      textAlign: "center",
     },
   },
 }));
 
 type ApproveCommitmentApplicationProps = {
-  commitmentApplication: CommitmentApplicationData
-}
+  commitmentApplication: CommitmentApplicationData;
+};
 
 const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (
-  props: ApproveCommitmentApplicationProps,
+  props: ApproveCommitmentApplicationProps
 ) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
@@ -36,15 +39,20 @@ const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (
       ...commitmentApplication,
       status: CommitmentApplicationStatus.Accepted,
     };
-    dispatch(updateCommitmentApplication({
-      data: updatedCommitmentApplication,
-      _id: commitmentApplication._id,
-    }));
+    dispatch(
+      updateCommitmentApplication({
+        data: updatedCommitmentApplication,
+        _id: commitmentApplication._id,
+      })
+    );
   };
 
   return (
     <div className={classes.header}>
-      <Typography variant="body2"> Pending approval for conversion to committed volunteer </Typography>
+      <Typography variant="body2">
+        {" "}
+        Pending approval for conversion to committed volunteer{" "}
+      </Typography>
       <ActionableDialog
         open={isOpen}
         setOpen={() => setIsOpen(!isOpen)}

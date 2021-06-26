@@ -1,13 +1,23 @@
 export const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 // Date obj -> 12:00pm
 export function formatAMPM(date: Date) {
   let hours: string | number = date.getHours();
   let minutes: string | number = date.getMinutes();
-  const ampm = hours >= 12 ? 'pm' : 'am';
+  const ampm = hours >= 12 ? "pm" : "am";
   hours %= 12;
   hours = hours || 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? `0${minutes}` : minutes;
@@ -22,12 +32,19 @@ export function formatDateStartEndTime(startDate: Date, endDate: Date) {
   }
 
   // assume single day events
-  if (!(startDate.getFullYear() === endDate.getFullYear()
-  && startDate.getMonth() === endDate.getMonth() && startDate.getDate() === endDate.getDate())) {
+  if (
+    !(
+      startDate.getFullYear() === endDate.getFullYear() &&
+      startDate.getMonth() === endDate.getMonth() &&
+      startDate.getDate() === endDate.getDate()
+    )
+  ) {
     return { date: null, time: null };
   }
 
-  const date = `${startDate.getDate()} ${MONTHS[startDate.getMonth()]} ${startDate.getFullYear()}`;
+  const date = `${startDate.getDate()} ${
+    MONTHS[startDate.getMonth()]
+  } ${startDate.getFullYear()}`;
   const time = `${formatAMPM(startDate)} - ${formatAMPM(endDate)}`;
   return { date, time };
 }

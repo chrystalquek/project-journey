@@ -1,15 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { VolunteerData, VolunteerType } from '@type/volunteer';
-import { getPendingVolunteers } from '@redux/actions/volunteer';
-import { updateCommitmentApplication } from '@redux/actions/commitmentApplication';
-import { CommitmentApplicationStatus } from '@type/commitmentApplication';
+import { createSlice } from "@reduxjs/toolkit";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
+import { getPendingVolunteers } from "@redux/actions/volunteer";
+import { updateCommitmentApplication } from "@redux/actions/commitmentApplication";
+import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 
 export type PendingVolunteerState = {
   data: Record<string, VolunteerData>;
-  pendingVolunteers: { // used for dashboard and volunteer > pending requests
-    ids: Array<string> // ie volunteers with committment applications that are state pending
-  }
-}
+  pendingVolunteers: {
+    // used for dashboard and volunteer > pending requests
+    ids: Array<string>; // ie volunteers with committment applications that are state pending
+  };
+};
 
 const initialState: PendingVolunteerState = {
   data: {},
@@ -19,7 +20,10 @@ const initialState: PendingVolunteerState = {
 };
 
 // parse all Dates etc before saving to store
-const addToData = (volunteers: Array<VolunteerData>, state: PendingVolunteerState) => {
+const addToData = (
+  volunteers: Array<VolunteerData>,
+  state: PendingVolunteerState
+) => {
   volunteers.forEach((volunteer) => {
     state.data[volunteer._id] = {
       ...volunteer,
@@ -30,7 +34,7 @@ const addToData = (volunteers: Array<VolunteerData>, state: PendingVolunteerStat
 };
 
 const volunteerSlice = createSlice({
-  name: 'volunteer',
+  name: "volunteer",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -40,7 +44,9 @@ const volunteerSlice = createSlice({
     builder.addCase(getPendingVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
       addToData(payload.data, state);
-      state.pendingVolunteers.ids = payload.data.map((volunteer) => volunteer._id);
+      state.pendingVolunteers.ids = payload.data.map(
+        (volunteer) => volunteer._id
+      );
     });
 
     builder.addCase(updateCommitmentApplication.fulfilled, (state, action) => {
@@ -54,8 +60,9 @@ const volunteerSlice = createSlice({
         };
       }
       // no longer a pending request with either accept or reject
-      state.pendingVolunteers.ids = state.pendingVolunteers.ids
-        .filter((volunteerId) => volunteerId !== payload.volunteerId);
+      state.pendingVolunteers.ids = state.pendingVolunteers.ids.filter(
+        (volunteerId) => volunteerId !== payload.volunteerId
+      );
     });
   },
 });

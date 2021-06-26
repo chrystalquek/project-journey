@@ -1,51 +1,55 @@
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import { Button, CardActions, Chip, makeStyles } from "@material-ui/core";
+import React, { FC, useState } from "react";
+import { EventData } from "@type/event";
+import { parseDate } from "@components/event/helpers/EventsPageBody";
+import { VolunteerType } from "@type/volunteer";
+import { EventTypography } from "@components/common/event/EventTypography";
+import { testEventImage3 } from "@utils/constants/imagePaths";
 import {
-  Button, CardActions, Chip, makeStyles,
-} from '@material-ui/core';
-import React, { FC, useState } from 'react';
-import { EventData } from '@type/event';
-import { parseDate } from '@components/event/helpers/EventsPageBody';
-import { VolunteerType } from '@type/volunteer';
-import { EventTypography } from '@components/common/event/EventTypography';
-import { testEventImage3 } from '@utils/constants/imagePaths';
-import { ADHOC_VOLUNTEER_TAG, COMMITTED_VOLUNTEER_TAG } from '@components/event/index';
-import FeedbackModal from './FeedbackModal';
+  ADHOC_VOLUNTEER_TAG,
+  COMMITTED_VOLUNTEER_TAG,
+} from "@components/event/index";
+import FeedbackModal from "./FeedbackModal";
 
 type EventCardProps = {
-  event: EventData,
-  onCardClick: () => void
-}
+  event: EventData;
+  onCardClick: () => void;
+};
 
 const useStyles = makeStyles((theme) => ({
   viewFeedbackButton: {
-    textTransform: 'none',
+    textTransform: "none",
     color: theme.palette.text.disabled,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   submitFeedbackButton: {
-    textTransform: 'none',
+    textTransform: "none",
     color: theme.palette.text.secondary,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   media: {
-    objectFit: 'cover',
-    height: '12rem',
+    objectFit: "cover",
+    height: "12rem",
   },
   cardAction: {
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
   committedTag: {
-    borderRadius: '10px',
+    borderRadius: "10px",
     opacity: 0.85,
   },
 }));
 
 const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
   const classes = useStyles();
-  const { date, time } = parseDate(new Date(event.startDate), new Date(event.endDate));
+  const { date, time } = parseDate(
+    new Date(event.startDate),
+    new Date(event.endDate)
+  );
 
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -57,25 +61,30 @@ const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
           component="img"
           alt="EventCard"
           image={event?.coverImage ?? testEventImage3}
-          title={event && event.name ? event.name : 'EventCard'}
+          title={event && event.name ? event.name : "EventCard"}
         />
         <CardContent onClick={onCardClick}>
-          <EventTypography gutterBottom fontBold text={event && event.name ? event.name : 'No event name provided'} />
-          <EventTypography text={date || 'No date provided'} />
-          <EventTypography gutterBottom text={time || 'No time provided'} />
-
+          <EventTypography
+            gutterBottom
+            fontBold
+            text={event && event.name ? event.name : "No event name provided"}
+          />
+          <EventTypography text={date || "No date provided"} />
+          <EventTypography gutterBottom text={time || "No time provided"} />
         </CardContent>
       </CardActionArea>
 
       <Button
-        className={event?.feedbackStatus
-          ? classes.viewFeedbackButton
-          : classes.submitFeedbackButton}
+        className={
+          event?.feedbackStatus
+            ? classes.viewFeedbackButton
+            : classes.submitFeedbackButton
+        }
         onClick={() => setOpen(true)}
       >
         {event?.feedbackStatus
-          ? 'View Submitted Feedback'
-          : 'Submit Volunteer Feedback'}
+          ? "View Submitted Feedback"
+          : "Submit Volunteer Feedback"}
       </Button>
       <FeedbackModal
         title={event.name}
@@ -84,22 +93,22 @@ const PastEventCard: FC<EventCardProps> = ({ event, onCardClick }) => {
         description={event.description}
         isOpen={isOpen}
         eventId={event._id}
-        initialState={event?.feedbackStatus ? 'success' : 'prompt'}
+        initialState={event?.feedbackStatus ? "success" : "prompt"}
         onClose={() => setOpen(false)}
       />
 
       <CardActions className={classes.cardAction}>
-        {event?.volunteerType === VolunteerType.COMMITTED
-          && (
-            <Chip
-              color="secondary"
-              size="small"
-              label={COMMITTED_VOLUNTEER_TAG}
-              className={classes.committedTag}
-            />
-          )}
-        {event?.volunteerType === VolunteerType.ADHOC
-          && <Chip color="primary" size="small" label={ADHOC_VOLUNTEER_TAG} />}
+        {event?.volunteerType === VolunteerType.COMMITTED && (
+          <Chip
+            color="secondary"
+            size="small"
+            label={COMMITTED_VOLUNTEER_TAG}
+            className={classes.committedTag}
+          />
+        )}
+        {event?.volunteerType === VolunteerType.ADHOC && (
+          <Chip color="primary" size="small" label={ADHOC_VOLUNTEER_TAG} />
+        )}
       </CardActions>
     </Card>
   );

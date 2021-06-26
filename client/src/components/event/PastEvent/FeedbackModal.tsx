@@ -1,55 +1,60 @@
 import {
-  Button, IconButton, makeStyles, Modal, Typography,
-} from '@material-ui/core';
-import React, {
-  FC, useCallback, useEffect, useState,
-} from 'react';
-import { testEventImage1 } from '@utils/constants/imagePaths';
-import { EventButton } from '@components/common/event/EventButton';
-import CloseIcon from '@material-ui/icons/Close';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+  Button,
+  IconButton,
+  makeStyles,
+  Modal,
+  Typography,
+} from "@material-ui/core";
+import React, { FC, useCallback, useEffect, useState } from "react";
+import { testEventImage1 } from "@utils/constants/imagePaths";
+import { EventButton } from "@components/common/event/EventButton";
+import CloseIcon from "@material-ui/icons/Close";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
-import dayjs from 'dayjs';
-import Checkbox from '@material-ui/core/Checkbox';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { getEventFeedbackFormQuestions, submitEventFeedbackFormQuestions } from '@redux/actions/form';
-import FormGenerator from '@components/form/FormGenerator';
+import dayjs from "dayjs";
+import Checkbox from "@material-ui/core/Checkbox";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import {
+  getEventFeedbackFormQuestions,
+  submitEventFeedbackFormQuestions,
+} from "@redux/actions/form";
+import FormGenerator from "@components/form/FormGenerator";
 
-export type FEEDBACK_STATE = 'prompt' | 'fields' | 'success'
+export type FEEDBACK_STATE = "prompt" | "fields" | "success";
 
 type FeedbackModalProps = {
-  title: string
-  imageUrl: string
-  eventDate: Date
-  description: string
-  isOpen: boolean
-  eventId: string
-  initialState: FEEDBACK_STATE
-  onClose: () => void
-}
+  title: string;
+  imageUrl: string;
+  eventDate: Date;
+  description: string;
+  isOpen: boolean;
+  eventId: string;
+  initialState: FEEDBACK_STATE;
+  onClose: () => void;
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '600px',
-    maxWidth: '100%',
-    height: '500px',
-    maxHeight: '100%',
-    borderRadius: '10px',
-    top: '50%',
-    left: '50%',
-    background: 'white',
-    transform: 'translate(-50%, -50%)',
-    position: 'absolute',
-    display: 'flex',
+    width: "600px",
+    maxWidth: "100%",
+    height: "500px",
+    maxHeight: "100%",
+    borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    background: "white",
+    transform: "translate(-50%, -50%)",
+    position: "absolute",
+    display: "flex",
     flex: 1,
-    padding: '54px 86px 54px 86px',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    overflow: 'hidden',
+    padding: "54px 86px 54px 86px",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    overflow: "hidden",
   },
   title: {
     marginBottom: theme.spacing(8),
-    textAlign: 'left',
+    textAlign: "left",
   },
   imageContainer: {
     marginBottom: theme.spacing(3),
@@ -59,24 +64,24 @@ const useStyles = makeStyles((theme) => ({
   },
   feedbackButton: {
     backgroundColor: theme.palette.primary.main,
-    borderRadius: '16px',
-    textTransform: 'none',
-    padding: '6px 16px',
-    '&:hover': {
+    borderRadius: "16px",
+    textTransform: "none",
+    padding: "6px 16px",
+    "&:hover": {
       backgroundColor: theme.palette.secondary.main,
     },
-    width: '270px',
+    width: "270px",
   },
   footer: {
     marginTop: theme.spacing(5),
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   submitFeedback: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: theme.spacing(3),
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     right: 10,
   },
@@ -84,24 +89,24 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
   textBox: {
-    width: '100%',
+    width: "100%",
   },
   submittedRoot: {
     flex: 1,
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   checkIcon: {
-    fontSize: '100px',
-    color: '#D0DE39', // light green
+    fontSize: "100px",
+    color: "#D0DE39", // light green
   },
   image: {
-    width: '100%',
-    height: '250px',
-    borderRadius: '10px',
+    width: "100%",
+    height: "250px",
+    borderRadius: "10px",
   },
 }));
 
@@ -117,7 +122,8 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
 }) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const [feedbackState, setFeedbackState] = useState<FEEDBACK_STATE>(initialState);
+  const [feedbackState, setFeedbackState] =
+    useState<FEEDBACK_STATE>(initialState);
   const [checked, setChecked] = useState<boolean>(false);
 
   const user = useAppSelector((state) => state.user.user);
@@ -129,42 +135,42 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
   }, []);
 
   const navigateToFeedback = () => {
-    setFeedbackState('fields');
+    setFeedbackState("fields");
   };
 
-  const handleSubmit = useCallback(async (values: Record<string, any>) => {
-    const answers = Object.keys(values).map((key) => ({
-      questionId: key,
-      userId: user._id,
-      content: values[key],
-    }));
+  const handleSubmit = useCallback(
+    async (values: Record<string, any>) => {
+      const answers = Object.keys(values).map((key) => ({
+        questionId: key,
+        userId: user._id,
+        content: values[key],
+      }));
 
-    dispatch(submitEventFeedbackFormQuestions({
-      answers,
-      eventId,
-    }));
+      dispatch(
+        submitEventFeedbackFormQuestions({
+          answers,
+          eventId,
+        })
+      );
 
-    setFeedbackState('success');
-  }, [user, eventId, dispatch]);
+      setFeedbackState("success");
+    },
+    [user, eventId, dispatch]
+  );
 
-  const date = dayjs(eventDate).format('ddd, DD MMMM YYYY');
-  const time = dayjs(eventDate).format('h.mma');
+  const date = dayjs(eventDate).format("ddd, DD MMMM YYYY");
+  const time = dayjs(eventDate).format("h.mma");
 
   const renderModalContent = (stateFeedback: FEEDBACK_STATE) => {
     switch (stateFeedback) {
-      case 'prompt':
+      case "prompt":
         return (
           <div className={classes.root}>
-            <Button
-              className={classes.closeButton}
-              onClick={onClose}
-            >
+            <Button className={classes.closeButton} onClick={onClose}>
               <CloseIcon />
             </Button>
             <div className={classes.title}>
-              <Typography variant="h2">
-                {title}
-              </Typography>
+              <Typography variant="h2">{title}</Typography>
             </div>
             <div className={classes.imageContainer}>
               <img
@@ -184,9 +190,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
               </Typography>
             </div>
             <div>
-              <Typography variant="body2">
-                {description}
-              </Typography>
+              <Typography variant="body2">{description}</Typography>
             </div>
             <div className={classes.footer}>
               <Typography variant="h4" className={classes.submitFeedback}>
@@ -202,15 +206,13 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
             </div>
           </div>
         );
-      case 'fields':
+      case "fields":
         return (
-          <form onSubmit={() => { }}>
+          <form onSubmit={() => {}}>
             <div className={classes.root}>
               <div className={classes.title}>
                 <Typography variant="h2">
-                  Submitting Feedback for:
-                  {' '}
-                  {title}
+                  Submitting Feedback for: {title}
                 </Typography>
               </div>
               <div>
@@ -218,7 +220,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                   <Checkbox
                     checked={checked}
                     onChange={() => setChecked(!checked)}
-                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                    inputProps={{ "aria-label": "primary checkbox" }}
                   />
                   I would like to submit my feedback annonymously
                 </Typography>
@@ -230,9 +232,8 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
               />
             </div>
           </form>
-
         );
-      case 'success':
+      case "success":
         return (
           <div className={classes.root}>
             <div className={classes.submittedRoot}>
@@ -243,11 +244,10 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                 <Typography
                   variant="h2"
                   style={{
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                 >
-                  Your Feedback has been submitted!
-                  Thank you for your feedback
+                  Your Feedback has been submitted! Thank you for your feedback
                 </Typography>
               </div>
               <div>
@@ -262,24 +262,20 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
           </div>
         );
       default:
-        return (
-          <></>
-        );
+        return <></>;
     }
   };
 
   return (
-
     <Modal
       open={isOpen}
       onClose={onClose}
       style={{
-        overflow: 'scroll',
+        overflow: "scroll",
       }}
     >
       {renderModalContent(feedbackState)}
     </Modal>
-
   );
 };
 

@@ -1,32 +1,34 @@
-import React from 'react';
+import React from "react";
 import {
   AppBar,
   Divider,
   Toolbar,
   useMediaQuery,
   useTheme,
-} from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { reset } from '@redux/reducers/loading';
-import DesktopNavBar from './DesktopNavBar';
-import MobileNavBar from './MobileNavBar';
+} from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { reset } from "@redux/reducers/loading";
+import DesktopNavBar from "./DesktopNavBar";
+import MobileNavBar from "./MobileNavBar";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    flexGrow: 1,
-    paddingBottom: theme.spacing(8),
-    [theme.breakpoints.down('sm')]: {
-      paddingBottom: 0,
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+      paddingBottom: theme.spacing(8),
+      [theme.breakpoints.down("sm")]: {
+        paddingBottom: 0,
+      },
     },
-  },
-}));
+  })
+);
 
 function NavBar() {
   const classes = useStyles();
   const theme = useTheme();
   const userData = useAppSelector((state) => state.user.user);
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
   dispatch(reset());
 
