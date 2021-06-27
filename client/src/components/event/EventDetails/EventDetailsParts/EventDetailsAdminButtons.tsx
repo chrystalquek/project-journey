@@ -3,6 +3,7 @@ import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { deleteEvent } from "@redux/actions/event";
 import { useAppDispatch } from "@redux/store";
+import { EDIT_EVENT_FORM_ROUTE } from "@constants/routes";
 
 const useStyles = makeStyles((theme) => ({
   editButton: {
@@ -37,7 +38,7 @@ const EventDetailsAdminButtons = ({ event }) => {
           variant="contained"
           type="submit"
           color="primary"
-          onClick={() => router.push(`/form/${event._id}`)}
+          onClick={() => router.push(EDIT_EVENT_FORM_ROUTE(event._id))}
           className={classes.editButton}
         >
           <Typography variant="body1">Edit Event</Typography>

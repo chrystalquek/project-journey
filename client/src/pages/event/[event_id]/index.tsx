@@ -6,11 +6,11 @@ import { EventDetails } from "@components/event/EventDetails";
 // Handles checking that user is logged in and event detail validity
 const EventsDetailPage = () => {
   const router = useRouter();
-  const { eid } = router.query;
+  const eventId = router.query.event_id as string;
 
   return (
     <Container fixed>
-      <EventDetails eid={eid as string} />
+      <EventDetails eid={eventId} />
     </Container>
   );
 };

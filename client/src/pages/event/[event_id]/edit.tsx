@@ -12,7 +12,7 @@ const AdminEventFormPage = () => {
   return (
     <Container fixed>
       <Head title="Blessings in a Bag" />
-      <EventForm id={eventId} isNew={eventId === "new"} />
+      <EventForm id={eventId} isNew={false} />
     </Container>
   );
 };

@@ -8,13 +8,13 @@ import { checkLoggedIn } from "@utils/helpers/auth";
 const EventVolunteersPage = () => {
   checkLoggedIn();
   const router = useRouter();
-  const { eid } = router.query;
+  const eventId = router.query.event_id as string;
 
   return (
     <>
       <Head title="Blessings in a Bag" />
       <Container fixed>
-        <EventVolunteers eid={eid} />
+        <EventVolunteers eid={eventId} />
       </Container>
     </>
   );

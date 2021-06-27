@@ -23,6 +23,7 @@ import { useRouter } from "next/router";
 import { isAdmin } from "@utils/helpers/auth";
 import { cancelEvent, deleteEvent } from "@redux/actions/event";
 import { Button, makeStyles, Typography } from "@material-ui/core";
+import { EDIT_EVENT_FORM_ROUTE } from "@constants/routes";
 
 type EventDetailsProps = {
   event: EventData;
@@ -243,7 +244,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
       variant="contained"
       type="submit"
       color="primary"
-      onClick={() => router.push(`/form/${event._id}`)}
+      onClick={() => router.push(EDIT_EVENT_FORM_ROUTE(event._id))}
       className={classes.editButton}
     >
       <Typography variant="body1" className={classes.editButtonText}>

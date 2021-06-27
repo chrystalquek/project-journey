@@ -16,6 +16,7 @@ import {
 import { getSignUpsUpcomingEvent } from "@redux/actions/signUp";
 import { formatDateStartEndTime } from "@utils/helpers/date";
 import { useRouter } from "next/router";
+import { CREATE_EVENT_FORM_ROUTE } from "@constants/routes";
 
 const useStyles = makeStyles((theme) => ({
   pane: {
@@ -135,7 +136,7 @@ const UpcomingEvent: FC<{}> = () => {
       <br />
       <Button
         className={classes.button}
-        onClick={() => router.push("/form/new")}
+        onClick={() => router.push(CREATE_EVENT_FORM_ROUTE)}
       >
         Create New Event
       </Button>
