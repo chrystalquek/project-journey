@@ -135,7 +135,7 @@ class AxiosApiClient {
   async getVolunteer(
     request: GetVolunteerRequest
   ): Promise<GetVolunteerResponse> {
-    return this.send({}, `volunteer/id/${request._id}`, "get");
+    return this.send({}, `volunteer/${request._id}`, "get");
   }
 
   async updateVolunteer(
