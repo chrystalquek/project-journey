@@ -30,18 +30,10 @@ router.get(
   volunteerController.getVolunteersByIds,
 );
 
-// @route   GET /volunteer/:email
+// @route   GET /volunteer/:id
 // @desc    For volunteer and admin to get volunteer
 router.get(
-  '/:email',
-  validate(getValidations('getVolunteer')),
-  volunteerController.getVolunteerDetailsByEmail,
-);
-
-// @route   GET /volunteer/id/:id
-// @desc    For volunteer and admin to get volunteer
-router.get(
-  '/id/:id',
+  '/:id',
   authorize([]),
   volunteerController.getVolunteerDetailsById,
 );

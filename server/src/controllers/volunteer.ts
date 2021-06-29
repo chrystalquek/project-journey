@@ -4,12 +4,12 @@ import commitmentApplicationService from '../services/commitmentApplication';
 import HTTP_CODES from '../constants/httpCodes';
 import {
   CreateVolunteerRequest, DeleteVolunteerRequest, GetPendingVolunteersRequest,
-  GetVolunteerDetailsByEmailRequest, GetVolunteerRequest,
+  GetVolunteerRequest,
   GetVolunteersByIdsRequest, GetVolunteersRequest, UpdateVolunteerRequest,
 } from '../types/request/volunteer';
 import {
   CreateVolunteerResponse, DeleteVolunteerResponse, GetPendingVolunteersResponse,
-  GetVolunteerDetailsByEmailResponse, GetVolunteerResponse,
+  GetVolunteerResponse,
   GetVolunteersByIdsResponse, GetVolunteersResponse, UpdateVolunteerResponse,
 } from '../types/response/volunteer';
 import { removeUserId } from '../helpers/volunteer';
@@ -18,7 +18,7 @@ const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteer
   Promise<void> => {
   try {
     const volunteerData = req.body;
-    // assuming we create a few fixed admin accounts for biab, 
+    // assuming we create a few fixed admin accounts for biab,
     // should only be able to create ad-hoc and commited
     if (volunteerData.volunteerType === 'admin') {
       res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
@@ -35,42 +35,10 @@ const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteer
   }
 };
 
-// BY EMAIL
-const getVolunteerDetailsByEmail = async (req: GetVolunteerDetailsByEmailRequest,
-  res: GetVolunteerDetailsByEmailResponse): Promise<void> => {
-  try {
-    let volunteer = await volunteerService.getVolunteer(
-      req.params.email,
-    );
-
-    if (req.user._id !== volunteer._id) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
-      return;
-    }
-
-    // append administrator remarks
-    if (req.user.volunteerType === 'admin') {
-      volunteer = await userService.addAdminRemarks(volunteer);
-    }
-
-    const volunteerWithoutUserId = removeUserId(volunteer);
-    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
-  } catch (error) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
-    });
-  }
-};
-
 // BY ID
 const getVolunteerDetailsById = async (req: GetVolunteerRequest, res: GetVolunteerResponse):
   Promise<void> => {
   try {
-    if (String(req.user._id) !== req.params.id) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
-      return;
-    }
-
     let volunteer = await volunteerService.getVolunteerById(
       req.params.id,
     );
@@ -131,9 +99,9 @@ const getPendingVolunteers = async (req: GetPendingVolunteersRequest,
   res: GetPendingVolunteersResponse): Promise<void> => {
   try {
     const pendingCommitmentApplications = await
-      commitmentApplicationService.getCommitmentApplications(
-        'pending',
-      );
+    commitmentApplicationService.getCommitmentApplications(
+      'pending',
+    );
 
     const pendingVolunteersIds = pendingCommitmentApplications.map(
       (commitmentApplication) => commitmentApplication.volunteerId,
@@ -218,7 +186,6 @@ const deleteVolunteer = async (req: DeleteVolunteerRequest,
 
 export default {
   createVolunteer,
-  getVolunteerDetailsByEmail,
   getVolunteerDetailsById,
   getAllVolunteerDetails,
   getPendingVolunteers,

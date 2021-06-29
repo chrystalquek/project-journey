@@ -1,13 +1,9 @@
 import { NewVolunteerData, VolunteerData, VolunteerType } from '../../models/Volunteer';
-import { Request, EmptyBody, EmptyQuery, IdRequest, IdParams } from './common';
+import {
+  Request, EmptyBody, EmptyQuery, IdRequest, IdParams,
+} from './common';
 
 export type CreateVolunteerRequest = Request<NewVolunteerData>
-
-type GetVolunteerDetailsByEmailRequestParams = {
-    email: string
-}
-
-export type GetVolunteerDetailsByEmailRequest = Request<EmptyBody, EmptyQuery, GetVolunteerDetailsByEmailRequestParams>
 
 export type GetVolunteerRequest = IdRequest
 
