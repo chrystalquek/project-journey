@@ -3,8 +3,6 @@ import { Response } from './common';
 
 export type CreateVolunteerResponse = Response<GetVolunteerData>
 
-export type GetVolunteerDetailsByEmailResponse = Response<GetVolunteerData>
-
 export type GetVolunteerResponse = Response<GetVolunteerData>
 
 export type GetVolunteersResponse = Response<{ data: GetVolunteerData[], count: number }>
