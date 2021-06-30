@@ -1,12 +1,12 @@
-import express from 'express';
-import multer from 'multer';
-import fs from 'fs';
-import imageController from '../controllers/image';
-import authorize from '../helpers/authorize';
+import express from "express";
+import multer from "multer";
+import fs from "fs";
+import imageController from "../controllers/image";
+import authorize from "../helpers/authorize";
 
 const router = express.Router();
 
-const imageDir = '/tmp';
+const imageDir = "/tmp";
 if (!fs.existsSync(imageDir)) {
   fs.mkdirSync(imageDir);
 }
@@ -19,10 +19,10 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true); // will keep the file
   } else {
-    cb(new Error('Image must be JPEG/PNG'), false); // will ignore the file
+    cb(new Error("Image must be JPEG/PNG"), false); // will ignore the file
   }
 };
 
@@ -37,23 +37,19 @@ const upload = multer({
 // @route   POST /image
 // @desc    For volunteers and admin to upload image
 router.post(
-  '/',
+  "/",
   authorize([]),
-  upload.single('image'),
-  imageController.uploadImage,
+  upload.single("image"),
+  imageController.uploadImage
 );
 
 // TO BE DEPRECATED; Use image route to upload and volunteer update to set url
 router.post(
-  '/profile-picture',
-  upload.single('image'),
-  imageController.updateProfilePicture,
+  "/profile-picture",
+  upload.single("image"),
+  imageController.updateProfilePicture
 );
 
-router.delete(
-  '/:email',
-  authorize([]),
-  imageController.deleteImageWithEmail,
-);
+router.delete("/:email", authorize([]), imageController.deleteImageWithEmail);
 
 export default router;

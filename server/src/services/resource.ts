@@ -1,4 +1,4 @@
-import Resource, { ResourceData } from '../models/Resource';
+import Resource, { ResourceData } from "../models/Resource";
 
 const createResource = async (resourceData: ResourceData): Promise<void> => {
   try {
@@ -18,7 +18,7 @@ const getResource = async (id: string): Promise<ResourceData> => {
     const resource = await Resource.findById(id);
 
     if (!resource) {
-      throw new Error('Resource is not found.');
+      throw new Error("Resource is not found.");
     }
 
     return resource;
@@ -29,13 +29,13 @@ const getResource = async (id: string): Promise<ResourceData> => {
 
 const updateResource = async (
   id: string,
-  updatedFields: ResourceData,
+  updatedFields: ResourceData
 ): Promise<void> => {
   try {
     await Resource.findOneAndUpdate(
       { _id: id },
       { $set: updatedFields },
-      { new: true },
+      { new: true }
     );
   } catch (err) {
     throw new Error(err.msg);

@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { TeamData } from '../types/types';
+import mongoose from "mongoose";
+import { TeamData } from "../types/types";
 
 const { Schema } = mongoose;
 
@@ -12,4 +12,4 @@ const TeamSchema = new Schema({
   members: [mongoose.Types.ObjectId],
 });
 
-export default mongoose.model<TeamModel>('Team', TeamSchema);
+export default mongoose.model<TeamModel>("Team", TeamSchema);

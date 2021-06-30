@@ -1,4 +1,4 @@
-import Form, { FormData, NewFormData } from '../../models/Forms/Form';
+import Form, { FormData, NewFormData } from "../../models/Forms/Form";
 
 /**
  * Create form attached to event
@@ -19,10 +19,14 @@ const createForm = async (formData: NewFormData): Promise<FormData> => {
 const getForm = async (eventId: string) => {
   const form = await Form.findOne({
     eventId,
-  }).lean().exec();
+  })
+    .lean()
+    .exec();
 
   if (!form) {
-    throw new Error(`Form with specified event id: ${eventId} could not be founds`);
+    throw new Error(
+      `Form with specified event id: ${eventId} could not be founds`
+    );
   }
 
   return form;
@@ -38,7 +42,9 @@ const deleteForm = async (eventId: string): Promise<void> => {
       eventId,
     });
     if (!form) {
-      throw new Error(`Relevant form with event id: ${eventId} cannot be found`);
+      throw new Error(
+        `Relevant form with event id: ${eventId} cannot be found`
+      );
     }
   } catch (err) {
     throw new Error(err.msg);

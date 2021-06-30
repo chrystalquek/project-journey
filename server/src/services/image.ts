@@ -1,18 +1,18 @@
-import { Storage } from '@google-cloud/storage';
-import mongoose from 'mongoose';
-import { ImageRequest } from '../controllers/image';
+import { Storage } from "@google-cloud/storage";
+import mongoose from "mongoose";
+import { ImageRequest } from "../controllers/image";
 
-import Image, { ImageData } from '../models/Image';
+import Image, { ImageData } from "../models/Image";
 
 const storage = new Storage();
 
 const uploadImage = async (imageData: ImageRequest): Promise<ImageData> => {
   try {
     const filepath = `/tmp/${imageData.imageName}`;
-    const returnVal = await storage.bucket('journey-storage').upload(filepath, {
+    const returnVal = await storage.bucket("journey-storage").upload(filepath, {
       gzip: true,
       metadata: {
-        cacheControl: 'no-cache',
+        cacheControl: "no-cache",
       },
     });
     try {

@@ -1,9 +1,15 @@
-import { Request, Response } from 'express';
-import imageService from '../services/image';
-import volunteerService from '../services/volunteer';
+import { Request, Response } from "express";
+import imageService from "../services/image";
+import volunteerService from "../services/volunteer";
 
-import HTTP_CODES from '../constants/httpCodes';
-import { VolunteerData } from '../models/Volunteer';
+import HTTP_CODES from "../constants/httpCodes";
+import { VolunteerData } from "../models/Volunteer";
+
+// TODO should try to get rid of this
+export type ImageRequest = {
+  email: String;
+  imageName: String;
+};
 
 // TODO authentication not done in anticipation of changes made here
 const uploadImage = async (req: Request, res: Response): Promise<void> => {
@@ -19,7 +25,10 @@ const uploadImage = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const updateProfilePicture = async (req: Request, res: Response): Promise<void> => {
+const updateProfilePicture = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const imageData: ImageRequest = {
       email: req.body.email,
@@ -28,7 +37,7 @@ const updateProfilePicture = async (req: Request, res: Response): Promise<void> 
     const imageResponse = await imageService.uploadImage(imageData);
     const response = await volunteerService.updateVolunteerDetails(
       imageResponse.email as string,
-      { photoUrl: imageResponse.url } as Partial<VolunteerData>,
+      { photoUrl: imageResponse.url } as Partial<VolunteerData>
     );
     res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
@@ -36,7 +45,10 @@ const updateProfilePicture = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-const deleteImageWithEmail = async (req: Request, res: Response): Promise<void> => {
+const deleteImageWithEmail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     // if (typeof req.query.email !== 'string') {
     //   throw new Error("Email field is not string");
@@ -48,12 +60,6 @@ const deleteImageWithEmail = async (req: Request, res: Response): Promise<void> 
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
   }
 };
-
-// TODO should try to get rid of this
-export type ImageRequest = {
-  email: String,
-  imageName: String
-}
 
 export default {
   uploadImage,

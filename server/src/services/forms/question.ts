@@ -1,11 +1,13 @@
-import mongoose from 'mongoose';
-import Question, { QuestionData } from '../../models/Forms/Question';
+import mongoose from "mongoose";
+import Question, { QuestionData } from "../../models/Forms/Question";
 
 /**
  * Bulk-insert questions attached to form
  * @param questions question data to be created
  */
-const insertQuestions = async (questions: Array<Omit<QuestionData, '_id'>>): Promise<Array<string>> => {
+const insertQuestions = async (
+  questions: Array<Omit<QuestionData, "_id">>
+): Promise<Array<string>> => {
   const questionIds: string[] = [];
   const bulkQuestions = questions.map((question) => {
     const questionId = new mongoose.Types.ObjectId();
@@ -26,13 +28,20 @@ const insertQuestions = async (questions: Array<Omit<QuestionData, '_id'>>): Pro
  * Update questions in bulk for a form
  * @param updatedQuestions Array of `QuestionData`
  */
-const updateQuestions = async (updatedQuestions: Array<Partial<QuestionData>>): Promise<void> => {
+const updateQuestions = async (
+  updatedQuestions: Array<Partial<QuestionData>>
+): Promise<void> => {
   // Bulk update supported but for same condition, reads in parallel
-  await Promise.all(updatedQuestions.map(async (question) => {
-    await Question.findOneAndUpdate({
-      _id: question._id,
-    }, question);
-  }));
+  await Promise.all(
+    updatedQuestions.map(async (question) => {
+      await Question.findOneAndUpdate(
+        {
+          _id: question._id,
+        },
+        question
+      );
+    })
+  );
 };
 
 /**
@@ -42,7 +51,9 @@ const updateQuestions = async (updatedQuestions: Array<Partial<QuestionData>>): 
 const getQuestions = async (formId: string): Promise<Array<QuestionData>> => {
   const questions = await Question.find({
     formId,
-  }).lean().exec();
+  })
+    .lean()
+    .exec();
   return questions;
 };
 

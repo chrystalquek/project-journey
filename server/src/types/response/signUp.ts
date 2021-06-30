@@ -1,14 +1,14 @@
-import { SignUpData } from '../../models/SignUp';
-import { Response } from '../response/common';
+import { SignUpData } from "../../models/SignUp";
+import { Response } from "./common";
 
-export type CreateSignUpResponse = Response<SignUpData>
+export type CreateSignUpResponse = Response<SignUpData>;
 
-export type GetSignUpResponse = Response<SignUpData>
+export type GetSignUpResponse = Response<SignUpData>;
 
-export type GetSignUpsResponse = Response<{ data: SignUpData[] }>
+export type GetSignUpsResponse = Response<{ data: SignUpData[] }>;
 
-export type GetPendingSignUpsResponse = Response<{ data: SignUpData[] }>
+export type GetPendingSignUpsResponse = Response<{ data: SignUpData[] }>;
 
-export type UpdateSignUpResponse = Response<SignUpData>
+export type UpdateSignUpResponse = Response<SignUpData>;
 
-export type DeleteSignUpResponse = Response
+export type DeleteSignUpResponse = Response;

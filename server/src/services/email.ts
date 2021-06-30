@@ -1,36 +1,41 @@
-import nodemailer, { TransportOptions } from 'nodemailer';
-import { google } from 'googleapis';
-import ejs from 'ejs';
-import Volunteer, { VolunteerData } from '../models/Volunteer';
-import Event, { EventData } from '../models/Event';
-import Mail from 'nodemailer/lib/mailer';
-
+import nodemailer, { TransportOptions } from "nodemailer";
+import { google } from "googleapis";
+import ejs from "ejs";
+import Mail from "nodemailer/lib/mailer";
+import Volunteer, { VolunteerData } from "../models/Volunteer";
+import Event, { EventData } from "../models/Event";
 
 const { OAuth2 } = google.auth;
 
-type EmailTemplate = 'CANCEL_EVENT' | 'FEEDBACK' | 'EVENT_SIGN_UP_CONFIRMATION' | 'WAITLIST_TO_CONFIRMED';
+type EmailTemplate =
+  | "CANCEL_EVENT"
+  | "FEEDBACK"
+  | "EVENT_SIGN_UP_CONFIRMATION"
+  | "WAITLIST_TO_CONFIRMED";
 type EmailMetadata = {
-  to: string,
-  cc: string[],
-  bcc: string[],
-  subject: string,
-  templateFile: string,
-  templateData: object,
-}
+  to: string;
+  cc: string[];
+  bcc: string[];
+  subject: string;
+  templateFile: string;
+  templateData: object;
+};
 
-const EMAIL_TYPE_INVALID = 'Email type is invalid';
-const DETAILS_NOT_FOUND = 'Event or volunteer is not found';
+const EMAIL_TYPE_INVALID = "Email type is invalid";
+const DETAILS_NOT_FOUND = "Event or volunteer is not found";
 
-const FEEDBACK_TEMPLATE_FILE = 'src/views/feedback.ejs';
-const WAITLIST_TO_CONFIRMED_TEMPLATE_FILE = 'src/views/waitlist-to-confirmed.ejs';
-const EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE = 'src/views/event-sign-up-confirmation.ejs';
-const EVENT_CANCEL_TEMPLATE_FILE = 'src/views/event-cancel.ejs';
+const FEEDBACK_TEMPLATE_FILE = "src/views/feedback.ejs";
+const WAITLIST_TO_CONFIRMED_TEMPLATE_FILE =
+  "src/views/waitlist-to-confirmed.ejs";
+const EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE =
+  "src/views/event-sign-up-confirmation.ejs";
+const EVENT_CANCEL_TEMPLATE_FILE = "src/views/event-cancel.ejs";
 
 const getSmtpTransport = async (): Promise<Mail> => {
   const oauth2Client = new OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    'https://developers.google.com/oauthplayground',
+    "https://developers.google.com/oauthplayground"
   );
 
   google.options({ auth: oauth2Client });
@@ -41,12 +46,12 @@ const getSmtpTransport = async (): Promise<Mail> => {
 
   const accessToken = await oauth2Client.getAccessToken();
   const transportOptions = {
-    host: 'smtp.gmail.com',
-    service: 'gmail',
+    host: "smtp.gmail.com",
+    service: "gmail",
     port: 465,
     secure: true,
     auth: {
-      type: 'OAuth2',
+      type: "OAuth2",
       user: process.env.SENDER_EMAIL_ADDRESS,
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -58,14 +63,21 @@ const getSmtpTransport = async (): Promise<Mail> => {
     },
   };
 
-  const smtpTransport = nodemailer.createTransport(transportOptions as TransportOptions);
+  const smtpTransport = nodemailer.createTransport(
+    transportOptions as TransportOptions
+  );
 
   return smtpTransport;
 };
 
-const sendEmailHelper = async (to: string[], cc: string[],
-  bcc: string[], subject: string, templateFile: string,
-  templateData: Record<string, string>): Promise<void> => {
+const sendEmailHelper = async (
+  to: string[],
+  cc: string[],
+  bcc: string[],
+  subject: string,
+  templateFile: string,
+  templateData: Record<string, string>
+): Promise<void> => {
   const smtpTransport = await getSmtpTransport();
 
   ejs.renderFile(templateFile, templateData, (err, content) => {
@@ -92,12 +104,14 @@ const sendEmailHelper = async (to: string[], cc: string[],
   });
 };
 
-const eventSignUpConfirmationEmailHelper = async (user: VolunteerData,
-  event: EventData): Promise<EmailMetadata> => {
+const eventSignUpConfirmationEmailHelper = async (
+  user: VolunteerData,
+  event: EventData
+): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
-  const subject = 'Event Confirmation';
+  const subject = "Event Confirmation";
 
   const templateData = {
     name: user.name,
@@ -113,16 +127,23 @@ const eventSignUpConfirmationEmailHelper = async (user: VolunteerData,
 
   const templateFile = EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE;
   return {
-    to, cc, bcc, subject, templateFile, templateData,
+    to,
+    cc,
+    bcc,
+    subject,
+    templateFile,
+    templateData,
   };
 };
 
-const feedbackEmailHelper = async (user: VolunteerData,
-  event: EventData): Promise<EmailMetadata> => {
+const feedbackEmailHelper = async (
+  user: VolunteerData,
+  event: EventData
+): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
-  const subject = 'Event Feedback';
+  const subject = "Event Feedback";
 
   const templateData = {
     name: user.name,
@@ -132,16 +153,23 @@ const feedbackEmailHelper = async (user: VolunteerData,
   const templateFile = FEEDBACK_TEMPLATE_FILE;
 
   return {
-    to, cc, bcc, subject, templateFile, templateData,
+    to,
+    cc,
+    bcc,
+    subject,
+    templateFile,
+    templateData,
   };
 };
 
-const waitlistToConfirmedEmailHelper = async (user: VolunteerData,
-  event: EventData): Promise<EmailMetadata> => {
+const waitlistToConfirmedEmailHelper = async (
+  user: VolunteerData,
+  event: EventData
+): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
-  const subject = 'Waitlisted to Confirmed';
+  const subject = "Waitlisted to Confirmed";
 
   const templateData = {
     name: user.name,
@@ -158,16 +186,23 @@ const waitlistToConfirmedEmailHelper = async (user: VolunteerData,
   const templateFile = WAITLIST_TO_CONFIRMED_TEMPLATE_FILE;
 
   return {
-    to, cc, bcc, subject, templateFile, templateData,
+    to,
+    cc,
+    bcc,
+    subject,
+    templateFile,
+    templateData,
   };
 };
 
-const cancelEventEmailHelper = async (user: VolunteerData,
-  event: EventData): Promise<EmailMetadata> => {
+const cancelEventEmailHelper = async (
+  user: VolunteerData,
+  event: EventData
+): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
   const bcc = [];
-  const subject = 'Event Cancelled';
+  const subject = "Event Cancelled";
 
   const templateData = {
     name: user.name,
@@ -179,48 +214,52 @@ const cancelEventEmailHelper = async (user: VolunteerData,
   const templateFile = EVENT_CANCEL_TEMPLATE_FILE;
 
   return {
-    to, cc, bcc, subject, templateFile, templateData,
+    to,
+    cc,
+    bcc,
+    subject,
+    templateFile,
+    templateData,
   };
 };
 
-export const sendEmail = async (emailType: EmailTemplate,
+export const sendEmail = async (
+  emailType: EmailTemplate,
   userId: string,
-  eventId: string | null = null): Promise<void> => {
+  eventId: string | null = null
+): Promise<void> => {
   let helperObject;
   const volunteerData: VolunteerData | null = await Volunteer.findById(userId);
-  const eventData = eventId && await Event.findById(eventId);
+  const eventData = eventId && (await Event.findById(eventId));
 
   if (!volunteerData || !eventData) {
     throw new Error(DETAILS_NOT_FOUND);
   }
 
   switch (emailType) {
-    case 'EVENT_SIGN_UP_CONFIRMATION':
+    case "EVENT_SIGN_UP_CONFIRMATION":
       helperObject = await eventSignUpConfirmationEmailHelper(
-        volunteerData, eventData,
+        volunteerData,
+        eventData
       );
       break;
-    case 'FEEDBACK':
-      helperObject = await feedbackEmailHelper(volunteerData,
-        eventData);
+    case "FEEDBACK":
+      helperObject = await feedbackEmailHelper(volunteerData, eventData);
       break;
-    case 'WAITLIST_TO_CONFIRMED':
+    case "WAITLIST_TO_CONFIRMED":
       helperObject = await waitlistToConfirmedEmailHelper(
-        volunteerData, eventData,
+        volunteerData,
+        eventData
       );
       break;
-    case 'CANCEL_EVENT':
-      helperObject = await cancelEventEmailHelper(
-        volunteerData, eventData,
-      );
+    case "CANCEL_EVENT":
+      helperObject = await cancelEventEmailHelper(volunteerData, eventData);
       break;
     default:
       throw new Error(EMAIL_TYPE_INVALID);
   }
 
-  const {
-    to, cc, bcc, subject, templateFile, templateData,
-  } = helperObject;
+  const { to, cc, bcc, subject, templateFile, templateData } = helperObject;
 
   return sendEmailHelper(to, cc, bcc, subject, templateFile, templateData);
 };

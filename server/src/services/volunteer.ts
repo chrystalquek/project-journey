@@ -1,9 +1,12 @@
 /* eslint-disable max-len */
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import Volunteer, {
-  NewVolunteerData, VolunteerData, VolunteerType, VOLUNTEER_TYPE,
-} from '../models/Volunteer';
-import userService from './user';
+  NewVolunteerData,
+  VolunteerData,
+  VolunteerType,
+  VOLUNTEER_TYPE,
+} from "../models/Volunteer";
+import userService from "./user";
 
 // Helper methods
 export const doesUserEmailExist = async (email: string): Promise<boolean> => {
@@ -17,9 +20,14 @@ export const doesUserEmailExist = async (email: string): Promise<boolean> => {
  * Creates new volunteer for both ad-hoc/committed
  * @param volunteerData new volunteer data
  */
-const createVolunteer = async (volunteerData: NewVolunteerData): Promise<VolunteerData> => {
+const createVolunteer = async (
+  volunteerData: NewVolunteerData
+): Promise<VolunteerData> => {
   // create user first
-  const user = await userService.createUser({ password: volunteerData.password, administratorRemarks: volunteerData.administratorRemarks });
+  const user = await userService.createUser({
+    password: volunteerData.password,
+    administratorRemarks: volunteerData.administratorRemarks,
+  });
 
   // add userId to volunteer
   const volunteerSchemaData = new Volunteer({
@@ -40,7 +48,9 @@ const createVolunteer = async (volunteerData: NewVolunteerData): Promise<Volunte
 const getVolunteer = async (email: string): Promise<VolunteerData> => {
   const volunteer = await Volunteer.findOne({
     email,
-  }).lean().exec();
+  })
+    .lean()
+    .exec();
 
   if (!volunteer) {
     throw new Error(`Volunteer with email: ${email} not found`);
@@ -55,7 +65,10 @@ const getVolunteer = async (email: string): Promise<VolunteerData> => {
  * @param id User id to be searched
  */
 const getVolunteerById = async (id: string): Promise<VolunteerData> => {
-  const volunteer = await Volunteer.findById(id).populate('commitmentApplicationIds').lean().exec();
+  const volunteer = await Volunteer.findById(id)
+    .populate("commitmentApplicationIds")
+    .lean()
+    .exec();
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }
@@ -68,16 +81,26 @@ const getVolunteerById = async (id: string): Promise<VolunteerData> => {
  * Filter by volunteerType and name inclusive
  * Sort by field specified if any
  */
-const getAllVolunteers = async (volunteerType?: VolunteerType[], name?: string, sort?: string, skip?: number, limit?: number): Promise<{ data: VolunteerData[], count: number }> => {
+const getAllVolunteers = async (
+  volunteerType?: VolunteerType[],
+  name?: string,
+  sort?: string,
+  skip?: number,
+  limit?: number
+): Promise<{ data: VolunteerData[]; count: number }> => {
   // no of volunteers that match name (if any)
-  const count = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
+  const count = await Volunteer.find(
+    name ? { name: { $regex: `.*${name}.*`, $options: "xis" } } : {}
+  )
     .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
     .countDocuments();
 
   // get only part of the collection cos of pagination
-  const volunteers = await Volunteer.find(name ? { name: { $regex: `.*${name}.*`, $options: 'xis' } } : {})
+  const volunteers = await Volunteer.find(
+    name ? { name: { $regex: `.*${name}.*`, $options: "xis" } } : {}
+  )
     .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
-    .sort({ [sort ?? '']: 1 })
+    .sort({ [sort ?? ""]: 1 })
     .skip(skip ?? 0)
     .limit(limit ?? 0)
     .lean()
@@ -92,7 +115,9 @@ const getAllVolunteers = async (volunteerType?: VolunteerType[], name?: string, 
  * @param ids array of volunteer ids
  * @return corresponding volunteers
  */
-const getVolunteersByIds = async (ids: string[]): Promise<Array<VolunteerData>> => {
+const getVolunteersByIds = async (
+  ids: string[]
+): Promise<Array<VolunteerData>> => {
   try {
     const volunteers = await Volunteer.find({
       _id: { $in: ids },
@@ -109,12 +134,15 @@ const getVolunteersByIds = async (ids: string[]): Promise<Array<VolunteerData>> 
  * @param email
  * @param updatedVolunteerData
  */
-const updateVolunteerDetails = async (email: string, updatedVolunteerData: Partial<VolunteerData>) => {
+const updateVolunteerDetails = async (
+  email: string,
+  updatedVolunteerData: Partial<VolunteerData>
+) => {
   await getVolunteer(email);
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
     { email },
     updatedVolunteerData,
-    { new: true },
+    { new: true }
   );
   return savedVolunteerData;
 };
@@ -124,11 +152,14 @@ const updateVolunteerDetails = async (email: string, updatedVolunteerData: Parti
  * @param id
  * @param updatedVolunteerData
  */
-const updateVolunteer = async (id: string, updatedVolunteerData: Partial<VolunteerData>): Promise<VolunteerData> => {
+const updateVolunteer = async (
+  id: string,
+  updatedVolunteerData: Partial<VolunteerData>
+): Promise<VolunteerData> => {
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
     { _id: id },
     updatedVolunteerData,
-    { new: true },
+    { new: true }
   );
   if (!savedVolunteerData) {
     throw new Error(`Volunteer with id: ${id} not found`);
@@ -153,5 +184,12 @@ const deleteVolunteer = async (email: string): Promise<void> => {
 };
 
 export default {
-  createVolunteer, deleteVolunteer, getAllVolunteers, getVolunteer, getVolunteerById, getVolunteersByIds, updateVolunteerDetails, updateVolunteer,
+  createVolunteer,
+  deleteVolunteer,
+  getAllVolunteers,
+  getVolunteer,
+  getVolunteerById,
+  getVolunteersByIds,
+  updateVolunteerDetails,
+  updateVolunteer,
 };

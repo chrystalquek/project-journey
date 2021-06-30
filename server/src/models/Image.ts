@@ -1,6 +1,4 @@
-import {
-  createSchema, ExtractProps, Type, typedModel,
-} from 'ts-mongoose';
+import { createSchema, ExtractProps, Type, typedModel } from "ts-mongoose";
 
 const ImageSchema = createSchema({
   email: Type.string({ required: true }),
@@ -14,4 +12,4 @@ const ImageSchema = createSchema({
 
 export type ImageData = Omit<ExtractProps<typeof ImageSchema>, "__v">;
 
-export default typedModel('Image', ImageSchema);
+export default typedModel("Image", ImageSchema);

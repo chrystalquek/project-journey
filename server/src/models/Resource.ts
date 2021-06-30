@@ -1,9 +1,7 @@
-import {
-  createSchema, ExtractProps, Type
-} from 'ts-mongoose';
-import mongoose from 'mongoose';
+import { createSchema, ExtractProps, Type } from "ts-mongoose";
+import mongoose from "mongoose";
 
-const RESOURCE_TYPE = ['google docs', 'link', 'pdf', 'video']
+const RESOURCE_TYPE = ["google docs", "link", "pdf", "video"];
 
 const ResourceSchema = createSchema({
   name: Type.string({ required: true }),
@@ -18,8 +16,10 @@ const ResourceSchema = createSchema({
   }),
 });
 
-export type ResourceData = Omit<ExtractProps<typeof ResourceSchema>, "__v" | "_id"> & { _id: string };
+export type ResourceData = Omit<
+  ExtractProps<typeof ResourceSchema>,
+  "__v" | "_id"
+> & { _id: string };
 
-type ResourceModel = ResourceData & mongoose.Document
-export default mongoose.model<ResourceModel>('Resource', ResourceSchema);
-
+type ResourceModel = ResourceData & mongoose.Document;
+export default mongoose.model<ResourceModel>("Resource", ResourceSchema);

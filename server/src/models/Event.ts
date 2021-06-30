@@ -1,11 +1,11 @@
-import mongoose from 'mongoose'
-import { Type, createSchema, ExtractProps } from 'ts-mongoose';
-import { VOLUNTEER_TYPE } from './Volunteer';
+import mongoose from "mongoose";
+import { Type, createSchema, ExtractProps } from "ts-mongoose";
+import { VOLUNTEER_TYPE } from "./Volunteer";
 
-const options = { discriminatorKey: 'eventType' };
+const options = { discriminatorKey: "eventType" };
 
-export const EVENT_TYPE = ['workshop', 'volunteering', 'hangout'] as const
-export type EventType = (typeof EVENT_TYPE)[number]
+export const EVENT_TYPE = ["workshop", "volunteering", "hangout"] as const;
+export type EventType = typeof EVENT_TYPE[number];
 
 // make sure RoleData matches fields defined in EventSchema
 export type RoleData = {
@@ -13,11 +13,11 @@ export type RoleData = {
   description: string;
   capacity: number;
   volunteers: string[];
-}
+};
 
-const CONTENT_TYPE = ['pdf', 'video', 'image', 'links', 'document']
+const CONTENT_TYPE = ["pdf", "video", "image", "links", "document"];
 
-export type EventSearchType = 'all' | 'upcoming' | 'past'
+export type EventSearchType = "all" | "upcoming" | "past";
 
 const EventSchema = createSchema(
   {
@@ -25,11 +25,11 @@ const EventSchema = createSchema(
     coverImage: Type.string({ required: false }),
     eventType: Type.string({
       enum: EVENT_TYPE,
-      required: true
+      required: true,
     }),
     volunteerType: Type.string({
       enum: VOLUNTEER_TYPE,
-      required: true
+      required: true,
     }),
     startDate: Type.date({ required: true }),
     endDate: Type.date({ required: true }),
@@ -48,7 +48,7 @@ const EventSchema = createSchema(
     contentUrl: Type.string({ required: false }),
     contentType: Type.string({
       enum: CONTENT_TYPE,
-      required: false
+      required: false,
     }),
     location: Type.string({ required: true }),
     isCancelled: Type.boolean({
@@ -56,21 +56,25 @@ const EventSchema = createSchema(
       default: false,
     }),
     feedbackStatus: Type.boolean({
-      required: false
+      required: false,
     }),
     createdAt: Type.date({
       required: true,
       default: Date.now,
     }),
-  }, options
-)
+  },
+  options
+);
 
-export type EventData = Omit<ExtractProps<typeof EventSchema>, "__v" | "_id" | "roles"> & {
-  _id: string,
-  roles: RoleData[]
+export type EventData = Omit<
+  ExtractProps<typeof EventSchema>,
+  "__v" | "_id" | "roles"
+> & {
+  _id: string;
+  roles: RoleData[];
 };
 
-export type NewEventData = Omit<EventData, "_id" | "createdAt">
+export type NewEventData = Omit<EventData, "_id" | "createdAt">;
 
-type EventModel = EventData & mongoose.Document
-export default mongoose.model<EventModel>('Event', EventSchema);
+type EventModel = EventData & mongoose.Document;
+export default mongoose.model<EventModel>("Event", EventSchema);

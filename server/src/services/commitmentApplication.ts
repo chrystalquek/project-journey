@@ -1,18 +1,27 @@
-import mongoose from 'mongoose';
-import CommitmentApplication, { CommitmentApplicationData, CommitmentApplicationStatus, NewCommitmentApplicationData } from '../models/CommitmentApplication';
+import mongoose from "mongoose";
+import CommitmentApplication, {
+  CommitmentApplicationData,
+  CommitmentApplicationStatus,
+  NewCommitmentApplicationData,
+} from "../models/CommitmentApplication";
 
 const createCommitmentApplication = async (
-  commitmentApplicationData: NewCommitmentApplicationData,
+  commitmentApplicationData: NewCommitmentApplicationData
 ): Promise<CommitmentApplicationData> => {
-  const commitmentApplicationSchemaData: mongoose.Document = new CommitmentApplication({
-    volunteerId: mongoose.Types.ObjectId(commitmentApplicationData.volunteerId)
-  });
-  const savedCommitmentApplication = await commitmentApplicationSchemaData.save();
+  const commitmentApplicationSchemaData: mongoose.Document =
+    new CommitmentApplication({
+      volunteerId: mongoose.Types.ObjectId(
+        commitmentApplicationData.volunteerId
+      ),
+    });
+  const savedCommitmentApplication =
+    await commitmentApplicationSchemaData.save();
   return savedCommitmentApplication.toObject();
 };
 
-const getCommitmentApplications = async (status?: CommitmentApplicationStatus):
-  Promise<CommitmentApplicationData[]> => {
+const getCommitmentApplications = async (
+  status?: CommitmentApplicationStatus
+): Promise<CommitmentApplicationData[]> => {
   const commitmentApplications = await (status
     ? CommitmentApplication.find({ status })
     : CommitmentApplication.find({}));
@@ -21,16 +30,16 @@ const getCommitmentApplications = async (status?: CommitmentApplicationStatus):
 
 const updateCommitmentApplication = async (
   id: string,
-  updatedFields: Partial<CommitmentApplicationData>,
+  updatedFields: Partial<CommitmentApplicationData>
 ): Promise<CommitmentApplicationData> => {
   try {
     const commitmentApplication = await CommitmentApplication.findOneAndUpdate(
       { _id: id },
       { $set: updatedFields },
-      { new: true },
+      { new: true }
     );
     if (!commitmentApplication) {
-      throw new Error('Commitment Application is not found');
+      throw new Error("Commitment Application is not found");
     } else {
       return commitmentApplication;
     }

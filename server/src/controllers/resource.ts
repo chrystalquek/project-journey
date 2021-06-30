@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import HTTP_CODES from '../constants/httpCodes';
-import { ResourceData } from '../models/Resource';
-import resourceService from '../services/resource';
+import { Request, Response } from "express";
+import HTTP_CODES from "../constants/httpCodes";
+import { ResourceData } from "../models/Resource";
+import resourceService from "../services/resource";
 
 const createResource = async (req: Request, res: Response): Promise<void> => {
   try {
     const resourceData: ResourceData = req.body;
     await resourceService.createResource(resourceData);
-    res.status(HTTP_CODES.OK).send('Resource data created');
+    res.status(HTTP_CODES.OK).send("Resource data created");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -33,7 +33,7 @@ const updateResource = async (req: Request, res: Response): Promise<void> => {
 
     await resourceService.updateResource(id, updatedFields);
 
-    res.status(HTTP_CODES.OK).send('Resource data updated');
+    res.status(HTTP_CODES.OK).send("Resource data updated");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -44,7 +44,7 @@ const updateResource = async (req: Request, res: Response): Promise<void> => {
 const deleteResource = async (req: Request, res: Response): Promise<void> => {
   try {
     await resourceService.deleteResource(req.params.id);
-    res.status(HTTP_CODES.OK).send('Resource data deleted');
+    res.status(HTTP_CODES.OK).send("Resource data deleted");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

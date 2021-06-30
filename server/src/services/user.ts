@@ -1,6 +1,6 @@
-import User, { NewUserData, UserData } from '../models/User';
-import { VolunteerData } from '../models/Volunteer';
-import volunteerService from './volunteer';
+import User, { NewUserData, UserData } from "../models/User";
+import { VolunteerData } from "../models/Volunteer";
+import volunteerService from "./volunteer";
 
 const createUser = async (userData: NewUserData): Promise<UserData> => {
   const userSchemaData = new User({
@@ -29,12 +29,13 @@ const getUserByEmail = async (email: string): Promise<UserData> => {
   return user;
 };
 
-const updateUser = async (id: string, userData: Partial<UserData>): Promise<UserData> => {
-  const savedUserData = await User.findOneAndUpdate(
-    { _id: id },
-    userData,
-    { new: true },
-  );
+const updateUser = async (
+  id: string,
+  userData: Partial<UserData>
+): Promise<UserData> => {
+  const savedUserData = await User.findOneAndUpdate({ _id: id }, userData, {
+    new: true,
+  });
   if (!savedUserData) {
     throw new Error(`User with id: ${id} is not found`);
   }
@@ -47,12 +48,18 @@ const deleteUser = async (id: string): Promise<void> => {
   });
 };
 
-const addAdminRemarks = async (volunteerData: VolunteerData):
-  Promise<VolunteerData & { administratorRemarks?: string }> => {
+const addAdminRemarks = async (
+  volunteerData: VolunteerData
+): Promise<VolunteerData & { administratorRemarks?: string }> => {
   const user = await getUser(volunteerData.userId);
   return { ...volunteerData, administratorRemarks: user.administratorRemarks };
 };
 
 export default {
-  createUser, getUser, getUserByEmail, updateUser, deleteUser, addAdminRemarks,
+  createUser,
+  getUser,
+  getUserByEmail,
+  updateUser,
+  deleteUser,
+  addAdminRemarks,
 };
