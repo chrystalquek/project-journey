@@ -4,35 +4,31 @@ import { stringEnumValidator } from './global';
 
 type CommitmentApplicationValidatorMethod = 'createCommitmentApplication' | 'readCommitmentApplication' | 'updateCommitmentApplication'
 
-const commitmentApplicationStatus: ValidationChain = body('status','status is not valid')
-  .isString()
-  .custom((status: string) => stringEnumValidator(
-    COMMITMENT_APPLICATION_STATUS,
-    'Commitment Application Status',
-    status,
-  ));
-
-
-
 export const getValidations = (method: CommitmentApplicationValidatorMethod): ValidationChain[] => {
   switch (method) {
     case 'createCommitmentApplication': {
       return [
         body('volunteerId', 'volunteer ID does not exist').exists(),
-        body('volunteerId', 'volunteer ID is not a object id').isMongoId(),// not sure if the ref to Volunteer needs to be checked as well
+        body('volunteerId', 'volunteer ID is not a string').isString(),
         body('status', 'status does not exist').exists(),
-        body('status', 'status is not a string').isString(), // not sure if it's redundant as enum is checked on next line and all members of this enum are string
-        commitmentApplicationStatus, 
-        body('createdAt', 'time of creation does not exist').exists(),
-        body('createdAt', 'time of creation is of wrong date format').isISO8601(),
+        body('status', 'status is not valid').custom((status: string) => stringEnumValidator(
+          COMMITMENT_APPLICATION_STATUS,
+          'Commitment Application Status',
+          status,
+        )),
+        body('createdAt', 'createdAt is of wrong date format').isISO8601(),
       ];
     }
     case 'updateCommitmentApplication': {
       return [
-        body('volunteerId', 'volunteer ID is not a object id').isMongoId(),
-        body('status', 'status is not a string').isString(), 
-        commitmentApplicationStatus,
-        body('createdAt', 'time of creation is of wrong date format').isISO8601(),
+        body('volunteerId', 'volunteer ID is not a string').isString(),
+        body('status', 'status is not a string').isString(),
+        body('status', 'status is not valid').isString().custom((status: string) => stringEnumValidator(
+          COMMITMENT_APPLICATION_STATUS,
+          'Commitment Application Status',
+          status,
+        )),
+        body('createdAt', 'createdAt is of wrong date format').isISO8601(),
       ];
     }
     default:
