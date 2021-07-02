@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import ProfileDivider from "@components/common/ProfileDivider";
 import DataRow from "@components/common/DataRow";
 import PaddedGrid from "@components/common/PaddedGrid";
@@ -19,7 +19,9 @@ const SignUpInformation: FC<props> = ({ profilePageData }) => {
   return (
     <PaddedGrid>
       <Grid item>
-        <Typography variant="h4">Sign Up Information</Typography>
+        <Box fontWeight="fontWeightMedium" fontSize="h3.fontSize">
+          Sign Up Information
+        </Box>
       </Grid>
       <Grid item>
         <ProfileDivider />

@@ -31,12 +31,12 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
       <EventPaper alignItems="center">
         <PersonIcon className={classes.icon} />
         <EventTypography
-          fontSize="h4"
+          fontSize="h2"
           fontBold
           text="You need an account to register events."
         />
         <EventTypography
-          fontSize="h4"
+          fontSize="h2"
           gutterBottom
           text="It takes less than 2mins to create one"
         />

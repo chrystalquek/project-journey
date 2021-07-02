@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -26,7 +27,7 @@ const DataRow: FC<Props> = ({ header, data, xs1, xs2 }) => {
     <Grid container item className={classes.grid}>
       <Grid item xs={xs1}>
         <Typography>
-          <strong>{header}:</strong>
+          <Box fontWeight="fontWeightMedium">{header}:</Box>
         </Typography>
       </Grid>
       <Grid item xs={xs2}>

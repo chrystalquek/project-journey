@@ -20,7 +20,11 @@ import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { EventButton } from "@components/common/event/EventButton";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { getUpcomingEvents } from "@redux/actions/event";
-import { CREATE_EVENT_FORM_ROUTE, EVENTS_ROUTE, LOGIN_ROUTE } from "@utils/constants/routes";
+import {
+  CREATE_EVENT_FORM_ROUTE,
+  EVENTS_ROUTE,
+  LOGIN_ROUTE,
+} from "@utils/constants/routes";
 
 type EventsPageBodyProps = {
   // nothing yet
@@ -112,7 +116,10 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
               justify="center"
               alignItems="center"
             >
-              <EventButton disableRipple onClick={() => router.push(CREATE_EVENT_FORM_ROUTE)}>
+              <EventButton
+                disableRipple
+                onClick={() => router.push(CREATE_EVENT_FORM_ROUTE)}
+              >
                 Create new event
               </EventButton>
             </Grid>

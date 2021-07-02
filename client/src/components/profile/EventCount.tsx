@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Grid, Button, makeStyles, Typography } from "@material-ui/core";
+import { Grid, Button, makeStyles, Typography, Box } from "@material-ui/core";
 import ProfileDivider from "@components/common/ProfileDivider";
 import DataRow from "@components/common/DataRow";
 import PaddedGrid from "@components/common/PaddedGrid";
@@ -27,7 +27,9 @@ const EventCount: FC<props> = ({ profilePageData }) => {
   return (
     <PaddedGrid>
       <Grid item>
-        <Typography variant="h4">Event Count</Typography>
+        <Box fontWeight="fontWeightMedium" fontSize="h3.fontSize">
+          Event Count
+        </Box>
       </Grid>
       <Grid item>
         <ProfileDivider />

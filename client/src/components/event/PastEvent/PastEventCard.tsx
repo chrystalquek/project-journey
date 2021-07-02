@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   submitFeedbackButton: {
     textTransform: "none",
-    color: theme.palette.text.secondary,
+    color: theme.palette.primary.dark,
     fontWeight: "bold",
   },
   media: {

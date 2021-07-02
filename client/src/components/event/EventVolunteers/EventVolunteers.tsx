@@ -16,6 +16,7 @@ import {
   MenuItem,
   Badge,
   InputLabel,
+  Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@redux/store";
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     textAlign: "left",
   },
+  // TODO abstract this to button
   redCloseButton: {
     width: "55px",
     height: "38px",
@@ -53,15 +55,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "5em",
   },
   whiteCancelIcon: {
-    color: "white",
+    color: theme.palette.common.white,
   },
+  // TODO abstract this to button
   assignButton: {
     backgroundColor: theme.palette.primary.main,
     "&:hover": {
       backgroundColor: "#def024", // lighter green
     },
     borderRadius: "5em",
-    color: "white",
+    color: theme.palette.common.white,
     width: "80%",
   },
   tickButton: {
@@ -79,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 2px 4px 1px rgba(0, 0, 0, 0.25)",
   },
   badge: {
-    color: "white",
+    color: theme.palette.common.white,
     backgroundColor: theme.palette.primary.main,
   },
 }));
@@ -535,7 +538,7 @@ const EventVolunteers = ({ eid }) => {
     <>
       <Grid container alignItems="center" justify="center">
         <Grid item xs={12} md={8}>
-          <h2>{event?.name}</h2>
+          <Typography variant="h1">{event?.name}</Typography>
         </Grid>
         <Grid item xs={12} md={8}>
           <Tabs tabs={tabs} clickedOn={1} />

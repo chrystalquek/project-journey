@@ -30,7 +30,6 @@ const RemarksTextField: FC<props> = ({
         size="small"
         multiline
         variant="filled"
-        color="secondary"
         value={value}
         onChange={onChange}
         label={label}

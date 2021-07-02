@@ -44,10 +44,7 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.85,
   },
   orangeText: {
-    color: theme.palette.warning.main,
-  },
-  greenText: {
-    color: theme.palette.text.secondary,
+    color: theme.palette.tertiary.main,
   },
 }));
 
@@ -87,7 +84,7 @@ const EventCard: FC<EventCardProps> = ({
         return <Typography>-</Typography>;
       default:
         return (
-          <Typography className={classes.greenText}>
+          <Typography color="textSecondary">
             Volunteer role assigned -{status[1]}
           </Typography>
         );

@@ -9,4 +9,5 @@ export const VOLUNTEER_PROFILES_ROUTE = "/volunteer";
 export const VOLUNTEER_PENDING_REQUESTS_ROUTE = "/volunteer/pending-requests";
 
 export const CREATE_EVENT_FORM_ROUTE = "/event/create";
-export const EDIT_EVENT_FORM_ROUTE = (eventId: string) => `/event/${eventId}/edit`;
+export const EDIT_EVENT_FORM_ROUTE = (eventId: string) =>
+  `/event/${eventId}/edit`;

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import ProfileDivider from "@components/common/ProfileDivider";
 import DataRow from "@components/common/DataRow";
 import PaddedGrid from "@components/common/PaddedGrid";
@@ -12,7 +12,9 @@ type props = {
 const ContactInformation: FC<props> = ({ profilePageData }) => (
   <PaddedGrid>
     <Grid item>
-      <Typography variant="h4">Contact Information</Typography>
+      <Box fontWeight="fontWeightMedium" fontSize="h3.fontSize">
+        Contact Information
+      </Box>
     </Grid>
     <Grid item>
       <ProfileDivider />

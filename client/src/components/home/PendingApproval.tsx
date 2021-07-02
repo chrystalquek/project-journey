@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     textAlign: "center",
     fontSize: "large",
-    color: "white",
+    color: theme.palette.common.white,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -47,7 +47,9 @@ const PendingApproval: FC<{}> = () => {
       <CardContent>
         <Grid container direction="row">
           <Grid item xs={10}>
-            <Typography variant="h4">Pending Approvals</Typography>
+            <Typography variant="h2" style={{ fontWeight: "bold" }}>
+              Pending Approvals
+            </Typography>
             <Typography>
               {pendingVolunteerCount} pending volunteer approvals
             </Typography>

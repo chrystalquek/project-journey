@@ -380,7 +380,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Type of event */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant="h4">Type of Event</Typography>
+              <Typography style={{ fontWeight: "bold" }}>
+                Type of Event
+              </Typography>
             </Grid>
             <Grid item xs={6} md={2}>
               <TextField
@@ -390,7 +392,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 id="type"
                 type="text"
                 fullWidth
-                color="secondary"
                 name="eventType"
                 value={eventType}
                 onChange={handleChange}
@@ -421,7 +422,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Name of event */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant="h4">Name of Event</Typography>
+              <Typography style={{ fontWeight: "bold" }}>
+                Name of Event
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -431,7 +434,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 placeholder={getEventTypePlaceholder(eventType)}
                 type="text"
                 fullWidth
-                color="secondary"
                 name="name"
                 value={name}
                 onChange={handleChange}
@@ -444,7 +446,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Volunteer Type */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant="h4">Volunteer Type</Typography>
+              <Typography style={{ fontWeight: "bold" }}>
+                Volunteer Type
+              </Typography>
             </Grid>
             <Grid item xs={6} md={2}>
               <TextField
@@ -454,7 +458,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 id="type"
                 type="text"
                 fullWidth
-                color="secondary"
                 name="volunteerType"
                 value={volunteerType}
                 onChange={handleChange}
@@ -473,7 +476,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Date - From & To */}
           <Grid item container direction="row" alignItems="center" spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h4">Date</Typography>
+              <Typography style={{ fontWeight: "bold" }}>Date</Typography>
             </Grid>
             <Grid item xs={2} md="auto">
               <Typography variant="body1">From</Typography>
@@ -496,7 +499,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 onChange={(date) => setFieldValue("startDate", date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
-                color="secondary"
                 helperText={errors.startDate}
                 error={touched.startDate && Boolean(errors.startDate)}
               />
@@ -523,7 +525,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 onChange={(date) => setFieldValue("endDate", date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
-                color="secondary"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
                 minDate={startDate}
@@ -535,7 +536,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Sign-up Deadline */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant="h4">Sign-up Deadline</Typography>
+              <Typography style={{ fontWeight: "bold" }}>
+                Sign-up Deadline
+              </Typography>
             </Grid>
             <Grid item xs={10} md={3}>
               <KeyboardDateTimePicker
@@ -555,7 +558,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 onChange={(date) => setFieldValue("deadline", date)}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
-                color="secondary"
                 helperText={errors.deadline}
                 error={touched.deadline && Boolean(errors.deadline)}
               />
@@ -565,7 +567,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Number of Vacancies */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant="h4">Number of Vacancies</Typography>
+              <Typography style={{ fontWeight: "bold" }}>
+                Number of Vacancies
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -575,7 +579,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 placeholder="e.g. 20"
                 type="text"
                 fullWidth
-                color="secondary"
                 name="vacancies"
                 value={vacancies}
                 onChange={handleChange}
@@ -588,7 +591,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           {/* Event Description */}
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant="h4">Event Description</Typography>
+              <Typography style={{ fontWeight: "bold" }}>
+                Event Description
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -598,7 +603,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 placeholder="Type something here..."
                 type="text"
                 fullWidth
-                color="secondary"
                 name="description"
                 value={description}
                 onChange={handleChange}
@@ -614,7 +618,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <>
               <Grid item container>
                 <Grid item xs={12}>
-                  <Typography variant="h4"> Name of Facilitator</Typography>
+                  <Typography style={{ fontWeight: "bold" }}>
+                    {" "}
+                    Name of Facilitator
+                  </Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -624,7 +631,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                     placeholder="eg. Ms Anna Soh"
                     type="text"
                     fullWidth
-                    color="secondary"
                     name="facilitatorName"
                     value={facilitatorName}
                     onChange={handleChange}
@@ -648,7 +654,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               </Grid>
               <Grid item container>
                 <Grid item xs={12}>
-                  <Typography variant="h4">
+                  <Typography style={{ fontWeight: "bold" }}>
                     Description of Facilitator
                   </Typography>
                 </Grid>
@@ -660,7 +666,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                     placeholder="Type something here..."
                     type="text"
                     fullWidth
-                    color="secondary"
                     name="facilitatorDescription"
                     value={facilitatorDescription}
                     onChange={handleChange}
@@ -682,7 +687,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               {() => (
                 <>
                   <div>
-                    <Typography variant="h2">
+                    <Typography variant="h1">
                       Volunteer Response Form
                     </Typography>
                   </div>

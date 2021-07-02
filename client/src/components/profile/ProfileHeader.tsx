@@ -5,6 +5,8 @@ import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 import { useAppSelector } from "@redux/store";
+import DataRow from "@components/common/DataRow";
+import { formatDDMMYYYY } from "@utils/helpers/date";
 import ProfilePicture from "./ProfilePicture";
 import ApproveCommitmentApplication from "./ApproveCommitmentApplication";
 import ChangeVolunteerType from "./ChangeVolunteerType";
@@ -64,14 +66,25 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
 
       {/* User details */}
       <Grid item xs={12} sm="auto">
-        <Typography variant="h2" className={classes.header}>
+        <Typography
+          variant="h2"
+          style={{ fontWeight: "bold" }}
+          className={classes.header}
+        >
           {profilePageData.name}
         </Typography>
-        <Grid item container alignItems="center">
+        <Grid item container alignItems="center" direction="column">
           <Grid item>
-            <Typography className={classes.header}>
-              <strong>Volunteer Type: </strong>
-              {profilePageData?.volunteerType?.toString()}
+            <DataRow
+              header="Volunteer Status"
+              data={profilePageData?.volunteerType?.toString()}
+              xs1={9}
+              xs2={3}
+            />
+          </Grid>
+          <Grid item>
+            <Typography>
+              Member Since {formatDDMMYYYY(profilePageData?.createdAt)}
             </Typography>
           </Grid>
           <Grid item>

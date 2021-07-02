@@ -45,12 +45,12 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       textTransform: "none",
       marginLeft: theme.spacing(2),
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: "bold",
+      fontSize: theme.typography.h2.fontSize,
+      fontWeight: theme.typography.fontWeightMedium,
     },
     buttonRight: {
       textTransform: "none",
-      fontSize: theme.typography.h4.fontSize,
+      fontSize: theme.typography.h2.fontSize,
       fontWeight: "bold",
     },
     nameContainer: {
@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(2),
     },
     nameStyle: {
-      color: "#000000",
       flex: 1,
     },
     loginButtonContainer: {

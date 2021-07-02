@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
-    color: "black",
+    color: theme.palette.common.black,
     textTransform: "none",
     padding: "5px 50px",
     borderRadius: 20,
@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme) => ({
   },
   signUpText: {
     fontWeight: "bold",
-    color: "#000",
+    color: theme.palette.common.black,
     cursor: "pointer",
   },
   invalidText: {
     marginBottom: "10px",
-    color: "#e60026",
+    color: theme.palette.error.main,
   },
   section: {
     margin: "20px",

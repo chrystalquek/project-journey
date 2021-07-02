@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     textAlign: "center",
     fontSize: "large",
-    color: "white",
+    color: theme.palette.common.white,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

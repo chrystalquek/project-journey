@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import ProfileDivider from "@components/common/ProfileDivider";
 import PaddedGrid from "@components/common/PaddedGrid";
 import RemarksTextField from "@components/profile/RemarksTextField";
@@ -82,7 +82,9 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   return (
     <PaddedGrid>
       <Grid item>
-        <Typography variant="h4">Remarks</Typography>
+        <Box fontWeight="fontWeightMedium" fontSize="h3.fontSize">
+          Remarks
+        </Box>
       </Grid>
       <Grid item>
         <ProfileDivider />

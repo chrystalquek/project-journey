@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
   },
   checkIcon: {
     fontSize: "100px",
-    color: "#D0DE39", // light green
+    color: theme.palette.primary.main,
   },
   image: {
     width: "100%",
@@ -170,7 +170,9 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
               <CloseIcon />
             </Button>
             <div className={classes.title}>
-              <Typography variant="h2">{title}</Typography>
+              <Typography variant="h2" style={{ fontWeight: "bold" }}>
+                {title}
+              </Typography>
             </div>
             <div className={classes.imageContainer}>
               <img
@@ -180,11 +182,11 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
               />
             </div>
             <div className={classes.dateTimeContainer}>
-              <Typography variant="h4">
+              <Typography style={{ fontWeight: "bold" }}>
                 Date:
                 {` ${date}`}
               </Typography>
-              <Typography variant="h4">
+              <Typography style={{ fontWeight: "bold" }}>
                 Time:
                 {` ${time}`}
               </Typography>
@@ -193,7 +195,10 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
               <Typography variant="body2">{description}</Typography>
             </div>
             <div className={classes.footer}>
-              <Typography variant="h4" className={classes.submitFeedback}>
+              <Typography
+                style={{ fontWeight: "bold" }}
+                className={classes.submitFeedback}
+              >
                 How was the event?
               </Typography>
               <EventButton
@@ -211,7 +216,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
           <form onSubmit={() => {}}>
             <div className={classes.root}>
               <div className={classes.title}>
-                <Typography variant="h2">
+                <Typography variant="h2" style={{ fontWeight: "bold" }}>
                   Submitting Feedback for: {title}
                 </Typography>
               </div>
@@ -245,6 +250,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                   variant="h2"
                   style={{
                     textAlign: "center",
+                    fontWeight: "bold",
                   }}
                 >
                   Your Feedback has been submitted! Thank you for your feedback

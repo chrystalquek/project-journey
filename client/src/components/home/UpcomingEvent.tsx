@@ -32,10 +32,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   orangeText: {
-    color: theme.palette.warning.main,
+    color: theme.palette.tertiary.main,
   },
   header: {
     padding: theme.spacing(5),
+    fontWeight: "bold",
   },
   button: {
     padding: theme.spacing(5),
@@ -157,7 +158,7 @@ const UpcomingEvent: FC<{}> = () => {
 
   return (
     <div className={classes.pane}>
-      <Typography className={classes.header} variant="h4" align="center">
+      <Typography className={classes.header} variant="h2" align="center">
         {isAdmin(user) ? "" : "My "}
         Upcoming Events
       </Typography>
@@ -181,7 +182,9 @@ const UpcomingEvent: FC<{}> = () => {
                   ).date
                 }
               </Typography>
-              <Typography variant="h4">{event.name}</Typography>
+              <Typography variant="h2" style={{ fontWeight: "bold" }}>
+                {event.name}
+              </Typography>
               <Typography>
                 Time:{" "}
                 {

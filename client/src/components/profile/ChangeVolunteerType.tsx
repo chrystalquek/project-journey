@@ -75,7 +75,7 @@ const ChangeVolunteerType: FC = () => {
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>
-          <Typography variant="h2" className={classes.centralize}>
+          <Typography className={classes.centralize}>
             Change volunteer type to
           </Typography>
         </DialogTitle>

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(5),
   },
   editButtonText: {
-    color: "black",
+    color: theme.palette.common.black,
   },
 }));
 

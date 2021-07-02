@@ -37,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
-    color: "black",
+    color: theme.palette.common.black,
     textTransform: "none",
     padding: "5px 50px 5px 50px",
     borderRadius: 20,
   },
   backButton: {
     backgroundColor: theme.palette.secondary.main,
-    color: "black",
+    color: theme.palette.common.black,
     textTransform: "none",
     padding: "5px 50px 5px 50px",
     borderRadius: 20,
@@ -70,10 +70,10 @@ const useStyles = makeStyles((theme) => ({
   },
   invalidText: {
     marginBottom: "10px",
-    color: "#e60026",
+    color: theme.palette.error.main,
   },
   dividerLine: {
-    backgroundColor: "#D0DE39",
+    backgroundColor: theme.palette.primary.main,
     height: 1,
   },
   dividerText: {
@@ -84,13 +84,15 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "10px",
   },
   cardHeaderAdhoc: {
-    background: "#D0DE39",
-    color: "#fff",
+    background: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    fontSize: theme.typography.h2.fontSize,
     borderRadius: "10px 10px 0px 0px",
   },
   cardHeaderRegular: {
-    background: "#00BADC",
-    color: "#fff",
+    background: theme.palette.secondary.main,
+    color: theme.palette.common.white,
+    fontSize: theme.typography.h2.fontSize,
     borderRadius: "10px 10px 0px 0px",
   },
   signUpInstructions: {
@@ -105,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
   },
   login: {
     fontWeight: "bold",
-    color: "#000",
+    color: theme.palette.common.black,
     cursor: "pointer",
   },
   loginFooter: {
@@ -220,7 +222,7 @@ const SignUp = () => {
           <Grid container className={classes.centerContent}>
             <Grid item sm={6}>
               <TextDivider>
-                <Typography variant="body1">Sign Up As</Typography>
+                <Typography variant="h1">Sign Up As</Typography>
               </TextDivider>
             </Grid>
           </Grid>

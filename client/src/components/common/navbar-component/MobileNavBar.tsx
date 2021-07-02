@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     listButton: {
       textTransform: "none",
-      fontSize: theme.typography.h4.fontSize,
+      fontSize: theme.typography.h2.fontSize,
       fontWeight: "bold",
     },
     nested: {
@@ -74,9 +74,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 1,
     },
     primaryTextStyle: {
-      color: "#000", // black
+      color: theme.palette.common.black,
       textTransform: "none",
-      fontSize: theme.typography.h4.fontSize,
+      fontSize: theme.typography.h2.fontSize,
       fontWeight: "bold",
     },
   })

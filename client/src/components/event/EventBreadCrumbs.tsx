@@ -12,9 +12,9 @@ const EventBreadCrumbs: FC<EventBreadCrumbsProps> = ({ eid }) => {
   const event: EventData | null = getStoreEvent(eid);
 
   return (
-    <Breadcrumbs separator=">" aria-label="breadcrumb">
+    <Breadcrumbs separator=">" color="textPrimary" aria-label="breadcrumb">
       <Typography>Events</Typography>
-      <Link color="textSecondary" href={EVENTS_ROUTE}>
+      <Link color="textPrimary" href={EVENTS_ROUTE}>
         Search events
       </Link>
       {event ? <Typography>{event.name}</Typography> : null}

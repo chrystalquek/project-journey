@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(5),
     marginTop: theme.spacing(5),
     height: 30,
-    backgroundColor: "#D3D3D3",
+    backgroundColor: theme.palette.common.white,
     borderRadius: "5em",
     fontSize: "small",
     justifyContent: "center",
@@ -85,7 +85,7 @@ export function ActionableDialog(props: ActionableDialogProps) {
           justify="center"
         >
           <Grid item>
-            <Typography variant="h4">{content}</Typography>
+            <Typography>{content}</Typography>
           </Grid>
 
           <Grid container direction="row" spacing={5} justify="center">

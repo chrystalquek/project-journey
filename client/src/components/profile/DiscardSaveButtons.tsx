@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   save: {
-    color: "#FFFFFF",
+    color: theme.palette.common.black,
   },
   discard: {
     color: theme.palette.secondary.main,
@@ -27,7 +27,6 @@ const DiscardSaveButtons: FC<props> = ({ show, onSave, onDiscard }) => {
         <Grid item>
           <Button
             variant="contained"
-            color="secondary"
             onClick={onSave}
             size="small"
             disableElevation
