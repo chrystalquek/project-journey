@@ -16,19 +16,19 @@ export const getValidations = (method: CommitmentApplicationValidatorMethod): Va
           'Commitment Application Status',
           status,
         )),
-        body('createdAt', 'createdAt is of wrong date format').isISO8601(),
+        body('createdAt', 'time of creation is of wrong date format').isISO8601(),
       ];
     }
     case 'updateCommitmentApplication': {
       return [
-        body('volunteerId', 'volunteer ID is not a string').isString(),
-        body('status', 'status is not a string').isString(),
-        body('status', 'status is not valid').isString().custom((status: string) => stringEnumValidator(
+        body('volunteerId', 'volunteer ID is not a string').optional({ checkFalsy: true }).isString(),
+        body('status', 'status is not a string').optional({ checkFalsy: true }).isString(),
+        body('status', 'status is not valid').optional({ checkFalsy: true }).custom((status: string) => stringEnumValidator(
           COMMITMENT_APPLICATION_STATUS,
           'Commitment Application Status',
           status,
         )),
-        body('createdAt', 'createdAt is of wrong date format').isISO8601(),
+        body('createdAt', 'time of creation is of wrong date format').isISO8601(),
       ];
     }
     default:
