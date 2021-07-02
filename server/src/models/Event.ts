@@ -62,7 +62,8 @@ const EventSchema = createSchema(
       required: true,
       default: Date.now,
     }),
-  }, options
+  }, 
+  options
 )
 
 export type EventData = Omit<ExtractProps<typeof EventSchema>, "__v" | "_id" | "roles"> & {

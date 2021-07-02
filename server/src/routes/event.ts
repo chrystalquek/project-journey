@@ -24,11 +24,21 @@ router.delete('/:id', authorize(['admin']), eventController.deleteEvent);
 
 // @route   PUT /event
 // @desc    Update a event by id
-router.put('/:id', authorize(['admin']), eventController.updateEvent);
+router.put(
+  '/:id',
+  authorize(['admin']),
+  validate(getValidations('updateEvent')),
+  eventController.updateEvent
+);
 
 // @route   PUT /event/cancel/:id
 // @desc    Cancel an event by id
-router.put('/cancel/:id', authorize(['admin']), eventController.cancelEvent);
+router.put(
+  '/cancel/:id',
+  authorize(['admin']),
+  validate(getValidations('updateEvent')),
+  eventController.cancelEvent,
+);
 
 // @route   POST /event
 // @desc    Post a new event
