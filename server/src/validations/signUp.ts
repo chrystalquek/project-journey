@@ -23,7 +23,7 @@ const signUpStatusValidator = (value: SignUpStatus) => {
 
 function isArrayOfStrings(value: Array<any>): boolean {
   return value.every(item => typeof item === "string");
-}
+};
 
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
@@ -35,8 +35,9 @@ const getValidations = (method: SignUpValidatorMethod) => {
         body('userId', 'user id is not a string').isString(),
         body('status', 'status does not exist').exists(),
         body('status', 'status is not valid').custom((status: SignUpStatus) => signUpStatusValidator(status)),
-        body('preferences', 'preferences does not exist').isArray().notEmpty(),
-        body('preferences', 'preferences is not an array of string').custom((preferences: Array<any>) => isArrayOfStrings(preferences)),
+        body('preferences', 'preferences does not exist').exists(),
+        body('preferences', 'preferences is not an array').isArray(),
+        body('preferences', 'preferences is not an array of string').custom((preferences: any[]) => isArrayOfStrings(preferences)),
         body('isRestricted', 'is restricted does not exist').exists(),
         body('isRestricted', 'is restricted is not a boolean value').isBoolean(),
         body('createdAt', 'createdAt is of wrong date format').isISO8601(),
@@ -44,13 +45,12 @@ const getValidations = (method: SignUpValidatorMethod) => {
     }
     case 'updateSignUp': {
       return [
-        body('eventId', 'event id is not a string').isString(),
-        body('userId', 'user id is not a string').isString(),
+        body('eventId', 'event id is not a string').optional({ checkFalsy: true }).isString(),
+        body('userId', 'user id is not a string').optional({ checkFalsy: true }).isString(),
         body('status', 'status is not valid').custom((status: SignUpStatus) => signUpStatusValidator(status)),
-        body('preferences', 'preferences does not exist').isArray().notEmpty(),
-        body('preferences', 'preferences is not an array of string').custom((preferences: Array<any>) => isArrayOfStrings(preferences)),
-        body('isRestricted', 'is restricted is not a boolean value').isBoolean(),
-        body('createdAt', 'createdAt is of wrong date format').isISO8601(),
+        body('preferences', 'preferences is not an array of string').optional({ checkFalsy: true }).custom((preferences: Array<any>) => isArrayOfStrings(preferences)),
+        body('isRestricted', 'is restricted is not a boolean value').optional({ checkFalsy: true }).isBoolean(),
+        body('createdAt', 'createdAt is of wrong date format').optional({ checkFalsy: true }).isISO8601(),
       ];
     }
     default: {
