@@ -10,7 +10,7 @@ import {
   SOCIAL_MEDIA_PLATFORM,
   VolunteerData,
 } from "../models/Volunteer";
-import { NewUserData, UserData } from "../models/User";
+import { NewUserData, setPassword, UserData } from "../models/User";
 import { EventData, NewEventData } from "../models/Event";
 import { NewSignUpData } from "../models/SignUp";
 import { NewCommitmentApplicationData } from "../models/CommitmentApplication";
@@ -108,7 +108,7 @@ async function seedDB() {
     const users: Array<NewUserData & { createdAt: Date }> = Array.from(
       { length: essentialVolunteerData.length },
       () => ({
-        password: "hello123!",
+        password: setPassword("hello123!"),
         administratorRemarks: faker.lorem.sentence(),
         createdAt: faker.date.between(
           new Date(2018, 1, 1),

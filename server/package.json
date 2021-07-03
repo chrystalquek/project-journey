@@ -15,7 +15,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prod": "npm run build && npm run start",
     "create-env": "printenv > .env",
-    "seed-db": "node ./src/seed/index.ts"
+    "seed-db": "npm run build && node ./build/seed/index.js"
   },
   "repository": {
     "type": "git",
