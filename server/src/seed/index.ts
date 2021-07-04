@@ -15,15 +15,6 @@ import { EventData, NewEventData } from "../models/Event";
 import { NewSignUpData } from "../models/SignUp";
 import { NewCommitmentApplicationData } from "../models/CommitmentApplication";
 
-// const mongoose = require("mongoose");
-// const faker = require("faker");
-// const _ = require("lodash");
-// const volunteer = require('../models/Volunteer');
-// const { CITIZENSHIP, GENDER, LEADERSHIP_INTEREST, NewVolunteerData, RACE, SOCIAL_MEDIA_PLATFORM, VolunteerData } = require("../models/Volunteer");
-// const { NewUserData } = require("../models/User");
-
-// const { CITIZENSHIP, GENDER, LEADERSHIP_INTEREST, RACE, SOCIAL_MEDIA_PLATFORM, } = volunteer
-
 
 async function seedDB() {
   // Connection URL
@@ -69,7 +60,6 @@ async function seedDB() {
     const essentialVolunteerData: Array<
       Pick<NewVolunteerData, "volunteerType" | "name">
     > = [
-      // const essentialVolunteerData = [
       {
         name: "adhoc1",
         volunteerType: "ad-hoc",
@@ -104,7 +94,6 @@ async function seedDB() {
       },
     ];
 
-    // const users = Array.from(
     const users: Array<NewUserData & { createdAt: Date }> = Array.from(
       { length: essentialVolunteerData.length },
       () => ({
@@ -129,10 +118,6 @@ async function seedDB() {
       | "hangoutsCount"
       | "commitmentApplicationIds"
     > & { createdAt: Date };
-    // const volunteers = _.zipWith(
-    //   essentialVolunteerData,
-    //   newUserIds,
-    //   (vol, userId) => {
     const volunteers: Array<NewVolunteerDataSeed> = _.zipWith(
       essentialVolunteerData,
       newUsers,
@@ -149,7 +134,7 @@ async function seedDB() {
           ),
           address: faker.address.streetAddress(true),
           mobileNumber: `8${faker.phone.phoneNumber("#######")}`,
-          photoUrl: "@clara",
+          photoUrl: "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/woman-1625393990543.jpeg?generation=1625393993120164&alt=media",
           email: `${vol.name}@gmail.com`,
 
           socialMediaPlatform: faker.random.arrayElement(SOCIAL_MEDIA_PLATFORM),
@@ -291,8 +276,8 @@ async function seedDB() {
           {
             name: "photographer",
             description: faker.lorem.sentence(),
-            capacity: 1,
-            volunteers: [volunteerNamesToIds.adhoc1],
+            capacity: 2,
+            volunteers: [volunteerNamesToIds.adhoc1, volunteerNamesToIds.committed1],
           },
           {
             name: "chef",
@@ -320,19 +305,19 @@ async function seedDB() {
           {
             name: "eventlead",
             description: faker.lorem.sentence(),
-            capacity: 0,
+            capacity: 1,
             volunteers: [volunteerNamesToIds.committed1],
           },
           {
             name: "social media",
             description: faker.lorem.sentence(),
-            capacity: 0,
+            capacity: 1,
             volunteers: [volunteerNamesToIds.committed2],
           },
           {
             name: "fundraising",
             description: faker.lorem.sentence(),
-            capacity: 0,
+            capacity: 1,
             volunteers: [volunteerNamesToIds.committed3],
           },
         ],
@@ -349,13 +334,13 @@ async function seedDB() {
           {
             name: "eventlead",
             description: faker.lorem.sentence(),
-            capacity: 0,
+            capacity: 1,
             volunteers: [volunteerNamesToIds.committed1],
           },
           {
             name: "kids",
             description: faker.lorem.sentence(),
-            capacity: 0,
+            capacity: 2,
             volunteers: [
               volunteerNamesToIds.adhoc3,
               volunteerNamesToIds.committed2,
@@ -364,7 +349,7 @@ async function seedDB() {
           {
             name: "chef",
             description: faker.lorem.sentence(),
-            capacity: 0,
+            capacity: 1,
             volunteers: [volunteerNamesToIds.committed3],
           },
         ],
@@ -410,21 +395,20 @@ async function seedDB() {
     const events: Array<NewEventDataSeed> = essentialEventData.map((eve) => {
       const event: NewEventDataSeed = {
         ...eve,
-        coverImage: "@clara",
+        coverImage: "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/people_extend_hand-1625393691729.jpeg?generation=1625393694760151&alt=media",
         endDate: faker.date.soon(7, eve.startDate),
         deadline: faker.date.recent(30, eve.startDate),
         vacancies: eve.roles
           .map((role) => role.capacity)
           .reduce((a, b) => a + b, 0),
         description: faker.lorem.sentence(),
-        contentUrl: "@clara",
         location: faker.address.secondaryAddress(),
       };
 
       if (event.eventType === "workshop") {
         event.facilitatorName = faker.name.findName();
         event.facilitatorDescription = faker.lorem.sentence();
-        event.facilitatorPhoto = "@clara";
+        event.facilitatorPhoto = "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/woman_2-1625394082590.png?generation=1625394085211457&alt=media";
       }
 
       event.createdAt = faker.date.recent(7, event.deadline);
@@ -449,18 +433,10 @@ async function seedDB() {
 
     // -Mark: signup collection
 
-    // createdAt: Date;
-    //       status: any;
-    //       userId: mongoose.Types.ObjectId;
-    //       eventId: mongoose.Types.ObjectId;
-    //       preferences: string[];
-    //       isRestricted: boolean;
-
     // rejected or pending sign ups
     const essentialSignUpData: Array<
       Pick<NewSignUpData, "status" | "userId" | "eventId">
     > = [
-      // const essentialVolunteerData = [
       {
         status: "rejected",
         userId: volunteerNamesToIds.adhoc3,
@@ -551,7 +527,7 @@ async function seedDB() {
     const commitmentApplications: Array<NewCommitmentApplicationDataSeed> =
       essentialCommitmentApplicationData.map((comApp) => {
         const volunteer = newVolunteers.find(
-          (vol) => vol._id == comApp.volunteerId
+          (vol) => vol._id === comApp.volunteerId
         );
 
         if (!volunteer) {
