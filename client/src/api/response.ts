@@ -61,12 +61,8 @@ export type GetCommitmentApplicationsResponse = {
 
 export type UpdateCommitmentApplicationResponse = CommitmentApplicationData;
 
-// image
-
-export type UploadImageResponse = {
-  name: string;
-  url: string;
-};
+// file
+export type UploadFileResponse = { url: string };
 
 // form
 

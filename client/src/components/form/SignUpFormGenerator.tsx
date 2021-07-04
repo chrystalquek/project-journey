@@ -6,9 +6,6 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import * as Yup from "yup";
 import { VolunteerType } from "@type/volunteer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { useAppDispatch } from "@redux/store";
-import { uploadImage } from "@redux/actions/image";
 import { useRouter } from "next/router";
 import { SignUpResponse } from "@api/response";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -21,6 +18,7 @@ import {
   QuestionList,
   QuestionsWithHeader,
 } from "@type/form/form";
+import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import { FormQuestionMapper } from "./FormGenerator";
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +66,6 @@ const SignUpFormGenerator = ({
 }: FormGeneratorProps) => {
   const classes = useStyles();
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>("");
@@ -86,14 +83,6 @@ const SignUpFormGenerator = ({
     initialValues[name] = questionType === "checkboxes" ? [] : initialValue;
   });
 
-  const onUploadImage = (imageFile, name) => {
-    const form = new FormData();
-    form.append("image", imageFile);
-    form.append("email", "dummy@dummy.com");
-
-    return dispatch(uploadImage({ name, form }));
-  };
-
   const handleSubmit = async (formValues: Record<string, any>) => {
     // @ts-ignore type exists
     const values = objectFilter(
@@ -103,12 +92,7 @@ const SignUpFormGenerator = ({
 
     // Upload and get cover image URL
     if (values.photoUrl && typeof values.photoUrl !== "string") {
-      // @ts-ignore type exists
-      await onUploadImage(values.photoUrl, "photoUrl")
-        .then(unwrapResult)
-        .then((result) => {
-          values.photoUrl = result.url;
-        });
+      values.photoUrl = await uploadAndGetFileUrl(values.photoUrl, "image");
     }
 
     const response = await handleSignUp({

@@ -14,7 +14,8 @@ import { PhotoCamera } from "@material-ui/icons";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { useAppDispatch } from "@redux/store";
-import { updateProfilePicture } from "@redux/actions/image";
+import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
+import { updateVolunteer } from "@redux/actions/user";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -44,9 +45,11 @@ const ProfilePicture = ({ profilePageData }) => {
   // https://www.npmjs.com/package/react-image-crop
 
   let fileUrl = "";
+  const [file, setFile] = useState<File>(null); 
   const [src, setSrc] = useState<string>(null);
   const [imageRef, setImageRef] = useState(null);
-  const [newImageUrl, setNewImageUrl] = useState<string>("");
+  // TODO: decide whether to remove this state 
+  const [, setNewImageUrl] = useState<string>("");
   const [crop, setCrop] = useState({
     unit: "%",
     width: 30,
@@ -63,6 +66,7 @@ const ProfilePicture = ({ profilePageData }) => {
         setSrc(reader.result as string);
       });
       reader.readAsDataURL(e.target.files[0]);
+      setFile(e.target.files[0]); 
     }
   };
 
@@ -118,15 +122,9 @@ const ProfilePicture = ({ profilePageData }) => {
   };
 
   const handleSave = async () => {
-    const blob = await fetch(newImageUrl).then((res) => res.blob());
-    const metadata = { type: "image/jpeg" };
-    const imageFile = new File([blob], "profile.jpg", metadata);
-
-    const form = new FormData();
-    form.append("image", imageFile);
-    form.append("email", profilePageData.email);
-
-    dispatch(updateProfilePicture(form));
+    const photoUrl = await uploadAndGetFileUrl(file, "image"); 
+    const updatedVolunteerData = { ...profilePageData, photoUrl };
+    dispatch(updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData })); 
     setSrc(null);
   };
 

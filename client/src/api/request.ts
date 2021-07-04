@@ -115,13 +115,12 @@ export interface AnswerFormQuestionsRequest {
   answers: Array<Omit<AnswerData, "_id" | "createdAt">>;
 }
 
-// image
+// file
+export type FileType = "image" | "video" | "application";
 
-export type UploadImageRequest = FormData;
-
-export type UploadImageRequestWithField = {
-  name: string;
-  form: FormData;
+export type UploadFileRequest = {
+  formData: FormData;
+  fileType: FileType;
 };
 
 // some commonly used types

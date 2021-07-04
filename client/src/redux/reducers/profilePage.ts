@@ -1,4 +1,3 @@
-import { updateProfilePicture } from "@redux/actions/image";
 import { getVolunteerById } from "@redux/actions/profilePage";
 import { updateVolunteer } from "@redux/actions/user";
 import { createSlice } from "@reduxjs/toolkit";
@@ -21,12 +20,6 @@ const profilePageDataSlice = createSlice({
       state.data = action.payload;
     });
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
-      const updatedVolunteerData = action.payload;
-      if (state?.data.email === updatedVolunteerData.email) {
-        state.data = updatedVolunteerData;
-      }
-    });
-    builder.addCase(updateProfilePicture.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload;
       if (state?.data.email === updatedVolunteerData.email) {
         state.data = updatedVolunteerData;

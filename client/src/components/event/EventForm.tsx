@@ -14,18 +14,16 @@ import PaddedGrid from "@components/common/PaddedGrid";
 import DropZoneCard from "@components/common/DropZoneCard";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { createEvent, getEvent, editEvent } from "@redux/actions/event";
-import { uploadImage } from "@redux/actions/image";
-import { resetImages } from "@redux/reducers/image";
 import dayjs from "dayjs";
 import { Formik, useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as yup from "yup";
-import { unwrapResult } from "@reduxjs/toolkit";
 import ClearIcon from "@material-ui/icons/Clear";
 import { resetEventStatus } from "@redux/reducers/event";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { ToastStatus } from "@type/common";
+import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import { FormQuestionMapper } from "../form/FormGenerator";
 
 type AdminEventFormProps = {
@@ -156,7 +154,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const event = useAppSelector((state) => state.event);
   const eventForm: any = useAppSelector((state) => state.event.form);
-  const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -206,7 +203,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         ...feedbackFormEventQuestions[index].options,
         "",
       ];
-
       handleChangeQuestion(newOption, "options", index);
     },
     [feedbackFormEventQuestions]
@@ -271,21 +267,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       );
       setToastStatus("success");
       setOpenSnackbar(true);
-
-      dispatch(resetImages());
       setTimeout(() => {
         router.push("/event");
       }, TOAST_MESSAGE_LENGTH_MS);
     }
   }, [event.status]);
-
-  const onUploadImage = (imageFile, name) => {
-    const form = new FormData();
-    form.append("image", imageFile);
-    form.append("email", user.user.email);
-
-    return dispatch(uploadImage({ name, form }));
-  };
 
   const {
     errors,
@@ -304,12 +290,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       // Upload and get cover image URL
       if (formValues.coverImage && typeof formValues.coverImage !== "string") {
-        // @ts-ignore type exists
-        await onUploadImage(formValues.coverImage, "coverImage")
-          .then(unwrapResult)
-          .then((result) => {
-            form.coverImage = result.url;
-          });
+        form.coverImage = await uploadAndGetFileUrl(formValues.coverImage, "image");
       }
 
       // Upload and get facilitator photo URL
@@ -317,12 +298,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         formValues.facilitatorPhoto &&
         typeof formValues.facilitatorPhoto !== "string"
       ) {
-        // @ts-ignore type exists
-        await onUploadImage(formValues.facilitatorPhoto, "facilitatorPhoto")
-          .then(unwrapResult)
-          .then((result) => {
-            form.facilitatorPhoto = result.url;
-          });
+        form.facilitatorPhoto = await uploadAndGetFileUrl(formValues.facilitatorPhoto, "image");;
       }
 
       const newForm = {
@@ -344,7 +320,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
   const onChangeImage = (e, fieldName) => {
     if (e.target.files && e.target.files[0]) {
-      const imageFile = e.target.files[0];
+      const imageFile: File = e.target.files[0];
       setFieldValue(fieldName, imageFile);
       return URL.createObjectURL(imageFile);
     }
@@ -362,6 +338,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     facilitatorDescription,
     startDate,
     endDate,
+    location
   } = values;
 
   if (id !== "new" && eventForm === null) {
@@ -560,6 +537,29 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 format="DD/MM/YYYY HH:mm"
                 helperText={errors.deadline}
                 error={touched.deadline && Boolean(errors.deadline)}
+              />
+            </Grid>
+          </Grid>
+
+          {/* Event Location */}
+          <Grid item container>
+            <Grid item xs={12}>
+              <Typography variant="h4">Location</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                margin="dense"
+                id="location"
+                placeholder="Type something here..."
+                type="text"
+                fullWidth
+                color="secondary"
+                name="location"
+                value={location}
+                onChange={handleChange}
+                helperText={errors.location}
+                error={touched.location && Boolean(errors.location)}
               />
             </Grid>
           </Grid>

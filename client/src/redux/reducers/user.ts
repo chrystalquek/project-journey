@@ -4,7 +4,6 @@ import { VolunteerData } from "@type/volunteer";
 import jwt from "jsonwebtoken";
 import apiClient from "@api/apiClient";
 import { REHYDRATE } from "redux-persist";
-import { updateProfilePicture } from "@redux/actions/image";
 import user, { updateVolunteer } from "../actions/user";
 
 type FetchStatus = "fetching" | "fulfilled" | "rejected" | "";
@@ -67,13 +66,6 @@ const userSlice = createSlice({
       const updatedVolunteerData = action.payload;
       // Update the loggedInUser data
       if (state.user._id === updatedVolunteerData._id) {
-        state.user = updatedVolunteerData;
-      }
-    });
-    builder.addCase(updateProfilePicture.fulfilled, (state, action) => {
-      const updatedVolunteerData = action.payload;
-      // Update the loggedInUser data
-      if (state.user.email === updatedVolunteerData.email) {
         state.user = updatedVolunteerData;
       }
     });

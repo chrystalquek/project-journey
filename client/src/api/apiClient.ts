@@ -1,4 +1,3 @@
-import { VolunteerData } from "@type/volunteer";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { SignUpIdType } from "@type/signUp";
 import querystring from "querystring";
@@ -25,7 +24,7 @@ import {
   UpdateCommitmentApplicationRequest,
   AnswerFormQuestionsRequest,
   CreateFormQuestionsRequest,
-  UploadImageRequest,
+  UploadFileRequest,
   GetEventFeedbackQuestionsRequest,
 } from "./request";
 import {
@@ -47,7 +46,7 @@ import {
   GetCommitmentApplicationsResponse,
   UpdateCommitmentApplicationResponse,
   GetEventFeedbackQuestionsResponse,
-  UploadImageResponse,
+  UploadFileResponse,
 } from "./response";
 
 type HttpMethod = "get" | "post" | "put" | "delete";
@@ -237,16 +236,10 @@ class AxiosApiClient {
     return this.send(request, "form/answer", "post");
   }
 
-  // image
-
-  async uploadImage(request: UploadImageRequest): Promise<UploadImageResponse> {
-    return this.send(request, "image", "post", true);
-  }
-
-  async updateProfilePicture(
-    request: UploadImageRequest
-  ): Promise<VolunteerData> {
-    return this.send(request, "image/profile-picture", "post", true);
+  // file
+  async uploadFile(request: UploadFileRequest): Promise<UploadFileResponse> {
+    const { formData, fileType } = request;
+    return this.send(formData, `file/${fileType}`, "post", true);
   }
 
   protected async send(

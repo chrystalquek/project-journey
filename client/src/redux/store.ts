@@ -1,7 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "@redux/reducers/user";
 import EventReducer from "@redux/reducers/event";
-import imageReducer from "@redux/reducers/image";
 import volunteerReducer from "@redux/reducers/volunteer/index";
 import profilePageReducer from "@redux/reducers/profilePage";
 import loadingReducer from "@redux/reducers/loading";
@@ -32,7 +31,6 @@ const reducers = combineReducers({
   signUp: signUpReducer,
   form: formReducer,
   commitmentApplication: commitmentApplicationReducer,
-  image: imageReducer,
   profilePage: profilePageReducer,
   loading: loadingReducer,
 });
@@ -45,7 +43,7 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
-const store = configureStore({
+export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     process.env.NODE_ENV === "development"
