@@ -1,5 +1,7 @@
-import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
 import SearchBar from "@components/common/SearchBar";
+import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
+import EventsFilter from "@components/event/EventsFilter";
+import { withFilters } from "@components/event/helpers/EventsPageBody";
 import {
   Button,
   Drawer,
@@ -8,18 +10,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import { EventData, EventFilterOptions, EventFilters } from "@type/event";
-import React, { FC, useCallback, useEffect, useState } from "react";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
-import EventsFilter from "@components/event/EventsFilter";
-import { withFilters } from "@components/event/helpers/EventsPageBody";
-import { useRouter } from "next/router";
-import { VolunteerData } from "@type/volunteer";
-import { useAppDispatch, useAppSelector } from "@redux/store";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { getSignedUpEventsPastEvent } from "@redux/actions/event";
-import { EVENTS_ROUTE, LOGIN_ROUTE } from "@utils/constants/routes";
-import PastEventCard from "./PastEventCard";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { EventData, EventFilterOptions, EventFilters } from "@type/event";
+import { VolunteerData } from "@type/volunteer";
+import React, { FC, useEffect, useState } from "react";
+import EventsGrid from "../EventsGrid";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -41,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 
 const PastEventsPageBody: FC<{}> = () => {
   const theme = useTheme();
-  const router = useRouter();
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
@@ -80,17 +77,6 @@ const PastEventsPageBody: FC<{}> = () => {
     event.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleCardClick = useCallback(
-    (eventId: string) => {
-      if (user) {
-        router.push(`${EVENTS_ROUTE}/${eventId}`);
-      } else {
-        router.push(LOGIN_ROUTE);
-      }
-    },
-    [user]
-  );
-
   if (screenSm) {
     return (
       <>
@@ -121,17 +107,7 @@ const PastEventsPageBody: FC<{}> = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid container xs={12} spacing={4}>
-            {filteredSearchedEvents?.map((event) => (
-              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <PastEventCard
-                  key={event._id}
-                  event={event}
-                  onCardClick={() => handleCardClick(event._id)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <EventsGrid events={filteredSearchedEvents} type="my-past-events" />
         </Grid>
         <Drawer
           anchor="right"
@@ -170,17 +146,7 @@ const PastEventsPageBody: FC<{}> = () => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item container sm={12} spacing={2}>
-            {filteredSearchedEvents?.map((event) => (
-              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <PastEventCard
-                  key={event._id}
-                  event={event}
-                  onCardClick={() => router.push(`/event/${event._id}`)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <EventsGrid events={filteredSearchedEvents} type="my-past-events" />
         </Grid>
         <Grid item sm={3}>
           <div style={{ width: "100%" }}>

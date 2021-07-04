@@ -1,5 +1,7 @@
-import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
 import SearchBar from "@components/common/SearchBar";
+import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
+import EventsFilter from "@components/event/EventsFilter";
+import { withFilters } from "@components/event/helpers/EventsPageBody";
 import {
   Button,
   Drawer,
@@ -8,18 +10,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import { EventData, EventFilterOptions, EventFilters } from "@type/event";
-import React, { FC, useCallback, useEffect, useState } from "react";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
-import EventsFilter from "@components/event/EventsFilter";
-import { withFilters } from "@components/event/helpers/EventsPageBody";
-import { useRouter } from "next/router";
-import { VolunteerData } from "@type/volunteer";
-import { useAppDispatch, useAppSelector } from "@redux/store";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { getSignedUpEventsUpcomingEvent } from "@redux/actions/event";
-import { EVENTS_ROUTE, LOGIN_ROUTE } from "@utils/constants/routes";
-import EventCard from "../EventCard";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { EventData, EventFilterOptions, EventFilters } from "@type/event";
+import { VolunteerData } from "@type/volunteer";
+import React, { FC, useEffect, useState } from "react";
+import EventsGrid from "../EventsGrid";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -41,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 
 const UpcomingEvents: FC<{}> = () => {
   const theme = useTheme();
-  const router = useRouter();
   const classes = useStyles();
   const screenSm = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
@@ -51,10 +48,6 @@ const UpcomingEvents: FC<{}> = () => {
       .filter((event) => event)
   );
   const user: VolunteerData | null = useAppSelector((state) => state.user.user);
-
-  const signUps = useAppSelector((state) => state.signUp);
-  const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;
-  const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
 
   useEffect(() => {
     dispatch(
@@ -87,17 +80,6 @@ const UpcomingEvents: FC<{}> = () => {
     event.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleCardClick = useCallback(
-    (eventId: string) => {
-      if (user) {
-        router.push(`${EVENTS_ROUTE}/${eventId}`);
-      } else {
-        router.push(LOGIN_ROUTE);
-      }
-    },
-    [user]
-  );
-
   if (screenSm) {
     return (
       <>
@@ -128,17 +110,10 @@ const UpcomingEvents: FC<{}> = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid container xs={12} spacing={4}>
-            {filteredSearchedEvents?.map((event) => (
-              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onCardClick={() => handleCardClick(event._id)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <EventsGrid
+            events={filteredSearchedEvents}
+            type="my-upcoming-events"
+          />
         </Grid>
         <Drawer
           anchor="right"
@@ -177,18 +152,10 @@ const UpcomingEvents: FC<{}> = () => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item container sm={12} spacing={2}>
-            {filteredSearchedEvents?.map((event) => (
-              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onCardClick={() => router.push(`/event/${event._id}`)}
-                  upcomingSignUps={upcomingSignUps}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <EventsGrid
+            events={filteredSearchedEvents}
+            type="my-upcoming-events"
+          />
         </Grid>
         <Grid item sm={3}>
           <div style={{ width: "100%" }}>

@@ -4,7 +4,7 @@ import { VolunteerType, VolunteerData } from "@type/volunteer";
 import { Chip, Grid, makeStyles } from "@material-ui/core";
 import { testEventImage1 } from "@utils/constants/imagePaths";
 import {
-  ADHOC_VOLUNTEER_TAG,
+  ALL_VOLUNTEERS_TAG,
   COMMITTED_VOLUNTEER_TAG,
 } from "@components/event/index";
 import EventInformation from "@components/event/EventDetails/EventDetailsParts/EventInformation";
@@ -57,7 +57,7 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({
       )}
       {event.volunteerType === VolunteerType.ADHOC && (
         <Grid className={classes.gutterBottom} item xs={12}>
-          <Chip color="primary" label={ADHOC_VOLUNTEER_TAG} />
+          <Chip color="primary" label={ALL_VOLUNTEERS_TAG} />
         </Grid>
       )}
 

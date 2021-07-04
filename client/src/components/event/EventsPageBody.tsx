@@ -1,5 +1,9 @@
-import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
+import { EventButton } from "@components/common/event/EventButton";
 import SearchBar from "@components/common/SearchBar";
+import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
+import EventsFilter from "@components/event/EventsFilter";
+import { withFilters } from "@components/event/helpers/EventsPageBody";
+import { CREATE_EVENT_FORM_ROUTE } from "@constants/routes";
 import {
   Button,
   Drawer,
@@ -8,23 +12,15 @@ import {
   Typography,
 } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import { EventData, EventFilterOptions, EventFilters } from "@type/event";
-import { FC, useCallback, useEffect, useState } from "react";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
-import EventCard from "@components/event/EventCard";
-import EventsFilter from "@components/event/EventsFilter";
-import { withFilters } from "@components/event/helpers/EventsPageBody";
-import { useRouter } from "next/router";
-import { VolunteerData, VolunteerType } from "@type/volunteer";
-import { EventButton } from "@components/common/event/EventButton";
-import { useAppDispatch, useAppSelector } from "@redux/store";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { getUpcomingEvents } from "@redux/actions/event";
-import {
-  CREATE_EVENT_FORM_ROUTE,
-  EVENTS_ROUTE,
-  LOGIN_ROUTE,
-} from "@utils/constants/routes";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { EventData, EventFilterOptions, EventFilters } from "@type/event";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
+import { useRouter } from "next/router";
+import React, { FC, useEffect, useState } from "react";
+import EventsGrid from "./EventsGrid";
 
 type EventsPageBodyProps = {
   // nothing yet
@@ -34,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
   box: {
     marginBottom: "1rem",
     lineHeight: "2rem",
-  },
-  card: {
-    display: "flex",
   },
   filterResultsBtn: {
     background: "none",
@@ -87,17 +80,6 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
     event.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleCardClick = useCallback(
-    (eventId: string) => {
-      if (user) {
-        router.push(`${EVENTS_ROUTE}/${eventId}`);
-      } else {
-        router.push(LOGIN_ROUTE);
-      }
-    },
-    [user]
-  );
-
   if (screenSm) {
     return (
       <>
@@ -145,17 +127,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid container xs={12} spacing={4}>
-            {filteredSearchedEvents?.map((event) => (
-              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onCardClick={() => handleCardClick(event._id)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <EventsGrid events={filteredSearchedEvents} type="public" />
         </Grid>
         <Drawer
           anchor="right"
@@ -204,17 +176,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item container sm={12} spacing={2}>
-            {filteredSearchedEvents?.map((event) => (
-              <Grid key={event._id} item className={classes.card} sm={6} md={4}>
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onCardClick={() => router.push(`/event/${event._id}`)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <EventsGrid events={filteredSearchedEvents} type="public" />
         </Grid>
         <Grid item sm={3}>
           <div style={{ width: "100%" }}>
