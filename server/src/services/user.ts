@@ -52,7 +52,9 @@ const addAdminRemarks = async (
   volunteerData: VolunteerData
 ): Promise<VolunteerData & { administratorRemarks?: string }> => {
   const user = await getUser(volunteerData.userId);
-  return { ...volunteerData, administratorRemarks: user.administratorRemarks };
+  const volunteer: VolunteerData & { administratorRemarks?: string } = volunteerData
+  volunteer.administratorRemarks = user.administratorRemarks
+  return volunteer;
 };
 
 export default {

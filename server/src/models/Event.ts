@@ -74,7 +74,7 @@ export type EventData = Omit<
   roles: RoleData[];
 };
 
-export type NewEventData = Omit<EventData, "_id" | "createdAt">;
+export type NewEventData = Omit<EventData, "_id" | "createdAt" | "isCancelled">;
 
 type EventModel = EventData & mongoose.Document;
 export default mongoose.model<EventModel>("Event", EventSchema);
