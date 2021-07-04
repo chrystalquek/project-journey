@@ -2,11 +2,7 @@ import { Type, createSchema, ExtractProps } from "ts-mongoose";
 import mongoose from "mongoose";
 
 // types in schema
-export const SIGN_UP_STATUS = [
-  "pending",
-  ["accepted", String],
-  "rejected",
-] as const;
+export const SIGN_UP_STATUS = ["pending", "accepted", "rejected"];
 export type SignUpStatus = typeof SIGN_UP_STATUS[number];
 
 // types in controllers/services
@@ -19,6 +15,7 @@ const SignUpSchema = createSchema({
     required: true,
     enum: SIGN_UP_STATUS,
   }),
+  acceptedRole: Type.string({ required: false }),
   preferences: Type.array({ required: true }).of(
     Type.string({ required: true })
   ),

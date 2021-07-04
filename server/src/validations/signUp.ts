@@ -1,25 +1,8 @@
 import { body } from "express-validator";
-import { SignUpStatus } from "../models/SignUp";
-import { checkIfAccepted } from "../services/signUp";
+import { SIGN_UP_STATUS } from "../models/SignUp";
+import { stringEnumValidator } from "./global";
 
 export type SignUpValidatorMethod = "createSignUp" | "updateSignUp";
-
-const checkIfStatusValid = (value: SignUpStatus) => {
-  const isPending = value === "pending";
-  const isRejected = value === "rejected";
-  const isAccepted = checkIfAccepted(value);
-
-  return isPending || isRejected || isAccepted;
-};
-
-const signUpStatusValidator = (value: SignUpStatus) => {
-  if (checkIfStatusValid(value)) {
-    return true;
-  }
-  throw new Error(
-    'status must be either "pending", "rejected", or ["accepted": <acceptedRole>]'
-  );
-};
 
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
@@ -28,8 +11,8 @@ const getValidations = (method: SignUpValidatorMethod) => {
       return [
         body("eventId", "event id does not exist").isString(),
         body("userId", "user id does not exist").isString(),
-        body("status").custom((status: SignUpStatus) =>
-          signUpStatusValidator(status)
+        body("status").custom((status) =>
+          stringEnumValidator(SIGN_UP_STATUS, "Sign up status", status)
         ),
         body("preferences", "preferences does not exist").isArray().notEmpty(),
         body("isRestricted", "is restricted does not exist").isBoolean(),

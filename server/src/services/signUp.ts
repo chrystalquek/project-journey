@@ -8,6 +8,8 @@ import Event, { RoleData } from "../models/Event";
 import emailService from "./email";
 
 const INVALID_SIGN_UP_ID_TYPE = "Invalid sign up id type";
+const SIGN_UP_NOT_FOUND = "Sign up not found";
+
 type UpdateEventVolunteersAction = "add" | "remove" | "replace";
 
 const createSignUp = async (signUpData: NewSignUpData): Promise<SignUpData> => {
@@ -18,6 +20,7 @@ const createSignUp = async (signUpData: NewSignUpData): Promise<SignUpData> => {
       status: signUpData.status,
       preferences: signUpData.preferences,
       isRestricted: signUpData.isRestricted,
+      acceptedRole: signUpData.acceptedRole || "",
     });
     const signUp = await signUpSchemaData.save();
 
@@ -65,13 +68,6 @@ const getPendingSignUps = async () => {
     throw new Error(err.msg);
   }
 };
-
-/**
- * Checks if the SignUpStatus is of type ['accepted', acceptedRole]
- * @param status either 'pending', 'rejected', or ['accepted', acceptedRole]
- */
-export const checkIfAccepted = (status: SignUpStatus): boolean =>
-  Array.isArray(status) && status[0] === "accepted" && status.length === 2;
 
 /**
  * Adds a volunteer id to event.roles.volunteers
@@ -181,6 +177,17 @@ const updateEventRoles = async (
 };
 
 /**
+ * Checks if the sign up is accepted and valid
+ * @param status either 'pending', 'accepted', or 'rejected'
+ * @param acceptedRole must be non-empty if status is 'accepted'
+ */
+export const isSignUpAccepted = (
+  status: SignUpStatus,
+  acceptedRole: string | undefined
+): boolean =>
+  status === "accepted" && acceptedRole !== undefined && acceptedRole !== "";
+
+/**
  * Update sign up (and corresponding event when necessary)
  * @param id one of the ids in the sign up
  * @param idType type of the specified id
@@ -215,35 +222,34 @@ const updateSignUp = async (
       default:
         throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
-
     if (!oldFields) {
-      throw new Error("SignUp not found");
+      throw new Error(SIGN_UP_NOT_FOUND);
     }
+
+    const oldStatus = oldFields.status;
+    const oldAcceptedRole = oldFields.acceptedRole || "";
+    const newStatus = updatedFields.status;
+    const newAcceptedRole = updatedFields.acceptedRole || "";
 
     /** Add, remove, or replace volunteer from Event.volunteers array if SignUp.status changes */
     /** status is an array if the sign up is accepted i.e. ["accepted", string] */
 
-    /** Not accepted --> Not accepted : No change */
-    if (
-      !checkIfAccepted(oldFields.status) &&
-      !checkIfAccepted(updatedFields.status)
-    ) {
-      return oldFields;
-    }
-
     /** Not accepted --> Accepted : Add */
     if (
-      !checkIfAccepted(oldFields.status) &&
-      checkIfAccepted(updatedFields.status) &&
-      updatedFields.userId
+      !isSignUpAccepted(oldStatus, oldAcceptedRole) &&
+      isSignUpAccepted(newStatus, newAcceptedRole)
     ) {
       updateEventRoles(
         oldFields.eventId,
         oldFields.userId,
         "",
-        updatedFields.status[1],
+        newAcceptedRole,
         "add"
       );
+
+      if (!updatedFields.userId) {
+        throw new Error("User id not found");
+      }
 
       emailService.sendEmail(
         "WAITLIST_TO_CONFIRMED",
@@ -254,13 +260,13 @@ const updateSignUp = async (
 
     /** Accepted --> Not Accepted : Remove */
     if (
-      checkIfAccepted(oldFields.status) &&
-      !checkIfAccepted(updatedFields.status)
+      isSignUpAccepted(oldStatus, oldAcceptedRole) &&
+      !isSignUpAccepted(newStatus, newAcceptedRole)
     ) {
       updateEventRoles(
         oldFields.eventId,
         oldFields.userId,
-        oldFields.status[1],
+        oldAcceptedRole,
         "",
         "remove"
       );
@@ -268,15 +274,15 @@ const updateSignUp = async (
 
     /** Accepted --> Accepted but acceptedRole changed : Replace */
     if (
-      checkIfAccepted(oldFields.status) &&
-      checkIfAccepted(updatedFields.status) &&
-      oldFields.status[1] !== updatedFields.status[1]
+      isSignUpAccepted(oldStatus, oldAcceptedRole) &&
+      isSignUpAccepted(newStatus, newAcceptedRole) &&
+      oldAcceptedRole !== newAcceptedRole
     ) {
       updateEventRoles(
         oldFields.eventId,
         oldFields.userId,
-        oldFields.status[1],
-        updatedFields.status[1],
+        oldAcceptedRole,
+        newAcceptedRole,
         "replace"
       );
     }
@@ -308,11 +314,20 @@ const deleteSignUp = async (
         throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
 
-    if (deletedSignUp && checkIfAccepted(deletedSignUp.status)) {
+    if (!deletedSignUp) {
+      throw new Error(SIGN_UP_NOT_FOUND);
+    }
+
+    const oldAcceptedRole = deletedSignUp.acceptedRole || "";
+
+    if (
+      deletedSignUp &&
+      isSignUpAccepted(deletedSignUp.status, oldAcceptedRole)
+    ) {
       updateEventRoles(
         deletedSignUp.eventId,
         deletedSignUp.userId,
-        deletedSignUp.status[1],
+        oldAcceptedRole,
         "",
         "remove"
       );

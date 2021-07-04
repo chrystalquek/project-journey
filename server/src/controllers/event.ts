@@ -1,4 +1,4 @@
-import signUpService, { checkIfAccepted } from "../services/signUp";
+import signUpService, { isSignUpAccepted } from "../services/signUp";
 import answerService from "../services/forms/answer";
 import HTTP_CODES from "../constants/httpCodes";
 import eventService from "../services/event";
@@ -120,7 +120,9 @@ const getSignedUpEvents = async (
     /** status is an array if the sign up is accepted i.e. ["accepted", string] */
     const filteredSignUps =
       eventType === "past"
-        ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
+        ? signUps.filter((signUp) =>
+            isSignUpAccepted(signUp.status, signUp.acceptedRole)
+          )
         : signUps;
 
     const signedUpEventsIds: string[] = filteredSignUps.map(
