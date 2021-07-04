@@ -19,7 +19,7 @@ const getValidations = (method: EventValidatorMethod) => {
       return [
         body("name", "name does not exist").exists(),
         body("description", "description does not exist").exists(),
-        body("contentUrl", "content url is invaßlid")
+        body("contentUrl", "content url is invalid")
           .optional({ checkFalsy: true })
           .isURL(),
         body("facilitatorName", "facilitator name does not exist")

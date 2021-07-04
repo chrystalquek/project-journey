@@ -54,7 +54,7 @@ router.delete(
 // @route   PUT /volunteer/:id
 // @desc    For admin to update volunteer
 router.put(
-  "/",
+  "/:id",
   validate(getValidations("updateVolunteer")),
   volunteerController.updateVolunteer
 );

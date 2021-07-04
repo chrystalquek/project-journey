@@ -7,7 +7,7 @@ import opportunityRouter from "./opportunity";
 import signUpRouter from "./signUp";
 import formRouter from "./form";
 import commitmentApplicationRouter from "./commitmentApplication";
-import imageRouter from "./image";
+import fileRouter from "./file";
 import emailRouter from "./email";
 
 const router = express.Router();
@@ -20,7 +20,7 @@ router.use("/volunteer", volunteerRouter);
 router.use("/opportunity", opportunityRouter);
 router.use("/form", formRouter);
 router.use("/commitment-application", commitmentApplicationRouter);
-router.use("/image", imageRouter);
+router.use("/file", fileRouter);
 router.use("/email", emailRouter);
 
 export default router;

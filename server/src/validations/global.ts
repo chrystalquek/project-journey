@@ -19,13 +19,12 @@ export const validate =
     );
 
     const validationErrors = validationResult(req);
-    if (validationErrors.isEmpty()) {
-      return next();
+    if (!validationErrors.isEmpty()) {
+      return res
+        .status(HTTP_CODES.UNPROCESSABLE_ENTITIY)
+        .json({ errors: validationErrors.array() });
     }
-
-    return res
-      .status(HTTP_CODES.UNPROCESSABLE_ENTITIY)
-      .json({ errors: validationErrors.array() });
+    return next();
   };
 
 export const stringEnumValidator = (
