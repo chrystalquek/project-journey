@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import faker from "faker";
 import _ from "lodash";
-import {
+import Volunteer, {
   CITIZENSHIP,
   GENDER,
   LEADERSHIP_INTEREST,
@@ -10,10 +10,10 @@ import {
   SOCIAL_MEDIA_PLATFORM,
   VolunteerData,
 } from "../models/Volunteer";
-import { NewUserData, setPassword, UserData } from "../models/User";
-import { EventData, NewEventData } from "../models/Event";
-import { NewSignUpData } from "../models/SignUp";
-import { NewCommitmentApplicationData } from "../models/CommitmentApplication";
+import User, { NewUserData, setPassword, UserData } from "../models/User";
+import Event, { EventData, NewEventData } from "../models/Event";
+import SignUp, { NewSignUpData } from "../models/SignUp";
+import CommitmentApplication, { NewCommitmentApplicationData } from "../models/CommitmentApplication";
 
 
 async function seedDB() {
@@ -42,7 +42,6 @@ async function seedDB() {
     // const optionCollection = db.collection("options")
 
     // images
-    // resources
 
     // delete all data in collections
     const collections = [
@@ -106,7 +105,8 @@ async function seedDB() {
       })
     );
 
-    await userCollection.insertMany(users);
+    const userDocuments = users.map((user) => new User(user));
+    await userCollection.insertMany(userDocuments);
 
     const newUsers: Array<UserData> = await userCollection.find().toArray();
 
@@ -236,7 +236,8 @@ async function seedDB() {
       }
     );
 
-    await volunteerCollection.insertMany(volunteers);
+    const volunteerDocuments = volunteers.map((volunteer) => new Volunteer(volunteer));
+    await volunteerCollection.insertMany(volunteerDocuments);
 
     const newVolunteers: Array<VolunteerData> = await volunteerCollection
       .find()
@@ -263,7 +264,6 @@ async function seedDB() {
         "name" | "volunteerType" | "eventType" | "startDate" | "roles"
       >
     > = [
-      // const essentialVolunteerData = [
       {
         name: "volunteering1",
         volunteerType: "ad-hoc",
@@ -416,7 +416,8 @@ async function seedDB() {
       return event;
     });
 
-    await eventCollection.insertMany(events);
+    const eventDocuments = events.map((event) => new Event(event));
+    await eventCollection.insertMany(eventDocuments);
 
     const newEvents: Array<EventData> = await eventCollection.find().toArray();
 
@@ -482,11 +483,12 @@ async function seedDB() {
         const role = roles[j];
         const roleNames = roles.map((r) => r.name);
         const roleVolunteers = role.volunteers;
-        for (let k = 0; k < volunteers.length; k += 1) {
+        for (let k = 0; k < roleVolunteers.length; k += 1) {
           const signUp: NewSignUpDataSeed = {
             eventId: event._id,
             userId: roleVolunteers[k],
-            status: "approved",
+            status: "accepted",
+            acceptedRole: role.name,
             preferences: faker.helpers.shuffle(roleNames),
             isRestricted: false,
             createdAt: faker.date.between(event.createdAt, event.deadline),
@@ -496,7 +498,8 @@ async function seedDB() {
       }
     }
 
-    await signUpCollection.insertMany(signUps);
+    const signUpDocuments = signUps.map((signUp) => new SignUp(signUp));
+    await signUpCollection.insertMany(signUpDocuments);
 
     // -Mark: CommitmentApplication collection
     const essentialCommitmentApplicationData: Array<
@@ -547,7 +550,8 @@ async function seedDB() {
         return commitmentApplication;
       });
 
-    await commitmentApplicationCollection.insertMany(commitmentApplications);
+    const commitmentApplicationDocuments = commitmentApplications.map((commitmentApplication) => new CommitmentApplication(commitmentApplication));
+    await commitmentApplicationCollection.insertMany(commitmentApplicationDocuments);
 
     console.log("Database seeded! :)");
     db.close();

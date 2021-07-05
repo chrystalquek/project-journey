@@ -182,7 +182,7 @@ const updateEventRoles = async (
  * @param acceptedRole must be non-empty if status is 'accepted'
  */
 export const isSignUpAccepted = (
-  status: SignUpStatus,
+  status: SignUpStatus | undefined,
   acceptedRole: string | undefined
 ): boolean =>
   status === "accepted" && acceptedRole !== undefined && acceptedRole !== "";

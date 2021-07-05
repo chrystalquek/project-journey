@@ -2,7 +2,7 @@ import { Type, createSchema, ExtractProps } from "ts-mongoose";
 import mongoose from "mongoose";
 
 // types in schema
-export const SIGN_UP_STATUS = ["pending", "accepted", "rejected"];
+export const SIGN_UP_STATUS = ["pending", "accepted", "rejected"] as const;
 export type SignUpStatus = typeof SIGN_UP_STATUS[number];
 
 // types in controllers/services
@@ -11,7 +11,7 @@ export type SignUpIdType = "eventId" | "userId" | "signUpId";
 const SignUpSchema = createSchema({
   eventId: Type.objectId({ required: true }),
   userId: Type.objectId({ required: true }),
-  status: Type.mixed({
+  status: Type.string({
     required: true,
     enum: SIGN_UP_STATUS,
   }),
