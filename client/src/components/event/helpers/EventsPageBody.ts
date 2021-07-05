@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { MONTHS } from "@utils/helpers/date";
 import {
   EventData,
   EventFilterOptions,
@@ -9,34 +8,6 @@ import {
 import { VolunteerType } from "@type/volunteer";
 
 // Contains helper functions for everything related to the events page.
-
-// Takes a start and end date, parses to human-readable form
-export function parseDate(startDate: Date, endDate: Date) {
-  if (startDate === null || endDate === null) {
-    return { date: null, time: null };
-  }
-  const s = dayjs(startDate);
-  const e = dayjs(endDate);
-  const sMinutePadded = `${s.minute()}`.padStart(2, "0");
-  const eMinutePadded = `${e.minute()}`.padStart(2, "0");
-  const startTime =
-    s.hour() > 13
-      ? `${s.hour() - 12}.${sMinutePadded}pm`
-      : `${s.hour()}.${sMinutePadded}am`;
-  const endTime =
-    e.hour() > 13
-      ? `${e.hour() - 12}.${eMinutePadded}pm`
-      : `${e.hour()}.${eMinutePadded}am`;
-  // Same year, month, day -> format as <DD Month YYYY 1pm - 2pm>
-  if (s.year() === e.year() && s.month() === e.month() && s.day() === e.day()) {
-    return {
-      date: `${e.date()} ${MONTHS[e.month()]} ${e.year()}`,
-      time: `${startTime} - ${endTime}`,
-    };
-  }
-  // For now, there are no multiple-date events
-  return { date: null, time: null };
-}
 
 // Returns an object of (filled vacancies, total vacancies) for an event.
 export function getEventVacancies(data: EventData): {

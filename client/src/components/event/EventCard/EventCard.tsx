@@ -1,5 +1,4 @@
 import { EventTypography } from "@components/common/event/EventTypography";
-import { parseDate } from "@components/event/helpers/EventsPageBody";
 import {
   ALL_VOLUNTEERS_TAG,
   COMMITTED_VOLUNTEER_TAG,
@@ -14,6 +13,7 @@ import { useAppSelector } from "@redux/store";
 import { EventData } from "@type/event";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { testEventImage3 } from "@utils/constants/imagePaths";
+import { formatDateStartEndTime } from "@utils/helpers/date";
 import { useRouter } from "next/router";
 import { FC, useCallback } from "react";
 
@@ -49,7 +49,7 @@ const EventCard: FC<Props> = ({
   const router = useRouter();
   const user: VolunteerData | null = useAppSelector((state) => state.user.user);
 
-  const { date, time } = parseDate(
+  const dateTime = formatDateStartEndTime(
     new Date(event.startDate),
     new Date(event.endDate)
   );
@@ -78,8 +78,7 @@ const EventCard: FC<Props> = ({
             fontBold
             text={event && event.name ? event.name : "No event name provided"}
           />
-          <EventTypography text={date || "No date provided"} />
-          <EventTypography gutterBottom text={time || "No time provided"} />
+          <EventTypography text={dateTime || "No date provided"} />
           {CardContentInfoComponent && <CardContentInfoComponent />}
         </CardContent>
       </CardActionArea>

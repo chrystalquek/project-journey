@@ -174,24 +174,16 @@ const UpcomingEvent: FC<{}> = () => {
             onClick={() => router.push(`/event/${event._id}`)}
           >
             <CardContent>
-              <Typography>
-                {
-                  formatDateStartEndTime(
-                    new Date(event.startDate),
-                    new Date(event.endDate)
-                  ).date
-                }
-              </Typography>
               <Typography variant="h2" style={{ fontWeight: "bold" }}>
                 {event.name}
               </Typography>
               <Typography>
-                Time:{" "}
+                Date and Time:{" "}
                 {
                   formatDateStartEndTime(
                     new Date(event.startDate),
                     new Date(event.endDate)
-                  ).time
+                  )
                 }
               </Typography>
               {generateNotification(event)}

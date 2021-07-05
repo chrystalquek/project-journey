@@ -26,9 +26,7 @@ export function createTblData(
 
 // Extracts date, time, location, vacancies, singup deadline
 export function getEventInfo(event: EventData) {
-  const date = dayjs(event.startDate).format("ddd, DD MMMM YYYY");
-  const startTime = dayjs(event.startDate).format("h.mma");
-  const endTime = dayjs(event.startDate).format("h.mma");
+  const dateTime = `${dayjs(event.startDate).format("ddd, DD MMMM YYYY, h.mma")  } - ${  dayjs(event.endDate).format("ddd, DD MMMM YYYY, h.mma")}`;
   const location = event.location ? event.location : "No location listed.";
   const { remaining, total } = getEventVacancies(event);
   const vacancies = `${remaining}/${total} ${
@@ -37,8 +35,7 @@ export function getEventInfo(event: EventData) {
   const deadline = dayjs(event.deadline).format("DD MMMM YYYY hh:mm A");
 
   return [
-    createTblData("Date:", date, false),
-    createTblData("Time:", `${startTime} to ${endTime}`, false),
+    createTblData("Date and Time:", dateTime, false),
     createTblData("Location:", location, false),
     createTblData("Vacancies:", vacancies, false),
     createTblData("Sign-up deadline:", deadline, true),

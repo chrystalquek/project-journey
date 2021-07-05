@@ -28,25 +28,15 @@ export function formatAMPM(date: Date) {
 // (date, date) -> { 29 October 2020, 2.30pm - 6.00pm } ie { date, time }
 export function formatDateStartEndTime(startDate: Date, endDate: Date) {
   if (startDate === null || endDate === null) {
-    return { date: null, time: null };
+    return "";
   }
 
-  // assume single day events
-  if (
-    !(
-      startDate.getFullYear() === endDate.getFullYear() &&
-      startDate.getMonth() === endDate.getMonth() &&
-      startDate.getDate() === endDate.getDate()
-    )
-  ) {
-    return { date: null, time: null };
-  }
-
-  const date = `${startDate.getDate()} ${
+  return `${startDate.getDate()} ${
     MONTHS[startDate.getMonth()]
-  } ${startDate.getFullYear()}`;
-  const time = `${formatAMPM(startDate)} - ${formatAMPM(endDate)}`;
-  return { date, time };
+  } ${startDate.getFullYear()}, ${formatAMPM(startDate)} - 
+  ${endDate.getDate()} ${
+    MONTHS[endDate.getMonth()]
+  } ${endDate.getFullYear()}, ${formatAMPM(endDate)}`;
 }
 
 // to 26/08/2018
