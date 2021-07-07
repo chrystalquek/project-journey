@@ -13,6 +13,7 @@ router.post(
 );
 
 router.get('/',
+  validate(getValidations('readCommitmentApplication')),
   commitmentApplicationController.getCommitmentApplications);
 
 // @route   PUT /commitment-application

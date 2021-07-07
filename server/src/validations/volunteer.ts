@@ -1,6 +1,6 @@
 import { body, param, query } from 'express-validator';
 import {
-  email, password, regexValidator, stringEnumValidator,
+  newEmailValidator, existingEmailValidator, passwordValidator, regexValidator, stringEnumValidator,
 } from './global';
 import {
   CITIZENSHIP,
@@ -23,26 +23,27 @@ type VolunteerValidatorMethod =
  * Handles route request validation for controllers
  * @param method Controller handler names
  */
-const name = body('name').isString();
-const address = body('address').isString();
-const nickname = body('nickname').isString().optional();
-const mobileNumber = body('mobileNumber').isString().isMobilePhone('en-SG');
-const birthday = body('birthday').isISO8601().toDate();
-const socialMediaPlatform = body('socialMediaPlatform')
+
+const name = body('name', 'name is not a string').isString();
+const address = body('address', 'address is not a string').isString();
+const nickname = body('nickname', 'nickname is not a string').isString().optional({ checkFalsy: true });
+const mobileNumber = body('mobileNumber', 'mobile number is not from SG').isString().isMobilePhone('en-SG');
+const birthday = body('birthday', 'birthday is not a date').isISO8601().toDate();
+const socialMediaPlatform = body('socialMediaPlatform', 'social media platform is not valid')
   .isString()
   .custom((socialMedia: string) => stringEnumValidator(
     SOCIAL_MEDIA_PLATFORM,
     'Social Media Platform',
     socialMedia,
   ));
-const instagramHandle = body('instagramHandle').isString().optional();
-const gender = body('gender').custom((genderText: string) => stringEnumValidator(GENDER, 'Gender', genderText));
-const citizenship = body('citizenship').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP, 'Citizenship', citizenshipType));
-const race = body('race')
+const instagramHandle = body('instagramHandle', 'instagram handle is not a string').isString().optional();
+const gender = body('gender', 'gender is not valid').custom((genderText: string) => stringEnumValidator(GENDER, 'Gender', genderText));
+const citizenship = body('citizenship', 'citizenship is not valid').custom((citizenshipType: string) => stringEnumValidator(CITIZENSHIP, 'Citizenship', citizenshipType));
+const race = body('race', 'race is not valid')
   .custom((raceType: string) => stringEnumValidator(RACE, 'Race', raceType))
   .optional();
-const organization = body('organization').isString().optional();
-const position = body('position').isString().optional();
+const organization = body('organization', 'organization is not a string').isString().optional();
+const position = body('position', 'position is not a string').isString().optional();
 
 const hasVolunteered = body('hasVolunteered').isBoolean();
 const biabVolunteeringDuration = body('biabVolunteeringDuration')
@@ -122,16 +123,21 @@ const getValidations = (method: VolunteerValidatorMethod) => {
     case 'createVolunteer': {
       return [
         // Login details
-        email(true),
-        password,
+        newEmailValidator,
+        passwordValidator,
         // Personal details
+        body('name', 'name is required').exists(),
         name,
         nickname,
+        body('gender', 'gender is required').exists(),
         gender,
+        body('citizenship', 'citizenship is required').exists(),
         citizenship,
         birthday,
         address,
+        body('mobileNumber', 'mobile number is required').exists(),
         mobileNumber,
+        body('socialMediaPlatform', 'social media platform is required').exists(),
         socialMediaPlatform,
         instagramHandle,
         organization,
@@ -139,12 +145,16 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         race,
         referralSources,
         languages,
+        body('volunteerType', 'volunteer type is required').exists(),
         volunteerType,
         // Boolean responses
+        body('hasVolunteered', 'existance of past volunteer experience is required').exists(),
         hasVolunteered,
         biabVolunteeringDuration,
+        body('hasChildrenExperience', 'existance of past volunteer experience with children is required').exists(),
         hasChildrenExperience,
         childrenExperience,
+        body('hasVolunteeredExternally', 'existance of past external volunteer experience is required').exists(),
         hasVolunteeredExternally,
         volunteeringExperience,
         hasFirstAidCertification,
@@ -194,8 +204,8 @@ const getValidations = (method: VolunteerValidatorMethod) => {
     }
     case 'updateVolunteer': {
       return [
-        email(false),
-        password.optional(),
+        existingEmailValidator(),
+        passwordValidator.optional(),
         name.optional(),
         address.optional(),
         mobileNumber.optional(),
