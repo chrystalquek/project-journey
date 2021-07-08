@@ -14,7 +14,7 @@ import {
 
 type VolunteerValidatorMethod =
   | 'createVolunteer'
-  | 'getVolunteer'
+  | 'getVolunteerDetailByEmail'
   | 'deleteVolunteer'
   | 'updateVolunteer'
   | 'getVolunteers';
@@ -118,6 +118,7 @@ const hangoutsCount = body('hangoutsCount').isInt();
 const sessionsPerMonth = body('sessionsPerMonth').isInt().optional();
 const sessionPreference = body('sessionPreference').isString().optional();
 
+
 const getValidations = (method: VolunteerValidatorMethod) => {
   switch (method) {
     case 'createVolunteer': {
@@ -204,7 +205,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
     }
     case 'updateVolunteer': {
       return [
-        existingEmailValidator(),
+        existingEmailValidator,
         passwordValidator.optional(),
         name.optional(),
         address.optional(),
@@ -227,5 +228,8 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       return [];
   }
 };
+
+
+
 
 export default getValidations;

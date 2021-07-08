@@ -34,7 +34,7 @@ router.get(
 // @desc    For volunteer and admin to get volunteer
 router.get(
   '/:email',
-  validate(getValidations('getVolunteer')),
+  validate(getValidations('getVolunteerDetailByEmail')),
   volunteerController.getVolunteerDetailsByEmail,
 );
 

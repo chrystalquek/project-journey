@@ -1,8 +1,9 @@
-import { body } from 'express-validator';
-import { SignUpStatus } from '../models/SignUp';
+import { body, query, param } from 'express-validator';
+import { SignUpStatus, SIGN_UP_ID_TYPE } from '../models/SignUp';
 import { checkIfAccepted } from '../services/signUp';
+import { stringEnumValidator } from './global';
 
-export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp';
+export type SignUpValidatorMethod = 'createSignUp' | 'updateSignUp' | 'getSignUps' | 'deleteSignUp';
 
 const checkIfStatusValid = (value: SignUpStatus) => {
   const isPending = value === 'pending';
@@ -22,35 +23,53 @@ const signUpStatusValidator = (value: SignUpStatus) => {
 };
 
 function isArrayOfStrings(value: Array<any>): boolean {
-  return value.every(item => typeof item === "string");
+  return value.every((item) => typeof item === 'string');
 };
+
+// Define validation for each field 
+const eventId = body('eventId').exists().withMessage('Event ID is required').isString().withMessage('Volunteer ID must be a string');
+const userId = body('userId').exists().withMessage('User ID is required').isString().withMessage('User ID must be a string');
+const status = body('status').exists().withMessage('Status is required').custom((status: SignUpStatus) => signUpStatusValidator(status)).withMessage('Status is invalid');
+const preferences = body('preferences').exists().withMessage('Preferences are required').isArray().withMessage('Preferences must be an array').custom((preferences: any[]) => isArrayOfStrings(preferences)).withMessage('Preferences should be an array fo strings');
+const isRestricted = body('isRestricted').exists().withMessage('Is restricted is required').isBoolean().withMessage('Is restricted must be a boolean value');
+const createdAt = body('createdAt', 'Time of creation is of wrong date format').isISO8601();
+const id = param('id').exists().withMessage('ID is required').isString().withMessage('Id must be a string');
+const idType = param('idType').exists().withMessage('ID type is required').custom(
+  (idType: string) => stringEnumValidator(SIGN_UP_ID_TYPE, 'Sign Up ID Type', idType))
+  .withMessage('ID type is invalid');
 
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
     case 'createSignUp': {
       return [
-        body('eventId', 'event id does not exist').exists(),
-        body('eventId', 'event id is not a string').isString(),
-        body('userId', 'user id does not exist').exists(),
-        body('userId', 'user id is not a string').isString(),
-        body('status', 'status does not exist').exists(),
-        body('status', 'status is not valid').custom((status: SignUpStatus) => signUpStatusValidator(status)),
-        body('preferences', 'preferences does not exist').exists(),
-        body('preferences', 'preferences is not an array').isArray(),
-        body('preferences', 'preferences is not an array of string').custom((preferences: any[]) => isArrayOfStrings(preferences)),
-        body('isRestricted', 'is restricted does not exist').exists(),
-        body('isRestricted', 'is restricted is not a boolean value').isBoolean(),
-        body('createdAt', 'createdAt is of wrong date format').isISO8601(),
+        eventId,
+        userId,
+        status,
+        preferences,
+        isRestricted,
+        createdAt,
       ];
     }
     case 'updateSignUp': {
       return [
-        body('eventId', 'event id is not a string').optional({ checkFalsy: true }).isString(),
-        body('userId', 'user id is not a string').optional({ checkFalsy: true }).isString(),
-        body('status', 'status is not valid').custom((status: SignUpStatus) => signUpStatusValidator(status)),
-        body('preferences', 'preferences is not an array of string').optional({ checkFalsy: true }).custom((preferences: Array<any>) => isArrayOfStrings(preferences)),
-        body('isRestricted', 'is restricted is not a boolean value').optional({ checkFalsy: true }).isBoolean(),
-        body('createdAt', 'createdAt is of wrong date format').optional({ checkFalsy: true }).isISO8601(),
+        eventId.optional(),
+        userId.optional(),
+        status.optional(),
+        preferences.optional(),
+        isRestricted.optional(),
+        createdAt.optional(),
+      ];
+    }
+    case 'getSignUps': {
+      return [
+        id,
+        idType
+      ];
+    }
+    case 'deleteSignUp': {
+      return [
+        id,
+        idType
       ];
     }
     default: {

@@ -19,6 +19,7 @@ router.post(
 router.get(
   '/:id/:idType',
   authorize(['admin']),
+  validate(getValidations('getSignUps')),
   signUpController.getSignUps,
 );
 
@@ -35,6 +36,7 @@ router.get(
 router.delete(
   '/:id/:idType',
   authorize([]),
+  validate(getValidations('deleteSignUp')),
   signUpController.deleteSignUp,
 );
 

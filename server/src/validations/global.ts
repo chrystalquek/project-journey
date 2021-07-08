@@ -56,7 +56,7 @@ export const passwordValidator = body('password').isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
 });
 
-  export const existingEmailValidator = () => body('email')
+export const existingEmailValidator = body('email')
   .isEmail()
   .normalizeEmail()
   .custom(async (emailString: string) => {
@@ -67,7 +67,7 @@ export const passwordValidator = body('password').isString().isLength({
     return true;
   });
 
-  export const newEmailValidator = () => body('email')
+export const newEmailValidator = body('email')
   .isEmail()
   .normalizeEmail()
   .custom(async (emailString: string) => {
