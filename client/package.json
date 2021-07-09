@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "npm run lint && cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
+    "build": "npm run lint && npm run format && cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
     "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
     "deploy-staging": "npm run build && npm run gcp-predeploy && gcloud app deploy app-staging.yaml",
     "deploy-prod": "npm run build && npm run gcp-predeploy && gcloud app deploy app-prod.yaml",
@@ -12,6 +12,8 @@
     "gcp-build": "find ./build -name '\\[@@@*' -exec bash -c 'mv \"$1\" \"${1/@@@/...}\"' -- {} \\;",
     "lint-fix": "eslint --fix . --ext .js,.jsx,.ts,.tsx",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
+    "format-fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "start": "next start -p 8080",
     "test": "echo \"Error: no test specified\" && exit 1",
     "create-env": "printenv > .env.local"

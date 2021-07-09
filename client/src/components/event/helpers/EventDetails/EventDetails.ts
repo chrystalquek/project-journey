@@ -26,7 +26,9 @@ export function createTblData(
 
 // Extracts date, time, location, vacancies, singup deadline
 export function getEventInfo(event: EventData) {
-  const dateTime = `${dayjs(event.startDate).format("ddd, DD MMMM YYYY, h.mma")  } - ${  dayjs(event.endDate).format("ddd, DD MMMM YYYY, h.mma")}`;
+  const dateTime = `${dayjs(event.startDate).format(
+    "ddd, DD MMMM YYYY, h.mma"
+  )} - ${dayjs(event.endDate).format("ddd, DD MMMM YYYY, h.mma")}`;
   const location = event.location ? event.location : "No location listed.";
   const { remaining, total } = getEventVacancies(event);
   const vacancies = `${remaining}/${total} ${

@@ -179,12 +179,10 @@ const UpcomingEvent: FC<{}> = () => {
               </Typography>
               <Typography>
                 Date and Time:{" "}
-                {
-                  formatDateStartEndTime(
-                    new Date(event.startDate),
-                    new Date(event.endDate)
-                  )
-                }
+                {formatDateStartEndTime(
+                  new Date(event.startDate),
+                  new Date(event.endDate)
+                )}
               </Typography>
               {generateNotification(event)}
             </CardContent>

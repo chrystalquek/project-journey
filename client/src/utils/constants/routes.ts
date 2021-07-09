@@ -12,4 +12,4 @@ export const CREATE_EVENT_FORM_ROUTE = "/event/create";
 export const EDIT_EVENT_FORM_ROUTE = (eventId: string) =>
   `/event/${eventId}/edit`;
 export const EVENT_VOLUNTEERS_ROUTE = (eventId: string) =>
-`/event/${eventId}/volunteers`;
+  `/event/${eventId}/volunteers`;

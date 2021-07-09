@@ -8,36 +8,26 @@ export enum EventType {
   HANGOUT = "hangout",
 }
 
-export enum ContentType {
-  PDF = "pdf",
-  VIDEO = "video",
-  IMAGE = "image",
-  LINKS = "links",
-  DOCUMENT = "document",
-}
-
 export type EventSearchType = "all" | "upcoming" | "past";
 
 export type EventData = {
   _id: string;
   name: string;
-  coverImage?: string; // TODO: change to appropriate type
+  coverImage?: string;
   eventType: EventType;
   volunteerType: VolunteerType;
   startDate: string;
   endDate: string;
   deadline: string;
-  vacancies: number;
   description: string;
   facilitatorName?: string;
   facilitatorPhoto?: string;
   facilitatorDescription?: string;
   roles: Array<RoleData>;
   contentUrl?: string;
-  contentType?: ContentType;
   location: string;
   isCancelled: boolean;
-  feedbackStatus?: boolean; // for past events
+  feedbackStatus?: boolean; // by right shouldn't be here but for easy check whether current user has given feedback for past events
   createdAt: string;
 };
 

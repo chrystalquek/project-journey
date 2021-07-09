@@ -45,10 +45,10 @@ const ProfilePicture = ({ profilePageData }) => {
   // https://www.npmjs.com/package/react-image-crop
 
   let fileUrl = "";
-  const [file, setFile] = useState<File>(null); 
+  const [file, setFile] = useState<File>(null);
   const [src, setSrc] = useState<string>(null);
   const [imageRef, setImageRef] = useState(null);
-  // TODO: decide whether to remove this state 
+  // TODO: decide whether to remove this state
   const [, setNewImageUrl] = useState<string>("");
   const [crop, setCrop] = useState({
     unit: "%",
@@ -66,7 +66,7 @@ const ProfilePicture = ({ profilePageData }) => {
         setSrc(reader.result as string);
       });
       reader.readAsDataURL(e.target.files[0]);
-      setFile(e.target.files[0]); 
+      setFile(e.target.files[0]);
     }
   };
 
@@ -122,9 +122,11 @@ const ProfilePicture = ({ profilePageData }) => {
   };
 
   const handleSave = async () => {
-    const photoUrl = await uploadAndGetFileUrl(file, "image"); 
+    const photoUrl = await uploadAndGetFileUrl(file, "image");
     const updatedVolunteerData = { ...profilePageData, photoUrl };
-    dispatch(updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData })); 
+    dispatch(
+      updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData })
+    );
     setSrc(null);
   };
 

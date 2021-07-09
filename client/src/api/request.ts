@@ -81,7 +81,7 @@ export type DeleteSignUpRequest = SignUpIdRequest;
 
 export type CreateCommitmentApplicationRequest = Omit<
   CommitmentApplicationData,
-  "_id" | "createdAt"
+  "_id" | "createdAt" | "status"
 >;
 
 export type GetCommitmentApplicationsRequest = {

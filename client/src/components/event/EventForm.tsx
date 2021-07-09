@@ -113,7 +113,6 @@ const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
   volunteerType: yup.string().required("Volunteer type is required"),
   deadline: yup.date().required("Deadline is required"),
-  vacancies: yup.number().required("Vacancies is required"),
   description: yup.string().required("Description is required"),
   startDate: yup.date().required("Start date is required"),
   endDate: yup.date().required("End date is required"),
@@ -125,10 +124,7 @@ const validationSchema = yup.object({
     is: "volunteering",
     then: yup.string().required("Facilitator description is required"),
   }),
-  roles: yup.array().when("eventType", {
-    is: "volunteering",
-    then: yup.array().required("Roles is required"),
-  }),
+  roles: yup.array().required("Roles is required"),
 });
 
 const emptyForm = {
@@ -137,14 +133,12 @@ const emptyForm = {
   eventType: "workshop",
   volunteerType: "committed",
   deadline: dayjs().toISOString(),
-  vacancies: "",
   description: "",
   facilitatorName: "",
   facilitatorPhoto: "",
   facilitatorDescription: "",
   roles: [],
   contentUrl: "",
-  contentType: "pdf",
   location: "",
   startDate: dayjs().toISOString(),
   endDate: dayjs().toISOString(),
@@ -338,7 +332,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     eventType,
     volunteerType,
     deadline,
-    vacancies,
     description,
     facilitatorName,
     facilitatorDescription,
@@ -567,30 +560,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 onChange={handleChange}
                 helperText={errors.location}
                 error={touched.location && Boolean(errors.location)}
-              />
-            </Grid>
-          </Grid>
-
-          {/* Number of Vacancies */}
-          <Grid item container>
-            <Grid item xs={12}>
-              <Typography style={{ fontWeight: "bold" }}>
-                Number of Vacancies
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                margin="dense"
-                id="type"
-                placeholder="e.g. 20"
-                type="text"
-                fullWidth
-                name="vacancies"
-                value={vacancies}
-                onChange={handleChange}
-                helperText={errors.vacancies}
-                error={touched.vacancies && Boolean(errors.vacancies)}
               />
             </Grid>
           </Grid>
