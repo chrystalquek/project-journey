@@ -32,7 +32,7 @@ export type CommitmentApplicationData = Omit<
 
 export type NewCommitmentApplicationData = Omit<
   CommitmentApplicationData,
-  "_id" | "createdAt"
+  "_id" | "createdAt" | "status"
 >;
 
 type CommitmentApplicationModel = CommitmentApplicationData & mongoose.Document;

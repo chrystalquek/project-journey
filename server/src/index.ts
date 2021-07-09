@@ -19,7 +19,6 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 if (config.env === "development") {
-  console.info("Using cors middleware");
   app.use(cors({ origin: "*" }));
 } else if (config.env === "production") {
   app.use(
@@ -33,6 +32,7 @@ if (config.env === "development") {
 app.use("/", router);
 
 app.listen(config.port, () => {
+  // eslint-disable-next-line no-console
   console.info("listening on port: ", config.port);
 });
 

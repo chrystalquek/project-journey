@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import * as core from "express-serve-static-core";
 import { Request as ExpressRequest } from "express";
 

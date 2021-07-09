@@ -15,14 +15,12 @@ const createEvent = async (eventData: NewEventData): Promise<EventData> => {
       startDate: eventData.startDate,
       endDate: eventData.endDate,
       deadline: eventData.deadline,
-      vacancies: eventData.vacancies,
       description: eventData.description,
       facilitatorName: eventData.facilitatorName,
       facilitatorDescription: eventData.facilitatorDescription,
       facilitatorPhoto: eventData.facilitatorPhoto,
       roles: eventData.roles,
       contentUrl: eventData.contentUrl,
-      contentType: eventData.contentType,
       location: eventData.location,
     });
     const event = await eventSchemaData.save();

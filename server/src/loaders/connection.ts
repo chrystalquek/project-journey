@@ -21,6 +21,7 @@ db.on("error", () => {
 });
 
 db.once("open", () => {
+  // eslint-disable-next-line no-console
   console.info("Database connection established");
 });
 

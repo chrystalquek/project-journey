@@ -15,8 +15,6 @@ export type RoleData = {
   volunteers: string[];
 };
 
-const CONTENT_TYPE = ["pdf", "video", "image", "links", "document"];
-
 export type EventSearchType = "all" | "upcoming" | "past";
 
 const EventSchema = createSchema(
@@ -34,7 +32,6 @@ const EventSchema = createSchema(
     startDate: Type.date({ required: true }),
     endDate: Type.date({ required: true }),
     deadline: Type.date({ required: true }),
-    vacancies: Type.number({ required: true }),
     description: Type.string({ required: true }),
     facilitatorName: Type.string({ required: false }),
     facilitatorDescription: Type.string({ required: false }),
@@ -46,17 +43,10 @@ const EventSchema = createSchema(
       volunteers: Type.array({ required: true }).of(Type.objectId()),
     }),
     contentUrl: Type.string({ required: false }),
-    contentType: Type.string({
-      enum: CONTENT_TYPE,
-      required: false,
-    }),
     location: Type.string({ required: true }),
     isCancelled: Type.boolean({
       required: true,
       default: false,
-    }),
-    feedbackStatus: Type.boolean({
-      required: false,
     }),
     createdAt: Type.date({
       required: true,
@@ -72,6 +62,7 @@ export type EventData = Omit<
 > & {
   _id: string;
   roles: RoleData[];
+  feedbackStatus?: boolean; // computed and appended property
 };
 
 export type NewEventData = Omit<EventData, "_id" | "createdAt" | "isCancelled">;

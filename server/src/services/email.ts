@@ -90,11 +90,9 @@ const sendEmailHelper = async (
         subject,
         html: content,
       };
-      smtpTransport.sendMail(mainOptions, (error, info) => {
+      smtpTransport.sendMail(mainOptions, (error) => {
         if (error) {
           throw new Error(error.message);
-        } else {
-          console.info(`Message sent: ${info.response}`);
         }
       });
       smtpTransport.close();

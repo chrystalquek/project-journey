@@ -13,8 +13,10 @@ import Volunteer, {
 import User, { NewUserData, UserData } from "../models/User";
 import Event, { EventData, NewEventData } from "../models/Event";
 import SignUp, { NewSignUpData } from "../models/SignUp";
-import CommitmentApplication, { NewCommitmentApplicationData } from "../models/CommitmentApplication";
-
+import CommitmentApplication, {
+  CommitmentApplicationData,
+  NewCommitmentApplicationData,
+} from "../models/CommitmentApplication";
 
 async function seedDB() {
   // Connection URL
@@ -22,12 +24,9 @@ async function seedDB() {
     "mongodb+srv://user:user@cluster0.8ap9j.gcp.mongodb.net/user?retryWrites=true&w=majority";
   mongoose.connect(uri, {
     useNewUrlParser: true,
-    // useUnifiedTopology: true,
   });
   const db = mongoose.connection;
   try {
-    console.log("Connected correctly to server");
-
     const userCollection = db.collection("users");
     const volunteerCollection = db.collection("volunteers");
     const eventCollection = db.collection("events");
@@ -134,7 +133,8 @@ async function seedDB() {
           ),
           address: faker.address.streetAddress(true),
           mobileNumber: `8${faker.phone.phoneNumber("#######")}`,
-          photoUrl: "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/woman-1625393990543.jpeg?generation=1625393993120164&alt=media",
+          photoUrl:
+            "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/woman-1625393990543.jpeg?generation=1625393993120164&alt=media",
           email: `${vol.name}@gmail.com`,
 
           socialMediaPlatform: faker.random.arrayElement(SOCIAL_MEDIA_PLATFORM),
@@ -236,7 +236,9 @@ async function seedDB() {
       }
     );
 
-    const volunteerDocuments = volunteers.map((volunteer) => new Volunteer(volunteer));
+    const volunteerDocuments = volunteers.map(
+      (volunteer) => new Volunteer(volunteer)
+    );
     await volunteerCollection.insertMany(volunteerDocuments);
 
     const newVolunteers: Array<VolunteerData> = await volunteerCollection
@@ -277,7 +279,10 @@ async function seedDB() {
             name: "photographer",
             description: faker.lorem.sentence(),
             capacity: 2,
-            volunteers: [volunteerNamesToIds.adhoc1, volunteerNamesToIds.committed1],
+            volunteers: [
+              volunteerNamesToIds.adhoc1,
+              volunteerNamesToIds.committed1,
+            ],
           },
           {
             name: "chef",
@@ -395,12 +400,10 @@ async function seedDB() {
     const events: Array<NewEventDataSeed> = essentialEventData.map((eve) => {
       const event: NewEventDataSeed = {
         ...eve,
-        coverImage: "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/people_extend_hand-1625393691729.jpeg?generation=1625393694760151&alt=media",
+        coverImage:
+          "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/people_extend_hand-1625393691729.jpeg?generation=1625393694760151&alt=media",
         endDate: faker.date.soon(7, eve.startDate),
         deadline: faker.date.recent(30, eve.startDate),
-        vacancies: eve.roles
-          .map((role) => role.capacity)
-          .reduce((a, b) => a + b, 0),
         description: faker.lorem.sentence(),
         location: faker.address.secondaryAddress(),
       };
@@ -408,7 +411,8 @@ async function seedDB() {
       if (event.eventType === "workshop") {
         event.facilitatorName = faker.name.findName();
         event.facilitatorDescription = faker.lorem.sentence();
-        event.facilitatorPhoto = "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/woman_2-1625394082590.png?generation=1625394085211457&alt=media";
+        event.facilitatorPhoto =
+          "https://storage.googleapis.com/download/storage/v1/b/journey-storage/o/woman_2-1625394082590.png?generation=1625394085211457&alt=media";
       }
 
       event.createdAt = faker.date.recent(7, event.deadline);
@@ -503,7 +507,7 @@ async function seedDB() {
 
     // -Mark: CommitmentApplication collection
     const essentialCommitmentApplicationData: Array<
-      Pick<NewCommitmentApplicationData, "volunteerId" | "status">
+      Pick<CommitmentApplicationData, "volunteerId" | "status">
     > = [
       {
         volunteerId: volunteerNamesToIds.adhoc1,
@@ -550,12 +554,19 @@ async function seedDB() {
         return commitmentApplication;
       });
 
-    const commitmentApplicationDocuments = commitmentApplications.map((commitmentApplication) => new CommitmentApplication(commitmentApplication));
-    await commitmentApplicationCollection.insertMany(commitmentApplicationDocuments);
+    const commitmentApplicationDocuments = commitmentApplications.map(
+      (commitmentApplication) =>
+        new CommitmentApplication(commitmentApplication)
+    );
+    await commitmentApplicationCollection.insertMany(
+      commitmentApplicationDocuments
+    );
 
+    // eslint-disable-next-line no-console
     console.log("Database seeded! :)");
     db.close();
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err.stack);
   }
 }

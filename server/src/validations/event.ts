@@ -40,9 +40,7 @@ const getValidations = (method: EventValidatorMethod) => {
         body("endDate", "end date is of wrong date format").isISO8601(),
         body("deadline", "deadline does not exist").exists(),
         body("deadline", "deadline is of wrong date format").isISO8601(),
-        body("roles", "roles is not an array")
-          .optional({ checkFalsy: true })
-          .isArray(),
+        body("roles", "roles is not an array").isArray(),
         body("roles", "number of volunteers exceeds role capacity").custom(
           (roles: RoleData[]) => roleCapacityValidator(roles)
         ),
