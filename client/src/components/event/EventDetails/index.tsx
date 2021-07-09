@@ -7,6 +7,7 @@ import EventDetailsRegistered from "@components/event/EventDetails/EventDetailsR
 import EventDetailsUnregistered from "@components/event/EventDetails/EventDetailsUnregistered";
 import { EventDetailsWrapper } from "@components/event/EventDetails/EventDetailsWrapper";
 import LoadingIndicator from "@components/common/LoadingIndicator";
+import Header from "@components/common/Header";
 
 type EventDetailsProps = {
   eid: string;
@@ -26,21 +27,22 @@ const EventDetails: FC<EventDetailsProps> = ({ eid }) => {
     (state) => state.event.form
   );
 
-  if (userData && eventData) {
-    return (
-      <EventDetailsWrapper event={eventData}>
-        <EventDetailsRegistered user={userData} event={eventData} />
-      </EventDetailsWrapper>
-    );
-  }
-  if (eventData) {
-    return (
-      <EventDetailsWrapper event={eventData}>
-        <EventDetailsUnregistered user={userData} event={eventData} />;
-      </EventDetailsWrapper>
-    );
-  }
-  return <LoadingIndicator />;
+  return (
+    <>
+      <Header title={eventData?.name ?? "Event"} />
+      {userData && eventData && (
+        <EventDetailsWrapper event={eventData}>
+          <EventDetailsRegistered user={userData} event={eventData} />
+        </EventDetailsWrapper>
+      )}
+      {!userData && eventData && (
+        <EventDetailsWrapper event={eventData}>
+          <EventDetailsUnregistered user={userData} event={eventData} />;
+        </EventDetailsWrapper>
+      )}
+      {!userData && !eventData && <LoadingIndicator />}
+    </>
+  );
 };
 
 export { EventDetails };

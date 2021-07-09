@@ -14,11 +14,10 @@ import EventRegisterForm, {
 } from "@components/event/EventDetails/EventDetailsParts/EventRegisterForm";
 import FacilitatorInfo from "@components/event/EventDetails/EventDetailsParts/FacilitatorInfo";
 import BecomeCommited from "@components/profile/BecomeCommitedDialog";
-import { EventPaper } from "@components/common/event/EventPaper";
 import { EventTypography } from "@components/common/event/EventTypography";
 import { getAcceptedSignUp } from "@components/event/helpers";
 import { FormStatus } from "@type/form/form";
-import ResizedImage from "../ResizedImage";
+import ResizedImage from "../../../common/image/ResizedImage";
 
 type EventDetailsAdhocProps = {
   event: EventData;
@@ -78,28 +77,24 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
 
       {formStatus.reason === FormDisabledReason.SIGNUP_PENDING && (
         <Grid className={classes.gutterBottom} item xs={12}>
-          <EventPaper>
-            <EventTypography gutterBottom fontBold text="Sign-up Pending." />
-            <EventTypography gutterBottom text="Pending approval by admin." />
-          </EventPaper>
+          <EventTypography gutterBottom fontBold text="Sign-up Pending." />
+          <EventTypography gutterBottom text="Pending approval by admin." />
         </Grid>
       )}
       {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED && (
         <Grid className={classes.gutterBottom} item xs={12}>
-          <EventPaper>
-            <EventTypography
-              gutterBottom
-              fontBold
-              text="Successful registration!"
-            />
-            <EventTypography
-              gutterBottom
-              text={`Accepted role: ${
-                getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
-                "Error retrieving accepted role."
-              }`}
-            />
-          </EventPaper>
+          <EventTypography
+            gutterBottom
+            fontBold
+            text="Successful registration!"
+          />
+          <EventTypography
+            gutterBottom
+            text={`Accepted role: ${
+              getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
+              "Error retrieving accepted role."
+            }`}
+          />
         </Grid>
       )}
 

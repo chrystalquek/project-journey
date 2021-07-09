@@ -11,7 +11,6 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import React, { FC, useEffect } from "react";
 import { VolunteerData } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import Head from "next/head";
 import {
   getCommitmentApplications,
   updateCommitmentApplication,
@@ -24,6 +23,7 @@ import {
 import { ActionableDialog } from "@components/common/ActionableDialog";
 import { checkLoggedIn } from "@utils/helpers/auth";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
+import Header from "@components/common/Header";
 
 const PendingRequests: FC<{}> = () => {
   checkLoggedIn();
@@ -106,9 +106,7 @@ const PendingRequests: FC<{}> = () => {
 
   return (
     <>
-      <Head>
-        <title>Volunteer Pending Requests</title>
-      </Head>
+      <Header title="Pending Requests" />
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
           <PendingRequestsTabs clickedOn={0} />

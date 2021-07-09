@@ -13,11 +13,10 @@ import {
   COMMITTED_VOLUNTEER_TAG,
 } from "@components/event/index";
 import { FormDisabledReason } from "@components/event/helpers/EventDetails/EventDetails";
-import { EventPaper } from "@components/common/event/EventPaper";
 import { EventTypography } from "@components/common/event/EventTypography";
 import { getAcceptedSignUp } from "@components/event/helpers";
 import { FormStatus } from "@type/form/form";
-import ResizedImage from "../ResizedImage";
+import ResizedImage from "../../../common/image/ResizedImage";
 
 type EventDetailsCommittedProps = {
   event: EventData;
@@ -78,29 +77,25 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
       {user.volunteerType !== VolunteerType.ADMIN &&
         formStatus.reason === FormDisabledReason.SIGNUP_PENDING && (
           <Grid className={classes.gutterBottom} item xs={12}>
-            <EventPaper>
-              <EventTypography gutterBottom fontBold text="Sign-up Pending." />
-              <EventTypography gutterBottom text="Pending approval by admin." />
-            </EventPaper>
+            <EventTypography gutterBottom fontBold text="Sign-up Pending." />
+            <EventTypography gutterBottom text="Pending approval by admin." />
           </Grid>
         )}
       {user.volunteerType !== VolunteerType.ADMIN &&
         formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED && (
           <Grid className={classes.gutterBottom} item xs={12}>
-            <EventPaper>
-              <EventTypography
-                gutterBottom
-                fontBold
-                text="Successful registration!"
-              />
-              <EventTypography
-                gutterBottom
-                text={`Accepted role: ${
-                  getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
-                  "Error retrieving accepted role."
-                }`}
-              />
-            </EventPaper>
+            <EventTypography
+              gutterBottom
+              fontBold
+              text="Successful registration!"
+            />
+            <EventTypography
+              gutterBottom
+              text={`Accepted role: ${
+                getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
+                "Error retrieving accepted role."
+              }`}
+            />
           </Grid>
         )}
 

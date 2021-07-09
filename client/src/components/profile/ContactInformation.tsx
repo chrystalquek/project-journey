@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Box, Grid } from "@material-ui/core";
 import ProfileDivider from "@components/common/ProfileDivider";
 import DataRow from "@components/common/DataRow";
-import PaddedGrid from "@components/common/PaddedGrid";
+import PaddedGrid from "@components/common/surfaces/PaddedGrid";
 import { VolunteerData } from "@type/volunteer";
 
 type props = {

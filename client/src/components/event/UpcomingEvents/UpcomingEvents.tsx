@@ -1,3 +1,4 @@
+import Header from "@components/common/Header";
 import SearchBar from "@components/common/SearchBar";
 import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
 import EventsFilter from "@components/event/EventsFilter";
@@ -83,6 +84,7 @@ const UpcomingEvents: FC<{}> = () => {
   if (screenSm) {
     return (
       <>
+        <Header title="Upcoming Events" />
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <SearchBar
@@ -129,6 +131,7 @@ const UpcomingEvents: FC<{}> = () => {
   }
   return (
     <>
+      <Header title="Upcoming Events" />
       <Grid container spacing={4}>
         <Grid item sm={12}>
           <EventBreadCrumbs />

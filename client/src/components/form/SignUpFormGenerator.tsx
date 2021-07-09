@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, Typography, Button, makeStyles } from "@material-ui/core";
+import { Typography, Button, makeStyles } from "@material-ui/core";
 import { Formik, Form } from "formik";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -233,15 +233,7 @@ const SignUpFormGenerator = ({
   });
 
   return (
-    <Paper
-      style={{
-        margin: "auto",
-        padding: "30px",
-        textAlign: "left",
-        maxHeight: "100%",
-        wordWrap: "break-word",
-      }}
-    >
+    <>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={initialValues}
@@ -343,7 +335,7 @@ const SignUpFormGenerator = ({
           {toastText}
         </MuiAlert>
       </Snackbar>
-    </Paper>
+    </>
   );
 };
 

@@ -37,7 +37,7 @@ const EventDetailsWrapper: FC<EventDetailsWrapperProps> = (props) => {
       <Grid container direction="row" wrap="nowrap">
         {isDesktop && (
           <Grid item xs={1}>
-            <SideNav selected="details" />
+            <SideNav selected="details" eventId={event._id} />
           </Grid>
         )}
         <Grid

@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from "react";
 import {
-  Button,
+  AccordionDetails,
   capitalize,
   Checkbox,
   FormControl,
@@ -22,8 +22,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import RightDrawer from "@components/common/RightDrawer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
@@ -35,6 +33,10 @@ import { formatDDMMYYYY } from "@utils/helpers/date";
 import { VolunteerSortFieldsType } from "@redux/reducers/volunteer/index";
 import LoadingIndicator from "@components/common/LoadingIndicator";
 import ErrorPage from "@components/common/ErrorPage";
+import Header from "@components/common/Header";
+import FilterAccordionGroup from "@components/common/surfaces/accordion/FilterAccordionGroup";
+import Accordion from "@components/common/surfaces/accordion/Accordion";
+import AccordionSummary from "@components/common/surfaces/accordion/AccordionSummary";
 
 // constants
 export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
@@ -93,85 +95,36 @@ const Index: FC<{}> = () => {
       })
     );
   };
-  const handleClearAllFilters = () => {
-    const clearedVolunteerTypeFilters = { ...volunteerType };
-    Object.values(VolunteerType).forEach((key) => {
-      clearedVolunteerTypeFilters[key] = false;
-    });
 
-    dispatch(
-      getVolunteers({
-        newCollate: {
-          filters: {
-            volunteerType: clearedVolunteerTypeFilters,
-          },
-        },
-      })
-    );
-  };
-
-  // filter state and components
-  const isDisableClearFilters = Object.values(VolunteerType).every(
-    (volType) => !volunteerType[volType]
-  );
   const [openFilter, setOpenFilter] = React.useState(isMobile);
+
   const filterOptions = (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableCell>
-            <b>Filter By</b>
-          </TableCell>
-        </TableHead>
-        <TableRow>
-          <TableCell>
-            Volunteer Type
-            <Button
-              className={classes.rightButton}
-              size="small"
-              onClick={() => setOpenFilter(!openFilter)}
-            >
-              {openFilter ? (
-                <RemoveIcon fontSize="small" />
-              ) : (
-                <AddIcon fontSize="small" />
-              )}
-            </Button>
-            {openFilter && (
-              <>
-                <FormGroup>
-                  {Object.values(VolunteerType).map((volType) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          size="small"
-                          checked={volunteerType[volType]}
-                          onChange={handleFilterVolunteerTypeChange}
-                          name={volType}
-                          key={volType}
-                        />
-                      }
-                      label={
-                        <Typography variant="body1">
-                          {capitalize(volType)}
-                        </Typography>
-                      }
-                    />
-                  ))}
-                </FormGroup>
-                <Button
-                  className={classes.link}
-                  disabled={isDisableClearFilters}
-                  onClick={handleClearAllFilters}
-                >
-                  <u>Clear</u>
-                </Button>
-              </>
-            )}
-          </TableCell>
-        </TableRow>
-      </Table>
-    </TableContainer>
+    <FilterAccordionGroup>
+      <Accordion
+        expanded={openFilter}
+        onChange={() => setOpenFilter(!openFilter)}
+      >
+        <AccordionSummary title="Volunteer Type" isExpanded={openFilter} />
+        <AccordionDetails>
+          <FormGroup>
+            {Object.values(VolunteerType).map((volType) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={volunteerType[volType]}
+                    onChange={handleFilterVolunteerTypeChange}
+                    name={volType}
+                    key={volType}
+                  />
+                }
+                label={<Typography>{capitalize(volType)}</Typography>}
+              />
+            ))}
+          </FormGroup>
+        </AccordionDetails>
+      </Accordion>
+    </FilterAccordionGroup>
   );
 
   // search function
@@ -274,6 +227,7 @@ const Index: FC<{}> = () => {
   // define components needed above, piece them tog for mobile and comp versions
   return (
     <>
+      <Header title="Volunteers" />
       {!isMobile ? (
         <Grid>
           <Grid direction="row" container spacing={6}>

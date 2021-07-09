@@ -10,7 +10,6 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
-import PaddedGrid from "@components/common/PaddedGrid";
 import DropZoneCard from "@components/common/DropZoneCard";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { createEvent, getEvent, editEvent } from "@redux/actions/event";
@@ -24,6 +23,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { ToastStatus } from "@type/common";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
+import Header from "@components/common/Header";
 import { FormQuestionMapper } from "../form/FormGenerator";
 
 type AdminEventFormProps = {
@@ -290,7 +290,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       // Upload and get cover image URL
       if (formValues.coverImage && typeof formValues.coverImage !== "string") {
-        form.coverImage = await uploadAndGetFileUrl(formValues.coverImage, "image");
+        form.coverImage = await uploadAndGetFileUrl(
+          formValues.coverImage,
+          "image"
+        );
       }
 
       // Upload and get facilitator photo URL
@@ -298,7 +301,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         formValues.facilitatorPhoto &&
         typeof formValues.facilitatorPhoto !== "string"
       ) {
-        form.facilitatorPhoto = await uploadAndGetFileUrl(formValues.facilitatorPhoto, "image");;
+        form.facilitatorPhoto = await uploadAndGetFileUrl(
+          formValues.facilitatorPhoto,
+          "image"
+        );
       }
 
       const newForm = {
@@ -338,15 +344,16 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     facilitatorDescription,
     startDate,
     endDate,
-    location
+    location,
   } = values;
 
   if (id !== "new" && eventForm === null) {
     return <h1>Loading</h1>;
   }
   return (
-    <form onSubmit={handleSubmit}>
-      <PaddedGrid>
+    <>
+      <Header title={isNew ? "Create Event" : "Edit Event"} />
+      <form onSubmit={handleSubmit}>
         <Grid container direction="column" spacing={10}>
           <Grid item>
             <Typography variant="h1">
@@ -842,19 +849,19 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </Button>
           </Grid>
         </Grid>
-      </PaddedGrid>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
-        onClose={() => {
-          setOpenSnackbar(false);
-        }}
-      >
-        <MuiAlert elevation={6} severity={toastStatus}>
-          {toastText}
-        </MuiAlert>
-      </Snackbar>
-    </form>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
+          onClose={() => {
+            setOpenSnackbar(false);
+          }}
+        >
+          <MuiAlert elevation={6} severity={toastStatus}>
+            {toastText}
+          </MuiAlert>
+        </Snackbar>
+      </form>
+    </>
   );
 };
 

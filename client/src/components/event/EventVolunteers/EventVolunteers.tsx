@@ -35,6 +35,7 @@ import { getEvent } from "@redux/actions/event";
 import CheckIcon from "@material-ui/icons/Check";
 import SearchBar from "@components/common/SearchBar";
 import { UpdateSignUpRequest } from "@api/request";
+import Header from "@components/common/Header";
 
 export const rowsPerPage = 10;
 
@@ -536,6 +537,7 @@ const EventVolunteers = ({ eid }) => {
 
   return (
     <>
+      <Header title="Event Volunteers" />
       <Grid container alignItems="center" justify="center">
         <Grid item xs={12} md={8}>
           <Typography variant="h1">{event?.name}</Typography>

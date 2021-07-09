@@ -10,6 +10,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "@styles/theme";
 import NavBar from "@components/common/navbar-component/NavBar";
 import Footer from "@components/common/Footer";
+import { Container } from "@material-ui/core";
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -25,9 +26,9 @@ function App({ Component, pageProps }: AppProps) {
               }}
             >
               <NavBar />
-              <div style={{ flex: 1 }}>
+              <Container style={{ flex: 1 }}>
                 <Component {...pageProps} />
-              </div>
+              </Container>
               <Footer />
             </div>
           </MuiPickersUtilsProvider>

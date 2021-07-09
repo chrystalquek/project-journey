@@ -14,10 +14,10 @@ import { useAppDispatch, useAppSelector } from "@redux/store";
 import { getEventsUpcomingEvent } from "@redux/actions/event";
 import { getPendingSignUps } from "@redux/actions/signUp";
 import { SignUpData } from "@type/signUp";
-import Head from "next/head";
 import { checkLoggedIn } from "@utils/helpers/auth";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import { useRouter } from "next/router";
+import Header from "@components/common/Header";
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -72,9 +72,7 @@ const PendingRequests: FC = () => {
 
   return (
     <>
-      <Head>
-        <title>Event Pending Requests</title>
-      </Head>
+      <Header title="Pending Requests - Events" />
       <Grid container alignItems="center" justify="center">
         <Grid item xs={8}>
           <PendingRequestsTabs clickedOn={1} />

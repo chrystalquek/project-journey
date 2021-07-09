@@ -5,13 +5,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
 import DropZoneCard from "@components/common/DropZoneCard";
-import {
-  Button,
-  makeStyles,
-  MenuItem,
-  Paper,
-  Typography,
-} from "@material-ui/core";
+import { Button, makeStyles, MenuItem, Typography } from "@material-ui/core";
 import * as Yup from "yup";
 import { OptionType } from "@type/form/option";
 import { QuestionList } from "@type/form/form";
@@ -213,7 +207,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
   const validationSchema = Yup.object().shape(validationObj);
 
   return (
-    <Paper elevation={0} className={classes.root}>
+    <>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={initialValues}
@@ -261,7 +255,7 @@ const FormGenerator: FC<FormGeneratorType> = ({
           )}
         </Formik>
       </MuiPickersUtilsProvider>
-    </Paper>
+    </>
   );
 };
 FormQuestionMapper.defaultProps = {

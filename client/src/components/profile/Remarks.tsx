@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { Box, Grid } from "@material-ui/core";
 import ProfileDivider from "@components/common/ProfileDivider";
-import PaddedGrid from "@components/common/PaddedGrid";
+import PaddedGrid from "@components/common/surfaces/PaddedGrid";
 import RemarksTextField from "@components/profile/RemarksTextField";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";

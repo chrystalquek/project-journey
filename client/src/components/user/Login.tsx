@@ -1,15 +1,14 @@
-import { Box, Grid, Button, Typography, Paper } from "@material-ui/core";
+import { Box, Grid, Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
-import Head from "next/head";
 import { useRouter } from "next/dist/client/router";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
-
 import login, { LoginArgs } from "@redux/actions/user";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { HOME_ROUTE } from "@utils/constants/routes";
+import Header from "@components/common/Header";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -139,68 +138,61 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
 
   return (
     <>
-      <Head>
-        <title>Login</title>
-      </Head>
+      <Header title="Login" />
       <Box>
         <Box className={classes.content}>
           <Grid container className={classes.rowContent}>
             <Grid item sm={6} lg={4}>
               <Typography className={classes.pageHeader}>Login</Typography>
-              <Paper className={classes.formContainer}>
-                <Formik
-                  initialValues={{
-                    email: "",
-                    password: "",
-                  }}
-                  validate={validate}
-                  onSubmit={handleSubmit}
-                >
-                  {({ isSubmitting }) => (
-                    <Form>
-                      <Typography className={classes.header}>
-                        {" "}
-                        Email{" "}
-                      </Typography>
-                      <Field
-                        component={TextField}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="email"
-                        name="email"
-                        autoComplete="email"
-                      />
-                      <Typography className={classes.header}>
-                        {" "}
-                        Password{" "}
-                      </Typography>
-                      <Field
-                        component={TextField}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        name="password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                      />
-                      <Grid className={classes.loginButtonContainer}>
-                        <InvalidCredentials />
-                        <Button
-                          color="primary"
-                          type="submit"
-                          disabled={isSubmitting}
-                          className={classes.loginButton}
-                          size="large"
-                        >
-                          Log In
-                        </Button>
-                      </Grid>
-                    </Form>
-                  )}
-                </Formik>
-              </Paper>
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: "",
+                }}
+                validate={validate}
+                onSubmit={handleSubmit}
+              >
+                {({ isSubmitting }) => (
+                  <Form>
+                    <Typography className={classes.header}> Email </Typography>
+                    <Field
+                      component={TextField}
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      id="email"
+                      name="email"
+                      autoComplete="email"
+                    />
+                    <Typography className={classes.header}>
+                      {" "}
+                      Password{" "}
+                    </Typography>
+                    <Field
+                      component={TextField}
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      name="password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                    />
+                    <Grid className={classes.loginButtonContainer}>
+                      <InvalidCredentials />
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={isSubmitting}
+                        className={classes.loginButton}
+                        size="large"
+                      >
+                        Log In
+                      </Button>
+                    </Grid>
+                  </Form>
+                )}
+              </Formik>
 
               <div className={classes.section}>
                 <div>

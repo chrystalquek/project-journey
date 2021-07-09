@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { Grid } from "@material-ui/core";
 import { EventData } from "@type/event";
 import { EventTypography } from "@components/common/event/EventTypography";
+import ResizedImage from "@components/common/image/ResizedImage";
 
 type FacilitatorInfoProps = {
   event: EventData;
@@ -18,7 +19,7 @@ const FacilitatorInfo: FC<FacilitatorInfoProps> = ({ event }) => (
     />
     <Grid container>
       <Grid item xs={12} md={4}>
-        <img src={event.coverImage} alt="Facilitator" />
+        <ResizedImage img={event.coverImage} name="Facilitator" />
       </Grid>
       <Grid item xs={12} md={8}>
         <EventTypography

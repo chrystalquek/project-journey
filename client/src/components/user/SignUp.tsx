@@ -12,13 +12,13 @@ import {
   useTheme,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import Head from "next/head";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import SignUpForm from "@components/form/SignUpForm";
 import { VolunteerType } from "@type/volunteer";
 import { questions as SignUpAdhocQuestionList } from "@components/form/questions/SignUpAdhocQuestionList";
 import { questions as SignUpCommittedQuestionList } from "@components/form/questions/SignUpCommittedQuestionList";
+import Header from "@components/common/Header";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -327,9 +327,7 @@ const SignUp = () => {
 
   return (
     <>
-      <Head>
-        <title>Signup</title>
-      </Head>
+      <Header title="Sign Up" />
       <VolunteerSignUp />
     </>
   );

@@ -5,7 +5,6 @@ import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@utils/constants/routes";
 import { EventTypography } from "@components/common/event/EventTypography";
 import PersonIcon from "@material-ui/icons/Person";
 import { EventButton } from "@components/common/event/EventButton";
-import { EventPaper } from "@components/common/event/EventPaper";
 import { EventDivider } from "@components/common/event/EventDivider";
 
 type CreateAccountNoticeProps = {
@@ -28,26 +27,24 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
   return (
     <>
       <EventDivider>Register Here</EventDivider>
-      <EventPaper alignItems="center">
-        <PersonIcon className={classes.icon} />
-        <EventTypography
-          fontSize="h2"
-          fontBold
-          text="You need an account to register events."
-        />
-        <EventTypography
-          fontSize="h2"
-          gutterBottom
-          text="It takes less than 2mins to create one"
-        />
-        <Box margin={3}>
-          <EventButton disableRipple onClick={() => router.push(SIGNUP_ROUTE)}>
-            Sign up
-          </EventButton>
-          <Typography display="inline"> or </Typography>
-          <Button onClick={() => router.push(LOGIN_ROUTE)}>Login</Button>
-        </Box>
-      </EventPaper>
+      <PersonIcon className={classes.icon} />
+      <EventTypography
+        fontSize="h2"
+        fontBold
+        text="You need an account to register events."
+      />
+      <EventTypography
+        fontSize="h2"
+        gutterBottom
+        text="It takes less than 2mins to create one"
+      />
+      <Box margin={3}>
+        <EventButton disableRipple onClick={() => router.push(SIGNUP_ROUTE)}>
+          Sign up
+        </EventButton>
+        <Typography display="inline"> or </Typography>
+        <Button onClick={() => router.push(LOGIN_ROUTE)}>Login</Button>
+      </Box>
     </>
   );
 };

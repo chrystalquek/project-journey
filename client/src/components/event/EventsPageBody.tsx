@@ -1,4 +1,5 @@
 import { EventButton } from "@components/common/event/EventButton";
+import Header from "@components/common/Header";
 import SearchBar from "@components/common/SearchBar";
 import EventBreadCrumbs from "@components/event/EventBreadCrumbs";
 import EventsFilter from "@components/event/EventsFilter";
@@ -143,6 +144,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   }
   return (
     <>
+      <Header title="Events" />
       <Grid container spacing={4}>
         <Grid item sm={12}>
           <EventBreadCrumbs />

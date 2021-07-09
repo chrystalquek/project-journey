@@ -1,4 +1,4 @@
-import { VOLUNTEER_PROFILES_ROUTE } from "@constants/routes";
+import { EVENT_VOLUNTEERS_ROUTE } from "@constants/routes";
 import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
 import { useAppSelector } from "@redux/store";
 import { VolunteerType } from "@type/volunteer";
@@ -6,6 +6,7 @@ import React from "react";
 
 type Props = {
   selected: "details" | "volunteers" | "feedback";
+  eventId: string;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SideNav({ selected }: Props) {
+function SideNav({ selected, eventId }: Props) {
   const classes = useStyles();
   const currentUser = useAppSelector((state) => state.user.user);
   const isAdmin = currentUser?.volunteerType === VolunteerType.ADMIN;
@@ -38,7 +39,7 @@ function SideNav({ selected }: Props) {
           dense
           className={selected === "volunteers" && classes.selected}
           component="a"
-          href={VOLUNTEER_PROFILES_ROUTE}
+          href={EVENT_VOLUNTEERS_ROUTE(eventId)}
         >
           <ListItemText primary="Volunteers" />
         </ListItem>

@@ -11,7 +11,7 @@ import EventInformation from "@components/event/EventDetails/EventDetailsParts/E
 import FacilitatorInfo from "@components/event/EventDetails/EventDetailsParts/FacilitatorInfo";
 import CreateAccountNotice from "@components/event/EventDetails/EventDetailsParts/CreateAccountNotice";
 import { EventTypography } from "@components/common/event/EventTypography";
-import ResizedImage from "./ResizedImage";
+import ResizedImage from "../../common/image/ResizedImage";
 
 type EventDetailsUnregisteredProps = {
   event: EventData;
