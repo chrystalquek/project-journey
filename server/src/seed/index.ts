@@ -10,7 +10,7 @@ import Volunteer, {
   SOCIAL_MEDIA_PLATFORM,
   VolunteerData,
 } from "../models/Volunteer";
-import User, { NewUserData, setPassword, UserData } from "../models/User";
+import User, { NewUserData, UserData } from "../models/User";
 import Event, { EventData, NewEventData } from "../models/Event";
 import SignUp, { NewSignUpData } from "../models/SignUp";
 import CommitmentApplication, { NewCommitmentApplicationData } from "../models/CommitmentApplication";
@@ -96,7 +96,7 @@ async function seedDB() {
     const users: Array<NewUserData & { createdAt: Date }> = Array.from(
       { length: essentialVolunteerData.length },
       () => ({
-        password: setPassword("hello123!"),
+        password: "hello123!",
         administratorRemarks: faker.lorem.sentence(),
         createdAt: faker.date.between(
           new Date(2018, 1, 1),
@@ -181,7 +181,7 @@ async function seedDB() {
             faker.random.arrayElement(["F", "T"]) +
             faker.random.arrayElement(["J", "P"])
           }-${faker.random.arrayElement(["A", "T"])}`,
-          strengths: Array(3).map(faker.random.word),
+          strengths: Array(3).map(() => faker.random.word()),
           volunteeringOpportunityInterest: faker.lorem.sentence(),
 
           volunteerReason: faker.lorem.paragraph(),
