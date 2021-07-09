@@ -22,9 +22,11 @@ router.get(
   volunteerController.getPendingVolunteers
 );
 
-// @route   GET /volunteer/ids
+// @route   POST /volunteer/ids
 // @desc    For admin to get volunteers
-router.get(
+// POST is used here to pass in the list of ids in req.body
+// https://stackoverflow.com/questions/19637459/rest-api-using-post-instead-of-get
+router.post(
   "/ids",
   authorize(["admin"]),
   volunteerController.getVolunteersByIds
