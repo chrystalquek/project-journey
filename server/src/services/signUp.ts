@@ -4,8 +4,9 @@ import SignUp, {
   SignUpIdType,
   SignUpStatus,
 } from "../models/SignUp";
-import Event, { RoleData } from "../models/Event";
+import { RoleData } from "../models/Event";
 import emailService from "./email";
+import eventService from "./event";
 
 const INVALID_SIGN_UP_ID_TYPE = "Invalid sign up id type";
 const SIGN_UP_NOT_FOUND = "Sign up not found";
@@ -61,9 +62,16 @@ const getSignUps = async (
   }
 };
 
-const getPendingSignUps = async () => {
+const getPendingSignUps = async (): Promise<SignUpData[]> => {
   try {
-    return SignUp.find({ status: "pending" });
+    const upcomingEventsIds = (await eventService.getEvents("upcoming")).map(
+      (event) => event._id
+    );
+    const pendingSignUps = SignUp.find({
+      status: "pending",
+      eventId: { $in: upcomingEventsIds },
+    });
+    return pendingSignUps;
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -131,7 +139,7 @@ const updateEventRoles = async (
   actionType: UpdateEventVolunteersAction
 ): Promise<void> => {
   try {
-    const unupdatedEvent = await Event.findById(eventId);
+    const unupdatedEvent = await eventService.getEvent(eventId);
     let eventRoles: RoleData[];
 
     if (unupdatedEvent && unupdatedEvent.roles) {
@@ -166,10 +174,7 @@ const updateEventRoles = async (
           throw new Error("Invalid action type");
       }
 
-      await Event.findOneAndUpdate(
-        { _id: eventId },
-        { $set: { roles: eventRoles } }
-      );
+      await eventService.updateEvent(eventId, { roles: eventRoles });
     }
   } catch (err) {
     throw new Error(err.msg);
