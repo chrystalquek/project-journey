@@ -1,15 +1,14 @@
 import { Breadcrumbs, Link, Typography } from "@material-ui/core";
 import { FC } from "react";
 import { EVENTS_ROUTE } from "@utils/constants/routes";
-import { EventData } from "@type/event";
-import { getStoreEvent } from "@components/event/helpers";
+import { useGetStoreEvent } from "@components/event/helpers";
 
 type EventBreadCrumbsProps = {
   eid?: string;
 };
 
 const EventBreadCrumbs: FC<EventBreadCrumbsProps> = ({ eid }) => {
-  const event: EventData | null = getStoreEvent(eid);
+  const event = useGetStoreEvent(eid);
 
   return (
     <Breadcrumbs separator=">" color="textPrimary" aria-label="breadcrumb">

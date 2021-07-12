@@ -50,7 +50,7 @@ const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
       default:
         throw new Error(`Unexpected sign up status!`);
     }
-  }, [upcomingSignUps, event]);
+  }, [upcomingSignUps, event, classes]);
 
   return (
     <Typography color="primary" gutterBottom className={classes.bold}>

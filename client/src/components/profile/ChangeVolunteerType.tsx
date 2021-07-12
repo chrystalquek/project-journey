@@ -46,17 +46,17 @@ const ChangeVolunteerType: FC = () => {
 
   const handleOpenDialog = useCallback(() => {
     setOpenDialog(true);
-  }, [openDialog]);
+  }, []);
 
   const handleCloseDialog = useCallback(() => {
     setOpenDialog(false);
-  }, [openDialog]);
+  }, []);
 
   const handleChange = useCallback(
     (event) => {
       setVolunteerType(event.target.value || profilePageData.volunteerType);
     },
-    [volunteerType]
+    [profilePageData]
   );
 
   const handleSubmit = () => {

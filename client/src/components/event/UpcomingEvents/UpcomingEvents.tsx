@@ -57,7 +57,7 @@ const UpcomingEvents: FC<{}> = () => {
         userId: user?._id,
       })
     );
-  }, []);
+  }, [dispatch, user]);
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,

@@ -54,11 +54,11 @@ const BecomeCommited: FC = () => {
 
   const handleClickOpen = useCallback(() => {
     setOpen(true);
-  }, [open]);
+  }, []);
 
   const handleClose = useCallback(() => {
     setOpen(false);
-  }, [open]);
+  }, []);
 
   const handleSubmit = async (formValues: Record<string, any>) => {
     formValues.volunteerId = user.user._id;

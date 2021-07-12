@@ -1,8 +1,8 @@
 import EventForm from "@components/event/EventForm";
-import { checkLoggedIn } from "@utils/helpers/auth";
+import { useAuthenticatedRoute } from "@utils/helpers/auth";
 
 const AdminEventFormPage = () => {
-  checkLoggedIn();
+  useAuthenticatedRoute();
 
   return <EventForm id="new" isNew />;
 };

@@ -36,7 +36,7 @@ const PendingApproval: FC<{}> = () => {
   useEffect(() => {
     dispatch(getPendingSignUps());
     dispatch(getPendingVolunteers());
-  }, []);
+  }, [dispatch]);
 
   const { pendingSignUps, pendingVolunteers } = useAppSelector(
     (state) => state.home.pendingApproval

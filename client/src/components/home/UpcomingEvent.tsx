@@ -76,7 +76,7 @@ const UpcomingEvent: FC<{}> = () => {
         getSignUpsUpcomingEvent({ id: user.user?._id, idType: "userId" })
       );
     }
-  }, []);
+  }, [dispatch, user]);
 
   const events = useAppSelector((state) => state.event.event);
   const signUps = useAppSelector((state) => state.signUp); // only relevant if user is volunteer

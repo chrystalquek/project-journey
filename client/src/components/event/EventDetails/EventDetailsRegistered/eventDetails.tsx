@@ -52,7 +52,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
 
   useEffect(() => {
     dispatch(getSignUps({ id: user._id, idType: "userId" as SignUpIdType }));
-  }, []);
+  }, [dispatch, user]);
 
   const signUpInfo: Array<SignUpData> = currSignUps.filter(
     (signUp) => signUp.eventId === event._id
@@ -167,13 +167,13 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     dispatch(cancelEvent(event._id));
     setIsCancelDeleteModalOpen(false);
     router.push("/event");
-  }, [event]);
+  }, [dispatch, event, router]);
 
   const handleDeleteEvent = useCallback(() => {
     dispatch(deleteEvent(event._id));
     setIsCancelDeleteModalOpen(false);
     router.push("/event");
-  }, [event]);
+  }, [dispatch, event, router]);
 
   const withdrawCommitmentQuestion = (
     <>

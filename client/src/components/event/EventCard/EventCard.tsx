@@ -60,7 +60,7 @@ const EventCard: FC<Props> = ({
     } else {
       router.push(LOGIN_ROUTE);
     }
-  }, [user, event]);
+  }, [user, router, event._id]);
 
   return (
     <Card className={classes.card}>

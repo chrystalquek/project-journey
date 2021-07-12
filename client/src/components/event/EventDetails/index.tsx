@@ -20,7 +20,7 @@ const EventDetails: FC<EventDetailsProps> = ({ eid }) => {
     if (eid) {
       dispatch(getEvent(String(eid)));
     }
-  }, [eid]);
+  }, [dispatch, eid]);
 
   const userData: VolunteerData = useAppSelector((state) => state.user.user);
   const eventData: EventData | null = useAppSelector(

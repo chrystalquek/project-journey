@@ -22,7 +22,7 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
   useEffect(() => {
     dispatch(getPendingVolunteers());
     dispatch(getPendingSignUps());
-  }, []);
+  }, [dispatch]);
 
   // volunteer no
   const { pendingVolunteers, pendingSignUps, isLoading, error } =

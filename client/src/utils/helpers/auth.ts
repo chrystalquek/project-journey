@@ -15,7 +15,7 @@ export const isAdmin = (user: UserState | VolunteerData) => {
   return false;
 };
 
-export const checkLoggedIn = () => {
+export const useAuthenticatedRoute = () => {
   const router = useRouter();
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();

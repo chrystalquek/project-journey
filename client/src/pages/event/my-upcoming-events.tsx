@@ -1,8 +1,8 @@
-import { checkLoggedIn } from "@utils/helpers/auth";
+import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import UpcomingEvents from "@components/event/UpcomingEvents/UpcomingEvents";
 
 const UpcomingEventsPage = () => {
-  checkLoggedIn();
+  useAuthenticatedRoute();
   return (
     <>
       <UpcomingEvents />

@@ -16,7 +16,7 @@ import {
   getPendingSignUps,
 } from "@redux/actions/events/pendingRequests";
 import { SignUpData, SignUpStatus } from "@type/signUp";
-import { checkLoggedIn } from "@utils/helpers/auth";
+import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import { useRouter } from "next/router";
 import Header from "@components/common/Header";
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingRequests: FC = () => {
-  checkLoggedIn();
+  useAuthenticatedRoute();
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -50,7 +50,7 @@ const PendingRequests: FC = () => {
   useEffect(() => {
     dispatch(getUpcomingEvents());
     dispatch(getPendingSignUps());
-  }, []);
+  }, [dispatch]);
 
   const { pendingSignUps, upcomingEvents, isLoading, error } = useAppSelector(
     (state) => state.event.pendingRequests

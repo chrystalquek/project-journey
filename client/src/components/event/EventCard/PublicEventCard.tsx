@@ -24,7 +24,7 @@ const PublicEventCard: FC<{
         } left`}
       </Typography>
     ),
-    [total, remaining]
+    [total, remaining, classes]
   );
 
   return (

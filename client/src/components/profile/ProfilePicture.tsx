@@ -132,7 +132,7 @@ const ProfilePicture = ({ profilePageData }) => {
 
   const handleCancel = useCallback(() => {
     setSrc(null);
-  }, [src]);
+  }, []);
 
   return (
     <div>

@@ -79,20 +79,20 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
     if (user.token) {
       router.push(HOME_ROUTE);
     }
-  }, [user]);
+  }, [router, user]);
 
   useEffect(() => {
     if (user.status === "fulfilled") {
       router.push(HOME_ROUTE);
     }
-  }, [user.status]);
+  }, [router, user]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", resetStatus);
     return () => {
       window.removeEventListener("beforeunload", resetStatus);
     };
-  }, []);
+  }, [resetStatus]);
 
   const handleSubmit = async (values) => {
     const loginArgs: LoginArgs = {

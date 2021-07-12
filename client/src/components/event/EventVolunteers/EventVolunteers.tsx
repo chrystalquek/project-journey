@@ -18,7 +18,7 @@ import {
   InputLabel,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { getVolunteersById } from "@redux/actions/volunteer";
 import {
@@ -115,7 +115,7 @@ const EventVolunteers = ({ eid }) => {
       dispatch(getEvent(eid));
       dispatch(getSignUpsUpcomingEvent({ id: eid, idType: "eventId" }));
     }
-  }, [eid]);
+  }, [dispatch, eid]);
 
   useEffect(() => {
     if (signUps && eid) {
@@ -126,9 +126,9 @@ const EventVolunteers = ({ eid }) => {
 
       setAllVolunteerIds(volunteerIds);
     }
-  }, [signUps]);
+  }, [eid, signUps]);
 
-  const getVolunteerData = async () => {
+  const getVolunteerData = useCallback(async () => {
     const volunteerData = await dispatch(
       getVolunteersById({ ids: allVolunteerIds })
     )
@@ -136,7 +136,7 @@ const EventVolunteers = ({ eid }) => {
       .then(unwrapResult)
       .then((result) => result.data);
     return volunteerData;
-  };
+  }, [allVolunteerIds, dispatch]);
 
   useEffect(() => {
     const updateVolunteerData = async () => {
@@ -150,19 +150,19 @@ const EventVolunteers = ({ eid }) => {
     };
 
     if (allVolunteerIds.length) updateVolunteerData();
-  }, [allVolunteerIds]);
+  }, [allVolunteerIds, getVolunteerData]);
 
-  const getVacanciesForAllRoles = () => {
+  const getVacanciesForAllRoles = useCallback(() => {
     const vacancies = {};
     roles?.forEach((role) => {
       const num = role.capacity - role.volunteers.length;
       vacancies[role.name] = num > 0 ? num : 0;
     });
     return vacancies;
-  };
+  }, [roles]);
   useEffect(() => {
     setRoleVacancies(getVacanciesForAllRoles());
-  }, [event, roles]);
+  }, [event, getVacanciesForAllRoles, roles]);
 
   useEffect(() => {
     const signUpData = signUps.data;
@@ -183,7 +183,7 @@ const EventVolunteers = ({ eid }) => {
     setDisplayedApprovedSignUps(approved);
     setNonApprovedSignUps(nonApproved);
     setDisplayedNonApprovedSignUps(nonApproved);
-  }, [signUps]);
+  }, [dispatch, eid, signUps]);
 
   /** Anchor for  more button's popover */
   const [anchorEl, setAnchorEl] = useState(null);
@@ -422,14 +422,20 @@ const EventVolunteers = ({ eid }) => {
 
   const [selectedSort, setSelectedSort] = useState(null);
 
-  const sortByName = (array: SignUpData[]): SignUpData[] =>
-    array.sort((a, b) =>
-      allVolunteerData[a.userId].name.localeCompare(
-        allVolunteerData[b.userId].name
-      )
-    );
-  const sortByRole = (array: SignUpData[]): SignUpData[] =>
-    array.sort((a, b) => a.acceptedRole.localeCompare(b.acceptedRole));
+  const sortByName = useCallback(
+    (array: SignUpData[]): SignUpData[] =>
+      array.sort((a, b) =>
+        allVolunteerData[a.userId].name.localeCompare(
+          allVolunteerData[b.userId].name
+        )
+      ),
+    [allVolunteerData]
+  );
+  const sortByRole = useCallback(
+    (array: SignUpData[]): SignUpData[] =>
+      array.sort((a, b) => a.acceptedRole.localeCompare(b.acceptedRole)),
+    []
+  );
 
   /** Search */
   const [searchString, setSearchString] = useState("");
@@ -485,7 +491,16 @@ const EventVolunteers = ({ eid }) => {
 
     if (isApprovedTab) setDisplayedApprovedSignUps(currentSignUps);
     else setDisplayedNonApprovedSignUps(currentSignUps);
-  }, [searchString, selectedSort]);
+  }, [
+    allVolunteerData,
+    approvedSignUps,
+    isApprovedTab,
+    nonApprovedSignUps,
+    searchString,
+    selectedSort,
+    sortByName,
+    sortByRole,
+  ]);
 
   /** Get  table body for approved volunteers tab */
   const getApprovedVolunteersTableBody = () =>

@@ -200,7 +200,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
       ];
       handleChangeQuestion(newOption, "options", index);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions, handleChangeQuestion]
   );
 
   const handleRemoveQuestion = useCallback(
@@ -223,7 +223,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       handleChangeQuestion(newOption, "options", questionIndex);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions, handleChangeQuestion]
   );
 
   const handleChangeOption = useCallback(
@@ -238,7 +238,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       handleChangeQuestion(newOption, "options", questionIndex);
     },
-    [feedbackFormEventQuestions]
+    [feedbackFormEventQuestions, handleChangeQuestion]
   );
 
   const router = useRouter();
@@ -247,9 +247,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     if (id && id !== "new") {
       dispatch(getEvent(id));
     }
-  }, [id]);
+  }, [dispatch, id]);
 
-  useEffect(() => () => dispatch(resetEventStatus()), []);
+  useEffect(() => () => dispatch(resetEventStatus()), [dispatch]);
 
   useEffect(() => {
     if (event.status === SignUpStatus.REJECTED) {
@@ -266,7 +266,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         router.push("/event");
       }, TOAST_MESSAGE_LENGTH_MS);
     }
-  }, [event.status]);
+  }, [event, isNew, router]);
 
   const {
     errors,

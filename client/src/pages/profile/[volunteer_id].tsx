@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Grid } from "@material-ui/core";
 import ProfileHeader from "@components/profile/ProfileHeader";
 import Remarks from "@components/profile/Remarks";
@@ -10,37 +10,38 @@ import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 import { VolunteerType } from "@type/volunteer";
 import { getVolunteerById } from "@redux/actions/profilePage";
-import { checkLoggedIn } from "@utils/helpers/auth";
+import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import LoadingIndicator from "@components/common/LoadingIndicator";
 import Header from "@components/common/Header";
 
 const Profile = () => {
-  checkLoggedIn();
+  useAuthenticatedRoute();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  let profilePageId = router.query.volunteer_id as string;
+  const profilePageId = useRef<string>(router.query.volunteer_id as string);
 
   const loggedInUser = useAppSelector((state) => state.user);
   const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   // First time load page, send request to receive data
   useEffect(() => {
-    profilePageId = router.query.volunteer_id as string;
-    dispatch(getVolunteerById(profilePageId));
-  }, [router]);
+    profilePageId.current = router.query.volunteer_id as string;
+    dispatch(getVolunteerById(profilePageId.current));
+  }, [dispatch, router]);
 
   // Guard clause, user cannot view other users
   // Only admin can view other users
   if (
     loggedInUser.user === null ||
     (loggedInUser.user.volunteerType !== VolunteerType.ADMIN &&
-      loggedInUser.user._id !== profilePageId)
+      loggedInUser.user._id !== profilePageId.current)
   ) {
     return <ErrorPage statusCode={404} />;
   }
 
-  return profilePageData === null || profilePageData?._id !== profilePageId ? (
+  return profilePageData === null ||
+    profilePageData?._id !== profilePageId.current ? (
     <LoadingIndicator />
   ) : (
     <>

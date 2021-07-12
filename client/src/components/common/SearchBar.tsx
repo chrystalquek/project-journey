@@ -13,7 +13,7 @@ function SearchBar({ setFilterFunction }: SearchBarProps) {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setFilterFunction(e.target.value);
     },
-    []
+    [setFilterFunction]
   );
 
   return (

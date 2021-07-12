@@ -54,7 +54,7 @@ const PastEventsPageBody: FC<{}> = () => {
     dispatch(
       getSignedUpEventsPastEvent({ userId: user._id, eventType: "past" })
     );
-  }, []);
+  }, [dispatch, user]);
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,

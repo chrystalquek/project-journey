@@ -21,20 +21,20 @@ import {
   CommitmentApplicationStatus,
 } from "@type/commitmentApplication";
 import { ActionableDialog } from "@components/common/ActionableDialog";
-import { checkLoggedIn } from "@utils/helpers/auth";
+import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import Header from "@components/common/Header";
 import ErrorPage from "@components/common/ErrorPage";
 import LoadingIndicator from "@components/common/LoadingIndicator";
 
 const PendingRequests: FC<{}> = () => {
-  checkLoggedIn();
+  useAuthenticatedRoute();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getPendingVolunteers());
     dispatch(getPendingCommitmentApplications());
-  }, []);
+  }, [dispatch]);
 
   const { pendingVolunteers, pendingCommitmentApplications, isLoading, error } =
     useAppSelector((state) => state.volunteer.pendingRequests);

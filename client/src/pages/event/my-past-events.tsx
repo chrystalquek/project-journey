@@ -1,8 +1,8 @@
 import PastEventsPageBody from "@components/event/PastEvent/PastEvents";
-import { checkLoggedIn } from "@utils/helpers/auth";
+import { useAuthenticatedRoute } from "@utils/helpers/auth";
 
 const EventsPage = () => {
-  checkLoggedIn();
+  useAuthenticatedRoute();
   return (
     <>
       <PastEventsPageBody />

@@ -27,7 +27,7 @@ import RightDrawer from "@components/common/RightDrawer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import SearchBar from "@components/common/SearchBar";
 import { useRouter } from "next/router";
-import { checkLoggedIn } from "@utils/helpers/auth";
+import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import { getVolunteers } from "@redux/actions/volunteer/index";
 import { formatDDMMYYYY } from "@utils/helpers/date";
 import LoadingIndicator from "@components/common/LoadingIndicator";
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Index: FC<{}> = () => {
-  checkLoggedIn();
+  useAuthenticatedRoute();
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -75,7 +75,7 @@ const Index: FC<{}> = () => {
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
     dispatch(getVolunteers({}));
-  }, []);
+  }, [dispatch]);
 
   // filter functions
   const handleFilterVolunteerTypeChange = (event) => {

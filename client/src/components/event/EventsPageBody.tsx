@@ -57,7 +57,7 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
 
   useEffect(() => {
     dispatch(getUpcomingEvents());
-  }, []);
+  }, [dispatch]);
 
   const eventFilters: EventFilterOptions = {
     [EventFilters.DATE]: null,
