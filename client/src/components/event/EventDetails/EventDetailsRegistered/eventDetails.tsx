@@ -16,7 +16,7 @@ import {
   FormDisabledReason,
   getFormData,
 } from "@components/event/helpers/EventDetails/EventDetails";
-import { SignUpData, SignUpIdType } from "@type/signUp";
+import { SignUpData, SignUpIdType, SignUpStatus } from "@type/signUp";
 import { getEventVacancies } from "@components/event/helpers/EventsPageBody";
 import { ActionableDialog } from "@components/common/ActionableDialog";
 import { useRouter } from "next/router";
@@ -59,11 +59,9 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
   );
   const isEventFull = getEventVacancies(event).remaining === 0;
   const hasPendingSignUp =
-    signUpInfo.length > 0 && signUpInfo[0].status === "pending";
+    signUpInfo.length > 0 && signUpInfo[0].status === SignUpStatus.PENDING;
   const hasAcceptedSignUp =
-    signUpInfo.length > 0 &&
-    Array.isArray(signUpInfo[0].status) &&
-    signUpInfo[0].status[0] === "accepted";
+    signUpInfo.length > 0 && signUpInfo[0].status === SignUpStatus.ACCEPTED;
 
   let reason;
   if (isEventFull) {
@@ -90,7 +88,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     signUpAndAccept: async (uid: string, eid: string, form: FormState) => {
       const request: CreateSignUpRequest = {
         ...getFormData(uid, eid, form),
-        status: "pending",
+        status: SignUpStatus.PENDING,
       };
       dispatch(createAndAcceptSignUp({ request, form })); // possibly check for failure
     },
@@ -98,7 +96,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
     signUpOnly: async (uid: string, eid: string, form: FormState) => {
       const request: CreateSignUpRequest = {
         ...getFormData(uid, eid, form),
-        status: "pending",
+        status: SignUpStatus.PENDING,
       };
       dispatch(createSignUp(request));
     },
@@ -154,8 +152,7 @@ const EventDetails: FC<EventDetailsProps> = ({ event, user }) => {
 
   const withdrawCommitment = () => {
     const acceptedSignUp = signUpInfo.find(
-      (signUp) =>
-        Array.isArray(signUp.status) && signUp.status[0] === "accepted"
+      (signUp) => signUp.status === SignUpStatus.ACCEPTED
     );
     dispatch(
       deleteSignUp({

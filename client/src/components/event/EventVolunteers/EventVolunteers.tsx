@@ -25,7 +25,7 @@ import {
   getSignUpsUpcomingEvent,
   updateSignUpInstant,
 } from "@redux/actions/signUp";
-import { SignUpData } from "@type/signUp";
+import { SignUpData, SignUpStatus } from "@type/signUp";
 import { Tabs } from "@components/common/Tabs";
 import { unwrapResult } from "@reduxjs/toolkit";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -88,9 +88,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const isStatusApproved = (status: string | string[]) =>
-  typeof status !== "string" && status[0] === "accepted";
-
 const EventVolunteers = ({ eid }) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
@@ -126,6 +123,7 @@ const EventVolunteers = ({ eid }) => {
       const volunteerIds = Object.values(signUpsData)
         .filter((signUp) => signUp.eventId === eid)
         .map((signUp) => signUp.userId);
+
       setAllVolunteerIds(volunteerIds);
     }
   }, [signUps]);
@@ -173,7 +171,7 @@ const EventVolunteers = ({ eid }) => {
     Object.values(signUpData)
       .filter((signUp) => signUp.eventId === eid)
       .forEach((signUp) => {
-        if (isStatusApproved(signUp.status)) {
+        if (signUp.status === SignUpStatus.ACCEPTED) {
           approved.push(signUp);
         } else {
           nonApproved.push(signUp);
@@ -223,7 +221,9 @@ const EventVolunteers = ({ eid }) => {
     <FormControl variant="outlined" className={classes.selectRole}>
       <Select
         defaultValue={
-          signUp && isStatusApproved(signUp.status) ? signUp.status[1] : "Role"
+          signUp && signUp.status === SignUpStatus.ACCEPTED
+            ? signUp.acceptedRole
+            : "Role"
         }
         value={selectedRoles[signUp._id]}
         onChange={(e) => handleSelectedRoleChange(signUp._id, e)}
@@ -258,7 +258,11 @@ const EventVolunteers = ({ eid }) => {
 
     dispatch(
       updateSignUpInstant({
-        data: { ...signUp, status: ["accepted", selectedRole] },
+        data: {
+          ...signUp,
+          status: SignUpStatus.ACCEPTED,
+          acceptedRole: selectedRole,
+        },
         id: signUp._id,
         idType: "signUpId",
       })
@@ -323,7 +327,7 @@ const EventVolunteers = ({ eid }) => {
                 buttonTitle="Delete"
                 buttonOnClick={() =>
                   onUpdateSignUp({
-                    data: { ...signUp, status: "pending" },
+                    data: { ...signUp, status: SignUpStatus.PENDING },
                     id: signUp._id,
                     idType: "signUpId",
                   })
@@ -384,7 +388,7 @@ const EventVolunteers = ({ eid }) => {
 
     const assignedButton = <Button disabled>Assigned</Button>;
 
-    if (isStatusApproved(signUp.status)) {
+    if (signUp.status === SignUpStatus.ACCEPTED) {
       return assignedButton;
     }
 
@@ -425,7 +429,7 @@ const EventVolunteers = ({ eid }) => {
       )
     );
   const sortByRole = (array: SignUpData[]): SignUpData[] =>
-    array.sort((a, b) => a.status[1].localeCompare(b.status[1]));
+    array.sort((a, b) => a.acceptedRole.localeCompare(b.acceptedRole));
 
   /** Search */
   const [searchString, setSearchString] = useState("");
@@ -496,7 +500,7 @@ const EventVolunteers = ({ eid }) => {
           <TableCell>
             {signUpIdOfRolesBeingEdited.includes(signUp._id)
               ? getRoleSelectMenu(signUp)
-              : signUp?.status[1]}
+              : signUp?.acceptedRole}
           </TableCell>
           <TableCell>
             {getApprovedTabButtons(signUp, volunteer?.name)}

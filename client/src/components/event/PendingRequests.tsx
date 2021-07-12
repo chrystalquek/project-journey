@@ -13,7 +13,7 @@ import { EventData } from "@type/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { getEventsUpcomingEvent } from "@redux/actions/event";
 import { getPendingSignUps } from "@redux/actions/signUp";
-import { SignUpData } from "@type/signUp";
+import { SignUpData, SignUpStatus } from "@type/signUp";
 import { checkLoggedIn } from "@utils/helpers/auth";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import { useRouter } from "next/router";
@@ -60,7 +60,10 @@ const PendingRequests: FC = () => {
   const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
     upcomingSignUps.forEach((signUp: SignUpData) => {
-      if (signUp.eventId === event._id && signUp.status === "pending")
+      if (
+        signUp.eventId === event._id &&
+        signUp.status === SignUpStatus.PENDING
+      )
         result += 1;
     });
     return result;

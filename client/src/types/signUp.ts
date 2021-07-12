@@ -1,5 +1,10 @@
 export type SignUpIdType = "eventId" | "userId" | "signUpId";
-export type SignUpStatus = "pending" | ["accepted", string] | "rejected";
+
+export enum SignUpStatus {
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  REJECTED = "rejected",
+}
 
 export type SignUpData = {
   _id: string;
@@ -9,4 +14,5 @@ export type SignUpData = {
   preferences: Array<string>;
   isRestricted: boolean;
   createdAt: string;
+  acceptedRole?: string;
 };

@@ -7,7 +7,7 @@ import { Tabs } from "@components/common/Tabs";
 import { useRouter } from "next/dist/client/router";
 import { getEventsUpcomingEvent } from "@redux/actions/event";
 import { EventData } from "@type/event";
-import { SignUpData } from "@type/signUp";
+import { SignUpData, SignUpStatus } from "@type/signUp";
 
 interface TabsProps {
   clickedOn: number;
@@ -44,7 +44,10 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
   const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
     upcomingSignUps.forEach((signUp: SignUpData) => {
-      if (signUp.eventId === event._id && signUp.status === "pending")
+      if (
+        signUp.eventId === event._id &&
+        signUp.status === SignUpStatus.PENDING
+      )
         result += 1;
     });
     return result;

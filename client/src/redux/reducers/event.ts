@@ -11,6 +11,7 @@ import {
   cancelEvent,
 } from "@redux/actions/event";
 import { EventData } from "@type/event";
+import { SignUpStatus } from "@type/signUp";
 
 type FetchStatus = "fetching" | "fulfilled" | "rejected" | "";
 
@@ -104,7 +105,7 @@ const eventSlice = createSlice({
       state.data[meta.arg].isCancelled = false;
     });
     builder.addCase(createEvent.rejected, (state) => {
-      state.status = "rejected";
+      state.status = SignUpStatus.REJECTED;
     });
     builder.addCase(createEvent.pending, (state) => {
       state.status = "fetching";

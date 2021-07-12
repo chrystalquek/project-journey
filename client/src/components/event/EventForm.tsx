@@ -24,6 +24,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import { ToastStatus } from "@type/common";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import Header from "@components/common/Header";
+import { SignUpStatus } from "@type/signUp";
 import { FormQuestionMapper } from "../form/FormGenerator";
 
 type AdminEventFormProps = {
@@ -251,7 +252,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   useEffect(() => () => dispatch(resetEventStatus()), []);
 
   useEffect(() => {
-    if (event.status === "rejected") {
+    if (event.status === SignUpStatus.REJECTED) {
       setToastText("Event creation failed.");
       setToastStatus("error");
       setOpenSnackbar(true);

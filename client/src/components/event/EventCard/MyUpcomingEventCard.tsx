@@ -1,6 +1,7 @@
 import { makeStyles, Typography } from "@material-ui/core";
 import { useAppSelector } from "@redux/store";
 import { EventData } from "@type/event";
+import { SignUpStatus } from "@type/signUp";
 import React, { FC, useCallback } from "react";
 import EventCard from "./EventCard";
 
@@ -21,31 +22,31 @@ const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
   const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
 
   const renderSignUpStatus = useCallback(() => {
-    const status =
-      upcomingSignUps.find((signUp) => signUp.eventId === event._id)?.status ||
-      "unknown";
+    const signUp = upcomingSignUps.find(
+      (upcomingSignUp) => upcomingSignUp.eventId === event._id
+    );
+
+    const { status, acceptedRole } = signUp;
 
     switch (status) {
-      case "accepted":
+      case SignUpStatus.ACCEPTED:
         return (
           <Typography color="textSecondary">
-            Volunteer role assigned -{status[1]}
+            Volunteer role assigned -{acceptedRole}
           </Typography>
         );
-      case "pending":
+      case SignUpStatus.PENDING:
         return (
           <Typography>
             <i>Sign-up pending</i>
           </Typography>
         );
-      case "rejected":
+      case SignUpStatus.REJECTED:
         return (
           <Typography className={classes.orangeText}>
             Sign-up unsuccessful
           </Typography>
         );
-      case "unknown":
-        return <Typography>-</Typography>;
       default:
         throw new Error(`Unexpected sign up status!`);
     }

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { SignUpIdType } from "@type/signUp";
+import { SignUpIdType, SignUpStatus } from "@type/signUp";
 import querystring from "querystring";
 import {
   LoginRequest,
@@ -121,10 +121,12 @@ class AxiosApiClient {
     return this.send({}, `volunteer/${this.toURLParams(request)}`, "get");
   }
 
+  // POST is used here to pass in the list of ids in req.body
+  // https://stackoverflow.com/questions/19637459/rest-api-using-post-instead-of-get
   async getVolunteersById(
     request: GetVolunteersByIdRequest
   ): Promise<GetVolunteersResponse> {
-    return this.send(request, "volunteer/ids", "get");
+    return this.send(request, "volunteer/ids", "post");
   }
 
   async getPendingVolunteers(): Promise<GetVolunteersResponse> {
@@ -179,7 +181,8 @@ class AxiosApiClient {
         idType: "signUpId" as SignUpIdType,
         data: {
           ...request,
-          status: ["accepted", acceptedRole],
+          status: SignUpStatus.ACCEPTED,
+          acceptedRole,
         },
       };
       return this.updateSignUp(newRequest);

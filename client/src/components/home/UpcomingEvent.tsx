@@ -17,6 +17,7 @@ import { getSignUpsUpcomingEvent } from "@redux/actions/signUp";
 import { formatDateStartEndTime } from "@utils/helpers/date";
 import { useRouter } from "next/router";
 import { CREATE_EVENT_FORM_ROUTE } from "@constants/routes";
+import { SignUpStatus } from "@type/signUp";
 
 const useStyles = makeStyles((theme) => ({
   pane: {
@@ -102,30 +103,33 @@ const UpcomingEvent: FC<{}> = () => {
       );
     }
     // is volunteer
-    const status =
-      upcomingSignUps.find((signUp) => signUp.eventId === event._id)?.status ||
-      "unknown";
+    const signUp = upcomingSignUps.find(
+      (upcomingSignUp) => upcomingSignUp.eventId === event._id
+    );
+
+    const { status, acceptedRole } = signUp;
+
     switch (status) {
-      case "pending":
+      case SignUpStatus.PENDING:
         return (
           <Typography>
             <i>Sign-up pending</i>
           </Typography>
         );
-      case "rejected":
+      case SignUpStatus.REJECTED:
         return (
           <Typography className={classes.orangeText}>
             Sign-up unsuccessful
           </Typography>
         );
-      case "unknown":
-        return <Typography>-</Typography>;
-      default:
+      case SignUpStatus.ACCEPTED:
         return (
           <Typography className={classes.greenText}>
-            Volunteer role assigned -{status[1]}
+            Volunteer role assigned -{acceptedRole}
           </Typography>
         );
+      default:
+        return <Typography>-</Typography>;
     }
   };
 
