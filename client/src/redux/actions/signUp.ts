@@ -32,22 +32,6 @@ export const getSignUpsUpcomingEvent = createAsyncThunk(
   }
 );
 
-export const getPendingSignUps = createAsyncThunk(
-  "signUp/getPendingSignUps",
-  async () => {
-    const response = await apiClient.getPendingSignUps();
-    return response;
-  }
-);
-
-export const updateSignUp = createAsyncThunk(
-  "signUp/updateSignUp",
-  async (request: UpdateSignUpRequest) => {
-    const response = await apiClient.updateSignUp(request);
-    return response;
-  }
-);
-
 // TODO what are these 2 below
 export const updateSignUpInstant = createAsyncThunk(
   "signUp/updateSignUpInstant",

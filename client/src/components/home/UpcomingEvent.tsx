@@ -78,7 +78,7 @@ const UpcomingEvent: FC<{}> = () => {
     }
   }, []);
 
-  const events = useAppSelector((state) => state.event);
+  const events = useAppSelector((state) => state.event.event);
   const signUps = useAppSelector((state) => state.signUp); // only relevant if user is volunteer
 
   const upcomingEventsIds = events.upcomingEvent.ids;

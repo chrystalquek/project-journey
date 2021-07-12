@@ -147,8 +147,8 @@ const emptyForm = {
 
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
-  const event = useAppSelector((state) => state.event);
-  const eventForm: any = useAppSelector((state) => state.event.form);
+  const event = useAppSelector((state) => state.event.event);
+  const eventForm: any = useAppSelector((state) => state.event.event.form);
   const dispatch = useAppDispatch();
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);

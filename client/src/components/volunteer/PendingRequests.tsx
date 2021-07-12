@@ -12,10 +12,10 @@ import React, { FC, useEffect } from "react";
 import { VolunteerData } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import {
-  getCommitmentApplications,
+  getPendingVolunteers,
+  getPendingCommitmentApplications,
   updateCommitmentApplication,
-} from "@redux/actions/commitmentApplication";
-import { getPendingVolunteers } from "@redux/actions/volunteer";
+} from "@redux/actions/volunteer/pendingRequests";
 import {
   CommitmentApplicationData,
   CommitmentApplicationStatus,
@@ -24,6 +24,8 @@ import { ActionableDialog } from "@components/common/ActionableDialog";
 import { checkLoggedIn } from "@utils/helpers/auth";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import Header from "@components/common/Header";
+import ErrorPage from "@components/common/ErrorPage";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 
 const PendingRequests: FC<{}> = () => {
   checkLoggedIn();
@@ -31,29 +33,13 @@ const PendingRequests: FC<{}> = () => {
 
   useEffect(() => {
     dispatch(getPendingVolunteers());
-    dispatch(
-      getCommitmentApplications({ status: CommitmentApplicationStatus.Pending })
-    );
+    dispatch(getPendingCommitmentApplications());
   }, []);
 
-  const volunteers = useAppSelector((state) => state.pendingVolunteer);
-  const commitmentApplications = useAppSelector(
-    (state) => state.commitmentApplication
-  );
-
-  const upcomingVolunteersIds = volunteers.pendingVolunteers.ids;
-  const upcomingCommitmentApplicationsIds =
-    commitmentApplications.pendingCommitmentApplications.ids;
-
-  const upcomingVolunteers = upcomingVolunteersIds.map(
-    (id) => volunteers.data[id]
-  );
-  const upcomingCommitmentApplications = upcomingCommitmentApplicationsIds.map(
-    (id) => commitmentApplications.data[id]
-  );
+  const { pendingVolunteers, pendingCommitmentApplications, isLoading, error } =
+    useAppSelector((state) => state.volunteer.pendingRequests);
 
   const [openApprove, setOpenApprove] = React.useState(false);
-
   const [openReject, setOpenReject] = React.useState(false);
 
   const onApproveReject = (
@@ -70,7 +56,7 @@ const PendingRequests: FC<{}> = () => {
   };
 
   const getApproveRejectButtons = (volunteer: VolunteerData) => {
-    const commitmentApplication = upcomingCommitmentApplications.find(
+    const commitmentApplication = pendingCommitmentApplications.find(
       (commApp) => commApp.volunteerId === volunteer._id
     );
     const approveCommitmentApplication = {
@@ -104,6 +90,13 @@ const PendingRequests: FC<{}> = () => {
     );
   };
 
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+  if (error) {
+    return <ErrorPage message={error.message} />;
+  }
+
   return (
     <>
       <Header title="Pending Requests" />
@@ -127,7 +120,7 @@ const PendingRequests: FC<{}> = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {upcomingVolunteers.map((volunteer) => (
+                {pendingVolunteers.map((volunteer) => (
                   <TableRow key={volunteer._id}>
                     <TableCell>
                       <b>{volunteer.name}</b>

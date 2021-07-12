@@ -93,7 +93,7 @@ const EventVolunteers = ({ eid }) => {
   const dispatch = useAppDispatch();
 
   const signUps = useAppSelector((state) => state.signUp);
-  const event = useAppSelector((state) => state.event.form);
+  const event = useAppSelector((state) => state.event.event.form);
   const roles = event?.roles;
 
   const [allVolunteerIds, setAllVolunteerIds] = useState<string[]>([]);

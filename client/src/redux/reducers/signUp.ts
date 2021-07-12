@@ -3,10 +3,8 @@ import {
   createAndAcceptSignUp,
   createSignUp,
   deleteSignUp,
-  getPendingSignUps,
   getSignUps,
   getSignUpsUpcomingEvent,
-  updateSignUp,
   updateSignUpInstant,
 } from "@redux/actions/signUp";
 import { SignUpData } from "@type/signUp";
@@ -17,10 +15,6 @@ export type SignUpState = {
     // signups for a volunteer's upcoming events // used for dashboard
     ids: Array<string>; // signed up events
   };
-  pendingSignUps: {
-    // pending sign ups // used for events > pending requests
-    ids: Array<string>;
-  };
   getSignUps: {
     currSignUps: Array<SignUpData>; // signups from getSignUps action
   };
@@ -29,9 +23,6 @@ export type SignUpState = {
 const initialState: SignUpState = {
   data: {},
   volunteerSignUpsForUpcomingEvent: {
-    ids: [],
-  },
-  pendingSignUps: {
     ids: [],
   },
   getSignUps: {
@@ -60,11 +51,6 @@ const signUpSlice = createSlice({
         (signUp) => signUp._id
       );
     });
-    builder.addCase(getPendingSignUps.fulfilled, (state, action) => {
-      const { payload } = action;
-      addToData(payload.data, state);
-      state.pendingSignUps.ids = payload.data.map((signUp) => signUp._id);
-    });
 
     builder.addCase(getSignUps.fulfilled, (state, action) => {
       const { payload } = action;
@@ -88,15 +74,6 @@ const signUpSlice = createSlice({
       // do nothing yet
     });
     builder.addCase(createSignUp.rejected, () => {
-      // do nothing yet
-    });
-    builder.addCase(updateSignUp.pending, () => {
-      // do nothing yet
-    });
-    builder.addCase(updateSignUp.fulfilled, () => {
-      // do nothing yet
-    });
-    builder.addCase(updateSignUp.rejected, () => {
       // do nothing yet
     });
     builder.addCase(updateSignUpInstant.fulfilled, (state, action) => {

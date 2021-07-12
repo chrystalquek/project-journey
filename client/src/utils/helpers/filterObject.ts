@@ -13,3 +13,9 @@ export function initializeFilterObject<T extends { [key: number]: string }>(
   });
   return filterObject;
 }
+
+export function convertFilterObjectToArray(
+  filterObj: Record<string, boolean>
+): string[] {
+  return Object.keys(filterObj).filter((volType) => filterObj[volType]);
+}

@@ -16,22 +16,40 @@ import {
   REGISTER,
 } from "redux-persist";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import pendingVolunteerReducer from "./reducers/volunteer";
 import signUpReducer from "./reducers/signUp";
 import formReducer from "./reducers/form";
 import commitmentApplicationReducer from "./reducers/commitmentApplication";
+import pendingRequestsVolunteerReducer from "./reducers/volunteer/pendingRequests";
+import pendingRequestsEventReducer from "./reducers/event/pendingRequests";
+import pendingApprovalReducer from "./reducers/home/pendingApproval";
+import pendingRequestsTabsReducer from "./reducers/common/pendingRequestsTabs";
 
 export type StoreState = ReturnType<typeof reducers>;
 
 const reducers = combineReducers({
-  user: userReducer,
-  event: EventReducer,
-  volunteer: volunteerReducer,
-  pendingVolunteer: pendingVolunteerReducer,
+  home: combineReducers({
+    pendingApproval: pendingApprovalReducer,
+  }),
+
+  event: combineReducers({
+    event: EventReducer,
+    pendingRequests: pendingRequestsEventReducer,
+  }),
+
+  volunteer: combineReducers({
+    index: volunteerReducer,
+    pendingRequests: pendingRequestsVolunteerReducer,
+  }),
+
+  common: combineReducers({
+    pendingRequestsTabs: pendingRequestsTabsReducer,
+  }),
+
   signUp: signUpReducer,
   form: formReducer,
   commitmentApplication: commitmentApplicationReducer,
   profilePage: profilePageReducer,
+  user: userReducer,
   loading: loadingReducer,
 });
 

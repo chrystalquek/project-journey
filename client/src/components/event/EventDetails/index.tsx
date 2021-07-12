@@ -24,7 +24,7 @@ const EventDetails: FC<EventDetailsProps> = ({ eid }) => {
 
   const userData: VolunteerData = useAppSelector((state) => state.user.user);
   const eventData: EventData | null = useAppSelector(
-    (state) => state.event.form
+    (state) => state.event.event.form
   );
 
   return (

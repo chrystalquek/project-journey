@@ -2,16 +2,9 @@ import { createSlice, SerializedError } from "@reduxjs/toolkit";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { initializeFilterObject } from "@utils/helpers/filterObject";
 import { getVolunteers } from "@redux/actions/volunteer/index";
+import { ROWS_PER_PAGE, VolunteerSortFieldsType } from "@api/request";
 import { Pagination } from "../../../utils/helpers/pagination";
 
-export type VolunteerSortFieldsType = "name" | "createdAt";
-
-/* TODO: should change to importing from Index.tsx, but there's circular dependency
-  i.e. this page imports from Index.tsx for `rowsPerPage` AND
-  Index.tsx imports from this page for `VolunteerSortFieldsType`
-  Assigned to: @chrystal
-*/
-const rowsPerPage = 10;
 // collate objects can be defined later on and should have filters, search, sort fields too
 export type VolunteerCollate = {
   filters: {
@@ -50,7 +43,7 @@ const initialState: VolunteerState = {
   pagination: {
     count: 0,
     pageNo: 0,
-    size: rowsPerPage,
+    size: ROWS_PER_PAGE,
   },
 };
 
@@ -59,16 +52,20 @@ const volunteerSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getVolunteers.pending, (state) => {
-      state.isLoading = true;
-    });
     builder.addCase(getVolunteers.fulfilled, (state, action) => {
       const { payload } = action;
       state.volunteers = payload.response.data;
-      state.collate = Object.assign(state.collate, payload.newCollate);
-      state.pagination = Object.assign(state.pagination, payload.newPagination);
+      state.collate = Object.assign(state.collate, payload.param.newCollate);
+      state.pagination = Object.assign(
+        state.pagination,
+        payload.param.newPagination
+      );
       state.pagination.count = payload.response.count;
       state.isLoading = false;
+    });
+
+    builder.addCase(getVolunteers.pending, (state) => {
+      state.isLoading = true;
     });
     builder.addCase(getVolunteers.rejected, (state, action) => {
       state.isLoading = false;

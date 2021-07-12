@@ -11,13 +11,17 @@ import {
 import React, { FC, useEffect } from "react";
 import { EventData } from "@type/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { getEventsUpcomingEvent } from "@redux/actions/event";
-import { getPendingSignUps } from "@redux/actions/signUp";
+import {
+  getUpcomingEvents,
+  getPendingSignUps,
+} from "@redux/actions/events/pendingRequests";
 import { SignUpData, SignUpStatus } from "@type/signUp";
 import { checkLoggedIn } from "@utils/helpers/auth";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import { useRouter } from "next/router";
 import Header from "@components/common/Header";
+import ErrorPage from "@components/common/ErrorPage";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -44,22 +48,17 @@ const PendingRequests: FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(getEventsUpcomingEvent({ eventType: "upcoming" }));
+    dispatch(getUpcomingEvents());
     dispatch(getPendingSignUps());
   }, []);
 
-  const events = useAppSelector((state) => state.event);
-  const signUps = useAppSelector((state) => state.signUp);
-
-  const upcomingEventsIds = events.upcomingEvent.ids;
-  const upcomingSignUpsIds = signUps.pendingSignUps.ids;
-
-  const upcomingEvents = upcomingEventsIds.map((id) => events.data[id]);
-  const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
+  const { pendingSignUps, upcomingEvents, isLoading, error } = useAppSelector(
+    (state) => state.event.pendingRequests
+  );
 
   const pendingRequestsForEventCount = (event: EventData) => {
     let result = 0;
-    upcomingSignUps.forEach((signUp: SignUpData) => {
+    pendingSignUps.forEach((signUp: SignUpData) => {
       if (
         signUp.eventId === event._id &&
         signUp.status === SignUpStatus.PENDING
@@ -72,6 +71,13 @@ const PendingRequests: FC = () => {
   const upcomingEventsWithPendingSignUps = upcomingEvents.filter(
     (event) => pendingRequestsForEventCount(event) !== 0
   );
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+  if (error) {
+    return <ErrorPage message={error.message} />;
+  }
 
   return (
     <>

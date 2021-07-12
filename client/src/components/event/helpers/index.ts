@@ -8,7 +8,7 @@ import { SignUpData, SignUpStatus } from "@type/signUp";
  */
 export function getStoreEvent(eid: string): EventData | null {
   if (eid) {
-    return useSelector((state: StoreState) => state.event.data[eid]);
+    return useSelector((state: StoreState) => state.event.event.data[eid]);
   }
   return null;
 }

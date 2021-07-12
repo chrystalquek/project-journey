@@ -49,8 +49,8 @@ const EventsPageBody: FC<EventsPageBodyProps> = () => {
   const screenSm = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
   const events: Array<EventData> = useAppSelector((state) =>
-    state.event.browseEvents.ids
-      .map((eid) => state.event.data[eid])
+    state.event.event.browseEvents.ids
+      .map((eid) => state.event.event.data[eid])
       .filter((event) => event)
   );
   const user: VolunteerData | null = useAppSelector((state) => state.user.user);

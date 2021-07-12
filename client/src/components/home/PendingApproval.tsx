@@ -7,8 +7,10 @@ import {
 } from "@material-ui/core";
 import React, { FC, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { getPendingSignUps } from "@redux/actions/signUp";
-import { getPendingVolunteers } from "@redux/actions/volunteer";
+import {
+  getPendingSignUps,
+  getPendingVolunteers,
+} from "@redux/actions/home/pendingApproval";
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -36,11 +38,12 @@ const PendingApproval: FC<{}> = () => {
     dispatch(getPendingVolunteers());
   }, []);
 
-  const pendingSignUpCount = useAppSelector((state) => state.signUp)
-    .pendingSignUps.ids.length;
-  const pendingVolunteerCount = useAppSelector(
-    (state) => state.pendingVolunteer
-  ).pendingVolunteers.ids.length;
+  const { pendingSignUps, pendingVolunteers } = useAppSelector(
+    (state) => state.home.pendingApproval
+  );
+
+  const pendingSignUpCount = pendingSignUps.length;
+  const pendingVolunteerCount = pendingVolunteers.length;
 
   return (
     <Card>

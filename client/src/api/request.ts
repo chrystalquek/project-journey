@@ -46,12 +46,15 @@ export type CreateVolunteerRequest = Omit<
   "_id" | "createdAt"
 > & { password: string; administratorRemarks?: string };
 
+export const ROWS_PER_PAGE = 10;
+export type VolunteerSortFieldsType = "name" | "createdAt";
+
 export type GetVolunteersPaginatedRequest = {
   pageNo?: number;
   size?: number;
   volunteerType?: string[];
   name?: string;
-  sort?: string;
+  sort?: VolunteerSortFieldsType;
 };
 
 export type GetVolunteersByIdRequest = {

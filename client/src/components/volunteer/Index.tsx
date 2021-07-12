@@ -30,16 +30,13 @@ import { useRouter } from "next/router";
 import { checkLoggedIn } from "@utils/helpers/auth";
 import { getVolunteers } from "@redux/actions/volunteer/index";
 import { formatDDMMYYYY } from "@utils/helpers/date";
-import { VolunteerSortFieldsType } from "@redux/reducers/volunteer/index";
 import LoadingIndicator from "@components/common/LoadingIndicator";
 import ErrorPage from "@components/common/ErrorPage";
 import Header from "@components/common/Header";
 import FilterAccordionGroup from "@components/common/surfaces/accordion/FilterAccordionGroup";
 import Accordion from "@components/common/surfaces/accordion/Accordion";
 import AccordionSummary from "@components/common/surfaces/accordion/AccordionSummary";
-
-// constants
-export const rowsPerPage = 10; // for VolunteerProfile, its default is 10
+import { VolunteerSortFieldsType, ROWS_PER_PAGE } from "@api/request";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -69,7 +66,7 @@ const Index: FC<{}> = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
-  const volunteerState = useAppSelector((state) => state.volunteer);
+  const volunteerState = useAppSelector((state) => state.volunteer.index);
   const { volunteerType } = volunteerState.collate.filters;
   const { sort } = volunteerState.collate;
   const { volunteers } = volunteerState;
@@ -205,10 +202,10 @@ const Index: FC<{}> = () => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[rowsPerPage]}
+        rowsPerPageOptions={[ROWS_PER_PAGE]}
         component="div"
         count={total}
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={ROWS_PER_PAGE}
         page={pageNo}
         onChangePage={handleChangePage}
       />
