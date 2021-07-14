@@ -33,6 +33,11 @@ export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'admin'];
 export type VolunteerType = (typeof VOLUNTEER_TYPE)[number]
 
 export const VolunteerSchema = createSchema({
+  name: Type.string({ required: true }),
+  mobileNumber: Type.string({ required: true }),
+  address: Type.string({ required: false }),
+  nickname: Type.string({ required: false }),
+  birthday: Type.date({ required: false }),
   userId: Type.objectId({
     required: true,
     ref: 'User',
@@ -41,19 +46,15 @@ export const VolunteerSchema = createSchema({
     required: true,
     enum: VOLUNTEER_TYPE,
   }),
-  name: Type.string({ required: true }),
-  nickname: Type.string({ required: false }),
   gender: Type.string({
     required: true,
     enum: GENDER,
   }),
+
   citizenship: Type.string({
     required: true,
     enum: CITIZENSHIP,
   }),
-  birthday: Type.date({ required: false }),
-  address: Type.string({ required: false }),
-  mobileNumber: Type.string({ required: true }),
   photoUrl: Type.string({ required: true }), // Process on server side - not immediately available
   email: Type.string({ required: true }),
 
@@ -74,6 +75,7 @@ export const VolunteerSchema = createSchema({
     required: true,
     default: [],
   }).of(Type.string({ required: true })),
+
   referralSources: Type.array({
     required: true,
     default: [],
