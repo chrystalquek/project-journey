@@ -49,6 +49,10 @@ export const regexValidator = (regexExp: RegExp, regexName: string, value: strin
   return true;
 };
 
+export function stringArrayValidator(value: any): boolean {
+  return value.every(item => typeof item === "string");
+}
+
 // TODO: remove from global after separating user and volunteer
 const LENGTH_MINIMUM_PASSWORD = 8;
 
