@@ -50,7 +50,10 @@ export const VolunteerSchema = createSchema({
     required: true,
     enum: GENDER,
   }),
-
+  race: Type.string({
+    required: false,
+    enum: RACE,
+  }),
   citizenship: Type.string({
     required: true,
     enum: CITIZENSHIP,
@@ -66,10 +69,7 @@ export const VolunteerSchema = createSchema({
 
   orgnanization: Type.string({ required: false }),
   position: Type.string({ required: false }),
-  race: Type.string({
-    required: false,
-    enum: RACE,
-  }),
+ 
 
   languages: Type.array({
     required: true,

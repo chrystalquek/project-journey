@@ -27,6 +27,7 @@ router.get(
 router.get(
   '/ids',
   authorize(['admin']),
+  validate(getValidations('getVolunteersById')),
   volunteerController.getVolunteersByIds,
 );
 
@@ -34,7 +35,7 @@ router.get(
 // @desc    For volunteer and admin to get volunteer
 router.get(
   '/:email',
-  validate(getValidations('getVolunteerDetailByEmail')),
+  validate(getValidations('getVolunteerByEmail')),
   volunteerController.getVolunteerDetailsByEmail,
 );
 
@@ -43,6 +44,7 @@ router.get(
 router.get(
   '/id/:id',
   authorize([]),
+  validate(getValidations('getVolunteerById')),
   volunteerController.getVolunteerDetailsById,
 );
 
@@ -51,7 +53,7 @@ router.get(
 router.get(
   '/',
   authorize(['admin']),
-  validate(getValidations('getVolunteers')),
+  validate(getValidations('getAllVolunteers')),
   volunteerController.getAllVolunteerDetails,
 );
 
