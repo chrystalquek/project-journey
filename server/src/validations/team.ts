@@ -1,10 +1,10 @@
 import { body } from 'express-validator';
-import { TeamMethod } from '../controllers/team';
 
+type TeamValidatorMethod = 'createTeam' | 'updateTeam' | 'readTeam' | 'deleteTeam';
 // TODO @everyone - fill as required
-const getValidations = (method: TeamMethod) => {
+const getValidations = (method: TeamValidatorMethod) => {
   switch (method) {
-    case 'TeamCreate':
+    case 'createTeam':
       return [
         body('members', 'members must be a string array').isArray(),
         body('leader', 'leader cannot be empty').not().isEmpty(),

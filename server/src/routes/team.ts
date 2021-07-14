@@ -5,9 +5,9 @@ import getValidations from '../validations/team';
 
 const router = express.Router();
 
-router.get('/:id?', validate(getValidations('TeamRead')), teamController.getTeam);
-router.post('/', validate(getValidations('TeamCreate')), teamController.createTeam);
-router.put('/:id', validate(getValidations('TeamUpdate')), teamController.updateTeam);
-router.delete('/:id', validate(getValidations('TeamDelete')), teamController.deleteTeam);
+router.get('/:id?', validate(getValidations('readTeam')), teamController.getTeam);
+router.post('/', validate(getValidations('createTeam')), teamController.createTeam);
+router.put('/:id', validate(getValidations('updateTeam')), teamController.updateTeam);
+router.delete('/:id', validate(getValidations('deleteTeam')), teamController.deleteTeam);
 
 export default router;

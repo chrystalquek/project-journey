@@ -4,12 +4,6 @@ import {
   teamCreate, teamRead, teamUpdate, teamDelete,
 } from '../services/team';
 
-export type TeamCreate = 'TeamCreate';
-export type TeamRead = 'TeamRead';
-export type TeamUpdate = 'TeamUpdate';
-export type TeamDelete = 'TeamDelete';
-export type TeamMethod = TeamCreate | TeamRead | TeamUpdate | TeamDelete;
-
 const createTeam = async (req: Request, res: Response): Promise<void> => {
   const result = await teamCreate(req.body);
   res.send(result);
