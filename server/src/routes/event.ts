@@ -8,19 +8,39 @@ const router = express.Router();
 
 // @route   GET /event/single/:id
 // @desc    Get event by id
-router.get('/single/:id', authorize([]), eventController.getEvent);
+router.get(
+  '/single/:id',
+   authorize([]), 
+   validate(getValidations('readEvent')),
+   eventController.getEvent
+   );
 
 // @route   GET /event/multiple/:eventType
 // @desc    Get either all, upcoming, or past events
-router.get('/multiple/:eventType', authorize([]), eventController.getEvents);
+router.get(
+  '/multiple/:eventType',
+   authorize([]), 
+   validate(getValidations('readEvents')),
+   eventController.getEvents
+   );
 
 // @route   GET /event/signup/:userId/:eventType
 // @desc    Get either all, upcoming, or past signed up events
-router.get('/signup/:userId/:eventType', authorize([]), eventController.getSignedUpEvents);
+router.get(
+  '/signup/:userId/:eventType',
+   authorize([]),
+   validate(getValidations('readSignedUpEvents')),
+  eventController.getSignedUpEvents
+  );
 
 // @route   DELETE /event
 // @desc    Delete a event by id
-router.delete('/:id', authorize(['admin']), eventController.deleteEvent);
+router.delete(
+  '/:id', 
+  authorize(['admin']), 
+  validate(getValidations('deleteEvent')),
+  eventController.deleteEvent
+  );
 
 // @route   PUT /event
 // @desc    Update a event by id
@@ -36,7 +56,7 @@ router.put(
 router.put(
   '/cancel/:id',
   authorize(['admin']),
-  validate(getValidations('updateEvent')),
+  validate(getValidations('cancelEvent')),
   eventController.cancelEvent,
 );
 

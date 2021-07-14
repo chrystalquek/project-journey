@@ -4,7 +4,7 @@ import { VOLUNTEER_TYPE } from './Volunteer';
 
 const options = { discriminatorKey: 'eventType' };
 
-export const EVENT_TYPE = ['workshop', 'volunteering', 'hangout'] as const
+export const EVENT_TYPE = ['workshop', 'volunteering', 'hangout'] as const;
 export type EventType = (typeof EVENT_TYPE)[number]
 
 // make sure RoleData matches fields defined in EventSchema
@@ -15,9 +15,10 @@ export type RoleData = {
   volunteers: string[];
 }
 
-const CONTENT_TYPE = ['pdf', 'video', 'image', 'links', 'document']
+export const CONTENT_TYPE = ['pdf', 'video', 'image', 'links', 'document'];
 
-export type EventSearchType = 'all' | 'upcoming' | 'past'
+export const EVENT_SEARCH_TYPE = ['all' , 'upcoming' , 'past'] as const;
+export type EventSearchType = (typeof EVENT_SEARCH_TYPE)[number]
 
 const EventSchema = createSchema(
   {
