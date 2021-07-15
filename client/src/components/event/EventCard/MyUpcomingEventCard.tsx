@@ -25,6 +25,9 @@ const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
     const signUp = upcomingSignUps.find(
       (upcomingSignUp) => upcomingSignUp.eventId === event._id
     );
+    if (!signUp) {
+      return <></>;
+    }
 
     const { status, acceptedRole } = signUp;
 

@@ -107,6 +107,10 @@ const UpcomingEvent: FC<{}> = () => {
       (upcomingSignUp) => upcomingSignUp.eventId === event._id
     );
 
+    if (!signUp) {
+      return <></>;
+    }
+
     const { status, acceptedRole } = signUp;
 
     switch (status) {
