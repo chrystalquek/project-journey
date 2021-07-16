@@ -1,8 +1,8 @@
-import express from 'express';
-import getValidations from '../validations/event';
-import eventController from '../controllers/event';
-import { validate } from '../validations/global';
-import authorize from '../helpers/authorize';
+import express from "express";
+import getValidations from "../validations/event";
+import eventController from "../controllers/event";
+import { validate } from "../validations/global";
+import authorize from "../helpers/authorize";
 
 const router = express.Router();
 
@@ -23,6 +23,7 @@ router.get(
    validate(getValidations('readEvents')),
    eventController.getEvents
    );
+
 
 // @route   GET /event/signup/:userId/:eventType
 // @desc    Get either all, upcoming, or past signed up events
@@ -60,12 +61,13 @@ router.put(
   eventController.cancelEvent,
 );
 
+
 // @route   POST /event
 // @desc    Post a new event
 router.post(
-  '/',
-  validate(getValidations('createEvent')),
-  eventController.createEvent,
+  "/",
+  validate(getValidations("createEvent")),
+  eventController.createEvent
 );
 
 export default router;

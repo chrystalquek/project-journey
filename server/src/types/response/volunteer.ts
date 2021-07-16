@@ -1,18 +1,21 @@
-import { GetVolunteerData } from '../../models/Volunteer';
-import { Response } from './common';
+import { GetVolunteerData } from "../../models/Volunteer";
+import { Response } from "./common";
 
-export type CreateVolunteerResponse = Response<GetVolunteerData>
+export type CreateVolunteerResponse = Response<GetVolunteerData>;
 
-export type GetVolunteerDetailsByEmailResponse = Response<GetVolunteerData>
+export type GetVolunteerResponse = Response<GetVolunteerData>;
 
-export type GetVolunteerResponse = Response<GetVolunteerData>
+export type GetVolunteersResponse = Response<{
+  data: GetVolunteerData[];
+  count: number;
+}>;
 
-export type GetVolunteersResponse = Response<{ data: GetVolunteerData[], count: number }>
+export type GetPendingVolunteersResponse = Response<{
+  data: GetVolunteerData[];
+}>;
 
-export type GetPendingVolunteersResponse = Response<{ data: GetVolunteerData[] }>
+export type GetVolunteersByIdsResponse = Response<{ data: GetVolunteerData[] }>;
 
-export type GetVolunteersByIdsResponse = Response<{ data: GetVolunteerData[] }>
+export type UpdateVolunteerResponse = Response<GetVolunteerData>;
 
-export type UpdateVolunteerResponse = Response<GetVolunteerData>
-
-export type DeleteVolunteerResponse = Response
+export type DeleteVolunteerResponse = Response;

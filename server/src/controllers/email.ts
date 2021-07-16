@@ -1,13 +1,24 @@
-import HTTP_CODES from '../constants/httpCodes';
-import emailService from '../services/email';
-import massEmailService from '../services/massEmail';
-import { SendCancelEventRequest, SendFeedbackRequest as SendFeedbackRequestRequest, SendMassFeedbackRequest as SendMassFeedbackRequestRequest } from '../types/request/email';
-import { SendCancelEventResponse, SendFeedbackRequestResponse, SendMassFeedbackRequestResponse } from '../types/response/email';
+import HTTP_CODES from "../constants/httpCodes";
+import emailService from "../services/email";
+import massEmailService from "../services/massEmail";
+import {
+  SendCancelEventRequest,
+  SendFeedbackRequest as SendFeedbackRequestRequest,
+  SendMassFeedbackRequest as SendMassFeedbackRequestRequest,
+} from "../types/request/email";
+import {
+  SendCancelEventResponse,
+  SendFeedbackRequestResponse,
+  SendMassFeedbackRequestResponse,
+} from "../types/response/email";
 
-const sendFeedbackRequest = async (req: SendFeedbackRequestRequest, res: SendFeedbackRequestResponse): Promise<void> => {
+const sendFeedbackRequest = async (
+  req: SendFeedbackRequestRequest,
+  res: SendFeedbackRequestResponse
+): Promise<void> => {
   try {
     const { userId, eventId } = req.params;
-    await emailService.sendEmail('FEEDBACK', userId, eventId);
+    await emailService.sendEmail("FEEDBACK", userId, eventId);
     res.status(HTTP_CODES.OK).json({ userId, eventId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -16,7 +27,10 @@ const sendFeedbackRequest = async (req: SendFeedbackRequestRequest, res: SendFee
   }
 };
 
-const sendMassFeedbackRequest = async (req: SendMassFeedbackRequestRequest, res: SendMassFeedbackRequestResponse): Promise<void> => {
+const sendMassFeedbackRequest = async (
+  req: SendMassFeedbackRequestRequest,
+  res: SendMassFeedbackRequestResponse
+): Promise<void> => {
   try {
     await massEmailService.sendMassFeedbackEmail();
     res.status(HTTP_CODES.OK).json();
@@ -27,10 +41,13 @@ const sendMassFeedbackRequest = async (req: SendMassFeedbackRequestRequest, res:
   }
 };
 
-const sendCancelEvent = async (req: SendCancelEventRequest, res: SendCancelEventResponse): Promise<void> => {
+const sendCancelEvent = async (
+  req: SendCancelEventRequest,
+  res: SendCancelEventResponse
+): Promise<void> => {
   try {
     const { userId, eventId } = req.params;
-    await emailService.sendEmail('CANCEL_EVENT', userId, eventId);
+    await emailService.sendEmail("CANCEL_EVENT", userId, eventId);
     res.status(HTTP_CODES.OK).json({ userId, eventId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({

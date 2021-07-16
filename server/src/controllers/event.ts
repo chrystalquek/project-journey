@@ -1,13 +1,32 @@
-import signUpService, { checkIfAccepted } from '../services/signUp';
-import answerService from '../services/forms/answer';
-import HTTP_CODES from '../constants/httpCodes';
-import eventService from '../services/event';
-import { EventData, EventSearchType } from '../models/Event';
-import { VolunteerType } from '../models/Volunteer';
-import { CancelEventRequest, CreateEventRequest, DeleteEventRequest, GetEventRequest, GetEventsRequest, GetSignedUpEventsRequest, UpdateEventRequest } from '../types/request/event';
-import { CancelEventResponse, CreateEventResponse, DeleteEventResponse, GetEventResponse, GetEventsResponse, GetSignedUpEventsResponse, UpdateEventResponse } from '../types/response/event';
+import signUpService, { isSignUpAccepted } from "../services/signUp";
+import answerService from "../services/forms/answer";
+import HTTP_CODES from "../constants/httpCodes";
+import eventService from "../services/event";
+import { EventData, EventSearchType } from "../models/Event";
+import { VolunteerType } from "../models/Volunteer";
+import {
+  CancelEventRequest,
+  CreateEventRequest,
+  DeleteEventRequest,
+  GetEventRequest,
+  GetEventsRequest,
+  GetSignedUpEventsRequest,
+  UpdateEventRequest,
+} from "../types/request/event";
+import {
+  CancelEventResponse,
+  CreateEventResponse,
+  DeleteEventResponse,
+  GetEventResponse,
+  GetEventsResponse,
+  GetSignedUpEventsResponse,
+  UpdateEventResponse,
+} from "../types/response/event";
 
-const createEvent = async (req: CreateEventRequest, res: CreateEventResponse): Promise<void> => {
+const createEvent = async (
+  req: CreateEventRequest,
+  res: CreateEventResponse
+): Promise<void> => {
   try {
     const eventData = req.body;
     const event = await eventService.createEvent(eventData);
@@ -19,12 +38,18 @@ const createEvent = async (req: CreateEventRequest, res: CreateEventResponse): P
   }
 };
 
-const getEvent = async (req: GetEventRequest, res: GetEventResponse): Promise<void> => {
+const getEvent = async (
+  req: GetEventRequest,
+  res: GetEventResponse
+): Promise<void> => {
   try {
     const event = await eventService.getEvent(req.params.id);
 
-    if (event.volunteerType === 'committed' && req.user.volunteerType === 'ad-hoc') {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    if (
+      event.volunteerType === "committed" &&
+      req.user.volunteerType === "ad-hoc"
+    ) {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
       return;
     }
 
@@ -39,22 +64,31 @@ const getEvent = async (req: GetEventRequest, res: GetEventResponse): Promise<vo
 /**
  * Retrieves either all, upcoming, or past events.
  */
-const getEvents = async (req: GetEventsRequest, res: GetEventsResponse): Promise<void> => {
+const getEvents = async (
+  req: GetEventsRequest,
+  res: GetEventsResponse
+): Promise<void> => {
   try {
-    const { eventType } = req.params
-    const { pageNo, size } = req.query
+    const { eventType } = req.params;
+    const { pageNo, size } = req.query;
 
-    const volunteerType: VolunteerType[] = req.user.volunteerType === 'ad-hoc'
-      ? ['ad-hoc']
-      : ['ad-hoc', 'committed'];
+    const volunteerType: VolunteerType[] =
+      req.user.volunteerType === "ad-hoc"
+        ? ["ad-hoc"]
+        : ["ad-hoc", "committed"];
 
     let events: EventData[];
     if (!size || !pageNo) {
       events = await eventService.getEvents(eventType, volunteerType);
     } else {
-      const pageNoNum = parseInt(pageNo)
-      const sizeNum = parseInt(size)
-      events = await eventService.getEvents(eventType, volunteerType, sizeNum * pageNoNum, sizeNum);
+      const pageNoNum = parseInt(pageNo, 10);
+      const sizeNum = parseInt(size, 10);
+      events = await eventService.getEvents(
+        eventType,
+        volunteerType,
+        sizeNum * pageNoNum,
+        sizeNum
+      );
     }
 
     res.status(HTTP_CODES.OK).json({
@@ -74,28 +108,39 @@ const getEvents = async (req: GetEventsRequest, res: GetEventsResponse): Promise
  * @param req.params.userId userId in SignUpData
  * @param req.params.eventType event type based on time period - all, upcoming, past
  */
-const getSignedUpEvents = async (req: GetSignedUpEventsRequest, res: GetSignedUpEventsResponse): Promise<void> => {
+const getSignedUpEvents = async (
+  req: GetSignedUpEventsRequest,
+  res: GetSignedUpEventsResponse
+): Promise<void> => {
   try {
     const { userId, eventType } = req.params;
-    const signUps = await signUpService.getSignUps(userId, 'userId');
+    const signUps = await signUpService.getSignUps(userId, "userId");
 
     /** For past events, filter sign ups with accepted status */
     /** status is an array if the sign up is accepted i.e. ["accepted", string] */
-    const filteredSignUps = eventType === 'past'
-      ? signUps.filter((signUp) => checkIfAccepted(signUp.status))
-      : signUps;
+    const filteredSignUps =
+      eventType === "past"
+        ? signUps.filter((signUp) =>
+            isSignUpAccepted(signUp.status, signUp.acceptedRole)
+          )
+        : signUps;
 
-    const signedUpEventsIds: string[] = filteredSignUps.map((signUp) => signUp.eventId);
+    const signedUpEventsIds: string[] = filteredSignUps.map(
+      (signUp) => signUp.eventId
+    );
 
-    const signedUpEvents = await eventService
-      .readEventsByIds(signedUpEventsIds, eventType as EventSearchType);
+    const signedUpEvents = await eventService.readEventsByIds(
+      signedUpEventsIds,
+      eventType as EventSearchType
+    );
 
     // append feedback status
-    if (eventType === 'past') {
+    if (eventType === "past") {
       const signedUpEventsWithFeedbackStatus: EventData[] = [];
       const feedbackStatuses = await Promise.all(
-        signedUpEvents.map(async (signedUpEvent) => answerService
-          .getFeedbackStatus(userId, signedUpEvent._id)),
+        signedUpEvents.map(async (signedUpEvent) =>
+          answerService.getFeedbackStatus(userId, signedUpEvent._id)
+        )
       );
       for (let i = 0; i < signedUpEvents.length; i += 1) {
         signedUpEventsWithFeedbackStatus.push({
@@ -103,7 +148,9 @@ const getSignedUpEvents = async (req: GetSignedUpEventsRequest, res: GetSignedUp
           feedbackStatus: feedbackStatuses[i],
         });
       }
-      res.status(HTTP_CODES.OK).json({ data: signedUpEventsWithFeedbackStatus });
+      res
+        .status(HTTP_CODES.OK)
+        .json({ data: signedUpEventsWithFeedbackStatus });
       return;
     }
 
@@ -115,7 +162,10 @@ const getSignedUpEvents = async (req: GetSignedUpEventsRequest, res: GetSignedUp
   }
 };
 
-const updateEvent = async (req: UpdateEventRequest, res: UpdateEventResponse): Promise<void> => {
+const updateEvent = async (
+  req: UpdateEventRequest,
+  res: UpdateEventResponse
+): Promise<void> => {
   try {
     const { id } = req.params;
     const updatedFields = req.body;
@@ -130,13 +180,16 @@ const updateEvent = async (req: UpdateEventRequest, res: UpdateEventResponse): P
   }
 };
 
-const cancelEvent = async (req: CancelEventRequest, res: CancelEventResponse): Promise<void> => {
+const cancelEvent = async (
+  req: CancelEventRequest,
+  res: CancelEventResponse
+): Promise<void> => {
   try {
     const { id } = req.params;
 
     await eventService.cancelEvent(id);
 
-    res.status(HTTP_CODES.OK).send('Event cancelled');
+    res.status(HTTP_CODES.OK).send("Event cancelled");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -144,10 +197,13 @@ const cancelEvent = async (req: CancelEventRequest, res: CancelEventResponse): P
   }
 };
 
-const deleteEvent = async (req: DeleteEventRequest, res: DeleteEventResponse): Promise<void> => {
+const deleteEvent = async (
+  req: DeleteEventRequest,
+  res: DeleteEventResponse
+): Promise<void> => {
   try {
     await eventService.deleteEvent(req.params.id);
-    res.status(HTTP_CODES.OK).send('Event data deleted');
+    res.status(HTTP_CODES.OK).send("Event data deleted");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],

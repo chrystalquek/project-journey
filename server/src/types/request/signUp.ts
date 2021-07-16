@@ -1,15 +1,22 @@
-
 import { NewSignUpData, SignUpData, SignUpIdType } from "../../models/SignUp";
 import { EmptyBody, EmptyQuery, Request, IdParams } from "./common";
 
-type SignUpIdParams = IdParams & { idType: SignUpIdType }
+type SignUpIdParams = IdParams & { idType: SignUpIdType };
 
-export type CreateSignUpRequest = Request<NewSignUpData>
+export type CreateSignUpRequest = Request<NewSignUpData>;
 
-export type GetSignUpsRequest = Request<EmptyBody, EmptyQuery, SignUpIdParams>
+export type GetSignUpsRequest = Request<EmptyBody, EmptyQuery, SignUpIdParams>;
 
-export type GetPendingSignUpsRequest = Request
+export type GetPendingSignUpsRequest = Request;
 
-export type UpdateSignUpRequest = Request<Partial<SignUpData>, EmptyQuery, SignUpIdParams>
+export type UpdateSignUpRequest = Request<
+  Partial<SignUpData>,
+  EmptyQuery,
+  SignUpIdParams
+>;
 
-export type DeleteSignUpRequest = Request<EmptyBody, EmptyQuery, SignUpIdParams>
+export type DeleteSignUpRequest = Request<
+  EmptyBody,
+  EmptyQuery,
+  SignUpIdParams
+>;

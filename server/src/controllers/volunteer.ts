@@ -1,27 +1,37 @@
-import volunteerService from '../services/volunteer';
-import userService from '../services/user';
-import commitmentApplicationService from '../services/commitmentApplication';
-import HTTP_CODES from '../constants/httpCodes';
+import volunteerService from "../services/volunteer";
+import userService from "../services/user";
+import commitmentApplicationService from "../services/commitmentApplication";
+import HTTP_CODES from "../constants/httpCodes";
 import {
-  CreateVolunteerRequest, DeleteVolunteerRequest, GetPendingVolunteersRequest,
-  GetVolunteerDetailsByEmailRequest, GetVolunteerRequest,
-  GetVolunteersByIdsRequest, GetVolunteersRequest, UpdateVolunteerRequest,
-} from '../types/request/volunteer';
+  CreateVolunteerRequest,
+  DeleteVolunteerRequest,
+  GetPendingVolunteersRequest,
+  GetVolunteerRequest,
+  GetVolunteersByIdsRequest,
+  GetVolunteersRequest,
+  UpdateVolunteerRequest,
+} from "../types/request/volunteer";
 import {
-  CreateVolunteerResponse, DeleteVolunteerResponse, GetPendingVolunteersResponse,
-  GetVolunteerDetailsByEmailResponse, GetVolunteerResponse,
-  GetVolunteersByIdsResponse, GetVolunteersResponse, UpdateVolunteerResponse,
-} from '../types/response/volunteer';
-import { removeUserId } from '../helpers/volunteer';
+  CreateVolunteerResponse,
+  DeleteVolunteerResponse,
+  GetPendingVolunteersResponse,
+  GetVolunteerResponse,
+  GetVolunteersByIdsResponse,
+  GetVolunteersResponse,
+  UpdateVolunteerResponse,
+} from "../types/response/volunteer";
+import { removeUserId } from "../helpers/volunteer";
 
-const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteerResponse):
-  Promise<void> => {
+const createVolunteer = async (
+  req: CreateVolunteerRequest,
+  res: CreateVolunteerResponse
+): Promise<void> => {
   try {
     const volunteerData = req.body;
-    // assuming we create a few fixed admin accounts for biab, 
+    // assuming we create a few fixed admin accounts for biab,
     // should only be able to create ad-hoc and commited
-    if (volunteerData.volunteerType === 'admin') {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    if (volunteerData.volunteerType === "admin") {
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
       return;
     }
 
@@ -35,48 +45,16 @@ const createVolunteer = async (req: CreateVolunteerRequest, res: CreateVolunteer
   }
 };
 
-// BY EMAIL
-const getVolunteerDetailsByEmail = async (req: GetVolunteerDetailsByEmailRequest,
-  res: GetVolunteerDetailsByEmailResponse): Promise<void> => {
-  try {
-    let volunteer = await volunteerService.getVolunteer(
-      req.params.email,
-    );
-
-    if (req.user._id !== volunteer._id) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
-      return;
-    }
-
-    // append administrator remarks
-    if (req.user.volunteerType === 'admin') {
-      volunteer = await userService.addAdminRemarks(volunteer);
-    }
-
-    const volunteerWithoutUserId = removeUserId(volunteer);
-    res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
-  } catch (error) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
-    });
-  }
-};
-
 // BY ID
-const getVolunteerDetailsById = async (req: GetVolunteerRequest, res: GetVolunteerResponse):
-  Promise<void> => {
+const getVolunteerDetailsById = async (
+  req: GetVolunteerRequest,
+  res: GetVolunteerResponse
+): Promise<void> => {
   try {
-    if (String(req.user._id) !== req.params.id) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
-      return;
-    }
-
-    let volunteer = await volunteerService.getVolunteerById(
-      req.params.id,
-    );
+    let volunteer = await volunteerService.getVolunteerById(req.params.id);
 
     // append administrator remarks
-    if (req.user.volunteerType === 'admin') {
+    if (req.user.volunteerType === "admin") {
       volunteer = await userService.addAdminRemarks(volunteer);
     }
 
@@ -89,25 +67,32 @@ const getVolunteerDetailsById = async (req: GetVolunteerRequest, res: GetVolunte
   }
 };
 
-const getAllVolunteerDetails = async (req: GetVolunteersRequest, res: GetVolunteersResponse):
-  Promise<void> => {
+const getAllVolunteerDetails = async (
+  req: GetVolunteersRequest,
+  res: GetVolunteersResponse
+): Promise<void> => {
   try {
-    const {
-      volunteerType, pageNo, size, name, sort,
-    } = req.query;
+    const { volunteerType, pageNo, size, name, sort } = req.query;
     const pageNoNum = Number(req.query.pageNo);
     const sizeNum = Number(req.query.size);
 
-    const withPagination = pageNo && size && !Number.isNaN(pageNo) && !Number.isNaN(size);
+    const withPagination =
+      pageNo && size && !Number.isNaN(pageNo) && !Number.isNaN(size);
     const skip = pageNo && size && withPagination ? sizeNum * pageNoNum : 0;
     const limit = withPagination ? sizeNum : 0;
 
     const volunteers = await volunteerService.getAllVolunteers(
-      volunteerType, name, sort, skip, limit,
+      volunteerType,
+      name,
+      sort,
+      skip,
+      limit
     );
 
-    if (req.user.volunteerType === 'admin') {
-      volunteers.data = await Promise.all(volunteers.data.map(userService.addAdminRemarks));
+    if (req.user.volunteerType === "admin") {
+      volunteers.data = await Promise.all(
+        volunteers.data.map(userService.addAdminRemarks)
+      );
     }
 
     const response = {
@@ -127,24 +112,26 @@ const getAllVolunteerDetails = async (req: GetVolunteersRequest, res: GetVolunte
  * Retrieves sign ups that are pending approval
  * @return number of pending sign ups
  */
-const getPendingVolunteers = async (req: GetPendingVolunteersRequest,
-  res: GetPendingVolunteersResponse): Promise<void> => {
+const getPendingVolunteers = async (
+  req: GetPendingVolunteersRequest,
+  res: GetPendingVolunteersResponse
+): Promise<void> => {
   try {
-    const pendingCommitmentApplications = await
-      commitmentApplicationService.getCommitmentApplications(
-        'pending',
-      );
+    const pendingCommitmentApplications =
+      await commitmentApplicationService.getCommitmentApplications("pending");
 
     const pendingVolunteersIds = pendingCommitmentApplications.map(
-      (commitmentApplication) => commitmentApplication.volunteerId,
+      (commitmentApplication) => commitmentApplication.volunteerId
     );
 
     let pendingVolunteers = await volunteerService.getVolunteersByIds(
-      pendingVolunteersIds,
+      pendingVolunteersIds
     );
 
-    if (req.user.volunteerType === 'admin') {
-      pendingVolunteers = await Promise.all(pendingVolunteers.map(userService.addAdminRemarks));
+    if (req.user.volunteerType === "admin") {
+      pendingVolunteers = await Promise.all(
+        pendingVolunteers.map(userService.addAdminRemarks)
+      );
     }
 
     const volunteersWithoutUserId = pendingVolunteers.map(removeUserId);
@@ -157,14 +144,18 @@ const getPendingVolunteers = async (req: GetPendingVolunteersRequest,
   }
 };
 
-const getVolunteersByIds = async (req: GetVolunteersByIdsRequest,
-  res: GetVolunteersByIdsResponse): Promise<void> => {
+const getVolunteersByIds = async (
+  req: GetVolunteersByIdsRequest,
+  res: GetVolunteersByIdsResponse
+): Promise<void> => {
   try {
     const { ids } = req.body;
     let volunteers = await volunteerService.getVolunteersByIds(ids);
 
-    if (req.user.volunteerType === 'admin') {
-      volunteers = await Promise.all(volunteers.map(userService.addAdminRemarks));
+    if (req.user.volunteerType === "admin") {
+      volunteers = await Promise.all(
+        volunteers.map(userService.addAdminRemarks)
+      );
     }
 
     const volunteersWithoutUserId = volunteers.map(removeUserId);
@@ -177,21 +168,26 @@ const getVolunteersByIds = async (req: GetVolunteersByIdsRequest,
   }
 };
 
-const updateVolunteer = async (req: UpdateVolunteerRequest, res: UpdateVolunteerResponse):
-  Promise<void> => {
+const updateVolunteer = async (
+  req: UpdateVolunteerRequest,
+  res: UpdateVolunteerResponse
+): Promise<void> => {
   try {
     const volunteerId = req.params.id;
     if (String(req.user._id) !== volunteerId) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
       return;
     }
     const updatedVolunteerData = req.body;
     let savedVolunteerData = await volunteerService.updateVolunteer(
-      volunteerId, updatedVolunteerData,
+      volunteerId,
+      updatedVolunteerData
     );
 
-    if (req.user.volunteerType === 'admin') {
-      savedVolunteerData = await userService.addAdminRemarks(savedVolunteerData);
+    if (req.user.volunteerType === "admin") {
+      savedVolunteerData = await userService.addAdminRemarks(
+        savedVolunteerData
+      );
     }
 
     const volunteerWithoutUserId = removeUserId(savedVolunteerData);
@@ -203,8 +199,10 @@ const updateVolunteer = async (req: UpdateVolunteerRequest, res: UpdateVolunteer
   }
 };
 
-const deleteVolunteer = async (req: DeleteVolunteerRequest,
-  res: DeleteVolunteerResponse): Promise<void> => {
+const deleteVolunteer = async (
+  req: DeleteVolunteerRequest,
+  res: DeleteVolunteerResponse
+): Promise<void> => {
   try {
     const { email } = req.body;
     await volunteerService.deleteVolunteer(email);
@@ -218,7 +216,6 @@ const deleteVolunteer = async (req: DeleteVolunteerRequest,
 
 export default {
   createVolunteer,
-  getVolunteerDetailsByEmail,
   getVolunteerDetailsById,
   getAllVolunteerDetails,
   getPendingVolunteers,

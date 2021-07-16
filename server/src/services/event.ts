@@ -1,6 +1,9 @@
-import mongoose from 'mongoose';
-import Event, { EventData, EventSearchType, NewEventData } from '../models/Event';
-import { VolunteerType } from '../models/Volunteer';
+import Event, {
+  EventData,
+  EventSearchType,
+  NewEventData,
+} from "../models/Event";
+import { VolunteerType, VOLUNTEER_TYPE } from "../models/Volunteer";
 
 const createEvent = async (eventData: NewEventData): Promise<EventData> => {
   try {
@@ -12,21 +15,18 @@ const createEvent = async (eventData: NewEventData): Promise<EventData> => {
       startDate: eventData.startDate,
       endDate: eventData.endDate,
       deadline: eventData.deadline,
-      vacancies: eventData.vacancies,
       description: eventData.description,
       facilitatorName: eventData.facilitatorName,
       facilitatorDescription: eventData.facilitatorDescription,
       facilitatorPhoto: eventData.facilitatorPhoto,
       roles: eventData.roles,
       contentUrl: eventData.contentUrl,
-      contentType: eventData.contentType,
       location: eventData.location,
     });
     const event = await eventSchemaData.save();
     return event;
   } catch (err) {
     throw new Error(err.msg);
-
   }
 };
 
@@ -39,7 +39,7 @@ const getEvent = async (id: string): Promise<EventData> => {
     const event = await Event.findById(id);
 
     if (!event) {
-      throw new Error('Event is not found.');
+      throw new Error("Event is not found.");
     }
 
     return event;
@@ -55,29 +55,38 @@ const getEvent = async (id: string): Promise<EventData> => {
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promise<EventData[]> => {
+const readEventsByIds = async (
+  ids: string[],
+  eventType: EventSearchType
+): Promise<EventData[]> => {
   try {
     let events;
     switch (eventType) {
-      case 'all':
+      case "all":
         events = await Event.find({
           _id: { $in: ids },
-        }).lean().exec();
+        })
+          .lean()
+          .exec();
         break;
-      case 'upcoming':
+      case "upcoming":
         events = await Event.find({
           _id: { $in: ids },
           startDate: { $gt: new Date() },
-        }).lean().exec();
+        })
+          .lean()
+          .exec();
         break;
-      case 'past':
+      case "past":
         events = await Event.find({
           _id: { $in: ids },
           startDate: { $lt: new Date() },
-        }).lean().exec();
+        })
+          .lean()
+          .exec();
         break;
       default:
-        throw new Error('Event type is invalid');
+        throw new Error("Event type is invalid");
     }
 
     return events.map((event: EventData) => event);
@@ -93,38 +102,52 @@ const readEventsByIds = async (ids: string[], eventType: EventSearchType): Promi
  * @param eventType event type - all, upcoming, or past
  * @return either all, upcoming, or past events
  */
-const getEvents = async (eventType: EventSearchType, volunteerType: VolunteerType[],
-  skip?: number, limit?: number): Promise<EventData[]> => {
+const getEvents = async (
+  eventType: EventSearchType,
+  volunteerType?: VolunteerType[],
+  skip?: number,
+  limit?: number
+): Promise<EventData[]> => {
   try {
     let events: EventData[];
 
     const skipQuery = skip ?? 0;
     const limitQuery = limit ?? 0;
+    const volunteerTypeQuery = volunteerType ?? VOLUNTEER_TYPE;
 
     switch (eventType) {
-      case 'all':
-        events = await Event.find({ volunteerType: { $in: volunteerType } })
-          .skip(skipQuery).limit(limitQuery).lean()
-          .exec();
-        break;
-      case 'past':
+      case "all":
         events = await Event.find({
-          startDate: { $lt: new Date() },
-          volunteerType: { $in: volunteerType },
+          volunteerType: { $in: volunteerTypeQuery },
         })
-          .skip(skipQuery).limit(limitQuery).lean()
-          .exec();
-        break;
-      case 'upcoming':
-        events = await Event.find({
-          startDate: { $gt: new Date() },
-          volunteerType: { $in: volunteerType },
-        })
-          .skip(skipQuery).limit(limitQuery).sort({ startDate: 1 })
+          .skip(skipQuery)
+          .limit(limitQuery)
           .lean()
           .exec();
         break;
-      default: throw new Error('Event type is invalid');
+      case "past":
+        events = await Event.find({
+          startDate: { $lt: new Date() },
+          volunteerType: { $in: volunteerTypeQuery },
+        })
+          .skip(skipQuery)
+          .limit(limitQuery)
+          .lean()
+          .exec();
+        break;
+      case "upcoming":
+        events = await Event.find({
+          startDate: { $gt: new Date() },
+          volunteerType: { $in: volunteerTypeQuery },
+        })
+          .skip(skipQuery)
+          .limit(limitQuery)
+          .sort({ startDate: 1 })
+          .lean()
+          .exec();
+        break;
+      default:
+        throw new Error("Event type is invalid");
     }
 
     return events;
@@ -135,28 +158,26 @@ const getEvents = async (eventType: EventSearchType, volunteerType: VolunteerTyp
 
 const updateEvent = async (
   id: string,
-  updatedFields: Partial<EventData>,
+  updatedFields: Partial<EventData>
 ): Promise<EventData> => {
   try {
     const event = await Event.findOneAndUpdate(
       { _id: id },
       { $set: updatedFields },
-      { new: true },
+      { new: true }
     );
 
     if (!event) {
-      throw new Error('Event is not found.');
+      throw new Error("Event is not found.");
     }
 
-    return event
+    return event;
   } catch (err) {
     throw new Error(err.msg);
   }
 };
 
-const cancelEvent = async (
-  id: string,
-): Promise<void> => {
+const cancelEvent = async (id: string): Promise<void> => {
   try {
     await Event.findOneAndUpdate(
       { _id: id },
@@ -165,7 +186,7 @@ const cancelEvent = async (
           isCancelled: true,
         },
       },
-      { new: true },
+      { new: true }
     );
   } catch (err) {
     throw new Error(err.msg);
@@ -205,7 +226,7 @@ export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
     });
 
     if (!eventsNDaysAgo || eventsNDaysAgo.length === 0) {
-      throw new Error('Event is not found.');
+      throw new Error("Event is not found.");
     }
 
     return eventsNDaysAgo;

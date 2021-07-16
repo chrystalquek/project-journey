@@ -5,6 +5,7 @@ import { stringEnumValidator } from './global';
 
 type EventValidatorMethod = 'createEvent' | 'updateEvent' | 'readEvent' | 'readEvents' | 'readSignedUpEvents' | 'cancelEvent' | 'deleteEvent';
 
+
 const roleCapacityValidator = (roles: Array<RoleData>) => {
   for (let i = 0; i < roles.length; i += 1) {
     const currRole = roles[i];
@@ -94,7 +95,7 @@ const isCancelled = body('isCancelled').isBoolean().withMessage('IsCancelled mus
 
 const getValidations = (method: EventValidatorMethod) => {
   switch (method) {
-    case 'createEvent': {
+    case "createEvent": {
       return [
         name,
         startDate,

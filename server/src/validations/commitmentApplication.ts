@@ -1,9 +1,12 @@
-/* eslint-disable linebreak-style */
-import { body, query, ValidationChain } from 'express-validator';
-import { COMMITMENT_APPLICATION_STATUS } from '../models/CommitmentApplication';
-import { stringEnumValidator } from './global';
 
-type CommitmentApplicationValidatorMethod = 'createCommitmentApplication' | 'readCommitmentApplication' | 'updateCommitmentApplication'
+import { body, query, ValidationChain } from "express-validator";
+import { COMMITMENT_APPLICATION_STATUS } from "../models/CommitmentApplication";
+import { stringEnumValidator } from "./global";
+
+type CommitmentApplicationValidatorMethod =
+  | "createCommitmentApplication"
+  | "readCommitmentApplication"
+  | "updateCommitmentApplication";
 
 // Define validation for each field 
 const volunteerId = body('volunteerId').exists().withMessage('Volunteer ID is required').isString().withMessage('Volunteer ID must be a string');
@@ -12,7 +15,9 @@ const status = body('status')
   .withMessage('Status is not valid');
 const createdAt = body('createdAt', 'Time of creation is of wrong date format').isISO8601();
 
-export const getValidations = (method: CommitmentApplicationValidatorMethod): ValidationChain[] => {
+export const getValidations = (
+  method: CommitmentApplicationValidatorMethod
+): ValidationChain[] => {
   switch (method) {
     case 'createCommitmentApplication': {
       return [
@@ -35,6 +40,7 @@ export const getValidations = (method: CommitmentApplicationValidatorMethod): Va
     }
     default:
       return [];
-  };
+  }
+};
 
-  export default getValidations;
+export default getValidations;

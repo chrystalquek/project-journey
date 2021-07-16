@@ -1,24 +1,33 @@
 /* eslint-disable no-await-in-loop */
-import HTTP_CODES from '../constants/httpCodes';
-import formService from '../services/forms/form';
-import optionsService from '../services/forms/option';
-import questionService from '../services/forms/question';
-import answerService from '../services/forms/answer';
-import { AnswerFormQuestionsRequest, CreateFormRequest, GetEventFormRequest } from '../types/request/form';
-import { AnswerFormQuestionsResponse, CreateFormResponse, GetEventFormResponse, QuestionsOptionsResponseData } from '../types/response/form';
+import HTTP_CODES from "../constants/httpCodes";
+import formService from "../services/forms/form";
+import optionsService from "../services/forms/option";
+import questionService from "../services/forms/question";
+import answerService from "../services/forms/answer";
+import {
+  AnswerFormQuestionsRequest,
+  CreateFormRequest,
+  GetEventFormRequest,
+} from "../types/request/form";
+import {
+  AnswerFormQuestionsResponse,
+  CreateFormResponse,
+  GetEventFormResponse,
+  QuestionsOptionsResponseData,
+} from "../types/response/form";
 
-const createForm = async (req: CreateFormRequest, res: CreateFormResponse): Promise<void> => {
+const createForm = async (
+  req: CreateFormRequest,
+  res: CreateFormResponse
+): Promise<void> => {
   try {
-    const {
-      questions,
-      eventId,
-    } = req.body;
+    const { questions, eventId } = req.body;
 
     const form = await formService.createForm({
-      eventId
+      eventId,
     });
 
-    const formId = form._id
+    const formId = form._id;
 
     const questionsData = questions.map((questionData) => ({
       formId,
@@ -46,7 +55,10 @@ const createForm = async (req: CreateFormRequest, res: CreateFormResponse): Prom
   }
 };
 
-const getEventFormDetails = async (req: GetEventFormRequest, res: GetEventFormResponse): Promise<void> => {
+const getEventFormDetails = async (
+  req: GetEventFormRequest,
+  res: GetEventFormResponse
+): Promise<void> => {
   const { eventId } = req.params;
 
   try {
@@ -57,7 +69,9 @@ const getEventFormDetails = async (req: GetEventFormRequest, res: GetEventFormRe
     const questionsWithOptions: Array<QuestionsOptionsResponseData> = [];
     for (let i = 0; i < questions.length; i += 1) {
       const question = questions[i];
-      const optionsForQuestion = await optionsService.getOptionsForQuestion(question._id);
+      const optionsForQuestion = await optionsService.getOptionsForQuestion(
+        question._id
+      );
 
       questionsWithOptions.push({
         ...question,
@@ -75,13 +89,16 @@ const getEventFormDetails = async (req: GetEventFormRequest, res: GetEventFormRe
   }
 };
 
-const answerFormQuestions = async (req: AnswerFormQuestionsRequest, res: AnswerFormQuestionsResponse): Promise<void> => {
+const answerFormQuestions = async (
+  req: AnswerFormQuestionsRequest,
+  res: AnswerFormQuestionsResponse
+): Promise<void> => {
   let { answers } = req.body;
   const { eventId } = req.body;
 
   if (answers.some((answer) => answer.userId !== req.user._id)) {
     // trying to submit responses that are not your user id is not allowed
-    res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: 'Unauthorized' });
+    res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
     return;
   }
 

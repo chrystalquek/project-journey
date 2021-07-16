@@ -1,3 +1,4 @@
+
 import { body, param, query } from 'express-validator';
 import {
   newEmailValidator, existingEmailValidator, passwordValidator, regexValidator,
@@ -11,7 +12,7 @@ import {
   SOCIAL_MEDIA_PLATFORM,
   VOLUNTEER_TYPE,
   PERSONALITY_TYPES_REGEX,
-} from '../models/Volunteer';
+} from "../models/Volunteer";
 
 type VolunteerValidatorMethod =
   | 'createVolunteer'
@@ -83,9 +84,10 @@ const volunteeringExperience = body('volunteeringExperience', 'volunteeringExper
 
 // Volunteering with childrean
 const hasChildrenExperience = body('hasChildrenExperience')
+
   .isBoolean()
   .optional();
-const childrenExperience = body('childrenExperience').isString().optional();
+const childrenExperience = body("childrenExperience").isString().optional();
 
 // First Aid 
 const hasFirstAidCertification = body('hasFirstAidCertification', 'hasFirstAidCertification must be a boolean value').isBoolean();
@@ -140,11 +142,11 @@ const volunteeringOpportunityInterest = body('volunteeringOpportunityInterest', 
 const hasMedicalNeeds = body('hasMedicalNeeds')
   .exists().withMessage('hasMedicalNeeds is required')
   .isBoolean().withMessage('hasMedicalNeeds must be a boolean value');
-const medicalNeeds = body('medicalNeeds','Medical needs must be a string').isString();
+const medicalNeeds = body('medicalNeeds', 'Medical needs must be a string').isString();
 const hasAllergies = body('hasAllergies')
   .exists().withMessage('hasAllergies is required')
   .isBoolean().withMessage('hasAllergies must be a boolean value');
-const allergies = body('allergies','Allergies must be a string').isString();
+const allergies = body('allergies', 'Allergies must be a string').isString();
 const hasMedicationDuringDay = body('hasMedicationDuringDay')
   .exists().withMessage('hasMedicationDuringDay is required')
   .isBoolean().withMessage('hasMedicationDuringDay must be a boolean value');
@@ -164,22 +166,22 @@ const emergencyContactRelationship = body('emergencyContactRelationship')
   .isString().withMessage('Emergency contact relationship must be a string');
 
 // Remarks
-const volunteerRemarks = body('volunteerRemarks','Volunteer remarks must be a string').isString();
+const volunteerRemarks = body('volunteerRemarks', 'Volunteer remarks must be a string').isString();
 // const administratorRemarks = body('administratorRemarks').isString();
 
 // Event count
-const volunteeringSessionsCount = body('volunteeringSessionsCount','Volunteering sessions count must be an integer').isInt({ min: 0 });
-const workshopsCount = body('workshopsCount','Workshop count must be an integer').isInt({ min: 0 });
-const hangoutsCount = body('hangoutsCount','Hang outs count must be an integer').isInt({ min: 0 });
-const sessionsPerMonth = body('sessionsPerMonth','Sessions per month must be an integer').isInt({ min: 0 });
-const sessionPreference = body('sessionPreference','Session preference must be a string').isString();
+const volunteeringSessionsCount = body('volunteeringSessionsCount', 'Volunteering sessions count must be an integer').isInt({ min: 0 });
+const workshopsCount = body('workshopsCount', 'Workshop count must be an integer').isInt({ min: 0 });
+const hangoutsCount = body('hangoutsCount', 'Hang outs count must be an integer').isInt({ min: 0 });
+const sessionsPerMonth = body('sessionsPerMonth', 'Sessions per month must be an integer').isInt({ min: 0 });
+const sessionPreference = body('sessionPreference', 'Session preference must be a string').isString();
 
 // Submitted Commitment Application
 
 
 const getValidations = (method: VolunteerValidatorMethod) => {
   switch (method) {
-    case 'createVolunteer': {
+    case "createVolunteer": {
       return [
         // Login details
         newEmailValidator,
@@ -209,17 +211,17 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         instagramHandle.optional(),
         // Organization
         organization.optional(),
-        position.optional(),  
+        position.optional(),
         // Volunteering experience
         hasVolunteered,
         biabVolunteeringDuration.optional(),
         // Children experience
         hasChildrenExperience,
-        childrenExperience.optional(), 
+        childrenExperience.optional(),
         // External volunteering
         hasVolunteeredExternally,
         volunteeringExperience.optional(),
- 
+
         // Other volunteering related
         volunteerType,
         volunteerReason, // Categorize answers
@@ -244,6 +246,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         emergencyContactRelationship,
       ];
     }
+
     case 'getVolunteerByEmail': {
       return [param('email').isEmail()];
     }
@@ -258,15 +261,22 @@ const getValidations = (method: VolunteerValidatorMethod) => {
     }
     case 'getAllVolunteers': {
       return [
-        query(['pageNo', 'size']).isInt({ min: 0 }).optional(),
-        query(['name', 'sort']).isString().optional(),
-        query('volunteerType').isArray().custom((volTypes: string[]) => volTypes.every((volType: string) => stringEnumValidator(VOLUNTEER_TYPE, 'volunteer type', volType))).optional()
-      ]
+        query(["pageNo", "size"]).isInt({ min: 0 }).optional(),
+        query(["name", "sort"]).isString().optional(),
+        query("volunteerType")
+          .isArray()
+          .custom((volTypes: string[]) =>
+            volTypes.every((volType: string) =>
+              stringEnumValidator(VOLUNTEER_TYPE, "volunteer type", volType)
+            )
+          )
+          .optional(),
+      ];
     }
     case 'deleteVolunteer': {
       return [body('email').exists().isEmail()];
     }
-    case 'updateVolunteer': {
+    case "updateVolunteer": {
       return [
         existingEmailValidator,
         passwordValidator.optional(),

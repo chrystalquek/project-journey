@@ -1,36 +1,36 @@
-import { Type, createSchema, ExtractProps } from 'ts-mongoose';
-import mongoose from 'mongoose';
-import { UserData } from './User';
+import { Type, createSchema, ExtractProps } from "ts-mongoose";
+import mongoose from "mongoose";
+import { UserData } from "./User";
 
-export const GENDER = ['male', 'female'] as const;
-export type Gender = (typeof GENDER)[number]
+export const GENDER = ["male", "female"] as const;
+export type Gender = typeof GENDER[number];
 
 export const CITIZENSHIP = [
-  'singapore',
-  'permanent_resident',
-  'foreigner',
+  "singapore",
+  "permanent_resident",
+  "foreigner",
 ] as const;
-export type Citizenship = (typeof CITIZENSHIP)[number]
+export type Citizenship = typeof CITIZENSHIP[number];
 
-export const RACE = ['chinese', 'malay', 'indian', 'caucasian', 'other'];
-export type Race = (typeof RACE)[number]
+export const RACE = ["chinese", "malay", "indian", "caucasian", "other"];
+export type Race = typeof RACE[number];
 
-export const LEADERSHIP_INTEREST = ['yes', 'no', 'maybe'] as const;
-export type LeadershipInterest = (typeof LEADERSHIP_INTEREST)[number]
+export const LEADERSHIP_INTEREST = ["yes", "no", "maybe"] as const;
+export type LeadershipInterest = typeof LEADERSHIP_INTEREST[number];
 
 export const PERSONALITY_TYPES_REGEX = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
 
 export const SOCIAL_MEDIA_PLATFORM = [
-  'instagram',
-  'facebook',
-  'snapchat',
-  'email',
-  'other',
+  "instagram",
+  "facebook",
+  "snapchat",
+  "email",
+  "other",
 ] as const;
-export type SocialMediaPlatform = (typeof SOCIAL_MEDIA_PLATFORM)[number]
+export type SocialMediaPlatform = typeof SOCIAL_MEDIA_PLATFORM[number];
 
-export const VOLUNTEER_TYPE = ['ad-hoc', 'committed', 'admin'];
-export type VolunteerType = (typeof VOLUNTEER_TYPE)[number]
+export const VOLUNTEER_TYPE = ["ad-hoc", "committed", "admin"];
+export type VolunteerType = typeof VOLUNTEER_TYPE[number];
 
 export const VolunteerSchema = createSchema({
   name: Type.string({ required: true }),
@@ -40,7 +40,7 @@ export const VolunteerSchema = createSchema({
   birthday: Type.date({ required: false }),
   userId: Type.objectId({
     required: true,
-    ref: 'User',
+    ref: "User",
   }),
   volunteerType: Type.string({
     required: true,
@@ -106,7 +106,9 @@ export const VolunteerSchema = createSchema({
     required: false,
     validate: PERSONALITY_TYPES_REGEX,
   }), // Myers-Briggs
-  strengths: Type.array({ required: false }).of(Type.string({ required: true })),
+  strengths: Type.array({ required: false }).of(
+    Type.string({ required: true })
+  ),
   volunteeringOpportunityInterest: Type.string({ required: false }),
 
   volunteerReason: Type.string({ required: true }), // Essay
@@ -147,11 +149,12 @@ export const VolunteerSchema = createSchema({
   commitmentApplicationIds: Type.array({
     required: true,
     default: [],
-  })
-    .of(Type.objectId({
+  }).of(
+    Type.objectId({
       required: true,
-      ref: 'CommitmentApplication',
-    })),
+      ref: "CommitmentApplication",
+    })
+  ),
 
   createdAt: Type.date({
     required: true,
@@ -159,12 +162,20 @@ export const VolunteerSchema = createSchema({
   }),
 });
 
-export type VolunteerData = Omit<ExtractProps<typeof VolunteerSchema>, '__v' | '_id' | 'commitmentApplicationIds' | 'userId'> & { _id: string, commitmentApplicationIds: string[], userId: string }; // whats retrieved from db
+export type VolunteerData = Omit<
+  ExtractProps<typeof VolunteerSchema>,
+  "__v" | "_id" | "commitmentApplicationIds" | "userId"
+> & { _id: string; commitmentApplicationIds: string[]; userId: string }; // whats retrieved from db
 
-export type GetVolunteerData = Omit<VolunteerData, 'userId'> & { administratorRemarks?: string }
+export type GetVolunteerData = Omit<VolunteerData, "userId"> & {
+  administratorRemarks?: string;
+};
 // whats retrieved from db + adminRemarks - userId
 
-export type NewVolunteerData = Omit<VolunteerData & UserData, '_id' | 'createdAt' | 'userId'>
+export type NewVolunteerData = Omit<
+  VolunteerData & UserData,
+  "_id" | "createdAt" | "userId"
+>;
 
-type VolunteerModel = VolunteerData & mongoose.Document
-export default mongoose.model<VolunteerModel>('Volunteer', VolunteerSchema);
+type VolunteerModel = VolunteerData & mongoose.Document;
+export default mongoose.model<VolunteerModel>("Volunteer", VolunteerSchema);

@@ -1,9 +1,11 @@
 import { body } from 'express-validator';
 import { existingEmailValidator, passwordValidator } from './global';
 
-export type UserValidatorMethod = 'login' | 'updatePassword'
+
+export type UserValidatorMethod = "login" | "updatePassword";
 
 const LENGTH_MINIMUM_PASSWORD = 8;
+
 
 const newPasswordValidator = body('newPassword').isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
@@ -23,6 +25,7 @@ const getValidations = (method: UserValidatorMethod) => {
         passwordValidator,
         newPasswordValidator,
       ];
+
     }
     default:
       return [];
