@@ -167,7 +167,6 @@ const emergencyContactRelationship = body('emergencyContactRelationship')
 
 // Remarks
 const volunteerRemarks = body('volunteerRemarks', 'Volunteer remarks must be a string').isString();
-// const administratorRemarks = body('administratorRemarks').isString();
 
 // Event count
 const volunteeringSessionsCount = body('volunteeringSessionsCount', 'Volunteering sessions count must be an integer').isInt({ min: 0 });
