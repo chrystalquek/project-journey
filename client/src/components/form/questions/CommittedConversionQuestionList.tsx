@@ -1,10 +1,11 @@
-import { QuestionList } from "@type/form/form";
+import { FormFields } from "@type/form/form";
 import { Race } from "@type/volunteer";
+import * as yup from "yup";
 
-export const conversionFormQuestions: QuestionList = [
+export const conversionFormQuestions: FormFields = [
   {
     name: "address",
-    displayText: ["Home Address"],
+    displayText: ["Home Address *"],
     type: "shortAnswer",
     initialValue: "",
     isRequired: true,
@@ -21,11 +22,11 @@ export const conversionFormQuestions: QuestionList = [
       { value: Race.CAUCASIAN, label: "Caucasian" },
       { value: Race.OTHER, label: "Other" },
     ],
-    isRequired: true,
+    isRequired: false,
   },
   {
     name: "biabVolunteeringDuration",
-    displayText: ["How long have you been with us?"],
+    displayText: ["How long have you been with us? *"],
     type: "mcq",
     initialValue: "",
     options: [
@@ -39,7 +40,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: "hasVolunteeredExternally",
-    displayText: ["Have you volunteered with other organizations before"],
+    displayText: ["Have you volunteered with other organizations before *"],
     type: "mcq",
     initialValue: "",
     options: [
@@ -59,7 +60,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: "hasChildrenExperience",
-    displayText: ["Do you have any experience working with children?"],
+    displayText: ["Do you have any experience working with children? *"],
     type: "mcq",
     initialValue: "",
     options: [
@@ -78,7 +79,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "sessionsPerMonth",
     displayText: [
-      "How many sessions can you volunteer (realistically) per month?",
+      "How many sessions can you volunteer (realistically) per month? *",
     ],
     type: "number",
     initialValue: "",
@@ -87,7 +88,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "sessionPreference",
     displayText: [
-      "We run weekly sessions, which sessions are you most able to commit to on a regular basis?",
+      "We run weekly sessions, which sessions are you most able to commit to on a regular basis? *",
     ],
     type: "mcq",
     initialValue: "",
@@ -100,7 +101,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: "hasFirstAidCertification",
-    displayText: ["Are you certified in FIRST AID?"],
+    displayText: ["Are you certified in FIRST AID? *"],
     type: "mcq",
     initialValue: "",
     options: [
@@ -112,7 +113,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "leadershipInterest",
     displayText: [
-      "Would you be interested in taking on a leadership role that would offer you leadership + personal development opportunities?",
+      "Would you be interested in taking on a leadership role that would offer you leadership + personal development opportunities? *",
     ],
     type: "mcq",
     initialValue: "",
@@ -128,7 +129,7 @@ export const conversionFormQuestions: QuestionList = [
   },
   {
     name: "interests",
-    displayText: ["What are your interests/passions?"],
+    displayText: ["What are your interests/passions? *"],
     type: "shortAnswer",
     initialValue: "",
     isRequired: true,
@@ -136,7 +137,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "skills",
     displayText: [
-      "It takes a village to run our programs and we would love specialised support! Do you have any specialised skills? Or feel you can contribute?",
+      "It takes a village to run our programs and we would love specialised support! Do you have any specialised skills? Or feel you can contribute? *",
     ],
     type: "checkboxes",
     initialValue: [],
@@ -172,7 +173,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "personality",
     displayText: [
-      "What is your personality type via www.16personalities.com? (For example: INTJ-A)",
+      "What is your personality type via www.16personalities.com? (For example: INTJ-A) *",
     ],
     type: "shortAnswer",
     initialValue: "",
@@ -181,7 +182,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "strengths",
     displayText: [
-      "What are your 5 strengths on https://high5test.com (please list below, separated by comma)",
+      "What are your 5 strengths on https://high5test.com (please list below, separated by comma) *",
     ],
     type: "shortAnswer",
     initialValue: "",
@@ -190,7 +191,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "volunteerContribution",
     displayText: [
-      "Please tell us how you feel you can contribute or add to our program",
+      "Please tell us how you feel you can contribute or add to our program *",
     ],
     type: "longAnswer",
     initialValue: "",
@@ -199,7 +200,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "hasCriminalRecord",
     displayText: [
-      "Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education?",
+      "Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education? *",
     ],
     type: "mcq",
     initialValue: "",
@@ -212,7 +213,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "isAwareOfGroupInvite",
     displayText: [
-      "I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc.",
+      "I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc. *",
     ],
     type: "mcq",
     initialValue: "",
@@ -225,7 +226,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "isAwareOfCommitmentExpectation",
     displayText: [
-      "I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement.",
+      "I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement. *",
     ],
     type: "mcq",
     initialValue: "",
@@ -238,7 +239,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "isAwareOfConfidentiality",
     displayText: [
-      "If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation.",
+      "If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation. *",
     ],
     type: "mcq",
     initialValue: "",
@@ -251,7 +252,7 @@ export const conversionFormQuestions: QuestionList = [
   {
     name: "isAwareOfBackgroundCheck",
     displayText: [
-      "I give Beyond Awesome (under Blessings in a Bag Limited) permission to conduct a background check with the relevant authorities and understand that they will notify me before conducting this process.",
+      "I give Beyond Awesome (under Blessings in a Bag Limited) permission to conduct a background check with the relevant authorities and understand that they will notify me before conducting this process. *",
     ],
     type: "mcq",
     initialValue: "",
@@ -262,3 +263,53 @@ export const conversionFormQuestions: QuestionList = [
     isRequired: true,
   },
 ];
+
+const personalityRegex = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
+
+export const conversionSchema = yup.object({
+  address: yup.string().required("Required"),
+  race: yup.string().optional().oneOf(Object.values(Race), "Invalid choice"),
+  biabVolunteeringDuration: yup.string().required("Required"),
+  hasVolunteeredExternally: yup.boolean().required("Required"),
+  volunteeringExperience: yup.string().when("hasVolunteeredExternally", {
+    is: true,
+    then: yup.string().required("Required"),
+  }), // Dependent validation
+  hasChildrenExperience: yup.boolean().required("Required"),
+  childrenExperience: yup.string().when("hasChildrenExperience", {
+    is: true,
+    then: yup.string().required("Required"),
+  }), // Dependent validation
+  sessionsPerMonth: yup
+    .number()
+    .integer("Input must be an integer")
+    .required("Required")
+    .min(1, "You have to be able to commit at least one session."),
+  sessionPreference: yup.string().required("Required"),
+  hasFirstAidCertification: yup.boolean().required("Required"),
+  leadershipInterest: yup.string().required("Required"),
+  interests: yup.string().required("Required"),
+  personality: yup
+    .string()
+    .matches(personalityRegex, "Invalid value")
+    .required("Required"),
+  strengths: yup.string().required("Required"),
+  volunteerContribution: yup.string().required("Required"),
+  hasCriminalRecord: yup.boolean().required("Required"),
+  isAwareOfGroupInvite: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "Please acknowledge to proceed"), // Has to be true
+  isAwareOfCommitmentExpectation: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "Please acknowledge to proceed"), // Has to be true
+  isAwareOfConfidentiality: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "Please acknowledge to proceed"), // Has to be true
+  isAwareOfBackgroundCheck: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "Please acknowledge to proceed"), // Has to be true
+});

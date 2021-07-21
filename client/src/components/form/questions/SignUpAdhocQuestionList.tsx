@@ -1,42 +1,44 @@
 import { Link } from "@material-ui/core";
-import { HeaderQuestionList } from "@type/form/form";
+import { SectionalFormFields } from "@type/form/form";
 import { Citizenship, Gender } from "@type/volunteer";
+import Typography from "@material-ui/core/Typography";
+import * as yup from "yup";
 
-export const questions: HeaderQuestionList = [
+export const formData: SectionalFormFields = [
   {
     header: "Personal Information",
-    questionList: [
+    fields: [
       {
         name: "firstName",
-        displayText: ["First Name"],
+        displayText: ["First Name *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "lastName",
-        displayText: ["Last Name (Family Name)"],
+        displayText: ["Last Name (Family Name) *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "email",
-        displayText: ["Email"],
+        displayText: ["Email *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "password",
-        displayText: ["Password"],
+        displayText: ["Password *"],
         type: "password",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "confirmPassword",
-        displayText: ["Confirm password"],
+        displayText: ["Confirm password *"],
         type: "password",
         initialValue: "",
         isRequired: true,
@@ -52,7 +54,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "gender",
-        displayText: ["Gender"],
+        displayText: ["Gender *"],
         type: "mcq",
         initialValue: "",
         options: [
@@ -63,7 +65,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "citizenship",
-        displayText: ["Citizenship"],
+        displayText: ["Citizenship *"],
         type: "mcq",
         initialValue: "",
         options: [
@@ -78,22 +80,22 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "birthday",
-        displayText: ["Date of Birth"],
+        displayText: ["Date of Birth *"],
         type: "date",
         initialValue: new Date(),
         isRequired: true,
       },
       {
         name: "mobileNumber",
-        displayText: ["Mobile Number"],
+        displayText: ["Mobile Number *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "photoUrl",
-        displayText: ["Upload profile picture"],
-        type: "photo",
+        displayText: ["Upload profile picture *"],
+        type: "image",
         initialValue: null,
         isRequired: true,
       },
@@ -129,7 +131,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "referralSources",
-        displayText: ["How did you hear about us/Beyond Awesome?"],
+        displayText: ["How did you hear about us/Beyond Awesome? *"],
         type: "checkboxes",
         initialValue: [],
 
@@ -152,7 +154,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "hasVolunteered",
         displayText: [
-          "Have you volunteered with us before? (eg ad-hoc volunteer or other event)",
+          "Have you volunteered with us before? (eg ad-hoc volunteer or other event) *",
         ],
         type: "mcq",
         initialValue: "",
@@ -165,7 +167,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "volunteerReason",
         displayText: [
-          "Please tell us why you're interested in volunteering with our program",
+          "Please tell us why you're interested in volunteering with our program *",
         ],
         type: "longAnswer",
         initialValue: "",
@@ -178,7 +180,7 @@ export const questions: HeaderQuestionList = [
   {
     header: "WCA Registration: Medical Information",
     info: "The information in this section is collected in the unlikely event of a medical emergency. This information will not be used for any other purposes.",
-    questionList: [
+    fields: [
       {
         name: "hasMedicalNeeds",
         displayText: [
@@ -238,31 +240,31 @@ export const questions: HeaderQuestionList = [
   // Emergency Contact Information
   {
     header: "WCA Registration: Emergency Contact Information",
-    questionList: [
+    fields: [
       {
         name: "emergencyContactName",
-        displayText: ["Emergency Contact Full Name"],
+        displayText: ["Emergency Contact Full Name *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "emergencyContactNumber",
-        displayText: ["Emergency Contact Mobile Number"],
+        displayText: ["Emergency Contact Mobile Number *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "emergencyContactEmail",
-        displayText: ["Emergency Contact Email Address"],
+        displayText: ["Emergency Contact Email Address *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "emergencyContactRelationship",
-        displayText: ["Emergency Contact Relationship"],
+        displayText: ["Emergency Contact Relationship *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
@@ -274,13 +276,13 @@ export const questions: HeaderQuestionList = [
   {
     header:
       "WCA Registration: Permission for Email Collection and Communication",
-    questionList: [
+    fields: [
       {
         name: "permissionEmailCollection",
         displayText: [
           "For purposes of communicating with our community about current and upcoming program opportunities and events, Beyond Awesome and Blessings in a Bag Limited may collect email addresses and email individuals ages 13 and above. This information will be used solely for program, event, and alumni engagement purposes by the program and will not be used for any commercial purpose or given to any third party. Individuals may opt out of these communications at any time.",
 
-          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein.",
+          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -296,11 +298,11 @@ export const questions: HeaderQuestionList = [
   // Acknowledgement
   {
     header: "WCA Registration: Acknowledgements",
-    questionList: [
+    fields: [
       {
         name: "personalInformationConsent",
         displayText: [
-          "I give Beyond Awesome (A program by Blessings in a Bag Limited) to communicate my personal information to volunteer mentors in order to support my experience, development and journey with the program",
+          "I give Beyond Awesome (A program by Blessings in a Bag Limited) to communicate my personal information to volunteer mentors in order to support my experience, development and journey with the program *",
         ],
         type: "mcq",
         initialValue: "",
@@ -323,7 +325,7 @@ export const questions: HeaderQuestionList = [
           "(c) To respect the value the rights, religious beliefs and practices of individuals. Refrain from actions and behaviours that constitute harassment or discrimination and strive to be sensitive to the feelings of others.",
 
           // A bit nasty, but it needs link here.
-          <>
+          <Typography>
             (d) To report any accidents or situations involving any member of
             the community (Student, WCA, etc) and to record this in our record
             book as soon as practically possible (Including incidents such as
@@ -336,10 +338,10 @@ export const questions: HeaderQuestionList = [
             >
               Click here
             </Link>
-          </>,
+          </Typography>,
           "(e) To be responsible for familiarising myself with building/facility safety issues, such as, fire procedures, location of emergency exits, location of emergency telephones and first aid equipment.",
 
-          "(f) To be committed to the dates I've scheduled myself for in the roster and will give notice at least 1 day before the scheduled date should I not be able to make it due to unforeseen circumstances.",
+          "(f) To be committed to the dates I've scheduled myself for in the roster and will give notice at least 1 day before the scheduled date should I not be able to make it due to unforeseen circumstances. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -349,7 +351,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "acknowledgeTnC",
         displayText: [
-          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein",
+          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein *",
         ],
         type: "mcq",
         initialValue: "",
@@ -362,7 +364,7 @@ export const questions: HeaderQuestionList = [
   // Informed Consent and License Agreement
   {
     header: "WCA Registration: Informed Consent and License Agreement",
-    questionList: [
+    fields: [
       {
         name: "informedConsent",
         displayText: [
@@ -376,7 +378,7 @@ export const questions: HeaderQuestionList = [
 
           "Please note that although participation in Beyond Awesome (of Blessings in a Bag Limited) programs is voluntary, once this agreement is signed, it cannot be withdrawn and remains in effect even after the individual is no longer participating in any Beyond Awesome (of Blessings in a Bag Limited) programming.",
 
-          "I have read and agree to each of the terms and conditions of this Informed Consent and License Agreement, and agree to waive any and all claims for monetary compensation from Beyond Awesome (of Blessings in a Bag Limited), acknowledging that Blessings in a Bag Limited is a purpose-driven entity focusing on youth development with a focus on under-resourced students and the community at large.",
+          "I have read and agree to each of the terms and conditions of this Informed Consent and License Agreement, and agree to waive any and all claims for monetary compensation from Beyond Awesome (of Blessings in a Bag Limited), acknowledging that Blessings in a Bag Limited is a purpose-driven entity focusing on youth development with a focus on under-resourced students and the community at large. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -386,3 +388,98 @@ export const questions: HeaderQuestionList = [
     ],
   },
 ];
+
+const phoneRegex = /^(\+65)?[689]\d{7}$/;
+
+export const schema = yup.object({
+  firstName: yup.string().required("Required"),
+  lastName: yup.string().required("Required"),
+  email: yup.string().required("Required").email("Invalid email"),
+  password: yup
+    .string()
+    .required("Required")
+    .min(8, "Password must be at least 8 characters!"),
+  confirmPassword: yup.string().when("password", {
+    is: (val: string) => val && val.length > 0,
+    then: yup
+      .string()
+      .oneOf(
+        [yup.ref("password")],
+        "Confirm Password need to be the same as Password field"
+      )
+      .required("Required"),
+  }),
+  nickname: yup.string(),
+  gender: yup
+    .string()
+    .required("Required")
+    .oneOf(Object.values(Gender), "Invalid choice"),
+  citizenship: yup
+    .string()
+    .required("Required")
+    .oneOf(Object.values(Citizenship), "Invalid choice"),
+  birthday: yup.date().required("Required"),
+  mobileNumber: yup
+    .string()
+    .matches(phoneRegex, "Mobile phone is not valid")
+    .required("Required"),
+  photoUrl: yup.mixed().required("Required"),
+  instagramHandle: yup.string(),
+  organization: yup.string(),
+  position: yup.string(),
+  languages: yup.string(),
+  referralSources: yup
+    .array()
+    .required("Required")
+    .min(1, "Choose at least one option below"),
+  hasVolunteered: yup.boolean().required("Required"),
+  volunteerReason: yup.string().required("Required"),
+  hasMedicalNeeds: yup.boolean(),
+  medicalNeeds: yup.string().when("hasMedicalNeeds", {
+    is: true,
+    then: yup.string().required("Required"),
+    otherwise: yup.string(),
+  }),
+  hasAllergies: yup.boolean(),
+  allergies: yup.string().when("hasAllergies", {
+    is: true,
+    then: yup.string().required("Required"),
+    otherwise: yup.string(),
+  }),
+  hasMedicalDuringDay: yup.boolean(),
+  emergencyContactName: yup.string().required("Required"),
+  emergencyContactNumber: yup
+    .string()
+    .matches(phoneRegex, "Mobile phone is not valid")
+    .required("Required"),
+  emergencyContactEmail: yup
+    .string()
+    .required("Required")
+    .email("Invalid email"),
+  emergencyContactRelationship: yup.string().required("Required"),
+  biabVolunteeringDuration: yup
+    .number()
+    .integer("Input must be an integer")
+    .positive("Input must be a positive integer"),
+  sessionsPerMonth: yup
+    .number()
+    .integer("Input must be an integer")
+    .positive("Input must be a positive integer"),
+  permissionEmailCollection: yup.boolean().required("Required"),
+  personalInformationConsent: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "You have to agree in order to proceed"),
+  safetyProtection: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "You have to agree in order to proceed"),
+  acknowledgeTnC: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "You have to agree to proceed"),
+  informedConsent: yup
+    .boolean()
+    .required("Required")
+    .oneOf([true], "You have to agree to proceed"),
+});

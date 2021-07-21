@@ -1,25 +1,157 @@
-import { useCallback } from "react";
+import React, { useState } from "react";
+import Box from "@material-ui/core/Box";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import { useAppDispatch } from "@redux/store";
 import { signUp } from "@redux/actions/user";
+import { useRouter } from "next/router";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { objectFilter } from "@utils/helpers/objectFilter";
 import { VolunteerType } from "@type/volunteer";
-import { HeaderQuestionList } from "@type/form/form";
-import { CreateVolunteerRequest } from "@api/request";
-import SignUpFormGenerator from "./SignUpFormGenerator";
+import { ToastStatus } from "@type/common";
+import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
+import SectionalForm from "./generator/SectionalForm";
+import {
+  formData as adhocFormFields,
+  schema as adhocSchema,
+} from "./questions/SignUpAdhocQuestionList";
+import {
+  formData as committedFormFields,
+  schema as committedSchema,
+} from "./questions/SignUpCommittedQuestionList";
 
 type SignUpFormProps = {
   type: VolunteerType;
-  questionWithHeader: HeaderQuestionList;
 };
 
-function SignUpForm({ type, questionWithHeader }: SignUpFormProps) {
-  const dispatch = useAppDispatch();
-  const handleSignUp = useCallback(
-    (values: CreateVolunteerRequest) => dispatch(signUp(values)),
-    [dispatch]
-  );
+const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
-  // @ts-ignore types are too complicated
-  return SignUpFormGenerator({ type, questionWithHeader, handleSignUp });
+function SignUpForm({ type }: SignUpFormProps) {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>("");
+  const [toastStatus, setToastStatus] = useState<ToastStatus>("success");
+
+  const handleSubmit = async (formValues: Record<string, any>) => {
+    // @ts-ignore type exists
+    const values = objectFilter(
+      formValues,
+      (element) => typeof element === "boolean" || element
+    );
+
+    // Upload and get cover image URL
+    if (values.photoUrl && typeof values.photoUrl !== "string") {
+      values.photoUrl = await uploadAndGetFileUrl(values.photoUrl, "image");
+    }
+
+    await dispatch(
+      signUp({
+        name: `${values.firstName} ${values.lastName}`,
+        volunteerType: type,
+        password: values.password,
+
+        nickname: values.nickname,
+        gender: values.gender,
+        citizenship: values.citizenship,
+        birthday: values.birthday.toISOString(),
+        mobileNumber: values.mobileNumber,
+        photoUrl: values.photoUrl,
+        email: values.email,
+
+        socialMediaPlatform: values.socialMediaPlatform,
+        instagramHandle: values.instagramHandle,
+
+        organization: values.organization,
+        position: values.position,
+        race: values.race,
+
+        languages: values.languages
+          ?.split(",")
+          .map((element) => element.trimStart().trimEnd()), // Delete whitespaces
+        referralSources: values.referralSources,
+
+        hasVolunteered: values.hasVolunteered,
+        biabVolunteeringDuration: values.biabVolunteeringDuration,
+
+        hasVolunteeredExternally: values.hasVolunteeredExternally,
+        volunteeringExperience: values.volunteeringExperience,
+
+        hasChildrenExperience: values.hasChildrenExperience,
+        childrenExperience: values.childrenExperience,
+
+        sessionsPerMonth: values.sessionsPerMonth,
+        sessionPreference: values.sessionPreference,
+
+        hasFirstAidCertification: values.hasFirstAidCertification,
+        leadershipInterest: values.leadershipInterest,
+        interests: values.interests,
+
+        skills: values.skills,
+
+        personality: values.personality,
+        strengths: values.strengths
+          ?.split(",")
+          .map((element) => element.trimStart().trimEnd()),
+        volunteeringOpportunityInterest: values.volunteeringOpportunityInterest,
+
+        volunteerReason: values.volunteerReason,
+        volunteerContribution: values.volunteerContribution,
+        hasCriminalRecord: values.hasCriminalRecord,
+
+        // WCA Registration: Medical Information
+        hasMedicalNeeds: values.hasMedicalNeeds,
+        medicalNeeds: values.medicalNeeds,
+        hasAllergies: values.hasAllergies,
+        allergies: values.allergies,
+        hasMedicationDuringDay: values.hasMedicalDuringDay,
+
+        // WCA Registration: Emergency Contact
+        emergencyContactName: values.emergencyContactName,
+        emergencyContactNumber: values.emergencyContactNumber,
+        emergencyContactEmail: values.emergencyContactEmail,
+        emergencyContactRelationship: values.emergencyContactRelationship,
+      })
+    )
+      .then(unwrapResult)
+      .then(() => {
+        setToastText("You have signed up successfully.");
+        setToastStatus("success");
+        setOpenSnackbar(true);
+        router.push("/login");
+      })
+      .catch((err) => {
+        setToastText(`Error: ${err.message}`);
+        setToastStatus("error");
+        setOpenSnackbar(true);
+      });
+  };
+
+  const data =
+    type === VolunteerType.ADHOC ? adhocFormFields : committedFormFields;
+  const schema = type === VolunteerType.ADHOC ? adhocSchema : committedSchema;
+
+  return (
+    <Box textAlign="left">
+      <SectionalForm
+        sectionalFormFields={data}
+        validationSchema={schema}
+        onSubmit={handleSubmit}
+      />
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
+        onClose={() => {
+          setOpenSnackbar(false);
+        }}
+      >
+        <MuiAlert elevation={6} severity={toastStatus}>
+          {toastText}
+        </MuiAlert>
+      </Snackbar>
+    </Box>
+  );
 }
 
 export default SignUpForm;

@@ -43,7 +43,12 @@ export type CancelEventRequest = IdRequest;
 
 export type CreateVolunteerRequest = Omit<
   VolunteerData,
-  "_id" | "createdAt"
+  | "_id"
+  | "createdAt"
+  | "volunteeringSessionsCount"
+  | "workshopsCount"
+  | "hangoutsCount"
+  | "commitmentApplicationIds"
 > & { password: string; administratorRemarks?: string };
 
 export const ROWS_PER_PAGE = 10;

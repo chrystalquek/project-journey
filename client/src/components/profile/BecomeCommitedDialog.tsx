@@ -70,6 +70,9 @@ const BecomeCommited: FC = () => {
     delete request.isAwareOfConfidentiality;
     delete request.isAwareOfBackgroundCheck;
 
+    // Not sure whether we really need this?
+    request.status = CommitmentApplicationStatus.Pending;
+
     await dispatch(
       createCommitmentApplication(request as CreateCommitmentApplicationRequest)
     );

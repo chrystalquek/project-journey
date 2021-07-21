@@ -25,7 +25,7 @@ import { ToastStatus } from "@type/common";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import Header from "@components/common/Header";
 import { SignUpStatus } from "@type/signUp";
-import { FormQuestionMapper } from "../form/FormGenerator";
+import FormQuestionMapper from "../form/generator/FormQuestionMapper";
 
 type AdminEventFormProps = {
   id: string;
@@ -685,7 +685,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                         </div>
 
                         <FormQuestionMapper
-                          formType="mcq"
+                          type="mcq"
                           name={`type${String(index)}`}
                           options={[
                             { value: "shortAnswer", label: "Short Answer" },
@@ -704,7 +704,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                           }}
                         />
                         <FormQuestionMapper
-                          formType="shortAnswer"
+                          type="shortAnswer"
                           name={question.displayText + String(index)}
                           props={{
                             value: question.displayText,
@@ -739,7 +739,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                     }}
                                   >
                                     <FormQuestionMapper
-                                      formType="shortAnswer"
+                                      type="shortAnswer"
                                       name={String(optionIndex)}
                                       key={option}
                                       props={{

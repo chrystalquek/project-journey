@@ -1,10 +1,5 @@
-import {
-  Button,
-  IconButton,
-  makeStyles,
-  Modal,
-  Typography,
-} from "@material-ui/core";
+import { Button, IconButton, Modal, Typography } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { testEventImage1 } from "@utils/constants/imagePaths";
 import { EventButton } from "@components/common/event/EventButton";
@@ -18,7 +13,8 @@ import {
   getEventFeedbackFormQuestions,
   submitEventFeedbackFormQuestions,
 } from "@redux/actions/form";
-import FormGenerator from "@components/form/FormGenerator";
+import Paper from "@material-ui/core/Paper";
+import BasicForm from "@components/form/generator/BasicForm";
 
 export type FEEDBACK_STATE = "prompt" | "fields" | "success";
 
@@ -121,6 +117,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
   onClose,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const [feedbackState, setFeedbackState] =
     useState<FEEDBACK_STATE>(initialState);
@@ -230,11 +227,17 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                   I would like to submit my feedback annonymously
                 </Typography>
               </div>
-              <FormGenerator
-                handleSubmit={handleSubmit}
-                questionsList={questions}
-                validationObj={{}}
-              />
+              <Paper
+                style={{
+                  margin: "auto",
+                  padding: theme.spacing(8),
+                  textAlign: "left",
+                  maxHeight: "100%",
+                  wordWrap: "break-word",
+                }}
+              >
+                <BasicForm formFields={questions} onSubmit={handleSubmit} />
+              </Paper>
             </div>
           </form>
         );

@@ -4,15 +4,15 @@ import { QuestionItem } from "./question";
 
 // all types only used by FE
 
-export type QuestionList = Array<QuestionItem>;
+export type FormFields = Array<QuestionItem>;
 
-export type QuestionsWithHeader = {
+export type FormSection = {
   header: string;
   info?: string;
-  questionList: QuestionList;
+  fields: FormFields;
 };
 
-export type HeaderQuestionList = Array<QuestionsWithHeader>;
+export type SectionalFormFields = Array<FormSection>;
 
 // Contains types used in /event
 export type FormStatus = {

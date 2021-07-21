@@ -16,8 +16,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import SignUpForm from "@components/form/SignUpForm";
 import { VolunteerType } from "@type/volunteer";
-import { questions as SignUpAdhocQuestionList } from "@components/form/questions/SignUpAdhocQuestionList";
-import { questions as SignUpCommittedQuestionList } from "@components/form/questions/SignUpCommittedQuestionList";
 import Header from "@components/common/Header";
 
 const useStyles = makeStyles((theme) => ({
@@ -287,14 +285,7 @@ const SignUp = () => {
               <Typography className={classes.pageHeader}>
                 Registration
               </Typography>
-              <SignUpForm
-                type={volunteerType}
-                questionWithHeader={
-                  volunteerType === VolunteerType.ADHOC
-                    ? SignUpAdhocQuestionList
-                    : SignUpCommittedQuestionList
-                }
-              />
+              <SignUpForm type={volunteerType} />
               <div className={classes.loginFooter}>
                 <Typography variant="body1">
                   Already have an account?

@@ -1,47 +1,50 @@
 import { Link } from "@material-ui/core";
-import { HeaderQuestionList } from "@type/form/form";
+import Typography from "@material-ui/core/Typography";
+import * as yup from "yup";
+import { SectionalFormFields } from "@type/form/form";
 import {
   Citizenship,
   Gender,
   Race,
   SocialMediaPlatform,
 } from "@type/volunteer";
+import { schema as AdhocSchema } from "./SignUpAdhocQuestionList";
 
-export const questions: HeaderQuestionList = [
+export const formData: SectionalFormFields = [
   {
     header: "Personal Information",
-    questionList: [
+    fields: [
       {
         name: "firstName",
-        displayText: ["First Name"],
+        displayText: ["First Name *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "lastName",
-        displayText: ["Last Name (Family Name)"],
+        displayText: ["Last Name (Family Name) *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "email",
-        displayText: ["Email"],
+        displayText: ["Email *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "password",
-        displayText: ["Password"],
+        displayText: ["Password *"],
         type: "password",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "confirmPassword",
-        displayText: ["Confirm password"],
+        displayText: ["Confirm password *"],
         type: "password",
         initialValue: "",
         isRequired: true,
@@ -57,7 +60,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "gender",
-        displayText: ["Gender"],
+        displayText: ["Gender *"],
         type: "mcq",
         initialValue: "",
         options: [
@@ -68,7 +71,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "citizenship",
-        displayText: ["Citizenship"],
+        displayText: ["Citizenship *"],
         type: "mcq",
         initialValue: "",
         options: [
@@ -83,28 +86,28 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "birthday",
-        displayText: ["Date of Birth"],
+        displayText: ["Date of Birth *"],
         type: "date",
         initialValue: new Date(),
         isRequired: true,
       },
       {
         name: "address",
-        displayText: ["Home address"],
+        displayText: ["Home address *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "mobileNumber",
-        displayText: ["Mobile Number"],
+        displayText: ["Mobile Number *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "socialMediaPlatform",
-        displayText: ["What social media platform do you use the most?"],
+        displayText: ["What social media platform do you use the most? *"],
         type: "mcq",
         initialValue: "",
         options: [
@@ -118,8 +121,8 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "photoUrl",
-        displayText: ["Upload profile picture"],
-        type: "photo",
+        displayText: ["Upload profile picture *"],
+        type: "image",
         initialValue: "",
         isRequired: true,
       },
@@ -132,7 +135,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "organization",
-        displayText: ["School / company name"],
+        displayText: ["School / company name *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
@@ -161,7 +164,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "languages",
         displayText: [
-          "What languages do you speak (please put your first language at the start of your response, separate each language with a comma)",
+          "What languages do you speak (please put your first language at the start of your response, separate each language with a comma) *",
         ],
         type: "shortAnswer",
         initialValue: "",
@@ -169,7 +172,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "referralSources",
-        displayText: ["How did you hear about us/Beyond Awesome?"],
+        displayText: ["How did you hear about us/Beyond Awesome? *"],
         type: "checkboxes",
         initialValue: [],
 
@@ -192,7 +195,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "hasVolunteered",
         displayText: [
-          "Have you volunteered with us before? (eg ad-hoc volunteer or other event)",
+          "Have you volunteered with us before? (eg ad-hoc volunteer or other event) *",
         ],
         type: "mcq",
         initialValue: "",
@@ -213,7 +216,9 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "hasVolunteeredExternally",
-        displayText: ["Have you volunteered with other organisations before?"],
+        displayText: [
+          "Have you volunteered with other organisations before? *",
+        ],
         type: "mcq",
         initialValue: "",
         options: [
@@ -233,7 +238,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "hasChildrenExperience",
-        displayText: ["Do you have any experience working with children?"],
+        displayText: ["Do you have any experience working with children? *"],
         type: "mcq",
         initialValue: "",
         options: [
@@ -252,7 +257,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "sessionsPerMonth",
         displayText: [
-          "How many sessions can you volunteer (realistically) per month?",
+          "How many sessions can you volunteer (realistically) per month? *",
         ],
         type: "number",
         initialValue: "",
@@ -261,7 +266,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "sessionPreference",
         displayText: [
-          "We run weekly sessions, which sessions are you most able to commit to on a regular basis?",
+          "We run weekly sessions, which sessions are you most able to commit to on a regular basis? *",
         ],
         type: "mcq",
         initialValue: "",
@@ -277,7 +282,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "hasFirstAidCertification",
-        displayText: ["Are you certified in FIRST AID?"],
+        displayText: ["Are you certified in FIRST AID? *"],
         type: "mcq",
         initialValue: "",
         options: [
@@ -289,7 +294,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "leadershipInterest",
         displayText: [
-          "Would you be interested in taking on a leadership role that would offer you leadership + personal development opportunities?",
+          "Would you be interested in taking on a leadership role that would offer you leadership + personal development opportunities? *",
         ],
         type: "mcq",
         initialValue: "",
@@ -305,7 +310,7 @@ export const questions: HeaderQuestionList = [
       },
       {
         name: "interests",
-        displayText: ["What are your interests/passions?"],
+        displayText: ["What are your interests/passions? *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
@@ -313,7 +318,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "skills",
         displayText: [
-          "It takes a village to run our programs and we would love specialised support! Do you have any specialised skills? Or feel you can contribute?",
+          "It takes a village to run our programs and we would love specialised support! Do you have any specialised skills? Or feel you can contribute? *",
         ],
         type: "checkboxes",
         initialValue: [],
@@ -351,7 +356,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "personality",
         displayText: [
-          "What is your personality type via www.16personalities.com? (For example: INTJ-A)",
+          "What is your personality type via www.16personalities.com? (For example: INTJ-A) *",
         ],
         type: "shortAnswer",
         initialValue: "",
@@ -360,7 +365,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "strengths",
         displayText: [
-          "What are your 5 strengths on https://high5test.com (please list below, separated by comma)",
+          "What are your 5 strengths on https://high5test.com (please list below, separated by comma) *",
         ],
         type: "shortAnswer",
         initialValue: "",
@@ -369,7 +374,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "volunteerReason",
         displayText: [
-          "Please tell us why you're interested in volunteering with our program",
+          "Please tell us why you're interested in volunteering with our program *",
         ],
         type: "longAnswer",
         initialValue: "",
@@ -378,7 +383,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "volunteerContribution",
         displayText: [
-          "Please tell us how you feel you can contribute or add to our program",
+          "Please tell us how you feel you can contribute or add to our program *",
         ],
         type: "longAnswer",
         initialValue: "",
@@ -391,7 +396,7 @@ export const questions: HeaderQuestionList = [
   {
     header: "WCA Registration: Medical Information",
     info: "The information in this section is collected in the unlikely event of a medical emergency. This information will not be used for any other purposes.",
-    questionList: [
+    fields: [
       {
         name: "hasMedicalNeeds",
         displayText: [
@@ -452,31 +457,31 @@ export const questions: HeaderQuestionList = [
   // Emergency Contact Information
   {
     header: "WCA Registration: Emergency Contact Information",
-    questionList: [
+    fields: [
       {
         name: "emergencyContactName",
-        displayText: ["Emergency Contact Full Name"],
+        displayText: ["Emergency Contact Full Name *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "emergencyContactNumber",
-        displayText: ["Emergency Contact Mobile Number"],
+        displayText: ["Emergency Contact Mobile Number *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "emergencyContactEmail",
-        displayText: ["Emergency Contact Email Address"],
+        displayText: ["Emergency Contact Email Address *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
       },
       {
         name: "emergencyContactRelationship",
-        displayText: ["Emergency Contact Relationship"],
+        displayText: ["Emergency Contact Relationship *"],
         type: "shortAnswer",
         initialValue: "",
         isRequired: true,
@@ -488,13 +493,13 @@ export const questions: HeaderQuestionList = [
   {
     header:
       "WCA Registration: Permission for Email Collection and Communication",
-    questionList: [
+    fields: [
       {
         name: "permissionEmailCollection",
         displayText: [
           "For purposes of communicating with our community about current and upcoming program opportunities and events, Beyond Awesome and Blessings in a Bag Limited may collect email addresses and email individuals ages 13 and above. This information will be used solely for program, event, and alumni engagement purposes by the program and will not be used for any commercial purpose or given to any third party. Individuals may opt out of these communications at any time.",
 
-          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein.",
+          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -510,11 +515,11 @@ export const questions: HeaderQuestionList = [
   // Acknowledgement
   {
     header: "WCA Registration: Acknowledgements",
-    questionList: [
+    fields: [
       {
         name: "personalInformationConsent",
         displayText: [
-          "I give Beyond Awesome (A program by Blessings in a Bag Limited) to communicate my personal information to volunteer mentors in order to support my experience, development and journey with the program",
+          "I give Beyond Awesome (A program by Blessings in a Bag Limited) to communicate my personal information to volunteer mentors in order to support my experience, development and journey with the program  *",
         ],
         type: "mcq",
         initialValue: "",
@@ -524,7 +529,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "acknowledgeWAGroup",
         displayText: [
-          "I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc.",
+          "I am aware that participating in this program means that I will be added to Whatsapp group(s) where I will receive communication and updates on program information/sessions/change of venue, etc. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -534,7 +539,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "hasCrimeHistory",
         displayText: [
-          "Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education?",
+          "Have you ever been convicted of a crime, or have you ever been or are currently under investigation for neglect or impropriety in the fields of childcare or education? *",
         ],
         type: "mcq",
         initialValue: "",
@@ -547,7 +552,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "acknowledgeMinimumCommitment",
         displayText: [
-          "I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement.",
+          "I acknowledge that I am fully aware that the MINIMUM commitment expectation to volunteer with the Beyond Awesome program (under Blessings in a Bag Limited) is 3 months, serving 3 times a month (9 sessions all together) and that I am more than welcome to commit to more than the minimum requirement. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -557,7 +562,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "acknowledgeConfidential",
         displayText: [
-          "If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation.",
+          "If ever I am privy to private and confidential material or documentation related to Beyond Awesome stakeholders (under Blessings in a Bag Limited), I will not release information or share details outside of the organisation. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -595,7 +600,7 @@ export const questions: HeaderQuestionList = [
           "(d) To respect the confidential nature of information gained, or behaviour observed, whilst participating in the program, in relation to children and adults.  I am aware that there are some individuals who are present that may be under the child protection services program.",
 
           // A bit nasty, but it needs link here.
-          <>
+          <Typography>
             (e) To report any accidents or situations involving any member of
             the community (Student, WCA, etc) and to record this in our record
             book as soon as practically possible (Including incidents such as
@@ -608,7 +613,7 @@ export const questions: HeaderQuestionList = [
             >
               Click here
             </Link>
-          </>,
+          </Typography>,
           "(f) To be responsible for familiarising myself with building/facility safety issues, such as, fire procedures, location of emergency exits, location of emergency telephones and first aid equipment.",
 
           "(g) To be responsible for reporting suspected cases of child abuse to the appropriate individuals in the organisation (Program Captains, Emily Teng)",
@@ -621,7 +626,7 @@ export const questions: HeaderQuestionList = [
 
           "(k) To encourage good behaviour  - amongst children and the WCA community",
 
-          <>
+          <Typography>
             (l) To not physically or verbally punish any young person. Our
             program follows Restorative Care practices, please see:{" "}
             <Link
@@ -630,8 +635,8 @@ export const questions: HeaderQuestionList = [
             >
               https://www.edutopia.org/blog/restorative-justice-resources-matt-davis
             </Link>
-          </>,
-          "(m) To seek for assistance, guidance or clarification from any of the program captains and/or Emily Teng.",
+          </Typography>,
+          "(m) To seek for assistance, guidance or clarification from any of the program captains and/or Emily Teng. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -641,7 +646,7 @@ export const questions: HeaderQuestionList = [
       {
         name: "acknowledgeTnC",
         displayText: [
-          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein",
+          "I have read all of the above information, and hereby acknowledge and accept the terms and conditions set forth herein *",
         ],
         type: "mcq",
         initialValue: "",
@@ -654,7 +659,7 @@ export const questions: HeaderQuestionList = [
   // Informed Consent and License Agreement
   {
     header: "WCA Registration: Informed Consent and License Agreement",
-    questionList: [
+    fields: [
       {
         name: "informedConsent",
         displayText: [
@@ -668,7 +673,7 @@ export const questions: HeaderQuestionList = [
 
           "Please note that although participation in Beyond Awesome (of Blessings in a Bag Limited) programs is voluntary, once this agreement is signed, it cannot be withdrawn and remains in effect even after the individual is no longer participating in any Beyond Awesome (of Blessings in a Bag Limited) programming.",
 
-          "I have read and agree to each of the terms and conditions of this Informed Consent and License Agreement, and agree to waive any and all claims for monetary compensation from Beyond Awesome (of Blessings in a Bag Limited), acknowledging that Blessings in a Bag Limited is a purpose-driven entity focusing on youth development with a focus on under-resourced students and the community at large.",
+          "I have read and agree to each of the terms and conditions of this Informed Consent and License Agreement, and agree to waive any and all claims for monetary compensation from Beyond Awesome (of Blessings in a Bag Limited), acknowledging that Blessings in a Bag Limited is a purpose-driven entity focusing on youth development with a focus on under-resourced students and the community at large. *",
         ],
         type: "mcq",
         initialValue: "",
@@ -678,3 +683,68 @@ export const questions: HeaderQuestionList = [
     ],
   },
 ];
+
+const personalityRegex = /(I|E)(N|S)(F|T)(J|P)-(A|T)/;
+
+export const schema = AdhocSchema.concat(
+  yup.object({
+    address: yup.string().required("Required"),
+    socialMediaPlatform: yup
+      .string()
+      .required("Required")
+      .oneOf(Object.values(SocialMediaPlatform), "Invalid choice"),
+    organization: yup.string().required("Required"),
+    race: yup.string().optional().oneOf(Object.values(Race), "Invalid choice"),
+    languages: yup.string().required("Required"),
+    biabVolunteeringDuration: yup.number().when("hasVolunteered", {
+      is: true,
+      then: yup.number().required("Required"),
+      otherwise: yup.number().optional(),
+    }),
+    hasVolunteeredExternally: yup.boolean().required("Required"),
+    volunteeringExperience: yup.string().when("hasVolunteeredExternally", {
+      is: true,
+      then: yup.string().required("Required"),
+      otherwise: yup.string().optional(),
+    }),
+    hasChildrenExperience: yup.boolean().required("Required"),
+    childrenExperience: yup.string().when("hasChildrenExperience", {
+      is: true,
+      then: yup.string().required("Required"),
+      otherwise: yup.string().optional(),
+    }),
+    sessionsPerMonth: yup
+      .number()
+      .integer("Input must be an integer")
+      .required("Required")
+      .min(1, "You have to be able to commit at least one session."),
+    sessionPreference: yup.string().required("Required"),
+    hasFirstAidCertification: yup.boolean().required("Required"),
+    leadershipInterest: yup
+      .string()
+      .required("Required")
+      .oneOf(["yes", "no", "maybe"]),
+    interests: yup.string().required("Required"),
+    skills: yup.array().required("Required").min(1, "Choose at least one"),
+    personality: yup
+      .string()
+      .required("Required")
+      .matches(personalityRegex, "Invalid personality type"),
+    strengths: yup.string().required("Required"),
+    volunteerContribution: yup.string().required("Required"),
+    acknowledgeWAGroup: yup
+      .boolean()
+      .required("Required")
+      .oneOf([true], "You have to agree to proceed"),
+    hasCrimeHistory: yup.boolean().required("Required"),
+    acknowledgeMinimumCommitment: yup
+      .boolean()
+      .required("Required")
+      .oneOf([true], "You have to agree to proceed"),
+    acknowledgeConfidential: yup
+      .boolean()
+      .required("Required")
+      .oneOf([true], "You have to agree to proceed"),
+    permissionBackgroundCheck: yup.boolean().required("Required"),
+  })
+);

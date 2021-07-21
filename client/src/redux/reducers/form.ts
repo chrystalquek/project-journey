@@ -1,6 +1,6 @@
 import { getEventFeedbackFormQuestions } from "@redux/actions/form";
 import { createSlice } from "@reduxjs/toolkit";
-import { QuestionList } from "@type/form/form";
+import { QuestionList } from "@type/form/question";
 
 export type FormState = {
   questions: QuestionList;

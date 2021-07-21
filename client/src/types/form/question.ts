@@ -2,14 +2,6 @@ import { OptionType } from "./option";
 
 export type FormQuestionType = "short-answer" | "mcq" | "check-box";
 
-export type QuestionsOptionsRequestData = {
-  displayText: string;
-  type: FormQuestionType;
-  isRequired: boolean;
-  name: string;
-  options: Array<{ content: string }>;
-};
-
 // used for FE only
 export type InputType =
   | "shortAnswer"
@@ -18,14 +10,16 @@ export type InputType =
   | "date"
   | "mcq"
   | "password"
-  | "photo"
+  | "image"
   | "number";
 
 export type QuestionItem = {
   name: string;
   displayText: Array<string | JSX.Element>;
   type: InputType;
-  initialValue: string | Date | number | [] | boolean | null;
+  initialValue: any;
   options?: Array<OptionType>;
   isRequired: boolean;
 };
+
+export type QuestionList = Array<QuestionItem>;
