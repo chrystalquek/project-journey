@@ -128,8 +128,6 @@ const referralSources = body('referralSources')
 const volunteerReason = body('volunteerReason')
   .exists().withMessage('Volunteer reason is required')
   .isString().withMessage('Volunteer reason must be a string');
-
-// const volunteerFrequency = body('volunteerFrequency').isNumeric().optional();
 const volunteerContribution = body('volunteerContribution', 'Volunteer contribution must be a string').isString();
 const volunteerType = body('volunteerType')
   .exists().withMessage('Volunteer type is required')
