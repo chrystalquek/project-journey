@@ -12,9 +12,11 @@ router.post(
   commitmentApplicationController.createCommitmentApplication
 );
 
-router.get('/',
-  validate(getValidations('readCommitmentApplication')),
-  commitmentApplicationController.getCommitmentApplications);
+router.get(
+  "/",
+  validate(getValidations("readCommitmentApplication")),
+  commitmentApplicationController.getCommitmentApplications
+);
 
 // @route   PUT /commitment-application
 // @desc    Update a commitmentApplication by id

@@ -17,10 +17,10 @@ router.post(
 // @route   GET /signup/:id/:idType
 // @desc    For admin to read sign ups // @clara
 router.get(
-  '/:id/:idType',
-  authorize(['admin']),
-  validate(getValidations('getSignUps')),
-  signUpController.getSignUps,
+  "/:id/:idType",
+  authorize(["admin"]),
+  validate(getValidations("getSignUps")),
+  signUpController.getSignUps
 );
 
 // @route   GET /signup/pending
@@ -34,12 +34,11 @@ router.get(
 // @route   DELETE /signup/:id/:idType
 // @desc    For volunteers to delete their sign up
 router.delete(
-  '/:id/:idType',
+  "/:id/:idType",
   authorize([]),
-  validate(getValidations('deleteSignUp')),
-  signUpController.deleteSignUp,
+  validate(getValidations("deleteSignUp")),
+  signUpController.deleteSignUp
 );
-
 
 // @route   PUT /signup/:id/:idType
 // @desc    For admin to change status of sign up

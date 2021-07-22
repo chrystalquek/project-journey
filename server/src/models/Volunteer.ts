@@ -69,7 +69,6 @@ export const VolunteerSchema = createSchema({
 
   orgnanization: Type.string({ required: false }),
   position: Type.string({ required: false }),
- 
 
   languages: Type.array({
     required: true,

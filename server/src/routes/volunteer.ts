@@ -29,28 +29,26 @@ router.get(
 router.post(
   "/ids",
   authorize(["admin"]),
-  validate(getValidations('getVolunteersById')),
+  validate(getValidations("getVolunteersById")),
   volunteerController.getVolunteersByIds
-
 );
 
 // @route   GET /volunteer/:id
 // @desc    For volunteer and admin to get volunteer
 router.get(
-  '/id/:id',
+  "/id/:id",
   authorize([]),
-  validate(getValidations('getVolunteerById')),
-  volunteerController.getVolunteerDetailsById,
+  validate(getValidations("getVolunteerById")),
+  volunteerController.getVolunteerDetailsById
 );
 
 // @route   GET /volunteer
 // @desc    For admin to get all volunteers
 router.get(
-  '/',
-  authorize(['admin']),
-  validate(getValidations('getAllVolunteers')),
-  volunteerController.getAllVolunteerDetails,
-
+  "/",
+  authorize(["admin"]),
+  validate(getValidations("getAllVolunteers")),
+  volunteerController.getAllVolunteerDetails
 );
 
 // @route   DELETE /volunteer/:id

@@ -13,19 +13,19 @@ import HTTP_CODES from "../constants/httpCodes";
 
 export const validate =
   (validations: ValidationChain[]) =>
-    async (req: Request, res: Response, next: Function) => {
-      await Promise.all(
-        validations.map((validation: ValidationChain) => validation.run(req))
-      );
+  async (req: Request, res: Response, next: Function) => {
+    await Promise.all(
+      validations.map((validation: ValidationChain) => validation.run(req))
+    );
 
-      const validationErrors = validationResult(req);
-      if (!validationErrors.isEmpty()) {
-        return res
-          .status(HTTP_CODES.UNPROCESSABLE_ENTITIY)
-          .json({ errors: validationErrors.array() });
-      }
-      return next();
-    };
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return res
+        .status(HTTP_CODES.UNPROCESSABLE_ENTITIY)
+        .json({ errors: validationErrors.array() });
+    }
+    return next();
+  };
 
 export const stringEnumValidator = (
   enumTypes: Readonly<Array<string>>,
@@ -55,17 +55,17 @@ export const regexValidator = (
 };
 
 export function stringArrayValidator(value: any): boolean {
-  return value.every(item => typeof item === "string");
+  return value.every((item) => typeof item === "string");
 }
 
 // TODO: remove from global after separating user and volunteer
 const LENGTH_MINIMUM_PASSWORD = 8;
 
-export const passwordValidator = body('password').isString().isLength({
+export const passwordValidator = body("password").isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
 });
 
-export const existingEmailValidator = body('email')
+export const existingEmailValidator = body("email")
   .isEmail()
   .normalizeEmail()
   .custom(async (emailString: string) => {
@@ -76,13 +76,13 @@ export const existingEmailValidator = body('email')
     return true;
   });
 
-export const newEmailValidator = body('email')
+export const newEmailValidator = body("email")
   .isEmail()
   .normalizeEmail()
   .custom(async (emailString: string) => {
     const isNewEmailUnique = await doesUserEmailExist(emailString);
     if (!isNewEmailUnique) {
-      throw new Error('E-mail is already in use');
+      throw new Error("E-mail is already in use");
     }
     return true;
   });
