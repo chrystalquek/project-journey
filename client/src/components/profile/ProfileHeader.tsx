@@ -12,11 +12,6 @@ import ApproveCommitmentApplication from "./ApproveCommitmentApplication";
 import ChangeVolunteerType from "./ChangeVolunteerType";
 
 const useStyles = makeStyles((theme) => ({
-  avatar: {
-    backgroundColor: theme.palette.primary.main,
-    height: "100px",
-    width: "100px",
-  },
   header: {
     textAlign: "left",
     [theme.breakpoints.down("xs")]: {

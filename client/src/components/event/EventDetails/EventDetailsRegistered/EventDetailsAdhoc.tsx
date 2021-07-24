@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { EventData } from "@type/event";
 import { VolunteerType, VolunteerData } from "@type/volunteer";
-import { Chip, Grid, makeStyles } from "@material-ui/core";
+import { Chip, Grid, makeStyles, Typography } from "@material-ui/core";
 import { testEventImage1 } from "@utils/constants/imagePaths";
 import {
   ALL_VOLUNTEERS_TAG,
@@ -14,7 +14,6 @@ import EventRegisterForm, {
 } from "@components/event/EventDetails/EventDetailsParts/EventRegisterForm";
 import FacilitatorInfo from "@components/event/EventDetails/EventDetailsParts/FacilitatorInfo";
 import BecomeCommited from "@components/profile/BecomeCommitedDialog";
-import { EventTypography } from "@components/common/event/EventTypography";
 import { getAcceptedSignUp } from "@components/event/helpers";
 import { FormStatus } from "@type/form/form";
 import ResizedImage from "../../../common/image/ResizedImage";
@@ -50,7 +49,9 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
   return (
     <Grid container spacing={8}>
       <Grid className={classes.gutterBottom} item xs={12}>
-        <EventTypography fontSize="h1" fontBold text={event.name} />
+        <Typography variant="h1" style={{ fontWeight: "bold" }}>
+          {event.name}
+        </Typography>
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>
@@ -77,24 +78,21 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
 
       {formStatus.reason === FormDisabledReason.SIGNUP_PENDING && (
         <Grid className={classes.gutterBottom} item xs={12}>
-          <EventTypography gutterBottom fontBold text="Sign-up Pending." />
-          <EventTypography gutterBottom text="Pending approval by admin." />
+          <Typography style={{ fontWeight: "bold" }}>
+            Sign-up Pending.
+          </Typography>
+          <Typography>Pending approval by admin.</Typography>
         </Grid>
       )}
       {formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED && (
         <Grid className={classes.gutterBottom} item xs={12}>
-          <EventTypography
-            gutterBottom
-            fontBold
-            text="Successful registration!"
-          />
-          <EventTypography
-            gutterBottom
-            text={`Accepted role: ${
-              getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
-              "Error retrieving accepted role."
-            }`}
-          />
+          <Typography style={{ fontWeight: "bold" }}>
+            Successful registration!
+          </Typography>
+          <Typography>{`Accepted role: ${
+            getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
+            "Error retrieving accepted role."
+          }`}</Typography>
         </Grid>
       )}
 
@@ -119,7 +117,9 @@ const EventDetailsAdhoc: FC<EventDetailsAdhocProps> = ({
 
       {event.volunteerType === VolunteerType.COMMITTED && (
         <div>
-          <EventTypography text="This event is only opened to committed volunteers." />
+          <Typography>
+            This event is only opened to committed volunteers.
+          </Typography>
           <BecomeCommited />
         </div>
       )}

@@ -2,10 +2,9 @@ import React, { FC } from "react";
 import { Box, Button, makeStyles, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@utils/constants/routes";
-import { EventTypography } from "@components/common/event/EventTypography";
 import PersonIcon from "@material-ui/icons/Person";
 import { EventButton } from "@components/common/event/EventButton";
-import { EventDivider } from "@components/common/event/EventDivider";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
 type CreateAccountNoticeProps = {
   // nothing yet
@@ -26,18 +25,16 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
 
   return (
     <>
-      <EventDivider>Register Here</EventDivider>
+      <TypographyWithUnderline fontSize="h1" fontWeight="fontWeightBold">
+        Register Here
+      </TypographyWithUnderline>
       <PersonIcon className={classes.icon} />
-      <EventTypography
-        fontSize="h2"
-        fontBold
-        text="You need an account to register events."
-      />
-      <EventTypography
-        fontSize="h2"
-        gutterBottom
-        text="It takes less than 2mins to create one"
-      />
+      <Typography style={{ fontWeight: "bold" }} variant="h2">
+        You need an account to register events.
+      </Typography>
+      <Typography style={{ fontWeight: "bold" }} variant="h2">
+        It takes less than 2mins to create one
+      </Typography>
       <Box margin={3}>
         <EventButton disableRipple onClick={() => router.push(SIGNUP_ROUTE)}>
           Sign up

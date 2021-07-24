@@ -1,10 +1,9 @@
-import { EventTypography } from "@components/common/event/EventTypography";
 import {
   ALL_VOLUNTEERS_TAG,
   COMMITTED_VOLUNTEER_TAG,
 } from "@components/event/index";
 import { EVENTS_ROUTE, LOGIN_ROUTE } from "@constants/routes";
-import { CardActions, Chip, makeStyles } from "@material-ui/core";
+import { CardActions, Chip, makeStyles, Typography } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
@@ -15,7 +14,7 @@ import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { testEventImage3 } from "@utils/constants/imagePaths";
 import { formatDateStartEndTime } from "@utils/helpers/date";
 import { useRouter } from "next/router";
-import { FC, useCallback } from "react";
+import React, { FC, useCallback } from "react";
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -73,12 +72,10 @@ const EventCard: FC<Props> = ({
           title={event && event.name ? event.name : "EventCard"}
         />
         <CardContent>
-          <EventTypography
-            gutterBottom
-            fontBold
-            text={event && event.name ? event.name : "No event name provided"}
-          />
-          <EventTypography text={dateTime || "No date provided"} />
+          <Typography style={{ fontWeight: "bold" }}>
+            {event && event.name ? event.name : "No event name provided"}
+          </Typography>
+          <Typography>{dateTime || "No date provided"}</Typography>
           {CardContentInfoComponent && <CardContentInfoComponent />}
         </CardContent>
       </CardActionArea>

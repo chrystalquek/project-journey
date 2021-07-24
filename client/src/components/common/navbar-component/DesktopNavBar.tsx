@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import {
   Avatar,
-  Box,
   ClickAwayListener,
   Paper,
   Popper,
@@ -14,6 +13,7 @@ import {
   Fade,
   MenuList,
   IconButton,
+  Grid,
 } from "@material-ui/core";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -36,15 +36,17 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
+      borderBottomStyle: "solid",
+      borderBottomColor: theme.palette.grey[400],
+      borderBottomWidth: "thin",
+      marginBottom: theme.spacing(5),
+      padding: theme.spacing(2),
     },
-    buttonsContainer: {
-      flexGrow: 1,
-      marginLeft: theme.spacing(4),
+    popper: {
+      zIndex: 10000,
     },
     button: {
       textTransform: "none",
-      marginLeft: theme.spacing(2),
       fontSize: theme.typography.h2.fontSize,
       fontWeight: theme.typography.fontWeightMedium,
     },
@@ -53,30 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: theme.typography.h2.fontSize,
       fontWeight: "bold",
     },
-    nameContainer: {
-      display: "flex",
-      flexDirection: "column",
-      marginLeft: theme.spacing(2),
-    },
-    nameStyle: {
-      flex: 1,
-    },
-    loginButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-      marginRight: theme.spacing(2),
-    },
-    signUpButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-    },
-    editProfileButton: {
-      margin: 0,
-      padding: 0,
-      textAlign: "left",
-    },
     editProfileText: {
-      flex: 1,
       fontWeight: "bold",
     },
     iconSize24: {
@@ -182,7 +161,12 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     );
 
     const eventMenuWrapper = (
-      <Popper open={openEventMenu} anchorEl={eventRef.current} transition>
+      <Popper
+        open={openEventMenu}
+        anchorEl={eventRef.current}
+        transition
+        className={classes.popper}
+      >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={400}>
             <Paper>
@@ -219,6 +203,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
           open={openVolunteerMenu}
           anchorEl={volunteerRef.current}
           transition
+          className={classes.popper}
         >
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={400}>
@@ -256,44 +241,46 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     );
 
     return (
-      <>
-        {homeButton}
-        {eventButton}
+      <Grid container spacing={6}>
+        <Grid item>{homeButton}</Grid>
+        <Grid item>{eventButton}</Grid>
         {eventMenuWrapper}
-        {userData &&
-          userData.volunteerType === VolunteerType.ADMIN &&
-          volunteer}
-      </>
+        <Grid item>
+          {userData &&
+            userData.volunteerType === VolunteerType.ADMIN &&
+            volunteer}
+        </Grid>
+      </Grid>
     );
   };
 
   const loggedInRender = () => {
     if (!userData) {
       return (
-        <>
-          <div className={classes.loginButtonContainer}>
-            <ExitToAppIcon className={classes.iconSize24} color="primary" />
+        <Grid container alignItems="center">
+          <Grid item>
             <Button
               className={classes.buttonRight}
               onClick={() => {
                 router.push(LOGIN_ROUTE);
               }}
             >
+              <ExitToAppIcon className={classes.iconSize24} color="primary" />
               Login
             </Button>
-          </div>
-          <div className={classes.signUpButtonContainer}>
-            <PersonIcon className={classes.iconSize24} color="primary" />
+          </Grid>
+          <Grid item>
             <Button
               className={classes.buttonRight}
               onClick={() => {
                 router.push(SIGNUP_ROUTE);
               }}
             >
+              <PersonIcon className={classes.iconSize24} color="primary" />
               Sign Up
             </Button>
-          </div>
-        </>
+          </Grid>
+        </Grid>
       );
     }
     const profilePicture = !userData?.photoUrl ? (
@@ -303,45 +290,63 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
     );
 
     return (
-      <>
-        <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
-          {profilePicture}
-          <Popper open={openLogout} anchorEl={logoutRef.current} transition>
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={400}>
-                <Paper>
-                  <ClickAwayListener onClickAway={closeLogoutMenu}>
-                    <MenuList>
-                      <MenuItem dense onClick={handleLogout}>
-                        Logout
-                      </MenuItem>
-                      <MenuItem
-                        dense
-                        onClick={() => router.push(`/profile/${userData._id}`)}
-                      >
-                        Edit Profile
-                      </MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Fade>
-            )}
-          </Popper>
-        </IconButton>
-        <div className={classes.nameContainer}>
-          <Typography className={classes.nameStyle}>
-            <Box fontWeight={700}>{userData?.name}</Box>
+      <Grid container alignItems="center">
+        <Grid item>
+          <IconButton edge="start" onClick={toggleLogoutMenu} ref={logoutRef}>
+            {profilePicture}
+            <Popper
+              open={openLogout}
+              anchorEl={logoutRef.current}
+              transition
+              className={classes.popper}
+            >
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={400}>
+                  <Paper>
+                    <ClickAwayListener onClickAway={closeLogoutMenu}>
+                      <MenuList>
+                        <MenuItem dense onClick={handleLogout}>
+                          Logout
+                        </MenuItem>
+                        <MenuItem
+                          dense
+                          onClick={() =>
+                            router.push(`/profile/${userData._id}`)
+                          }
+                        >
+                          Edit Profile
+                        </MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Fade>
+              )}
+            </Popper>
+          </IconButton>
+        </Grid>
+        <Grid item>
+          <Typography style={{ fontWeight: "bold" }}>
+            {userData?.name}
           </Typography>
-        </div>
-      </>
+        </Grid>
+      </Grid>
     );
   };
 
   return (
-    <>
-      <Image src="/blessings-in-a-bag.png" width={100} height={100} />
-      <div className={classes.buttonsContainer}>{navigationRender()}</div>
-      {loggedInRender()}
-    </>
+    <Grid
+      container
+      justify="space-between"
+      alignItems="center"
+      className={classes.root}
+    >
+      <Grid item container md={9} alignItems="center" spacing={6}>
+        <Grid item>
+          <Image src="/blessings-in-a-bag.png" width={100} height={100} />
+        </Grid>
+        <Grid item>{navigationRender()}</Grid>
+      </Grid>
+      <Grid item>{loggedInRender()}</Grid>
+    </Grid>
   );
 }

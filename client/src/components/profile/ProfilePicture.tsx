@@ -19,17 +19,17 @@ import { updateVolunteer } from "@redux/actions/user";
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    width: 24,
-    height: 24,
+    width: theme.spacing(6),
+    height: theme.spacing(6),
   },
   icon: {
-    width: 16,
-    height: 16,
+    width: theme.spacing(4),
+    height: theme.spacing(4),
   },
   avatar: {
     backgroundColor: theme.palette.primary.main,
-    height: "100px",
-    width: "100px",
+    height: theme.spacing(29),
+    width: theme.spacing(29),
     objectFit: "cover",
   },
   input: {

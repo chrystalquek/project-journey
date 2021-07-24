@@ -45,13 +45,14 @@ export function Tabs(props: TabsProps) {
   const { tabs, clickedOn } = props;
 
   return (
-    <Grid direction="row">
+    <Grid container direction="row">
       {tabs.map((tab, idx) => (
         <Button
           className={
             idx === clickedOn ? classes.clickedButton : classes.otherButton
           }
           onClick={tab.onClick}
+          key={tab.label}
         >
           {tab.label}
         </Button>

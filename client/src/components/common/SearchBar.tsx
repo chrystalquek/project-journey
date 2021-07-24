@@ -1,5 +1,5 @@
-import { TextField } from "@material-ui/core";
-import React, { useCallback } from "react";
+import { InputProps, TextField } from "@material-ui/core";
+import React, { FC, useCallback } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
@@ -8,7 +8,10 @@ type SearchBarProps = {
   setFilterFunction: (searchText: string) => void;
 };
 
-function SearchBar({ setFilterFunction }: SearchBarProps) {
+const SearchBar: FC<SearchBarProps & InputProps> = ({
+  setFilterFunction,
+  ...inputProps
+}: SearchBarProps) => {
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setFilterFunction(e.target.value);
@@ -17,23 +20,23 @@ function SearchBar({ setFilterFunction }: SearchBarProps) {
   );
 
   return (
-    <>
-      <TextField
-        placeholder="Search..."
-        onChange={handleSearchChange}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        fullWidth
-        variant="outlined"
-        margin="dense"
-      />
-    </>
+    <TextField
+      {...inputProps}
+      placeholder="Search..."
+      onChange={handleSearchChange}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+      fullWidth
+      variant="outlined"
+      margin="dense"
+      autoFocus
+    />
   );
-}
+};
 
 export default SearchBar;

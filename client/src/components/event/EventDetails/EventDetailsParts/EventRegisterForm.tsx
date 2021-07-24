@@ -7,15 +7,15 @@ import {
   TextField,
   makeStyles,
   Grid,
+  Typography,
 } from "@material-ui/core";
 import {
   FormSelectRow,
   parseRoles,
 } from "@components/event/helpers/EventDetails/EventRegisterForm";
 import { VolunteerData } from "@type/volunteer";
-import { EventTypography } from "@components/common/event/EventTypography";
-import { EventDivider } from "@components/common/event/EventDivider";
 import { EventButton } from "@components/common/event/EventButton";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
 type EventRegisterProps = {
   event: EventData;
@@ -87,16 +87,18 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
   return (
     <>
       <form onSubmit={onFormSubmit}>
-        <EventDivider fontBold gutterBottom>
+        <TypographyWithUnderline fontSize="h1" fontWeight="fontWeightBold">
           Register Here
-        </EventDivider>
+        </TypographyWithUnderline>
         <Grid container direction="column" spacing={5}>
           <Grid item>
-            <EventTypography fontBold text="Position Interested:" />
+            <Typography style={{ fontWeight: "bold" }}>
+              Position Interested:
+            </Typography>
           </Grid>
 
           <Grid item>
-            <EventTypography text="First Choice:" gutterBottom />
+            <Typography>First Choice:</Typography>
             <FormControl
               fullWidth
               variant="outlined"
@@ -129,7 +131,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
           </Grid>
 
           <Grid item>
-            <EventTypography text="Second Choice: (optional)" gutterBottom />
+            <Typography>Second Choice: (optional)</Typography>
             <FormControl
               fullWidth
               variant="outlined"
@@ -161,7 +163,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
           </Grid>
 
           <Grid item>
-            <EventTypography text="Third Choice: (optional)" gutterBottom />
+            <Typography>Third Choice: (optional)</Typography>
             <FormControl
               fullWidth
               variant="outlined"
@@ -193,11 +195,9 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
           </Grid>
 
           <Grid item>
-            <EventTypography
-              fontBold
-              text="Anything you would like us to know?"
-              gutterBottom
-            />
+            <Typography style={{ fontWeight: "bold" }}>
+              Anything you would like us to know?
+            </Typography>
             <TextField
               id="additionalInfo"
               name="additionalInfo"

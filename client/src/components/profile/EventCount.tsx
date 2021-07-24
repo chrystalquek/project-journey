@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { Grid, Button, makeStyles, Typography, Box } from "@material-ui/core";
-import ProfileDivider from "@components/common/ProfileDivider";
+import { Grid, Button, makeStyles, Typography } from "@material-ui/core";
 import DataRow from "@components/common/DataRow";
 import PaddedGrid from "@components/common/surfaces/PaddedGrid";
 import { VolunteerData } from "@type/volunteer";
 import { useRouter } from "next/router";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
 type props = {
   profilePageData: VolunteerData;
@@ -26,14 +26,9 @@ const EventCount: FC<props> = ({ profilePageData }) => {
 
   return (
     <PaddedGrid>
-      <Grid item>
-        <Box fontWeight="fontWeightMedium" fontSize="h3.fontSize">
-          Event Count
-        </Box>
-      </Grid>
-      <Grid item>
-        <ProfileDivider />
-      </Grid>
+      <TypographyWithUnderline fontWeight="fontWeightMedium" fontSize="h3">
+        Event Count
+      </TypographyWithUnderline>
       <DataRow
         header="Volunteering Sessions"
         data={profilePageData.volunteeringSessionsCount?.toString()}

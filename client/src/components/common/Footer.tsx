@@ -4,8 +4,8 @@ import { Typography, makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   footerStyle: {
     textAlign: "center",
-    width: "100%",
-    marginTop: theme.spacing(9),
+    padding: theme.spacing(6),
+    backgroundColor: theme.palette.common.white,
   },
 }));
 
@@ -14,7 +14,7 @@ const FooterComponent: FC = () => {
 
   return (
     <footer className={classes.footerStyle}>
-      <Typography variant="body2">Journey © 2021 Created by DSC NUS</Typography>
+      <Typography>Journey © 2021 Created by DSC NUS</Typography>
     </footer>
   );
 };

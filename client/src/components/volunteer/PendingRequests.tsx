@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
+import { capitalize, Grid } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import React, { FC, useEffect } from "react";
 import { VolunteerData } from "@type/volunteer";
@@ -26,6 +18,11 @@ import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import Header from "@components/common/Header";
 import ErrorPage from "@components/common/ErrorPage";
 import LoadingIndicator from "@components/common/LoadingIndicator";
+import {
+  GridCellParams,
+  GridValueFormatterParams,
+} from "@material-ui/data-grid";
+import Table from "@components/common/data-display/Table";
 
 const PendingRequests: FC<{}> = () => {
   useAuthenticatedRoute();
@@ -68,24 +65,28 @@ const PendingRequests: FC<{}> = () => {
       status: CommitmentApplicationStatus.Rejected,
     };
     return (
-      <Grid direction="row">
-        <ActionableDialog
-          open={openApprove}
-          setOpen={() => setOpenApprove(!openApprove)}
-          content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`}
-          buttonTitle="Approve"
-          buttonOnClick={() => onApproveReject(approveCommitmentApplication)}
-          openCloseButtonTitle="Approve"
-        />
-        <ActionableDialog
-          open={openReject}
-          setOpen={() => setOpenReject(!openReject)}
-          content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`}
-          buttonTitle="Reject"
-          buttonOnClick={() => onApproveReject(rejectCommitmentApplication)}
-          openCloseButtonStyle=""
-          openCloseButtonTitle={<CancelIcon color="error" fontSize="large" />}
-        />
+      <Grid container>
+        <Grid item>
+          <ActionableDialog
+            open={openApprove}
+            setOpen={() => setOpenApprove(!openApprove)}
+            content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`}
+            buttonTitle="Approve"
+            buttonOnClick={() => onApproveReject(approveCommitmentApplication)}
+            openCloseButtonTitle="Approve"
+          />
+        </Grid>
+        <Grid item>
+          <ActionableDialog
+            open={openReject}
+            setOpen={() => setOpenReject(!openReject)}
+            content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`}
+            buttonTitle="Reject"
+            buttonOnClick={() => onApproveReject(rejectCommitmentApplication)}
+            openCloseButtonStyle=""
+            openCloseButtonTitle={<CancelIcon color="error" fontSize="large" />}
+          />
+        </Grid>
       </Grid>
     );
   };
@@ -97,44 +98,45 @@ const PendingRequests: FC<{}> = () => {
     return <ErrorPage message={error.message} />;
   }
 
+  const columns = [
+    {
+      field: "name",
+      headerName: "Name",
+      sortable: false,
+      width: 300,
+    },
+    {
+      field: "createdAt",
+      headerName: "Date of Registration",
+      width: 200,
+      valueFormatter: (params: GridValueFormatterParams) =>
+        new Date(params.value as string).toLocaleDateString(),
+    },
+    {
+      field: "volunteerType",
+      headerName: "Volunteer Type",
+      sortable: false,
+      width: 150,
+      valueFormatter: (params: GridValueFormatterParams) =>
+        capitalize(params.value as string),
+    },
+    {
+      field: "",
+      headerName: "",
+      sortable: false,
+      width: 300,
+      renderCell: (params: GridCellParams) =>
+        getApproveRejectButtons(params.row as VolunteerData),
+    },
+  ];
+
   return (
     <>
       <Header title="Pending Requests" />
       <Grid container alignItems="center" justify="center">
-        <Grid item xs={8}>
+        <Grid item xs={12} md={9}>
           <PendingRequestsTabs clickedOn={0} />
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <b>Name</b>
-                  </TableCell>
-                  <TableCell>
-                    <b>Date of Registration</b>
-                  </TableCell>
-                  <TableCell>
-                    <b>Status</b>
-                  </TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {pendingVolunteers.map((volunteer) => (
-                  <TableRow key={volunteer._id}>
-                    <TableCell>
-                      <b>{volunteer.name}</b>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(volunteer.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>{volunteer.volunteerType}</TableCell>
-                    <TableCell>{getApproveRejectButtons(volunteer)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Table rows={pendingVolunteers} columns={columns} />
         </Grid>
       </Grid>
     </>

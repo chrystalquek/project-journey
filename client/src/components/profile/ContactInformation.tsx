@@ -1,9 +1,8 @@
 import React, { FC } from "react";
-import { Box, Grid } from "@material-ui/core";
-import ProfileDivider from "@components/common/ProfileDivider";
 import DataRow from "@components/common/DataRow";
 import PaddedGrid from "@components/common/surfaces/PaddedGrid";
 import { VolunteerData } from "@type/volunteer";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
 type props = {
   profilePageData: VolunteerData;
@@ -11,14 +10,9 @@ type props = {
 
 const ContactInformation: FC<props> = ({ profilePageData }) => (
   <PaddedGrid>
-    <Grid item>
-      <Box fontWeight="fontWeightMedium" fontSize="h3.fontSize">
-        Contact Information
-      </Box>
-    </Grid>
-    <Grid item>
-      <ProfileDivider />
-    </Grid>
+    <TypographyWithUnderline fontWeight="fontWeightMedium" fontSize="h3">
+      Contact Information
+    </TypographyWithUnderline>
     <DataRow
       header="Tel. No."
       data={profilePageData.mobileNumber}

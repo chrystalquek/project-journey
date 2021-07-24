@@ -1,11 +1,11 @@
 import React, { FC, useState } from "react";
-import { Box, Grid } from "@material-ui/core";
-import ProfileDivider from "@components/common/ProfileDivider";
+import { Grid } from "@material-ui/core";
 import PaddedGrid from "@components/common/surfaces/PaddedGrid";
 import RemarksTextField from "@components/profile/RemarksTextField";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { updateVolunteer } from "@redux/actions/user";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
 type props = {
   profilePageData: VolunteerData;
@@ -82,12 +82,9 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   return (
     <PaddedGrid>
       <Grid item>
-        <Box fontWeight="fontWeightMedium" fontSize="h3.fontSize">
+        <TypographyWithUnderline fontWeight="fontWeightMedium" fontSize="h3">
           Remarks
-        </Box>
-      </Grid>
-      <Grid item>
-        <ProfileDivider />
+        </TypographyWithUnderline>
       </Grid>
       <Grid item container direction="column" spacing={2}>
         {/* Volunteer remarks */}

@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { EventData } from "@type/event";
-import { EventTypography } from "@components/common/event/EventTypography";
 import ResizedImage from "@components/common/image/ResizedImage";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
 type FacilitatorInfoProps = {
   event: EventData;
@@ -10,28 +10,20 @@ type FacilitatorInfoProps = {
 
 const FacilitatorInfo: FC<FacilitatorInfoProps> = ({ event }) => (
   <>
-    <EventTypography
-      fontSize="h3"
-      fontBold
-      borderBottom
-      gutterBottom
-      text="About the Facilitator"
-    />
+    <TypographyWithUnderline fontSize="h3" fontWeight="fontWeightBold">
+      About the Facilitator
+    </TypographyWithUnderline>
     <Grid container>
       <Grid item xs={12} md={4}>
         <ResizedImage img={event.coverImage} name="Facilitator" />
       </Grid>
       <Grid item xs={12} md={8}>
-        <EventTypography
-          gutterBottom
-          fontSize="body1"
-          text={event.facilitatorName || "No facilitator name"}
-        />
-        <EventTypography
-          gutterBottom
-          fontSize="body1"
-          text={event.facilitatorDescription || "No facilitator description."}
-        />
+        <Typography>
+          {event.facilitatorName || "No facilitator name"}
+        </Typography>
+        <Typography>
+          {event.facilitatorDescription || "No facilitator description."}
+        </Typography>
       </Grid>
     </Grid>
   </>

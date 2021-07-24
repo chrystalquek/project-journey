@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { EventData } from "@type/event";
 import { VolunteerType, VolunteerData } from "@type/volunteer";
-import { Chip, Grid, makeStyles } from "@material-ui/core";
+import { Chip, Grid, makeStyles, Typography } from "@material-ui/core";
 import { testEventImage1 } from "@utils/constants/imagePaths";
 import {
   ALL_VOLUNTEERS_TAG,
@@ -10,7 +10,6 @@ import {
 import EventInformation from "@components/event/EventDetails/EventDetailsParts/EventInformation";
 import FacilitatorInfo from "@components/event/EventDetails/EventDetailsParts/FacilitatorInfo";
 import CreateAccountNotice from "@components/event/EventDetails/EventDetailsParts/CreateAccountNotice";
-import { EventTypography } from "@components/common/event/EventTypography";
 import ResizedImage from "../../common/image/ResizedImage";
 
 type EventDetailsUnregisteredProps = {
@@ -36,7 +35,9 @@ const EventDetailsUnregistered: FC<EventDetailsUnregisteredProps> = ({
   return (
     <Grid container spacing={8}>
       <Grid className={classes.gutterBottom} item xs={12}>
-        <EventTypography text={event.name} fontBold fontSize="h1" />
+        <Typography style={{ fontWeight: "bold" }} variant="h1">
+          {event.name}
+        </Typography>
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>

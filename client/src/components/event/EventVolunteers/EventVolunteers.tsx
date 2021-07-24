@@ -1,21 +1,13 @@
 import {
   makeStyles,
   Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   IconButton,
   Button,
   Popover,
   FormControl,
-  TablePagination,
   Select,
   MenuItem,
   Badge,
-  InputLabel,
   Typography,
 } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
@@ -33,9 +25,14 @@ import { ActionableDialog } from "@components/common/ActionableDialog";
 import CloseIcon from "@material-ui/icons/Close";
 import { getEvent } from "@redux/actions/event";
 import CheckIcon from "@material-ui/icons/Check";
-import SearchBar from "@components/common/SearchBar";
 import { UpdateSignUpRequest } from "@api/request";
 import Header from "@components/common/Header";
+import {
+  GridCellParams,
+  GridColDef,
+  GridValueGetterParams,
+} from "@material-ui/data-grid";
+import Table from "@components/common/data-display/Table";
 
 export const rowsPerPage = 10;
 
@@ -318,7 +315,7 @@ const EventVolunteers = ({ eid }) => {
             horizontal: "left",
           }}
         >
-          <Grid direction="row">
+          <Grid>
             <Grid item>
               <ActionableDialog
                 open={openRemoveDialog}
@@ -403,24 +400,7 @@ const EventVolunteers = ({ eid }) => {
 
   const [isApprovedTab, setIsApprovedTab] = useState(true);
 
-  /** Pagination */
-  const [pageNumber, setPageNumber] = useState(0);
-
-  const handleChangePageNumber = (e, newPageNumber) => {
-    setPageNumber(newPageNumber);
-  };
-
-  /** Sort */
-  const sortFieldsForApprovedTab = [
-    { label: "Name", value: "name" },
-    { label: "Role", value: "role" },
-  ];
-  const sortFieldsForPendingTab = [{ label: "Name", value: "name" }];
-  const sortFields = isApprovedTab
-    ? sortFieldsForApprovedTab
-    : sortFieldsForPendingTab;
-
-  const [selectedSort, setSelectedSort] = useState(null);
+  const [selectedSort, setSelectedSort] = useState("name");
 
   const sortByName = useCallback(
     (array: SignUpData[]): SignUpData[] =>
@@ -441,7 +421,7 @@ const EventVolunteers = ({ eid }) => {
   const [searchString, setSearchString] = useState("");
 
   const resetSettings = () => {
-    setSelectedSort("");
+    setSelectedSort("name");
     setSearchString("");
   };
 
@@ -502,57 +482,68 @@ const EventVolunteers = ({ eid }) => {
     sortByRole,
   ]);
 
-  /** Get  table body for approved volunteers tab */
-  const getApprovedVolunteersTableBody = () =>
-    displayedApprovedSignUps.map((signUp) => {
-      const volunteer = allVolunteerData[signUp.userId];
-      return (
-        <TableRow key={signUp._id}>
-          <TableCell>
-            <b>{volunteer?.name}</b>
-          </TableCell>
-          <TableCell>{volunteer?.mobileNumber}</TableCell>
-          <TableCell>
-            {signUpIdOfRolesBeingEdited.includes(signUp._id)
-              ? getRoleSelectMenu(signUp)
-              : signUp?.acceptedRole}
-          </TableCell>
-          <TableCell>
-            {getApprovedTabButtons(signUp, volunteer?.name)}
-          </TableCell>
-        </TableRow>
-      );
-    });
+  const columns: GridColDef[] = [
+    {
+      field: "name",
+      headerName: "Name",
+      sortable: true,
+      flex: isApprovedTab ? 0.35 : 0.2,
+      valueGetter: (params: GridValueGetterParams) => {
+        const userId = params.getValue(params.id, "userId") as string;
+        const volunteer = allVolunteerData[userId];
+        return volunteer.name;
+      },
+    },
+    {
+      field: "Contact Number",
+      headerName: "Contact Number",
+      sortable: false,
+      flex: 0.25,
+      valueGetter: (params: GridValueGetterParams) => {
+        const userId = params.getValue(params.id, "userId") as string;
+        const volunteer = allVolunteerData[userId];
+        return volunteer.mobileNumber;
+      },
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      sortable: isApprovedTab,
+      flex: isApprovedTab ? 0.35 : 0.4,
+      renderCell: (params: GridCellParams) =>
+        (isApprovedTab && signUpIdOfRolesBeingEdited.includes(params.id)) ||
+        !isApprovedTab
+          ? getRoleSelectMenu(params.row as SignUpData)
+          : params.getValue(params.id, "acceptedRole"),
+    },
+  ];
 
-  /** Get  table body for pending volunteers tab */
-  const getNonApprovedSignUpsVolunteersTableBody = () =>
-    displayedNonApprovedSignUps.map((signUp) => {
-      const volunteer = allVolunteerData[signUp.userId];
-      return (
-        <TableRow key={signUp._id}>
-          <TableCell>
-            <b>{volunteer?.name}</b>
-          </TableCell>
-          <TableCell>{volunteer?.mobileNumber}</TableCell>
-          <TableCell>{getRoleSelectMenu(signUp)}</TableCell>
-          <TableCell>{getPendingTabButtons(signUp)}</TableCell>
-        </TableRow>
-      );
+  if (isApprovedTab) {
+    columns.push({
+      field: "",
+      headerName: "",
+      sortable: false,
+      flex: 0.05,
+      align: "right",
+      renderCell: (params: GridCellParams) => {
+        const userId = params.getValue(params.id, "userId") as string;
+        const volunteer = allVolunteerData[userId];
+        const signUp = params.row as SignUpData;
+        return getApprovedTabButtons(signUp, volunteer?.name);
+      },
     });
-
-  const sortMenu = (
-    <FormControl fullWidth variant="outlined" size="small" margin="dense">
-      <InputLabel>Sort By:</InputLabel>
-      <Select
-        value={selectedSort}
-        onChange={(e) => setSelectedSort(e.target.value)}
-      >
-        {sortFields.map((field) => (
-          <MenuItem value={field.value}>{field.label}</MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
+  } else {
+    columns.push({
+      field: "",
+      headerName: "",
+      sortable: false,
+      flex: 0.3,
+      renderCell: (params: GridCellParams) => {
+        const signUp = params.row as SignUpData;
+        return getPendingTabButtons(signUp);
+      },
+    });
+  }
 
   return (
     <>
@@ -562,7 +553,7 @@ const EventVolunteers = ({ eid }) => {
           <Typography variant="h1">{event?.name}</Typography>
         </Grid>
         <Grid item xs={12} md={8}>
-          <Tabs tabs={tabs} clickedOn={1} />
+          <Tabs tabs={tabs} clickedOn={isApprovedTab ? 0 : 1} />
         </Grid>
         <Grid
           item
@@ -573,46 +564,17 @@ const EventVolunteers = ({ eid }) => {
           justify="center"
           spacing={2}
         >
-          <Grid item xs={12} md={9}>
-            <SearchBar setFilterFunction={setSearchString} />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            {sortMenu}
-          </Grid>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow key={event?.name}>
-                  <TableCell width="22%">
-                    <b>Name</b>
-                  </TableCell>
-                  <TableCell width="20%">
-                    <b>Contact Number</b>
-                  </TableCell>
-                  <TableCell width="33%">
-                    <b>Role</b>
-                  </TableCell>
-                  <TableCell width="25%" />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {isApprovedTab
-                  ? getApprovedVolunteersTableBody()
-                  : getNonApprovedSignUpsVolunteersTableBody()}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[rowsPerPage]}
-            component="div"
-            count={
-              isApprovedTab ? approvedSignUps.length : nonApprovedSignUps.length
+          <Table
+            columns={columns}
+            rows={
+              isApprovedTab
+                ? displayedApprovedSignUps
+                : displayedNonApprovedSignUps
             }
-            rowsPerPage={rowsPerPage}
-            page={pageNumber}
-            onChangePage={handleChangePageNumber}
+            searchText={searchString}
+            onSearch={setSearchString}
+            selectedSort={selectedSort}
+            onSort={setSelectedSort}
           />
         </Grid>
       </Grid>

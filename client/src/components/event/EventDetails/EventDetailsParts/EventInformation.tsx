@@ -12,8 +12,9 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Typography,
 } from "@material-ui/core";
-import { EventTypography } from "@components/common/event/EventTypography";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
 type EventInformationProps = {
   event: EventData;
@@ -46,15 +47,12 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
           paddingBottom: 0,
         }}
       >
-        <EventTypography
-          fontSize="h3"
-          fontBold
-          borderBottom
-          gutterBottom
-          text="Event Information"
-        />
+        <TypographyWithUnderline fontSize="h3" fontWeight="fontWeightBold">
+          Event Information
+        </TypographyWithUnderline>
       </Grid>
       <Grid item>
+        {/* // TODO i dont think this should be a table */}
         <TableContainer className={classes.gutterBottom}>
           <Table aria-label="event information table">
             <TableBody>
@@ -92,7 +90,7 @@ const EventInformation: FC<EventInformationProps> = ({ event }) => {
         </TableContainer>
       </Grid>
       <Grid item>
-        <EventTypography text={event.description || "No event description."} />
+        <Typography>{event.description || "No event description."} </Typography>
       </Grid>
     </Grid>
   );

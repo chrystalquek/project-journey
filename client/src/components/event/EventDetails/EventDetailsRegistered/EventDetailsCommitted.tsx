@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { EventData } from "@type/event";
 import { VolunteerType, VolunteerData } from "@type/volunteer";
-import { Chip, Grid, makeStyles } from "@material-ui/core";
+import { Chip, Grid, makeStyles, Typography } from "@material-ui/core";
 import { testEventImage1 } from "@utils/constants/imagePaths";
 import EventInformation from "@components/event/EventDetails/EventDetailsParts/EventInformation";
 import VolunteerRoles from "@components/event/EventDetails/EventDetailsParts/VolunteerRoles";
@@ -13,7 +13,6 @@ import {
   COMMITTED_VOLUNTEER_TAG,
 } from "@components/event/index";
 import { FormDisabledReason } from "@components/event/helpers/EventDetails/EventDetails";
-import { EventTypography } from "@components/common/event/EventTypography";
 import { getAcceptedSignUp } from "@components/event/helpers";
 import { FormStatus } from "@type/form/form";
 import ResizedImage from "../../../common/image/ResizedImage";
@@ -49,7 +48,9 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
   return (
     <Grid container spacing={8}>
       <Grid className={classes.gutterBottom} item xs={12}>
-        <EventTypography fontSize="h1" fontBold text={event.name} />
+        <Typography variant="h1" style={{ fontWeight: "bold" }}>
+          {event.name}
+        </Typography>
       </Grid>
 
       <Grid className={classes.gutterBottom} item xs={12}>
@@ -77,25 +78,22 @@ const EventDetailsCommitted: FC<EventDetailsCommittedProps> = ({
       {user.volunteerType !== VolunteerType.ADMIN &&
         formStatus.reason === FormDisabledReason.SIGNUP_PENDING && (
           <Grid className={classes.gutterBottom} item xs={12}>
-            <EventTypography gutterBottom fontBold text="Sign-up Pending." />
-            <EventTypography gutterBottom text="Pending approval by admin." />
+            <Typography style={{ fontWeight: "bold" }}>
+              Sign-up Pending.
+            </Typography>
+            <Typography>Pending approval by admin.</Typography>
           </Grid>
         )}
       {user.volunteerType !== VolunteerType.ADMIN &&
         formStatus.reason === FormDisabledReason.SIGNUP_ACCEPTED && (
           <Grid className={classes.gutterBottom} item xs={12}>
-            <EventTypography
-              gutterBottom
-              fontBold
-              text="Successful registration!"
-            />
-            <EventTypography
-              gutterBottom
-              text={`Accepted role: ${
-                getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
-                "Error retrieving accepted role."
-              }`}
-            />
+            <Typography style={{ fontWeight: "bold" }}>
+              Successful registration!
+            </Typography>
+            <Typography>{`Accepted role: ${
+              getAcceptedSignUp(formStatus.details.acceptedSignUp) ||
+              "Error retrieving accepted role."
+            }`}</Typography>
           </Grid>
         )}
 

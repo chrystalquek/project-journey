@@ -39,7 +39,7 @@ const theme = createMuiTheme({
       secondary: "#8d9a00", // dark green // same as palette.primary.dark
     },
   },
-  spacing: [0, 4, 8, 12, 16, 20, 24, 28, 32, 48, 64], // padding & margins
+  spacing: (factor) => `${0.25 * factor}rem`, // (Bootstrap strategy)
 });
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
