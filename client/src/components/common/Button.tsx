@@ -1,8 +1,11 @@
 // IGNORE
-import { Button, makeStyles, Theme, ButtonProps } from "@material-ui/core";
+import {
+  Button as MuiButton,
+  makeStyles,
+  Theme,
+  ButtonProps,
+} from "@material-ui/core";
 import { FC } from "react";
-
-type EventButtonProps = ButtonProps;
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -16,13 +19,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const EventButton: FC<EventButtonProps> = (props) => {
+const Button: FC<ButtonProps> = (props) => {
   const classes = useStyles();
 
   const { children } = props;
   return (
-    <Button className={classes.root} {...props}>
+    <MuiButton className={classes.root} {...props}>
       {children}
-    </Button>
+    </MuiButton>
   );
 };
+
+export default Button;

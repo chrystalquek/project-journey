@@ -6,7 +6,7 @@ import {
   UpdateSignUpRequest,
 } from "@api/request";
 import apiClient from "@api/apiClient";
-import { FormState } from "@components/event/EventDetails/EventDetailsParts/EventRegisterForm";
+import { FormState } from "@components/event/EventDetails/EventRegisterForm";
 
 export const createSignUp = createAsyncThunk(
   "signUp/createSignUp",

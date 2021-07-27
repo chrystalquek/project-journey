@@ -1,30 +1,31 @@
-import React, { FC, useState } from "react";
-import { EventData, EventType } from "@type/event";
-import {
-  Box,
-  FormControl,
-  MenuItem,
-  TextField,
-  makeStyles,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { CreateSignUpRequest } from "@api/request";
+import Button from "@components/common/Button";
+import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
+import { getFormData } from "@components/event/helpers/EventDetails/EventDetails";
 import {
   FormSelectRow,
   parseRoles,
 } from "@components/event/helpers/EventDetails/EventRegisterForm";
+import {
+  Box,
+  FormControl,
+  Grid,
+  makeStyles,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { createAndAcceptSignUp, createSignUp } from "@redux/actions/signUp";
+import { useAppDispatch } from "@redux/store";
+import { EventData, EventType } from "@type/event";
+import { SignUpStatus } from "@type/signUp";
 import { VolunteerData } from "@type/volunteer";
-import { EventButton } from "@components/common/event/EventButton";
-import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
+import React, { FC, useState } from "react";
 
 type EventRegisterProps = {
   event: EventData;
   user: VolunteerData;
   isDisabled: boolean; // true when no vacancies left in event
-  formHandlers: {
-    signUpAndAccept: (uid: string, eid: string, form: FormState) => void;
-    signUpOnly: (uid: string, eid: string, form: FormState) => void;
-  };
 };
 
 export type FormState = {
@@ -51,11 +52,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventRegisterForm: FC<EventRegisterProps> = ({
-  formHandlers,
   event,
   user,
   isDisabled,
 }) => {
+  const dispatch = useAppDispatch();
   const classes = useStyles();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
@@ -69,15 +70,21 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
+
   const onFormSubmit = (e) => {
     e.preventDefault();
+    const request: CreateSignUpRequest = {
+      ...getFormData(user._id, event._id, formState),
+      status: SignUpStatus.PENDING,
+    };
+
     switch (event.eventType) {
       case EventType.VOLUNTEERING:
-        formHandlers.signUpOnly(user._id, event._id, formState);
+        dispatch(createSignUp(request));
         break;
       case EventType.HANGOUT:
       case EventType.WORKSHOP:
-        formHandlers.signUpAndAccept(user._id, event._id, formState);
+        dispatch(createAndAcceptSignUp({ request, form: formState }));
         break;
       default:
         throw new Error("You shouldn't be here!");
@@ -213,14 +220,14 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
 
           <Grid item>
             <Box margin={3} />
-            <EventButton
+            <Button
               onSubmit={onFormSubmit}
               disabled={isDisabled}
               className={classes.button}
               type="submit"
             >
               Register
-            </EventButton>
+            </Button>
           </Grid>
         </Grid>
       </form>

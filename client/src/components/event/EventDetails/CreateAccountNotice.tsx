@@ -1,10 +1,15 @@
-import React, { FC } from "react";
-import { Box, Button, makeStyles, Typography } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@utils/constants/routes";
-import PersonIcon from "@material-ui/icons/Person";
-import { EventButton } from "@components/common/event/EventButton";
+import Button from "@components/common/Button";
 import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
+import {
+  Box,
+  Button as MuiButton,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
+import PersonIcon from "@material-ui/icons/Person";
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@utils/constants/routes";
+import { useRouter } from "next/router";
+import React, { FC } from "react";
 
 type CreateAccountNoticeProps = {
   // nothing yet
@@ -36,11 +41,11 @@ const CreateAccountNotice: FC<CreateAccountNoticeProps> = () => {
         It takes less than 2mins to create one
       </Typography>
       <Box margin={3}>
-        <EventButton disableRipple onClick={() => router.push(SIGNUP_ROUTE)}>
+        <Button disableRipple onClick={() => router.push(SIGNUP_ROUTE)}>
           Sign up
-        </EventButton>
+        </Button>
         <Typography display="inline"> or </Typography>
-        <Button onClick={() => router.push(LOGIN_ROUTE)}>Login</Button>
+        <MuiButton onClick={() => router.push(LOGIN_ROUTE)}>Login</MuiButton>
       </Box>
     </>
   );

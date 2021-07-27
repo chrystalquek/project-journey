@@ -1,8 +1,14 @@
-import { Button, IconButton, Modal, Typography } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import {
+  Button as MuiButton,
+  IconButton,
+  makeStyles,
+  Modal,
+  Typography,
+  useTheme,
+} from "@material-ui/core";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { testEventImage1 } from "@utils/constants/imagePaths";
-import { EventButton } from "@components/common/event/EventButton";
+import Button from "@components/common/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
@@ -163,9 +169,9 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
       case "prompt":
         return (
           <div className={classes.root}>
-            <Button className={classes.closeButton} onClick={onClose}>
+            <MuiButton className={classes.closeButton} onClick={onClose}>
               <CloseIcon />
-            </Button>
+            </MuiButton>
             <div className={classes.title}>
               <Typography variant="h2" style={{ fontWeight: "bold" }}>
                 {title}
@@ -198,13 +204,13 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
               >
                 How was the event?
               </Typography>
-              <EventButton
+              <Button
                 onClick={navigateToFeedback}
                 className={classes.feedbackButton}
                 type="submit"
               >
                 Submit Feedback
-              </EventButton>
+              </Button>
             </div>
           </div>
         );
@@ -260,12 +266,9 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
                 </Typography>
               </div>
               <div>
-                <EventButton
-                  onClick={onClose}
-                  className={classes.feedbackButton}
-                >
+                <Button onClick={onClose} className={classes.feedbackButton}>
                   Back Home
-                </EventButton>
+                </Button>
               </div>
             </div>
           </div>

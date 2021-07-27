@@ -1,10 +1,10 @@
-import { EventButton } from "@components/common/event/EventButton";
+import Button from "@components/common/Button";
 import SearchBar from "@components/common/SearchBar";
 import EventsFilter from "@components/event/EventsFilter";
 import { withFilters } from "@components/event/helpers/EventsPageBody";
 import { CREATE_EVENT_FORM_ROUTE } from "@constants/routes";
 import {
-  Button,
+  Button as MuiButton,
   Drawer,
   Grid,
   makeStyles,
@@ -83,12 +83,12 @@ const EventsPageBody = ({ type, events, user }: Props) => {
           {/* Create New Event Button */}
           {user && user.volunteerType === VolunteerType.ADMIN && (
             <Grid item container justify="center" xs={12} md={3}>
-              <EventButton
+              <Button
                 disableRipple
                 onClick={() => router.push(CREATE_EVENT_FORM_ROUTE)}
               >
                 Create new event
-              </EventButton>
+              </Button>
             </Grid>
           )}
         </Grid>
@@ -107,12 +107,12 @@ const EventsPageBody = ({ type, events, user }: Props) => {
           {/* Filter Button (mobile) */}
           {isMobile && (
             <Grid item>
-              <Button
+              <MuiButton
                 className={classes.filterResultsBtn}
                 onClick={onPressMobileFilterButton}
               >
                 Filter Results
-              </Button>
+              </MuiButton>
             </Grid>
           )}
         </Grid>

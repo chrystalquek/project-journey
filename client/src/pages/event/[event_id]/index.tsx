@@ -1,4 +1,5 @@
-import { EventDetails } from "@components/event/EventDetails";
+import Head from "@components/common/Header";
+import EventDetails from "@components/event/EventDetails";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -9,6 +10,7 @@ const EventsDetailPage = () => {
 
   return (
     <>
+      <Head title="Event Details" />
       <EventDetails eid={eventId} />
     </>
   );

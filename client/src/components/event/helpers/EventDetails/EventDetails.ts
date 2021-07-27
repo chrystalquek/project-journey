@@ -1,7 +1,7 @@
 import { EventData } from "@type/event";
 import dayjs from "dayjs";
 import { getEventVacancies } from "@components/event/helpers/EventsPageBody";
-import { FormState } from "@components/event/EventDetails/EventDetailsParts/EventRegisterForm";
+import { FormState } from "@components/event/EventDetails/EventRegisterForm";
 import { CreateSignUpRequest } from "@api/request";
 
 export type TableData = {

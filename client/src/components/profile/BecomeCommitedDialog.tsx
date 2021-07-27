@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BecomeCommited: FC = () => {
+const BecomeCommitedDialog: FC = () => {
   const user = useAppSelector((state) => state.user);
   const userData = user.user;
   const dispatch = useAppDispatch();
@@ -106,4 +106,4 @@ const BecomeCommited: FC = () => {
   );
 };
 
-export default BecomeCommited;
+export default BecomeCommitedDialog;
