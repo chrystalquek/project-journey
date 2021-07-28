@@ -257,6 +257,20 @@ const sessionPreference = body(
   "Session preference must be a string"
 ).isString();
 
+// Photo URL
+const photoUrl = body("photoUrl")
+  .exists()
+  .withMessage("Photo URL is required")
+  .isString()
+  .withMessage("Photo URL must be a string")
+
+// hasCriminalRecord
+const hasCriminalRecord = body("hasCriminalRecord")
+  .exists()
+  .withMessage("hasCriminalRecord is required")
+  .isBoolean()
+  .withMessage("hasCriminalRecord must be a boolean value");
+
 // Submitted Commitment Application
 
 const getValidations = (method: VolunteerValidatorMethod) => {
@@ -320,6 +334,10 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         emergencyContactName,
         emergencyContactNumber,
         emergencyContactRelationship,
+        // Photo URL
+        photoUrl,
+        // Criminal Record
+        hasCriminalRecord,
       ];
     }
 

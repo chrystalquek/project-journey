@@ -31,7 +31,7 @@ const roleCapacityValidator = (roles: Array<RoleData>) => {
 const isRoleData = (value: any): value is RoleData =>
   (value as RoleData).name !== undefined;
 
-function isArrayOfRoleData(value: Array<any>): boolean {
+const isArrayOfRoleData(value: Array<any>): boolean {
   return value.every((item) => isRoleData(item));
 }
 
