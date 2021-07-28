@@ -100,7 +100,7 @@ const getAllVolunteers = async (
     name ? { name: { $regex: `.*${name}.*`, $options: "xis" } } : {}
   )
     .find({ volunteerType: { $in: volunteerType ?? VOLUNTEER_TYPE } })
-    .sort({ [sort ?? ""]: 1 })
+    .sort(sort ? { [sort]: 1 } : {})
     .skip(skip ?? 0)
     .limit(limit ?? 0)
     .lean()
