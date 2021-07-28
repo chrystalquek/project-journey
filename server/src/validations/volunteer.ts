@@ -247,19 +247,7 @@ const volunteerRemarks = body(
   "Volunteer remarks must be a string"
 ).isString();
 
-// Event count
-const volunteeringSessionsCount = body(
-  "volunteeringSessionsCount",
-  "Volunteering sessions count must be an integer"
-).isInt({ min: 0 });
-const workshopsCount = body(
-  "workshopsCount",
-  "Workshop count must be an integer"
-).isInt({ min: 0 });
-const hangoutsCount = body(
-  "hangoutsCount",
-  "Hang outs count must be an integer"
-).isInt({ min: 0 });
+// Session related
 const sessionsPerMonth = body(
   "sessionsPerMonth",
   "Sessions per month must be an integer"
@@ -318,10 +306,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         volunteerType,
         volunteerReason, // Categorize answers
         volunteerContribution.optional(),
-        // Event count
-        volunteeringSessionsCount,
-        workshopsCount,
-        hangoutsCount,
+        // Session related
         sessionsPerMonth,
         sessionPreference,
         // Medical Information
