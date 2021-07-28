@@ -78,10 +78,6 @@ const deadline = body("deadline")
   .withMessage("Deadline is required")
   .isISO8601()
   .withMessage("Deadline is of wrong date format");
-const createdAt = body(
-  "createdAt",
-  "Time of creation is of wrong date format"
-).isISO8601();
 
 // Numeric fields
 const vacancies = body("vacancies")
@@ -157,7 +153,6 @@ const getValidations = (method: EventValidatorMethod) => {
         description,
         location,
         isCancelled,
-        createdAt,
 
         // Optional fields
         coverImage.optional(),
@@ -184,7 +179,6 @@ const getValidations = (method: EventValidatorMethod) => {
         description.optional(),
         location.optional(),
         isCancelled.optional(),
-        createdAt.optional(),
 
         // Optional fields
         coverImage.optional(),
