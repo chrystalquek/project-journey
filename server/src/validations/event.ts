@@ -6,7 +6,7 @@ import {
   RoleData,
 } from "../models/Event";
 import { VOLUNTEER_TYPE } from "../models/Volunteer";
-import { stringEnumValidator } from "./global";
+import { stringEnumValidator,stringArrayValidator } from "./global";
 
 type EventValidatorMethod =
   | "createEvent"
@@ -28,12 +28,17 @@ const roleCapacityValidator = (roles: Array<RoleData>) => {
 };
 
 // check if the data is of custom type RoleData
-const isRoleData = (value: any): value is RoleData =>
-  (value as RoleData).name !== undefined;
-
-function isArrayOfRoleData(value: Array<any>): boolean {
-  return value.every((item) => isRoleData(item));
+function isRoleData(value: any) : value is RoleData {
+  const r: RoleData = value
+  return typeof r.name === "string"
+      && typeof r.description === "string"
+      && typeof r.capacity === "number"
+      && stringArrayValidator(r.volunteers)
 }
+
+const isArrayOfRoleData = (value: Array<any>) => {
+  value.every((item) => isRoleData(item));
+};
 
 // Define validation for each field
 // Enum fields
