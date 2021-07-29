@@ -36,7 +36,7 @@ router.post(
 // @route   GET /volunteer/:id
 // @desc    For volunteer and admin to get volunteer
 router.get(
-  "/id/:id",
+  "/:id",
   authorize([]),
   validate(getValidations("getVolunteerById")),
   volunteerController.getVolunteerDetailsById
@@ -54,7 +54,7 @@ router.get(
 // @route   DELETE /volunteer/:id
 // @desc    For admin to delete volunteer
 router.delete(
-  "/",
+  "/:id",
   validate(getValidations("deleteVolunteer")),
   volunteerController.deleteVolunteer
 );
