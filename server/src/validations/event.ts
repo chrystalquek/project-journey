@@ -49,11 +49,6 @@ const eventType = body("eventType")
   .withMessage("Event type is required")
   .custom((type: string) => stringEnumValidator(EVENT_TYPE, "Event Type", type))
   .withMessage("Event type is invalid");
-const contentType = body("contentType")
-  .custom((type: string) =>
-    stringEnumValidator(CONTENT_TYPE, "Content type", type)
-  )
-  .withMessage("Content Type is invalid");
 const eventSearchType = param("eventType")
   .custom((type: string) =>
     stringEnumValidator(EVENT_SEARCH_TYPE, "Event Search Type", type)

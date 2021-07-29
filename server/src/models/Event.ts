@@ -15,8 +15,6 @@ export type RoleData = {
   volunteers: string[];
 };
 
-export const CONTENT_TYPE = ["pdf", "video", "image", "links", "document"];
-
 export const EVENT_SEARCH_TYPE = ["all", "upcoming", "past"] as const;
 export type EventSearchType = typeof EVENT_SEARCH_TYPE[number];
 
