@@ -65,7 +65,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
             onOpen={() => setIsCalendarOpen(true)}
             onChange={(date) => handleDateChange(date)}
             minDate={dayjs(new Date())}
-            format="DD/MM/YYYY"
+            format="dd/MM/yyyy"
             inputVariant="outlined"
             margin="dense"
             placeholder="dd/MM/yyyy"
