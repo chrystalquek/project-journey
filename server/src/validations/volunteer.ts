@@ -32,11 +32,6 @@ type VolunteerValidatorMethod =
  */
 // Personal information
 // Compulsory
-const userId = body("userId")
-  .exists()
-  .withMessage("User ID is required")
-  .isString()
-  .withMessage("User ID must be a string");
 const name = body("name")
   .exists()
   .withMessage("Name is required")
@@ -281,7 +276,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         newEmailValidator,
         passwordValidator,
         // Personal details
-        userId,
         name,
         gender,
         mobileNumber,

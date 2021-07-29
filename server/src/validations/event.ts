@@ -60,7 +60,7 @@ const startDate = body("startDate")
   .exists()
   .withMessage("Start date is required")
   .custom((value, { req }) => value <= req.body.endDate)
-  .withMessage("Start date must be after end date")
+  .withMessage("Start date must be before end date")
   .isISO8601()
   .withMessage("Start date is of wrong date format");
 const endDate = body("endDate")
@@ -73,13 +73,6 @@ const deadline = body("deadline")
   .withMessage("Deadline is required")
   .isISO8601()
   .withMessage("Deadline is of wrong date format");
-
-// Numeric fields
-const vacancies = body("vacancies")
-  .exists()
-  .withMessage("Vacancy is required")
-  .isNumeric()
-  .withMessage("Vacancy must be a numeric value");
 
 // String fields
 const name = body("name")
@@ -198,7 +191,7 @@ const getValidations = (method: EventValidatorMethod) => {
       return [
         eventSearchType,
         query("pageNo").isString().withMessage("Page no must be a string"),
-        query("size").isString().withMessage("Page no must be a string"),
+        query("size").isString().withMessage("Size must be a string"),
       ];
     }
 
