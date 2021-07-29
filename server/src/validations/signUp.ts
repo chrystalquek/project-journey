@@ -26,6 +26,8 @@ const status = body("status")
     stringEnumValidator(SIGN_UP_STATUS, "Sign Up Status", s)
   )
   .withMessage("Status is invalid");
+const acceptedRole = body("status", "Accepted role must be a string")
+  .isString();
 const preferences = body("preferences")
   .exists()
   .withMessage("Preferences are required")
@@ -49,13 +51,14 @@ const idType = param("idType")
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
     case "createSignUp": {
-      return [eventId, userId, status, preferences, isRestricted];
+      return [eventId, userId, status, acceptedRole, preferences, isRestricted];
     }
     case "updateSignUp": {
       return [
         eventId.optional(),
         userId.optional(),
         status.optional(),
+        acceptedRole.optional(),
         preferences.optional(),
         isRestricted.optional(),
       ];
