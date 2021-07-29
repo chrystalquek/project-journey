@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FC, ChangeEvent } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { IconButton, Typography } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
@@ -7,87 +7,93 @@ import ClearIcon from "@material-ui/icons/Clear";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
     boxShadow: "none",
-    border: "1px dashed #545454", // grey
+    border: `thin dashed ${theme.palette.action.disabled}`,
+
     height: "100%",
     width: "100%",
   },
-  icon: {
-    color: "#D8D8D8", // grey
+  content: {
+    display: "flex",
+    flexWrap: "wrap",
   },
-  child: {
-    height: "100%",
+  // Used when there is no image.
+  addPhotoIcon: {
+    flex: "0 0 100%",
+    color: theme.palette.action.active,
   },
-  overlay: {
-    position: "absolute",
-    top: "0",
-    right: "0",
+  instructionText: {
+    flex: "0 0 100%",
+    color: theme.palette.action.active,
   },
-  container: {
-    height: "100%",
-    width: "100%",
+  // Used when there is image.
+  overlayContainer: {
     position: "relative",
+    height: "100%",
+    weight: "100%",
+  },
+  image: {
+    height: "100%",
+    width: "100%",
+    objectFit: "contain",
+  },
+  imageContainer: {
+    height: "100%",
   },
   clearIcon: {
     color: theme.palette.primary.main,
   },
-  overlayIcon: {
+  clearIconOverlay: {
     position: "absolute",
-    left: "50%",
-    top: "43%",
-    transform: "translate(-50%, -50%)",
-  },
-  overlayText: {
-    position: "absolute",
-    left: "50%",
-    top: "58%",
-    transform: "translate(-50%, -50%)",
-    color: "#D8D8D8", // grey
+    top: "0",
+    right: "0",
   },
 }));
 
-const DropZoneCard = ({ id, initialUrl, isBig, onChangeImage }) => {
-  const classes = useStyles();
-  const [imageUrl, setImageUrl] = useState(initialUrl);
+type DropZoneCardProps = {
+  id: string;
+  initialUrl: string;
+  onChangeImage: (e: ChangeEvent) => string | null;
+};
 
-  const handleChange = (e) => {
+const DropZoneCard: FC<DropZoneCardProps> = ({
+  id,
+  initialUrl,
+  onChangeImage,
+}) => {
+  const classes = useStyles();
+  const [imageUrl, setImageUrl] = useState<string | null>(initialUrl);
+
+  const handleChange = (e: ChangeEvent) => {
     const newImageUrl = onChangeImage(e);
     setImageUrl(newImageUrl);
   };
-
   return (
     <>
       <label htmlFor={id}>
         <div className={classes.root}>
           {!imageUrl ? (
-            <div className={classes.container}>
-              <div className={classes.overlayIcon}>
-                <AddAPhotoIcon className={classes.icon} />
-              </div>
-              <div className={classes.overlayText}>
-                <Typography variant="subtitle1" align="center">
-                  Browse file to
-                  <br />
-                  add
-                  {isBig ? " cover " : " "}
-                  image
-                </Typography>
-              </div>
+            <div className={classes.content}>
+              <AddAPhotoIcon className={classes.addPhotoIcon} />
+              <Typography
+                variant="subtitle1"
+                align="center"
+                className={classes.instructionText}
+              >
+                Browse file to
+                <br />
+                add image
+              </Typography>
             </div>
           ) : (
-            <div className={classes.container}>
-              <div className={classes.child}>
-                <img
-                  src={imageUrl}
-                  alt={imageUrl}
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    objectFit: "contain",
-                  }}
-                />
+            <div className={classes.overlayContainer}>
+              <div className={classes.imageContainer}>
+                <img src={imageUrl} alt={imageUrl} className={classes.image} />
               </div>
-              <div className={classes.overlay}>
+              <div className={classes.clearIconOverlay}>
                 <IconButton
                   onClick={() => setImageUrl(null)}
                   className={classes.clearIcon}

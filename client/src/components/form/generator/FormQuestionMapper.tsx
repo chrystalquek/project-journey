@@ -120,7 +120,7 @@ const FormQuestionMapper: FC<FormQuestionMapperProps> = ({
         </Field>
       );
     case "image":
-      return <ImageField name={name} isBig={false} />;
+      return <ImageField name={name} />;
     case "number":
       return (
         <Field

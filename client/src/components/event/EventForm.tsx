@@ -391,7 +391,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               <DropZoneCard
                 id="coverImage"
                 initialUrl={eventForm?.coverImage}
-                isBig
                 onChangeImage={(e) => onChangeImage(e, "coverImage")}
               />
             </div>
@@ -476,7 +475,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 }}
                 onChange={(date) => setFieldValue("startDate", date)}
                 disablePast
-                format="DD/MM/YYYY HH:mm"
+                format="dd/MM/yyyy HH:mm"
                 helperText={errors.startDate}
                 error={touched.startDate && Boolean(errors.startDate)}
               />
@@ -502,7 +501,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 }}
                 onChange={(date) => setFieldValue("endDate", date)}
                 disablePast
-                format="DD/MM/YYYY HH:mm"
+                format="dd/MM/yyyy HH:mm"
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
                 minDate={startDate}
@@ -535,7 +534,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 }}
                 onChange={(date) => setFieldValue("deadline", date)}
                 disablePast
-                format="DD/MM/YYYY HH:mm"
+                format="dd/MM/yyyy HH:mm"
                 helperText={errors.deadline}
                 error={touched.deadline && Boolean(errors.deadline)}
               />
@@ -624,7 +623,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   <DropZoneCard
                     id="facilitatorPhoto"
                     initialUrl={eventForm?.facilitatorPhoto}
-                    isBig={false}
                     onChangeImage={(e) => onChangeImage(e, "facilitatorPhoto")}
                   />
                 </div>

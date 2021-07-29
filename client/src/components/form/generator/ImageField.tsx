@@ -7,15 +7,9 @@ type ImageFieldProps = {
   width?: string | number;
   height?: string | number;
   name: string;
-  isBig?: boolean;
 };
 
-const ImageField = ({
-  width,
-  height,
-  name,
-  isBig = false,
-}: ImageFieldProps) => {
+const ImageField = ({ width, height, name }: ImageFieldProps) => {
   const [, meta, helpers] = useField(name);
 
   const { error, touched } = meta;
@@ -37,7 +31,6 @@ const ImageField = ({
         <DropZoneCard
           id={name}
           initialUrl={null}
-          isBig={Boolean(isBig)}
           onChangeImage={onChangeImage}
         />
       </div>
@@ -49,7 +42,6 @@ const ImageField = ({
 ImageField.defaultProps = {
   width: "100%",
   height: "200px",
-  isBig: false,
 };
 
 export default ImageField;
