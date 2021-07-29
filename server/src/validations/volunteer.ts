@@ -21,7 +21,6 @@ import {
 type VolunteerValidatorMethod =
   | "createVolunteer"
   | "getAllVolunteers"
-  | "getVolunteerByEmail"
   | "getVolunteerById"
   | "getVolunteersById"
   | "deleteVolunteer"
@@ -335,10 +334,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         hasCriminalRecord,
       ];
     }
-
-    case "getVolunteerByEmail": {
-      return [param("email").isEmail()];
-    }
     case "getVolunteerById": {
       return [id];
     }
@@ -364,7 +359,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       ];
     }
     case "deleteVolunteer": {
-      return [body("email").exists().isEmail()];
+      return [id];
     }
     case "updateVolunteer": {
       return [
