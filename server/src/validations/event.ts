@@ -120,9 +120,6 @@ const contentUrl = body("contentUrl")
   .withMessage("Content URL is invalid");
 
 // Boolean fields
-const feedbackStatus = body("feedbackStatus")
-  .isBoolean()
-  .withMessage("Feedback status must be a boolean value");
 const isCancelled = body("isCancelled")
   .isBoolean()
   .withMessage("IsCancelled must be a boolean value");
@@ -145,7 +142,6 @@ const getValidations = (method: EventValidatorMethod) => {
         facilitatorDescription.optional(),
         facilitatorPhoto.optional(),
         contentUrl.optional(),
-        feedbackStatus.optional(),
 
         // Enum validator
         eventType,
@@ -169,8 +165,6 @@ const getValidations = (method: EventValidatorMethod) => {
         facilitatorDescription.optional(),
         facilitatorPhoto.optional(),
         contentUrl.optional(),
-        contentType.optional(),
-        feedbackStatus.optional(),
 
         // Enum validator
         eventType.optional(),
@@ -185,8 +179,8 @@ const getValidations = (method: EventValidatorMethod) => {
     case "readEvents": {
       return [
         eventSearchType,
-        query("pageNo").isString().withMessage("Page no must be a string"),
-        query("size").isString().withMessage("Size must be a string"),
+        query("pageNo").isInt({min:0}).withMessage("Page number must be a non-negative integer").isString().withMessage("Page number must be a string"),
+        query("size").isInt({min:0}).withMessage("Size must be a non-negative integer").isString().withMessage("Size must be a string"),
       ];
     }
 
