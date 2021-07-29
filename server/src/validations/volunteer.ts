@@ -6,6 +6,7 @@ import {
   regexValidator,
   stringEnumValidator,
   stringArrayValidator,
+  id
 } from "./global";
 import {
   CITIZENSHIP,
@@ -339,7 +340,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       return [param("email").isEmail()];
     }
     case "getVolunteerById": {
-      return [param("id").isString()];
+      return [id];
     }
     case "getVolunteersById": {
       return [

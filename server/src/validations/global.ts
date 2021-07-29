@@ -1,4 +1,4 @@
-import { body, ValidationChain, validationResult } from "express-validator";
+import { body, param,ValidationChain, validationResult } from "express-validator";
 import { Request, Response } from "express";
 import _ from "lodash";
 import { doesUserEmailExist } from "../services/volunteer";
@@ -86,3 +86,6 @@ export const newEmailValidator = body("email")
     }
     return true;
   });
+  
+  // for all read single, update, delete requests
+  export const id = param("id").isString().withMessage("id must be a string");

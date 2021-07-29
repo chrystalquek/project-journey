@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import { SIGN_UP_ID_TYPE, SIGN_UP_STATUS } from "../models/SignUp";
-import { stringEnumValidator, stringArrayValidator } from "./global";
+import { stringEnumValidator, stringArrayValidator, id } from "./global";
 
 export type SignUpValidatorMethod =
   | "createSignUp"
@@ -38,11 +38,6 @@ const isRestricted = body("isRestricted")
   .withMessage("Is restricted is required")
   .isBoolean()
   .withMessage("Is restricted must be a boolean value");
-const id = param("id")
-  .exists()
-  .withMessage("ID is required")
-  .isString()
-  .withMessage("Id must be a string");
 const idType = param("idType")
   .exists()
   .withMessage("ID type is required")

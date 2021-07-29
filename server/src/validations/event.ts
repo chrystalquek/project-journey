@@ -2,11 +2,10 @@ import { body, query, param } from "express-validator";
 import {
   EVENT_SEARCH_TYPE,
   EVENT_TYPE,
-  CONTENT_TYPE,
   RoleData,
 } from "../models/Event";
 import { VOLUNTEER_TYPE } from "../models/Volunteer";
-import { stringEnumValidator } from "./global";
+import { stringEnumValidator, id } from "./global";
 
 type EventValidatorMethod =
   | "createEvent"
@@ -103,7 +102,6 @@ const location = body("location")
   .withMessage("Location is required")
   .isString()
   .withMessage("Location must be a string");
-const id = param("id").isString().withMessage("id must be a string");
 
 // Array fields
 const roles = body("roles")
@@ -137,7 +135,6 @@ const getValidations = (method: EventValidatorMethod) => {
         startDate,
         endDate,
         deadline,
-        vacancies,
         description,
         location,
         isCancelled,
@@ -148,7 +145,6 @@ const getValidations = (method: EventValidatorMethod) => {
         facilitatorDescription.optional(),
         facilitatorPhoto.optional(),
         contentUrl.optional(),
-        contentType.optional(),
         feedbackStatus.optional(),
 
         // Enum validator
@@ -163,7 +159,6 @@ const getValidations = (method: EventValidatorMethod) => {
         startDate.optional(),
         endDate.optional(),
         deadline.optional(),
-        vacancies.optional(),
         description.optional(),
         location.optional(),
         isCancelled.optional(),
