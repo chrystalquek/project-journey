@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 
+
 body,
 body *:not(html):not(style):not(br):not(tr):not(code) {
   box-sizing: border-box;
@@ -34,6 +35,8 @@ a {
   text-decoration: none;
 }
 
+
+
 /* Typography */
 
 h1 {
@@ -58,6 +61,7 @@ p {
   margin-top: 0;
 }
 
+
 img {
   max-width: 100%;
 }
@@ -80,7 +84,7 @@ c {
 .signature {
   font-family: "Pacifico", cursive;
   font-weight: 400;
-  text-align: center;
+  text-align: center
 }
 
 /* Layout */
@@ -107,13 +111,14 @@ c {
 /* Header */
 
 .header {
-  padding: 35px 30px 0 30px;
+  padding: 35px 30px 0 30px ;
   text-align: left;
   color: #111122;
   font-weight: 600;
   font-size: 26px;
   text-decoration: none;
 }
+
 
 .header h1 div {
   display: inline-block;
