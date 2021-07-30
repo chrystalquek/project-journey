@@ -1,7 +1,7 @@
 import { body, query, param } from "express-validator";
 import { EVENT_SEARCH_TYPE, EVENT_TYPE, RoleData } from "../models/Event";
 import { VOLUNTEER_TYPE } from "../models/Volunteer";
-import { stringEnumValidator, stringArrayValidator, id } from "./global";
+import { stringEnumValidator, stringArrayValidator, idInParam } from "./global";
 
 type EventValidatorMethod =
   | "createEvent"
@@ -173,7 +173,7 @@ const getValidations = (method: EventValidatorMethod) => {
       ];
     }
     case "readEvent": {
-      return [id];
+      return [idInParam];
     }
 
     case "readEvents": {
@@ -200,11 +200,11 @@ const getValidations = (method: EventValidatorMethod) => {
     }
 
     case "cancelEvent": {
-      return [id];
+      return [idInParam];
     }
 
     case "deleteEvent": {
-      return [id];
+      return [idInParam];
     }
     default: {
       return [];

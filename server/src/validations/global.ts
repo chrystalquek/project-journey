@@ -93,4 +93,4 @@ export const newEmailValidator = body("email")
   });
 
 // for all read single, update, delete requests
-export const id = param("id").isString().withMessage("id must be a string");
+export const idInParam = param("id").isString().withMessage("id must be a string");

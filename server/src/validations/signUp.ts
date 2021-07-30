@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import { SIGN_UP_ID_TYPE, SIGN_UP_STATUS } from "../models/SignUp";
-import { stringEnumValidator, stringArrayValidator, id } from "./global";
+import { stringEnumValidator, stringArrayValidator, idInParam } from "./global";
 
 export type SignUpValidatorMethod =
   | "createSignUp"
@@ -66,10 +66,10 @@ const getValidations = (method: SignUpValidatorMethod) => {
       ];
     }
     case "getSignUps": {
-      return [id, idType];
+      return [idInParam, idType];
     }
     case "deleteSignUp": {
-      return [id, idType];
+      return [idInParam, idType];
     }
     default: {
       return [];

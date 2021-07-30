@@ -5,7 +5,7 @@ import {
   regexValidator,
   stringEnumValidator,
   stringArrayValidator,
-  id,
+  idInParam,
 } from "./global";
 import {
   CITIZENSHIP,
@@ -335,7 +335,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       ];
     }
     case "getVolunteerById": {
-      return [id];
+      return [idInParam];
     }
     case "getVolunteersById": {
       return [
@@ -359,12 +359,12 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       ];
     }
     case "deleteVolunteer": {
-      return [id];
+      return [idInParam];
     }
     case "updateVolunteer": {
       return [
         // check id in request param
-        id,
+        idInParam,
         // update email address
         newEmailValidator.optional(),
         // update password
