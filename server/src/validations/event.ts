@@ -1,11 +1,7 @@
 import { body, query, param } from "express-validator";
-import {
-  EVENT_SEARCH_TYPE,
-  EVENT_TYPE,
-  RoleData,
-} from "../models/Event";
+import { EVENT_SEARCH_TYPE, EVENT_TYPE, RoleData } from "../models/Event";
 import { VOLUNTEER_TYPE } from "../models/Volunteer";
-import { stringEnumValidator,stringArrayValidator,id } from "./global";
+import { stringEnumValidator, stringArrayValidator, id } from "./global";
 
 type EventValidatorMethod =
   | "createEvent"
@@ -28,12 +24,14 @@ const roleCapacityValidator = (roles: Array<RoleData>) => {
 
 // check if the data is of custom type RoleData
 
-function isRoleData(value: any) : value is RoleData {
-  const r: RoleData = value
-  return typeof r.name === "string"
-      && typeof r.description === "string"
-      && typeof r.capacity === "number"
-      && stringArrayValidator(r.volunteers)
+function isRoleData(value: any): value is RoleData {
+  const r: RoleData = value;
+  return (
+    typeof r.name === "string" &&
+    typeof r.description === "string" &&
+    typeof r.capacity === "number" &&
+    stringArrayValidator(r.volunteers)
+  );
 }
 
 const isArrayOfRoleData = (value: Array<any>) => {
@@ -185,8 +183,16 @@ const getValidations = (method: EventValidatorMethod) => {
     case "readEvents": {
       return [
         eventSearchType,
-        query("pageNo").isInt({min:0}).withMessage("Page number must be a non-negative integer").isString().withMessage("Page number must be a string"),
-        query("size").isInt({min:0}).withMessage("Size must be a non-negative integer").isString().withMessage("Size must be a string"),
+        query("pageNo")
+          .isInt({ min: 0 })
+          .withMessage("Page number must be a non-negative integer")
+          .isString()
+          .withMessage("Page number must be a string"),
+        query("size")
+          .isInt({ min: 0 })
+          .withMessage("Size must be a non-negative integer")
+          .isString()
+          .withMessage("Size must be a string"),
       ];
     }
 

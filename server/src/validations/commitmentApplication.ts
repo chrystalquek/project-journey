@@ -23,7 +23,6 @@ const status = body("status")
   )
   .withMessage("Status is not valid");
 
-
 export const getValidations = (
   method: CommitmentApplicationValidatorMethod
 ): ValidationChain[] => {

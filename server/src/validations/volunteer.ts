@@ -6,7 +6,7 @@ import {
   regexValidator,
   stringEnumValidator,
   stringArrayValidator,
-  id
+  id,
 } from "./global";
 import {
   CITIZENSHIP,
@@ -257,7 +257,7 @@ const photoUrl = body("photoUrl")
   .exists()
   .withMessage("Photo URL is required")
   .isString()
-  .withMessage("Photo URL must be a string")
+  .withMessage("Photo URL must be a string");
 
 // hasCriminalRecord
 const hasCriminalRecord = body("hasCriminalRecord")

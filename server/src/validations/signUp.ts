@@ -26,8 +26,10 @@ const status = body("status")
     stringEnumValidator(SIGN_UP_STATUS, "Sign Up Status", s)
   )
   .withMessage("Status is invalid");
-const acceptedRole = body("status", "Accepted role must be a string")
-  .isString();
+const acceptedRole = body(
+  "status",
+  "Accepted role must be a string"
+).isString();
 const preferences = body("preferences")
   .exists()
   .withMessage("Preferences are required")
