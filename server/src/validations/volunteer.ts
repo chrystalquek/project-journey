@@ -1,7 +1,6 @@
-import { body, param, query } from "express-validator";
+import { body, query } from "express-validator";
 import {
   newEmailValidator,
-  existingEmailValidator,
   passwordValidator,
   regexValidator,
   stringEnumValidator,
@@ -309,7 +308,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         // External volunteering
         hasVolunteeredExternally,
         volunteeringExperience.optional(),
-
         // Other volunteering related
         volunteerType,
         volunteerReason, // Categorize answers
@@ -332,6 +330,8 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         photoUrl,
         // Criminal Record
         hasCriminalRecord,
+        // Remark
+        volunteerRemarks.optional(),
       ];
     }
     case "getVolunteerById": {
@@ -425,6 +425,8 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         photoUrl.optional(),
         // Criminal Record
         hasCriminalRecord.optional(),
+        // Remark
+        volunteerRemarks.optional(),
       ];
     }
     default:
