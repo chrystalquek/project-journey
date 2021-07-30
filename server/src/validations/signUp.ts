@@ -38,10 +38,6 @@ const isRestricted = body("isRestricted")
   .withMessage("Is restricted is required")
   .isBoolean()
   .withMessage("Is restricted must be a boolean value");
-const createdAt = body(
-  "createdAt",
-  "Time of creation is of wrong date format"
-).isISO8601();
 const id = param("id")
   .exists()
   .withMessage("ID is required")
@@ -58,7 +54,7 @@ const idType = param("idType")
 const getValidations = (method: SignUpValidatorMethod) => {
   switch (method) {
     case "createSignUp": {
-      return [eventId, userId, status, preferences, isRestricted, createdAt];
+      return [eventId, userId, status, preferences, isRestricted];
     }
     case "updateSignUp": {
       return [
@@ -67,7 +63,6 @@ const getValidations = (method: SignUpValidatorMethod) => {
         status.optional(),
         preferences.optional(),
         isRestricted.optional(),
-        createdAt.optional(),
       ];
     }
     case "getSignUps": {

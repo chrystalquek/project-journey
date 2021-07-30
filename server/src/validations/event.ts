@@ -28,13 +28,13 @@ const roleCapacityValidator = (roles: Array<RoleData>) => {
 };
 
 // check if the data is of custom type RoleData
+
 function isRoleData(value: any) : value is RoleData {
   const r: RoleData = value
   return typeof r.name === "string"
       && typeof r.description === "string"
       && typeof r.capacity === "number"
       && stringArrayValidator(r.volunteers)
-}
 
 const isArrayOfRoleData = (value: Array<any>) => {
   value.every((item) => isRoleData(item));
@@ -83,10 +83,6 @@ const deadline = body("deadline")
   .withMessage("Deadline is required")
   .isISO8601()
   .withMessage("Deadline is of wrong date format");
-const createdAt = body(
-  "createdAt",
-  "Time of creation is of wrong date format"
-).isISO8601();
 
 // Numeric fields
 const vacancies = body("vacancies")
@@ -162,7 +158,6 @@ const getValidations = (method: EventValidatorMethod) => {
         description,
         location,
         isCancelled,
-        createdAt,
 
         // Optional fields
         coverImage.optional(),
@@ -189,7 +184,6 @@ const getValidations = (method: EventValidatorMethod) => {
         description.optional(),
         location.optional(),
         isCancelled.optional(),
-        createdAt.optional(),
 
         // Optional fields
         coverImage.optional(),

@@ -247,19 +247,7 @@ const volunteerRemarks = body(
   "Volunteer remarks must be a string"
 ).isString();
 
-// Event count
-const volunteeringSessionsCount = body(
-  "volunteeringSessionsCount",
-  "Volunteering sessions count must be an integer"
-).isInt({ min: 0 });
-const workshopsCount = body(
-  "workshopsCount",
-  "Workshop count must be an integer"
-).isInt({ min: 0 });
-const hangoutsCount = body(
-  "hangoutsCount",
-  "Hang outs count must be an integer"
-).isInt({ min: 0 });
+// Session related
 const sessionsPerMonth = body(
   "sessionsPerMonth",
   "Sessions per month must be an integer"
@@ -268,6 +256,20 @@ const sessionPreference = body(
   "sessionPreference",
   "Session preference must be a string"
 ).isString();
+
+// Photo URL
+const photoUrl = body("photoUrl")
+  .exists()
+  .withMessage("Photo URL is required")
+  .isString()
+  .withMessage("Photo URL must be a string")
+
+// hasCriminalRecord
+const hasCriminalRecord = body("hasCriminalRecord")
+  .exists()
+  .withMessage("hasCriminalRecord is required")
+  .isBoolean()
+  .withMessage("hasCriminalRecord must be a boolean value");
 
 // Submitted Commitment Application
 
@@ -318,10 +320,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         volunteerType,
         volunteerReason, // Categorize answers
         volunteerContribution.optional(),
-        // Event count
-        volunteeringSessionsCount,
-        workshopsCount,
-        hangoutsCount,
+        // Session related
         sessionsPerMonth,
         sessionPreference,
         // Medical Information
@@ -335,6 +334,10 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         emergencyContactName,
         emergencyContactNumber,
         emergencyContactRelationship,
+        // Photo URL
+        photoUrl,
+        // Criminal Record
+        hasCriminalRecord,
       ];
     }
 

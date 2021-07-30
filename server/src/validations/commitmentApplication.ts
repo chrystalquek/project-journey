@@ -22,17 +22,14 @@ const status = body("status")
     )
   )
   .withMessage("Status is not valid");
-const createdAt = body(
-  "createdAt",
-  "Time of creation is of wrong date format"
-).isISO8601();
+
 
 export const getValidations = (
   method: CommitmentApplicationValidatorMethod
 ): ValidationChain[] => {
   switch (method) {
     case "createCommitmentApplication": {
-      return [volunteerId, status, createdAt];
+      return [volunteerId, status];
     }
     case "updateCommitmentApplication": {
       return [volunteerId.optional(), status.optional()];
@@ -40,11 +37,11 @@ export const getValidations = (
     case "readCommitmentApplication": {
       return [
         query("status")
-          .custom((statu: string) =>
+          .custom((value: string) =>
             stringEnumValidator(
               COMMITMENT_APPLICATION_STATUS,
               "Commitment Application Status",
-              statu
+              value
             )
           )
           .withMessage("Status is not valid")
