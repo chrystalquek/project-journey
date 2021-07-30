@@ -22,10 +22,6 @@ router.get(
   eventController.getSignedUpEvents
 );
 
-// @route   DELETE /event
-// @desc    Delete a event by id
-router.delete("/:id", authorize(["admin"]), eventController.deleteEvent);
-
 // @route   PUT /event
 // @desc    Update a event by id
 router.put("/:id", authorize(["admin"]), eventController.updateEvent);

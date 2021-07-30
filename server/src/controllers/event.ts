@@ -1,13 +1,12 @@
-import signUpService, { isSignUpAccepted } from "../services/signUp";
-import answerService from "../services/forms/answer";
 import HTTP_CODES from "../constants/httpCodes";
-import eventService from "../services/event";
 import { EventData, EventSearchType } from "../models/Event";
 import { VolunteerType } from "../models/Volunteer";
+import eventService from "../services/event";
+import answerService from "../services/forms/answer";
+import signUpService, { isSignUpAccepted } from "../services/signUp";
 import {
   CancelEventRequest,
   CreateEventRequest,
-  DeleteEventRequest,
   GetEventRequest,
   GetEventsRequest,
   GetSignedUpEventsRequest,
@@ -16,7 +15,6 @@ import {
 import {
   CancelEventResponse,
   CreateEventResponse,
-  DeleteEventResponse,
   GetEventResponse,
   GetEventsResponse,
   GetSignedUpEventsResponse,
@@ -189,21 +187,9 @@ const cancelEvent = async (
 
     await eventService.cancelEvent(id);
 
-    res.status(HTTP_CODES.OK).send("Event cancelled");
-  } catch (err) {
-    res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
-    });
-  }
-};
+    // TODO: send emails to users that have previously signed up for the event.
 
-const deleteEvent = async (
-  req: DeleteEventRequest,
-  res: DeleteEventResponse
-): Promise<void> => {
-  try {
-    await eventService.deleteEvent(req.params.id);
-    res.status(HTTP_CODES.OK).send("Event data deleted");
+    res.status(HTTP_CODES.OK).send("Event cancelled");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
       errors: [{ msg: err.msg }],
@@ -218,5 +204,4 @@ export default {
   getSignedUpEvents,
   updateEvent,
   cancelEvent,
-  deleteEvent,
 };

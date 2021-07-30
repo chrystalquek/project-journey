@@ -193,20 +193,6 @@ const cancelEvent = async (id: string): Promise<void> => {
   }
 };
 
-const deleteEvent = async (id: string): Promise<void> => {
-  try {
-    const event = await Event.findById(id);
-
-    if (!event) {
-      throw new Error("Event can't be found");
-    }
-
-    await event.remove();
-  } catch (err) {
-    throw new Error(err.msg);
-  }
-};
-
 export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
   try {
     const nDaysAgo = new Date();
@@ -242,6 +228,5 @@ export default {
   readEventsByIds,
   updateEvent,
   cancelEvent,
-  deleteEvent,
   findEventsNDaysAgo,
 };
