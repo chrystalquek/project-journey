@@ -365,31 +365,10 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       return [
         // check id in request param
         id,
-
         // update email address
         newEmailValidator.optional(),
         // update password
         passwordValidator.optional(),
-
-
-        name.optional(),
-        address.optional(),
-        mobileNumber.optional(),
-
-        socialMediaPlatform.optional(),
-        organization.optional(),
-        position.optional(),
-        leadershipInterest.optional(),
-        volunteerType.optional(),
-
-        interests.optional(),
-        personality.optional(),
-        skills.optional(),
-        volunteerRemarks.optional(),
-
-
-
-
         // Personal details
         name.optional(),
         gender.optional(),
@@ -424,7 +403,6 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         // External volunteering
         hasVolunteeredExternally.optional(),
         volunteeringExperience.optional(),
-
         // Other volunteering related
         volunteerType.optional(),
         volunteerReason.optional(), // Categorize answers
