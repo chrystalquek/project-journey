@@ -363,8 +363,15 @@ const getValidations = (method: VolunteerValidatorMethod) => {
     }
     case "updateVolunteer": {
       return [
-        existingEmailValidator,
+        // check id in request param
+        id,
+
+        // update email address
+        newEmailValidator.optional(),
+        // update password
         passwordValidator.optional(),
+
+
         name.optional(),
         address.optional(),
         mobileNumber.optional(),
@@ -379,6 +386,67 @@ const getValidations = (method: VolunteerValidatorMethod) => {
         personality.optional(),
         skills.optional(),
         volunteerRemarks.optional(),
+
+
+
+
+        // Personal details
+        name.optional(),
+        gender.optional(),
+        mobileNumber.optional(),
+        citizenship.optional(),
+        languages.optional(),
+        nickname.optional(),
+        address.optional(),
+        birthday.optional(),
+        race.optional(),
+        // Additional details
+        referralSources.optional(),
+        hasFirstAidCertification.optional(),
+        leadershipInterest.optional(),
+        interests.optional(),
+        personality.optional(),
+        skills.optional(),
+        strengths.optional(),
+        volunteeringOpportunityInterest.optional(),
+        // Soical media
+        socialMediaPlatform.optional(),
+        instagramHandle.optional(),
+        // Organization
+        organization.optional(),
+        position.optional(),
+        // Volunteering experience
+        hasVolunteered.optional(),
+        biabVolunteeringDuration.optional(),
+        // Children experience
+        hasChildrenExperience.optional(),
+        childrenExperience.optional(),
+        // External volunteering
+        hasVolunteeredExternally.optional(),
+        volunteeringExperience.optional(),
+
+        // Other volunteering related
+        volunteerType.optional(),
+        volunteerReason.optional(), // Categorize answers
+        volunteerContribution.optional(),
+        // Session related
+        sessionsPerMonth.optional(),
+        sessionPreference.optional(),
+        // Medical Information
+        hasMedicalNeeds.optional(),
+        medicalNeeds.optional(),
+        hasAllergies.optional(),
+        allergies.optional(),
+        hasMedicationDuringDay.optional(),
+        // Emergency Contact
+        emergencyContactEmail.optional(),
+        emergencyContactName.optional(),
+        emergencyContactNumber.optional(),
+        emergencyContactRelationship.optional(),
+        // Photo URL
+        photoUrl.optional(),
+        // Criminal Record
+        hasCriminalRecord.optional(),
       ];
     }
     default:
