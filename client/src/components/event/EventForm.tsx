@@ -590,12 +590,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </Grid>
           </Grid>
 
-          {eventType === "volunteering" && (
+          {/* Facilitator Information */}
+          {(eventType === "workshop" || eventType === "hangout") && (
             <>
               <Grid item container>
                 <Grid item xs={12}>
                   <Typography style={{ fontWeight: "bold" }}>
-                    {" "}
                     Name of Facilitator
                   </Typography>
                 </Grid>
@@ -619,13 +619,22 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               </Grid>
 
               <Grid item container>
-                <div className={classes.facilPhotograph}>
-                  <DropZoneCard
-                    id="facilitatorPhoto"
-                    initialUrl={eventForm?.facilitatorPhoto}
-                    onChangeImage={(e) => onChangeImage(e, "facilitatorPhoto")}
-                  />
-                </div>
+                <Grid item xs={12}>
+                  <Typography style={{ fontWeight: "bold" }}>
+                    Photograph of Facilitator
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.facilPhotograph}>
+                    <DropZoneCard
+                      id="facilitatorPhoto"
+                      initialUrl={eventForm?.facilitatorPhoto}
+                      onChangeImage={(e) =>
+                        onChangeImage(e, "facilitatorPhoto")
+                      }
+                    />
+                  </div>
+                </Grid>
               </Grid>
               <Grid item container>
                 <Grid item xs={12}>
