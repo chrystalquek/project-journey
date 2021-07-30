@@ -28,7 +28,7 @@ export const getValidations = (
 ): ValidationChain[] => {
   switch (method) {
     case "createCommitmentApplication": {
-      return [volunteerId, status];
+      return [volunteerId];
     }
     case "updateCommitmentApplication": {
       return [volunteerId.optional(), status.optional()];
