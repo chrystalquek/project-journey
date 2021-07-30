@@ -24,13 +24,11 @@ const roleCapacityValidator = (roles: Array<RoleData>) => {
 
 // check if the data is of custom type RoleData
 
-const isRoleData= (value: any): value is RoleData => (
-    typeof value.name === "string" &&
-    typeof value.description === "string" &&
-    typeof value.capacity === "number" &&
-    stringArrayValidator(value.volunteers)
-  );
-
+const isRoleData = (value: any): value is RoleData =>
+  typeof value.name === "string" &&
+  typeof value.description === "string" &&
+  typeof value.capacity === "number" &&
+  stringArrayValidator(value.volunteers);
 
 const isArrayOfRoleData = (value: Array<any>) => {
   value.every((item) => isRoleData(item));
