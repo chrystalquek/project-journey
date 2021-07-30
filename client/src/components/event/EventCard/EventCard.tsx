@@ -1,7 +1,4 @@
-import {
-  ALL_VOLUNTEERS_TAG,
-  COMMITTED_VOLUNTEER_TAG,
-} from "@components/event/index";
+import { COMMITTED_VOLUNTEER_TAG } from "@components/event/index";
 import { EVENTS_ROUTE, LOGIN_ROUTE } from "@constants/routes";
 import { CardActions, Chip, makeStyles, Typography } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
@@ -88,9 +85,6 @@ const EventCard: FC<Props> = ({
             label={COMMITTED_VOLUNTEER_TAG}
             className={classes.committedTag}
           />
-        )}
-        {event?.volunteerType === VolunteerType.ADHOC && (
-          <Chip color="primary" size="small" label={ALL_VOLUNTEERS_TAG} />
         )}
       </CardActions>
     </Card>

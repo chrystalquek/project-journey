@@ -1,10 +1,7 @@
 import { ActionableDialog } from "@components/common/ActionableDialog";
 import ResizedImage from "@components/common/image/ResizedImage";
 import LoadingIndicator from "@components/common/LoadingIndicator";
-import {
-  ALL_VOLUNTEERS_TAG,
-  COMMITTED_VOLUNTEER_TAG,
-} from "@components/event/index";
+import { COMMITTED_VOLUNTEER_TAG } from "@components/event/index";
 import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
 import { EDIT_EVENT_FORM_ROUTE } from "@constants/routes";
 import {
@@ -230,20 +227,11 @@ const EventDetails = ({ eid }: Props) => {
           </Grid>
 
           {/* Volunteer Role Tags */}
-          <Grid item xs={12}>
-            <Chip
-              color={
-                event.volunteerType === VolunteerType.COMMITTED
-                  ? "secondary"
-                  : "primary"
-              }
-              label={
-                event.volunteerType === VolunteerType.COMMITTED
-                  ? COMMITTED_VOLUNTEER_TAG
-                  : ALL_VOLUNTEERS_TAG
-              }
-            />
-          </Grid>
+          {event.volunteerType === VolunteerType.COMMITTED && (
+            <Grid item xs={12}>
+              <Chip color="secondary" label={COMMITTED_VOLUNTEER_TAG} />
+            </Grid>
+          )}
 
           {/* Sign Up Status */}
           {isLoggedIn && !isAdmin(user) && (
