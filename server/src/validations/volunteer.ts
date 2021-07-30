@@ -40,9 +40,7 @@ const mobileNumber = body("mobileNumber")
   .exists()
   .withMessage("Mobile number is required")
   .isString()
-  .withMessage("Mobile number must be a string")
-  .isMobilePhone("en-SG")
-  .withMessage("Mobile number is not from SG");
+  .withMessage("Mobile number must be a string");
 const address = body("address", "Address must be a string").isString();
 const nickname = body("nickname", "Nickname must be a string").isString();
 const birthday = body("birthday", "birthday must be a date").isISO8601();

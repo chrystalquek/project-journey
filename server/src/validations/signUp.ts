@@ -13,7 +13,7 @@ const eventId = body("eventId")
   .exists()
   .withMessage("Event ID is required")
   .isString()
-  .withMessage("Volunteer ID must be a string");
+  .withMessage("Event ID must be a string");
 const userId = body("userId")
   .exists()
   .withMessage("User ID is required")
