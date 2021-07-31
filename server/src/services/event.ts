@@ -179,15 +179,7 @@ const updateEvent = async (
 
 const cancelEvent = async (id: string): Promise<void> => {
   try {
-    await Event.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: {
-          isCancelled: true,
-        },
-      },
-      { new: true }
-    );
+    await Event.findByIdAndDelete(id);
   } catch (err) {
     throw new Error(err.msg);
   }
