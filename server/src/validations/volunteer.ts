@@ -98,7 +98,9 @@ const hasVolunteered = body("hasVolunteered")
   .withMessage("hasVolunteered must be a boolean value");
 const biabVolunteeringDuration = body("biabVolunteeringDuration")
   .exists()
-  .withMessage("Past volunteer duration is required");
+  .withMessage("Past volunteer duration is required")
+  .isNumeric()
+  .withMessage("Past volunteer duration must be a number");
 
 // External volunteering
 const hasVolunteeredExternally = body("hasVolunteeredExternally")
