@@ -183,12 +183,15 @@ const getValidations = (method: EventValidatorMethod) => {
           .isInt({ min: 0 })
           .withMessage("Page number must be a non-negative integer")
           .isString()
-          .withMessage("Page number must be a string"),
+          .withMessage("Page number must be a string")
+          .optional(),
         query("size")
           .isInt({ min: 0 })
           .withMessage("Size must be a non-negative integer")
           .isString()
-          .withMessage("Size must be a string"),
+          .withMessage("Size must be a string")
+          .optional(),
+        
       ];
     }
 
