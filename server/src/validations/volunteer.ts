@@ -267,6 +267,31 @@ const hasCriminalRecord = body("hasCriminalRecord")
 
 // Submitted Commitment Application
 
+// volunteer type in query can be single string, array or empty
+const volunteerTypeInQuery = query("volunteerType")
+.optional()
+.custom( 
+  value => {
+    // if it's an array, check the type of each item in the array
+    if (Array.isArray(value)) {
+      return value.every(
+        (element) => stringEnumValidator(
+          VOLUNTEER_TYPE,
+          "Volunteer type",
+          element));
+        }
+      // if it's a single string
+    return typeof value === "string" && 
+      stringEnumValidator(
+        VOLUNTEER_TYPE,
+        "Volunteer type",
+        value)
+    ;
+  }) 
+.withMessage('Volunteer type in query must be a string or array');
+
+
+
 const getValidations = (method: VolunteerValidatorMethod) => {
   switch (method) {
     case "createVolunteer": {
@@ -348,14 +373,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       return [
         query(["pageNo", "size"]).isInt({ min: 0 }).optional(),
         query(["name", "sort"]).isString().optional(),
-        query("volunteerType")
-          .isArray()
-          .custom((volTypes: string[]) =>
-            volTypes.every((volType: string) =>
-              stringEnumValidator(VOLUNTEER_TYPE, "volunteer type", volType)
-            )
-          )
-          .optional(),
+        volunteerTypeInQuery
       ];
     }
     case "deleteVolunteer": {
