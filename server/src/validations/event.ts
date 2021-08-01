@@ -191,7 +191,6 @@ const getValidations = (method: EventValidatorMethod) => {
           .isString()
           .withMessage("Size must be a string")
           .optional(),
-        
       ];
     }
 

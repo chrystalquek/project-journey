@@ -14,11 +14,11 @@ const volunteerId = body("volunteerId")
   .isString()
   .withMessage("Volunteer ID must be a string");
 const status = body("status")
-  .custom((statu: string) =>
+  .custom((value: string) =>
     stringEnumValidator(
       COMMITMENT_APPLICATION_STATUS,
       "Commitment Application Status",
-      statu
+      value
     )
   )
   .withMessage("Status is not valid");
