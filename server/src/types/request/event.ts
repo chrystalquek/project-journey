@@ -37,5 +37,3 @@ export type UpdateEventRequest = Request<
 >;
 
 export type CancelEventRequest = IdRequest;
-
-export type DeleteEventRequest = IdRequest;
