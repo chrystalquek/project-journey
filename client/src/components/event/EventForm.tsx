@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 import {
   TextField,
   makeStyles,
@@ -19,9 +20,6 @@ import { useRouter } from "next/router";
 import * as yup from "yup";
 import ClearIcon from "@material-ui/icons/Clear";
 import { resetEventStatus } from "@redux/reducers/event";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-import { ToastStatus } from "@type/common";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import Header from "@components/common/Header";
 import { SignUpStatus } from "@type/signUp";
@@ -44,9 +42,6 @@ const volunteerTypes = [
   { value: "lead", label: "Lead" },
   { value: "admin", label: "Admin" },
 ];
-
-const TOAST_MESSAGE_LENGTH_MS = 2000;
-const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
 
 const getEventTypePlaceholder = (eventType) => {
   switch (eventType) {
@@ -146,14 +141,11 @@ const emptyForm = {
 };
 
 const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const event = useAppSelector((state) => state.event.event);
   const eventForm: any = useAppSelector((state) => state.event.event.form);
   const dispatch = useAppDispatch();
-
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [toastText, setToastText] = useState<string>("");
-  const [toastStatus, setToastStatus] = useState<ToastStatus>("success");
 
   // Store feedback event form
   const [feedbackFormEventQuestions, setFeedbackFormEventQuestions] = useState<
@@ -253,20 +245,20 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
   useEffect(() => {
     if (event.status === SignUpStatus.REJECTED) {
-      setToastText("Event creation failed.");
-      setToastStatus("error");
-      setOpenSnackbar(true);
+      enqueueSnackbar("Event creation failed.", {
+        variant: "error",
+      });
     } else if (event.status === "fulfilled") {
-      setToastText(
-        isNew ? "Successfully Created Event!" : "Successfully Edited Event!"
-      );
-      setToastStatus("success");
-      setOpenSnackbar(true);
-      setTimeout(() => {
-        router.push("/event");
-      }, TOAST_MESSAGE_LENGTH_MS);
+      const message = isNew
+        ? "Successfully Created Event!"
+        : "Successfully Edited Event!";
+      enqueueSnackbar(message, {
+        variant: "success",
+      });
+
+      router.push("/event");
     }
-  }, [event, isNew, router]);
+  }, [event, isNew, router, enqueueSnackbar]);
 
   const {
     errors,
@@ -826,17 +818,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             </Button>
           </Grid>
         </Grid>
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
-          onClose={() => {
-            setOpenSnackbar(false);
-          }}
-        >
-          <MuiAlert elevation={6} severity={toastStatus}>
-            {toastText}
-          </MuiAlert>
-        </Snackbar>
       </form>
     </>
   );

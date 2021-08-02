@@ -57,7 +57,6 @@ const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (
         open={isOpen}
         setOpen={() => setIsOpen(!isOpen)}
         content={DialogContent}
-        buttonTitle="Approve"
         buttonOnClick={handleApproveEvent}
         openCloseButtonTitle="Approve Conversion"
         recommendedAction="cancel"

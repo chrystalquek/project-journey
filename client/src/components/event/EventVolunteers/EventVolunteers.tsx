@@ -321,7 +321,6 @@ const EventVolunteers = ({ eid }) => {
                 open={openRemoveDialog}
                 setOpen={() => setOpenRemoveDialog(!openRemoveDialog)}
                 content={`Are you sure you want to remove ${volunteerName} as a volunteer?`}
-                buttonTitle="Delete"
                 buttonOnClick={() =>
                   onUpdateSignUp({
                     data: { ...signUp, status: SignUpStatus.PENDING },

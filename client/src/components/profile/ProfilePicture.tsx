@@ -1,18 +1,13 @@
-import {
-  Avatar,
-  Badge,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  useMediaQuery,
-} from "@material-ui/core";
+import { Avatar, Badge, Button } from "@material-ui/core";
 import React, { useCallback, useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import Dialog from "@components/common/feedback/Dialog";
+import DialogTitle from "@components/common/feedback/DialogTitle";
+import DialogContent from "@components/common/feedback/DialogContent";
+import DialogActions from "@components/common/feedback/DialogActions";
 import { useAppDispatch } from "@redux/store";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import { updateVolunteer } from "@redux/actions/user";
@@ -55,9 +50,6 @@ const ProfilePicture = ({ profilePageData }) => {
     width: 30,
     aspect: 1 / 1,
   });
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   const onSelectFile = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -167,9 +159,9 @@ const ProfilePicture = ({ profilePageData }) => {
       </Badge>
       <Dialog
         open={src !== null}
-        fullScreen={isMobile}
         onClose={handleCancel}
         scroll="body"
+        maxWidth="sm"
       >
         <DialogTitle>Update Profile Picture</DialogTitle>
         <DialogContent>
@@ -187,7 +179,7 @@ const ProfilePicture = ({ profilePageData }) => {
             />
           )}
         </DialogContent>
-        <DialogActions>
+        <DialogActions justifyContent="flex-end">
           <Button onClick={handleSave}>Save</Button>
           <Button onClick={handleCancel}>Cancel</Button>
         </DialogActions>

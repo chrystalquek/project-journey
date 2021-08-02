@@ -227,7 +227,6 @@ const EventDetails = ({ eid }: Props) => {
               open={isWithdrawModalOpen}
               setOpen={() => setIsWithdrawModalOpen(!isWithdrawModalOpen)}
               content={renderWithdrawCommitmentQuestion()}
-              buttonTitle="Confirm"
               buttonOnClick={withdrawCommitment}
               openCloseButtonTitle="Withdraw"
               recommendedAction="cancel"

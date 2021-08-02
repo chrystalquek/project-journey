@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSnackbar } from "notistack";
 import Box from "@material-ui/core/Box";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
 import { useAppDispatch } from "@redux/store";
 import { signUp } from "@redux/actions/user";
 import { useRouter } from "next/router";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { objectFilter } from "@utils/helpers/objectFilter";
 import { VolunteerType } from "@type/volunteer";
-import { ToastStatus } from "@type/common";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import SectionalForm from "./generator/SectionalForm";
 import {
@@ -24,15 +22,11 @@ type SignUpFormProps = {
   type: VolunteerType;
 };
 
-const TOAST_MESSAGE_AUTO_DISSAPEAR_MS = 6000;
-
 function SignUpForm({ type }: SignUpFormProps) {
+  const { enqueueSnackbar } = useSnackbar();
+
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [toastText, setToastText] = useState<string>("");
-  const [toastStatus, setToastStatus] = useState<ToastStatus>("success");
 
   const handleSubmit = async (formValues: Record<string, any>) => {
     // @ts-ignore type exists
@@ -116,15 +110,15 @@ function SignUpForm({ type }: SignUpFormProps) {
     )
       .then(unwrapResult)
       .then(() => {
-        setToastText("You have signed up successfully.");
-        setToastStatus("success");
-        setOpenSnackbar(true);
+        enqueueSnackbar("You have signed up successfully", {
+          variant: "success",
+        });
         router.push("/login");
       })
       .catch((err) => {
-        setToastText(`Error: ${err.message}`);
-        setToastStatus("error");
-        setOpenSnackbar(true);
+        enqueueSnackbar(`Error: ${err.message}`, {
+          variant: "error",
+        });
       });
   };
 
@@ -139,17 +133,6 @@ function SignUpForm({ type }: SignUpFormProps) {
         validationSchema={schema}
         onSubmit={handleSubmit}
       />
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={TOAST_MESSAGE_AUTO_DISSAPEAR_MS}
-        onClose={() => {
-          setOpenSnackbar(false);
-        }}
-      >
-        <MuiAlert elevation={6} severity={toastStatus}>
-          {toastText}
-        </MuiAlert>
-      </Snackbar>
     </Box>
   );
 }

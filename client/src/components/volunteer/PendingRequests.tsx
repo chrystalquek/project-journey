@@ -71,7 +71,6 @@ const PendingRequests: FC<{}> = () => {
             open={openApprove}
             setOpen={() => setOpenApprove(!openApprove)}
             content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`}
-            buttonTitle="Approve"
             buttonOnClick={() => onApproveReject(approveCommitmentApplication)}
             openCloseButtonTitle="Approve"
           />
@@ -81,7 +80,6 @@ const PendingRequests: FC<{}> = () => {
             open={openReject}
             setOpen={() => setOpenReject(!openReject)}
             content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`}
-            buttonTitle="Reject"
             buttonOnClick={() => onApproveReject(rejectCommitmentApplication)}
             openCloseButtonStyle=""
             openCloseButtonTitle={<CancelIcon color="error" fontSize="large" />}

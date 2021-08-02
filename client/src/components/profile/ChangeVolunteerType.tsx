@@ -2,17 +2,17 @@ import React, { FC, useCallback, useState } from "react";
 import {
   IconButton,
   MenuItem,
-  Dialog,
-  DialogTitle,
   Typography,
-  DialogContent,
-  DialogActions,
   makeStyles,
   FormControl,
   Select,
   Input,
   Button,
+  Box,
 } from "@material-ui/core";
+import Dialog from "@components/common/feedback/Dialog";
+import DialogContent from "@components/common/feedback/DialogContent";
+import DialogActions from "@components/common/feedback/DialogActions";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { VolunteerType } from "@type/volunteer";
 import EditIcon from "@material-ui/icons/Edit";
@@ -73,13 +73,11 @@ const ChangeVolunteerType: FC = () => {
         <EditIcon fontSize="small" />
       </IconButton>
 
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>
-          <Typography className={classes.centralize}>
-            Change volunteer type to
-          </Typography>
-        </DialogTitle>
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs">
         <DialogContent className={classes.centralize}>
+          <Box mb={3}>
+            <Typography>Change volunteer type to</Typography>
+          </Box>
           <form>
             <FormControl className={classes.formControl}>
               <Select

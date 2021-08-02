@@ -1,14 +1,10 @@
 import React, { FC, useState, useCallback } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Button,
-  Typography,
-  useMediaQuery,
-} from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Button, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { useAppDispatch, useAppSelector } from "@redux/store";
+import Dialog from "@components/common/feedback/Dialog";
+import DialogContent from "@components/common/feedback/DialogContent";
+import DialogTitle from "@components/common/feedback/DialogTitle";
 import CommittedConversionForm from "@components/form/CommittedConversionForm";
 import { createCommitmentApplication } from "@redux/actions/commitmentApplication";
 import { CreateCommitmentApplicationRequest } from "@api/request";
@@ -27,12 +23,6 @@ const useStyles = makeStyles((theme) => ({
     },
     cursor: "pointer",
   },
-  dialogContent: {
-    overflowY: "scroll",
-    overflowX: "hidden",
-    msOverflowStyle: "-ms-autohiding-scrollbar",
-    height: "100%",
-  },
 }));
 
 const BecomeCommitedDialog: FC = () => {
@@ -49,8 +39,6 @@ const BecomeCommitedDialog: FC = () => {
     commitmentApplication?.status === CommitmentApplicationStatus.Pending;
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   const handleClickOpen = useCallback(() => {
     setOpen(true);
@@ -93,12 +81,16 @@ const BecomeCommitedDialog: FC = () => {
       </Typography>
 
       {/* Dialog */}
-      <Dialog open={open} onClose={handleClose} fullScreen={isMobile}>
-        <DialogTitle className={classes.centralize}>
-          <Typography variant="h2">Conversion of Volunteer Status</Typography>
-          <Typography variant="h3">Ad-hoc to Committed Volunteer</Typography>
+      <Dialog open={open} onClose={handleClose} maxWidth="sm">
+        <DialogTitle disableTypography>
+          <Typography variant="h2" align="center">
+            Conversion of Volunteer Status
+          </Typography>
+          <Typography variant="h3" align="center">
+            Ad-hoc to Committed Volunteer
+          </Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent>
           <CommittedConversionForm handleSubmit={handleSubmit} />
         </DialogContent>
       </Dialog>

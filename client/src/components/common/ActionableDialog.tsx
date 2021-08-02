@@ -1,6 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Dialog, Grid, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
+import Dialog from "@components/common/feedback/Dialog";
+import DialogActions from "@components/common/feedback/DialogActions";
+import DialogContent from "@components/common/feedback/DialogContent";
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
@@ -17,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "small",
     justifyContent: "center",
     alignItems: "center",
+    textTransform: "none",
   },
   recommendedButton: {
     padding: theme.spacing(5),
@@ -41,7 +45,6 @@ export interface ActionableDialogProps {
   open: boolean;
   setOpen: () => void;
   content: string | JSX.Element;
-  buttonTitle: string | JSX.Element;
   buttonOnClick: () => void;
   openCloseButtonTitle: string | JSX.Element;
   openCloseButtonStyle?: string;
@@ -57,7 +60,6 @@ export function ActionableDialog(props: ActionableDialogProps) {
     open,
     setOpen,
     content,
-    buttonTitle,
     buttonOnClick,
     openCloseButtonTitle,
     openCloseButtonStyle,
@@ -76,41 +78,34 @@ export function ActionableDialog(props: ActionableDialogProps) {
         onClose={setOpen}
         aria-labelledby="simple-dialog-title"
         open={open}
+        maxWidth="sm"
       >
-        <Grid
-          className={classes.dialog}
-          container
-          direction="column"
-          spacing={5}
-          justify="center"
-        >
-          <Grid item>
-            <Typography>{content}</Typography>
-          </Grid>
+        <DialogContent>
+          <Typography align="center">{content}</Typography>
+        </DialogContent>
 
-          <Grid container direction="row" spacing={5} justify="center">
-            <Button
-              className={
-                recommendedAction === "cancel"
-                  ? classes.recommendedButton
-                  : classes.unrecommendedButton
-              }
-              onClick={setOpen}
-            >
-              Cancel
-            </Button>
-            <Button
-              className={
-                recommendedAction === "cancel"
-                  ? classes.unrecommendedButton
-                  : classes.recommendedButton
-              }
-              onClick={buttonOnClick}
-            >
-              {buttonTitle}
-            </Button>
-          </Grid>
-        </Grid>
+        <DialogActions>
+          <Button
+            className={
+              recommendedAction === "cancel"
+                ? classes.recommendedButton
+                : classes.unrecommendedButton
+            }
+            onClick={setOpen}
+          >
+            Cancel
+          </Button>
+          <Button
+            className={
+              recommendedAction === "cancel"
+                ? classes.unrecommendedButton
+                : classes.recommendedButton
+            }
+            onClick={buttonOnClick}
+          >
+            Confirm
+          </Button>
+        </DialogActions>
       </Dialog>
     </>
   );
