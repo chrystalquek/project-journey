@@ -8,23 +8,47 @@ import {
 import { FC } from "react";
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    backgroundColor: theme.palette.primary.main,
+  base: {
     borderRadius: "16px",
     textTransform: "none",
     padding: "6px 16px",
+  },
+  primary: {
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.main,
+    },
+  },
+  secondary: {
+    border: `1px solid ${theme.palette.primary.main}`,
     "&:hover": {
       backgroundColor: theme.palette.secondary.main,
     },
   },
 }));
 
-const Button: FC<ButtonProps> = (props) => {
-  const classes = useStyles();
+type Props = ButtonProps & {
+  secondary?: boolean;
+};
 
-  const { children } = props;
+const Button: FC<Props> = ({
+  className,
+  secondary,
+  children,
+  ...restProps
+}) => {
+  const classes = useStyles();
+  const buttonClassName = !secondary
+    ? `${classes.base} ${classes.primary}`
+    : `${classes.base} ${classes.secondary}`;
+
   return (
-    <MuiButton className={classes.root} {...props}>
+    <MuiButton
+      className={
+        className ? `${buttonClassName} ${className}` : buttonClassName
+      }
+      {...restProps}
+    >
       {children}
     </MuiButton>
   );

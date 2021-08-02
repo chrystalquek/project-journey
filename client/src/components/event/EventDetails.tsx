@@ -3,19 +3,10 @@ import ResizedImage from "@components/common/image/ResizedImage";
 import LoadingIndicator from "@components/common/LoadingIndicator";
 import { COMMITTED_VOLUNTEER_TAG } from "@components/event/index";
 import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
-import { EDIT_EVENT_FORM_ROUTE } from "@constants/routes";
-import {
-  Button,
-  Chip,
-  Container,
-  Grid,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
-import { cancelEvent, deleteEvent, getEvent } from "@redux/actions/event";
+import { Chip, Container, Grid, Typography } from "@material-ui/core";
+import { getEvent } from "@redux/actions/event";
 import { deleteSignUp } from "@redux/actions/signUp";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import theme from "@styles/theme";
 import { EventType } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
 import { VolunteerType } from "@type/volunteer";
@@ -24,6 +15,7 @@ import { useIsMobile } from "@utils/helpers/layout";
 import { useRouter } from "next/dist/client/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import EventBreadCrumbs from "./EventBreadCrumbs";
+import AdminButtons from "./EventDetails/AdminButtons";
 import CreateAccountNotice from "./EventDetails/CreateAccountNotice";
 import EventInformation from "./EventDetails/EventInformation";
 import EventRegisterForm from "./EventDetails/EventRegisterForm";
@@ -38,27 +30,8 @@ type Props = {
   eid: string;
 };
 
-const useStyles = makeStyles({
-  coverImage: {
-    width: "100%",
-    height: "auto",
-  },
-  editButton: {
-    borderRadius: "5em",
-    textTransform: "none",
-    padding: theme.spacing(5),
-    height: 30,
-    marginRight: theme.spacing(5),
-    marginTop: theme.spacing(5),
-  },
-  editButtonText: {
-    color: theme.palette.common.black,
-  },
-});
-
 const EventDetails = ({ eid }: Props) => {
   const dispatch = useAppDispatch();
-  const classes = useStyles();
   const router = useRouter();
 
   const user = useAppSelector((state) => state.user.user);
@@ -116,52 +89,6 @@ const EventDetails = ({ eid }: Props) => {
       innerHasAcceptedSignUp,
     ];
   }, [currSignUps, event]);
-  // =========================
-
-  // =========================
-  // TODO (aloy): Simplify this.
-  const hasSignUps = getEventVacancies(event).filled === 0;
-  const [isCancelDeleteModalOpen, setIsCancelDeleteModalOpen] = useState(false);
-  const renderDeleteEventContent = useCallback(
-    () => (
-      <>
-        Are you sure you want to delete
-        <br />
-        <b>{event.name}</b>
-        <br />
-        <br />
-        <br />
-        Deletion of event cannot be undone.
-      </>
-    ),
-    [event]
-  );
-
-  const renderCancelEventContent = useCallback(
-    () => (
-      <>
-        Are you sure you want to cancel
-        <br />
-        <b>{event.name}</b>
-        <br />
-        <br />
-        <br />
-        Cancellation of event cannot be undone.
-      </>
-    ),
-    [event]
-  );
-  const handleCancelEvent = useCallback(() => {
-    dispatch(cancelEvent(event._id));
-    setIsCancelDeleteModalOpen(false);
-    router.push("/event");
-  }, [event]);
-
-  const handleDeleteEvent = useCallback(() => {
-    dispatch(deleteEvent(event._id));
-    setIsCancelDeleteModalOpen(false);
-    router.push("/event");
-  }, [event]);
   // =========================
 
   // =========================
@@ -292,41 +219,7 @@ const EventDetails = ({ eid }: Props) => {
           )}
 
           {/* Admin Buttons */}
-          {isAdmin(user) && (
-            <>
-              <Button
-                variant="contained"
-                type="submit"
-                color="primary"
-                onClick={() => router.push(EDIT_EVENT_FORM_ROUTE(event._id))}
-                className={classes.editButton}
-              >
-                <Typography className={classes.editButtonText}>
-                  Edit Event
-                </Typography>
-              </Button>
-
-              <ActionableDialog
-                open={isCancelDeleteModalOpen}
-                setOpen={() =>
-                  setIsCancelDeleteModalOpen(!isCancelDeleteModalOpen)
-                }
-                content={
-                  hasSignUps
-                    ? renderDeleteEventContent()
-                    : renderCancelEventContent()
-                }
-                buttonTitle="Confirm"
-                buttonOnClick={
-                  hasSignUps ? handleDeleteEvent : handleCancelEvent
-                }
-                openCloseButtonTitle={
-                  hasSignUps ? "Delete Event" : "Cancel Event"
-                }
-                recommendedAction="cancel"
-              />
-            </>
-          )}
+          {isAdmin(user) && <AdminButtons event={event} />}
 
           {/* Non-admin Buttons */}
           {!isAdmin(user) && hasAcceptedSignUp && (

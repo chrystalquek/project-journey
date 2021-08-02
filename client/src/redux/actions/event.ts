@@ -64,23 +64,9 @@ export const editEvent = createAsyncThunk(
   }
 );
 
-export const deleteEvent = createAsyncThunk(
-  "event/deleteEvent",
-  async (_id: string) => {
-    await apiClient.deleteEvent({ _id });
-  }
-);
-
 export const cancelEvent = createAsyncThunk(
   "event/cancelEvent",
   async (_id: string) => {
     await apiClient.cancelEvent({ _id });
   }
 );
-
-export default {
-  createEvent,
-  editEvent,
-  getEvent,
-  getUpcomingEvents,
-};
