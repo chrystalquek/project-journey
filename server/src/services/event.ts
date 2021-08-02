@@ -179,29 +179,7 @@ const updateEvent = async (
 
 const cancelEvent = async (id: string): Promise<void> => {
   try {
-    await Event.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: {
-          isCancelled: true,
-        },
-      },
-      { new: true }
-    );
-  } catch (err) {
-    throw new Error(err.msg);
-  }
-};
-
-const deleteEvent = async (id: string): Promise<void> => {
-  try {
-    const event = await Event.findById(id);
-
-    if (!event) {
-      throw new Error("Event can't be found");
-    }
-
-    await event.remove();
+    await Event.findByIdAndDelete(id);
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -242,6 +220,5 @@ export default {
   readEventsByIds,
   updateEvent,
   cancelEvent,
-  deleteEvent,
   findEventsNDaysAgo,
 };
