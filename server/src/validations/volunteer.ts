@@ -256,7 +256,9 @@ const photoUrl = body("photoUrl")
   .exists()
   .withMessage("Photo URL is required")
   .isString()
-  .withMessage("Photo URL must be a string");
+  .withMessage("Photo URL must be a string")
+  .isURL()
+  .withMessage("Photo URL must be a URL");
 
 // hasCriminalRecord
 const hasCriminalRecord = body("hasCriminalRecord")

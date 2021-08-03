@@ -83,8 +83,10 @@ const name = body("name")
   .withMessage("Name must be a string");
 const coverImage = body(
   "coverImage",
-  "cover image is not represented by a string"
-).isString();
+  "cover image must be represented by a string"
+).isString().isURL()
+  .withMessage("Cover image must be represented by a URL");
+;
 const description = body("description")
   .exists()
   .withMessage("Description is required")
@@ -98,7 +100,9 @@ const facilitatorDescription = body("facilitatorDescription")
   .withMessage("Facilitator description must be a string");
 const facilitatorPhoto = body("facilitatorPhoto")
   .isString()
-  .withMessage("Facilitator photo must be represented by a string");
+  .withMessage("Facilitator photo must be represented by a string")
+  .isURL()
+  .withMessage("Facilitator photo must be represented by a URL");
 const location = body("location")
   .exists()
   .withMessage("Location is required")
