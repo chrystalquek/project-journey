@@ -59,11 +59,7 @@ const socialMediaPlatform = body("socialMediaPlatform")
   .isString()
   .withMessage("Social media platform must be a string")
   .custom((value: string) =>
-    stringEnumValidator(
-      SOCIAL_MEDIA_PLATFORM,
-      "Social Media Platform",
-      value
-    )
+    stringEnumValidator(SOCIAL_MEDIA_PLATFORM, "Social Media Platform", value)
   )
   .withMessage("Social media platform is invalid");
 const instagramHandle = body(
@@ -75,9 +71,7 @@ const instagramHandle = body(
 const gender = body("gender")
   .exists()
   .withMessage("Gender is required")
-  .custom((value: string) =>
-    stringEnumValidator(GENDER, "Gender", value)
-  )
+  .custom((value: string) => stringEnumValidator(GENDER, "Gender", value))
   .withMessage("Gender is invalid");
 const citizenship = body("citizenship")
   .exists()
@@ -130,11 +124,7 @@ const leadershipInterest = body("leadershipInterest")
   .isString()
   .withMessage("leadershipInterest must be a string")
   .custom((value: string) =>
-    stringEnumValidator(
-      LEADERSHIP_INTEREST,
-      "Leadership Interest",
-      value
-    )
+    stringEnumValidator(LEADERSHIP_INTEREST, "Leadership Interest", value)
   )
   .withMessage("leadershipInterest is invalid");
 

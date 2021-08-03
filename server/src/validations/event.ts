@@ -46,7 +46,9 @@ const volunteerType = body("volunteerType")
 const eventType = body("eventType")
   .exists()
   .withMessage("Event type is required")
-  .custom((value: string) => stringEnumValidator(EVENT_TYPE, "Event Type", value))
+  .custom((value: string) =>
+    stringEnumValidator(EVENT_TYPE, "Event Type", value)
+  )
   .withMessage("Event type is invalid");
 const eventSearchType = param("eventType")
   .custom((value: string) =>
@@ -84,9 +86,10 @@ const name = body("name")
 const coverImage = body(
   "coverImage",
   "cover image must be represented by a string"
-).isString().isURL()
+)
+  .isString()
+  .isURL()
   .withMessage("Cover image must be represented by a URL");
-;
 const description = body("description")
   .exists()
   .withMessage("Description is required")
