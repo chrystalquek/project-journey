@@ -1,4 +1,9 @@
-import { body, ValidationChain, validationResult } from "express-validator";
+import {
+  body,
+  param,
+  ValidationChain,
+  validationResult,
+} from "express-validator";
 import { Request, Response } from "express";
 import _ from "lodash";
 import { doesUserEmailExist } from "../services/volunteer";
@@ -54,26 +59,40 @@ export const regexValidator = (
   return true;
 };
 
+export function stringArrayValidator(array: any): boolean {
+  return array.every((item) => typeof item === "string");
+}
+
 // TODO: remove from global after separating user and volunteer
 const LENGTH_MINIMUM_PASSWORD = 8;
 
-export const password = body("password").isString().isLength({
+export const passwordValidator = body("password").isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
 });
 
-export const email = (emailMustBeUnique: boolean) =>
-  body("email")
-    .isEmail()
-    .normalizeEmail()
-    .custom(async (emailString: string) => {
-      const isNewEmailUnique = await doesUserEmailExist(emailString);
-      if (!isNewEmailUnique && emailMustBeUnique) {
-        throw new Error("E-mail is already in use");
-      }
+export const existingEmailValidator = body("email")
+  .isEmail()
+  .normalizeEmail()
+  .custom(async (emailString: string) => {
+    const isNewEmailUnique = await doesUserEmailExist(emailString);
+    if (isNewEmailUnique) {
+      throw new Error(`E-mail: ${emailString} does not exist in the system`);
+    }
+    return true;
+  });
 
-      if (isNewEmailUnique && !emailMustBeUnique) {
-        throw new Error(`E-mail: ${emailString} does not exist in the system`);
-      }
+export const newEmailValidator = body("email")
+  .isEmail()
+  .normalizeEmail()
+  .custom(async (emailString: string) => {
+    const isNewEmailUnique = await doesUserEmailExist(emailString);
+    if (!isNewEmailUnique) {
+      throw new Error("E-mail is already in use");
+    }
+    return true;
+  });
 
-      return true;
-    });
+// for all read single, update, delete requests
+export const idInParam = param("id")
+  .isString()
+  .withMessage("id must be a string");

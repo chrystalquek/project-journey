@@ -29,26 +29,32 @@ router.get(
 router.post(
   "/ids",
   authorize(["admin"]),
+  validate(getValidations("getVolunteersById")),
   volunteerController.getVolunteersByIds
 );
 
 // @route   GET /volunteer/:id
 // @desc    For volunteer and admin to get volunteer
-router.get("/:id", authorize([]), volunteerController.getVolunteerDetailsById);
+router.get(
+  "/:id",
+  authorize([]),
+  validate(getValidations("getVolunteerById")),
+  volunteerController.getVolunteerDetailsById
+);
 
 // @route   GET /volunteer
 // @desc    For admin to get all volunteers
 router.get(
   "/",
   authorize(["admin"]),
-  validate(getValidations("getVolunteers")),
+  validate(getValidations("getAllVolunteers")),
   volunteerController.getAllVolunteerDetails
 );
 
 // @route   DELETE /volunteer/:id
 // @desc    For admin to delete volunteer
 router.delete(
-  "/",
+  "/:id",
   validate(getValidations("deleteVolunteer")),
   volunteerController.deleteVolunteer
 );

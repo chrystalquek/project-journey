@@ -1,4 +1,4 @@
-import { body, ValidationChain } from "express-validator";
+import { body, query, ValidationChain } from "express-validator";
 import { COMMITMENT_APPLICATION_STATUS } from "../models/CommitmentApplication";
 import { stringEnumValidator } from "./global";
 
@@ -7,25 +7,45 @@ type CommitmentApplicationValidatorMethod =
   | "readCommitmentApplication"
   | "updateCommitmentApplication";
 
-const commitmentApplicationStatus: ValidationChain = body("status")
+// Define validation for each field
+const volunteerId = body("volunteerId")
+  .exists()
+  .withMessage("Volunteer ID is required")
   .isString()
-  .custom((status: string) =>
+  .withMessage("Volunteer ID must be a string");
+const status = body("status")
+  .custom((value: string) =>
     stringEnumValidator(
       COMMITMENT_APPLICATION_STATUS,
       "Commitment Application Status",
-      status
+      value
     )
-  );
+  )
+  .withMessage("Status is not valid");
 
 export const getValidations = (
   method: CommitmentApplicationValidatorMethod
 ): ValidationChain[] => {
   switch (method) {
     case "createCommitmentApplication": {
-      return [commitmentApplicationStatus];
+      return [volunteerId];
     }
     case "updateCommitmentApplication": {
-      return [commitmentApplicationStatus];
+      return [volunteerId.optional(), status.optional()];
+    }
+    case "readCommitmentApplication": {
+      return [
+        query("status")
+          .custom((value: string) =>
+            stringEnumValidator(
+              COMMITMENT_APPLICATION_STATUS,
+              "Commitment Application Status",
+              value
+            )
+          )
+          .withMessage("Status is not valid")
+          .optional(),
+      ];
     }
     default:
       return [];

@@ -41,7 +41,7 @@ const getValidations = (method: FormValidatorMethod) => {
       ];
     }
     case "getFormDetails": {
-      return [param("eventId").isString()];
+      return [param("eventId", "Event id must be a string").isString()];
     }
     case "answerForm": {
       return [

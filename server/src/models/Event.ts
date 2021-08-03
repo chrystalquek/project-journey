@@ -15,7 +15,8 @@ export type RoleData = {
   volunteers: string[];
 };
 
-export type EventSearchType = "all" | "upcoming" | "past";
+export const EVENT_SEARCH_TYPE = ["all", "upcoming", "past"] as const;
+export type EventSearchType = typeof EVENT_SEARCH_TYPE[number];
 
 const EventSchema = createSchema(
   {

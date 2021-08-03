@@ -6,7 +6,8 @@ export const SIGN_UP_STATUS = ["pending", "accepted", "rejected"] as const;
 export type SignUpStatus = typeof SIGN_UP_STATUS[number];
 
 // types in controllers/services
-export type SignUpIdType = "eventId" | "userId" | "signUpId";
+export const SIGN_UP_ID_TYPE = ["eventId", "userId", "signUpId"];
+export type SignUpIdType = typeof SIGN_UP_ID_TYPE[number];
 
 const SignUpSchema = createSchema({
   eventId: Type.objectId({ required: true }),
