@@ -59,8 +59,8 @@ export const regexValidator = (
   return true;
 };
 
-export function stringArrayValidator(value: any): boolean {
-  return value.every((item) => typeof item === "string");
+export function stringArrayValidator(array: any): boolean {
+  return array.every((item) => typeof item === "string");
 }
 
 // TODO: remove from global after separating user and volunteer

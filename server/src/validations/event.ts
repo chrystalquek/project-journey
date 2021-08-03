@@ -30,7 +30,7 @@ const isRoleData = (value: any): value is RoleData =>
   typeof value.capacity === "number" &&
   stringArrayValidator(value.volunteers);
 
-const isArrayOfRoleData = (value: Array<any>) => {
+const isArrayOfRoleData = (value: any[]) => {
   value.every((item) => isRoleData(item));
 };
 
@@ -39,18 +39,18 @@ const isArrayOfRoleData = (value: Array<any>) => {
 const volunteerType = body("volunteerType")
   .exists()
   .withMessage("Volunteer type is required")
-  .custom((type: string) =>
-    stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", type)
+  .custom((value: string) =>
+    stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", value)
   )
   .withMessage("Volunteer type is invalid");
 const eventType = body("eventType")
   .exists()
   .withMessage("Event type is required")
-  .custom((type: string) => stringEnumValidator(EVENT_TYPE, "Event Type", type))
+  .custom((value: string) => stringEnumValidator(EVENT_TYPE, "Event Type", value))
   .withMessage("Event type is invalid");
 const eventSearchType = param("eventType")
-  .custom((type: string) =>
-    stringEnumValidator(EVENT_SEARCH_TYPE, "Event Search Type", type)
+  .custom((value: string) =>
+    stringEnumValidator(EVENT_SEARCH_TYPE, "Event Search Type", value)
   )
   .withMessage("Event search type is invalid");
 
@@ -109,9 +109,9 @@ const roles = body("roles")
   .withMessage("Roles is required")
   .isArray()
   .withMessage("Roles must be an array")
-  .custom((role: any[]) => isArrayOfRoleData(role))
+  .custom((value: any[]) => isArrayOfRoleData(value))
   .withMessage("Roles must be an array of RoleData")
-  .custom((role: RoleData[]) => roleCapacityValidator(role))
+  .custom((value: RoleData[]) => roleCapacityValidator(value))
   .withMessage("Number of volunteers must not exceed role capacity");
 
 // URL fields

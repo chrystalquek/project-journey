@@ -22,8 +22,8 @@ const userId = body("userId")
 const status = body("status")
   .exists()
   .withMessage("Status is required")
-  .custom((s: string) =>
-    stringEnumValidator(SIGN_UP_STATUS, "Sign Up Status", s)
+  .custom((value: string) =>
+    stringEnumValidator(SIGN_UP_STATUS, "Sign Up Status", value)
   )
   .withMessage("Status is invalid");
 const acceptedRole = body(
@@ -35,7 +35,7 @@ const preferences = body("preferences")
   .withMessage("Preferences are required")
   .isArray()
   .withMessage("Preferences must be an array")
-  .custom((preference: any[]) => stringArrayValidator(preference))
+  .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Preferences should be an array of strings");
 const isRestricted = body("isRestricted")
   .exists()
@@ -45,8 +45,8 @@ const isRestricted = body("isRestricted")
 const idType = param("idType")
   .exists()
   .withMessage("ID type is required")
-  .custom((type: string) =>
-    stringEnumValidator(SIGN_UP_ID_TYPE, "Sign Up ID Type", type)
+  .custom((value: string) =>
+    stringEnumValidator(SIGN_UP_ID_TYPE, "Sign Up ID Type", value)
   )
   .withMessage("ID type is invalid");
 

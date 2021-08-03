@@ -58,11 +58,11 @@ const socialMediaPlatform = body("socialMediaPlatform")
   .withMessage("Social media platform is required")
   .isString()
   .withMessage("Social media platform must be a string")
-  .custom((socialMedia: string) =>
+  .custom((value: string) =>
     stringEnumValidator(
       SOCIAL_MEDIA_PLATFORM,
       "Social Media Platform",
-      socialMedia
+      value
     )
   )
   .withMessage("Social media platform is invalid");
@@ -75,19 +75,19 @@ const instagramHandle = body(
 const gender = body("gender")
   .exists()
   .withMessage("Gender is required")
-  .custom((genderText: string) =>
-    stringEnumValidator(GENDER, "Gender", genderText)
+  .custom((value: string) =>
+    stringEnumValidator(GENDER, "Gender", value)
   )
   .withMessage("Gender is invalid");
 const citizenship = body("citizenship")
   .exists()
   .withMessage("Citizenship is required")
-  .custom((citizenshipType: string) =>
-    stringEnumValidator(CITIZENSHIP, "Citizenship", citizenshipType)
+  .custom((value: string) =>
+    stringEnumValidator(CITIZENSHIP, "Citizenship", value)
   )
   .withMessage("Citizenship is invalid");
-const race = body("race", "Race is not valid").custom((raceType: string) =>
-  stringEnumValidator(RACE, "Race", raceType)
+const race = body("race", "Race is not valid").custom((value: string) =>
+  stringEnumValidator(RACE, "Race", value)
 );
 
 // Volunteer experience
@@ -129,11 +129,11 @@ const hasFirstAidCertification = body(
 const leadershipInterest = body("leadershipInterest")
   .isString()
   .withMessage("leadershipInterest must be a string")
-  .custom((leadershipInterestType: string) =>
+  .custom((value: string) =>
     stringEnumValidator(
       LEADERSHIP_INTEREST,
       "Leadership Interest",
-      leadershipInterestType
+      value
     )
   )
   .withMessage("leadershipInterest is invalid");
@@ -142,29 +142,29 @@ const interests = body("interests", "interest must be a string").isString();
 const personality = body("personality")
   .isString()
   .withMessage("Personality must be a string")
-  .custom((personalityType: string) =>
-    regexValidator(PERSONALITY_TYPES_REGEX, "Personality", personalityType)
+  .custom((value: string) =>
+    regexValidator(PERSONALITY_TYPES_REGEX, "Personality", value)
   )
   .withMessage("Personality is invalid");
 const strengths = body("strengths")
   .isArray()
   .withMessage("strengths must be an array")
-  .custom((strength: Array<any>) => stringArrayValidator(strength))
+  .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Strengths must be an array of string");
 const languages = body("languages")
   .isArray()
   .withMessage("languages must be an array")
-  .custom((language: Array<any>) => stringArrayValidator(language))
+  .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Languages must be an array of string");
 const skills = body("skills")
   .isArray()
   .withMessage("Skills must be an array")
-  .custom((skill: Array<any>) => stringArrayValidator(skill))
+  .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Skills must be an array of string");
 const referralSources = body("referralSources")
   .isArray()
   .withMessage("Referral Sources must be an array")
-  .custom((sources: Array<any>) => stringArrayValidator(sources))
+  .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Referral Sources must be an array of string");
 
 // Volunteering related
@@ -182,8 +182,8 @@ const volunteerType = body("volunteerType")
   .withMessage("Volunteer type is required")
   .isString()
   .withMessage("Volunteer type must be a string")
-  .custom((type: string) =>
-    stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", type)
+  .custom((value: string) =>
+    stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", value)
   )
   .withMessage("Volunteer type is invalid");
 const volunteeringOpportunityInterest = body(
@@ -359,7 +359,7 @@ const getValidations = (method: VolunteerValidatorMethod) => {
       return [
         body("ids")
           .isArray()
-          .custom((ids: Array<any>) => stringArrayValidator(ids)),
+          .custom((value: any[]) => stringArrayValidator(value)),
       ];
     }
     case "getAllVolunteers": {
