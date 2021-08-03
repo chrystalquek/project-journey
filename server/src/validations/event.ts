@@ -70,6 +70,8 @@ const endDate = body("endDate")
 const deadline = body("deadline")
   .exists()
   .withMessage("Deadline is required")
+  .custom((value, { req }) => value <= req.body.startDate)
+  .withMessage("Deadline must be before start date")
   .isISO8601()
   .withMessage("Deadline is of wrong date format");
 
@@ -134,7 +136,6 @@ const getValidations = (method: EventValidatorMethod) => {
         deadline,
         description,
         location,
-        isCancelled,
 
         // Optional fields
         coverImage.optional(),
