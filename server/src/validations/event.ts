@@ -1,4 +1,5 @@
 import { body, query, param } from "express-validator";
+import _ from "lodash";
 import { EVENT_SEARCH_TYPE, EVENT_TYPE, RoleData } from "../models/Event";
 import { VOLUNTEER_TYPE } from "../models/Volunteer";
 import { stringEnumValidator, stringArrayValidator, idInParam } from "./global";
@@ -30,15 +31,16 @@ const isRoleData = (value: any): value is RoleData =>
   typeof value.capacity === "number" &&
   stringArrayValidator(value.volunteers);
 
-const isArrayOfRoleData = (value: any[]) => {
+const isArrayOfRoleData = (value: any[]) =>
   value.every((item) => isRoleData(item));
-};
 
 // Define validation for each field
 // Enum fields
 const volunteerType = body("volunteerType")
   .exists()
   .withMessage("Volunteer type is required")
+  .notEmpty()
+  .withMessage("Volunteer type cannot be empty")
   .custom((value: string) =>
     stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", value)
   )
@@ -46,6 +48,8 @@ const volunteerType = body("volunteerType")
 const eventType = body("eventType")
   .exists()
   .withMessage("Event type is required")
+  .notEmpty()
+  .withMessage("Event type cannot be empty")
   .custom((value: string) =>
     stringEnumValidator(EVENT_TYPE, "Event Type", value)
   )
@@ -82,7 +86,9 @@ const name = body("name")
   .exists()
   .withMessage("Name is required")
   .isString()
-  .withMessage("Name must be a string");
+  .withMessage("Name must be a string")
+  .notEmpty()
+  .withMessage("Name cannot be empty");
 const coverImage = body(
   "coverImage",
   "cover image must be represented by a string"
@@ -110,7 +116,9 @@ const location = body("location")
   .exists()
   .withMessage("Location is required")
   .isString()
-  .withMessage("Location must be a string");
+  .withMessage("Location must be a string")
+  .notEmpty()
+  .withMessage("Location cannot be empty");
 
 // Array fields
 const roles = body("roles")
@@ -118,6 +126,7 @@ const roles = body("roles")
   .withMessage("Roles is required")
   .isArray()
   .withMessage("Roles must be an array")
+  .if((value: any[]) => !_.isEmpty(value)) // Allow empty array.
   .custom((value: any[]) => isArrayOfRoleData(value))
   .withMessage("Roles must be an array of RoleData")
   .custom((value: RoleData[]) => roleCapacityValidator(value))
