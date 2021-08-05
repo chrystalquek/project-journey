@@ -32,12 +32,12 @@ type VolunteerValidatorMethod =
 // Personal information
 // Compulsory
 const name = body("name")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Name is required")
   .isString()
   .withMessage("Name must be a string");
 const mobileNumber = body("mobileNumber")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Mobile number is required")
   .isString()
   .withMessage("Mobile number must be a string");
@@ -69,7 +69,7 @@ const instagramHandle = body(
 
 // Enum field
 const gender = body("gender")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Gender is required")
   .custom((value: string) => stringEnumValidator(GENDER, "Gender", value))
   .withMessage("Gender is invalid");
@@ -86,19 +86,19 @@ const race = body("race", "Race is not valid").custom((value: string) =>
 
 // Volunteer experience
 const hasVolunteered = body("hasVolunteered")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("hasVolunteered is required")
   .isBoolean()
   .withMessage("hasVolunteered must be a boolean value");
 const biabVolunteeringDuration = body("biabVolunteeringDuration")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Past volunteer duration is required")
   .isNumeric()
   .withMessage("Past volunteer duration must be a number");
 
 // External volunteering
 const hasVolunteeredExternally = body("hasVolunteeredExternally")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("hasVolunteeredExternally is required")
   .isBoolean()
   .withMessage("hasVolunteeredExternally must be a boolean value");
@@ -159,7 +159,7 @@ const referralSources = body("referralSources")
 
 // Volunteering related
 const volunteerReason = body("volunteerReason")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Volunteer reason is required")
   .isString()
   .withMessage("Volunteer reason must be a string");
@@ -183,7 +183,7 @@ const volunteeringOpportunityInterest = body(
 
 // Medical Information
 const hasMedicalNeeds = body("hasMedicalNeeds")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("hasMedicalNeeds is required")
   .isBoolean()
   .withMessage("hasMedicalNeeds must be a boolean value");
@@ -192,35 +192,35 @@ const medicalNeeds = body(
   "Medical needs must be a string"
 ).isString();
 const hasAllergies = body("hasAllergies")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("hasAllergies is required")
   .isBoolean()
   .withMessage("hasAllergies must be a boolean value");
 const allergies = body("allergies", "Allergies must be a string").isString();
 const hasMedicationDuringDay = body("hasMedicationDuringDay")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("hasMedicationDuringDay is required")
   .isBoolean()
   .withMessage("hasMedicationDuringDay must be a boolean value");
 
 // Emergency contact
 const emergencyContactName = body("emergencyContactName")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact name is required")
   .isString()
   .withMessage("Emergency contact name must be a string");
 const emergencyContactNumber = body("emergencyContactNumber")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact number is required")
   .isString()
   .withMessage("Emergency contact number must be a string");
 const emergencyContactEmail = body("emergencyContactEmail")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact email is required")
   .isString()
   .withMessage("Emergency contact email must be a string");
 const emergencyContactRelationship = body("emergencyContactRelationship")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact relationship is required")
   .isString()
   .withMessage("Emergency contact relationship must be a string");
@@ -243,7 +243,7 @@ const sessionPreference = body(
 
 // Photo URL
 const photoUrl = body("photoUrl")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Photo URL is required")
   .isString()
   .withMessage("Photo URL must be a string")
@@ -252,7 +252,7 @@ const photoUrl = body("photoUrl")
 
 // hasCriminalRecord
 const hasCriminalRecord = body("hasCriminalRecord")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("hasCriminalRecord is required")
   .isBoolean()
   .withMessage("hasCriminalRecord must be a boolean value");

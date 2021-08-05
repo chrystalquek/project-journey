@@ -10,12 +10,12 @@ export type SignUpValidatorMethod =
 
 // Define validation for each field
 const eventId = body("eventId")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Event ID is required")
   .isString()
   .withMessage("Event ID must be a string");
 const userId = body("userId")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("User ID is required")
   .isString()
   .withMessage("User ID must be a string");
@@ -31,14 +31,14 @@ const acceptedRole = body(
   "Accepted role must be a string"
 ).isString();
 const preferences = body("preferences")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Preferences are required")
   .isArray()
   .withMessage("Preferences must be an array")
   .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Preferences should be an array of strings");
 const isRestricted = body("isRestricted")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Is restricted is required")
   .isBoolean()
   .withMessage("Is restricted must be a boolean value");

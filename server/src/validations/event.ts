@@ -58,19 +58,19 @@ const eventSearchType = param("eventType")
 
 // Date time fields
 const startDate = body("startDate")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Start date is required")
   .custom((value, { req }) => value <= req.body.endDate)
   .withMessage("Start date must be before end date")
   .isISO8601()
   .withMessage("Start date is of wrong date format");
 const endDate = body("endDate")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("End date is required")
   .isISO8601()
   .withMessage("End date is of wrong date format");
 const deadline = body("deadline")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Deadline is required")
   .custom((value, { req }) => value <= req.body.startDate)
   .withMessage("Deadline must be before start date")
@@ -79,7 +79,7 @@ const deadline = body("deadline")
 
 // String fields
 const name = body("name")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Name is required")
   .isString()
   .withMessage("Name must be a string");
@@ -91,7 +91,7 @@ const coverImage = body(
   .isURL()
   .withMessage("Cover image must be represented by a URL");
 const description = body("description")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Description is required")
   .isString()
   .withMessage("Description must be a string");
@@ -107,14 +107,14 @@ const facilitatorPhoto = body("facilitatorPhoto")
   .isURL()
   .withMessage("Facilitator photo must be represented by a URL");
 const location = body("location")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Location is required")
   .isString()
   .withMessage("Location must be a string");
 
 // Array fields
 const roles = body("roles")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Roles is required")
   .isArray()
   .withMessage("Roles must be an array")

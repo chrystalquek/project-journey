@@ -9,7 +9,7 @@ type CommitmentApplicationValidatorMethod =
 
 // Define validation for each field
 const volunteerId = body("volunteerId")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Volunteer ID is required")
   .isString()
   .withMessage("Volunteer ID must be a string");
