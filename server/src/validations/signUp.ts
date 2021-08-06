@@ -31,14 +31,14 @@ const acceptedRole = body(
   "Accepted role must be a string"
 ).isString();
 const preferences = body("preferences")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("Preferences are required")
   .isArray()
   .withMessage("Preferences must be an array")
   .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Preferences should be an array of strings");
 const isRestricted = body("isRestricted")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("Is restricted is required")
   .isBoolean()
   .withMessage("Is restricted must be a boolean value");

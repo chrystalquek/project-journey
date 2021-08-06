@@ -69,7 +69,7 @@ const instagramHandle = body(
 
 // Enum field
 const gender = body("gender")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("Gender is required")
   .custom((value: string) => stringEnumValidator(GENDER, "Gender", value))
   .withMessage("Gender is invalid");
@@ -86,19 +86,19 @@ const race = body("race", "Race is not valid").custom((value: string) =>
 
 // Volunteer experience
 const hasVolunteered = body("hasVolunteered")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("hasVolunteered is required")
   .isBoolean()
   .withMessage("hasVolunteered must be a boolean value");
 const biabVolunteeringDuration = body("biabVolunteeringDuration")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("Past volunteer duration is required")
   .isNumeric()
   .withMessage("Past volunteer duration must be a number");
 
 // External volunteering
 const hasVolunteeredExternally = body("hasVolunteeredExternally")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("hasVolunteeredExternally is required")
   .isBoolean()
   .withMessage("hasVolunteeredExternally must be a boolean value");
@@ -183,7 +183,7 @@ const volunteeringOpportunityInterest = body(
 
 // Medical Information
 const hasMedicalNeeds = body("hasMedicalNeeds")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("hasMedicalNeeds is required")
   .isBoolean()
   .withMessage("hasMedicalNeeds must be a boolean value");
@@ -192,13 +192,13 @@ const medicalNeeds = body(
   "Medical needs must be a string"
 ).isString();
 const hasAllergies = body("hasAllergies")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("hasAllergies is required")
   .isBoolean()
   .withMessage("hasAllergies must be a boolean value");
 const allergies = body("allergies", "Allergies must be a string").isString();
 const hasMedicationDuringDay = body("hasMedicationDuringDay")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("hasMedicationDuringDay is required")
   .isBoolean()
   .withMessage("hasMedicationDuringDay must be a boolean value");
@@ -252,7 +252,7 @@ const photoUrl = body("photoUrl")
 
 // hasCriminalRecord
 const hasCriminalRecord = body("hasCriminalRecord")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("hasCriminalRecord is required")
   .isBoolean()
   .withMessage("hasCriminalRecord must be a boolean value");

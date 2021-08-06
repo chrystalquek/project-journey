@@ -58,19 +58,19 @@ const eventSearchType = param("eventType")
 
 // Date time fields
 const startDate = body("startDate")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("Start date is required")
   .custom((value, { req }) => value <= req.body.endDate)
   .withMessage("Start date must be before end date")
   .isISO8601()
   .withMessage("Start date is of wrong date format");
 const endDate = body("endDate")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("End date is required")
   .isISO8601()
   .withMessage("End date is of wrong date format");
 const deadline = body("deadline")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("Deadline is required")
   .custom((value, { req }) => value <= req.body.startDate)
   .withMessage("Deadline must be before start date")
@@ -83,11 +83,9 @@ const name = body("name")
   .withMessage("Name is required")
   .isString()
   .withMessage("Name must be a string");
-const coverImage = body(
-  "coverImage",
-  "cover image must be represented by a string"
-)
+const coverImage = body("coverImage")
   .isString()
+  .withMessage("cover image must be represented by a string")
   .isURL()
   .withMessage("Cover image must be represented by a URL");
 const description = body("description")
@@ -114,7 +112,7 @@ const location = body("location")
 
 // Array fields
 const roles = body("roles")
-  .exists({ checkFalsy: true })
+  .exists()
   .withMessage("Roles is required")
   .isArray()
   .withMessage("Roles must be an array")
