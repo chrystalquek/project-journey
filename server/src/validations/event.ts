@@ -39,8 +39,6 @@ const isArrayOfRoleData = (value: any[]) =>
 const volunteerType = body("volunteerType")
   .exists()
   .withMessage("Volunteer type is required")
-  .notEmpty()
-  .withMessage("Volunteer type cannot be empty")
   .custom((value: string) =>
     stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", value)
   )
@@ -48,8 +46,6 @@ const volunteerType = body("volunteerType")
 const eventType = body("eventType")
   .exists()
   .withMessage("Event type is required")
-  .notEmpty()
-  .withMessage("Event type cannot be empty")
   .custom((value: string) =>
     stringEnumValidator(EVENT_TYPE, "Event Type", value)
   )
@@ -126,7 +122,7 @@ const roles = body("roles")
   .withMessage("Roles is required")
   .isArray()
   .withMessage("Roles must be an array")
-  .if((value: any[]) => !_.isEmpty(value)) // Allow empty array.
+  .if((value: any[]) => !_.isEmpty(value)) // Run the following validations only if the array is non-empty.
   .custom((value: any[]) => isArrayOfRoleData(value))
   .withMessage("Roles must be an array of RoleData")
   .custom((value: RoleData[]) => roleCapacityValidator(value))
