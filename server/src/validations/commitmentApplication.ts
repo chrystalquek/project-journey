@@ -31,7 +31,7 @@ export const getValidations = (
       return [volunteerId];
     }
     case "updateCommitmentApplication": {
-      return [idInParam,volunteerId,status.optional()];
+      return [idInParam, volunteerId, status.optional()];
     }
     case "readCommitmentApplication": {
       return [
