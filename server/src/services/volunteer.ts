@@ -65,10 +65,7 @@ const getVolunteer = async (email: string): Promise<VolunteerData> => {
  * @param id User id to be searched
  */
 const getVolunteerById = async (id: string): Promise<VolunteerData> => {
-  const volunteer = await Volunteer.findById(id)
-    .populate("commitmentApplicationIds")
-    .lean()
-    .exec();
+  const volunteer = await Volunteer.findById(id);
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }

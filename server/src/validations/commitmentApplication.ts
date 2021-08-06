@@ -45,6 +45,10 @@ export const getValidations = (
           )
           .withMessage("Status is not valid")
           .optional(),
+        query("volunteerId")
+          .isString()
+          .withMessage("Volunteer ID must be a string")
+          .optional(),
       ];
     }
     default:

@@ -31,15 +31,6 @@ const createCommitmentApplication = async (
         commitmentApplicationData
       );
 
-    // Add the commitment application id to the volunteer data
-    const updatedVolunteerData = {
-      commitmentApplicationIds: volunteerData.commitmentApplicationIds.concat(
-        savedCommitmentApplication._id
-      ),
-    };
-
-    await volunteerService.updateVolunteer(volunteerId, updatedVolunteerData);
-
     res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
@@ -53,10 +44,11 @@ const getCommitmentApplications = async (
   res: GetCommitmentApplicationsResponse
 ): Promise<void> => {
   try {
-    const comAppStatus = req.query.status;
+    const { status, volunteerId } = req.query;
     const commitmentApplications =
       await commitmentApplicationService.getCommitmentApplications(
-        comAppStatus
+        status,
+        volunteerId
       );
     res.status(HTTP_CODES.OK).json({
       data: commitmentApplications,

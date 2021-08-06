@@ -10,6 +10,7 @@ export type CreateCommitmentApplicationRequest =
 
 type GetCommitmentApplicationsRequestQuery = {
   status?: CommitmentApplicationStatus;
+  volunteerId?: string;
 };
 
 export type GetCommitmentApplicationsRequest = Request<

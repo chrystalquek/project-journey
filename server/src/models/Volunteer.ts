@@ -144,17 +144,6 @@ export const VolunteerSchema = createSchema({
     default: 0,
   }),
 
-  // Submitted Commitment Application
-  commitmentApplicationIds: Type.array({
-    required: true,
-    default: [],
-  }).of(
-    Type.objectId({
-      required: true,
-      ref: "CommitmentApplication",
-    })
-  ),
-
   createdAt: Type.date({
     required: true,
     default: Date.now,
@@ -163,8 +152,8 @@ export const VolunteerSchema = createSchema({
 
 export type VolunteerData = Omit<
   ExtractProps<typeof VolunteerSchema>,
-  "__v" | "_id" | "commitmentApplicationIds" | "userId"
-> & { _id: string; commitmentApplicationIds: string[]; userId: string }; // whats retrieved from db
+  "__v" | "_id" | "userId"
+> & { _id: string; userId: string }; // whats retrieved from db
 
 export type GetVolunteerData = Omit<VolunteerData, "userId"> & {
   administratorRemarks?: string;
