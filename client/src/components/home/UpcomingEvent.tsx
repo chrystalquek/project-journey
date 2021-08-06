@@ -63,7 +63,7 @@ const UpcomingEvent: FC<{}> = () => {
   const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    if (isAdmin(user)) {
+    if (!user || isAdmin(user)) {
       dispatch(getEventsUpcomingEvent({ eventType: "upcoming" }));
     } else {
       dispatch(

@@ -1,4 +1,3 @@
-import { createCommitmentApplication } from "@redux/actions/commitmentApplication";
 import { createSlice } from "@reduxjs/toolkit";
 import { VolunteerData } from "@type/volunteer";
 import jwt from "jsonwebtoken";
@@ -68,14 +67,6 @@ const userSlice = createSlice({
       if (state.user._id === updatedVolunteerData._id) {
         state.user = updatedVolunteerData;
       }
-    });
-    builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
-      const { payload } = action;
-      const newCommitmentApplication = {
-        ...payload,
-        createdAt: new Date(payload.createdAt),
-      } as any;
-      state.user.commitmentApplicationIds.push(newCommitmentApplication);
     });
   },
 });

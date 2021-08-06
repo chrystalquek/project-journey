@@ -48,7 +48,6 @@ export type CreateVolunteerRequest = Omit<
   | "volunteeringSessionsCount"
   | "workshopsCount"
   | "hangoutsCount"
-  | "commitmentApplicationIds"
 > & { password: string; administratorRemarks?: string };
 
 export const ROWS_PER_PAGE = 10;
@@ -94,6 +93,7 @@ export type CreateCommitmentApplicationRequest = Omit<
 
 export type GetCommitmentApplicationsRequest = {
   status?: CommitmentApplicationStatus;
+  volunteerId?: string;
 };
 
 export type UpdateCommitmentApplicationRequest = {

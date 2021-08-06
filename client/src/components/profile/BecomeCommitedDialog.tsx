@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback } from "react";
+import React, { FC, useState, useCallback, useEffect } from "react";
 import { Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppDispatch, useAppSelector } from "@redux/store";
@@ -6,7 +6,10 @@ import Dialog from "@components/common/feedback/Dialog";
 import DialogContent from "@components/common/feedback/DialogContent";
 import DialogTitle from "@components/common/feedback/DialogTitle";
 import CommittedConversionForm from "@components/form/CommittedConversionForm";
-import { createCommitmentApplication } from "@redux/actions/commitmentApplication";
+import {
+  createCommitmentApplication,
+  getCommitmentApplications,
+} from "@redux/actions/commitmentApplication";
 import { CreateCommitmentApplicationRequest } from "@api/request";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 
@@ -30,10 +33,20 @@ const BecomeCommitedDialog: FC = () => {
   const userData = user.user;
   const dispatch = useAppDispatch();
 
-  const length = userData?.commitmentApplicationIds?.length;
-  const commitmentApplication: any = length
-    ? userData.commitmentApplicationIds[length - 1]
-    : null;
+  useEffect(() => {
+    dispatch(getCommitmentApplications({ volunteerId: userData._id }));
+  }, [dispatch, userData._id]);
+
+  const commitmentApplicationState = useAppSelector(
+    (state) => state.commitmentApplication
+  );
+  const commitmentApplication = commitmentApplicationState.ownIds
+    .map((id) => commitmentApplicationState.data[id])
+    .reduce(
+      (prev, current) =>
+        prev && prev.createdAt > current.createdAt ? prev : current,
+      null
+    );
   // Check if there is pending application
   const isPending: boolean =
     commitmentApplication?.status === CommitmentApplicationStatus.Pending;
@@ -57,9 +70,6 @@ const BecomeCommitedDialog: FC = () => {
     delete request.isAwareOfCommitmentExpectation;
     delete request.isAwareOfConfidentiality;
     delete request.isAwareOfBackgroundCheck;
-
-    // Not sure whether we really need this?
-    request.status = CommitmentApplicationStatus.Pending;
 
     await dispatch(
       createCommitmentApplication(request as CreateCommitmentApplicationRequest)

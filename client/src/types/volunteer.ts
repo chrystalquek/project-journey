@@ -111,8 +111,5 @@ export type VolunteerData = {
   workshopsCount: number;
   hangoutsCount: number;
 
-  // Record of commitment applications
-  commitmentApplicationIds: Array<string>;
-
   createdAt: string; // used for member since
 };

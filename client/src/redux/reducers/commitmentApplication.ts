@@ -1,28 +1,27 @@
 import {
   updateCommitmentApplication,
   createCommitmentApplication,
+  getCommitmentApplications,
 } from "@redux/actions/commitmentApplication";
 import { createSlice } from "@reduxjs/toolkit";
 import { CommitmentApplicationData } from "@type/commitmentApplication";
 
 export type CommitmentApplicationState = {
   data: Record<string, CommitmentApplicationData>;
+  ownIds: string[];
 };
 
 const initialState: CommitmentApplicationState = {
   data: {},
+  ownIds: [],
 };
 
-// parse all Dates etc before saving to store
 const addToData = (
   commitmentApplications: Array<CommitmentApplicationData>,
   state: CommitmentApplicationState
 ) => {
   commitmentApplications.forEach((commApp) => {
-    state.data[commApp._id] = {
-      ...commApp,
-      createdAt: commApp.createdAt,
-    };
+    state.data[commApp._id] = commApp;
   });
 };
 
@@ -42,6 +41,14 @@ const commitmentApplicationSlice = createSlice({
         createdAt: payload.createdAt,
       } as CommitmentApplicationData;
       state.data[newCommitmentApplication._id] = newCommitmentApplication;
+    });
+    builder.addCase(getCommitmentApplications.fulfilled, (state, action) => {
+      const { payload } = action;
+      addToData(payload.data, state);
+      if (action.meta.arg.volunteerId) {
+        // further check on whether this is equal to state.user._id
+        state.ownIds = payload.data.map((app) => app._id);
+      }
     });
   },
 });
