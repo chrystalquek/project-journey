@@ -10,12 +10,12 @@ export type SignUpValidatorMethod =
 
 // Define validation for each field
 const eventId = body("eventId")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Event ID is required")
   .isString()
   .withMessage("Event ID must be a string");
 const userId = body("userId")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("User ID is required")
   .isString()
   .withMessage("User ID must be a string");

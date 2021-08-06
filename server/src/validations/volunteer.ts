@@ -32,12 +32,12 @@ type VolunteerValidatorMethod =
 // Personal information
 // Compulsory
 const name = body("name")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Name is required")
   .isString()
   .withMessage("Name must be a string");
 const mobileNumber = body("mobileNumber")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Mobile number is required")
   .isString()
   .withMessage("Mobile number must be a string");
@@ -159,7 +159,7 @@ const referralSources = body("referralSources")
 
 // Volunteering related
 const volunteerReason = body("volunteerReason")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Volunteer reason is required")
   .isString()
   .withMessage("Volunteer reason must be a string");
@@ -205,22 +205,22 @@ const hasMedicationDuringDay = body("hasMedicationDuringDay")
 
 // Emergency contact
 const emergencyContactName = body("emergencyContactName")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact name is required")
   .isString()
   .withMessage("Emergency contact name must be a string");
 const emergencyContactNumber = body("emergencyContactNumber")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact number is required")
   .isString()
   .withMessage("Emergency contact number must be a string");
 const emergencyContactEmail = body("emergencyContactEmail")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact email is required")
   .isString()
   .withMessage("Emergency contact email must be a string");
 const emergencyContactRelationship = body("emergencyContactRelationship")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Emergency contact relationship is required")
   .isString()
   .withMessage("Emergency contact relationship must be a string");
@@ -243,7 +243,7 @@ const sessionPreference = body(
 
 // Photo URL
 const photoUrl = body("photoUrl")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Photo URL is required")
   .isString()
   .withMessage("Photo URL must be a string")

@@ -79,19 +79,17 @@ const deadline = body("deadline")
 
 // String fields
 const name = body("name")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Name is required")
   .isString()
   .withMessage("Name must be a string");
-const coverImage = body(
-  "coverImage",
-  "cover image must be represented by a string"
-)
+const coverImage = body("coverImage")
   .isString()
+  .withMessage("cover image must be represented by a string")
   .isURL()
   .withMessage("Cover image must be represented by a URL");
 const description = body("description")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Description is required")
   .isString()
   .withMessage("Description must be a string");
@@ -107,7 +105,7 @@ const facilitatorPhoto = body("facilitatorPhoto")
   .isURL()
   .withMessage("Facilitator photo must be represented by a URL");
 const location = body("location")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Location is required")
   .isString()
   .withMessage("Location must be a string");
