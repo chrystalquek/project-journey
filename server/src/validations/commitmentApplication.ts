@@ -1,6 +1,6 @@
 import { body, query, ValidationChain } from "express-validator";
 import { COMMITMENT_APPLICATION_STATUS } from "../models/CommitmentApplication";
-import { stringEnumValidator } from "./global";
+import { stringEnumValidator, idInParam } from "./global";
 
 type CommitmentApplicationValidatorMethod =
   | "createCommitmentApplication"
@@ -31,7 +31,7 @@ export const getValidations = (
       return [volunteerId];
     }
     case "updateCommitmentApplication": {
-      return [volunteerId.optional(), status.optional()];
+      return [idInParam,volunteerId,status.optional()];
     }
     case "readCommitmentApplication": {
       return [
