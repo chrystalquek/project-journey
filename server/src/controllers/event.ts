@@ -31,7 +31,7 @@ const createEvent = async (
     res.status(HTTP_CODES.OK).send(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -42,19 +42,10 @@ const getEvent = async (
 ): Promise<void> => {
   try {
     const event = await eventService.getEvent(req.params.id);
-
-    if (
-      event.volunteerType === "committed" &&
-      req.user.volunteerType === "ad-hoc"
-    ) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-      return;
-    }
-
     res.status(HTTP_CODES.OK).json(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -94,7 +85,7 @@ const getEvents = async (
     });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -155,7 +146,7 @@ const getSignedUpEvents = async (
     res.status(HTTP_CODES.OK).json({ data: signedUpEvents });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -173,7 +164,7 @@ const updateEvent = async (
     res.status(HTTP_CODES.OK).send(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -192,7 +183,7 @@ const cancelEvent = async (
     res.status(HTTP_CODES.OK).send("Event cancelled");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };

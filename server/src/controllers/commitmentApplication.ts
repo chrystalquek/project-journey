@@ -18,13 +18,6 @@ const createCommitmentApplication = async (
 ): Promise<void> => {
   try {
     const commitmentApplicationData = req.body;
-    const volunteerData = req.user;
-    const { volunteerId } = commitmentApplicationData;
-
-    if (volunteerData._id !== volunteerId) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-      return;
-    }
 
     const savedCommitmentApplication =
       await commitmentApplicationService.createCommitmentApplication(
@@ -34,7 +27,7 @@ const createCommitmentApplication = async (
     res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -55,7 +48,7 @@ const getCommitmentApplications = async (
     });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -93,7 +86,7 @@ const updateCommitmentApplication = async (
     res.status(HTTP_CODES.OK).send(commitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };

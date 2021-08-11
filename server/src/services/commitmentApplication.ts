@@ -50,7 +50,7 @@ const updateCommitmentApplication = async (
       return commitmentApplication;
     }
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 

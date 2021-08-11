@@ -28,7 +28,7 @@ const uploadSingleFile = async (
     // Gets download link from metadata
     return { url: uploadResponse[1].mediaLink };
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 

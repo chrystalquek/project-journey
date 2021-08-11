@@ -1,6 +1,5 @@
 import signUpService from "../services/signUp";
 import HTTP_CODES from "../constants/httpCodes";
-import eventService from "../services/event";
 import { SignUpData, SignUpIdType } from "../models/SignUp";
 import {
   CreateSignUpRequest,
@@ -26,19 +25,11 @@ const createSignUp = async (
   res: CreateSignUpResponse
 ): Promise<void> => {
   try {
-    const event = await eventService.getEvent(req.body.eventId);
-    if (
-      req.user._id !== req.body.userId ||
-      (req.user.volunteerType === "ad-hoc" &&
-        event.volunteerType === "committed")
-    ) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-    }
     const signUpData = await signUpService.createSignUp(req.body);
     res.status(HTTP_CODES.OK).json(signUpData);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -63,7 +54,7 @@ const getSignUps = async (
     res.status(HTTP_CODES.OK).json({ data: userSignUpDetails });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -82,7 +73,7 @@ const getPendingSignUps = async (
     res.status(HTTP_CODES.OK).json({ data: pendingSignUps });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -106,7 +97,7 @@ const updateSignUp = async (
     res.status(HTTP_CODES.OK).send(signUp);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -124,42 +115,11 @@ const deleteSignUp = async (
     const { idType } = req.params;
     const { id } = req.params;
 
-    switch (idType) {
-      case "signUpId": {
-        const signUps = await signUpService.getSignUps(id, idType);
-        if (signUps.length !== 1) {
-          throw Error("Sign up does not exist");
-        }
-
-        // check that deleting your own signup
-        if (signUps[0].userId !== req.user._id) {
-          res
-            .status(HTTP_CODES.UNAUTHENTICATED)
-            .json({ message: "Unauthorized" });
-          return;
-        }
-        break;
-      }
-      case "eventId" || "userId": {
-        // after admin delete an event or a volunteer
-        if (req.user.volunteerType !== "admin") {
-          res
-            .status(HTTP_CODES.UNAUTHENTICATED)
-            .json({ message: "Unauthorized" });
-          return;
-        }
-        break;
-      }
-      default: {
-        throw Error("Unauthenticated");
-      }
-    }
-
     await signUpService.deleteSignUp(id, idType);
     res.status(HTTP_CODES.OK).send();
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };

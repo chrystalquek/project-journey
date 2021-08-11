@@ -26,7 +26,7 @@ const createEvent = async (eventData: NewEventData): Promise<EventData> => {
     const event = await eventSchemaData.save();
     return event;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -44,7 +44,7 @@ const getEvent = async (id: string): Promise<EventData> => {
 
     return event;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -91,7 +91,7 @@ const readEventsByIds = async (
 
     return events.map((event: EventData) => event);
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -152,7 +152,7 @@ const getEvents = async (
 
     return events;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -173,7 +173,7 @@ const updateEvent = async (
 
     return event;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -181,7 +181,7 @@ const cancelEvent = async (id: string): Promise<void> => {
   try {
     await Event.findByIdAndDelete(id);
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -209,7 +209,7 @@ export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
 
     return eventsNDaysAgo;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 

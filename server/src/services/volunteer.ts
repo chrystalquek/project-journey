@@ -121,27 +121,8 @@ const getVolunteersByIds = async (
     });
     return volunteers;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
-};
-
-// TODO remove below after fixing image
-/**
- * Updates volunteer data with email
- * @param email
- * @param updatedVolunteerData
- */
-const updateVolunteerDetails = async (
-  email: string,
-  updatedVolunteerData: Partial<VolunteerData>
-) => {
-  await getVolunteer(email);
-  const savedVolunteerData = await Volunteer.findOneAndUpdate(
-    { email },
-    updatedVolunteerData,
-    { new: true }
-  );
-  return savedVolunteerData;
 };
 
 /**
@@ -166,15 +147,15 @@ const updateVolunteer = async (
 
 /**
  * Removes volunteer from DB (hard delete)
- * @param email User email to be used to search
+ * @param id Volunteer id to be used to search
  */
-const deleteVolunteer = async (email: string): Promise<void> => {
+const deleteVolunteer = async (id: string): Promise<void> => {
   const volunteer = await Volunteer.findOneAndDelete({
-    email,
+    _id: id,
   });
 
   if (!volunteer) {
-    throw new Error(`Volunteer with email: ${email} not found`);
+    throw new Error(`Volunteer with id: ${id} not found`);
   }
 
   userService.deleteUser(volunteer.userId);
@@ -187,6 +168,5 @@ export default {
   getVolunteer,
   getVolunteerById,
   getVolunteersByIds,
-  updateVolunteerDetails,
   updateVolunteer,
 };

@@ -47,7 +47,7 @@ const deleteForm = async (eventId: string): Promise<void> => {
       );
     }
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 

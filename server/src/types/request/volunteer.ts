@@ -36,8 +36,4 @@ export type UpdateVolunteerRequest = Request<
   IdParams
 >;
 
-export type DeleteVolunteerRequestBody = {
-  email: string;
-};
-
-export type DeleteVolunteerRequest = Request<DeleteVolunteerRequestBody>;
+export type DeleteVolunteerRequest = IdRequest;
