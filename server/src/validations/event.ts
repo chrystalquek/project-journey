@@ -129,11 +129,6 @@ const contentUrl = body("contentUrl")
   .isURL()
   .withMessage("Content URL is invalid");
 
-// Boolean fields
-const isCancelled = body("isCancelled")
-  .isBoolean()
-  .withMessage("IsCancelled must be a boolean value");
-
 const getValidations = (method: EventValidatorMethod) => {
   switch (method) {
     case "createEvent": {
@@ -166,7 +161,6 @@ const getValidations = (method: EventValidatorMethod) => {
         deadline.optional(),
         description.optional(),
         location.optional(),
-        isCancelled.optional(),
 
         // Optional fields
         coverImage.optional(),
