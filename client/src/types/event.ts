@@ -26,7 +26,6 @@ export type EventData = {
   roles: Array<RoleData>;
   contentUrl?: string;
   location: string;
-  isCancelled: boolean;
   feedbackStatus?: boolean; // by right shouldn't be here but for easy check whether current user has given feedback for past events
   createdAt: string;
 };

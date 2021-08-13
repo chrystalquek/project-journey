@@ -7,7 +7,6 @@ import {
   getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
   getSignedUpEventsPastEvent,
-  cancelEvent,
 } from "@redux/actions/event";
 import { EventData } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
@@ -96,12 +95,6 @@ const eventSlice = createSlice({
     });
     builder.addCase(getEvent.pending, (state) => {
       state.form = null;
-    });
-    builder.addCase(cancelEvent.fulfilled, (state, { meta }) => {
-      state.data[meta.arg].isCancelled = true;
-    });
-    builder.addCase(cancelEvent.rejected, (state, { meta }) => {
-      state.data[meta.arg].isCancelled = false;
     });
     builder.addCase(createEvent.rejected, (state) => {
       state.status = SignUpStatus.REJECTED;

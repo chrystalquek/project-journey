@@ -1,28 +1,30 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
-import { useSnackbar } from "notistack";
+import DropZoneCard from "@components/common/DropZoneCard";
+import Header from "@components/common/Header";
 import {
-  TextField,
+  Button,
+  Grid,
+  IconButton,
   makeStyles,
   MenuItem,
-  Typography,
-  Grid,
-  Button,
   Switch,
-  IconButton,
+  TextField,
+  Typography,
 } from "@material-ui/core";
+import ClearIcon from "@material-ui/icons/Clear";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
-import DropZoneCard from "@components/common/DropZoneCard";
+import { createEvent, editEvent, getEvent } from "@redux/actions/event";
+import { resetEventStatus } from "@redux/reducers/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { createEvent, getEvent, editEvent } from "@redux/actions/event";
+import { EventData, EventType } from "@type/event";
+import { SignUpStatus } from "@type/signUp";
+import { VolunteerType } from "@type/volunteer";
+import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import dayjs from "dayjs";
 import { Formik, useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import * as yup from "yup";
-import ClearIcon from "@material-ui/icons/Clear";
-import { resetEventStatus } from "@redux/reducers/event";
-import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
-import Header from "@components/common/Header";
-import { SignUpStatus } from "@type/signUp";
 import FormQuestionMapper from "../form/generator/FormQuestionMapper";
 
 type AdminEventFormProps = {
@@ -104,37 +106,39 @@ type QuestionData = {
 
 type KeyType = "type" | "displayText" | "options" | "isRequired";
 
-const validationSchema = yup.object({
-  eventType: yup.string().required("Event type is required"),
+// @ts-ignore Some yup type errors.
+const validationSchema: yup.SchemaOf<EventData> = yup.object({
   name: yup.string().required("Name is required"),
-  volunteerType: yup.string().required("Volunteer type is required"),
-  deadline: yup.date().required("Deadline is required"),
-  description: yup.string().required("Description is required"),
+  coverImage: yup.string().optional(),
+  eventType: yup.mixed<EventType>().required("Event type is required"),
+  volunteerType: yup
+    .mixed<VolunteerType>()
+    .required("Volunteer type is required"),
   startDate: yup.date().required("Start date is required"),
   endDate: yup.date().required("End date is required"),
+  deadline: yup.date().required("Deadline is required"),
+  description: yup.string().required("Description is required"),
   facilitatorName: yup.string().when("eventType", {
-    is: "volunteering",
+    is: "workshop",
     then: yup.string().required("Facilitator name is required"),
   }),
+  facilitatorPhoto: yup.string().optional(),
   facilitatorDescription: yup.string().when("eventType", {
-    is: "volunteering",
+    is: "workshop",
     then: yup.string().required("Facilitator description is required"),
   }),
   roles: yup.array().required("Roles is required"),
+  contentUrl: yup.string().optional(),
+  location: yup.string().required("Location is required"),
 });
 
-const emptyForm = {
+const emptyForm: Omit<EventData, "_id" | "createdAt"> = {
   name: "",
-  coverImage: "",
-  eventType: "workshop",
-  volunteerType: "committed",
+  eventType: EventType.WORKSHOP,
+  volunteerType: VolunteerType.COMMITTED,
   deadline: dayjs().toISOString(),
   description: "",
-  facilitatorName: "",
-  facilitatorPhoto: "",
-  facilitatorDescription: "",
   roles: [],
-  contentUrl: "",
   location: "",
   startDate: dayjs().toISOString(),
   endDate: dayjs().toISOString(),
@@ -144,7 +148,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const event = useAppSelector((state) => state.event.event);
-  const eventForm: any = useAppSelector((state) => state.event.event.form);
+  const eventForm = useAppSelector((state) => state.event.event.form);
   const dispatch = useAppDispatch();
 
   // Store feedback event form
@@ -294,16 +298,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         );
       }
 
-      const newForm = {
-        ...form,
-        questions: feedbackFormEventQuestions.map((element) => ({
-          ...element,
-          name: element.displayText,
-        })),
-      };
-
       if (isNew) {
-        dispatch(createEvent(newForm));
+        dispatch(
+          createEvent({
+            ...form,
+            // @ts-ignore TODO: Many type errors here. Ignoring now as backend doesn't support
+            // questions yet.
+            questions: feedbackFormEventQuestions.map((element) => ({
+              ...element,
+              name: element.displayText,
+            })),
+          })
+        );
       } else {
         dispatch(editEvent({ data: form, _id: id }));
       }
@@ -470,6 +476,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 format="dd/MM/yyyy HH:mm"
                 helperText={errors.startDate}
                 error={touched.startDate && Boolean(errors.startDate)}
+                minDate={deadline}
+                minDateMessage="Start date should not be before deadline"
               />
             </Grid>
             <Grid item xs={12} md="auto" />
@@ -497,7 +505,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 helperText={errors.endDate}
                 error={touched.endDate && Boolean(errors.endDate)}
                 minDate={startDate}
-                maxDateMessage="End date should not be before start date"
+                minDateMessage="End date should not be before start date"
               />
             </Grid>
           </Grid>
