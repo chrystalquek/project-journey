@@ -32,7 +32,7 @@ const createSignUp = async (signUpData: NewSignUpData): Promise<SignUpData> => {
     );
     return signUp;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -58,7 +58,7 @@ const getSignUps = async (
 
     return signUps;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -73,7 +73,7 @@ const getPendingSignUps = async (): Promise<SignUpData[]> => {
     });
     return pendingSignUps;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -177,7 +177,7 @@ const updateEventRoles = async (
       await eventService.updateEvent(eventId, { roles: eventRoles });
     }
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -294,7 +294,7 @@ const updateSignUp = async (
 
     return oldFields;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -338,7 +338,7 @@ const deleteSignUp = async (
       );
     }
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 

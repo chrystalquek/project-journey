@@ -28,13 +28,6 @@ const createVolunteer = async (
 ): Promise<void> => {
   try {
     const volunteerData = req.body;
-    // assuming we create a few fixed admin accounts for biab,
-    // should only be able to create ad-hoc and commited
-    if (volunteerData.volunteerType === "admin") {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-      return;
-    }
-
     const volunteer = await volunteerService.createVolunteer(volunteerData);
     const volunteerWithoutUserId = removeUserId(volunteer);
     res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
@@ -54,7 +47,7 @@ const getVolunteerDetailsById = async (
     let volunteer = await volunteerService.getVolunteerById(req.params.id);
 
     // append administrator remarks
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       volunteer = await userService.addAdminRemarks(volunteer);
     }
 
@@ -62,7 +55,7 @@ const getVolunteerDetailsById = async (
     res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -89,7 +82,7 @@ const getAllVolunteerDetails = async (
       limit
     );
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       volunteers.data = await Promise.all(
         volunteers.data.map(userService.addAdminRemarks)
       );
@@ -103,7 +96,7 @@ const getAllVolunteerDetails = async (
     res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -128,7 +121,7 @@ const getPendingVolunteers = async (
       pendingVolunteersIds
     );
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       pendingVolunteers = await Promise.all(
         pendingVolunteers.map(userService.addAdminRemarks)
       );
@@ -139,7 +132,7 @@ const getPendingVolunteers = async (
     res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -152,7 +145,7 @@ const getVolunteersByIds = async (
     const { ids } = req.body;
     let volunteers = await volunteerService.getVolunteersByIds(ids);
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       volunteers = await Promise.all(
         volunteers.map(userService.addAdminRemarks)
       );
@@ -163,7 +156,7 @@ const getVolunteersByIds = async (
     res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -174,17 +167,13 @@ const updateVolunteer = async (
 ): Promise<void> => {
   try {
     const volunteerId = req.params.id;
-    if (String(req.user._id) !== volunteerId) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-      return;
-    }
     const updatedVolunteerData = req.body;
     let savedVolunteerData = await volunteerService.updateVolunteer(
       volunteerId,
       updatedVolunteerData
     );
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       savedVolunteerData = await userService.addAdminRemarks(
         savedVolunteerData
       );
@@ -194,7 +183,7 @@ const updateVolunteer = async (
     res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -204,12 +193,11 @@ const deleteVolunteer = async (
   res: DeleteVolunteerResponse
 ): Promise<void> => {
   try {
-    const { email } = req.body;
-    await volunteerService.deleteVolunteer(email);
+    await volunteerService.deleteVolunteer(req.params.id);
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error,
+      message: error.message,
     });
   }
 };

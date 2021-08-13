@@ -115,7 +115,6 @@ async function seedDB() {
       | "volunteeringSessionsCount"
       | "workshopsCount"
       | "hangoutsCount"
-      | "commitmentApplicationIds"
     > & { createdAt: Date };
     const volunteers: Array<NewVolunteerDataSeed> = _.zipWith(
       essentialVolunteerData,

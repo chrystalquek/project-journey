@@ -50,7 +50,7 @@ const createForm = async (
     res.status(HTTP_CODES.OK).send(form);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -84,7 +84,7 @@ const getEventFormDetails = async (
     res.status(HTTP_CODES.OK).send(questionsWithOptions);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -95,12 +95,6 @@ const answerFormQuestions = async (
 ): Promise<void> => {
   let { answers } = req.body;
   const { eventId } = req.body;
-
-  if (answers.some((answer) => answer.userId !== req.user._id)) {
-    // trying to submit responses that are not your user id is not allowed
-    res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-    return;
-  }
 
   const form = await formService.getForm(eventId);
 
@@ -116,7 +110,7 @@ const answerFormQuestions = async (
     res.status(HTTP_CODES.OK).send();
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };

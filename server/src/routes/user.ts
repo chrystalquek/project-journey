@@ -1,5 +1,6 @@
 import express from "express";
 import userController from "../controllers/user";
+import { canUpdate } from "../helpers/authorization";
 import { validate } from "../validations/global";
 import getValidations from "../validations/user";
 
@@ -13,6 +14,14 @@ router.post("/login", validate(getValidations("login")), userController.login);
 // @desc    For volunteers and admins to change their password
 router.post(
   "/password",
+  canUpdate("user", [
+    {
+      firstAttribute: "user",
+      firstValue: "email",
+      secondAttribute: "body",
+      secondValue: "email",
+    },
+  ]),
   validate(getValidations("updatePassword")),
   userController.updatePassword
 );

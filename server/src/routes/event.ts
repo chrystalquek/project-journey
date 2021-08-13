@@ -2,7 +2,7 @@ import express from "express";
 import getValidations from "../validations/event";
 import eventController from "../controllers/event";
 import { validate } from "../validations/global";
-import authorize from "../helpers/authorize";
+import { canUpdate, canCreate, canRead } from "../helpers/authorization";
 
 const router = express.Router();
 
@@ -10,7 +10,6 @@ const router = express.Router();
 // @desc    Get event by id
 router.get(
   "/single/:id",
-  authorize([]),
   validate(getValidations("readEvent")),
   eventController.getEvent
 );
@@ -19,7 +18,6 @@ router.get(
 // @desc    Get either all, upcoming, or past events
 router.get(
   "/multiple/:eventType",
-  authorize([]),
   validate(getValidations("readEvents")),
   eventController.getEvents
 );
@@ -28,7 +26,14 @@ router.get(
 // @desc    Get either all, upcoming, or past signed up events
 router.get(
   "/signup/:userId/:eventType",
-  authorize([]),
+  canRead("signedUpEvent", [
+    {
+      firstAttribute: "user",
+      firstValue: "_id",
+      secondAttribute: "params",
+      secondValue: "userId",
+    },
+  ]),
   validate(getValidations("readSignedUpEvents")),
   eventController.getSignedUpEvents
 );
@@ -37,7 +42,7 @@ router.get(
 // @desc    Update a event by id
 router.put(
   "/:id",
-  authorize(["admin"]),
+  canUpdate("event"),
   validate(getValidations("updateEvent")),
   eventController.updateEvent
 );
@@ -46,7 +51,7 @@ router.put(
 // @desc    Cancel an event by id
 router.put(
   "/cancel/:id",
-  authorize(["admin"]),
+  canUpdate("event"),
   validate(getValidations("cancelEvent")),
   eventController.cancelEvent
 );
@@ -55,6 +60,7 @@ router.put(
 // @desc    Post a new event
 router.post(
   "/",
+  canCreate("event"),
   validate(getValidations("createEvent")),
   eventController.createEvent
 );

@@ -3,7 +3,6 @@ import Event, {
   EventSearchType,
   NewEventData,
 } from "../models/Event";
-import { VolunteerType, VOLUNTEER_TYPE } from "../models/Volunteer";
 
 const createEvent = async (eventData: NewEventData): Promise<EventData> => {
   try {
@@ -26,7 +25,7 @@ const createEvent = async (eventData: NewEventData): Promise<EventData> => {
     const event = await eventSchemaData.save();
     return event;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -44,7 +43,7 @@ const getEvent = async (id: string): Promise<EventData> => {
 
     return event;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -91,7 +90,7 @@ const readEventsByIds = async (
 
     return events.map((event: EventData) => event);
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -104,7 +103,6 @@ const readEventsByIds = async (
  */
 const getEvents = async (
   eventType: EventSearchType,
-  volunteerType?: VolunteerType[],
   skip?: number,
   limit?: number
 ): Promise<EventData[]> => {
@@ -113,13 +111,10 @@ const getEvents = async (
 
     const skipQuery = skip ?? 0;
     const limitQuery = limit ?? 0;
-    const volunteerTypeQuery = volunteerType ?? VOLUNTEER_TYPE;
 
     switch (eventType) {
       case "all":
-        events = await Event.find({
-          volunteerType: { $in: volunteerTypeQuery },
-        })
+        events = await Event.find({})
           .skip(skipQuery)
           .limit(limitQuery)
           .lean()
@@ -128,7 +123,6 @@ const getEvents = async (
       case "past":
         events = await Event.find({
           startDate: { $lt: new Date() },
-          volunteerType: { $in: volunteerTypeQuery },
         })
           .skip(skipQuery)
           .limit(limitQuery)
@@ -138,7 +132,6 @@ const getEvents = async (
       case "upcoming":
         events = await Event.find({
           startDate: { $gt: new Date() },
-          volunteerType: { $in: volunteerTypeQuery },
         })
           .skip(skipQuery)
           .limit(limitQuery)
@@ -152,7 +145,7 @@ const getEvents = async (
 
     return events;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -173,7 +166,7 @@ const updateEvent = async (
 
     return event;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -181,7 +174,7 @@ const cancelEvent = async (id: string): Promise<void> => {
   try {
     await Event.findByIdAndDelete(id);
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 
@@ -209,7 +202,7 @@ export const findEventsNDaysAgo = async (n: number): Promise<EventData[]> => {
 
     return eventsNDaysAgo;
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 

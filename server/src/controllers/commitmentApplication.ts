@@ -18,32 +18,16 @@ const createCommitmentApplication = async (
 ): Promise<void> => {
   try {
     const commitmentApplicationData = req.body;
-    const volunteerData = req.user;
-    const { volunteerId } = commitmentApplicationData;
-
-    if (volunteerData._id !== volunteerId) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-      return;
-    }
 
     const savedCommitmentApplication =
       await commitmentApplicationService.createCommitmentApplication(
         commitmentApplicationData
       );
 
-    // Add the commitment application id to the volunteer data
-    const updatedVolunteerData = {
-      commitmentApplicationIds: volunteerData.commitmentApplicationIds.concat(
-        savedCommitmentApplication._id
-      ),
-    };
-
-    await volunteerService.updateVolunteer(volunteerId, updatedVolunteerData);
-
     res.status(HTTP_CODES.OK).send(savedCommitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -53,17 +37,18 @@ const getCommitmentApplications = async (
   res: GetCommitmentApplicationsResponse
 ): Promise<void> => {
   try {
-    const comAppStatus = req.query.status;
+    const { status, volunteerId } = req.query;
     const commitmentApplications =
       await commitmentApplicationService.getCommitmentApplications(
-        comAppStatus
+        status,
+        volunteerId
       );
     res.status(HTTP_CODES.OK).json({
       data: commitmentApplications,
     });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -101,7 +86,7 @@ const updateCommitmentApplication = async (
     res.status(HTTP_CODES.OK).send(commitmentApplication);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };

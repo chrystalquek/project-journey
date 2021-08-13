@@ -1,8 +1,6 @@
 import HTTP_CODES from "../constants/httpCodes";
 import { EventData, EventSearchType } from "../models/Event";
-import { VolunteerType } from "../models/Volunteer";
 import eventService from "../services/event";
-import answerService from "../services/forms/answer";
 import signUpService, { isSignUpAccepted } from "../services/signUp";
 import {
   CancelEventRequest,
@@ -31,7 +29,7 @@ const createEvent = async (
     res.status(HTTP_CODES.OK).send(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -42,19 +40,10 @@ const getEvent = async (
 ): Promise<void> => {
   try {
     const event = await eventService.getEvent(req.params.id);
-
-    if (
-      event.volunteerType === "committed" &&
-      req.user.volunteerType === "ad-hoc"
-    ) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-      return;
-    }
-
     res.status(HTTP_CODES.OK).json(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -70,20 +59,14 @@ const getEvents = async (
     const { eventType } = req.params;
     const { pageNo, size } = req.query;
 
-    const volunteerType: VolunteerType[] =
-      req.user.volunteerType === "ad-hoc"
-        ? ["ad-hoc"]
-        : ["ad-hoc", "committed"];
-
     let events: EventData[];
     if (!size || !pageNo) {
-      events = await eventService.getEvents(eventType, volunteerType);
+      events = await eventService.getEvents(eventType);
     } else {
       const pageNoNum = parseInt(pageNo, 10);
       const sizeNum = parseInt(size, 10);
       events = await eventService.getEvents(
         eventType,
-        volunteerType,
         sizeNum * pageNoNum,
         sizeNum
       );
@@ -94,7 +77,7 @@ const getEvents = async (
     });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -135,15 +118,10 @@ const getSignedUpEvents = async (
     // append feedback status
     if (eventType === "past") {
       const signedUpEventsWithFeedbackStatus: EventData[] = [];
-      const feedbackStatuses = await Promise.all(
-        signedUpEvents.map(async (signedUpEvent) =>
-          answerService.getFeedbackStatus(userId, signedUpEvent._id)
-        )
-      );
       for (let i = 0; i < signedUpEvents.length; i += 1) {
         signedUpEventsWithFeedbackStatus.push({
           ...signedUpEvents[i],
-          feedbackStatus: feedbackStatuses[i],
+          feedbackStatus: false, // TODO fix
         });
       }
       res
@@ -155,7 +133,7 @@ const getSignedUpEvents = async (
     res.status(HTTP_CODES.OK).json({ data: signedUpEvents });
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -173,7 +151,7 @@ const updateEvent = async (
     res.status(HTTP_CODES.OK).send(event);
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };
@@ -192,7 +170,7 @@ const cancelEvent = async (
     res.status(HTTP_CODES.OK).send("Event cancelled");
   } catch (err) {
     res.status(HTTP_CODES.SERVER_ERROR).json({
-      errors: [{ msg: err.msg }],
+      errors: [{ msg: err.message }],
     });
   }
 };

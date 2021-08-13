@@ -1,8 +1,13 @@
 import express, { Router } from "express";
 import volunteerController from "../controllers/volunteer";
-import authorize from "../helpers/authorize";
 import { validate } from "../validations/global";
 import getValidations from "../validations/volunteer";
+import {
+  canDelete,
+  canRead,
+  canUpdate,
+  isNotAdmin,
+} from "../helpers/authorization";
 
 const router: Router = express.Router();
 
@@ -10,6 +15,9 @@ const router: Router = express.Router();
 // @desc    For anyone to create new accounts
 router.post(
   "/",
+  // assuming we create a few fixed admin accounts for biab,
+  // should only be able to create ad-hoc and commited
+  isNotAdmin(),
   validate(getValidations("createVolunteer")),
   volunteerController.createVolunteer
 );
@@ -18,7 +26,7 @@ router.post(
 // @desc    For admin to get volunteers who have pending commitment applications
 router.get(
   "/pending",
-  authorize(["admin"]),
+  canRead("volunteer"),
   volunteerController.getPendingVolunteers
 );
 
@@ -28,7 +36,7 @@ router.get(
 // https://stackoverflow.com/questions/19637459/rest-api-using-post-instead-of-get
 router.post(
   "/ids",
-  authorize(["admin"]),
+  canRead("volunteer"),
   validate(getValidations("getVolunteersById")),
   volunteerController.getVolunteersByIds
 );
@@ -37,7 +45,14 @@ router.post(
 // @desc    For volunteer and admin to get volunteer
 router.get(
   "/:id",
-  authorize([]),
+  canRead("volunteer", [
+    {
+      firstAttribute: "user",
+      firstValue: "_id",
+      secondAttribute: "params",
+      secondValue: "id",
+    },
+  ]),
   validate(getValidations("getVolunteerById")),
   volunteerController.getVolunteerDetailsById
 );
@@ -46,7 +61,7 @@ router.get(
 // @desc    For admin to get all volunteers
 router.get(
   "/",
-  authorize(["admin"]),
+  canRead("volunteer"),
   validate(getValidations("getAllVolunteers")),
   volunteerController.getAllVolunteerDetails
 );
@@ -55,7 +70,7 @@ router.get(
 // @desc    For admin to delete volunteer
 router.delete(
   "/:id",
-  validate(getValidations("deleteVolunteer")),
+  canDelete("volunteer"),
   volunteerController.deleteVolunteer
 );
 
@@ -63,6 +78,20 @@ router.delete(
 // @desc    For admin to update volunteer
 router.put(
   "/:id",
+  canUpdate("volunteer", [
+    {
+      firstAttribute: "user",
+      firstValue: "_id",
+      secondAttribute: "params",
+      secondValue: "id",
+    },
+    {
+      firstAttribute: "user",
+      firstValue: "email",
+      secondAttribute: "body",
+      secondValue: "email",
+    },
+  ]),
   validate(getValidations("updateVolunteer")),
   volunteerController.updateVolunteer
 );

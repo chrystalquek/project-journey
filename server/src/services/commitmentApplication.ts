@@ -20,11 +20,17 @@ const createCommitmentApplication = async (
 };
 
 const getCommitmentApplications = async (
-  status?: CommitmentApplicationStatus
+  status?: CommitmentApplicationStatus,
+  volunteerId?: string
 ): Promise<CommitmentApplicationData[]> => {
-  const commitmentApplications = await (status
-    ? CommitmentApplication.find({ status })
-    : CommitmentApplication.find({}));
+  const query: any = {};
+  if (status) {
+    query.status = status;
+  }
+  if (volunteerId) {
+    query.volunteerId = volunteerId;
+  }
+  const commitmentApplications = await CommitmentApplication.find(query);
   return commitmentApplications;
 };
 
@@ -44,7 +50,7 @@ const updateCommitmentApplication = async (
       return commitmentApplication;
     }
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error(err);
   }
 };
 

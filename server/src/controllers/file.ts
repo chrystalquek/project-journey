@@ -18,7 +18,7 @@ const uploadSingleFile = async (
     const response = await fileService.uploadSingleFile(req.file);
     res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
-    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error);
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json(error.message);
   }
 };
 

@@ -1,6 +1,6 @@
 import { body, query, ValidationChain } from "express-validator";
 import { COMMITMENT_APPLICATION_STATUS } from "../models/CommitmentApplication";
-import { stringEnumValidator } from "./global";
+import { stringEnumValidator, idInParam } from "./global";
 
 type CommitmentApplicationValidatorMethod =
   | "createCommitmentApplication"
@@ -9,7 +9,7 @@ type CommitmentApplicationValidatorMethod =
 
 // Define validation for each field
 const volunteerId = body("volunteerId")
-  .exists()
+  .exists({ checkFalsy: true })
   .withMessage("Volunteer ID is required")
   .isString()
   .withMessage("Volunteer ID must be a string");
@@ -31,7 +31,7 @@ export const getValidations = (
       return [volunteerId];
     }
     case "updateCommitmentApplication": {
-      return [volunteerId.optional(), status.optional()];
+      return [idInParam, volunteerId, status.optional()];
     }
     case "readCommitmentApplication": {
       return [
@@ -44,6 +44,10 @@ export const getValidations = (
             )
           )
           .withMessage("Status is not valid")
+          .optional(),
+        query("volunteerId")
+          .isString()
+          .withMessage("Volunteer ID must be a string")
           .optional(),
       ];
     }

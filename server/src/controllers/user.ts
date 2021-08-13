@@ -54,11 +54,6 @@ const updatePassword = async (
 
   try {
     const user = await userService.getUserByEmail(email);
-    const volunteer = await volunteerService.getVolunteer(email);
-
-    if (req.user._id !== volunteer._id) {
-      res.status(HTTP_CODES.UNAUTHENTICATED).json({ message: "Unauthorized" });
-    }
 
     // should not be same as old password
     if (!bcrypt.compareSync(newPassword, user.password)) {
