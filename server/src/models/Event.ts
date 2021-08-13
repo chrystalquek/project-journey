@@ -45,10 +45,6 @@ const EventSchema = createSchema(
     }),
     contentUrl: Type.string({ required: false }),
     location: Type.string({ required: true }),
-    isCancelled: Type.boolean({
-      required: true,
-      default: false,
-    }),
     createdAt: Type.date({
       required: true,
       default: Date.now,
@@ -63,10 +59,9 @@ export type EventData = Omit<
 > & {
   _id: string;
   roles: RoleData[];
-  feedbackStatus?: boolean; // computed and appended property
 };
 
-export type NewEventData = Omit<EventData, "_id" | "createdAt" | "isCancelled">;
+export type NewEventData = Omit<EventData, "_id" | "createdAt">;
 
 type EventModel = EventData & mongoose.Document;
 export default mongoose.model<EventModel>("Event", EventSchema);
