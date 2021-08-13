@@ -59,6 +59,7 @@ export type EventData = Omit<
 > & {
   _id: string;
   roles: RoleData[];
+  feedbackStatus?: boolean; // computed and appended property
 };
 
 export type NewEventData = Omit<EventData, "_id" | "createdAt">;
