@@ -51,7 +51,7 @@ export type MongooseSaveError = {
 declare global {
   namespace Express {
     interface Request {
-      user: VolunteerData;
+      user?: VolunteerData;
     }
   }
 }

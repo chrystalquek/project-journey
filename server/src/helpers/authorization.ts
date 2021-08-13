@@ -34,8 +34,9 @@ export const canSignUp = () => [
   async (req: Request, res: Response, next: NextFunction) => {
     const event = await eventService.getEvent(req.body.eventId);
     if (
-      req.user.volunteerType === "ad-hoc" &&
-      event.volunteerType === "committed"
+      !req.user ||
+      (req.user.volunteerType === "ad-hoc" &&
+        event.volunteerType === "committed")
     ) {
       return res
         .status(HTTP_CODES.UNAUTHENTICATED)
@@ -54,11 +55,12 @@ export const canReadSignUp = () => [
       signUp = await signUpService.getSignUps(req.params.id, req.params.idType);
     }
     if (
-      req.user.volunteerType !== "admin" &&
-      ((req.params.idType === "userId" && req.params.id !== req.user._id) ||
-        req.params.idType === "eventId" ||
-        (req.params.idType === "signUpId" &&
-          req.user._id !== signUp[0].userId.toString()))
+      !req.user ||
+      (req.user.volunteerType !== "admin" &&
+        ((req.params.idType === "userId" && req.params.id !== req.user._id) ||
+          req.params.idType === "eventId" ||
+          (req.params.idType === "signUpId" &&
+            req.user._id !== signUp[0].userId.toString())))
     ) {
       return res
         .status(HTTP_CODES.UNAUTHENTICATED)
@@ -72,30 +74,13 @@ export const canUpdateSignUp = canReadSignUp;
 
 export const canDeleteSignUp = canReadSignUp;
 
-export const canReadEvent = () => [
-  jwt({ secret: accessTokenSecret, algorithms: ["HS256"] }),
-  // eslint-disable-next-line consistent-return
-  async (req: Request, res: Response, next: NextFunction) => {
-    const event = await eventService.getEvent(req.params.id);
-    if (
-      event.volunteerType === "committed" &&
-      req.user.volunteerType === "ad-hoc"
-    ) {
-      return res
-        .status(HTTP_CODES.UNAUTHENTICATED)
-        .json({ message: "Unauthorized" });
-    }
-    next();
-  },
-];
-
 export const canAnswerFormQuestions = () => [
   jwt({ secret: accessTokenSecret, algorithms: ["HS256"] }),
   // eslint-disable-next-line consistent-return
   async (req: Request, res: Response, next: NextFunction) => {
     const { answers } = req.body;
 
-    if (answers.some((answer) => answer.userId !== req.user._id)) {
+    if (answers.some((answer) => answer.userId !== req.user?._id)) {
       // trying to submit responses that are not your user id is not allowed
       return res
         .status(HTTP_CODES.UNAUTHENTICATED)
@@ -110,6 +95,11 @@ export const canRead = (resource: string, conditions?: Conditions) => [
 
   // eslint-disable-next-line consistent-return
   (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res
+        .status(HTTP_CODES.UNAUTHENTICATED)
+        .json({ message: "Unauthorized" });
+    }
     let permitted = ac.can(req.user.volunteerType).readAny(resource).granted;
 
     if (conditions) {
@@ -142,6 +132,12 @@ export const canUpdate = (resource: string, conditions?: Conditions) => [
 
   // eslint-disable-next-line consistent-return
   (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res
+        .status(HTTP_CODES.UNAUTHENTICATED)
+        .json({ message: "Unauthorized" });
+    }
+
     let permitted = ac.can(req.user.volunteerType).updateAny(resource).granted;
 
     if (conditions) {
@@ -174,6 +170,12 @@ export const canDelete = (resource: string, conditions?: Conditions) => [
 
   // eslint-disable-next-line consistent-return
   (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res
+        .status(HTTP_CODES.UNAUTHENTICATED)
+        .json({ message: "Unauthorized" });
+    }
+
     let permitted = ac.can(req.user.volunteerType).deleteAny(resource).granted;
 
     if (conditions) {
@@ -206,6 +208,12 @@ export const canCreate = (resource: string, conditions?: Conditions) => [
 
   // eslint-disable-next-line consistent-return
   (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res
+        .status(HTTP_CODES.UNAUTHENTICATED)
+        .json({ message: "Unauthorized" });
+    }
+
     let permitted = ac.can(req.user.volunteerType).createAny(resource).granted;
 
     if (conditions) {

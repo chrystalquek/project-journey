@@ -47,7 +47,7 @@ const getVolunteerDetailsById = async (
     let volunteer = await volunteerService.getVolunteerById(req.params.id);
 
     // append administrator remarks
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       volunteer = await userService.addAdminRemarks(volunteer);
     }
 
@@ -82,7 +82,7 @@ const getAllVolunteerDetails = async (
       limit
     );
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       volunteers.data = await Promise.all(
         volunteers.data.map(userService.addAdminRemarks)
       );
@@ -121,7 +121,7 @@ const getPendingVolunteers = async (
       pendingVolunteersIds
     );
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       pendingVolunteers = await Promise.all(
         pendingVolunteers.map(userService.addAdminRemarks)
       );
@@ -145,7 +145,7 @@ const getVolunteersByIds = async (
     const { ids } = req.body;
     let volunteers = await volunteerService.getVolunteersByIds(ids);
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       volunteers = await Promise.all(
         volunteers.map(userService.addAdminRemarks)
       );
@@ -173,7 +173,7 @@ const updateVolunteer = async (
       updatedVolunteerData
     );
 
-    if (req.user.volunteerType === "admin") {
+    if (req.user?.volunteerType === "admin") {
       savedVolunteerData = await userService.addAdminRemarks(
         savedVolunteerData
       );

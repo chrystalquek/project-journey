@@ -1,8 +1,6 @@
 import HTTP_CODES from "../constants/httpCodes";
 import { EventData, EventSearchType } from "../models/Event";
-import { VolunteerType } from "../models/Volunteer";
 import eventService from "../services/event";
-import answerService from "../services/forms/answer";
 import signUpService, { isSignUpAccepted } from "../services/signUp";
 import {
   CancelEventRequest,
@@ -61,20 +59,14 @@ const getEvents = async (
     const { eventType } = req.params;
     const { pageNo, size } = req.query;
 
-    const volunteerType: VolunteerType[] =
-      req.user.volunteerType === "ad-hoc"
-        ? ["ad-hoc"]
-        : ["ad-hoc", "committed"];
-
     let events: EventData[];
     if (!size || !pageNo) {
-      events = await eventService.getEvents(eventType, volunteerType);
+      events = await eventService.getEvents(eventType);
     } else {
       const pageNoNum = parseInt(pageNo, 10);
       const sizeNum = parseInt(size, 10);
       events = await eventService.getEvents(
         eventType,
-        volunteerType,
         sizeNum * pageNoNum,
         sizeNum
       );
@@ -126,15 +118,10 @@ const getSignedUpEvents = async (
     // append feedback status
     if (eventType === "past") {
       const signedUpEventsWithFeedbackStatus: EventData[] = [];
-      const feedbackStatuses = await Promise.all(
-        signedUpEvents.map(async (signedUpEvent) =>
-          answerService.getFeedbackStatus(userId, signedUpEvent._id)
-        )
-      );
       for (let i = 0; i < signedUpEvents.length; i += 1) {
         signedUpEventsWithFeedbackStatus.push({
           ...signedUpEvents[i],
-          feedbackStatus: feedbackStatuses[i],
+          feedbackStatus: false, // TODO fix
         });
       }
       res
