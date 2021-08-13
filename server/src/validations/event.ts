@@ -1,4 +1,5 @@
 import { body, query, param } from "express-validator";
+import _ from "lodash";
 import { EVENT_SEARCH_TYPE, EVENT_TYPE, RoleData } from "../models/Event";
 import { VOLUNTEER_TYPE } from "../models/Volunteer";
 import { stringEnumValidator, stringArrayValidator, idInParam } from "./global";
@@ -30,9 +31,8 @@ const isRoleData = (value: any): value is RoleData =>
   typeof value.capacity === "number" &&
   stringArrayValidator(value.volunteers);
 
-const isArrayOfRoleData = (value: any[]) => {
+const isArrayOfRoleData = (value: any[]) =>
   value.every((item) => isRoleData(item));
-};
 
 // Define validation for each field
 // Enum fields
@@ -108,7 +108,9 @@ const location = body("location")
   .exists({ checkFalsy: true })
   .withMessage("Location is required")
   .isString()
-  .withMessage("Location must be a string");
+  .withMessage("Location must be a string")
+  .notEmpty()
+  .withMessage("Location cannot be empty");
 
 // Array fields
 const roles = body("roles")
@@ -116,6 +118,7 @@ const roles = body("roles")
   .withMessage("Roles is required")
   .isArray()
   .withMessage("Roles must be an array")
+  .if((value: any[]) => !_.isEmpty(value)) // Run the following validations only if the array is non-empty.
   .custom((value: any[]) => isArrayOfRoleData(value))
   .withMessage("Roles must be an array of RoleData")
   .custom((value: RoleData[]) => roleCapacityValidator(value))
@@ -125,11 +128,6 @@ const roles = body("roles")
 const contentUrl = body("contentUrl")
   .isURL()
   .withMessage("Content URL is invalid");
-
-// Boolean fields
-const isCancelled = body("isCancelled")
-  .isBoolean()
-  .withMessage("IsCancelled must be a boolean value");
 
 const getValidations = (method: EventValidatorMethod) => {
   switch (method) {
@@ -163,7 +161,6 @@ const getValidations = (method: EventValidatorMethod) => {
         deadline.optional(),
         description.optional(),
         location.optional(),
-        isCancelled.optional(),
 
         // Optional fields
         coverImage.optional(),
