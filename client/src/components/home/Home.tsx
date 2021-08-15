@@ -13,7 +13,7 @@ const Home: FC = () => {
   const user = useAppSelector((state) => state?.user);
 
   return (
-    <>
+    <Grid item xs={8}>
       <Header title="Dashboard" />
       {isMobile ? (
         <Grid container direction="column">
@@ -24,15 +24,15 @@ const Home: FC = () => {
         </Grid>
       ) : (
         <Grid container direction="row" spacing={5}>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <UpcomingEvent />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             {isAdmin(user) && <PendingApproval />}
           </Grid>
         </Grid>
       )}
-    </>
+    </Grid>
   );
 };
 

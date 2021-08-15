@@ -15,7 +15,7 @@ import { EventData, EventFilterOptions, EventFilters } from "@type/event";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { useIsMobile } from "@utils/helpers/layout";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useState, useCallback } from "react";
 import EventBreadCrumbs from "./EventBreadCrumbs";
 import EventsGrid from "./EventsGrid";
 
@@ -24,6 +24,12 @@ const useStyles = makeStyles((theme) => ({
     background: "none",
     textTransform: "none",
     color: theme.palette.secondary.main,
+    textDecoration: "underline",
+    cursor: "pointer",
+    "&:hover": {
+      background: "none",
+      textDecoration: "underline",
+    },
   },
 }));
 
@@ -64,67 +70,78 @@ const EventsPageBody = ({ type, events, user }: Props) => {
   );
 
   return (
-    <Box width="80%" style={{ margin: "auto" }}>
-      <Grid container spacing={4}>
-        {!isMobile && (
-          <Grid item xs={12}>
-            <EventBreadCrumbs />
-          </Grid>
-        )}
+    <>
+      <Grid
+        container
+        spacing={4}
+        style={{
+          display: "flex",
+          justifyContent: isMobile ? "center" : "flex-end",
+        }}
+      >
+        <Grid item xs={8} spacing={10}>
+          {!isMobile && <EventBreadCrumbs />}
 
-        <Grid item container alignItems="center" spacing={4}>
-          {/* Search Bar */}
-          <Grid item xs={12} md={9}>
-            <SearchBar
-              setFilterFunction={(searchText: string) => setSearch(searchText)}
-            />
-          </Grid>
-
-          {/* Create New Event Button */}
-          {user && user.volunteerType === VolunteerType.ADMIN && (
-            <Grid item container justify="center" xs={12} md={3}>
-              <Button
-                disableRipple
-                onClick={() => router.push(CREATE_EVENT_FORM_ROUTE)}
-              >
-                Create new event
-              </Button>
+          <Grid item container alignItems="center" spacing={4}>
+            {/* Search Bar */}
+            <Grid item xs={12}>
+              <SearchBar
+                setFilterFunction={(searchText: string) =>
+                  setSearch(searchText)
+                }
+              />
             </Grid>
-          )}
-        </Grid>
 
-        <Grid item container justify="space-between" alignItems="center">
-          {/* Num Events */}
-          <Grid item>
-            <Typography display="inline" color="secondary">
-              {filteredSearchedEvents ? filteredSearchedEvents.length : 0}
-            </Typography>
-            <Typography display="inline" variant="body2">
-              {type !== "my-past-events" ? ` Upcoming Events` : ` Past Events`}
-            </Typography>
+            {/* Create New Event Button */}
+            {user && user.volunteerType === VolunteerType.ADMIN && (
+              <Grid item container xs={12} md={3}>
+                <Button
+                  disableRipple
+                  onClick={() => router.push(CREATE_EVENT_FORM_ROUTE)}
+                >
+                  Create new event
+                </Button>
+              </Grid>
+            )}
           </Grid>
-
-          {/* Filter Button (mobile) */}
-          {isMobile && (
+          <Grid
+            item
+            container
+            justify="space-between"
+            alignItems="center"
+            spacing={4}
+          >
+            {/* Num Events */}
             <Grid item>
-              <MuiButton
-                className={classes.filterResultsBtn}
-                onClick={onPressMobileFilterButton}
-              >
-                Filter Results
-              </MuiButton>
+              <Typography display="inline" color="secondary">
+                {filteredSearchedEvents ? filteredSearchedEvents.length : 0}
+              </Typography>
+              <Typography display="inline" variant="body2">
+                {type !== "my-past-events"
+                  ? ` Upcoming Events`
+                  : ` Past Events`}
+              </Typography>
             </Grid>
-          )}
-        </Grid>
 
-        {/* Events Grid */}
-        <Grid item xs={12} md={9}>
+            {/* Filter Button (mobile) */}
+            {isMobile && (
+              <Grid item>
+                <MuiButton
+                  className={classes.filterResultsBtn}
+                  onClick={onPressMobileFilterButton}
+                >
+                  Filter Results
+                </MuiButton>
+              </Grid>
+            )}
+          </Grid>
+          {/* Events Grid */}
           <EventsGrid events={filteredSearchedEvents} type="public" />
         </Grid>
 
         {/* Filter - desktop */}
         {!isMobile && (
-          <Grid item md={3}>
+          <Grid item md={2}>
             <EventsFilter filters={filters} setFilters={setFilters} />
           </Grid>
         )}
@@ -140,7 +157,7 @@ const EventsPageBody = ({ type, events, user }: Props) => {
           <EventsFilter filters={filters} setFilters={setFilters} />
         </Box>
       </Drawer>
-    </Box>
+    </>
   );
 };
 

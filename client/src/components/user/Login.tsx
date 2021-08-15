@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px",
   },
   signUpText: {
-    fontWeight: "bold",
-    color: theme.palette.common.black,
+    color: theme.palette.secondary.main,
+    textDecoration: "underline",
     cursor: "pointer",
   },
   invalidText: {
@@ -139,10 +139,10 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   return (
     <>
       <Header title="Login" />
-      <Box>
+      <Box style={{ width: "100%" }}>
         <Box className={classes.content}>
           <Grid container className={classes.rowContent}>
-            <Grid item sm={6} lg={4}>
+            <Grid item xs={12} sm={9} md={6}>
               <Typography className={classes.pageHeader}>Login</Typography>
               <Formik
                 initialValues={{

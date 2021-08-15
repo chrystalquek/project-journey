@@ -130,17 +130,25 @@ const EventDetails = ({ eid }: Props) => {
 
   return (
     <Container>
-      <Grid container direction="row" wrap="nowrap">
+      <Grid
+        container
+        direction="row"
+        wrap="nowrap"
+        style={{
+          display: "flex",
+          justifyContent: isMobile ? "center" : "flex-start",
+        }}
+      >
         {/* Desktop - Side Navigation */}
         {!isMobile && (
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             <SideNav selected="details" eventId={event._id} />
           </Grid>
         )}
 
-        <Grid item container xs={12} md={10} spacing={8}>
+        <Grid item container xs={8} spacing={8}>
           <Grid item xs={12}>
-            <EventBreadCrumbs eid={event._id} />
+            <EventBreadCrumbs name={event.name} />
           </Grid>
 
           {/* Event Title */}

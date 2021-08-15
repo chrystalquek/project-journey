@@ -104,8 +104,8 @@ const useStyles = makeStyles((theme) => ({
     padding: 24,
   },
   login: {
-    fontWeight: "bold",
-    color: theme.palette.common.black,
+    color: theme.palette.secondary.main,
+    textDecoration: "underline",
     cursor: "pointer",
   },
   loginFooter: {
@@ -178,7 +178,7 @@ const SignUp = () => {
       <Box className={classes.content}>
         <div>
           <Grid container className={classes.signUpInstructions}>
-            <Grid item md={6}>
+            <Grid item md={12}>
               <Typography variant="body1">
                 <p>
                   Yay! We are excited that you are interested to volunteer with
@@ -218,7 +218,7 @@ const SignUp = () => {
         </div>
         <div>
           <Grid container className={classes.centerContent}>
-            <Grid item sm={6}>
+            <Grid item sm={12}>
               <TextDivider>
                 <Typography variant="h1">Sign Up As</Typography>
               </TextDivider>
@@ -226,7 +226,7 @@ const SignUp = () => {
           </Grid>
           <div className={classes.cardContainer}>
             <Grid container spacing={6} className={classes.centerContent}>
-              <Grid item md={3}>
+              <Grid item md={6}>
                 <Card className={classes.card} onClick={selectAdhoc}>
                   <CardActionArea>
                     <CardHeader
@@ -242,7 +242,7 @@ const SignUp = () => {
                   </CardActionArea>
                 </Card>
               </Grid>
-              <Grid item md={3}>
+              <Grid item md={6}>
                 <Card className={classes.card} onClick={selectCommitted}>
                   <CardActionArea>
                     <CardHeader

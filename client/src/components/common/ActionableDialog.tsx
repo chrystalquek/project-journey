@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   unrecommendedButton: {
     padding: theme.spacing(5),
     marginRight: theme.spacing(5),
-    marginTop: theme.spacing(5),
     height: 30,
     backgroundColor: theme.palette.common.white,
     borderRadius: "5em",
@@ -25,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   recommendedButton: {
     padding: theme.spacing(5),
     marginRight: theme.spacing(5),
-    marginTop: theme.spacing(5),
     backgroundColor: theme.palette.primary.main,
     height: 30,
     borderRadius: "5em",

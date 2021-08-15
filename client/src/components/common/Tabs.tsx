@@ -5,7 +5,7 @@ import { Button, Grid } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   clickedButton: {
     padding: theme.spacing(5),
-    margin: theme.spacing(5),
+    margin: theme.spacing(6, 10, 6, 0),
     backgroundColor: theme.palette.primary.main,
     height: 30,
     width: 150,
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   otherButton: {
     padding: theme.spacing(5),
-    margin: theme.spacing(5),
+    margin: theme.spacing(6, 10, 6, 0),
     height: 30,
     width: 150,
     borderRadius: "5em",

@@ -1,16 +1,18 @@
-import React, { FC, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import {
   AccordionDetails,
   capitalize,
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Grid,
   Typography,
 } from "@material-ui/core";
 import { VolunteerType } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { useRouter } from "next/router";
 import { useAuthenticatedRoute } from "@utils/helpers/auth";
+import { useIsMobile } from "@utils/helpers/layout";
 import { getVolunteers } from "@redux/actions/volunteer/index";
 import { formatDDMMYYYY } from "@utils/helpers/date";
 import LoadingIndicator from "@components/common/LoadingIndicator";
@@ -24,41 +26,61 @@ import {
   GridCellParams,
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
+import VolunteerBreadCrumbs from "./VolunteerBreadCrumbs";
 
 const Index: FC<{}> = () => {
   useAuthenticatedRoute();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   const volunteerState = useAppSelector((state) => state.volunteer.index);
-  const { volunteerType } = volunteerState.collate.filters;
+  const { filters } = volunteerState.collate;
   const { sort } = volunteerState.collate;
   const { name } = volunteerState.collate.search;
   const { volunteers } = volunteerState;
   const { count, pageNo } = volunteerState.pagination;
+  const [volunteerType, setVolunteerType] = useState(filters.volunteerType);
+  const [openFilter, setOpenFilter] = useState(isMobile);
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
     dispatch(getVolunteers({}));
   }, [dispatch]);
 
-  // filter functions
-  const handleFilterVolunteerTypeChange = (event) => {
+  const handleApplyFilter = () => {
     dispatch(
       getVolunteers({
         newCollate: {
           filters: {
-            volunteerType: {
-              ...volunteerType,
-              [event.target.name]: !volunteerType[event.target.name],
-            },
+            volunteerType,
           },
         },
       })
     );
   };
 
-  const [openFilter, setOpenFilter] = React.useState(true);
+  // filter functions
+  const handleFilterVolunteerTypeChange = (event) => {
+    setVolunteerType({
+      ...volunteerType,
+      [event.target.name]: !volunteerType[event.target.name],
+    });
+    if (!isMobile) {
+      dispatch(
+        getVolunteers({
+          newCollate: {
+            filters: {
+              volunteerType: {
+                ...volunteerType,
+                [event.target.name]: !volunteerType[event.target.name],
+              },
+            },
+          },
+        })
+      );
+    }
+  };
 
   const filterOptions = (
     <Accordion
@@ -155,19 +177,35 @@ const Index: FC<{}> = () => {
   return (
     <>
       <Header title="Volunteers" />
-      <Table
-        columns={columns}
-        rows={volunteers}
-        searchText={name}
-        onSearch={onSearch}
-        selectedSort={sort}
-        onSort={handleSortChange}
-        filterOptions={filterOptions}
-        paginationMode="server"
-        rowCount={count}
-        page={pageNo}
-        onPageChange={handleChangePage}
-      />
+      <Grid
+        direction="row"
+        container
+        spacing={4}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Grid item xs={8}>
+          {!isMobile && <VolunteerBreadCrumbs />}
+        </Grid>
+        <Grid item xs={12}>
+          <Table
+            columns={columns}
+            rows={volunteers}
+            searchText={name}
+            onSearch={onSearch}
+            selectedSort={sort}
+            onSort={handleSortChange}
+            filterOptions={filterOptions}
+            onApplyFilter={handleApplyFilter}
+            paginationMode="server"
+            rowCount={count}
+            page={pageNo}
+            onPageChange={handleChangePage}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

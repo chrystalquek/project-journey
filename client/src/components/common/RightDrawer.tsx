@@ -1,28 +1,48 @@
-import React, { FC } from "react";
+import { FC, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Drawer } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: "80%",
+    width: "fit-content",
+    minWidth: "50%",
     padding: theme.spacing(4),
     paddingTop: theme.spacing(10),
+  },
+  button: {
+    background: "none",
+    textTransform: "none",
+    color: theme.palette.secondary.main,
+    textDecoration: "underline",
+    cursor: "pointer",
+    "&:hover": {
+      background: "none",
+      textDecoration: "underline",
+    },
   },
 }));
 
 type RightDrawerProps = {
   buttonTitle: JSX.Element;
   content: JSX.Element;
+  handleApplyFilter?: () => void;
 };
 
-const RightDrawer: FC<RightDrawerProps> = ({ buttonTitle, content }) => {
+const RightDrawer: FC<RightDrawerProps> = ({
+  buttonTitle,
+  content,
+  handleApplyFilter,
+}) => {
   const classes = useStyles();
 
-  const [rightDrawerOpen, setRightDrawerOpen] = React.useState(false);
+  const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
 
   return (
     <>
-      <Button onClick={() => setRightDrawerOpen(!rightDrawerOpen)}>
+      <Button
+        className={classes.button}
+        onClick={() => setRightDrawerOpen(!rightDrawerOpen)}
+      >
         {buttonTitle}
       </Button>
       <Drawer
@@ -31,7 +51,12 @@ const RightDrawer: FC<RightDrawerProps> = ({ buttonTitle, content }) => {
         }}
         anchor="right"
         open={rightDrawerOpen}
-        onClose={() => setRightDrawerOpen(false)}
+        onClose={() => {
+          setRightDrawerOpen(false);
+          if (handleApplyFilter) {
+            handleApplyFilter();
+          }
+        }}
       >
         {content}
       </Drawer>

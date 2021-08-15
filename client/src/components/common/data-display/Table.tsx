@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
     "&.MuiDataGrid-root .MuiDataGrid-iconSeparator": {
       display: "none",
     },
+    // remove padding in column title
+    "&.MuiDataGrid-root .MuiDataGrid-columnHeaderTitleContainer": {
+      padding: 0,
+    },
     height: 700,
   },
   "&. header": {
@@ -60,6 +64,7 @@ type TableProps = {
   onSort?: (value: string) => void;
 
   filterOptions?: JSX.Element;
+  onApplyFilter?: () => void;
 
   paginationMode?: "server" | "client";
   onPageChange?: (newPage: number) => void;
@@ -76,6 +81,7 @@ const Table: FC<TableProps> = (props) => {
     selectedSort,
     onSort,
     filterOptions,
+    onApplyFilter,
     paginationMode,
     onPageChange,
     page,
@@ -121,14 +127,21 @@ const Table: FC<TableProps> = (props) => {
   const hasSearch = searchText !== undefined && onSearch; // cos empty str is a falsy value
   const hasSort = selectedSort && onSort;
   const hasFilter = filterOptions;
-  const widthMd = hasFilter ? 9 : 12;
 
   const isControlledPagination =
     onPageChange && page !== undefined && rowCount !== undefined; // 0 is a falsy value
 
   return (
-    <Grid container xs={12} spacing={2}>
-      <Grid item container xs={12} md={widthMd} spacing={5}>
+    <Grid
+      container
+      xs={12}
+      spacing={2}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Grid item container xs={8} spacing={5}>
         {hasSearch && (
           <Grid item xs={12} md={8}>
             {searchBar}
@@ -144,13 +157,23 @@ const Table: FC<TableProps> = (props) => {
             <RightDrawer
               buttonTitle={<>Filter results</>}
               content={filterAccordionGroup}
+              handleApplyFilter={onApplyFilter}
             />
           </Grid>
         )}
       </Grid>
 
-      <Grid item container xs={12} md={12} spacing={5}>
-        <Grid item container xs={12} md={widthMd}>
+      <Grid
+        item
+        container
+        xs={12}
+        spacing={5}
+        style={{
+          display: "flex",
+          justifyContent: isDesktop && hasFilter ? "flex-end" : "center",
+        }}
+      >
+        <Grid item container xs={8}>
           <DataGrid
             columns={columns.map((column) => ({
               ...column,
@@ -181,7 +204,7 @@ const Table: FC<TableProps> = (props) => {
           />
         </Grid>
         {isDesktop && hasFilter && (
-          <Grid item md={3}>
+          <Grid item md={2}>
             {filterAccordionGroup}
           </Grid>
         )}

@@ -60,7 +60,7 @@ const getEventTypePlaceholder = (eventType) => {
 
 const useStyles = makeStyles((theme) => ({
   coverImage: {
-    width: "1010px",
+    width: "100%",
     height: "369px",
   },
   facilPhotograph: {
@@ -343,7 +343,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     return <h1>Loading</h1>;
   }
   return (
-    <>
+    <Grid container xs={8}>
       <Header title={isNew ? "Create Event" : "Edit Event"} />
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" spacing={10}>
@@ -360,7 +360,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 Type of Event
               </Typography>
             </Grid>
-            <Grid item xs={6} md={2}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 select
                 variant="outlined"
@@ -425,7 +425,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 Volunteer Type
               </Typography>
             </Grid>
-            <Grid item xs={6} md={2}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 select
                 variant="outlined"
@@ -517,7 +517,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 Sign-up Deadline
               </Typography>
             </Grid>
-            <Grid item xs={10} md={3}>
+            <Grid item xs={12}>
               <KeyboardDateTimePicker
                 fullWidth
                 clearable
@@ -827,7 +827,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
           </Grid>
         </Grid>
       </form>
-    </>
+    </Grid>
   );
 };
 

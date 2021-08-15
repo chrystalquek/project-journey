@@ -1,6 +1,6 @@
 import { capitalize, Grid } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
-import React, { FC, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { VolunteerData } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import {
@@ -14,6 +14,7 @@ import {
 } from "@type/commitmentApplication";
 import { ActionableDialog } from "@components/common/ActionableDialog";
 import { useAuthenticatedRoute } from "@utils/helpers/auth";
+import { useIsMobile } from "@utils/helpers/layout";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import Header from "@components/common/Header";
 import ErrorPage from "@components/common/ErrorPage";
@@ -23,10 +24,12 @@ import {
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
 import Table from "@components/common/data-display/Table";
+import VolunteerBreadCrumbs from "./VolunteerBreadCrumbs";
 
 const PendingRequests: FC<{}> = () => {
   useAuthenticatedRoute();
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     dispatch(getPendingVolunteers());
@@ -36,8 +39,8 @@ const PendingRequests: FC<{}> = () => {
   const { pendingVolunteers, pendingCommitmentApplications, isLoading, error } =
     useAppSelector((state) => state.volunteer.pendingRequests);
 
-  const [openApprove, setOpenApprove] = React.useState(false);
-  const [openReject, setOpenReject] = React.useState(false);
+  const [openApprove, setOpenApprove] = useState(false);
+  const [openReject, setOpenReject] = useState(false);
 
   const onApproveReject = (
     commitmentApplication: CommitmentApplicationData
@@ -101,7 +104,7 @@ const PendingRequests: FC<{}> = () => {
       field: "name",
       headerName: "Name",
       sortable: false,
-      width: 300,
+      width: 200,
     },
     {
       field: "createdAt",
@@ -122,7 +125,7 @@ const PendingRequests: FC<{}> = () => {
       field: "",
       headerName: "",
       sortable: false,
-      width: 300,
+      width: 250,
       renderCell: (params: GridCellParams) =>
         getApproveRejectButtons(params.row as VolunteerData),
     },
@@ -130,9 +133,10 @@ const PendingRequests: FC<{}> = () => {
 
   return (
     <>
-      <Header title="Pending Requests" />
+      <Header title="Pending Requests - Volunteers" />
       <Grid container alignItems="center" justify="center">
-        <Grid item xs={12} md={9}>
+        <Grid item xs={8}>
+          {!isMobile && <VolunteerBreadCrumbs name="Pending Volunteers" />}
           <PendingRequestsTabs clickedOn={0} />
           <Table rows={pendingVolunteers} columns={columns} />
         </Grid>

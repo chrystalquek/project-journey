@@ -8,6 +8,7 @@ import {
 } from "@redux/actions/events/pendingRequests";
 import { SignUpData, SignUpStatus } from "@type/signUp";
 import { useAuthenticatedRoute } from "@utils/helpers/auth";
+import { useIsMobile } from "@utils/helpers/layout";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import { useRouter } from "next/router";
 import Header from "@components/common/Header";
@@ -20,6 +21,7 @@ import {
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
 import Table from "@components/common/data-display/Table";
+import EventBreadCrumbs from "./EventBreadCrumbs";
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -44,6 +46,7 @@ const PendingRequests: FC = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     dispatch(getUpcomingEvents());
@@ -116,7 +119,8 @@ const PendingRequests: FC = () => {
     <>
       <Header title="Pending Requests - Events" />
       <Grid container alignItems="center" justify="center">
-        <Grid item xs={12} md={9}>
+        <Grid item xs={8}>
+          {!isMobile && <EventBreadCrumbs name="Pending Events" />}
           <PendingRequestsTabs clickedOn={1} />
           <Table
             columns={columns}

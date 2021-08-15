@@ -28,7 +28,9 @@ function App({ Component, pageProps }: AppProps) {
                 }}
               >
                 <NavBar />
-                <Container style={{ flex: 1 }}>
+                <Container
+                  style={{ display: "flex", justifyContent: "center", flex: 1 }}
+                >
                   <Component {...pageProps} />
                 </Container>
                 <Footer />
