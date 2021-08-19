@@ -1,9 +1,18 @@
-import React from "react";
-import { Container, Typography } from "@material-ui/core";
+import { useAppSelector } from "@redux/store";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-const Index = () => (
-  <Container>
-    <Typography variant="h1">WIP: Landing Page</Typography>
-  </Container>
-);
+const Index = () => {
+  const user = useAppSelector((state) => state.user.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    } else {
+      router.push("/home");
+    }
+  }, [user]);
+};
+
 export default Index;
