@@ -13,6 +13,8 @@ const Index = () => {
       router.push("/home");
     }
   }, [user]);
+
+  return null;
 };
 
 export default Index;
