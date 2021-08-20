@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import mongoose from "mongoose";
+import { isEqual } from "lodash";
 import Volunteer, {
   NewVolunteerData,
   VolunteerData,
@@ -7,6 +8,7 @@ import Volunteer, {
   VOLUNTEER_TYPE,
 } from "../models/Volunteer";
 import userService from "./user";
+import eventService from "./event";
 
 // Helper methods
 export const doesUserEmailExist = async (email: string): Promise<boolean> => {
@@ -14,6 +16,33 @@ export const doesUserEmailExist = async (email: string): Promise<boolean> => {
     email,
   });
   return !user;
+};
+
+/**
+ * Compute a volunteer event count
+ * Returns updated volunteer data with the computed event count
+ * @param volunteerData Volunteer data from db
+ */
+const addVolunteerEventCount = async (
+  volunteerData: VolunteerData
+): Promise<VolunteerData> => {
+  const pastEvents = await eventService.getEvents("past");
+  const count = { volunteering: 0, workshop: 0, hangout: 0 };
+  pastEvents.forEach((event) => {
+    const { roles, eventType } = event;
+
+    roles.forEach((role) => {
+      role.volunteers.forEach((id) => {
+        if (isEqual(id, volunteerData._id)) count[eventType] += 1;
+      });
+    });
+  });
+  return {
+    ...volunteerData,
+    volunteeringSessionsCount: count.volunteering,
+    workshopsCount: count.workshop,
+    hangoutsCount: count.hangout,
+  };
 };
 
 /**
@@ -169,4 +198,5 @@ export default {
   getVolunteerById,
   getVolunteersByIds,
   updateVolunteer,
+  addVolunteerEventCount,
 };

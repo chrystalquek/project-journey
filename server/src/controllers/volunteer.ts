@@ -51,6 +51,8 @@ const getVolunteerDetailsById = async (
       volunteer = await userService.addAdminRemarks(volunteer);
     }
 
+    volunteer = await volunteerService.addVolunteerEventCount(volunteer);
+
     const volunteerWithoutUserId = removeUserId(volunteer);
     res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
@@ -87,6 +89,10 @@ const getAllVolunteerDetails = async (
         volunteers.data.map(userService.addAdminRemarks)
       );
     }
+
+    volunteers.data = await Promise.all(
+      volunteers.data.map(volunteerService.addVolunteerEventCount)
+    );
 
     const response = {
       ...volunteers,
@@ -127,6 +133,10 @@ const getPendingVolunteers = async (
       );
     }
 
+    pendingVolunteers = await Promise.all(
+      pendingVolunteers.map(volunteerService.addVolunteerEventCount)
+    );
+
     const volunteersWithoutUserId = pendingVolunteers.map(removeUserId);
 
     res.status(HTTP_CODES.OK).json({ data: volunteersWithoutUserId });
@@ -150,6 +160,10 @@ const getVolunteersByIds = async (
         volunteers.map(userService.addAdminRemarks)
       );
     }
+
+    volunteers = await Promise.all(
+      volunteers.map(volunteerService.addVolunteerEventCount)
+    );
 
     const volunteersWithoutUserId = volunteers.map(removeUserId);
 
@@ -178,6 +192,10 @@ const updateVolunteer = async (
         savedVolunteerData
       );
     }
+
+    savedVolunteerData = await volunteerService.addVolunteerEventCount(
+      savedVolunteerData
+    );
 
     const volunteerWithoutUserId = removeUserId(savedVolunteerData);
     res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
