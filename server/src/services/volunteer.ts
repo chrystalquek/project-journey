@@ -94,7 +94,7 @@ const getVolunteer = async (email: string): Promise<VolunteerData> => {
  * @param id User id to be searched
  */
 const getVolunteerById = async (id: string): Promise<VolunteerData> => {
-  const volunteer = await Volunteer.findById(id);
+  const volunteer = await Volunteer.findById(id).lean().exec();
   if (!volunteer) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }
@@ -147,7 +147,9 @@ const getVolunteersByIds = async (
   try {
     const volunteers = await Volunteer.find({
       _id: { $in: ids },
-    });
+    })
+      .lean()
+      .exec();
     return volunteers;
   } catch (err) {
     throw new Error(err);
@@ -167,7 +169,9 @@ const updateVolunteer = async (
     { _id: id },
     updatedVolunteerData,
     { new: true }
-  );
+  )
+    .lean()
+    .exec();
   if (!savedVolunteerData) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }

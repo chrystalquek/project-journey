@@ -33,14 +33,18 @@ const login = async (req: LoginRequest, res: LoginResponse): Promise<void> => {
       res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
         errors: [
           {
-            message: "Password is incorrect, please try again",
+            msg: "Password is incorrect, please try again",
           },
         ],
       });
     }
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      errors: error.message,
+      errors: [
+        {
+          msg: error.message,
+        },
+      ],
     });
   }
 };
@@ -63,7 +67,7 @@ const updatePassword = async (
       res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
         errors: [
           {
-            message: "Password is the same, please enter a new password",
+            msg: "Password is the same, please enter a new password",
           },
         ],
       });
@@ -72,7 +76,7 @@ const updatePassword = async (
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
       errors: [
         {
-          message: error.message,
+          msg: error.message,
         },
       ],
     });

@@ -57,7 +57,7 @@ const getVolunteerDetailsById = async (
     res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error.message,
+      errors: [{ msg: error.message }],
     });
   }
 };
@@ -102,7 +102,7 @@ const getAllVolunteerDetails = async (
     res.status(HTTP_CODES.OK).json(response);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error.message,
+      errors: [{ msg: error.message }],
     });
   }
 };
@@ -201,7 +201,7 @@ const updateVolunteer = async (
     res.status(HTTP_CODES.OK).send(volunteerWithoutUserId);
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error.message,
+      errors: [{ msg: error.message }],
     });
   }
 };
@@ -215,7 +215,7 @@ const deleteVolunteer = async (
     res.status(HTTP_CODES.OK).send();
   } catch (error) {
     res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
-      message: error.message,
+      errors: [{ msg: error.message }],
     });
   }
 };
