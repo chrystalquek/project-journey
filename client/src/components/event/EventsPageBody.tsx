@@ -136,7 +136,7 @@ const EventsPageBody = ({ type, events, user }: Props) => {
             )}
           </Grid>
           {/* Events Grid */}
-          <EventsGrid events={filteredSearchedEvents} type="public" />
+          <EventsGrid events={filteredSearchedEvents} type={type} />
         </Grid>
 
         {/* Filter - desktop */}

@@ -6,6 +6,8 @@ import {
   GetSignedUpEventsRequest,
   UpdateEventRequest,
 } from "@api/request";
+import { EventData, EventSearchType } from "@type/event";
+import { StoreState } from "@redux/store";
 
 export const createEvent = createAsyncThunk(
   "event/createEvent",
@@ -27,6 +29,26 @@ export const getEventsUpcomingEvent = createAsyncThunk(
     return response;
   }
 );
+
+// Todo: Merge the APIs in the server into one.
+type ListEventsArgs = {
+  eventType?: EventSearchType;
+  onlySignedUp?: boolean;
+};
+export const listEvents = createAsyncThunk<
+  { events: EventData[] },
+  ListEventsArgs,
+  { state: StoreState }
+>("event/listEvents", async ({ eventType, onlySignedUp }, { getState }) => {
+  if (!onlySignedUp) {
+    const response = await apiClient.getEvents({ eventType });
+    return { events: response.data };
+  }
+
+  const userId = getState().user.user._id;
+  const response = await apiClient.getSignedUpEvents({ userId, eventType });
+  return { events: response.data };
+});
 
 export const getUpcomingEvents = createAsyncThunk("event/getEvents", async () =>
   apiClient.getEvents({ eventType: "upcoming" })

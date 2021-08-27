@@ -1,43 +1,44 @@
-import React, { useState, useRef } from "react";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import {
   Avatar,
+  ClickAwayListener,
+  Collapse,
   Drawer,
+  Fade,
   List,
   ListItem,
-  ListItemText,
   ListItemIcon,
-  Collapse,
-  Popper,
-  Fade,
-  ClickAwayListener,
-  Paper,
-  MenuList,
+  ListItemText,
   MenuItem,
+  MenuList,
+  Paper,
+  Popper,
 } from "@material-ui/core";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import IconButton from "@material-ui/core/IconButton";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import PersonIcon from "@material-ui/icons/Person";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import { VolunteerData, VolunteerType } from "@type/volunteer";
-import { useAppDispatch } from "@redux/store";
+import MenuIcon from "@material-ui/icons/Menu";
+import PersonIcon from "@material-ui/icons/Person";
 import { resetUser } from "@redux/reducers/user";
+import { useAppDispatch } from "@redux/store";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
 import {
   EVENTS_ROUTE,
-  PAST_EVENTS_ROUTE,
-  UPCOMING_EVENTS_ROUTE,
   EVENT_PENDING_REQUESTS_ROUTE,
-  VOLUNTEER_PROFILES_ROUTE,
-  VOLUNTEER_PENDING_REQUESTS_ROUTE,
-  LOGIN_ROUTE,
-  SIGNUP_ROUTE,
   HOME_ROUTE,
+  LOGIN_ROUTE,
+  MY_PAST_EVENTS_ROUTE,
+  MY_UPCOMING_EVENTS_ROUTE,
+  PAST_EVENTS_ROUTE,
+  SIGNUP_ROUTE,
+  VOLUNTEER_PENDING_REQUESTS_ROUTE,
+  VOLUNTEER_PROFILES_ROUTE,
 } from "@utils/constants/routes";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React, { useRef, useState } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -115,8 +116,8 @@ export default function MobileNavBar({ userData }: NavBarProps) {
     // Adhoc / Committed
     eventMenuArray = [
       { title: "Browse Events", route: EVENTS_ROUTE },
-      { title: "My Upcoming Events", route: UPCOMING_EVENTS_ROUTE },
-      { title: "My Past Events", route: PAST_EVENTS_ROUTE },
+      { title: "My Upcoming Events", route: MY_UPCOMING_EVENTS_ROUTE },
+      { title: "My Past Events", route: MY_PAST_EVENTS_ROUTE },
     ];
   }
 

@@ -7,6 +7,7 @@ import {
   getEventsUpcomingEvent,
   getSignedUpEventsUpcomingEvent,
   getSignedUpEventsPastEvent,
+  listEvents,
 } from "@redux/actions/event";
 import { EventData } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
@@ -128,6 +129,25 @@ const eventSlice = createSlice({
     builder.addCase(getUpcomingEvents.rejected, (state) => {
       state.status = "rejected";
       state.browseEvents.ids = [];
+    });
+    builder.addCase(listEvents.pending, (state) => {
+      state.status = "fetching";
+    });
+    builder.addCase(listEvents.fulfilled, (state, { meta, payload }) => {
+      state.status = "fulfilled";
+      addToData(payload.events, state);
+
+      if (meta.arg.eventType === "past") {
+        state.pastEvents.ids = payload.events.map((event) => event._id);
+      }
+      // hacky workaround to make create new event work
+      state.status = "";
+    });
+    builder.addCase(listEvents.rejected, (state, { meta }) => {
+      state.status = "rejected";
+      if (meta.arg.eventType === "past") {
+        state.pastEvents.ids = [];
+      }
     });
   },
 });
