@@ -180,7 +180,7 @@ async function seedDB() {
             faker.random.arrayElement(["F", "T"]) +
             faker.random.arrayElement(["J", "P"])
           }-${faker.random.arrayElement(["A", "T"])}`,
-          strengths: Array(3).map(() => faker.random.word()),
+          strengths: Array(3).map(() => faker.lorem.word()),
           volunteeringOpportunityInterest: faker.lorem.sentence(),
 
           volunteerReason: faker.lorem.paragraph(),
@@ -471,7 +471,6 @@ async function seedDB() {
         preferences: faker.helpers.shuffle(
           event.roles.map((role) => role.name)
         ),
-        isRestricted: false,
         createdAt: faker.date.between(event.createdAt, event.deadline),
       };
 
@@ -493,7 +492,6 @@ async function seedDB() {
             status: "accepted",
             acceptedRole: role.name,
             preferences: faker.helpers.shuffle(roleNames),
-            isRestricted: false,
             createdAt: faker.date.between(event.createdAt, event.deadline),
           };
           signUps.push(signUp);

@@ -3,16 +3,14 @@ import { VolunteerData } from "../models/Volunteer";
 import volunteerService from "./volunteer";
 
 const createUser = async (userData: NewUserData): Promise<UserData> => {
-  const userSchemaData = new User({
-    ...userData,
-  });
+  const userSchemaData = new User(userData);
 
   const user = await userSchemaData.save();
   return user;
 };
 
 const getUser = async (id: string): Promise<UserData> => {
-  const user = await User.findById(id).lean().exec();
+  const user = await User.findById(id);
   if (!user) {
     throw new Error(`User with id: ${id} not found`);
   }

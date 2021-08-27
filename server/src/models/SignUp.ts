@@ -20,7 +20,6 @@ const SignUpSchema = createSchema({
   preferences: Type.array({ required: true }).of(
     Type.string({ required: true })
   ),
-  isRestricted: Type.boolean({ required: true }),
   createdAt: Type.date({
     required: true,
     default: Date.now,

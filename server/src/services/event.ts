@@ -6,22 +6,7 @@ import Event, {
 
 const createEvent = async (eventData: NewEventData): Promise<EventData> => {
   try {
-    const eventSchemaData = new Event({
-      name: eventData.name,
-      coverImage: eventData.coverImage,
-      eventType: eventData.eventType,
-      volunteerType: eventData.volunteerType,
-      startDate: eventData.startDate,
-      endDate: eventData.endDate,
-      deadline: eventData.deadline,
-      description: eventData.description,
-      facilitatorName: eventData.facilitatorName,
-      facilitatorDescription: eventData.facilitatorDescription,
-      facilitatorPhoto: eventData.facilitatorPhoto,
-      roles: eventData.roles,
-      contentUrl: eventData.contentUrl,
-      location: eventData.location,
-    });
+    const eventSchemaData = new Event(eventData);
     const event = await eventSchemaData.save();
     return event;
   } catch (err) {

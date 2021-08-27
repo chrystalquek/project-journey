@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import CommitmentApplication, {
   CommitmentApplicationData,
   CommitmentApplicationStatus,
@@ -8,15 +7,12 @@ import CommitmentApplication, {
 const createCommitmentApplication = async (
   commitmentApplicationData: NewCommitmentApplicationData
 ): Promise<CommitmentApplicationData> => {
-  const commitmentApplicationSchemaData: mongoose.Document =
-    new CommitmentApplication({
-      volunteerId: mongoose.Types.ObjectId(
-        commitmentApplicationData.volunteerId
-      ),
-    });
+  const commitmentApplicationSchemaData = new CommitmentApplication(
+    commitmentApplicationData
+  );
   const savedCommitmentApplication =
     await commitmentApplicationSchemaData.save();
-  return savedCommitmentApplication.toObject();
+  return savedCommitmentApplication;
 };
 
 const getCommitmentApplications = async (

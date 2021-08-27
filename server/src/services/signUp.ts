@@ -15,14 +15,7 @@ type UpdateEventVolunteersAction = "add" | "remove" | "replace";
 
 const createSignUp = async (signUpData: NewSignUpData): Promise<SignUpData> => {
   try {
-    const signUpSchemaData = new SignUp({
-      eventId: signUpData.eventId,
-      userId: signUpData.userId,
-      status: signUpData.status,
-      preferences: signUpData.preferences,
-      isRestricted: signUpData.isRestricted,
-      acceptedRole: signUpData.acceptedRole || "",
-    });
+    const signUpSchemaData = new SignUp(signUpData);
     const signUp = await signUpSchemaData.save();
 
     emailService.sendEmail(
