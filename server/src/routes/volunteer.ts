@@ -45,6 +45,14 @@ router.post(
 // @desc    For volunteer and admin to get volunteer
 router.get(
   "/:id",
+  canRead("volunteer", [
+    {
+      firstAttribute: "user",
+      firstValue: "_id",
+      secondAttribute: "params",
+      secondValue: "id",
+    }
+  ]),
   validate(getValidations("getVolunteerById")),
   volunteerController.getVolunteerDetailsById
 );
