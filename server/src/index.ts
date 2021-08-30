@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 // Import routes
 import router from "./routes";
 import config from "./config/index";
+import httpCodes from "./constants/httpCodes";
 
 // The dotenv file should be parsed before any imports requiring process.env, such as CONFIG
 // tslint:disable-next-line:no-var-requires
@@ -27,6 +28,14 @@ if (config.env === "development") {
 } else {
   app.use(cors({ origin: "https://journey-288113.et.r.appspot.com" }));
 }
+
+app.use((err, req, res, next) => {
+  if (err.name === "UnauthorizedError") {
+    res.status(httpCodes.UNAUTHENTICATED).send({ message: "Unauthorized" });
+    return;
+  }
+  next();
+});
 
 // Add routes to app
 app.use("/", router);
