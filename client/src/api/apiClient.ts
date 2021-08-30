@@ -51,6 +51,28 @@ import {
 
 type HttpMethod = "get" | "post" | "put" | "delete";
 
+let urlBaseEndpoint;
+
+switch (process.env.NEXT_PUBLIC_ENV) {
+  case "development":
+    urlBaseEndpoint = "http://localhost:5000";
+    break;
+  case "production":
+    urlBaseEndpoint = "https://api-prod-dot-journey-288113.et.r.appspot.com/";
+    break;
+  default:
+    urlBaseEndpoint = "https://api-dot-journey-288113.et.r.appspot.com/";
+}
+
+let urlBaseClientEndpoint;
+
+switch (process.env.NEXT_PUBLIC_ENV) {
+  case "development":
+    urlBaseClientEndpoint = "http://localhost:3000";
+    break;
+  default:
+    urlBaseClientEndpoint = "https://journey-288113.et.r.appspot.com/";
+}
 class AxiosApiClient {
   private axiosInstance: AxiosInstance;
 
@@ -60,6 +82,14 @@ class AxiosApiClient {
     this.axiosInstance = axios.create({
       baseURL: endpoint,
     });
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response.status === 401) {
+          window.location.replace(`${urlBaseClientEndpoint}/unauthorized`);
+        }
+      }
+    );
   }
 
   private toURLParams = (query) => `?${querystring.stringify(query)}`;
@@ -280,19 +310,6 @@ class AxiosApiClient {
         return Promise.resolve(); // best way to handle this?
     }
   }
-}
-
-let urlBaseEndpoint;
-
-switch (process.env.NEXT_PUBLIC_ENV) {
-  case "development":
-    urlBaseEndpoint = "http://localhost:5000";
-    break;
-  case "production":
-    urlBaseEndpoint = "https://api-prod-dot-journey-288113.et.r.appspot.com/";
-    break;
-  default:
-    urlBaseEndpoint = "https://api-dot-journey-288113.et.r.appspot.com/";
 }
 
 const sharedClient: AxiosApiClient = new AxiosApiClient(urlBaseEndpoint);

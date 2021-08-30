@@ -1,7 +1,5 @@
-import { resetUser, UserState } from "@redux/reducers/user";
-import { useAppSelector, useAppDispatch } from "@redux/store";
+import { UserState } from "@redux/reducers/user";
 import { VolunteerData } from "@type/volunteer";
-import { useRouter } from "next/router";
 
 export const isAdmin = (user: UserState | VolunteerData) => {
   if ((user as VolunteerData)?.volunteerType === "admin") {
@@ -13,15 +11,4 @@ export const isAdmin = (user: UserState | VolunteerData) => {
   }
 
   return false;
-};
-
-export const useAuthenticatedRoute = () => {
-  const router = useRouter();
-  const { user } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
-
-  if (!user) {
-    dispatch(resetUser());
-    router.push("/login");
-  }
 };

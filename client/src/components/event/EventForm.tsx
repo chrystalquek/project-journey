@@ -1,5 +1,7 @@
 import DropZoneCard from "@components/common/DropZoneCard";
 import Header from "@components/common/Header";
+import { LoginRedirect } from "@components/user/LoginRedirect";
+import { UNAUTHORIZED } from "@constants/routes";
 import {
   Button,
   Grid,
@@ -149,7 +151,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const classes = useStyles();
   const event = useAppSelector((state) => state.event.event);
   const eventForm = useAppSelector((state) => state.event.event.form);
+  const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   // Store feedback event form
   const [feedbackFormEventQuestions, setFeedbackFormEventQuestions] = useState<
@@ -236,8 +240,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     },
     [feedbackFormEventQuestions, handleChangeQuestion]
   );
-
-  const router = useRouter();
 
   useEffect(() => {
     if (id && id !== "new") {
@@ -339,9 +341,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     location,
   } = values;
 
+  if (!user) {
+    return LoginRedirect();
+  }
+
+  if (user && user.volunteerType !== "admin") {
+    router.push(UNAUTHORIZED);
+  }
+
   if (id !== "new" && eventForm === null) {
     return <h1>Loading</h1>;
   }
+
   return (
     <Grid container xs={8}>
       <Header title={isNew ? "Create Event" : "Edit Event"} />

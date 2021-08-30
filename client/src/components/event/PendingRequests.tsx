@@ -7,7 +7,6 @@ import {
   getPendingSignUps,
 } from "@redux/actions/events/pendingRequests";
 import { SignUpData, SignUpStatus } from "@type/signUp";
-import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import { useIsMobile } from "@utils/helpers/layout";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import { useRouter } from "next/router";
@@ -42,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingRequests: FC = () => {
-  useAuthenticatedRoute();
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const router = useRouter();

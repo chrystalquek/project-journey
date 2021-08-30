@@ -10,12 +10,10 @@ import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 import { VolunteerType } from "@type/volunteer";
 import { getVolunteerById } from "@redux/actions/profilePage";
-import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import LoadingIndicator from "@components/common/LoadingIndicator";
 import Header from "@components/common/Header";
 
 const Profile = () => {
-  useAuthenticatedRoute();
   const router = useRouter();
   const dispatch = useAppDispatch();
 

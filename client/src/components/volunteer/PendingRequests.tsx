@@ -13,7 +13,6 @@ import {
   CommitmentApplicationStatus,
 } from "@type/commitmentApplication";
 import { ActionableDialog } from "@components/common/ActionableDialog";
-import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import { useIsMobile } from "@utils/helpers/layout";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import Header from "@components/common/Header";
@@ -27,7 +26,6 @@ import Table from "@components/common/data-display/Table";
 import VolunteerBreadCrumbs from "./VolunteerBreadCrumbs";
 
 const PendingRequests: FC<{}> = () => {
-  useAuthenticatedRoute();
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
 

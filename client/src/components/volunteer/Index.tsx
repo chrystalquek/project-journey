@@ -11,7 +11,6 @@ import {
 import { VolunteerType } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { useRouter } from "next/router";
-import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import { useIsMobile } from "@utils/helpers/layout";
 import { getVolunteers } from "@redux/actions/volunteer/index";
 import { formatDDMMYYYY } from "@utils/helpers/date";
@@ -29,7 +28,6 @@ import {
 import VolunteerBreadCrumbs from "./VolunteerBreadCrumbs";
 
 const Index: FC<{}> = () => {
-  useAuthenticatedRoute();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const isMobile = useIsMobile();

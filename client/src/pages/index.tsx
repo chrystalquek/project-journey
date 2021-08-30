@@ -12,7 +12,7 @@ const Index = () => {
     } else {
       router.push("/home");
     }
-  }, [user]);
+  }, [user, router]);
 
   return null;
 };

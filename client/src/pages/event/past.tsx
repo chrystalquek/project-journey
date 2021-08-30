@@ -2,11 +2,9 @@ import Header from "@components/common/Header";
 import EventsPageBody from "@components/event/EventsPageBody";
 import { listEvents } from "@redux/actions/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { useAuthenticatedRoute } from "@utils/helpers/auth";
 import React, { useEffect } from "react";
 
 const EventPastEventsPage = () => {
-  useAuthenticatedRoute();
   const dispatch = useAppDispatch();
 
   const events = useAppSelector((state) =>
