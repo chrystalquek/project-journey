@@ -51,7 +51,7 @@ router.get(
       firstValue: "_id",
       secondAttribute: "params",
       secondValue: "id",
-    }
+    },
   ]),
   validate(getValidations("getVolunteerById")),
   volunteerController.getVolunteerDetailsById
