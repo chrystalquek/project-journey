@@ -195,7 +195,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const handleAddOption = useCallback(
     (index: number) => {
       const newOption: Array<string> = [
-        ...feedbackFormEventQuestions[index].options,
+        ...(feedbackFormEventQuestions[index]?.options ?? []),
         "",
       ];
       handleChangeQuestion(newOption, "options", index);
@@ -215,7 +215,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
   const handleRemoveOption = useCallback(
     (questionIndex: number, optionIndex: number) => {
-      const currentOption = feedbackFormEventQuestions[questionIndex].options;
+      const currentOption =
+        feedbackFormEventQuestions[questionIndex].options ?? [];
       const newOption: Array<string> = [
         ...currentOption.slice(0, optionIndex),
         ...currentOption.slice(optionIndex + 1),
@@ -229,7 +230,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
   const handleChangeOption = useCallback(
     (value: string, questionIndex: number, optionIndex: number) => {
       const currentOption: Array<string> =
-        feedbackFormEventQuestions[questionIndex].options;
+        feedbackFormEventQuestions[questionIndex].options ?? [];
       const newOption: Array<string> = [
         ...currentOption.slice(0, optionIndex),
         value,
@@ -247,7 +248,12 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     }
   }, [dispatch, id]);
 
-  useEffect(() => () => dispatch(resetEventStatus()), [dispatch]);
+  useEffect(
+    () => () => {
+      dispatch(resetEventStatus());
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     if (event.status === SignUpStatus.REJECTED) {
@@ -399,7 +405,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <div className={classes.coverImage}>
               <DropZoneCard
                 id="coverImage"
-                initialUrl={eventForm?.coverImage}
+                initialUrl={eventForm?.coverImage ?? null}
                 onChangeImage={(e) => onChangeImage(e, "coverImage")}
               />
             </div>
@@ -479,7 +485,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(startDate)}
                 onError={(error) => {
                   if (error !== errors.startDate) {
-                    setFieldError("startDate", error.toLocaleString());
+                    setFieldError("startDate", error?.toLocaleString());
                   }
                 }}
                 onChange={(date) => setFieldValue("startDate", date)}
@@ -507,7 +513,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(endDate)}
                 onError={(error) => {
                   if (error !== errors.endDate) {
-                    setFieldError("endDate", error.toLocaleString());
+                    setFieldError("endDate", error?.toLocaleString());
                   }
                 }}
                 onChange={(date) => setFieldValue("endDate", date)}
@@ -540,7 +546,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                 value={dayjs(deadline)}
                 onError={(error) => {
                   if (error !== errors.deadline) {
-                    setFieldError("deadline", error.toLocaleString());
+                    setFieldError("deadline", error?.toLocaleString());
                   }
                 }}
                 onChange={(date) => setFieldValue("deadline", date)}
@@ -639,7 +645,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   <div className={classes.facilPhotograph}>
                     <DropZoneCard
                       id="facilitatorPhoto"
-                      initialUrl={eventForm?.facilitatorPhoto}
+                      initialUrl={eventForm?.facilitatorPhoto ?? null}
                       onChangeImage={(e) =>
                         onChangeImage(e, "facilitatorPhoto")
                       }
@@ -748,41 +754,43 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                                 <Typography className={classes.optionStyle}>
                                   Options:{" "}
                                 </Typography>
-                                {question.options.map((option, optionIndex) => (
-                                  <div
-                                    key={option}
-                                    style={{
-                                      display: "flex",
-                                      alignContent: "center",
-                                    }}
-                                  >
-                                    <FormQuestionMapper
-                                      type="shortAnswer"
-                                      name={String(optionIndex)}
+                                {(question.options ?? []).map(
+                                  (option, optionIndex) => (
+                                    <div
                                       key={option}
-                                      props={{
-                                        style: {
-                                          width: "500px",
-                                        },
-                                        placeholder: "Type option here...",
-                                        value: option,
-                                        onChange: (e) =>
-                                          handleChangeOption(
-                                            e.target.value,
-                                            index,
-                                            optionIndex
-                                          ),
+                                      style={{
+                                        display: "flex",
+                                        alignContent: "center",
                                       }}
-                                    />
-                                    <IconButton
-                                      onClick={() =>
-                                        handleRemoveOption(index, optionIndex)
-                                      }
                                     >
-                                      <ClearIcon />
-                                    </IconButton>
-                                  </div>
-                                ))}
+                                      <FormQuestionMapper
+                                        type="shortAnswer"
+                                        name={String(optionIndex)}
+                                        key={option}
+                                        props={{
+                                          style: {
+                                            width: "500px",
+                                          },
+                                          placeholder: "Type option here...",
+                                          value: option,
+                                          onChange: (e) =>
+                                            handleChangeOption(
+                                              e.target.value,
+                                              index,
+                                              optionIndex
+                                            ),
+                                        }}
+                                      />
+                                      <IconButton
+                                        onClick={() =>
+                                          handleRemoveOption(index, optionIndex)
+                                        }
+                                      >
+                                        <ClearIcon />
+                                      </IconButton>
+                                    </div>
+                                  )
+                                )}
                                 <Button
                                   className={classes.addNewFieldButton}
                                   onClick={() => handleAddOption(index)}

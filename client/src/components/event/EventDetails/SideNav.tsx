@@ -26,7 +26,7 @@ function SideNav({ selected, eventId }: Props) {
       <ListItem
         button
         dense
-        className={selected === "details" && classes.selected}
+        className={selected === "details" ? classes.selected : undefined}
         component="a"
         href="#"
       >
@@ -37,7 +37,7 @@ function SideNav({ selected, eventId }: Props) {
         <ListItem
           button
           dense
-          className={selected === "volunteers" && classes.selected}
+          className={selected === "volunteers" ? classes.selected : undefined}
           component="a"
           href={EVENT_VOLUNTEERS_ROUTE(eventId)}
         >
@@ -48,7 +48,7 @@ function SideNav({ selected, eventId }: Props) {
       <ListItem
         button
         dense
-        className={selected === "feedback" && classes.selected}
+        className={selected === "feedback" ? classes.selected : undefined}
         component="a"
         href="#"
       >

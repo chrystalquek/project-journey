@@ -23,7 +23,7 @@ const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
 
   const renderSignUpStatus = useCallback(() => {
     const signUp = upcomingSignUps.find(
-      (upcomingSignUp) => upcomingSignUp.eventId === event._id
+      (upcomingSignUp) => upcomingSignUp?.eventId === event._id
     );
     if (!signUp) {
       return <></>;

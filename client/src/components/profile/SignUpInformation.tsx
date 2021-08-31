@@ -9,7 +9,7 @@ type props = {
 };
 
 const SignUpInformation: FC<props> = ({ profilePageData }) => {
-  const birthday = new Date(profilePageData?.birthday).toLocaleDateString(
+  const birthday = new Date(profilePageData?.birthday ?? 0).toLocaleDateString(
     "en-US"
   );
   const createdAt = new Date(profilePageData?.createdAt).toLocaleDateString(

@@ -8,7 +8,7 @@ import { SignUpData } from "@type/signUp";
 
 export type PendingRequestsState = {
   isLoading: boolean;
-  error: SerializedError;
+  error: SerializedError | null;
   pendingVolunteers: Array<VolunteerData>;
   pendingSignUps: Array<SignUpData>;
 };

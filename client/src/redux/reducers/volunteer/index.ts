@@ -20,7 +20,7 @@ export type VolunteerCollate = {
 // state should contain most of state of the component, including collate and pagination
 export type VolunteerState = {
   isLoading: boolean;
-  error: SerializedError;
+  error: SerializedError | null;
   volunteers: VolunteerData[];
   collate: VolunteerCollate;
   pagination: Pagination;

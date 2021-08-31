@@ -11,6 +11,7 @@ import DialogActions from "@components/common/feedback/DialogActions";
 import { useAppDispatch } from "@redux/store";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import { updateVolunteer } from "@redux/actions/user";
+import { assert } from "@utils/helpers/typescript";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -40,8 +41,8 @@ const ProfilePicture = ({ profilePageData }) => {
   // https://www.npmjs.com/package/react-image-crop
 
   let fileUrl = "";
-  const [file, setFile] = useState<File>(null);
-  const [src, setSrc] = useState<string>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [src, setSrc] = useState<string | null>(null);
   const [imageRef, setImageRef] = useState(null);
   // TODO: decide whether to remove this state
   const [, setNewImageUrl] = useState<string>("");
@@ -74,7 +75,7 @@ const ProfilePicture = ({ profilePageData }) => {
     canvas.height = height;
     const ctx = canvas.getContext("2d");
 
-    ctx.drawImage(
+    ctx?.drawImage(
       image,
       x * scaleX,
       y * scaleY,
@@ -114,6 +115,7 @@ const ProfilePicture = ({ profilePageData }) => {
   };
 
   const handleSave = async () => {
+    assert(file, "File must be present before saving");
     const photoUrl = await uploadAndGetFileUrl(file, "image");
     const updatedVolunteerData = { ...profilePageData, photoUrl };
     dispatch(

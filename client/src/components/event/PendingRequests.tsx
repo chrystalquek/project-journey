@@ -1,25 +1,26 @@
-import { makeStyles, Grid, Typography } from "@material-ui/core";
-import React, { FC, useEffect } from "react";
-import { EventData } from "@type/event";
-import { useAppDispatch, useAppSelector } from "@redux/store";
-import {
-  getUpcomingEvents,
-  getPendingSignUps,
-} from "@redux/actions/events/pendingRequests";
-import { SignUpData, SignUpStatus } from "@type/signUp";
-import { useIsMobile } from "@utils/helpers/layout";
-import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
-import { useRouter } from "next/router";
-import Header from "@components/common/Header";
+import Table from "@components/common/data-display/Table";
 import ErrorPage from "@components/common/ErrorPage";
+import Header from "@components/common/Header";
 import LoadingIndicator from "@components/common/LoadingIndicator";
+import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
+import { ERROR_MESSAGE } from "@constants/messages";
+import { Grid, makeStyles, Typography } from "@material-ui/core";
 import {
   GridCellParams,
   GridColDef,
   GridRowParams,
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
-import Table from "@components/common/data-display/Table";
+import {
+  getPendingSignUps,
+  getUpcomingEvents,
+} from "@redux/actions/events/pendingRequests";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { EventData } from "@type/event";
+import { SignUpData, SignUpStatus } from "@type/signUp";
+import { useIsMobile } from "@utils/helpers/layout";
+import { useRouter } from "next/router";
+import React, { FC, useEffect } from "react";
 import EventBreadCrumbs from "./EventBreadCrumbs";
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +76,7 @@ const PendingRequests: FC = () => {
     return <LoadingIndicator />;
   }
   if (error) {
-    return <ErrorPage message={error.message} />;
+    return <ErrorPage message={error.message ?? ERROR_MESSAGE} />;
   }
 
   const columns: GridColDef[] = [

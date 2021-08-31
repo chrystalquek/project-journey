@@ -10,7 +10,7 @@ import { VolunteerType } from "@type/volunteer";
 // Contains helper functions for everything related to the events page.
 
 // Returns an object of (filled vacancies, total vacancies) for an event.
-export function getEventVacancies(data: EventData): {
+export function getEventVacancies(data: EventData | null): {
   filled: number;
   total: number;
   remaining: number;
@@ -28,24 +28,24 @@ export function getEventVacancies(data: EventData): {
 }
 
 // Getters for events, to future-proof changes to event structure
-function getDate(e: EventData): dayjs.Dayjs {
+function getDate(e: EventData) {
   return dayjs(e.startDate);
 }
 
-function getEventType(e: EventData): EventType {
-  return e.eventType as EventType; // type assertion
+function getEventType(e: EventData) {
+  return e.eventType;
 }
 
-function getVolunteerType(e: EventData): VolunteerType {
-  return e.volunteerType as VolunteerType;
+function getVolunteerType(e: EventData) {
+  return e.volunteerType;
 }
 
 // may be null
-function getDateFilter(f: EventFilterOptions): dayjs.Dayjs {
+function getDateFilter(f: EventFilterOptions) {
   return f[EventFilters.DATE];
 }
 
-function getEventFilters(f: EventFilterOptions): Array<EventType> {
+function getEventFilters(f: EventFilterOptions) {
   const ret: Array<EventType> = [];
   const eFilters = f[EventFilters.EVENTTYPE];
   if (eFilters[EventFilters.VOLUNTEERING]) {
@@ -60,7 +60,7 @@ function getEventFilters(f: EventFilterOptions): Array<EventType> {
   return ret;
 }
 
-function getVolunteerFilters(f: EventFilterOptions): Array<VolunteerType> {
+function getVolunteerFilters(f: EventFilterOptions) {
   const ret: Array<VolunteerType> = [];
   const vFilters = f[EventFilters.VOLUNTEERTYPE];
   if (vFilters[EventFilters.ADHOC]) {
@@ -96,9 +96,7 @@ export function withFilters(
     const allowVol = getVolunteerType(e) === undefined;
 
     return (
-      (allowAllDates
-        ? true
-        : areDatesEqual(getDateFilter(filters), getDate(e))) &&
+      (allowAllDates || areDatesEqual(getDateFilter(filters)!, getDate(e))) &&
       (allowEvent || getEventFilters(filters).includes(getEventType(e))) &&
       (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)))
     );

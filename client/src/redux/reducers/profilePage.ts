@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { VolunteerData } from "@type/volunteer";
 
 export type ProfilePageState = {
-  data: VolunteerData;
+  data: VolunteerData | null;
 };
 
 const initialState: ProfilePageState = {
@@ -21,7 +21,7 @@ const profilePageDataSlice = createSlice({
     });
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload;
-      if (state?.data.email === updatedVolunteerData.email) {
+      if (state?.data?.email === updatedVolunteerData.email) {
         state.data = updatedVolunteerData;
       }
     });

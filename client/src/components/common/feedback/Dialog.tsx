@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import MuiDialog, {
   DialogProps as MuiDialogProps,
 } from "@material-ui/core/Dialog";
@@ -36,22 +36,27 @@ export type DialogProps = MuiDialogProps;
  * </Dialog>
  * ```
  */
-const Dialog: FC<DialogProps> = (props) => {
+const Dialog: FC<DialogProps> = ({ onClose, children, ...restProps }) => {
   // Black colour with 50% alpha
   const ICON_COLOUR = "#00000080";
   const classes = useStyles();
   const isMobile = useIsMobile();
 
-  const { onClose, children } = props;
+  const onClickCloseIcon = useCallback(() => {
+    if (onClose) {
+      onClose({}, "backdropClick");
+    }
+  }, [onClose]);
+
   return (
     <MuiDialog
       fullScreen={isMobile}
-      {...props}
+      {...restProps}
       classes={{ paper: classes.root }}
     >
       <Box display="flex" justifyContent="flex-end">
         {/* Not sure whether this is a good practice */}
-        <IconButton size="small" onClick={() => onClose({}, "backdropClick")}>
+        <IconButton size="small" onClick={onClickCloseIcon}>
           <Box color={ICON_COLOUR}>
             <CloseIcon color="inherit" />
           </Box>

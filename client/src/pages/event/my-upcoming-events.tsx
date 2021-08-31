@@ -16,18 +16,22 @@ const EventMyUpcomingEventsPage = () => {
   );
 
   useEffect(() => {
-    dispatch(
-      getSignedUpEventsUpcomingEvent({
-        userId: user?._id,
-        eventType: "upcoming",
-      })
-    );
+    if (user) {
+      dispatch(
+        getSignedUpEventsUpcomingEvent({
+          userId: user._id,
+          eventType: "upcoming",
+        })
+      );
+    }
   }, [dispatch, user]);
 
   return (
     <>
       <Header title="Blessings in a Bag" />
-      <EventsPageBody type="my-upcoming-events" {...{ events, user }} />
+      {user && (
+        <EventsPageBody type="my-upcoming-events" {...{ events, user }} />
+      )}
     </>
   );
 };

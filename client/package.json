@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "npm run lint && npm run format && cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
+    "build": "npm run lint && npm run compile && npm run format && cross-env-shell NODE_ENV=production \"shx rm -rf ./build && next build\"",
+    "compile": "tsc --noEmit",
     "deploy": "npm run build && npm run gcp-predeploy && gcloud app deploy",
     "deploy-staging": "npm run build && npm run gcp-predeploy && gcloud app deploy app-staging.yaml",
     "deploy-prod": "npm run build && npm run gcp-predeploy && gcloud app deploy app-prod.yaml",
@@ -38,6 +39,7 @@
     "formik-material-ui": "^3.0.1",
     "formik-material-ui-pickers": "^0.0.12",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "next": "^10.0.5",
     "next-redux-wrapper": "^6.0.2",
     "notistack": "^1.0.10",
@@ -51,6 +53,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.172",
     "@types/node": "^14.6.4",
     "@types/react": "^16.9.49",
     "@types/react-redux": "^7.1.14",

@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 type DropZoneCardProps = {
   id: string;
-  initialUrl: string;
+  initialUrl: string | null;
   onChangeImage: (e: ChangeEvent) => string | null;
 };
 

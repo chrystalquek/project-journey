@@ -1,28 +1,29 @@
-import { capitalize, Grid } from "@material-ui/core";
-import CancelIcon from "@material-ui/icons/Cancel";
-import { FC, useState, useEffect } from "react";
-import { VolunteerData } from "@type/volunteer";
-import { useAppDispatch, useAppSelector } from "@redux/store";
-import {
-  getPendingVolunteers,
-  getPendingCommitmentApplications,
-  updateCommitmentApplication,
-} from "@redux/actions/volunteer/pendingRequests";
-import {
-  CommitmentApplicationData,
-  CommitmentApplicationStatus,
-} from "@type/commitmentApplication";
 import { ActionableDialog } from "@components/common/ActionableDialog";
-import { useIsMobile } from "@utils/helpers/layout";
-import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
-import Header from "@components/common/Header";
+import Table from "@components/common/data-display/Table";
 import ErrorPage from "@components/common/ErrorPage";
+import Header from "@components/common/Header";
 import LoadingIndicator from "@components/common/LoadingIndicator";
+import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
+import { ERROR_MESSAGE } from "@constants/messages";
+import { capitalize, Grid } from "@material-ui/core";
 import {
   GridCellParams,
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
-import Table from "@components/common/data-display/Table";
+import CancelIcon from "@material-ui/icons/Cancel";
+import {
+  getPendingCommitmentApplications,
+  getPendingVolunteers,
+  updateCommitmentApplication,
+} from "@redux/actions/volunteer/pendingRequests";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import {
+  CommitmentApplicationData,
+  CommitmentApplicationStatus,
+} from "@type/commitmentApplication";
+import { VolunteerData } from "@type/volunteer";
+import { useIsMobile } from "@utils/helpers/layout";
+import { FC, useEffect, useState } from "react";
 import VolunteerBreadCrumbs from "./VolunteerBreadCrumbs";
 
 const PendingRequests: FC<{}> = () => {
@@ -57,14 +58,18 @@ const PendingRequests: FC<{}> = () => {
     const commitmentApplication = pendingCommitmentApplications.find(
       (commApp) => commApp.volunteerId === volunteer._id
     );
-    const approveCommitmentApplication = {
-      ...commitmentApplication,
-      status: CommitmentApplicationStatus.Accepted,
-    };
-    const rejectCommitmentApplication = {
-      ...commitmentApplication,
-      status: CommitmentApplicationStatus.Rejected,
-    };
+    const approveCommitmentApplication = commitmentApplication
+      ? {
+          ...commitmentApplication,
+          status: CommitmentApplicationStatus.Accepted,
+        }
+      : null;
+    const rejectCommitmentApplication = commitmentApplication
+      ? {
+          ...commitmentApplication,
+          status: CommitmentApplicationStatus.Rejected,
+        }
+      : null;
     return (
       <Grid container>
         <Grid item>
@@ -72,7 +77,11 @@ const PendingRequests: FC<{}> = () => {
             open={openApprove}
             setOpen={() => setOpenApprove(!openApprove)}
             content={`Are you sure you want to approve ${volunteer.name} as a volunteer?`}
-            buttonOnClick={() => onApproveReject(approveCommitmentApplication)}
+            buttonOnClick={() => {
+              if (approveCommitmentApplication) {
+                onApproveReject(approveCommitmentApplication);
+              }
+            }}
             openCloseButtonTitle="Approve"
           />
         </Grid>
@@ -81,7 +90,11 @@ const PendingRequests: FC<{}> = () => {
             open={openReject}
             setOpen={() => setOpenReject(!openReject)}
             content={`Are you sure you want to reject ${volunteer.name} as a volunteer?`}
-            buttonOnClick={() => onApproveReject(rejectCommitmentApplication)}
+            buttonOnClick={() => {
+              if (rejectCommitmentApplication) {
+                onApproveReject(rejectCommitmentApplication);
+              }
+            }}
             openCloseButtonStyle=""
             openCloseButtonTitle={<CancelIcon color="error" fontSize="large" />}
           />
@@ -94,7 +107,7 @@ const PendingRequests: FC<{}> = () => {
     return <LoadingIndicator />;
   }
   if (error) {
-    return <ErrorPage message={error.message} />;
+    return <ErrorPage message={error.message ?? ERROR_MESSAGE} />;
   }
 
   const columns = [

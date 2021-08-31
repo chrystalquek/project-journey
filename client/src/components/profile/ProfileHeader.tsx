@@ -1,16 +1,17 @@
-import React, { FC, useEffect } from "react";
+import DataRow from "@components/common/DataRow";
+import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
 import { Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
-import { VolunteerData, VolunteerType } from "@type/volunteer";
-import { CommitmentApplicationStatus } from "@type/commitmentApplication";
-import { useAppDispatch, useAppSelector } from "@redux/store";
-import DataRow from "@components/common/DataRow";
-import { formatDDMMYYYY } from "@utils/helpers/date";
 import { getCommitmentApplications } from "@redux/actions/commitmentApplication";
-import ProfilePicture from "./ProfilePicture";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { CommitmentApplicationStatus } from "@type/commitmentApplication";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
+import { formatDDMMYYYY } from "@utils/helpers/date";
+import _ from "lodash";
+import React, { FC, useEffect } from "react";
 import ApproveCommitmentApplication from "./ApproveCommitmentApplication";
 import ChangeVolunteerType from "./ChangeVolunteerType";
+import ProfilePicture from "./ProfilePicture";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -43,19 +44,19 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getCommitmentApplications({ volunteerId: userData._id }));
-  }, [dispatch, userData._id]);
+    dispatch(getCommitmentApplications({ volunteerId: userData?._id }));
+  }, [dispatch, userData?._id]);
 
   const commitmentApplicationState = useAppSelector(
     (state) => state.commitmentApplication
   );
-  const commitmentApplication = commitmentApplicationState.ownIds
+
+  // Get the latest application.
+  const commitmentApplication = _.chain(commitmentApplicationState.ownIds)
     .map((id) => commitmentApplicationState.data[id])
-    .reduce(
-      (prev, current) =>
-        prev && prev.createdAt > current.createdAt ? prev : current,
-      null
-    );
+    .orderBy((data) => data.createdAt, "desc")
+    .head()
+    .value();
 
   return (
     <Grid
@@ -95,7 +96,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
             </Typography>
           </Grid>
           <Grid item>
-            {userData.volunteerType === VolunteerType.ADMIN && (
+            {userData?.volunteerType === VolunteerType.ADMIN && (
               <ChangeVolunteerType />
             )}
           </Grid>
@@ -103,7 +104,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
         {/* Only shows rejected if the loggedInUser
         is viewing own profile and has a rejected commitmentApplication */}
         {profilePageData.volunteerType === VolunteerType.ADHOC &&
-          userData._id === profilePageData._id &&
+          userData?._id === profilePageData._id &&
           commitmentApplication?.status ===
             CommitmentApplicationStatus.Rejected && (
             <Typography>
@@ -113,10 +114,10 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
         {/* Only shows the option to become committed if the loggedInUser
         is viewing own profile and is still an adhoc volunteer */}
         {profilePageData.volunteerType === VolunteerType.ADHOC &&
-          userData._id === profilePageData._id && <BecomeCommitedDialog />}
+          userData?._id === profilePageData._id && <BecomeCommitedDialog />}
         {/* Approval button if loggedInUser is admin and volunteerProfile
         has a pending commitmentApplication */}
-        {userData.volunteerType === VolunteerType.ADMIN &&
+        {userData?.volunteerType === VolunteerType.ADMIN &&
           commitmentApplication?.status ===
             CommitmentApplicationStatus.Pending && (
             <ApproveCommitmentApplication

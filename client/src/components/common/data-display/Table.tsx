@@ -92,7 +92,9 @@ const Table: FC<TableProps> = (props) => {
 
   const handleSortChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      onSort(e.target.value);
+      if (onSort) {
+        onSort(e.target.value);
+      }
     },
     [onSort]
   );
@@ -114,7 +116,7 @@ const Table: FC<TableProps> = (props) => {
 
   const searchBar = (
     <SearchBar
-      setFilterFunction={onSearch}
+      setFilterFunction={onSearch ?? (() => {})}
       key="Search field"
       value={searchText}
     />
@@ -191,8 +193,11 @@ const Table: FC<TableProps> = (props) => {
             paginationMode={paginationMode ?? "client"}
             {...(isControlledPagination
               ? {
-                  onPageChange: (params: GridPageChangeParams) =>
-                    onPageChange(params.page),
+                  onPageChange: (params: GridPageChangeParams) => {
+                    if (onPageChange) {
+                      onPageChange(params.page);
+                    }
+                  },
                   page,
                   rowCount,
                 }

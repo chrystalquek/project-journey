@@ -1,4 +1,11 @@
-import { FC, useState, useEffect } from "react";
+import { VolunteerSortFieldsType } from "@api/request";
+import Table from "@components/common/data-display/Table";
+import ErrorPage from "@components/common/ErrorPage";
+import Header from "@components/common/Header";
+import LoadingIndicator from "@components/common/LoadingIndicator";
+import Accordion from "@components/common/surfaces/accordion/Accordion";
+import AccordionSummary from "@components/common/surfaces/accordion/AccordionSummary";
+import { ERROR_MESSAGE } from "@constants/messages";
 import {
   AccordionDetails,
   capitalize,
@@ -8,23 +15,17 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import { VolunteerType } from "@type/volunteer";
-import { useAppDispatch, useAppSelector } from "@redux/store";
-import { useRouter } from "next/router";
-import { useIsMobile } from "@utils/helpers/layout";
-import { getVolunteers } from "@redux/actions/volunteer/index";
-import { formatDDMMYYYY } from "@utils/helpers/date";
-import LoadingIndicator from "@components/common/LoadingIndicator";
-import ErrorPage from "@components/common/ErrorPage";
-import Header from "@components/common/Header";
-import Accordion from "@components/common/surfaces/accordion/Accordion";
-import AccordionSummary from "@components/common/surfaces/accordion/AccordionSummary";
-import { VolunteerSortFieldsType } from "@api/request";
-import Table from "@components/common/data-display/Table";
 import {
   GridCellParams,
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
+import { getVolunteers } from "@redux/actions/volunteer/index";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { VolunteerType } from "@type/volunteer";
+import { formatDDMMYYYY } from "@utils/helpers/date";
+import { useIsMobile } from "@utils/helpers/layout";
+import { useRouter } from "next/router";
+import { FC, useEffect, useState } from "react";
 import VolunteerBreadCrumbs from "./VolunteerBreadCrumbs";
 
 const Index: FC<{}> = () => {
@@ -169,7 +170,7 @@ const Index: FC<{}> = () => {
     return <LoadingIndicator />;
   }
   if (error) {
-    return <ErrorPage message={error.message} />;
+    return <ErrorPage message={error.message ?? ERROR_MESSAGE} />;
   }
 
   return (

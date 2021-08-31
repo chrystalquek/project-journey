@@ -64,7 +64,7 @@ const userSlice = createSlice({
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload;
       // Update the loggedInUser data
-      if (state.user._id === updatedVolunteerData._id) {
+      if (state.user?._id === updatedVolunteerData._id) {
         state.user = updatedVolunteerData;
       }
     });

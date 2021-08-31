@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
   type: "public" | "my-upcoming-events" | "my-past-events";
   events: EventData[];
-  user: VolunteerData;
+  user: VolunteerData | null;
 };
 const EventsPageBody = ({ type, events, user }: Props) => {
   const router = useRouter();

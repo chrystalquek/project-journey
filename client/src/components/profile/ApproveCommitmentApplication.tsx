@@ -31,7 +31,9 @@ const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (
   const profilePageData = useAppSelector((state) => state.profilePage.data);
   const { commitmentApplication } = props;
 
-  const DialogContent = `Are you sure you want to approve ${profilePageData.name}?`;
+  const DialogContent = profilePageData?.name
+    ? `Are you sure you want to approve ${profilePageData.name}?`
+    : "";
 
   const handleApproveEvent = () => {
     // Change the status of the commitment Application

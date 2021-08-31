@@ -12,6 +12,8 @@ import {
 } from "@redux/actions/commitmentApplication";
 import { CreateCommitmentApplicationRequest } from "@api/request";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
+import _ from "lodash";
+import { assert } from "@utils/helpers/typescript";
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -34,19 +36,22 @@ const BecomeCommitedDialog: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getCommitmentApplications({ volunteerId: userData._id }));
-  }, [dispatch, userData._id]);
+    if (userData) {
+      dispatch(getCommitmentApplications({ volunteerId: userData._id }));
+    }
+  }, [dispatch, userData]);
 
   const commitmentApplicationState = useAppSelector(
     (state) => state.commitmentApplication
   );
-  const commitmentApplication = commitmentApplicationState.ownIds
+
+  // Get the latest commitment application.
+  const commitmentApplication = _.chain(commitmentApplicationState.ownIds)
     .map((id) => commitmentApplicationState.data[id])
-    .reduce(
-      (prev, current) =>
-        prev && prev.createdAt > current.createdAt ? prev : current,
-      null
-    );
+    .orderBy((data) => data.createdAt, "desc")
+    .head()
+    .value();
+
   // Check if there is pending application
   const isPending: boolean =
     commitmentApplication?.status === CommitmentApplicationStatus.Pending;
@@ -62,10 +67,11 @@ const BecomeCommitedDialog: FC = () => {
   }, []);
 
   const handleSubmit = async (formValues: Record<string, any>) => {
-    formValues.volunteerId = user.user._id;
+    assert(userData, "User must be present before submitting.");
+    formValues.volunteerId = userData._id;
     // Drop the acknowledgement attributes before sending api call\
     const request = { ...formValues };
-    request.volunteerId = user.user._id;
+    request.volunteerId = userData._id;
     delete request.isAwareOfGroupInvite;
     delete request.isAwareOfCommitmentExpectation;
     delete request.isAwareOfConfidentiality;

@@ -16,15 +16,17 @@ const EventMyPastEventPage = () => {
   );
 
   useEffect(() => {
-    dispatch(
-      getSignedUpEventsPastEvent({ userId: user?._id, eventType: "past" })
-    );
+    if (user) {
+      dispatch(
+        getSignedUpEventsPastEvent({ userId: user._id, eventType: "past" })
+      );
+    }
   }, [dispatch, user]);
 
   return (
     <>
       <Header title="Blessings in a Bag" />
-      <EventsPageBody type="my-past-events" {...{ events, user }} />
+      {user && <EventsPageBody type="my-past-events" {...{ events, user }} />}
     </>
   );
 };

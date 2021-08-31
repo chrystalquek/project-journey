@@ -1,13 +1,14 @@
-import React, { FC, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@redux/store";
+import { Tabs } from "@components/common/Tabs";
+import { ERROR_MESSAGE } from "@constants/messages";
 import {
   getPendingSignUps,
   getPendingVolunteers,
 } from "@redux/actions/common/pendingRequestsTabs";
-import { Tabs } from "@components/common/Tabs";
+import { useAppDispatch, useAppSelector } from "@redux/store";
 import { useRouter } from "next/dist/client/router";
-import LoadingIndicator from "./LoadingIndicator";
+import React, { FC, useEffect } from "react";
 import ErrorPage from "./ErrorPage";
+import LoadingIndicator from "./LoadingIndicator";
 
 interface TabsProps {
   clickedOn: number;
@@ -36,7 +37,7 @@ const PendingRequestsTabs: FC<TabsProps> = (props: TabsProps) => {
     return <LoadingIndicator />;
   }
   if (error) {
-    return <ErrorPage message={error.message} />;
+    return <ErrorPage message={error.message ?? ERROR_MESSAGE} />;
   }
 
   const tabs = [

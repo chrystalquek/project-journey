@@ -8,6 +8,7 @@ import {
 } from "@api/request";
 import { EventData, EventSearchType } from "@type/event";
 import { StoreState } from "@redux/store";
+import { assert } from "@utils/helpers/typescript";
 
 export const createEvent = createAsyncThunk(
   "event/createEvent",
@@ -32,7 +33,7 @@ export const getEventsUpcomingEvent = createAsyncThunk(
 
 // Todo: Merge the APIs in the server into one.
 type ListEventsArgs = {
-  eventType?: EventSearchType;
+  eventType: EventSearchType;
   onlySignedUp?: boolean;
 };
 export const listEvents = createAsyncThunk<
@@ -45,7 +46,8 @@ export const listEvents = createAsyncThunk<
     return { events: response.data };
   }
 
-  const userId = getState().user.user._id;
+  const userId = getState().user.user?._id;
+  assert(userId, "UserId must be present!");
   const response = await apiClient.getSignedUpEvents({ userId, eventType });
   return { events: response.data };
 });

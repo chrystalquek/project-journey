@@ -21,12 +21,13 @@ import {
 } from "@redux/actions/form";
 import Paper from "@material-ui/core/Paper";
 import BasicForm from "@components/form/generator/BasicForm";
+import { assert } from "@utils/helpers/typescript";
 
 export type FEEDBACK_STATE = "prompt" | "fields" | "success";
 
 type FeedbackModalProps = {
   title: string;
-  imageUrl: string;
+  imageUrl?: string;
   eventDate: Date;
   description: string;
   isOpen: boolean;
@@ -143,6 +144,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
 
   const handleSubmit = useCallback(
     async (values: Record<string, any>) => {
+      assert(user, "User must be present before submitting.");
       const answers = Object.keys(values).map((key) => ({
         questionId: key,
         userId: user._id,

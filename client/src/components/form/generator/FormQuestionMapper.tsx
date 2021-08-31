@@ -55,7 +55,7 @@ type FormQuestionMapperProps = {
 const FormQuestionMapper: FC<FormQuestionMapperProps> = ({
   type,
   name,
-  options,
+  options = [],
   props,
 }) => {
   const classes = useStyles();

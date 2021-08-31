@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from "@redux/store";
 import { VolunteerType } from "@type/volunteer";
 import EditIcon from "@material-ui/icons/Edit";
 import { updateVolunteer } from "@redux/actions/user";
+import { assert } from "@utils/helpers/typescript";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -40,8 +41,8 @@ const ChangeVolunteerType: FC = () => {
   const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [volunteerType, setVolunteerType] = useState<VolunteerType>(
-    profilePageData.volunteerType
+  const [volunteerType, setVolunteerType] = useState<VolunteerType | null>(
+    profilePageData?.volunteerType ?? null
   );
 
   const handleOpenDialog = useCallback(() => {
@@ -54,17 +55,27 @@ const ChangeVolunteerType: FC = () => {
 
   const handleChange = useCallback(
     (event) => {
-      setVolunteerType(event.target.value || profilePageData.volunteerType);
+      setVolunteerType(event.target.value || profilePageData?.volunteerType);
     },
     [profilePageData]
   );
 
   const handleSubmit = () => {
-    const updatedVolunteerData = { ...profilePageData, volunteerType };
-    dispatch(
-      updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData })
-    );
-    handleCloseDialog();
+    if (volunteerType) {
+      assert(
+        profilePageData,
+        "profilePageData must be present before submitting."
+      );
+
+      const updatedVolunteerData = { ...profilePageData, volunteerType };
+      dispatch(
+        updateVolunteer({
+          _id: profilePageData._id,
+          data: updatedVolunteerData,
+        })
+      );
+      handleCloseDialog();
+    }
   };
 
   return (

@@ -10,7 +10,7 @@ import {
 import { SignUpData } from "@type/signUp";
 
 export type SignUpState = {
-  data: Record<string, SignUpData>;
+  data: Record<string, SignUpData | null>;
   volunteerSignUpsForUpcomingEvent: {
     // signups for a volunteer's upcoming events // used for dashboard
     ids: Array<string>; // signed up events

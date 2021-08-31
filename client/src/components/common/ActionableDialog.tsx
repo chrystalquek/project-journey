@@ -67,7 +67,11 @@ export function ActionableDialog(props: ActionableDialogProps) {
   return (
     <>
       <Button
-        className={classes[openCloseButtonStyle] ?? classes.recommendedButton}
+        className={
+          openCloseButtonStyle
+            ? classes[openCloseButtonStyle]
+            : classes.recommendedButton
+        }
         onClick={setOpen}
       >
         {openCloseButtonTitle}

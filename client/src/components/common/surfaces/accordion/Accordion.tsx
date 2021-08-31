@@ -18,20 +18,19 @@ type AccordionProps = {
   onChange: () => void;
 };
 
-const Accordion: FC<AccordionProps> = (props) => {
-  const { expanded, onChange, children } = props;
+const Accordion: FC<AccordionProps> = ({ expanded, onChange, children }) => {
   const classes = useStyles();
-  return (
-    <>
-      <MuiAccordion
-        expanded={expanded}
-        onChange={onChange}
-        square
-        className={classes.root}
-      >
-        {children}
-      </MuiAccordion>
-    </>
+  return children ? (
+    <MuiAccordion
+      expanded={expanded}
+      onChange={onChange}
+      square
+      className={classes.root}
+    >
+      {children}
+    </MuiAccordion>
+  ) : (
+    <> </>
   );
 };
 

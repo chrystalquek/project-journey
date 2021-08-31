@@ -65,7 +65,7 @@ const UpcomingEvent: FC<{}> = () => {
   useEffect(() => {
     if (!user || isAdmin(user)) {
       dispatch(getEventsUpcomingEvent({ eventType: "upcoming" }));
-    } else {
+    } else if (user.user) {
       dispatch(
         getSignedUpEventsUpcomingEvent({
           eventType: "upcoming",
@@ -104,7 +104,7 @@ const UpcomingEvent: FC<{}> = () => {
     }
     // is volunteer
     const signUp = upcomingSignUps.find(
-      (upcomingSignUp) => upcomingSignUp.eventId === event._id
+      (upcomingSignUp) => upcomingSignUp?.eventId === event._id
     );
 
     if (!signUp) {

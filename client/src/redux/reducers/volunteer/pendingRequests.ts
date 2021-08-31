@@ -12,7 +12,7 @@ import {
 
 export type PendingRequestsState = {
   isLoading: boolean;
-  error: SerializedError;
+  error: SerializedError | null;
   pendingVolunteers: Array<VolunteerData>;
   pendingCommitmentApplications: Array<CommitmentApplicationData>;
 };

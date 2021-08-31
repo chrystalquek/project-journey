@@ -21,7 +21,7 @@ const EventPastEventsPage = () => {
   return (
     <>
       <Header title="Blessings in a Bag" />
-      <EventsPageBody type="my-past-events" {...{ events, user }} />
+      {user && <EventsPageBody type="my-past-events" {...{ events, user }} />}
     </>
   );
 };

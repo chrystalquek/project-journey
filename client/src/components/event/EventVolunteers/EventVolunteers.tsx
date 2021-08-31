@@ -33,6 +33,8 @@ import {
   GridValueGetterParams,
 } from "@material-ui/data-grid";
 import Table from "@components/common/data-display/Table";
+import { isDefined } from "@utils/helpers/typescript";
+import _ from "lodash";
 
 export const rowsPerPage = 10;
 
@@ -118,8 +120,9 @@ const EventVolunteers = ({ eid }) => {
     if (signUps && eid) {
       const signUpsData = signUps.data;
       const volunteerIds = Object.values(signUpsData)
-        .filter((signUp) => signUp.eventId === eid)
-        .map((signUp) => signUp.userId);
+        .filter((signUp) => signUp?.eventId === eid)
+        .map((signUp) => signUp?.userId)
+        .filter(isDefined);
 
       setAllVolunteerIds(volunteerIds);
     }
@@ -163,9 +166,10 @@ const EventVolunteers = ({ eid }) => {
 
   useEffect(() => {
     const signUpData = signUps.data;
-    const approved = [];
-    const nonApproved = [];
+    const approved: SignUpData[] = [];
+    const nonApproved: SignUpData[] = [];
     Object.values(signUpData)
+      .filter(isDefined)
       .filter((signUp) => signUp.eventId === eid)
       .forEach((signUp) => {
         if (signUp.status === SignUpStatus.ACCEPTED) {
@@ -200,9 +204,9 @@ const EventVolunteers = ({ eid }) => {
 
   /** States for the choices of the popover buttons */
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
-  const [signUpIdOfRolesBeingEdited, setSignUpIdOfRolesBeingEdited] = useState(
-    []
-  );
+  const [signUpIdOfRolesBeingEdited, setSignUpIdOfRolesBeingEdited] = useState<
+    string[]
+  >([]);
 
   const onUpdateSignUp = (request: UpdateSignUpRequest) => {
     dispatch(updateSignUpInstant(request));
@@ -268,7 +272,7 @@ const EventVolunteers = ({ eid }) => {
 
   const handleEditingButtonClick = (signUp: SignUpData) => {
     const signUpIdOfRolesBeingEditedCopy = [...signUpIdOfRolesBeingEdited];
-    const idx = signUpIdOfRolesBeingEditedCopy.indexOf(signUp._id);
+    const idx = signUpIdOfRolesBeingEditedCopy.indexOf(signUp?._id);
     if (idx > -1) signUpIdOfRolesBeingEditedCopy.splice(idx, 1);
     setSignUpIdOfRolesBeingEdited(signUpIdOfRolesBeingEditedCopy);
   };
@@ -412,7 +416,7 @@ const EventVolunteers = ({ eid }) => {
   );
   const sortByRole = useCallback(
     (array: SignUpData[]): SignUpData[] =>
-      array.sort((a, b) => a.acceptedRole.localeCompare(b.acceptedRole)),
+      _.orderBy(array, (signUp) => signUp.acceptedRole, "asc"),
     []
   );
 
@@ -510,7 +514,8 @@ const EventVolunteers = ({ eid }) => {
       sortable: isApprovedTab,
       flex: isApprovedTab ? 0.35 : 0.4,
       renderCell: (params: GridCellParams) =>
-        (isApprovedTab && signUpIdOfRolesBeingEdited.includes(params.id)) ||
+        (isApprovedTab &&
+          signUpIdOfRolesBeingEdited.includes(params.id.toString())) ||
         !isApprovedTab
           ? getRoleSelectMenu(params.row as SignUpData)
           : params.getValue(params.id, "acceptedRole"),

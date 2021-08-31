@@ -50,7 +50,7 @@ export function getFormData(
   eid: string,
   form: FormState
 ): Omit<CreateSignUpRequest, "status"> {
-  const preferences = [];
+  const preferences: string[] = [];
   if (form.firstChoice) {
     preferences.push(form.firstChoice);
   }

@@ -42,9 +42,11 @@ const EventDetails = ({ eid }: Props) => {
 
   // TODO (aloy): Move this business logic to backend.
   const userCanApplyToEvent =
-    user.volunteerType === VolunteerType.COMMITTED ||
-    (user.volunteerType === VolunteerType.ADHOC &&
-      event.volunteerType === VolunteerType.ADHOC);
+    user &&
+    event &&
+    (user.volunteerType === VolunteerType.COMMITTED ||
+      (user.volunteerType === VolunteerType.ADHOC &&
+        event.volunteerType === VolunteerType.ADHOC));
 
   useEffect(() => {
     dispatch(getEvent(eid));
@@ -58,7 +60,7 @@ const EventDetails = ({ eid }: Props) => {
 
   const [formStatus, hasAcceptedSignUp] = useMemo(() => {
     const signUpInfo = currSignUps.filter(
-      (signUp) => signUp.eventId === event._id
+      (signUp) => signUp.eventId === event?._id
     );
     const isEventFull = getEventVacancies(event).remaining === 0;
     const hasPendingSignUp =
@@ -96,7 +98,7 @@ const EventDetails = ({ eid }: Props) => {
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const withdrawCommitment = () => {
     const signUpInfo = currSignUps.filter(
-      (signUp) => signUp.eventId === event._id
+      (signUp) => signUp.eventId === event?._id
     );
     const acceptedSignUp = signUpInfo.find(
       (signUp) =>
@@ -104,7 +106,7 @@ const EventDetails = ({ eid }: Props) => {
     );
     dispatch(
       deleteSignUp({
-        id: acceptedSignUp._id,
+        id: acceptedSignUp?._id ?? "",
         idType: "signUpId",
       })
     );
@@ -114,7 +116,7 @@ const EventDetails = ({ eid }: Props) => {
     () => (
       <>
         Are you sure you want to withdraw from
-        <b>{event.name}?</b>
+        <b>{event?.name}?</b>
         <br />
         <br />
         Withdrawal from event cannot be undone.
@@ -157,9 +159,11 @@ const EventDetails = ({ eid }: Props) => {
           </Grid>
 
           {/* Cover Image */}
-          <Grid item xs={12}>
-            <ResizedImage img={event?.coverImage} name={event.name} />
-          </Grid>
+          {event?.coverImage && (
+            <Grid item xs={12}>
+              <ResizedImage img={event?.coverImage} name={event.name} />
+            </Grid>
+          )}
 
           {/* Volunteer Role Tags */}
           {event.volunteerType === VolunteerType.COMMITTED && (
@@ -197,7 +201,7 @@ const EventDetails = ({ eid }: Props) => {
           )}
 
           {/* Registration Form */}
-          {isLoggedIn && userCanApplyToEvent && !formStatus.disabled && (
+          {user && isLoggedIn && userCanApplyToEvent && !formStatus.disabled && (
             <Grid item xs={12}>
               <EventRegisterForm
                 isDisabled={formStatus.disabled}
@@ -210,7 +214,7 @@ const EventDetails = ({ eid }: Props) => {
           {/* Convert to commited volunteer CTA */}
           {isLoggedIn &&
             event.volunteerType === VolunteerType.COMMITTED &&
-            user.volunteerType === VolunteerType.ADHOC && (
+            user?.volunteerType === VolunteerType.ADHOC && (
               <Grid item xs={12}>
                 <Typography>
                   This event is only opened to committed volunteers.

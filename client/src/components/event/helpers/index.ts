@@ -10,8 +10,8 @@ export function useGetStoreEvent(eid: string): EventData | null {
   return eid ? storeEvent : null;
 }
 
-export function getAcceptedSignUp(signUp: SignUpData): string | null {
-  if (signUp?.status === SignUpStatus.ACCEPTED) {
+export function getAcceptedSignUp(signUp: SignUpData | null): string | null {
+  if (signUp?.status === SignUpStatus.ACCEPTED && signUp?.acceptedRole) {
     return signUp.acceptedRole;
   }
   return null;

@@ -6,6 +6,7 @@ import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { updateVolunteer } from "@redux/actions/user";
 import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
+import { isAdmin } from "@utils/helpers/auth";
 
 type props = {
   profilePageData: VolunteerData;
@@ -15,16 +16,15 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
   const userData = user.user;
-  const isAdmin = user.user.volunteerType === VolunteerType.ADMIN;
 
   let originalVolunteerRemarks = profilePageData.volunteerRemarks;
   let originalAdministratorRemarks = profilePageData.administratorRemarks;
 
   const [volunteerRemarks, setVolunteerRemarks] = useState<string>(
-    originalVolunteerRemarks
+    originalVolunteerRemarks ?? ""
   );
   const [administratorRemarks, setAdministratorRemarks] = useState<string>(
-    originalAdministratorRemarks
+    originalAdministratorRemarks ?? ""
   );
   const [volunteerRemarksChanged, setVolunteerRemarksChanged] =
     useState<boolean>(false);
@@ -71,11 +71,11 @@ const Remarks: FC<props> = ({ profilePageData }) => {
   };
 
   const discardVolunteerRemarks = () => {
-    setVolunteerRemarks(profilePageData.volunteerRemarks);
+    setVolunteerRemarks(profilePageData.volunteerRemarks ?? "");
     setVolunteerRemarksChanged(false);
   };
   const discardAdministratorRemarks = () => {
-    setAdministratorRemarks(profilePageData.administratorRemarks);
+    setAdministratorRemarks(profilePageData.administratorRemarks ?? "");
     setAdministratorRemarksChanged(false);
   };
 
@@ -97,13 +97,13 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           onDiscard={discardVolunteerRemarks}
           // Admin cannot edit the remarks written by the volunteer
           // But admin can edit remarks of him/herself
-          disabled={isAdmin && profilePageData._id !== user.user._id}
+          disabled={isAdmin(user) && profilePageData._id !== user.user?._id}
         />
 
         {/* Admin remarks not rendered if the profilePageData is admin
         and only shows the admin remarks if the user is admin */}
         {profilePageData.volunteerType !== VolunteerType.ADMIN &&
-          userData.volunteerType === VolunteerType.ADMIN && (
+          userData?.volunteerType === VolunteerType.ADMIN && (
             <RemarksTextField
               value={administratorRemarks}
               onChange={handleAdministratorRemarks}
@@ -111,7 +111,7 @@ const Remarks: FC<props> = ({ profilePageData }) => {
               show={administratorRemarksChanged}
               onSave={saveAdministratorRemarks}
               onDiscard={discardAdministratorRemarks}
-              disabled={!isAdmin}
+              disabled={!isAdmin(user)}
             />
           )}
       </Grid>

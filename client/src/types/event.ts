@@ -51,7 +51,7 @@ export enum EventFilters {
 }
 
 export type EventFilterOptions = {
-  [EventFilters.DATE]: dayjs.Dayjs;
+  [EventFilters.DATE]: dayjs.Dayjs | null;
   [EventFilters.VOLUNTEERTYPE]: {
     [EventFilters.ADHOC]: boolean;
     [EventFilters.COMMITTED]: boolean;
