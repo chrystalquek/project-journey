@@ -114,9 +114,8 @@ const eventSignUpConfirmationEmailHelper = async (
   const templateData = {
     name: user.name,
     event_title: event.name,
-    date: event.startDate,
-    time_start: event.startDate,
-    time_end: event.endDate,
+    time_start: event.startDate.toLocaleDateString(),
+    time_end: event.endDate.toLocaleDateString(),
     location_details: event.location,
     event_information: event.description,
     POC_name: event.facilitatorName,
@@ -172,9 +171,8 @@ const waitlistToConfirmedEmailHelper = async (
   const templateData = {
     name: user.name,
     event_title: event.name,
-    date: event.startDate,
-    time_start: event.startDate,
-    time_end: event.endDate,
+    time_start: event.startDate.toLocaleString(),
+    time_end: event.endDate.toLocaleString(),
     location_details: event.location,
     event_information: event.description,
     POC_name: event.facilitatorName,
