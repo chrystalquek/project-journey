@@ -89,6 +89,7 @@ const eventSlice = createSlice({
     });
     builder.addCase(getEvent.fulfilled, (state, action) => {
       const { payload } = action;
+      addToData([payload], state);
       state.form = payload;
     });
     builder.addCase(getEvent.rejected, (state) => {

@@ -32,9 +32,8 @@ export const getSignUpsUpcomingEvent = createAsyncThunk(
   }
 );
 
-// TODO what are these 2 below
-export const updateSignUpInstant = createAsyncThunk(
-  "signUp/updateSignUpInstant",
+export const updateSignUp = createAsyncThunk(
+  "signUp/updateSignUp",
   async (request: UpdateSignUpRequest) => {
     const response = await apiClient.updateSignUp(request);
     return response;

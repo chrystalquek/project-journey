@@ -5,7 +5,7 @@ import {
   deleteSignUp,
   getSignUps,
   getSignUpsUpcomingEvent,
-  updateSignUpInstant,
+  updateSignUp,
 } from "@redux/actions/signUp";
 import { SignUpData } from "@type/signUp";
 
@@ -76,7 +76,7 @@ const signUpSlice = createSlice({
     builder.addCase(createSignUp.rejected, () => {
       // do nothing yet
     });
-    builder.addCase(updateSignUpInstant.fulfilled, (state, action) => {
+    builder.addCase(updateSignUp.fulfilled, (state, action) => {
       const { payload } = action;
       state.data[payload._id] = payload;
     });

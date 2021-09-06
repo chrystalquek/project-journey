@@ -83,7 +83,11 @@ export function ActionableDialog(props: ActionableDialogProps) {
         maxWidth="sm"
       >
         <DialogContent>
-          <Typography align="center">{content}</Typography>
+          {typeof content === "string" ? (
+            <Typography align="center">{content}</Typography>
+          ) : (
+            content
+          )}
         </DialogContent>
 
         <DialogActions>

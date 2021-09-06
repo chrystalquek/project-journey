@@ -6,12 +6,7 @@ import {
   Select,
   makeStyles,
 } from "@material-ui/core";
-import {
-  DataGrid,
-  GridColDef,
-  GridPageChangeParams,
-  GridRowParams,
-} from "@material-ui/data-grid";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import React, { FC, useCallback } from "react";
 import { ROWS_PER_PAGE } from "@api/request";
 import { useIsMobile } from "@utils/helpers/layout";
@@ -135,6 +130,7 @@ const Table: FC<TableProps> = (props) => {
 
   return (
     <Grid
+      item
       container
       xs={12}
       spacing={2}
@@ -193,11 +189,7 @@ const Table: FC<TableProps> = (props) => {
             paginationMode={paginationMode ?? "client"}
             {...(isControlledPagination
               ? {
-                  onPageChange: (params: GridPageChangeParams) => {
-                    if (onPageChange) {
-                      onPageChange(params.page);
-                    }
-                  },
+                  onPageChange,
                   page,
                   rowCount,
                 }
