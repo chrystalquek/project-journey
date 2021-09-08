@@ -148,6 +148,9 @@ export const VolunteerSchema = createSchema({
     required: true,
     default: Date.now,
   }),
+
+  // Buddy
+  buddyId: Type.string({ required: false }),
 });
 
 export type VolunteerData = Omit<
