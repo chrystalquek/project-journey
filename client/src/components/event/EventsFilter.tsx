@@ -22,6 +22,7 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
   const [eventTypeExpanded, setEventTypeExpanded] = useState<boolean>(false);
   const [volTypeExpanded, setVolTypeExpanded] = useState<boolean>(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+  const [roleExpanded, setRoleExpanded] = useState<boolean>(false);
 
   const handleDateChange = (date) => {
     const newFilters = { ...filters, [EventFilters.DATE]: date };
@@ -42,6 +43,14 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
       case EventFilters.WORKSHOPS:
         newFilters[EventFilters.EVENTTYPE][event.target.name] =
           event.target.checked;
+        break;
+      case EventFilters.EVENT_LEAD:
+      case EventFilters.PHOTOGRAPHER:
+      case EventFilters.SOCIAL_MEDIA:
+      case EventFilters.KIDS:
+      case EventFilters.FUNDRAISING:
+      case EventFilters.OTHERS:
+        newFilters[EventFilters.ROLE][event.target.name] = event.target.checked;
         break;
       default:
       // do nothing
@@ -149,6 +158,82 @@ const EventsFilter: FC<AdminEventsFilterProps> = ({
                 />
               }
               label="Committed"
+            />
+          </FormGroup>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        expanded={roleExpanded}
+        onChange={() => setRoleExpanded(!roleExpanded)}
+      >
+        <AccordionSummary title="Role" isExpanded={roleExpanded} />
+        <AccordionDetails>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.role.eventlead}
+                  onChange={handleCheckboxChange}
+                  name={EventFilters.EVENT_LEAD}
+                  size="small"
+                />
+              }
+              label="Event Lead"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.role.photographer}
+                  onChange={handleCheckboxChange}
+                  name={EventFilters.PHOTOGRAPHER}
+                  size="small"
+                />
+              }
+              label="Photographer"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.role.socialmedia}
+                  onChange={handleCheckboxChange}
+                  name={EventFilters.SOCIAL_MEDIA}
+                  size="small"
+                />
+              }
+              label="Social Media"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.role.kids}
+                  onChange={handleCheckboxChange}
+                  name={EventFilters.KIDS}
+                  size="small"
+                />
+              }
+              label="Kids"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.role.fundraising}
+                  onChange={handleCheckboxChange}
+                  name={EventFilters.FUNDRAISING}
+                  size="small"
+                />
+              }
+              label="Fundraising"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.role.others}
+                  onChange={handleCheckboxChange}
+                  name={EventFilters.OTHERS}
+                  size="small"
+                />
+              }
+              label="Others"
             />
           </FormGroup>
         </AccordionDetails>

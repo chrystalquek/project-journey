@@ -8,6 +8,15 @@ export enum EventType {
   HANGOUT = "hangout",
 }
 
+export enum RoleType {
+  EVENT_LEAD = "eventlead",
+  PHOTOGRAPHER = "photographer",
+  SOCIAL_MEDIA = "socialmedia",
+  KIDS = "kids",
+  FUNDRAISING = "fundraising",
+  OTHERS = "others",
+}
+
 export type EventSearchType = "all" | "upcoming" | "past";
 
 export type EventData = {
@@ -48,6 +57,13 @@ export enum EventFilters {
   VOLUNTEERTYPE = "volunteerType",
   ADHOC = "adhoc",
   COMMITTED = "committed",
+  ROLE = "role",
+  EVENT_LEAD = "eventlead",
+  PHOTOGRAPHER = "photographer",
+  SOCIAL_MEDIA = "socialmedia",
+  KIDS = "kids",
+  FUNDRAISING = "fundraising",
+  OTHERS = "others",
 }
 
 export type EventFilterOptions = {
@@ -60,5 +76,13 @@ export type EventFilterOptions = {
     [EventFilters.VOLUNTEERING]: boolean;
     [EventFilters.WORKSHOPS]: boolean;
     [EventFilters.HANGOUTS]: boolean;
+  };
+  [EventFilters.ROLE]: {
+    [EventFilters.EVENT_LEAD]: boolean;
+    [EventFilters.PHOTOGRAPHER]: boolean;
+    [EventFilters.SOCIAL_MEDIA]: boolean;
+    [EventFilters.KIDS]: boolean;
+    [EventFilters.FUNDRAISING]: boolean;
+    [EventFilters.OTHERS]: boolean;
   };
 };

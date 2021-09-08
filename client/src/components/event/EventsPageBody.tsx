@@ -61,6 +61,14 @@ const EventsPageBody = ({ type, events, user }: Props) => {
       [EventFilters.WORKSHOPS]: true,
       [EventFilters.VOLUNTEERING]: true,
     },
+    [EventFilters.ROLE]: {
+      [EventFilters.EVENT_LEAD]: true,
+      [EventFilters.PHOTOGRAPHER]: true,
+      [EventFilters.SOCIAL_MEDIA]: true,
+      [EventFilters.KIDS]: true,
+      [EventFilters.FUNDRAISING]: true,
+      [EventFilters.OTHERS]: true,
+    },
   };
   const [filters, setFilters] = useState<EventFilterOptions>(eventFilters);
   const filteredEvents = withFilters(events || [], filters);

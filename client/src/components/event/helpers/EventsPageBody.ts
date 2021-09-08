@@ -4,6 +4,8 @@ import {
   EventFilterOptions,
   EventFilters,
   EventType,
+  RoleData,
+  RoleType,
 } from "@type/event";
 import { VolunteerType } from "@type/volunteer";
 
@@ -82,6 +84,55 @@ function areDatesEqual(d1: dayjs.Dayjs, d2: dayjs.Dayjs) {
   return d1.diff(d2, "day") === 0;
 }
 
+function getRoles(e: EventData): Array<RoleData> {
+  return e.roles as Array<RoleData>;
+}
+
+function getRoleType(arr: Array<RoleData>): Array<RoleType> {
+  const ret: Array<RoleType> = [];
+  const roles: Array<String> = [
+    "eventlead",
+    "photographer",
+    "social media",
+    "kids",
+    "fundraising",
+  ];
+
+  arr.forEach((role) => {
+    if (roles.indexOf(role.name) < 0) {
+      ret.push("others" as RoleType);
+    } else {
+      ret.push(role.name as RoleType);
+    }
+  });
+
+  return ret;
+}
+
+function getRoleFilters(f: EventFilterOptions): Array<RoleType> {
+  const ret: Array<RoleType> = [];
+  const rFilters = f[EventFilters.ROLE];
+  if (rFilters[EventFilters.EVENT_LEAD]) {
+    ret.push(RoleType.EVENT_LEAD);
+  }
+  if (rFilters[EventFilters.PHOTOGRAPHER]) {
+    ret.push(RoleType.PHOTOGRAPHER);
+  }
+  if (rFilters[EventFilters.SOCIAL_MEDIA]) {
+    ret.push(RoleType.SOCIAL_MEDIA);
+  }
+  if (rFilters[EventFilters.KIDS]) {
+    ret.push(RoleType.KIDS);
+  }
+  if (rFilters[EventFilters.FUNDRAISING]) {
+    ret.push(RoleType.FUNDRAISING);
+  }
+  if (rFilters[EventFilters.OTHERS]) {
+    ret.push(RoleType.OTHERS);
+  }
+  return ret;
+}
+
 // Filters events based on event type and volunteer type given some filter options
 export function withFilters(
   events: Array<EventData>,
@@ -94,11 +145,18 @@ export function withFilters(
   return events.filter((e: EventData) => {
     const allowEvent = getEventType(e) === undefined;
     const allowVol = getVolunteerType(e) === undefined;
+    const roles = getRoles(e);
+    const allowRole = roles.length === 0;
 
     return (
       (allowAllDates || areDatesEqual(getDateFilter(filters)!, getDate(e))) &&
       (allowEvent || getEventFilters(filters).includes(getEventType(e))) &&
-      (allowVol || getVolunteerFilters(filters).includes(getVolunteerType(e)))
+      (allowVol ||
+        getVolunteerFilters(filters).includes(getVolunteerType(e))) &&
+      (allowRole ||
+        getRoleType(roles).some(
+          (role) => getRoleFilters(filters).indexOf(role) >= 0
+        ))
     );
   });
 }
