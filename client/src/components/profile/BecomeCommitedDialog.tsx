@@ -14,6 +14,8 @@ import { CreateCommitmentApplicationRequest } from "@api/request";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 import _ from "lodash";
 import { assert } from "@utils/helpers/typescript";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -66,6 +68,8 @@ const BecomeCommitedDialog: FC = () => {
     setOpen(false);
   }, []);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleSubmit = async (formValues: Record<string, any>) => {
     assert(userData, "User must be present before submitting.");
     formValues.volunteerId = userData._id;
@@ -79,7 +83,13 @@ const BecomeCommitedDialog: FC = () => {
 
     await dispatch(
       createCommitmentApplication(request as CreateCommitmentApplicationRequest)
-    );
+    )
+      .then(unwrapResult)
+      .catch(() => {
+        enqueueSnackbar("Conversion application creation failed.", {
+          variant: "error",
+        });
+      });
     handleClose();
   };
 

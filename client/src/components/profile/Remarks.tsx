@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "@redux/store";
 import { updateVolunteer } from "@redux/actions/user";
 import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 import { isAdmin } from "@utils/helpers/auth";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useSnackbar } from "notistack";
 
 type props = {
   profilePageData: VolunteerData;
@@ -43,6 +45,8 @@ const Remarks: FC<props> = ({ profilePageData }) => {
     );
   };
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const saveVolunteerRemarks = () => {
     dispatch(
       updateVolunteer({
@@ -51,7 +55,13 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           volunteerRemarks,
         },
       })
-    );
+    )
+      .then(unwrapResult)
+      .catch(() => {
+        enqueueSnackbar("Update volunteer remarks failed.", {
+          variant: "error",
+        });
+      });
 
     originalVolunteerRemarks = volunteerRemarks;
     setVolunteerRemarksChanged(false);
@@ -64,7 +74,13 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           administratorRemarks,
         },
       })
-    );
+    )
+      .then(unwrapResult)
+      .catch(() => {
+        enqueueSnackbar("Update admin remarks failed.", {
+          variant: "error",
+        });
+      });
 
     originalAdministratorRemarks = administratorRemarks;
     setAdministratorRemarksChanged(false);

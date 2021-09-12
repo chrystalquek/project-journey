@@ -8,6 +8,8 @@ import {
   CommitmentApplicationStatus,
 } from "@type/commitmentApplication";
 import { updateCommitmentApplication } from "@redux/actions/commitmentApplication";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -35,6 +37,8 @@ const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (
     ? `Are you sure you want to approve ${profilePageData.name}?`
     : "";
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleApproveEvent = () => {
     // Change the status of the commitment Application
     const updatedCommitmentApplication = {
@@ -46,7 +50,13 @@ const ApproveCommitmentApplication: FC<ApproveCommitmentApplicationProps> = (
         data: updatedCommitmentApplication,
         _id: commitmentApplication._id,
       })
-    );
+    )
+      .then(unwrapResult)
+      .catch(() => {
+        enqueueSnackbar("Conversion application approval failed.", {
+          variant: "error",
+        });
+      });
   };
 
   return (

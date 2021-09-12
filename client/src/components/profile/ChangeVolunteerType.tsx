@@ -17,6 +17,8 @@ import { useAppDispatch, useAppSelector } from "@redux/store";
 import { VolunteerType } from "@type/volunteer";
 import EditIcon from "@material-ui/icons/Edit";
 import { updateVolunteer } from "@redux/actions/user";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useSnackbar } from "notistack";
 import { assert } from "@utils/helpers/typescript";
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +62,8 @@ const ChangeVolunteerType: FC = () => {
     [profilePageData]
   );
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleSubmit = () => {
     if (volunteerType) {
       assert(
@@ -73,7 +77,13 @@ const ChangeVolunteerType: FC = () => {
           _id: profilePageData._id,
           data: updatedVolunteerData,
         })
-      );
+      )
+        .then(unwrapResult)
+        .catch(() => {
+          enqueueSnackbar(`Change volunteer type failed.`, {
+            variant: "error",
+          });
+        });
       handleCloseDialog();
     }
   };
