@@ -6,6 +6,7 @@ import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
 import { Chip, Container, Grid, Typography } from "@material-ui/core";
 import { getEvent } from "@redux/actions/event";
 import { deleteSignUp } from "@redux/actions/signUp";
+import { selectEventById } from "@redux/reducers/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { EventType } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
@@ -35,7 +36,7 @@ const EventDetails = ({ eid }: Props) => {
   const router = useRouter();
 
   const user = useAppSelector((state) => state.user.user);
-  const event = useAppSelector((state) => state.event.event.form);
+  const event = useAppSelector((state) => selectEventById(state, eid));
 
   const isMobile = useIsMobile();
   const isLoggedIn = !!user;
@@ -62,7 +63,7 @@ const EventDetails = ({ eid }: Props) => {
     const signUpInfo = currSignUps.filter(
       (signUp) => signUp.eventId === event?._id
     );
-    const isEventFull = getEventVacancies(event).remaining === 0;
+    const isEventFull = getEventVacancies(event ?? null).remaining === 0;
     const hasPendingSignUp =
       signUpInfo.length > 0 && signUpInfo[0].status === SignUpStatus.PENDING;
     const innerHasAcceptedSignUp =

@@ -7,7 +7,7 @@ const AdminEventFormPage = () => {
 
   return (
     <>
-      <EventForm id={eventId} isNew={false} />
+      <EventForm eid={eventId} isEdit />
     </>
   );
 };

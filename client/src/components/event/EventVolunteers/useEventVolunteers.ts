@@ -1,18 +1,19 @@
 import { getEvent } from "@redux/actions/event";
 import { getSignUpsUpcomingEvent } from "@redux/actions/signUp";
 import { getVolunteersById } from "@redux/actions/volunteer";
+import { selectEventById } from "@redux/reducers/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { SignUpData, SignUpStatus } from "@type/signUp";
-import { useState, useEffect, useCallback } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { SignUpData, SignUpStatus } from "@type/signUp";
 import _ from "lodash";
+import { useCallback, useEffect, useState } from "react";
 
 export const useEventVolunteers = (eid: string) => {
   const dispatch = useAppDispatch();
 
   // Redux states.
   const signUps = useAppSelector((state) => state.signUp);
-  const event = useAppSelector((state) => state.event.event.data[eid]);
+  const event = useAppSelector((state) => selectEventById(state, eid));
   const roles = event?.roles;
 
   // Volunteers.

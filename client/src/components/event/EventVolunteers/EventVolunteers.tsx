@@ -1,17 +1,17 @@
-import { Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { SignUpData } from "@type/signUp";
-import { Tabs } from "@components/common/Tabs";
+import Table from "@components/common/data-display/Table";
 import Header from "@components/common/Header";
+import { Tabs } from "@components/common/Tabs";
+import { Grid, Typography } from "@material-ui/core";
 import {
   GridCellParams,
   GridColDef,
   GridValueGetterParams,
-} from "@mui/x-data-grid";
-import Table from "@components/common/data-display/Table";
-import { useEventVolunteers } from "./useEventVolunteers";
-import { MoreButton } from "./buttons/MoreButton";
+} from "@material-ui/data-grid";
+import { SignUpData } from "@type/signUp";
+import React from "react";
 import { EditVolunteerRoleButton } from "./buttons/EditRoleButton";
+import { MoreButton } from "./buttons/MoreButton";
+import { useEventVolunteers } from "./useEventVolunteers";
 
 export const rowsPerPage = 10;
 

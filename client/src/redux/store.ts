@@ -80,4 +80,6 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
 
+export type FetchStatus = "pending" | "fulfilled" | "rejected";
+
 export default { store, persistor };

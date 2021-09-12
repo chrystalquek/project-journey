@@ -11,10 +11,8 @@ import {
   GridRowParams,
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
-import {
-  getPendingSignUps,
-  getUpcomingEvents,
-} from "@redux/actions/events/pendingRequests";
+import { listEvents } from "@redux/actions/event";
+import { getPendingSignUps } from "@redux/actions/events/pendingRequests";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { EventData } from "@type/event";
 import { SignUpData, SignUpStatus } from "@type/signUp";
@@ -48,7 +46,7 @@ const PendingRequests: FC = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    dispatch(getUpcomingEvents());
+    dispatch(listEvents({ eventType: "upcoming" }));
     dispatch(getPendingSignUps());
   }, [dispatch]);
 

@@ -1,6 +1,7 @@
 import Header from "@components/common/Header";
 import EventsPageBody from "@components/event/EventsPageBody";
-import { getSignedUpEventsPastEvent } from "@redux/actions/event";
+import { listEvents } from "@redux/actions/event";
+import { selectEventsByIds } from "@redux/reducers/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import React, { useEffect } from "react";
 
@@ -8,25 +9,18 @@ const EventMyPastEventPage = () => {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector((state) => state.user.user);
-
   const events = useAppSelector((state) =>
-    state.event.event.pastEvents.ids
-      .map((eid) => state.event.event.data[eid])
-      .filter((event) => event)
+    selectEventsByIds(state, state.event.event.listEventIds)
   );
 
   useEffect(() => {
-    if (user) {
-      dispatch(
-        getSignedUpEventsPastEvent({ userId: user._id, eventType: "past" })
-      );
-    }
+    dispatch(listEvents({ eventType: "past", onlySignedUp: true }));
   }, [dispatch, user]);
 
   return (
     <>
       <Header title="Blessings in a Bag" />
-      {user && <EventsPageBody type="my-past-events" {...{ events, user }} />}
+      <EventsPageBody type="my-past-events" {...{ events, user }} />
     </>
   );
 };

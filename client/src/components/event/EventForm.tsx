@@ -15,23 +15,23 @@ import {
 import ClearIcon from "@material-ui/icons/Clear";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import { createEvent, editEvent, getEvent } from "@redux/actions/event";
-import { resetEventStatus } from "@redux/reducers/event";
+import { selectEventById } from "@redux/reducers/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { EventData, EventType } from "@type/event";
-import { SignUpStatus } from "@type/signUp";
 import { VolunteerType } from "@type/volunteer";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import dayjs from "dayjs";
 import { Formik, useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import * as yup from "yup";
 import FormQuestionMapper from "../form/generator/FormQuestionMapper";
+import { QuestionData, useFeedbackForm } from "./helpers/eventForm";
 
 type AdminEventFormProps = {
-  id: string;
-  isNew: boolean;
+  eid?: string;
+  isEdit?: boolean;
 };
 
 const eventTypes = [
@@ -97,17 +97,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Feedback form types
-// TODO should rename this
-type QuestionData = {
-  type: "shortAnswer" | "mcq" | "checkboxes";
-  displayText: string;
-  options?: Array<string>;
-  isRequired: boolean;
-};
-
-type KeyType = "type" | "displayText" | "options" | "isRequired";
-
 // @ts-ignore Some yup type errors.
 const validationSchema: yup.SchemaOf<EventData> = yup.object({
   name: yup.string().required("Name is required"),
@@ -146,122 +135,42 @@ const emptyForm: Omit<EventData, "_id" | "createdAt"> = {
   endDate: dayjs().toISOString(),
 };
 
-const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
-  const { enqueueSnackbar } = useSnackbar();
-  const classes = useStyles();
-  const event = useAppSelector((state) => state.event.event);
-  const eventForm = useAppSelector((state) => state.event.event.form);
-  const user = useAppSelector((state) => state.user.user);
+const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  // Store feedback event form
-  const [feedbackFormEventQuestions, setFeedbackFormEventQuestions] = useState<
-    Array<QuestionData>
-  >([]);
-
-  // Feedback form helper functions
-  const handleAddQuestion = useCallback(() => {
-    const newQuestion: QuestionData = {
-      type: "shortAnswer",
-      displayText: "",
-      isRequired: true,
-      options: [],
-    };
-    setFeedbackFormEventQuestions([...feedbackFormEventQuestions, newQuestion]);
-  }, [feedbackFormEventQuestions]);
-
-  const handleChangeQuestion = useCallback(
-    (value: string | Array<string> | boolean, key: KeyType, index: number) => {
-      const newQuestion: QuestionData = {
-        ...feedbackFormEventQuestions[index],
-        [key]: value,
-      };
-
-      if (key === "type") {
-        newQuestion.displayText = "";
-        newQuestion.options = [];
-      }
-
-      setFeedbackFormEventQuestions([
-        ...feedbackFormEventQuestions.slice(0, index),
-        newQuestion,
-        ...feedbackFormEventQuestions.slice(index + 1),
-      ]);
-    },
-    [feedbackFormEventQuestions]
-  );
-
-  const handleAddOption = useCallback(
-    (index: number) => {
-      const newOption: Array<string> = [
-        ...(feedbackFormEventQuestions[index]?.options ?? []),
-        "",
-      ];
-      handleChangeQuestion(newOption, "options", index);
-    },
-    [feedbackFormEventQuestions, handleChangeQuestion]
-  );
-
-  const handleRemoveQuestion = useCallback(
-    (index: number) => {
-      setFeedbackFormEventQuestions([
-        ...feedbackFormEventQuestions.slice(0, index),
-        ...feedbackFormEventQuestions.slice(index + 1),
-      ]);
-    },
-    [feedbackFormEventQuestions]
-  );
-
-  const handleRemoveOption = useCallback(
-    (questionIndex: number, optionIndex: number) => {
-      const currentOption =
-        feedbackFormEventQuestions[questionIndex].options ?? [];
-      const newOption: Array<string> = [
-        ...currentOption.slice(0, optionIndex),
-        ...currentOption.slice(optionIndex + 1),
-      ];
-
-      handleChangeQuestion(newOption, "options", questionIndex);
-    },
-    [feedbackFormEventQuestions, handleChangeQuestion]
-  );
-
-  const handleChangeOption = useCallback(
-    (value: string, questionIndex: number, optionIndex: number) => {
-      const currentOption: Array<string> =
-        feedbackFormEventQuestions[questionIndex].options ?? [];
-      const newOption: Array<string> = [
-        ...currentOption.slice(0, optionIndex),
-        value,
-        ...currentOption.slice(optionIndex + 1),
-      ];
-
-      handleChangeQuestion(newOption, "options", questionIndex);
-    },
-    [feedbackFormEventQuestions, handleChangeQuestion]
-  );
+  const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const eventStatus = useAppSelector((state) => state.event.event.status);
+  const event = useAppSelector((state) => selectEventById(state, eid ?? ""));
+  const user = useAppSelector((state) => state.user.user);
+  const {
+    feedbackFormEventQuestions,
+    handleAddQuestion,
+    handleChangeQuestion,
+    handleAddOption,
+    handleRemoveQuestion,
+    handleRemoveOption,
+    handleChangeOption,
+  } = useFeedbackForm();
 
   useEffect(() => {
-    if (id && id !== "new") {
-      dispatch(getEvent(id));
+    if (eid) {
+      dispatch(getEvent(eid));
     }
-  }, [dispatch, id]);
+  }, [dispatch, eid]);
 
-  useEffect(
-    () => () => {
-      dispatch(resetEventStatus());
-    },
-    [dispatch]
-  );
-
+  const hasPressedSubmit = useRef(false);
   useEffect(() => {
-    if (event.status === SignUpStatus.REJECTED) {
+    if (!hasPressedSubmit.current) {
+      return;
+    }
+
+    if (eventStatus === "rejected") {
       enqueueSnackbar("Event creation failed.", {
         variant: "error",
       });
-    } else if (event.status === "fulfilled") {
-      const message = isNew
+    } else if (eventStatus === "fulfilled") {
+      const message = !isEdit
         ? "Successfully Created Event!"
         : "Successfully Edited Event!";
       enqueueSnackbar(message, {
@@ -270,7 +179,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
 
       router.push("/event");
     }
-  }, [event, isNew, router, enqueueSnackbar]);
+  }, [eventStatus, isEdit, router, enqueueSnackbar]);
 
   const {
     errors,
@@ -282,9 +191,10 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     setFieldError,
     values,
   } = useFormik({
-    initialValues: eventForm || emptyForm,
+    initialValues: event ?? emptyForm,
     validationSchema,
     onSubmit: async (formValues) => {
+      hasPressedSubmit.current = true;
       const form = formValues;
 
       // Upload and get cover image URL
@@ -306,7 +216,9 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
         );
       }
 
-      if (isNew) {
+      if (isEdit && eid) {
+        dispatch(editEvent({ data: form, _id: eid }));
+      } else {
         dispatch(
           createEvent({
             ...form,
@@ -318,8 +230,6 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             })),
           })
         );
-      } else {
-        dispatch(editEvent({ data: form, _id: id }));
       }
     },
     enableReinitialize: true,
@@ -355,18 +265,18 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
     router.push(UNAUTHORIZED);
   }
 
-  if (id !== "new" && eventForm === null) {
+  if (eid && !event) {
     return <h1>Loading</h1>;
   }
 
   return (
     <Grid container xs={8}>
-      <Header title={isNew ? "Create Event" : "Edit Event"} />
+      <Header title={!isEdit ? "Create Event" : "Edit Event"} />
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" spacing={10}>
           <Grid item>
             <Typography variant="h1">
-              {isNew ? "Create Event" : "Edit Event"}
+              {!isEdit ? "Create Event" : "Edit Event"}
             </Typography>
           </Grid>
 
@@ -405,7 +315,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
             <div className={classes.coverImage}>
               <DropZoneCard
                 id="coverImage"
-                initialUrl={eventForm?.coverImage ?? null}
+                initialUrl={event?.coverImage ?? null}
                 onChangeImage={(e) => onChangeImage(e, "coverImage")}
               />
             </div>
@@ -645,7 +555,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
                   <div className={classes.facilPhotograph}>
                     <DropZoneCard
                       id="facilitatorPhoto"
-                      initialUrl={eventForm?.facilitatorPhoto ?? null}
+                      initialUrl={event?.facilitatorPhoto ?? null}
                       onChangeImage={(e) =>
                         onChangeImage(e, "facilitatorPhoto")
                       }
@@ -840,7 +750,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ id, isNew }) => {
               className={classes.submitButton}
             >
               <Typography variant="body1">
-                {isNew ? "Create Event" : "Edit Event"}
+                {!isEdit ? "Create Event" : "Edit Event"}
               </Typography>
             </Button>
           </Grid>

@@ -1,5 +1,5 @@
 import EventForm from "@components/event/EventForm";
 
-const AdminEventFormPage = () => <EventForm id="new" isNew />;
+const AdminEventFormPage = () => <EventForm />;
 
 export default AdminEventFormPage;

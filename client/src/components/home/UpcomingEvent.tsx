@@ -9,15 +9,13 @@ import { isAdmin } from "@utils/helpers/auth";
 import React, { FC, useEffect } from "react";
 import { EventData } from "@type/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import {
-  getEventsUpcomingEvent,
-  getSignedUpEventsUpcomingEvent,
-} from "@redux/actions/event";
+import { listEvents } from "@redux/actions/event";
 import { getSignUpsUpcomingEvent } from "@redux/actions/signUp";
 import { formatDateStartEndTime } from "@utils/helpers/date";
 import { useRouter } from "next/router";
 import { CREATE_EVENT_FORM_ROUTE } from "@constants/routes";
 import { SignUpStatus } from "@type/signUp";
+import { selectEventsByIds } from "@redux/reducers/event";
 
 const useStyles = makeStyles((theme) => ({
   pane: {
@@ -64,27 +62,20 @@ const UpcomingEvent: FC<{}> = () => {
 
   useEffect(() => {
     if (!user || isAdmin(user)) {
-      dispatch(getEventsUpcomingEvent({ eventType: "upcoming" }));
+      dispatch(listEvents({ eventType: "upcoming" }));
     } else if (user.user) {
+      dispatch(listEvents({ eventType: "upcoming", onlySignedUp: true }));
       dispatch(
-        getSignedUpEventsUpcomingEvent({
-          eventType: "upcoming",
-          userId: user.user?._id,
-        })
-      );
-      dispatch(
-        getSignUpsUpcomingEvent({ id: user.user?._id, idType: "userId" })
+        getSignUpsUpcomingEvent({ id: user.user._id, idType: "userId" })
       );
     }
   }, [dispatch, user]);
 
-  const events = useAppSelector((state) => state.event.event);
+  const upcomingEvents = useAppSelector((state) =>
+    selectEventsByIds(state, state.event.event.listEventIds)
+  );
   const signUps = useAppSelector((state) => state.signUp); // only relevant if user is volunteer
-
-  const upcomingEventsIds = events.upcomingEvent.ids;
   const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;
-
-  const upcomingEvents = upcomingEventsIds.map((id) => events.data[id]);
   const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
 
   const generateNotification = (event: EventData) => {
