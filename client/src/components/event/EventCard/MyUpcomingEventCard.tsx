@@ -1,8 +1,10 @@
 import { makeStyles, Typography } from "@material-ui/core";
-import { useAppSelector } from "@redux/store";
+import { getSignUps } from "@redux/actions/signUp";
+import { selectSignUpsByIds } from "@redux/reducers/signUp";
+import { useAppSelector, useAppDispatch } from "@redux/store";
 import { EventData } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import EventCard from "./EventCard";
 
 const useStyles = makeStyles((theme) => ({
@@ -17,9 +19,15 @@ const useStyles = makeStyles((theme) => ({
 const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
   const classes = useStyles();
 
-  const signUps = useAppSelector((state) => state.signUp);
-  const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;
-  const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
+  // TODO can just fetch own signup.
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
+  useEffect(() => {
+    dispatch(getSignUps({ id: user.user?._id ?? "", idType: "userId" }));
+  }, [dispatch, user.user?._id]);
+  const upcomingSignUps = useAppSelector((state) =>
+    selectSignUpsByIds(state, state.signUp.listSignUpIds)
+  );
 
   const renderSignUpStatus = useCallback(() => {
     const signUp = upcomingSignUps.find(

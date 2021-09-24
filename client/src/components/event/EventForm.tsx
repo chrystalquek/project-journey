@@ -140,7 +140,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
   const router = useRouter();
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const eventStatus = useAppSelector((state) => state.event.event.status);
+  const eventStatus = useAppSelector((state) => state.event.status);
   const event = useAppSelector((state) => selectEventById(state, eid ?? ""));
   const user = useAppSelector((state) => state.user.user);
   const {

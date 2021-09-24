@@ -1,7 +1,8 @@
 import { getEvent } from "@redux/actions/event";
-import { getSignUpsUpcomingEvent } from "@redux/actions/signUp";
+import { getSignUps } from "@redux/actions/signUp";
 import { getVolunteersById } from "@redux/actions/volunteer";
 import { selectEventById } from "@redux/reducers/event";
+import { selectSignUpsByIds } from "@redux/reducers/signUp";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { SignUpData, SignUpStatus } from "@type/signUp";
@@ -13,6 +14,9 @@ export const useEventVolunteers = (eid: string) => {
 
   // Redux states.
   const signUps = useAppSelector((state) => state.signUp);
+  const signUpData = useAppSelector((state) =>
+    selectSignUpsByIds(state, state.signUp.listSignUpIds)
+  );
   const event = useAppSelector((state) => selectEventById(state, eid));
   const roles = event?.roles;
 
@@ -62,21 +66,17 @@ export const useEventVolunteers = (eid: string) => {
   useEffect(() => {
     if (eid) {
       dispatch(getEvent(eid));
-      dispatch(getSignUpsUpcomingEvent({ id: eid, idType: "eventId" }));
+      dispatch(getSignUps({ id: eid, idType: "eventId" }));
     }
   }, [dispatch, eid]);
 
   // Get signed up volunteer ids.
   useEffect(() => {
-    if (signUps && eid) {
-      const signUpsData = signUps.data;
-      const ids = Object.values(signUpsData)
-        .filter((signUp) => signUp && signUp.eventId === eid && signUp.userId)
-        .map((signUp) => signUp!.userId);
-
-      setVolunteerIds(ids);
-    }
-  }, [eid, signUps]);
+    const ids = signUpData
+      .filter((signUp) => signUp && signUp.eventId === eid && signUp.userId)
+      .map((signUp) => signUp!.userId);
+    setVolunteerIds(ids);
+  }, [signUpData, eid]);
 
   // Get signed up volunteers' data.
   const getVolunteerData = useCallback(async () => {
@@ -118,8 +118,6 @@ export const useEventVolunteers = (eid: string) => {
 
   // Partition sign ups based on approved status.
   useEffect(() => {
-    const signUpData = signUps.data;
-
     const approved: SignUpData[] = [];
     const nonApproved: SignUpData[] = [];
 
@@ -138,7 +136,7 @@ export const useEventVolunteers = (eid: string) => {
 
     setNonApprovedSignUps(nonApproved);
     setFilteredNonApprovedSignUps(nonApproved);
-  }, [dispatch, eid, signUps]);
+  }, [dispatch, eid, signUpData, signUps]);
 
   // Sort and filter sign ups.
   useEffect(() => {

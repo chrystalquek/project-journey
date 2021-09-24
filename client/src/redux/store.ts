@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "@redux/reducers/user";
-import EventReducer from "@redux/reducers/event";
+import eventReducer from "@redux/reducers/event";
 import volunteerReducer from "@redux/reducers/volunteer/index";
 import loadingReducer from "@redux/reducers/loading";
 import storage from "redux-persist/lib/storage";
@@ -19,9 +19,7 @@ import signUpReducer from "./reducers/signUp";
 import formReducer from "./reducers/form";
 import commitmentApplicationReducer from "./reducers/commitmentApplication";
 import pendingRequestsVolunteerReducer from "./reducers/volunteer/pendingRequests";
-import pendingRequestsEventReducer from "./reducers/event/pendingRequests";
 import pendingApprovalReducer from "./reducers/home/pendingApproval";
-import pendingRequestsTabsReducer from "./reducers/common/pendingRequestsTabs";
 
 export type StoreState = ReturnType<typeof reducers>;
 
@@ -30,18 +28,11 @@ const reducers = combineReducers({
     pendingApproval: pendingApprovalReducer,
   }),
 
-  event: combineReducers({
-    event: EventReducer,
-    pendingRequests: pendingRequestsEventReducer,
-  }),
+  event: eventReducer,
 
   volunteer: combineReducers({
     index: volunteerReducer,
     pendingRequests: pendingRequestsVolunteerReducer,
-  }),
-
-  common: combineReducers({
-    pendingRequestsTabs: pendingRequestsTabsReducer,
   }),
 
   signUp: signUpReducer,

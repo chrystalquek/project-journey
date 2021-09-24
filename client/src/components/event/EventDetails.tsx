@@ -5,8 +5,9 @@ import { COMMITTED_VOLUNTEER_TAG } from "@components/event/index";
 import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
 import { Chip, Container, Grid, Typography } from "@material-ui/core";
 import { getEvent } from "@redux/actions/event";
-import { deleteSignUp } from "@redux/actions/signUp";
+import { deleteSignUp, getSignUps } from "@redux/actions/signUp";
 import { selectEventById } from "@redux/reducers/event";
+import { selectSignUpsByIds } from "@redux/reducers/signUp";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { EventType } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
@@ -51,15 +52,18 @@ const EventDetails = ({ eid }: Props) => {
 
   useEffect(() => {
     dispatch(getEvent(eid));
-  }, [dispatch, eid]);
+    dispatch(getSignUps({ id: user?._id ?? "", idType: "userId" }));
+  }, [dispatch, eid, user?._id]);
 
   // ========================
   // TODO (aloy): Simplify this.
-  const currSignUps = useAppSelector(
-    (state) => state.signUp.getSignUps.currSignUps
+  // i think can have just a single fetch for sign up?
+  const currSignUps = useAppSelector((state) =>
+    selectSignUpsByIds(state, state.signUp.listSignUpIds)
   );
 
   const [formStatus, hasAcceptedSignUp] = useMemo(() => {
+    // for volunteer purpose
     const signUpInfo = currSignUps.filter(
       (signUp) => signUp.eventId === event?._id
     );
@@ -102,8 +106,7 @@ const EventDetails = ({ eid }: Props) => {
       (signUp) => signUp.eventId === event?._id
     );
     const acceptedSignUp = signUpInfo.find(
-      (signUp) =>
-        Array.isArray(signUp.status) && signUp.status[0] === "accepted"
+      (signUp) => signUp.status === SignUpStatus.ACCEPTED
     );
     dispatch(
       deleteSignUp({

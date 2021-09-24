@@ -75,7 +75,7 @@ export default eventSlice.reducer;
 export const { resetEventStatus } = eventSlice.actions;
 
 export const { selectById: selectEventById, selectAll: selectAllEvents } =
-  eventsAdapter.getSelectors((state: StoreState) => state.event.event);
+  eventsAdapter.getSelectors((state: StoreState) => state.event);
 
 export const selectEventsByIds = (state: StoreState, ids: string[]) =>
   ids.map((id) => selectEventById(state, id)).filter(isDefined);

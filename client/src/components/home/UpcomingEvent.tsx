@@ -10,12 +10,13 @@ import React, { FC, useEffect } from "react";
 import { EventData } from "@type/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { listEvents } from "@redux/actions/event";
-import { getSignUpsUpcomingEvent } from "@redux/actions/signUp";
+import { getSignUps } from "@redux/actions/signUp";
 import { formatDateStartEndTime } from "@utils/helpers/date";
 import { useRouter } from "next/router";
 import { CREATE_EVENT_FORM_ROUTE } from "@constants/routes";
 import { SignUpStatus } from "@type/signUp";
 import { selectEventsByIds } from "@redux/reducers/event";
+import { selectSignUpsByIds } from "@redux/reducers/signUp";
 
 const useStyles = makeStyles((theme) => ({
   pane: {
@@ -65,18 +66,16 @@ const UpcomingEvent: FC<{}> = () => {
       dispatch(listEvents({ eventType: "upcoming" }));
     } else if (user.user) {
       dispatch(listEvents({ eventType: "upcoming", onlySignedUp: true }));
-      dispatch(
-        getSignUpsUpcomingEvent({ id: user.user._id, idType: "userId" })
-      );
+      dispatch(getSignUps({ id: user.user._id, idType: "userId" }));
     }
   }, [dispatch, user]);
 
   const upcomingEvents = useAppSelector((state) =>
-    selectEventsByIds(state, state.event.event.listEventIds)
+    selectEventsByIds(state, state.event.listEventIds)
   );
-  const signUps = useAppSelector((state) => state.signUp); // only relevant if user is volunteer
-  const upcomingSignUpsIds = signUps.volunteerSignUpsForUpcomingEvent.ids;
-  const upcomingSignUps = upcomingSignUpsIds.map((id) => signUps.data[id]);
+  const upcomingSignUps = useAppSelector((state) =>
+    selectSignUpsByIds(state, state.signUp.listSignUpIds)
+  );
 
   const generateNotification = (event: EventData) => {
     if (isAdmin(user)) {

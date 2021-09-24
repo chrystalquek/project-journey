@@ -1,60 +1,55 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createEntityAdapter,
+  createSlice,
+  isAnyOf,
+  isFulfilled,
+  isPending,
+  isRejected,
+} from "@reduxjs/toolkit";
 import {
   createAndAcceptSignUp,
   createSignUp,
   deleteSignUp,
+  getPendingSignUps,
   getSignUps,
-  getSignUpsUpcomingEvent,
   updateSignUp,
 } from "@redux/actions/signUp";
 import { SignUpData } from "@type/signUp";
+import { FetchStatus, StoreState } from "@redux/store";
+import { isDefined } from "@utils/helpers/typescript";
+
+const signUpAdapter = createEntityAdapter<SignUpData>({
+  selectId: (signUp) => signUp._id,
+});
 
 export type SignUpState = {
-  data: Record<string, SignUpData | null>;
-  volunteerSignUpsForUpcomingEvent: {
-    // signups for a volunteer's upcoming events // used for dashboard
-    ids: Array<string>; // signed up events
-  };
-  getSignUps: {
-    currSignUps: Array<SignUpData>; // signups from getSignUps action
-  };
+  listSignUpIds: string[];
+  status: FetchStatus | null;
 };
 
-const initialState: SignUpState = {
-  data: {},
-  volunteerSignUpsForUpcomingEvent: {
-    ids: [],
-  },
-  getSignUps: {
-    currSignUps: [],
-  },
-};
-
-// parse all Dates etc before saving to store
-const addToData = (signUps: Array<SignUpData>, state: SignUpState) => {
-  signUps.forEach((signUp) => {
-    state.data[signUp._id] = signUp;
-  });
-};
+const initialState = signUpAdapter.getInitialState<SignUpState>({
+  listSignUpIds: [],
+  status: null,
+});
 
 const signUpSlice = createSlice({
   name: "signUp",
   initialState,
-  reducers: {},
+  reducers: {
+    resetSignUpStatus(state) {
+      Object.assign(state, initialState);
+    },
+  },
   extraReducers: (builder) => {
-    // Simplify immutable updates with redux toolkit
-    // https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns#simplifying-immutable-updates-with-redux-toolkit
-    builder.addCase(getSignUpsUpcomingEvent.fulfilled, (state, action) => {
-      const { payload } = action;
-      addToData(payload.data, state);
-      state.volunteerSignUpsForUpcomingEvent.ids = payload.data.map(
-        (signUp) => signUp._id
-      );
-    });
-
     builder.addCase(getSignUps.fulfilled, (state, action) => {
-      const { payload } = action;
-      state.getSignUps.currSignUps = payload.data;
+      const payload = action.payload.data;
+      signUpAdapter.upsertMany(state, payload);
+      state.listSignUpIds = payload.map((signUp) => signUp._id);
+    });
+    builder.addCase(getPendingSignUps.fulfilled, (state, action) => {
+      const payload = action.payload.data;
+      signUpAdapter.upsertMany(state, payload);
+      state.listSignUpIds = payload.map((signUp) => signUp._id);
     });
 
     // Using redux for logging purposes
@@ -76,15 +71,34 @@ const signUpSlice = createSlice({
     builder.addCase(createSignUp.rejected, () => {
       // do nothing yet
     });
-    builder.addCase(updateSignUp.fulfilled, (state, action) => {
-      const { payload } = action;
-      state.data[payload._id] = payload;
-    });
     builder.addCase(deleteSignUp.fulfilled, (state, action) => {
-      const { meta } = action;
-      state.data[meta.arg.id] = null;
+      signUpAdapter.removeOne(state, action.meta.arg.id);
+    });
+
+    builder.addMatcher(
+      isAnyOf(updateSignUp.fulfilled),
+      (state, { payload }) => {
+        signUpAdapter.upsertOne(state, payload);
+      }
+    );
+    builder.addMatcher(isPending, (state) => {
+      state.status = "pending";
+    });
+    builder.addMatcher(isFulfilled, (state) => {
+      state.status = "fulfilled";
+    });
+    builder.addMatcher(isRejected, (state) => {
+      state.status = "rejected";
     });
   },
 });
 
 export default signUpSlice.reducer;
+
+export const { resetSignUpStatus } = signUpSlice.actions;
+
+export const { selectById: selectSignUpById, selectAll: selectAllSignUps } =
+  signUpAdapter.getSelectors((state: StoreState) => state.signUp);
+
+export const selectSignUpsByIds = (state: StoreState, ids: string[]) =>
+  ids.map((id) => selectSignUpById(state, id)).filter(isDefined);

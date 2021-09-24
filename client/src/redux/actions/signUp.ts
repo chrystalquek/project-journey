@@ -24,10 +24,10 @@ export const getSignUps = createAsyncThunk(
   }
 );
 
-export const getSignUpsUpcomingEvent = createAsyncThunk(
-  "signUp/getSignUpsUpcomingEvent",
-  async (request: GetSignUpsRequest) => {
-    const response = await apiClient.getSignUps(request);
+export const getPendingSignUps = createAsyncThunk(
+  "events/getPendingSignUps",
+  async () => {
+    const response = await apiClient.getPendingSignUps();
     return response;
   }
 );

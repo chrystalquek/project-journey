@@ -1,9 +1,7 @@
 import Table from "@components/common/data-display/Table";
-import ErrorPage from "@components/common/ErrorPage";
 import Header from "@components/common/Header";
-import LoadingIndicator from "@components/common/LoadingIndicator";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
-import { ERROR_MESSAGE } from "@constants/messages";
+import { EVENT_VOLUNTEERS_ROUTE } from "@constants/routes";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import {
   GridCellParams,
@@ -12,7 +10,9 @@ import {
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
 import { listEvents } from "@redux/actions/event";
-import { getPendingSignUps } from "@redux/actions/events/pendingRequests";
+import { getPendingSignUps } from "@redux/actions/signUp";
+import { selectEventsByIds } from "@redux/reducers/event";
+import { selectSignUpsByIds } from "@redux/reducers/signUp";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { EventData } from "@type/event";
 import { SignUpData, SignUpStatus } from "@type/signUp";
@@ -50,8 +50,11 @@ const PendingRequests: FC = () => {
     dispatch(getPendingSignUps());
   }, [dispatch]);
 
-  const { pendingSignUps, upcomingEvents, isLoading, error } = useAppSelector(
-    (state) => state.event.pendingRequests
+  const pendingSignUps = useAppSelector((state) =>
+    selectSignUpsByIds(state, state.signUp.listSignUpIds)
+  );
+  const upcomingEvents = useAppSelector((state) =>
+    selectEventsByIds(state, state.event.listEventIds)
   );
 
   const pendingRequestsForEventCount = (event: EventData) => {
@@ -69,13 +72,6 @@ const PendingRequests: FC = () => {
   const upcomingEventsWithPendingSignUps = upcomingEvents.filter(
     (event) => pendingRequestsForEventCount(event) !== 0
   );
-
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-  if (error) {
-    return <ErrorPage message={error.message ?? ERROR_MESSAGE} />;
-  }
 
   const columns: GridColDef[] = [
     {
@@ -123,7 +119,7 @@ const PendingRequests: FC = () => {
             columns={columns}
             rows={upcomingEventsWithPendingSignUps}
             onRowClick={(param: GridRowParams) =>
-              router.push(`/event/${param.id}/volunteers`)
+              router.push(EVENT_VOLUNTEERS_ROUTE(String(param.id)))
             }
           />
         </Grid>

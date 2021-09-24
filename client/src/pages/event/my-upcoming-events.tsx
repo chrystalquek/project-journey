@@ -10,7 +10,7 @@ const EventMyUpcomingEventsPage = () => {
 
   const user = useAppSelector((state) => state.user.user);
   const events = useAppSelector((state) =>
-    selectEventsByIds(state, state.event.event.listEventIds)
+    selectEventsByIds(state, state.event.listEventIds)
   );
 
   useEffect(() => {
