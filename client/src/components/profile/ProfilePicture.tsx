@@ -10,7 +10,7 @@ import DialogContent from "@components/common/feedback/DialogContent";
 import DialogActions from "@components/common/feedback/DialogActions";
 import { useAppDispatch } from "@redux/store";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
-import { updateVolunteer } from "@redux/actions/user";
+import { updateVolunteer } from "@redux/actions/volunteer/index";
 import { assert } from "@utils/helpers/typescript";
 
 const useStyles = makeStyles((theme) => ({

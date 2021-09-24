@@ -1,53 +1,42 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "@api/apiClient";
-import { GetVolunteersPaginatedRequest } from "@api/request";
-import { VolunteerCollate } from "@redux/reducers/volunteer/index";
-import { Pagination } from "@utils/helpers/pagination";
-import { StoreState } from "@redux/store";
+import {
+  GetVolunteersByIdRequest,
+  GetVolunteersPaginatedRequest,
+  UpdateVolunteerRequest,
+} from "@api/request";
 import { GetVolunteersPaginatedResponse } from "@api/response";
-import { convertFilterObjectToArray } from "@utils/helpers/filterObject";
-
+import { StoreState } from "@redux/store";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 // functions
 
 // only need to define generics if need to use getState
 // define generics for createAsyncThunk: return type, parameters and empty object: https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk
-export const getVolunteers = createAsyncThunk<
-  GetVolunteersResponseParam,
-  GetVolunteersParam,
+export const listVolunteers = createAsyncThunk<
+  GetVolunteersPaginatedResponse,
+  GetVolunteersPaginatedRequest,
   { state: StoreState }
->(
-  "volunteer/getVolunteers",
-  async (param: GetVolunteersParam, { getState }) => {
-    const volunteer = getState().volunteer.index;
-    const { collate, pagination } = volunteer; // grab state from store if does not exist in params
-    const { newPagination, newCollate } = param;
+>("volunteer/listVolunteers", async (args) => apiClient.getVolunteers(args));
 
-    // construct the request
-    const request: GetVolunteersPaginatedRequest = {
-      pageNo: newPagination?.pageNo ?? pagination.pageNo,
-      size: newPagination?.size ?? pagination.size,
-      volunteerType: convertFilterObjectToArray(
-        newCollate?.filters?.volunteerType ?? collate.filters.volunteerType
-      ),
-      name: newCollate?.search?.name ?? collate.search.name,
-      sort: newCollate?.sort ?? collate.sort,
-    };
-    const response = await apiClient.getVolunteers(request);
-
-    // combine the response and params into one object that can be accessed by reducer
-    return { response, param };
+export const getVolunteer = createAsyncThunk(
+  "volunteer/getVolunteer",
+  async (_id: string) => {
+    const response = await apiClient.getVolunteer({ _id });
+    return response;
   }
 );
 
-// other funcions...
+export const updateVolunteer = createAsyncThunk(
+  "volunteer/updateVolunteer",
+  async (request: UpdateVolunteerRequest) => {
+    const response = await apiClient.updateVolunteer(request);
+    return response;
+  }
+);
 
-// parameter types
-type GetVolunteersParam = {
-  newPagination?: Partial<Pagination>;
-  newCollate?: Partial<VolunteerCollate>;
-};
-
-type GetVolunteersResponseParam = {
-  response: GetVolunteersPaginatedResponse;
-  param: GetVolunteersParam;
-};
+export const getVolunteersById = createAsyncThunk(
+  "volunteer/getVolunteersById",
+  async (request: GetVolunteersByIdRequest) => {
+    const response = await apiClient.getVolunteersById(request);
+    return response;
+  }
+);

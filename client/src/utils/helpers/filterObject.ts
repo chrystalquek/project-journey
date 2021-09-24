@@ -14,6 +14,9 @@ export function initializeFilterObject<T extends { [key: number]: string }>(
   return filterObject;
 }
 
+/**
+ * @returns the filters that are applied (ie is set to true).
+ */
 export function convertFilterObjectToArray(
   filterObj: Record<string, boolean>
 ): string[] {

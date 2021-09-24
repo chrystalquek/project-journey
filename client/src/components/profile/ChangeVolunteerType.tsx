@@ -13,10 +13,10 @@ import {
 import Dialog from "@components/common/feedback/Dialog";
 import DialogContent from "@components/common/feedback/DialogContent";
 import DialogActions from "@components/common/feedback/DialogActions";
-import { useAppDispatch, useAppSelector } from "@redux/store";
-import { VolunteerType } from "@type/volunteer";
+import { useAppDispatch } from "@redux/store";
+import { VolunteerData, VolunteerType } from "@type/volunteer";
 import EditIcon from "@material-ui/icons/Edit";
-import { updateVolunteer } from "@redux/actions/user";
+import { updateVolunteer } from "@redux/actions/volunteer/index";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import { assert } from "@utils/helpers/typescript";
@@ -36,11 +36,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChangeVolunteerType: FC = () => {
+type Props = {
+  profilePageData: VolunteerData;
+};
+
+const ChangeVolunteerType: FC<Props> = ({ profilePageData }) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-
-  const profilePageData = useAppSelector((state) => state.profilePage.data);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [volunteerType, setVolunteerType] = useState<VolunteerType | null>(

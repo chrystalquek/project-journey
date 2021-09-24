@@ -1,5 +1,5 @@
 import { getEvent } from "@redux/actions/event";
-import { getVolunteerById } from "@redux/actions/profilePage";
+import { getVolunteer } from "@redux/actions/volunteer/index";
 import { createSlice } from "@reduxjs/toolkit";
 
 export type LoadingStatus = "idle" | "loading" | "succeeded" | "failed";
@@ -21,7 +21,7 @@ const loadingSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getVolunteerById.rejected, (state) => {
+    builder.addCase(getVolunteer.rejected, (state) => {
       state.status = "failed";
     });
     builder.addCase(getEvent.rejected, (state) => {

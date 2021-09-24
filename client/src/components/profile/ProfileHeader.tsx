@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type props = {
+type Props = {
   profilePageData: VolunteerData;
 };
 
-const ProfileHeader: FC<props> = ({ profilePageData }) => {
+const ProfileHeader: FC<Props> = ({ profilePageData }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
@@ -97,7 +97,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
           </Grid>
           <Grid item>
             {userData?.volunteerType === VolunteerType.ADMIN && (
-              <ChangeVolunteerType />
+              <ChangeVolunteerType {...{ profilePageData }} />
             )}
           </Grid>
         </Grid>
@@ -121,7 +121,7 @@ const ProfileHeader: FC<props> = ({ profilePageData }) => {
           commitmentApplication?.status ===
             CommitmentApplicationStatus.Pending && (
             <ApproveCommitmentApplication
-              commitmentApplication={commitmentApplication}
+              {...{ commitmentApplication, profilePageData }}
             />
           )}
       </Grid>

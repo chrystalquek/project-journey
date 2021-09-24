@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "@redux/reducers/user";
 import EventReducer from "@redux/reducers/event";
 import volunteerReducer from "@redux/reducers/volunteer/index";
-import profilePageReducer from "@redux/reducers/profilePage";
 import loadingReducer from "@redux/reducers/loading";
 import storage from "redux-persist/lib/storage";
 import {
@@ -48,7 +47,6 @@ const reducers = combineReducers({
   signUp: signUpReducer,
   form: formReducer,
   commitmentApplication: commitmentApplicationReducer,
-  profilePage: profilePageReducer,
   user: userReducer,
   loading: loadingReducer,
 });

@@ -1,77 +1,79 @@
-import { createSlice, SerializedError } from "@reduxjs/toolkit";
-import { VolunteerData, VolunteerType } from "@type/volunteer";
-import { initializeFilterObject } from "@utils/helpers/filterObject";
-import { getVolunteers } from "@redux/actions/volunteer/index";
-import { ROWS_PER_PAGE, VolunteerSortFieldsType } from "@api/request";
-import { Pagination } from "../../../utils/helpers/pagination";
+import {
+  getVolunteer,
+  getVolunteersById,
+  listVolunteers,
+  updateVolunteer,
+} from "@redux/actions/volunteer/index";
+import { FetchStatus, StoreState } from "@redux/store";
+import {
+  createEntityAdapter,
+  createSlice,
+  isAnyOf,
+  isFulfilled,
+  isPending,
+  isRejected,
+  SerializedError,
+} from "@reduxjs/toolkit";
+import { VolunteerData } from "@type/volunteer";
+import { isDefined } from "@utils/helpers/typescript";
 
-// collate objects can be defined later on and should have filters, search, sort fields too
-export type VolunteerCollate = {
-  filters: {
-    volunteerType: Record<VolunteerType, boolean>;
-  };
-  search: {
-    name: string;
-  };
-  sort: VolunteerSortFieldsType;
-};
+const volunteersAdapter = createEntityAdapter<VolunteerData>({
+  selectId: (volunteer) => volunteer._id,
+});
 
-// all state should have a loadingStatus and error
-// state should contain most of state of the component, including collate and pagination
 export type VolunteerState = {
-  isLoading: boolean;
+  listVolunteersIds: string[];
+  totalCount: number;
+  status: FetchStatus | null;
   error: SerializedError | null;
-  volunteers: VolunteerData[];
-  collate: VolunteerCollate;
-  pagination: Pagination;
 };
 
-const initialState: VolunteerState = {
-  isLoading: false,
+const initialState = volunteersAdapter.getInitialState<VolunteerState>({
+  listVolunteersIds: [],
+  totalCount: 0,
+  status: null,
   error: null,
-  volunteers: [],
-  collate: {
-    filters: {
-      // use these helper function for filter objects
-      volunteerType: initializeFilterObject(VolunteerType),
-    },
-    search: {
-      name: "",
-    },
-    sort: "name",
-  },
-  pagination: {
-    count: 0,
-    pageNo: 0,
-    size: ROWS_PER_PAGE,
-  },
-};
+});
 
 const volunteerSlice = createSlice({
   name: "volunteer",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getVolunteers.fulfilled, (state, action) => {
-      const { payload } = action;
-      state.volunteers = payload.response.data;
-      state.collate = Object.assign(state.collate, payload.param.newCollate);
-      state.pagination = Object.assign(
-        state.pagination,
-        payload.param.newPagination
-      );
-      state.pagination.count = payload.response.count;
-      state.isLoading = false;
+    builder.addCase(listVolunteers.fulfilled, (state, { payload }) => {
+      volunteersAdapter.upsertMany(state, payload.data);
+      state.listVolunteersIds = payload.data.map((v) => v._id);
+      state.totalCount = payload.count;
     });
-
-    builder.addCase(getVolunteers.pending, (state) => {
-      state.isLoading = true;
+    builder.addCase(getVolunteersById.fulfilled, (state, { payload }) => {
+      volunteersAdapter.upsertMany(state, payload.data);
     });
-    builder.addCase(getVolunteers.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.error; // catches http errors too (except 404 which is caught by NEXT)
+    builder.addMatcher(
+      isAnyOf(getVolunteer.fulfilled, updateVolunteer.fulfilled),
+      (state, { payload }) => {
+        volunteersAdapter.upsertOne(state, payload);
+      }
+    );
+    builder.addMatcher(isPending, (state) => {
+      state.status = "pending";
+    });
+    builder.addMatcher(isFulfilled, (state) => {
+      state.status = "fulfilled";
+    });
+    builder.addMatcher(isRejected, (state, { error }) => {
+      state.status = "rejected";
+      state.error = error;
     });
   },
 });
 
 export default volunteerSlice.reducer;
+export const {
+  selectById: selectVolunteerById,
+  selectAll: selectAllVolunteers,
+} = volunteersAdapter.getSelectors(
+  (state: StoreState) => state.volunteer.index
+);
+
+export const selectVolunteersByIds = (state: StoreState, ids: string[]) =>
+  ids.map((id) => selectVolunteerById(state, id)).filter(isDefined);

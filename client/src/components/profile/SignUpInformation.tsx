@@ -4,27 +4,25 @@ import PaddedGrid from "@components/common/surfaces/PaddedGrid";
 import { VolunteerData } from "@type/volunteer";
 import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 
-type props = {
-  profilePageData: VolunteerData;
+type Props = {
+  profileData: VolunteerData;
 };
 
-const SignUpInformation: FC<props> = ({ profilePageData }) => {
-  const birthday = new Date(profilePageData?.birthday ?? 0).toLocaleDateString(
+const SignUpInformation: FC<Props> = ({ profileData }) => {
+  const birthday = new Date(profileData?.birthday ?? 0).toLocaleDateString(
     "en-US"
   );
-  const createdAt = new Date(profilePageData?.createdAt).toLocaleDateString(
-    "en-US"
-  );
+  const createdAt = new Date(profileData.createdAt).toLocaleDateString("en-US");
   return (
     <PaddedGrid>
       <TypographyWithUnderline fontWeight="fontWeightMedium" fontSize="h3">
         Sign Up Information
       </TypographyWithUnderline>
-      <DataRow header="Buddy" data={profilePageData.name} xs1={3} xs2={9} />
+      <DataRow header="Buddy" data={profileData.name} xs1={3} xs2={9} />
       <DataRow header="Date of birth" data={birthday} xs1={3} xs2={9} />
       <DataRow
         header="Volunteer reason"
-        data={profilePageData.volunteerReason}
+        data={profileData.volunteerReason}
         xs1={3}
         xs2={9}
       />

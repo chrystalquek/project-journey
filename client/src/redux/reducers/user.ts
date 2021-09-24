@@ -3,7 +3,8 @@ import { VolunteerData } from "@type/volunteer";
 import jwt from "jsonwebtoken";
 import apiClient from "@api/apiClient";
 import { REHYDRATE } from "redux-persist";
-import user, { updateVolunteer } from "../actions/user";
+import user from "../actions/user";
+import { updateVolunteer } from "../actions/volunteer/index";
 
 type FetchStatus = "fetching" | "fulfilled" | "rejected" | "";
 
