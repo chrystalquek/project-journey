@@ -9,40 +9,40 @@ export type SignUpValidatorMethod =
   | "deleteSignUp";
 
 // Define validation for each field
-const eventId = body("eventId")
+const eventId = () => body("eventId")
   .exists({ checkFalsy: true })
   .withMessage("Event ID is required")
   .isString()
   .withMessage("Event ID must be a string");
-const userId = body("userId")
+const userId = () => body("userId")
   .exists({ checkFalsy: true })
   .withMessage("User ID is required")
   .isString()
   .withMessage("User ID must be a string");
-const status = body("status")
+const status = () => body("status")
   .exists()
   .withMessage("Status is required")
   .custom((value: string) =>
     stringEnumValidator(SIGN_UP_STATUS, "Sign Up Status", value)
   )
   .withMessage("Status is invalid");
-const acceptedRole = body(
+const acceptedRole = () => body(
   "status",
   "Accepted role must be a string"
 ).isString();
-const preferences = body("preferences")
+const preferences = () => body("preferences")
   .exists()
   .withMessage("Preferences are required")
   .isArray()
   .withMessage("Preferences must be an array")
   .custom((value: any[]) => stringArrayValidator(value))
   .withMessage("Preferences should be an array of strings");
-const isRestricted = body("isRestricted")
+const isRestricted = () => body("isRestricted")
   .exists()
   .withMessage("Is restricted is required")
   .isBoolean()
   .withMessage("Is restricted must be a boolean value");
-const idType = param("idType")
+const idType = () => param("idType")
   .exists()
   .withMessage("ID type is required")
   .custom((value: string) =>
@@ -57,19 +57,19 @@ const getValidations = (method: SignUpValidatorMethod) => {
     }
     case "updateSignUp": {
       return [
-        eventId.optional(),
-        userId.optional(),
-        status.optional(),
-        acceptedRole.optional(),
-        preferences.optional(),
-        isRestricted.optional(),
+        eventId().optional(),
+        userId().optional(),
+        status().optional(),
+        acceptedRole().optional(),
+        preferences().optional(),
+        isRestricted().optional(),
       ];
     }
     case "getSignUps": {
-      return [idInParam, idType];
+      return [idInParam, idType()];
     }
     case "deleteSignUp": {
-      return [idInParam, idType];
+      return [idInParam, idType()];
     }
     default: {
       return [];

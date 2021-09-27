@@ -8,12 +8,12 @@ type CommitmentApplicationValidatorMethod =
   | "updateCommitmentApplication";
 
 // Define validation for each field
-const volunteerId = body("volunteerId")
+const volunteerId = () => body("volunteerId")
   .exists({ checkFalsy: true })
   .withMessage("Volunteer ID is required")
   .isString()
   .withMessage("Volunteer ID must be a string");
-const status = body("status")
+const status = () => body("status")
   .custom((value: string) =>
     stringEnumValidator(
       COMMITMENT_APPLICATION_STATUS,
@@ -28,10 +28,10 @@ export const getValidations = (
 ): ValidationChain[] => {
   switch (method) {
     case "createCommitmentApplication": {
-      return [volunteerId];
+      return [volunteerId()];
     }
     case "updateCommitmentApplication": {
-      return [idInParam, volunteerId, status.optional()];
+      return [idInParam(), volunteerId(), status().optional()];
     }
     case "readCommitmentApplication": {
       return [

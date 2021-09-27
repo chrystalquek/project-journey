@@ -66,11 +66,11 @@ export function stringArrayValidator(array: any): boolean {
 // TODO: remove from global after separating user and volunteer
 const LENGTH_MINIMUM_PASSWORD = 8;
 
-export const passwordValidator = body("password").isString().isLength({
+export const passwordValidator = () => body("password").isString().isLength({
   min: LENGTH_MINIMUM_PASSWORD,
 });
 
-export const existingEmailValidator = body("email")
+export const existingEmailValidator = () => body("email")
   .isEmail()
   .normalizeEmail()
   .custom(async (emailString: string) => {
@@ -81,7 +81,7 @@ export const existingEmailValidator = body("email")
     return true;
   });
 
-export const newEmailValidator = body("email")
+export const newEmailValidator = () => body("email")
   .isEmail()
   .normalizeEmail()
   .custom(async (emailString: string) => {
@@ -93,6 +93,6 @@ export const newEmailValidator = body("email")
   });
 
 // for all read single, update, delete requests
-export const idInParam = param("id")
+export const idInParam = () => param("id")
   .isString()
   .withMessage("id must be a string");

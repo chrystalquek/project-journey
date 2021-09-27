@@ -7,12 +7,12 @@ const getValidations = (method: UserValidatorMethod) => {
   switch (method) {
     case "login": {
       return [
-        existingEmailValidator,
+        existingEmailValidator(),
         body("password", "Password must be a string").isString(),
       ];
     }
     case "updatePassword": {
-      return [existingEmailValidator, passwordValidator];
+      return [existingEmailValidator(), passwordValidator()];
     }
     default:
       return [];
