@@ -7,10 +7,10 @@ import {
 } from "@material-ui/core";
 import React, { FC, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import {
-  getPendingSignUps,
-  getPendingVolunteers,
-} from "@redux/actions/home/pendingApproval";
+import { getPendingSignUps } from "@redux/actions/signUp";
+import { getPendingVolunteers } from "@redux/actions/volunteer";
+import { selectSignUpsByIds } from "@redux/reducers/signUp";
+import { selectVolunteersByIds } from "@redux/reducers/volunteer";
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -38,8 +38,11 @@ const PendingApproval: FC<{}> = () => {
     dispatch(getPendingVolunteers());
   }, [dispatch]);
 
-  const { pendingSignUps, pendingVolunteers } = useAppSelector(
-    (state) => state.home.pendingApproval
+  const pendingSignUps = useAppSelector((state) =>
+    selectSignUpsByIds(state, state.signUp.listSignUpIds)
+  );
+  const pendingVolunteers = useAppSelector((state) =>
+    selectVolunteersByIds(state, state.volunteer.pendingVolunteerIds)
   );
 
   const pendingSignUpCount = pendingSignUps.length;

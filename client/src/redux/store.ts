@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "@redux/reducers/user";
 import eventReducer from "@redux/reducers/event";
 import volunteerReducer from "@redux/reducers/volunteer";
-import loadingReducer from "@redux/reducers/loading";
 import storage from "redux-persist/lib/storage";
 import {
   persistStore,
@@ -18,22 +17,16 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import signUpReducer from "./reducers/signUp";
 import formReducer from "./reducers/form";
 import commitmentApplicationReducer from "./reducers/commitmentApplication";
-import pendingApprovalReducer from "./reducers/home/pendingApproval";
 
 export type StoreState = ReturnType<typeof reducers>;
 
 const reducers = combineReducers({
-  home: combineReducers({
-    pendingApproval: pendingApprovalReducer,
-  }),
-
   event: eventReducer,
   volunteer: volunteerReducer,
   signUp: signUpReducer,
   form: formReducer,
   commitmentApplication: commitmentApplicationReducer,
   user: userReducer,
-  loading: loadingReducer,
 });
 
 const persistConfig = {
