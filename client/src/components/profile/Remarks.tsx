@@ -4,7 +4,7 @@ import PaddedGrid from "@components/common/surfaces/PaddedGrid";
 import RemarksTextField from "@components/profile/RemarksTextField";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { updateVolunteer } from "@redux/actions/volunteer/index";
+import { updateVolunteer } from "@redux/actions/volunteer";
 import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 import { isAdmin } from "@utils/helpers/auth";
 import { unwrapResult } from "@reduxjs/toolkit";

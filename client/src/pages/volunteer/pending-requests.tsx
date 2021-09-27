@@ -11,7 +11,8 @@ import {
   getPendingCommitmentApplications,
   getPendingVolunteers,
   updateCommitmentApplication,
-} from "@redux/actions/volunteer/pendingRequests";
+} from "@redux/actions/volunteer";
+import { selectVolunteersByIds } from "@redux/reducers/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import {
@@ -32,8 +33,14 @@ const PendingRequests: FC<{}> = () => {
     dispatch(getPendingCommitmentApplications());
   }, [dispatch]);
 
-  const { pendingVolunteers, pendingCommitmentApplications, isLoading } =
-    useAppSelector((state) => state.volunteer.pendingRequests);
+  const pendingVolunteers = useAppSelector((state) =>
+    selectVolunteersByIds(state, state.volunteer.pendingVolunteerIds)
+  );
+  const pendingCommitmentApplications = useAppSelector(
+    (state) => state.volunteer.pendingCommitmentApplications
+  );
+  const isLoading =
+    useAppSelector((state) => state.volunteer.status) === "pending";
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openReject, setOpenReject] = useState(false);

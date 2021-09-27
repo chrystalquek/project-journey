@@ -1,5 +1,5 @@
 import { getEvent } from "@redux/actions/event";
-import { getVolunteer } from "@redux/actions/volunteer/index";
+import { getVolunteer } from "@redux/actions/volunteer";
 import { createSlice } from "@reduxjs/toolkit";
 
 export type LoadingStatus = "idle" | "loading" | "succeeded" | "failed";

@@ -16,7 +16,7 @@ import DialogActions from "@components/common/feedback/DialogActions";
 import { useAppDispatch } from "@redux/store";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import EditIcon from "@material-ui/icons/Edit";
-import { updateVolunteer } from "@redux/actions/volunteer/index";
+import { updateVolunteer } from "@redux/actions/volunteer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import { assert } from "@utils/helpers/typescript";

@@ -20,7 +20,7 @@ import {
   GridCellParams,
   GridValueFormatterParams,
 } from "@material-ui/data-grid";
-import { listVolunteers } from "@redux/actions/volunteer/index";
+import { listVolunteers } from "@redux/actions/volunteer";
 import { selectVolunteersByIds } from "@redux/reducers/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { VolunteerType } from "@type/volunteer";
@@ -40,13 +40,11 @@ const Index: FC<{}> = () => {
   const isMobile = useIsMobile();
 
   const volunteers = useAppSelector((state) =>
-    selectVolunteersByIds(state, state.volunteer.index.listVolunteersIds)
+    selectVolunteersByIds(state, state.volunteer.listVolunteersIds)
   );
-  const totalCount = useAppSelector(
-    (state) => state.volunteer.index.totalCount
-  );
-  const status = useAppSelector((state) => state.volunteer.index.status);
-  const error = useAppSelector((state) => state.volunteer.index.error);
+  const totalCount = useAppSelector((state) => state.volunteer.totalCount);
+  const status = useAppSelector((state) => state.volunteer.status);
+  const error = useAppSelector((state) => state.volunteer.error);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);

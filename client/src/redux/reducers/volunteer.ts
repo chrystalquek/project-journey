@@ -1,9 +1,12 @@
 import {
+  getPendingCommitmentApplications,
+  getPendingVolunteers,
   getVolunteer,
   getVolunteersById,
   listVolunteers,
+  updateCommitmentApplication,
   updateVolunteer,
-} from "@redux/actions/volunteer/index";
+} from "@redux/actions/volunteer";
 import { FetchStatus, StoreState } from "@redux/store";
 import {
   createEntityAdapter,
@@ -14,6 +17,10 @@ import {
   isRejected,
   SerializedError,
 } from "@reduxjs/toolkit";
+import {
+  CommitmentApplicationData,
+  CommitmentApplicationStatus,
+} from "@type/commitmentApplication";
 import { VolunteerData } from "@type/volunteer";
 import { isDefined } from "@utils/helpers/typescript";
 
@@ -26,6 +33,9 @@ export type VolunteerState = {
   totalCount: number;
   status: FetchStatus | null;
   error: SerializedError | null;
+
+  pendingVolunteerIds: string[];
+  pendingCommitmentApplications: CommitmentApplicationData[];
 };
 
 const initialState = volunteersAdapter.getInitialState<VolunteerState>({
@@ -33,6 +43,9 @@ const initialState = volunteersAdapter.getInitialState<VolunteerState>({
   totalCount: 0,
   status: null,
   error: null,
+
+  pendingVolunteerIds: [],
+  pendingCommitmentApplications: [],
 });
 
 const volunteerSlice = createSlice({
@@ -48,6 +61,34 @@ const volunteerSlice = createSlice({
     builder.addCase(getVolunteersById.fulfilled, (state, { payload }) => {
       volunteersAdapter.upsertMany(state, payload.data);
     });
+
+    // Pending Requests
+    builder.addCase(getPendingVolunteers.fulfilled, (state, { payload }) => {
+      volunteersAdapter.upsertMany(state, payload.data);
+      state.pendingVolunteerIds = payload.data.map((v) => v._id);
+    });
+    builder.addCase(
+      getPendingCommitmentApplications.fulfilled,
+      (state, { payload }) => {
+        state.pendingCommitmentApplications = payload.data;
+      }
+    );
+    builder.addCase(
+      updateCommitmentApplication.fulfilled,
+      (state, { payload }) => {
+        // remove commitment application since no longer pending
+        if (payload.status !== CommitmentApplicationStatus.Pending) {
+          state.pendingVolunteerIds = state.pendingVolunteerIds.filter(
+            (id) => id !== payload.volunteerId
+          );
+          state.pendingCommitmentApplications =
+            state.pendingCommitmentApplications.filter(
+              (comApp) => comApp._id !== payload._id
+            );
+        }
+      }
+    );
+
     builder.addMatcher(
       isAnyOf(getVolunteer.fulfilled, updateVolunteer.fulfilled),
       (state, { payload }) => {
@@ -71,9 +112,7 @@ export default volunteerSlice.reducer;
 export const {
   selectById: selectVolunteerById,
   selectAll: selectAllVolunteers,
-} = volunteersAdapter.getSelectors(
-  (state: StoreState) => state.volunteer.index
-);
+} = volunteersAdapter.getSelectors((state: StoreState) => state.volunteer);
 
 export const selectVolunteersByIds = (state: StoreState, ids: string[]) =>
   ids.map((id) => selectVolunteerById(state, id)).filter(isDefined);
