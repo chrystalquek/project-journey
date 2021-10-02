@@ -105,3 +105,45 @@ export const useFeedbackForm = () => {
     handleChangeOption,
   };
 };
+
+export type VolunteerRoleData = {
+  roleType: "driver" | "custom";
+  roleTitle?: string;
+  description: string;
+  capacity?: number;
+};
+
+export const useVolunteerRoles = () => {
+  const [volunteerRoles, setVolunteerRoles] = useState<VolunteerRoleData[]>([]);
+
+  // Volunteer Role helper functions
+  const handleAddVolunteerRole = useCallback(() => {
+    setVolunteerRoles((prevRoles) => [
+      ...prevRoles,
+      {
+        roleType: "driver",
+        description: "",
+      },
+    ]);
+  }, []);
+
+  const handleChangeVolunteerRoleInfo = useCallback(
+    (value: string, key: keyof VolunteerRoleData, index: number) => {
+      setVolunteerRoles((prevRoles) => [
+        ...prevRoles.slice(0, index),
+        {
+          ...prevRoles[index],
+          [key]: key === "capacity" ? Number(value) : value,
+        },
+        ...prevRoles.slice(index + 1),
+      ]);
+    },
+    []
+  );
+
+  return {
+    volunteerRoles,
+    handleAddVolunteerRole,
+    handleChangeVolunteerRoleInfo,
+  };
+};

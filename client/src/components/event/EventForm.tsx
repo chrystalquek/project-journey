@@ -17,7 +17,7 @@ import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import { createEvent, editEvent, getEvent } from "@redux/actions/event";
 import { selectEventById } from "@redux/reducers/event";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { EventData, EventType } from "@type/event";
+import { EventData, EventType, RoleData } from "@type/event";
 import { VolunteerType } from "@type/volunteer";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import dayjs from "dayjs";
@@ -27,7 +27,12 @@ import { useSnackbar } from "notistack";
 import React, { FC, useEffect, useRef } from "react";
 import * as yup from "yup";
 import FormQuestionMapper from "../form/generator/FormQuestionMapper";
-import { QuestionData, useFeedbackForm } from "./helpers/eventForm";
+import {
+  QuestionData,
+  useFeedbackForm,
+  useVolunteerRoles,
+  VolunteerRoleData,
+} from "./helpers/eventForm";
 
 type AdminEventFormProps = {
   eid?: string;
@@ -138,6 +143,7 @@ const emptyForm: Omit<EventData, "_id" | "createdAt"> = {
 const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const eventStatus = useAppSelector((state) => state.event.status);
@@ -152,6 +158,11 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
     handleRemoveOption,
     handleChangeOption,
   } = useFeedbackForm();
+  const {
+    volunteerRoles,
+    handleAddVolunteerRole,
+    handleChangeVolunteerRoleInfo,
+  } = useVolunteerRoles();
 
   useEffect(() => {
     if (eid) {
@@ -222,6 +233,15 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
         dispatch(
           createEvent({
             ...form,
+            roles: volunteerRoles.map<RoleData>((role) => ({
+              name:
+                role.roleType === "custom"
+                  ? role.roleTitle ?? ""
+                  : role.roleType,
+              description: role.description,
+              capacity: role.capacity ?? 0,
+              volunteers: [],
+            })),
             // @ts-ignore TODO: Many type errors here. Ignoring now as backend doesn't support
             // questions yet.
             questions: feedbackFormEventQuestions.map((element) => ({
@@ -517,8 +537,132 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
             </Grid>
           </Grid>
 
+          {/* Type of Volunteer Roles */}
+          {eventType === EventType.VOLUNTEERING && (
+            <Grid item>
+              <Formik initialValues={{}} onSubmit={() => {}} enableReinitialize>
+                {() => (
+                  <>
+                    <div>
+                      <Typography style={{ fontWeight: "bold" }}>
+                        Types of Volunteer Roles
+                      </Typography>
+                    </div>
+
+                    {/* Feedback form generator based on redux state */}
+                    {volunteerRoles.map(
+                      (volunteerRole: VolunteerRoleData, index: number) => (
+                        <div key={String(index)}>
+                          <div style={{ display: "flex" }}>
+                            <Typography className={classes.questionStyle}>
+                              Role {index + 1}
+                            </Typography>
+                            <IconButton
+                              onClick={() => handleRemoveQuestion(index)}
+                            >
+                              <ClearIcon />
+                            </IconButton>
+                          </div>
+
+                          <Grid container spacing={2}>
+                            <Grid item>
+                              <FormQuestionMapper
+                                type="mcq"
+                                name={`role${index}`}
+                                options={[
+                                  { value: "driver", label: "Driver" },
+                                  { value: "custom", label: "Custom" },
+                                ]}
+                                props={{
+                                  style: { width: "200px" },
+                                  value: volunteerRole.roleType,
+                                  onChange: (e) =>
+                                    handleChangeVolunteerRoleInfo(
+                                      e.target.value,
+                                      "roleType",
+                                      index
+                                    ),
+                                }}
+                              />
+                            </Grid>
+
+                            {volunteerRole.roleType === "custom" && (
+                              <Grid item>
+                                <FormQuestionMapper
+                                  type="shortAnswer"
+                                  name={`roleTitle${index}`}
+                                  props={{
+                                    style: { width: "500px" },
+                                    placeholder: "eg, Food Distributor",
+                                    value: volunteerRole.roleTitle,
+                                    onChange: (e) =>
+                                      handleChangeVolunteerRoleInfo(
+                                        e.target.value,
+                                        "roleTitle",
+                                        index
+                                      ),
+                                  }}
+                                />
+                              </Grid>
+                            )}
+                          </Grid>
+
+                          <FormQuestionMapper
+                            type="shortAnswer"
+                            name={`description-${index}`}
+                            props={{
+                              value: volunteerRole.description,
+                              placeholder: "Type job description here...",
+                              onChange: (e) =>
+                                handleChangeVolunteerRoleInfo(
+                                  e.target.value,
+                                  "description",
+                                  index
+                                ),
+                            }}
+                          />
+
+                          <Grid container spacing={2} alignItems="center">
+                            <Grid item>
+                              <Typography>
+                                Number of vacancies available
+                              </Typography>
+                            </Grid>
+                            <Grid item>
+                              <FormQuestionMapper
+                                type="number"
+                                name={`vacancies-${index}`}
+                                props={{
+                                  value: volunteerRole.capacity,
+                                  placeholder: "eg, 3",
+                                  onChange: (e) =>
+                                    handleChangeVolunteerRoleInfo(
+                                      e.target.value,
+                                      "capacity",
+                                      index
+                                    ),
+                                }}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
+                      )
+                    )}
+                    <Button
+                      className={classes.addNewFieldButton}
+                      onClick={handleAddVolunteerRole}
+                    >
+                      + Add another role
+                    </Button>
+                  </>
+                )}
+              </Formik>
+            </Grid>
+          )}
+
           {/* Facilitator Information */}
-          {(eventType === "workshop" || eventType === "hangout") && (
+          {(eventType === EventType.WORKSHOP ||
+            eventType === EventType.HANGOUT) && (
             <>
               <Grid item container>
                 <Grid item xs={12}>
@@ -593,6 +737,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
             </>
           )}
 
+          {/* Volunteer Response Form */}
           <Grid item>
             <Formik initialValues={{}} onSubmit={() => {}} enableReinitialize>
               {() => (
