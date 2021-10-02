@@ -8,13 +8,13 @@ import { capitalize, Grid } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { GridCellParams, GridValueFormatterParams } from "@mui/x-data-grid";
 import {
-  getPendingCommitmentApplications,
-  getPendingVolunteers,
+  listCommitmentApplications,
   updateCommitmentApplication,
-} from "@redux/actions/volunteer";
+} from "@redux/actions/commitmentApplication";
+import { getPendingVolunteers } from "@redux/actions/volunteer";
+import { selectCommitmentApplicationsByIds } from "@redux/reducers/commitmentApplication";
 import { selectVolunteersByIds } from "@redux/reducers/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
-import { unwrapResult } from "@reduxjs/toolkit";
 import {
   CommitmentApplicationData,
   CommitmentApplicationStatus,
@@ -27,25 +27,36 @@ import React, { FC, useEffect, useState } from "react";
 const PendingRequests: FC<{}> = () => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     dispatch(getPendingVolunteers());
-    dispatch(getPendingCommitmentApplications());
+    dispatch(
+      listCommitmentApplications({
+        status: CommitmentApplicationStatus.Pending,
+      })
+    );
   }, [dispatch]);
+
+  const pendingCommitmentApplications = useAppSelector((state) =>
+    selectCommitmentApplicationsByIds(
+      state,
+      state.commitmentApplication.listCommitmentApplicationIds
+    )
+  );
 
   const pendingVolunteers = useAppSelector((state) =>
     selectVolunteersByIds(state, state.volunteer.pendingVolunteerIds)
   );
-  const pendingCommitmentApplications = useAppSelector(
-    (state) => state.volunteer.pendingCommitmentApplications
+
+  const isLoading = useAppSelector(
+    (state) =>
+      state.volunteer.status === "pending" &&
+      state.commitmentApplication.status === "pending"
   );
-  const isLoading =
-    useAppSelector((state) => state.volunteer.status) === "pending";
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openReject, setOpenReject] = useState(false);
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const onApproveReject = (
     commitmentApplication: CommitmentApplicationData,
@@ -60,20 +71,16 @@ const PendingRequests: FC<{}> = () => {
         _id: commitmentApplication._id,
         data: updatedCommitmentApplication,
       })
-    )
-      .then(unwrapResult)
-      .catch(() => {
-        enqueueSnackbar(
-          `Conversion application ${
-            status === CommitmentApplicationStatus.Accepted
-              ? "approval"
-              : "rejection"
-          } failed.`,
-          {
-            variant: "error",
-          }
-        );
-      });
+    ).catch(() =>
+      enqueueSnackbar(
+        `Conversion application ${
+          status === CommitmentApplicationStatus.Accepted
+            ? "approval"
+            : "rejection"
+        } failed.`,
+        { variant: "error" }
+      )
+    );
     setOpenApprove(false);
     setOpenReject(false);
   };
@@ -83,8 +90,9 @@ const PendingRequests: FC<{}> = () => {
       (commApp) => commApp.volunteerId === volunteer._id
     );
     if (!commitmentApplication) {
-      return <></>;
+      return null;
     }
+
     return (
       <Grid container>
         <Grid item>

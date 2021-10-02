@@ -8,7 +8,7 @@ import DialogTitle from "@components/common/feedback/DialogTitle";
 import CommittedConversionForm from "@components/form/CommittedConversionForm";
 import {
   createCommitmentApplication,
-  getCommitmentApplications,
+  listCommitmentApplications,
 } from "@redux/actions/commitmentApplication";
 import { CreateCommitmentApplicationRequest } from "@api/request";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
@@ -16,6 +16,7 @@ import _ from "lodash";
 import { assert } from "@utils/helpers/typescript";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
+import { selectCommitmentApplicationsByIds } from "@redux/reducers/commitmentApplication";
 
 const useStyles = makeStyles((theme) => ({
   centralize: {
@@ -39,24 +40,25 @@ const BecomeCommitedDialog: FC = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getCommitmentApplications({ volunteerId: userData._id }));
+      dispatch(listCommitmentApplications({ volunteerId: userData._id }));
     }
   }, [dispatch, userData]);
 
-  const commitmentApplicationState = useAppSelector(
-    (state) => state.commitmentApplication
+  const commitmentApplications = useAppSelector((state) =>
+    selectCommitmentApplicationsByIds(
+      state,
+      state.commitmentApplication.listCommitmentApplicationIds
+    )
   );
 
-  // Get the latest commitment application.
-  const commitmentApplication = _.chain(commitmentApplicationState.ownIds)
-    .map((id) => commitmentApplicationState.data[id])
-    .orderBy((data) => data.createdAt, "desc")
-    .head()
-    .value();
+  // Get the latest application.
+  const latestCommitmentApplication = _.head(
+    _.orderBy(commitmentApplications, (ca) => ca.createdAt, "desc")
+  );
 
   // Check if there is pending application
-  const isPending: boolean =
-    commitmentApplication?.status === CommitmentApplicationStatus.Pending;
+  const isApplicationPending =
+    latestCommitmentApplication?.status === CommitmentApplicationStatus.Pending;
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
 
@@ -97,7 +99,7 @@ const BecomeCommitedDialog: FC = () => {
     <div>
       {/* Link to open the dialog */}
       <Typography className={classes.header}>
-        {isPending ? (
+        {isApplicationPending ? (
           <Typography variant="body2"> Your application is pending </Typography>
         ) : (
           <Button color="secondary" onClick={handleClickOpen}>

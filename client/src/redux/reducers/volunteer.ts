@@ -1,10 +1,9 @@
+import { updateCommitmentApplication } from "@redux/actions/commitmentApplication";
 import {
-  getPendingCommitmentApplications,
   getPendingVolunteers,
   getVolunteer,
   getVolunteersById,
   listVolunteers,
-  updateCommitmentApplication,
   updateVolunteer,
 } from "@redux/actions/volunteer";
 import { FetchStatus, StoreState } from "@redux/store";
@@ -17,10 +16,7 @@ import {
   isRejected,
   SerializedError,
 } from "@reduxjs/toolkit";
-import {
-  CommitmentApplicationData,
-  CommitmentApplicationStatus,
-} from "@type/commitmentApplication";
+import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 import { VolunteerData } from "@type/volunteer";
 import { isDefined } from "@utils/helpers/typescript";
 
@@ -29,23 +25,19 @@ const volunteersAdapter = createEntityAdapter<VolunteerData>({
 });
 
 export type VolunteerState = {
+  pendingVolunteerIds: string[];
   listVolunteersIds: string[];
   totalCount: number;
   status: FetchStatus | null;
   error: SerializedError | null;
-
-  pendingVolunteerIds: string[];
-  pendingCommitmentApplications: CommitmentApplicationData[];
 };
 
 const initialState = volunteersAdapter.getInitialState<VolunteerState>({
+  pendingVolunteerIds: [],
   listVolunteersIds: [],
   totalCount: 0,
   status: null,
   error: null,
-
-  pendingVolunteerIds: [],
-  pendingCommitmentApplications: [],
 });
 
 const volunteerSlice = createSlice({
@@ -61,34 +53,20 @@ const volunteerSlice = createSlice({
     builder.addCase(getVolunteersById.fulfilled, (state, { payload }) => {
       volunteersAdapter.upsertMany(state, payload.data);
     });
-
-    // Pending Requests
     builder.addCase(getPendingVolunteers.fulfilled, (state, { payload }) => {
       volunteersAdapter.upsertMany(state, payload.data);
       state.pendingVolunteerIds = payload.data.map((v) => v._id);
     });
     builder.addCase(
-      getPendingCommitmentApplications.fulfilled,
-      (state, { payload }) => {
-        state.pendingCommitmentApplications = payload.data;
-      }
-    );
-    builder.addCase(
       updateCommitmentApplication.fulfilled,
       (state, { payload }) => {
-        // remove commitment application since no longer pending
         if (payload.status !== CommitmentApplicationStatus.Pending) {
           state.pendingVolunteerIds = state.pendingVolunteerIds.filter(
-            (id) => id !== payload.volunteerId
+            (volId) => volId !== payload.volunteerId
           );
-          state.pendingCommitmentApplications =
-            state.pendingCommitmentApplications.filter(
-              (comApp) => comApp._id !== payload._id
-            );
         }
       }
     );
-
     builder.addMatcher(
       isAnyOf(getVolunteer.fulfilled, updateVolunteer.fulfilled),
       (state, { payload }) => {

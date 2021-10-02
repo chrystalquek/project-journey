@@ -22,8 +22,8 @@ export const updateCommitmentApplication = createAsyncThunk(
   }
 );
 
-export const getCommitmentApplications = createAsyncThunk(
-  "commitmentApplication/getCommitmentApplications",
+export const listCommitmentApplications = createAsyncThunk(
+  "commitmentApplication/listCommitmentApplications",
   async (request: GetCommitmentApplicationsRequest) => {
     const response = await apiClient.getCommitmentApplications(request);
     return response;

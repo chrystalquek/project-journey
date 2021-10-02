@@ -1,56 +1,81 @@
 import {
-  updateCommitmentApplication,
   createCommitmentApplication,
-  getCommitmentApplications,
+  listCommitmentApplications,
+  updateCommitmentApplication,
 } from "@redux/actions/commitmentApplication";
-import { createSlice } from "@reduxjs/toolkit";
+import { FetchStatus, StoreState } from "@redux/store";
+import {
+  createEntityAdapter,
+  createSlice,
+  isAnyOf,
+  isFulfilled,
+  isPending,
+  isRejected,
+} from "@reduxjs/toolkit";
 import { CommitmentApplicationData } from "@type/commitmentApplication";
+import { isDefined } from "@utils/helpers/typescript";
+
+const caAdapter = createEntityAdapter<CommitmentApplicationData>({
+  selectId: (ca) => ca._id,
+});
 
 export type CommitmentApplicationState = {
-  data: Record<string, CommitmentApplicationData>;
-  ownIds: string[];
+  listCommitmentApplicationIds: string[];
+  status: FetchStatus | null;
 };
 
-const initialState: CommitmentApplicationState = {
-  data: {},
-  ownIds: [],
-};
-
-const addToData = (
-  commitmentApplications: Array<CommitmentApplicationData>,
-  state: CommitmentApplicationState
-) => {
-  commitmentApplications.forEach((commApp) => {
-    state.data[commApp._id] = commApp;
-  });
-};
+const initialState = caAdapter.getInitialState<CommitmentApplicationState>({
+  listCommitmentApplicationIds: [],
+  status: null,
+});
 
 const commitmentApplicationSlice = createSlice({
   name: "commitmentApplication",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(updateCommitmentApplication.fulfilled, (state, action) => {
-      const { payload } = action;
-      addToData([payload], state);
+    builder.addCase(listCommitmentApplications.pending, (state) => {
+      state.listCommitmentApplicationIds = [];
     });
-    builder.addCase(createCommitmentApplication.fulfilled, (state, action) => {
-      const { payload } = action;
-      const newCommitmentApplication = {
-        ...payload,
-        createdAt: payload.createdAt,
-      } as CommitmentApplicationData;
-      state.data[newCommitmentApplication._id] = newCommitmentApplication;
-    });
-    builder.addCase(getCommitmentApplications.fulfilled, (state, action) => {
-      const { payload } = action;
-      addToData(payload.data, state);
-      if (action.meta.arg.volunteerId) {
-        // further check on whether this is equal to state.user._id
-        state.ownIds = payload.data.map((app) => app._id);
+    builder.addCase(
+      listCommitmentApplications.fulfilled,
+      (state, { payload }) => {
+        caAdapter.upsertMany(state, payload.data);
+        state.listCommitmentApplicationIds = payload.data.map((ca) => ca._id);
       }
+    );
+    builder.addCase(listCommitmentApplications.rejected, (state) => {
+      state.listCommitmentApplicationIds = [];
+    });
+    builder.addMatcher(
+      isAnyOf(
+        createCommitmentApplication.fulfilled,
+        updateCommitmentApplication.fulfilled
+      ),
+      (state, { payload }) => {
+        caAdapter.upsertOne(state, payload);
+      }
+    );
+    builder.addMatcher(isPending, (state) => {
+      state.status = "pending";
+    });
+    builder.addMatcher(isFulfilled, (state) => {
+      state.status = "fulfilled";
+    });
+    builder.addMatcher(isRejected, (state) => {
+      state.status = "rejected";
     });
   },
 });
 
 export default commitmentApplicationSlice.reducer;
+export const {
+  selectById: selectCommitmentApplicationById,
+  selectAll: selectAllCommitmentApplications,
+} = caAdapter.getSelectors((state: StoreState) => state.commitmentApplication);
+
+export const selectCommitmentApplicationsByIds = (
+  state: StoreState,
+  ids: string[]
+) =>
+  ids.map((id) => selectCommitmentApplicationById(state, id)).filter(isDefined);

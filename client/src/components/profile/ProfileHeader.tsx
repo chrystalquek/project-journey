@@ -2,7 +2,8 @@ import DataRow from "@components/common/DataRow";
 import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
 import { Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { getCommitmentApplications } from "@redux/actions/commitmentApplication";
+import { listCommitmentApplications } from "@redux/actions/commitmentApplication";
+import { selectCommitmentApplicationsByIds } from "@redux/reducers/commitmentApplication";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
@@ -44,19 +45,20 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getCommitmentApplications({ volunteerId: userData?._id }));
+    dispatch(listCommitmentApplications({ volunteerId: userData?._id }));
   }, [dispatch, userData?._id]);
 
-  const commitmentApplicationState = useAppSelector(
-    (state) => state.commitmentApplication
+  const commitmentApplications = useAppSelector((state) =>
+    selectCommitmentApplicationsByIds(
+      state,
+      state.commitmentApplication.listCommitmentApplicationIds
+    )
   );
 
   // Get the latest application.
-  const commitmentApplication = _.chain(commitmentApplicationState.ownIds)
-    .map((id) => commitmentApplicationState.data[id])
-    .orderBy((data) => data.createdAt, "desc")
-    .head()
-    .value();
+  const latestCommitmentApplication = _.head(
+    _.orderBy(commitmentApplications, (ca) => ca.createdAt, "desc")
+  );
 
   return (
     <Grid
@@ -105,7 +107,7 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
         is viewing own profile and has a rejected commitmentApplication */}
         {profilePageData.volunteerType === VolunteerType.ADHOC &&
           userData?._id === profilePageData._id &&
-          commitmentApplication?.status ===
+          latestCommitmentApplication?.status ===
             CommitmentApplicationStatus.Rejected && (
             <Typography>
               <i>Conversion Application: Rejected</i>
@@ -118,10 +120,13 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
         {/* Approval button if loggedInUser is admin and volunteerProfile
         has a pending commitmentApplication */}
         {userData?.volunteerType === VolunteerType.ADMIN &&
-          commitmentApplication?.status ===
+          latestCommitmentApplication?.status ===
             CommitmentApplicationStatus.Pending && (
             <ApproveCommitmentApplication
-              {...{ commitmentApplication, profilePageData }}
+              {...{
+                commitmentApplication: latestCommitmentApplication,
+                profilePageData,
+              }}
             />
           )}
       </Grid>
