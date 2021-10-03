@@ -15,7 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PersonIcon from "@material-ui/icons/Person";
-import { resetUser } from "@redux/reducers/user";
+import { logout } from "@redux/reducers/session";
 import { useAppDispatch } from "@redux/store";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import {
@@ -132,7 +132,7 @@ export default function DesktopNavBar({ userData }: NavBarProps) {
   };
 
   const handleLogout = () => {
-    dispatch(resetUser());
+    dispatch(logout());
     router.push("/login");
   };
 

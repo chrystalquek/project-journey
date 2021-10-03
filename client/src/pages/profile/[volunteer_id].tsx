@@ -19,7 +19,7 @@ const Profile = () => {
   const dispatch = useAppDispatch();
   const profileId = router.query.volunteer_id as string;
 
-  const loggedInUser = useAppSelector((state) => state.user);
+  const loggedInUser = useAppSelector((state) => state.session.user);
   const profileData = useAppSelector((state) =>
     selectVolunteerById(state, profileId)
   );
@@ -32,9 +32,9 @@ const Profile = () => {
   // Guard clause, user cannot view other users
   // Only admin can view other users
   if (
-    loggedInUser.user === null ||
-    (loggedInUser.user.volunteerType !== VolunteerType.ADMIN &&
-      loggedInUser.user._id !== profileId)
+    !loggedInUser ||
+    (loggedInUser.volunteerType !== VolunteerType.ADMIN &&
+      loggedInUser._id !== profileId)
   ) {
     return <ErrorPage statusCode={404} />;
   }

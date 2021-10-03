@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReducer from "@redux/reducers/user";
+import sessionReducer from "@redux/reducers/session";
 import eventReducer from "@redux/reducers/event";
 import volunteerReducer from "@redux/reducers/volunteer";
 import storage from "redux-persist/lib/storage";
@@ -26,7 +26,7 @@ const reducers = combineReducers({
   signUp: signUpReducer,
   form: formReducer,
   commitmentApplication: commitmentApplicationReducer,
-  user: userReducer,
+  session: sessionReducer,
 });
 
 const persistConfig = {
@@ -37,16 +37,15 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
+
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    process.env.NODE_ENV === "development"
-      ? getDefaultMiddleware({
-          serializableCheck: {
-            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-          },
-        })
-      : getDefaultMiddleware(),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
   devTools: process.env.NODE_ENV === "development",
 });
 
@@ -57,5 +56,3 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
 
 export type FetchStatus = "pending" | "fulfilled" | "rejected";
-
-export default { store, persistor };

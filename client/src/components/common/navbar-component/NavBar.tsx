@@ -7,7 +7,7 @@ import MobileNavBar from "./MobileNavBar";
 
 function NavBar() {
   const isMobile = useIsMobile();
-  const userData = useAppSelector((state) => state.user.user);
+  const userData = useAppSelector((state) => state.session.user);
 
   return (
     <AppBar elevation={0} position="static" color="transparent">

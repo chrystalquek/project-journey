@@ -19,7 +19,7 @@ export const listEvents = createAsyncThunk<
     return response.data;
   }
 
-  const userId = getState().user.user?._id;
+  const userId = getState().session.user?._id;
   if (!userId) {
     return [];
   }

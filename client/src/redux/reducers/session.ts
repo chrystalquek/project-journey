@@ -4,63 +4,47 @@ import { createSlice } from "@reduxjs/toolkit";
 import { VolunteerData } from "@type/volunteer";
 import jwt from "jsonwebtoken";
 import { REHYDRATE } from "redux-persist";
-import user from "../actions/user";
+import { login } from "../actions/user";
 
-type FetchStatus = "fetching" | "fulfilled" | "rejected" | "";
-
-export type UserState = {
-  token: string;
+export type SessionState = {
+  token: string | null;
   user: VolunteerData | null;
-  status: FetchStatus;
 };
 
-const initialState: UserState = {
-  token: "",
+const initialState: SessionState = {
+  token: null,
   user: null,
-  status: "",
 };
 
-const userSlice = createSlice({
-  name: "user",
+const sessionSlice = createSlice({
+  name: "session",
   initialState,
   reducers: {
-    resetUser(state) {
-      state.token = "";
-      state.user = null;
-      state.status = "";
+    logout(state) {
+      Object.assign(state, initialState);
     },
   },
   extraReducers: (builder) => {
-    // Sets auth token from persisted state to runtime
     builder.addCase(REHYDRATE, (state, action) => {
       // @ts-ignore payload attribute not registered despite it available
       const authToken = action?.payload?.user?.token;
       if (authToken) {
         apiClient.setAuthToken(authToken);
       }
-      state.status = "";
     });
-    builder.addCase(user.pending, (state) => {
-      state.token = "";
-      state.status = "fetching";
+    builder.addCase(login.pending, (state) => {
+      state.token = null;
     });
-    builder.addCase(user.fulfilled, (state, action) => {
-      const { payload } = action;
+    builder.addCase(login.fulfilled, (state, { payload }) => {
       state.token = payload.token;
-      // Sets auth token for authorized endpoints
       apiClient.setAuthToken(payload.token);
 
-      state.status = "fulfilled";
       const userObj = jwt.decode(payload.token);
-      state.user = {
-        ...userObj,
-        birthday: userObj.birthday,
-        createdAt: userObj.createdAt,
-      };
+      state.user = userObj;
     });
-    builder.addCase(user.rejected, (state) => {
-      state.token = "";
-      state.status = "rejected";
+    builder.addCase(login.rejected, (state) => {
+      state.token = null;
+      state.user = null;
     });
     builder.addCase(updateVolunteer.fulfilled, (state, action) => {
       const updatedVolunteerData = action.payload;
@@ -72,5 +56,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { logout } = sessionSlice.actions;
+export default sessionSlice.reducer;

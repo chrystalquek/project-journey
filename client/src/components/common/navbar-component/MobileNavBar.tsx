@@ -21,7 +21,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import MenuIcon from "@material-ui/icons/Menu";
 import PersonIcon from "@material-ui/icons/Person";
-import { resetUser } from "@redux/reducers/user";
+import { logout } from "@redux/reducers/session";
 import { useAppDispatch } from "@redux/store";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import {
@@ -146,7 +146,7 @@ export default function MobileNavBar({ userData }: NavBarProps) {
   };
 
   const handleLogout = () => {
-    dispatch(resetUser());
+    dispatch(logout());
     router.push("/login");
   };
 

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const Index = () => {
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.session.user);
   const router = useRouter();
 
   useEffect(() => {

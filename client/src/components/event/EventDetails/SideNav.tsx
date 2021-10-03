@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SideNav({ selected, eventId }: Props) {
   const classes = useStyles();
-  const currentUser = useAppSelector((state) => state.user.user);
+  const currentUser = useAppSelector((state) => state.session.user);
   const isAdmin = currentUser?.volunteerType === VolunteerType.ADMIN;
 
   return (

@@ -130,7 +130,7 @@ const FeedbackModal: FC<FeedbackModalProps> = ({
     useState<FEEDBACK_STATE>(initialState);
   const [checked, setChecked] = useState<boolean>(false);
 
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.session.user);
   const questions = useAppSelector((state) => state.form.questions);
 
   // Load form when opening modal

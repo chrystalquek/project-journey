@@ -21,10 +21,12 @@ const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
 
   // TODO can just fetch own signup.
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.session.user);
   useEffect(() => {
-    dispatch(getSignUps({ id: user.user?._id ?? "", idType: "userId" }));
-  }, [dispatch, user.user?._id]);
+    if (user) {
+      dispatch(getSignUps({ id: user._id ?? "", idType: "userId" }));
+    }
+  }, [dispatch, user]);
   const upcomingSignUps = useAppSelector((state) =>
     selectSignUpsByIds(state, state.signUp.listSignUpIds)
   );

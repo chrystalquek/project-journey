@@ -59,15 +59,24 @@ const eventSlice = createSlice({
         eventsAdapter.upsertOne(state, payload);
       }
     );
-    builder.addMatcher(isPending, (state) => {
-      state.status = "pending";
-    });
-    builder.addMatcher(isFulfilled, (state) => {
-      state.status = "fulfilled";
-    });
-    builder.addMatcher(isRejected, (state) => {
-      state.status = "rejected";
-    });
+    builder.addMatcher(
+      isPending(getEvent, cancelEvent, listEvents, editEvent, createEvent),
+      (state) => {
+        state.status = "pending";
+      }
+    );
+    builder.addMatcher(
+      isFulfilled(getEvent, cancelEvent, listEvents, editEvent, createEvent),
+      (state) => {
+        state.status = "fulfilled";
+      }
+    );
+    builder.addMatcher(
+      isRejected(getEvent, cancelEvent, listEvents, editEvent, createEvent),
+      (state) => {
+        state.status = "rejected";
+      }
+    );
   },
 });
 

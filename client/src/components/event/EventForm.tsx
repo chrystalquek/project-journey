@@ -148,7 +148,7 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
   const { enqueueSnackbar } = useSnackbar();
   const eventStatus = useAppSelector((state) => state.event.status);
   const event = useAppSelector((state) => selectEventById(state, eid ?? ""));
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.session.user);
   const {
     feedbackFormEventQuestions,
     handleAddQuestion,

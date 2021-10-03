@@ -51,45 +51,60 @@ const signUpSlice = createSlice({
       signUpAdapter.upsertMany(state, payload);
       state.listSignUpIds = payload.map((signUp) => signUp._id);
     });
-
-    // Using redux for logging purposes
-    builder.addCase(createAndAcceptSignUp.pending, () => {
-      // do nothing yet
-    });
     builder.addCase(createAndAcceptSignUp.fulfilled, () => {
       window.location.reload();
     });
     builder.addCase(createAndAcceptSignUp.rejected, () => {
       window.location.reload();
     });
-    builder.addCase(createSignUp.pending, () => {
-      // do nothing yet
-    });
-    builder.addCase(createSignUp.fulfilled, () => {
-      // do nothing yet
-    });
-    builder.addCase(createSignUp.rejected, () => {
-      // do nothing yet
-    });
     builder.addCase(deleteSignUp.fulfilled, (state, action) => {
       signUpAdapter.removeOne(state, action.meta.arg.id);
     });
-
     builder.addMatcher(
       isAnyOf(updateSignUp.fulfilled),
       (state, { payload }) => {
         signUpAdapter.upsertOne(state, payload);
       }
     );
-    builder.addMatcher(isPending, (state) => {
-      state.status = "pending";
-    });
-    builder.addMatcher(isFulfilled, (state) => {
-      state.status = "fulfilled";
-    });
-    builder.addMatcher(isRejected, (state) => {
-      state.status = "rejected";
-    });
+    builder.addMatcher(
+      isPending(
+        getSignUps,
+        getPendingSignUps,
+        createAndAcceptSignUp,
+        createSignUp,
+        deleteSignUp,
+        updateSignUp
+      ),
+      (state) => {
+        state.status = "pending";
+      }
+    );
+    builder.addMatcher(
+      isFulfilled(
+        getSignUps,
+        getPendingSignUps,
+        createAndAcceptSignUp,
+        createSignUp,
+        deleteSignUp,
+        updateSignUp
+      ),
+      (state) => {
+        state.status = "fulfilled";
+      }
+    );
+    builder.addMatcher(
+      isRejected(
+        getSignUps,
+        getPendingSignUps,
+        createAndAcceptSignUp,
+        createSignUp,
+        deleteSignUp,
+        updateSignUp
+      ),
+      (state) => {
+        state.status = "rejected";
+      }
+    );
   },
 });
 

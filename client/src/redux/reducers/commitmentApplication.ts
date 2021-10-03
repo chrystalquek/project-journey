@@ -56,15 +56,36 @@ const commitmentApplicationSlice = createSlice({
         caAdapter.upsertOne(state, payload);
       }
     );
-    builder.addMatcher(isPending, (state) => {
-      state.status = "pending";
-    });
-    builder.addMatcher(isFulfilled, (state) => {
-      state.status = "fulfilled";
-    });
-    builder.addMatcher(isRejected, (state) => {
-      state.status = "rejected";
-    });
+    builder.addMatcher(
+      isPending(
+        createCommitmentApplication,
+        updateCommitmentApplication,
+        listCommitmentApplications
+      ),
+      (state) => {
+        state.status = "pending";
+      }
+    );
+    builder.addMatcher(
+      isFulfilled(
+        createCommitmentApplication,
+        updateCommitmentApplication,
+        listCommitmentApplications
+      ),
+      (state) => {
+        state.status = "fulfilled";
+      }
+    );
+    builder.addMatcher(
+      isRejected(
+        createCommitmentApplication,
+        updateCommitmentApplication,
+        listCommitmentApplications
+      ),
+      (state) => {
+        state.status = "rejected";
+      }
+    );
   },
 });
 

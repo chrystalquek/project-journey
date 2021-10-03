@@ -1,14 +1,16 @@
-import { Box, Grid, Button, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import React, { FC, useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/dist/client/router";
-import { Formik, Form, Field } from "formik";
-import { TextField } from "formik-material-ui";
-import login, { LoginArgs } from "@redux/actions/user";
-import { useAppDispatch, useAppSelector } from "@redux/store";
-import { HOME_ROUTE } from "@utils/constants/routes";
+import { LoginRequest } from "@api/request";
 import Header from "@components/common/Header";
+import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { login } from "@redux/actions/user";
+import { useAppDispatch, useAppSelector } from "@redux/store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { HOME_ROUTE } from "@utils/constants/routes";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import { useRouter } from "next/dist/client/router";
+import Link from "next/link";
+import React, { FC, useEffect, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -72,17 +74,11 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   const router = useRouter();
   const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.session.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user.token) {
-      router.push(HOME_ROUTE);
-    }
-  }, [router, user]);
-
-  useEffect(() => {
-    if (user.status === "fulfilled") {
+    if (user) {
       router.push(HOME_ROUTE);
     }
   }, [router, user]);
@@ -95,15 +91,14 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   }, [resetStatus]);
 
   const handleSubmit = async (values) => {
-    const loginArgs: LoginArgs = {
-      email: values.email,
-      password: values.password,
-    };
-    const response = await dispatch(login(loginArgs));
-    // @ts-ignore type exists
-    if (response?.type === "user/login/rejected") {
-      setInvalid(true);
-    }
+    dispatch(
+      login({
+        email: values.email,
+        password: values.password,
+      })
+    )
+      .then(unwrapResult)
+      .catch(() => setInvalid(true));
   };
   const InvalidCredentials = () => {
     if (invalid) {
@@ -117,7 +112,7 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   };
 
   const validate = (values) => {
-    const errors: Partial<LoginArgs> = {};
+    const errors: Partial<LoginRequest> = {};
 
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 

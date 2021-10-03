@@ -1,16 +1,23 @@
+import Header from "@components/common/Header";
 import PendingApproval from "@components/home/PendingApproval";
 import UpcomingEvent from "@components/home/UpcomingEvent";
+import { LOGIN_ROUTE } from "@constants/routes";
 import { Grid, useMediaQuery, useTheme } from "@material-ui/core";
-import React, { FC } from "react";
-import { isAdmin } from "@utils/helpers/auth";
 import { useAppSelector } from "@redux/store";
-import Header from "@components/common/Header";
+import { isAdmin } from "@utils/helpers/auth";
+import { useRouter } from "next/router";
+import React, { FC } from "react";
 
 const Home: FC = () => {
+  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
-  const user = useAppSelector((state) => state?.user);
+  const user = useAppSelector((state) => state.session.user);
+  if (!user) {
+    router.push(LOGIN_ROUTE);
+    return null;
+  }
 
   return (
     <Grid item xs={8}>

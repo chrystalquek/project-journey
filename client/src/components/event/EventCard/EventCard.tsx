@@ -43,7 +43,9 @@ const EventCard: FC<Props> = ({
 }) => {
   const classes = useStyles();
   const router = useRouter();
-  const user: VolunteerData | null = useAppSelector((state) => state.user.user);
+  const user: VolunteerData | null = useAppSelector(
+    (state) => state.session.user
+  );
 
   const dateTime = formatDateStartEndTime(
     new Date(event.startDate),

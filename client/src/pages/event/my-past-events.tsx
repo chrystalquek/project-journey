@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 const EventMyPastEventPage = () => {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.session.user);
   const events = useAppSelector((state) =>
     selectEventsByIds(state, state.event.listEventIds)
   );

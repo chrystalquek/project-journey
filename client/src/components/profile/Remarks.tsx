@@ -16,8 +16,7 @@ type props = {
 
 const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user);
-  const userData = user.user;
+  const user = useAppSelector((state) => state.session.user);
 
   let originalVolunteerRemarks = profilePageData.volunteerRemarks;
   let originalAdministratorRemarks = profilePageData.administratorRemarks;
@@ -113,13 +112,13 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           onDiscard={discardVolunteerRemarks}
           // Admin cannot edit the remarks written by the volunteer
           // But admin can edit remarks of him/herself
-          disabled={isAdmin(user) && profilePageData._id !== user.user?._id}
+          disabled={isAdmin(user) && profilePageData._id !== user?._id}
         />
 
         {/* Admin remarks not rendered if the profilePageData is admin
         and only shows the admin remarks if the user is admin */}
         {profilePageData.volunteerType !== VolunteerType.ADMIN &&
-          userData?.volunteerType === VolunteerType.ADMIN && (
+          user?.volunteerType === VolunteerType.ADMIN && (
             <RemarksTextField
               value={administratorRemarks}
               onChange={handleAdministratorRemarks}

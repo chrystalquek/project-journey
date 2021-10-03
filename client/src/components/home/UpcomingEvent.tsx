@@ -59,14 +59,14 @@ const UpcomingEvent: FC<{}> = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.session.user);
 
   useEffect(() => {
     if (!user || isAdmin(user)) {
       dispatch(listEvents({ eventType: "upcoming" }));
-    } else if (user.user) {
+    } else if (user) {
       dispatch(listEvents({ eventType: "upcoming", onlySignedUp: true }));
-      dispatch(getSignUps({ id: user.user._id, idType: "userId" }));
+      dispatch(getSignUps({ id: user._id, idType: "userId" }));
     }
   }, [dispatch, user]);
 

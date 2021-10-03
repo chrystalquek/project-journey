@@ -2,7 +2,7 @@ import React from "react";
 import type { AppProps } from "next/app";
 import "@styles/app.css";
 import { Provider } from "react-redux";
-import configureStore from "@redux/store";
+import { store, persistor } from "@redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -15,8 +15,8 @@ import { SnackbarProvider } from "notistack";
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={configureStore.store}>
-      <PersistGate loading={null} persistor={configureStore.persistor}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider theme={theme}>
           <SnackbarProvider maxSnack={3}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>

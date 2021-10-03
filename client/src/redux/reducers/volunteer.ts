@@ -73,16 +73,43 @@ const volunteerSlice = createSlice({
         volunteersAdapter.upsertOne(state, payload);
       }
     );
-    builder.addMatcher(isPending, (state) => {
-      state.status = "pending";
-    });
-    builder.addMatcher(isFulfilled, (state) => {
-      state.status = "fulfilled";
-    });
-    builder.addMatcher(isRejected, (state, { error }) => {
-      state.status = "rejected";
-      state.error = error;
-    });
+    builder.addMatcher(
+      isPending(
+        getPendingVolunteers,
+        getVolunteer,
+        getVolunteersById,
+        listVolunteers,
+        updateVolunteer
+      ),
+      (state) => {
+        state.status = "pending";
+      }
+    );
+    builder.addMatcher(
+      isFulfilled(
+        getPendingVolunteers,
+        getVolunteer,
+        getVolunteersById,
+        listVolunteers,
+        updateVolunteer
+      ),
+      (state) => {
+        state.status = "fulfilled";
+      }
+    );
+    builder.addMatcher(
+      isRejected(
+        getPendingVolunteers,
+        getVolunteer,
+        getVolunteersById,
+        listVolunteers,
+        updateVolunteer
+      ),
+      (state, { error }) => {
+        state.status = "rejected";
+        state.error = error;
+      }
+    );
   },
 });
 

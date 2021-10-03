@@ -40,13 +40,14 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   const direction = isMobile ? "column" : "row";
   const justify = isMobile ? "center" : "flex-start";
-  const user = useAppSelector((state) => state.user);
-  const userData = user?.user;
+  const user = useAppSelector((state) => state.session.user);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(listCommitmentApplications({ volunteerId: userData?._id }));
-  }, [dispatch, userData?._id]);
+    if (user) {
+      dispatch(listCommitmentApplications({ volunteerId: user._id }));
+    }
+  }, [dispatch, user]);
 
   const commitmentApplications = useAppSelector((state) =>
     selectCommitmentApplicationsByIds(
@@ -98,7 +99,7 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
             </Typography>
           </Grid>
           <Grid item>
-            {userData?.volunteerType === VolunteerType.ADMIN && (
+            {user?.volunteerType === VolunteerType.ADMIN && (
               <ChangeVolunteerType {...{ profilePageData }} />
             )}
           </Grid>
@@ -106,7 +107,7 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
         {/* Only shows rejected if the loggedInUser
         is viewing own profile and has a rejected commitmentApplication */}
         {profilePageData.volunteerType === VolunteerType.ADHOC &&
-          userData?._id === profilePageData._id &&
+          user?._id === profilePageData._id &&
           latestCommitmentApplication?.status ===
             CommitmentApplicationStatus.Rejected && (
             <Typography>
@@ -116,10 +117,10 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
         {/* Only shows the option to become committed if the loggedInUser
         is viewing own profile and is still an adhoc volunteer */}
         {profilePageData.volunteerType === VolunteerType.ADHOC &&
-          userData?._id === profilePageData._id && <BecomeCommitedDialog />}
+          user?._id === profilePageData._id && <BecomeCommitedDialog />}
         {/* Approval button if loggedInUser is admin and volunteerProfile
         has a pending commitmentApplication */}
-        {userData?.volunteerType === VolunteerType.ADMIN &&
+        {user?.volunteerType === VolunteerType.ADMIN &&
           latestCommitmentApplication?.status ===
             CommitmentApplicationStatus.Pending && (
             <ApproveCommitmentApplication

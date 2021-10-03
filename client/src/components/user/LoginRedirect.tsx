@@ -1,5 +1,5 @@
 import Header from "@components/common/Header";
-import { resetUser } from "@redux/reducers/user";
+import { logout } from "@redux/reducers/session";
 import { useAppDispatch } from "@redux/store";
 import { useRouter } from "next/router";
 
@@ -7,7 +7,7 @@ export const LoginRedirect = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  dispatch(resetUser());
+  dispatch(logout());
   router.push("/login");
   return (
     <>

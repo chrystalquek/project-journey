@@ -36,7 +36,7 @@ const EventDetails = ({ eid }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.session.user);
   const event = useAppSelector((state) => selectEventById(state, eid));
 
   const isMobile = useIsMobile();

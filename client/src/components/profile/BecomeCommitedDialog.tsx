@@ -34,15 +34,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BecomeCommitedDialog: FC = () => {
-  const user = useAppSelector((state) => state.user);
-  const userData = user.user;
+  const user = useAppSelector((state) => state.session.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (userData) {
-      dispatch(listCommitmentApplications({ volunteerId: userData._id }));
+    if (user) {
+      dispatch(listCommitmentApplications({ volunteerId: user._id }));
     }
-  }, [dispatch, userData]);
+  }, [dispatch, user]);
 
   const commitmentApplications = useAppSelector((state) =>
     selectCommitmentApplicationsByIds(
@@ -73,11 +72,11 @@ const BecomeCommitedDialog: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (formValues: Record<string, any>) => {
-    assert(userData, "User must be present before submitting.");
-    formValues.volunteerId = userData._id;
+    assert(user, "User must be present before submitting.");
+    formValues.volunteerId = user._id;
     // Drop the acknowledgement attributes before sending api call\
     const request = { ...formValues };
-    request.volunteerId = userData._id;
+    request.volunteerId = user._id;
     delete request.isAwareOfGroupInvite;
     delete request.isAwareOfCommitmentExpectation;
     delete request.isAwareOfConfidentiality;
