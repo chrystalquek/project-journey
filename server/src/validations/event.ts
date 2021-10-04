@@ -212,7 +212,7 @@ const getValidations = (method: EventValidatorMethod) => {
 
     case "readSignedUpEvents": {
       return [
-        eventSearchType,
+        eventSearchType(),
         param("userId").isString().withMessage("User id must be a string"),
       ];
     }
