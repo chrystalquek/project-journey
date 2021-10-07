@@ -11,7 +11,8 @@ type EmailTemplate =
   | "CANCEL_EVENT"
   | "FEEDBACK"
   | "EVENT_SIGN_UP_CONFIRMATION"
-  | "WAITLIST_TO_CONFIRMED";
+  | "WAITLIST_TO_CONFIRMED"
+  | "BUDDY";
 type EmailMetadata = {
   to: string;
   cc: string[];
@@ -30,6 +31,7 @@ const WAITLIST_TO_CONFIRMED_TEMPLATE_FILE =
 const EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE =
   "src/views/event-sign-up-confirmation.ejs";
 const EVENT_CANCEL_TEMPLATE_FILE = "src/views/event-cancel.ejs";
+const BUDDY_TEMPLATE_FILE = "src/views/buddy.ejs";
 
 const getSmtpTransport = async (): Promise<Mail> => {
   const oauth2Client = new OAuth2(
@@ -219,14 +221,44 @@ const cancelEventEmailHelper = async (
   };
 };
 
+const buddyEmailHelper = async (
+  user: VolunteerData,
+  buddyData: VolunteerData,
+): Promise<EmailMetadata> => {
+  const to = user.email;
+  const cc = [];
+  const bcc = [];
+  const subject = "Your buddy at BIAB";
+
+  const templateData = {
+    name: user.name,
+    buddy_name: buddyData.name,
+    buddy_mobile_number: buddyData.mobileNumber,
+    POC_name: null,
+    POC_mobile_number: null
+  }
+  const templateFile = BUDDY_TEMPLATE_FILE;
+
+  return {
+    to,
+    cc,
+    bcc,
+    subject,
+    templateData,
+    templateFile
+  }
+}
+
 export const sendEmail = async (
   emailType: EmailTemplate,
   userId: string,
-  eventId: string | null = null
+  eventId: string | null = null,
+  buddyId: string | null = null
 ): Promise<void> => {
   let helperObject;
   const volunteerData: VolunteerData | null = await Volunteer.findById(userId);
   const eventData = eventId && (await Event.findById(eventId));
+  const buddyData = buddyId && (await Volunteer.findById(buddyId));
 
   if (!volunteerData || !eventData) {
     throw new Error(DETAILS_NOT_FOUND);
@@ -250,6 +282,9 @@ export const sendEmail = async (
       break;
     case "CANCEL_EVENT":
       helperObject = await cancelEventEmailHelper(volunteerData, eventData);
+      break;
+    case "BUDDY":
+      helperObject = await buddyEmailHelper(volunteerData, buddyData as VolunteerData);
       break;
     default:
       throw new Error(EMAIL_TYPE_INVALID);
