@@ -16,3 +16,10 @@ type SendCancelEventResponseBody = {
 };
 
 export type SendCancelEventResponse = Response<SendCancelEventResponseBody>;
+
+type SendBuddyResponseBody = {
+  userId: string;
+  buddyId: string;
+}
+
+export type SendBuddyResponse = Response<SendBuddyResponseBody>;

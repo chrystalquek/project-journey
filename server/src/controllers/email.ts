@@ -5,11 +5,13 @@ import {
   SendCancelEventRequest,
   SendFeedbackRequest as SendFeedbackRequestRequest,
   SendMassFeedbackRequest as SendMassFeedbackRequestRequest,
+  SendBuddyRequest,
 } from "../types/request/email";
 import {
   SendCancelEventResponse,
   SendFeedbackRequestResponse,
   SendMassFeedbackRequestResponse,
+  SendBuddyResponse,
 } from "../types/response/email";
 
 const sendFeedbackRequest = async (
@@ -56,8 +58,24 @@ const sendCancelEvent = async (
   }
 };
 
+const sendBuddy = async(
+  req: SendBuddyRequest,
+  res: SendBuddyResponse
+): Promise<void> => {
+  try {
+    const { userId, buddyId } = req.params;
+    await emailService.sendEmail("BUDDY", userId, buddyId);
+    res.status(HTTP_CODES.OK).json({ userId, buddyId });
+  } catch (err) {
+    res.status(HTTP_CODES.SERVER_ERROR).json({
+      errors: [{ msg: err.msg }],
+    });
+  }
+}
+
 export default {
   sendFeedbackRequest,
   sendCancelEvent,
   sendMassFeedbackRequest,
+  sendBuddy,
 };

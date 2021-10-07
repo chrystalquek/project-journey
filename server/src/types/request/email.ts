@@ -23,3 +23,14 @@ export type SendCancelEventRequest = Request<
   EmptyQuery,
   SendCancelEventParams
 >;
+
+type SendBuddyRequestParams = {
+  userId: string;
+  buddyId: string;
+}
+
+export type SendBuddyRequest = Request<
+  EmptyBody,
+  EmptyQuery,
+  SendBuddyRequestParams
+>;
