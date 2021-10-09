@@ -81,7 +81,6 @@ const sendEmailHelper = async (
   templateData: Record<string, string>
 ): Promise<void> => {
   const smtpTransport = await getSmtpTransport();
-
   ejs.renderFile(templateFile, templateData, (err, content) => {
     try {
       const mainOptions = {
@@ -223,7 +222,7 @@ const cancelEventEmailHelper = async (
 
 const buddyEmailHelper = async (
   user: VolunteerData,
-  buddyData: VolunteerData,
+  buddyData: VolunteerData
 ): Promise<EmailMetadata> => {
   const to = user.email;
   const cc = [];
@@ -234,9 +233,7 @@ const buddyEmailHelper = async (
     name: user.name,
     buddy_name: buddyData.name,
     buddy_mobile_number: buddyData.mobileNumber,
-    POC_name: null,
-    POC_mobile_number: null
-  }
+  };
   const templateFile = BUDDY_TEMPLATE_FILE;
 
   return {
@@ -245,9 +242,9 @@ const buddyEmailHelper = async (
     bcc,
     subject,
     templateData,
-    templateFile
-  }
-}
+    templateFile,
+  };
+};
 
 export const sendEmail = async (
   emailType: EmailTemplate,
@@ -256,11 +253,12 @@ export const sendEmail = async (
   buddyId: string | null = null
 ): Promise<void> => {
   let helperObject;
-  const volunteerData: VolunteerData | null = await Volunteer.findById(userId);
-  const eventData = eventId && (await Event.findById(eventId));
-  const buddyData = buddyId && (await Volunteer.findById(buddyId));
+  const volunteerData = (await Volunteer.findById(userId)) as VolunteerData;
+  const eventData = (eventId && (await Event.findById(eventId))) as EventData;
+  const buddyData = (buddyId &&
+    (await Volunteer.findById(buddyId))) as VolunteerData;
 
-  if (!volunteerData || !eventData) {
+  if (!volunteerData || (eventId && !eventData) || (buddyId && !buddyData)) {
     throw new Error(DETAILS_NOT_FOUND);
   }
 
@@ -284,14 +282,13 @@ export const sendEmail = async (
       helperObject = await cancelEventEmailHelper(volunteerData, eventData);
       break;
     case "BUDDY":
-      helperObject = await buddyEmailHelper(volunteerData, buddyData as VolunteerData);
+      helperObject = await buddyEmailHelper(volunteerData, buddyData);
       break;
     default:
       throw new Error(EMAIL_TYPE_INVALID);
   }
 
   const { to, cc, bcc, subject, templateFile, templateData } = helperObject;
-
   return sendEmailHelper(to, cc, bcc, subject, templateFile, templateData);
 };
 

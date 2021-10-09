@@ -27,7 +27,7 @@ export type SendCancelEventRequest = Request<
 type SendBuddyRequestParams = {
   userId: string;
   buddyId: string;
-}
+};
 
 export type SendBuddyRequest = Request<
   EmptyBody,
