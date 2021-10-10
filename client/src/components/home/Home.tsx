@@ -2,16 +2,16 @@ import Header from "@components/common/Header";
 import PendingApproval from "@components/home/PendingApproval";
 import UpcomingEvent from "@components/home/UpcomingEvent";
 import { LOGIN_ROUTE } from "@constants/routes";
-import { Grid, useMediaQuery, useTheme } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { useAppSelector } from "@redux/store";
 import { isAdmin } from "@utils/helpers/auth";
+import { useIsMobile } from "@utils/helpers/layout";
 import { useRouter } from "next/router";
 import React, { FC } from "react";
 
 const Home: FC = () => {
   const router = useRouter();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useIsMobile();
 
   const user = useAppSelector((state) => state.session.user);
   if (!user) {

@@ -1,13 +1,14 @@
 import DataRow from "@components/common/DataRow";
 import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
-import { Grid, Typography, useMediaQuery } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Grid, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { listCommitmentApplications } from "@redux/actions/commitmentApplication";
 import { selectCommitmentApplicationsByIds } from "@redux/reducers/commitmentApplication";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import { formatDDMMYYYY } from "@utils/helpers/date";
+import { useIsMobile } from "@utils/helpers/layout";
 import _ from "lodash";
 import React, { FC, useEffect } from "react";
 import ApproveCommitmentApplication from "./ApproveCommitmentApplication";
@@ -36,8 +37,7 @@ type Props = {
 
 const ProfileHeader: FC<Props> = ({ profilePageData }) => {
   const classes = useStyles();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useIsMobile();
   const direction = isMobile ? "column" : "row";
   const justify = isMobile ? "center" : "flex-start";
   const user = useAppSelector((state) => state.session.user);
