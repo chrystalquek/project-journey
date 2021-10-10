@@ -56,7 +56,7 @@ async function seedDB() {
 
     // - MARK: user and volunteer collection
     const essentialVolunteerData: Array<
-      Pick<NewVolunteerData, "volunteerType" | "name">
+      Pick<NewVolunteerData, "volunteerType" | "name" | "buddyId">
     > = [
       {
         name: "adhoc1",
@@ -85,10 +85,12 @@ async function seedDB() {
       {
         name: "admin1",
         volunteerType: "admin",
+        buddyId: "613d995b161c0a3bbea175e5",
       },
       {
         name: "admin2",
         volunteerType: "admin",
+        buddyId: "613d995b161c0a3bbea175e4",
       },
     ];
 
