@@ -58,30 +58,30 @@ async function seedDB() {
     const essentialVolunteerData: Array<
       Pick<NewVolunteerData, "volunteerType" | "name" | "buddyId">
     > = [
-      {
-        name: "adhoc1",
-        volunteerType: "ad-hoc",
-      },
-      {
-        name: "adhoc2",
-        volunteerType: "ad-hoc",
-      },
-      {
-        name: "adhoc3",
-        volunteerType: "ad-hoc",
-      },
-      {
-        name: "committed1",
-        volunteerType: "committed",
-      },
-      {
-        name: "committed2",
-        volunteerType: "committed",
-      },
-      {
-        name: "committed3",
-        volunteerType: "committed",
-      },
+      // {
+      //   name: "adhoc1",
+      //   volunteerType: "ad-hoc",
+      // },
+      // {
+      //   name: "adhoc2",
+      //   volunteerType: "ad-hoc",
+      // },
+      // {
+      //   name: "adhoc3",
+      //   volunteerType: "ad-hoc",
+      // },
+      // {
+      //   name: "committed1",
+      //   volunteerType: "committed",
+      // },
+      // {
+      //   name: "committed2",
+      //   volunteerType: "committed",
+      // },
+      // {
+      //   name: "committed3",
+      //   volunteerType: "committed",
+      // },
       {
         name: "admin1",
         volunteerType: "admin",
