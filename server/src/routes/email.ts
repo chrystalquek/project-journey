@@ -19,8 +19,4 @@ router.post("/event-cancel/:userId/:eventId", emailController.sendCancelEvent);
 // from volunteers involved in recent events
 router.post("/feedback-mass", emailController.sendMassFeedbackRequest);
 
-// @route   POST /email/buddy/:userId/:buddyId
-// @desc    To send email to userId informing about his/her buddy
-router.post("/buddy/:userId/:buddyId", emailController.sendBuddy);
-
 export default router;
