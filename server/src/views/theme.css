@@ -17,6 +17,7 @@ a {
   text-decoration: none;
 }
 
+
 /* Typography */
 
 h1 {
@@ -44,6 +45,7 @@ p {
   color: #000000;
 }
 
+
 img {
   max-width: 100%;
 }
@@ -66,7 +68,7 @@ c {
 .signature {
   font-family: "Pacifico", cursive;
   font-weight: 400;
-  text-align: center;
+  text-align: center
 }
 
 /* Button */
@@ -79,9 +81,8 @@ c {
   cursor: pointer;
 }
 
-input:focus,
-input:active {
-  outline: none !important;
+input:focus, input:active {
+  outline:none!important;
 }
 
 @media only screen and (max-width: 480px) {
@@ -128,6 +129,7 @@ input:active {
     width: 40%;
   }
 }
+
 
 .header h1 div {
   display: inline-block;
@@ -271,6 +273,7 @@ address {
   border-bottom: 1px solid #edeff2;
   margin: 0;
   padding-bottom: 8px;
+
 }
 
 .table td {
