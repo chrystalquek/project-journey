@@ -150,7 +150,10 @@ export const VolunteerSchema = createSchema({
   }),
 
   // Buddy
-  buddyId: Type.string({ required: false }),
+  buddyId: Type.objectId({
+    required: false,
+    ref: "Volunteer",
+  }),
 });
 
 export type VolunteerData = Omit<
