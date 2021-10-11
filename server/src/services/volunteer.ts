@@ -177,14 +177,20 @@ const updateVolunteer = async (
   if (!originalVolunteerData || !savedVolunteerData) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }
-  
 
   // Trigger buddy email if the buddyId is different
-  if (updatedVolunteerData?.buddyId &&
-    updatedVolunteerData?.buddyId !== originalVolunteerData?.buddyId) {
-    await emailService.sendEmail("BUDDY", id, null, updatedVolunteerData?.buddyId);
+  if (
+    updatedVolunteerData?.buddyId &&
+    updatedVolunteerData?.buddyId !== originalVolunteerData?.buddyId
+  ) {
+    await emailService.sendEmail(
+      "BUDDY",
+      id,
+      null,
+      updatedVolunteerData?.buddyId
+    );
   }
-  
+
   return savedVolunteerData;
 };
 
