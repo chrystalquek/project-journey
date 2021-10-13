@@ -11,6 +11,7 @@ import { getPendingSignUps } from "@redux/actions/signUp";
 import { getPendingVolunteers } from "@redux/actions/volunteer";
 import { selectSignUpsByIds } from "@redux/reducers/signUp";
 import { selectVolunteersByIds } from "@redux/reducers/volunteer";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 
 const useStyles = makeStyles((theme) => ({
   shapeCircle: {
@@ -31,6 +32,10 @@ const PendingApproval: FC<{}> = () => {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(
+    (state) =>
+      state.signUp.status === "pending" || state.volunteer.status === "pending"
+  );
 
   // Only load on initial render to prevent infinite loop
   useEffect(() => {
@@ -47,6 +52,10 @@ const PendingApproval: FC<{}> = () => {
 
   const pendingSignUpCount = pendingSignUps.length;
   const pendingVolunteerCount = pendingVolunteers.length;
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <Card>

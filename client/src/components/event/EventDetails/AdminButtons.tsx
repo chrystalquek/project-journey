@@ -2,10 +2,11 @@ import Button from "@components/common/Button";
 import { EDIT_EVENT_FORM_ROUTE } from "@constants/routes";
 import { Box, Dialog, makeStyles, Typography } from "@material-ui/core";
 import { cancelEvent } from "@redux/actions/event";
-import { useAppDispatch } from "@redux/store";
+import { useAppDispatch, useAppSelector } from "@redux/store";
 import theme from "@styles/theme";
 import { EventData } from "@type/event";
 import router from "next/router";
+import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
 import { getEventVacancies } from "../helpers/EventsPageBody";
 
@@ -35,14 +36,25 @@ const AdminButtons = ({ event }: Props) => {
   const hasSignUps = getEventVacancies(event).filled === 0;
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isEventCancelled, setIsEventCancelled] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const eventFetchStatus = useAppSelector((state) => state.event.status);
 
   const handleCancelEvent = useCallback(() => {
     dispatch(cancelEvent(event._id));
+    if (eventFetchStatus === "rejected") {
+      enqueueSnackbar("Event cancellation failed.", {
+        variant: "error",
+      });
+    } else if (eventFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully Cancelled Event!", {
+        variant: "success",
+      });
+    }
     setIsEventCancelled(true);
     setTimeout(() => {
       setIsCancelModalOpen(false);
     }, 3000);
-  }, [dispatch, event._id]);
+  }, [dispatch, enqueueSnackbar, event._id, eventFetchStatus]);
 
   return (
     <>

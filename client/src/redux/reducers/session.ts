@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { VolunteerData } from "@type/volunteer";
 import jwt from "jsonwebtoken";
 import { REHYDRATE } from "redux-persist";
-import { login } from "../actions/user";
+import { login } from "../actions/session";
 
 export type SessionState = {
   token: string | null;

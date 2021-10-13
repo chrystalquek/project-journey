@@ -2,7 +2,7 @@ import React from "react";
 import { useSnackbar } from "notistack";
 import Box from "@material-ui/core/Box";
 import { useAppDispatch } from "@redux/store";
-import { signUp } from "@redux/actions/user";
+import { signUp } from "@redux/actions/session";
 import { useRouter } from "next/router";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { objectFilter } from "@utils/helpers/objectFilter";

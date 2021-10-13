@@ -14,7 +14,6 @@ import {
   isFulfilled,
   isPending,
   isRejected,
-  SerializedError,
 } from "@reduxjs/toolkit";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 import { VolunteerData } from "@type/volunteer";
@@ -29,7 +28,6 @@ export type VolunteerState = {
   listVolunteersIds: string[];
   totalCount: number;
   status: FetchStatus | null;
-  error: SerializedError | null;
 };
 
 const initialState = volunteersAdapter.getInitialState<VolunteerState>({
@@ -37,7 +35,6 @@ const initialState = volunteersAdapter.getInitialState<VolunteerState>({
   listVolunteersIds: [],
   totalCount: 0,
   status: null,
-  error: null,
 });
 
 const volunteerSlice = createSlice({
@@ -105,9 +102,8 @@ const volunteerSlice = createSlice({
         listVolunteers,
         updateVolunteer
       ),
-      (state, { error }) => {
+      (state) => {
         state.status = "rejected";
-        state.error = error;
       }
     );
   },

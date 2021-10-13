@@ -1,3 +1,4 @@
+import LoadingIndicator from "@components/common/LoadingIndicator";
 import { makeStyles, Typography } from "@material-ui/core";
 import { getSignUps } from "@redux/actions/signUp";
 import { selectSignUpsByIds } from "@redux/reducers/signUp";
@@ -30,6 +31,7 @@ const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
   const upcomingSignUps = useAppSelector((state) =>
     selectSignUpsByIds(state, state.signUp.listSignUpIds)
   );
+  const isLoading = useAppSelector((state) => state.event.status === "pending");
 
   const renderSignUpStatus = useCallback(() => {
     const signUp = upcomingSignUps.find(
@@ -64,6 +66,10 @@ const FooterComponent: FC<{ event: EventData }> = ({ event }) => {
         throw new Error(`Unexpected sign up status!`);
     }
   }, [upcomingSignUps, event, classes]);
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <Typography color="primary" gutterBottom className={classes.bold}>

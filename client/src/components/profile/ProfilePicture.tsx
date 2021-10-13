@@ -8,10 +8,11 @@ import Dialog from "@components/common/feedback/Dialog";
 import DialogTitle from "@components/common/feedback/DialogTitle";
 import DialogContent from "@components/common/feedback/DialogContent";
 import DialogActions from "@components/common/feedback/DialogActions";
-import { useAppDispatch } from "@redux/store";
+import { useAppDispatch, useAppSelector } from "@redux/store";
 import { uploadAndGetFileUrl } from "@utils/helpers/uploadAndGetFileUrl";
 import { updateVolunteer } from "@redux/actions/volunteer";
 import { assert } from "@utils/helpers/typescript";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -36,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
 const ProfilePicture = ({ profilePageData }) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const volunteerFetchStatus = useAppSelector(
+    (state) => state.volunteer.status
+  );
+  const { enqueueSnackbar } = useSnackbar();
 
   // ReactCrop documentation
   // https://www.npmjs.com/package/react-image-crop
@@ -121,6 +126,15 @@ const ProfilePicture = ({ profilePageData }) => {
     dispatch(
       updateVolunteer({ _id: profilePageData._id, data: updatedVolunteerData })
     );
+    if (volunteerFetchStatus === "rejected") {
+      enqueueSnackbar(`Change profile picture failed.`, {
+        variant: "error",
+      });
+    } else if (volunteerFetchStatus === "fulfilled") {
+      enqueueSnackbar(`Successfully changed profile picture!`, {
+        variant: "success",
+      });
+    }
     setSrc(null);
   };
 

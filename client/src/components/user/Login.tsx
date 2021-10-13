@@ -2,7 +2,7 @@ import { LoginRequest } from "@api/request";
 import Header from "@components/common/Header";
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { login } from "@redux/actions/user";
+import { login } from "@redux/actions/session";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { HOME_ROUTE } from "@utils/constants/routes";

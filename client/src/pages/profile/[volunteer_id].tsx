@@ -5,12 +5,12 @@ import EventCount from "@components/profile/EventCount";
 import ProfileHeader from "@components/profile/ProfileHeader";
 import Remarks from "@components/profile/Remarks";
 import SignUpInformation from "@components/profile/SignUpInformation";
+import { UNAUTHORIZED } from "@constants/routes";
 import { Grid } from "@material-ui/core";
 import { getVolunteer } from "@redux/actions/volunteer";
 import { selectVolunteerById } from "@redux/reducers/volunteer";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { VolunteerType } from "@type/volunteer";
-import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
@@ -22,6 +22,9 @@ const Profile = () => {
   const loggedInUser = useAppSelector((state) => state.session.user);
   const profileData = useAppSelector((state) =>
     selectVolunteerById(state, profileId)
+  );
+  const isLoading = useAppSelector(
+    (state) => state.volunteer.status === "pending"
   );
 
   // First time load page, send request to receive data
@@ -36,12 +39,15 @@ const Profile = () => {
     (loggedInUser.volunteerType !== VolunteerType.ADMIN &&
       loggedInUser._id !== profileId)
   ) {
-    return <ErrorPage statusCode={404} />;
+    router.push(UNAUTHORIZED);
+    return null;
   }
 
-  return !profileData || profileData?._id !== profileId ? (
-    <LoadingIndicator />
-  ) : (
+  if (!profileData || isLoading) {
+    return <LoadingIndicator />;
+  }
+
+  return (
     <>
       <Header title={profileData.name} />
       <Grid container direction="column">

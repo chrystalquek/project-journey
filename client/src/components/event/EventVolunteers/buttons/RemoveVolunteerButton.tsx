@@ -1,9 +1,10 @@
 import { ActionableDialog } from "@components/common/ActionableDialog";
 import { SignUpData, SignUpIdType, SignUpStatus } from "@type/signUp";
 import { useState } from "react";
-import { useAppDispatch } from "@redux/store";
+import { useAppDispatch, useAppSelector } from "@redux/store";
 import { updateSignUp } from "@redux/actions/signUp";
 import { getEvent } from "@redux/actions/event";
+import { useSnackbar } from "notistack";
 
 type RemoveVolunteerButtonProps = {
   signUp: SignUpData;
@@ -15,6 +16,8 @@ export const RemoveVolunteerButton = (props: RemoveVolunteerButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const dispatch = useAppDispatch();
+  const signUpFetchStatus = useAppSelector((state) => state.signUp.status);
+  const { enqueueSnackbar } = useSnackbar();
 
   const removeVolunteer = () => {
     const request = {
@@ -24,6 +27,15 @@ export const RemoveVolunteerButton = (props: RemoveVolunteerButtonProps) => {
     };
     dispatch(updateSignUp(request));
     dispatch(getEvent(signUp.eventId));
+    if (signUpFetchStatus === "rejected") {
+      enqueueSnackbar("Remove Volunteer failed.", {
+        variant: "error",
+      });
+    } else if (signUpFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully Removed Volunteer!", {
+        variant: "success",
+      });
+    }
   };
 
   return (

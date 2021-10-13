@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "@redux/store";
 import { updateVolunteer } from "@redux/actions/volunteer";
 import TypographyWithUnderline from "@components/common/data-display/TypographyWithUnderline";
 import { isAdmin } from "@utils/helpers/auth";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 
 type props = {
@@ -17,6 +16,9 @@ type props = {
 const Remarks: FC<props> = ({ profilePageData }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.session.user);
+  const volunteerFetchStatus = useAppSelector(
+    (state) => state.volunteer.status
+  );
 
   let originalVolunteerRemarks = profilePageData.volunteerRemarks;
   let originalAdministratorRemarks = profilePageData.administratorRemarks;
@@ -54,13 +56,16 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           volunteerRemarks,
         },
       })
-    )
-      .then(unwrapResult)
-      .catch(() => {
-        enqueueSnackbar("Update volunteer remarks failed.", {
-          variant: "error",
-        });
+    );
+    if (volunteerFetchStatus === "rejected") {
+      enqueueSnackbar("Update remarks failed.", {
+        variant: "error",
       });
+    } else if (volunteerFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully Updated Remarks!", {
+        variant: "success",
+      });
+    }
 
     originalVolunteerRemarks = volunteerRemarks;
     setVolunteerRemarksChanged(false);
@@ -73,13 +78,16 @@ const Remarks: FC<props> = ({ profilePageData }) => {
           administratorRemarks,
         },
       })
-    )
-      .then(unwrapResult)
-      .catch(() => {
-        enqueueSnackbar("Update admin remarks failed.", {
-          variant: "error",
-        });
+    );
+    if (volunteerFetchStatus === "rejected") {
+      enqueueSnackbar("Update remarks failed.", {
+        variant: "error",
       });
+    } else if (volunteerFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully Updated Remarks!", {
+        variant: "success",
+      });
+    }
 
     originalAdministratorRemarks = administratorRemarks;
     setAdministratorRemarksChanged(false);

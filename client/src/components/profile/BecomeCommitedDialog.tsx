@@ -14,7 +14,6 @@ import { CreateCommitmentApplicationRequest } from "@api/request";
 import { CommitmentApplicationStatus } from "@type/commitmentApplication";
 import _ from "lodash";
 import { assert } from "@utils/helpers/typescript";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import { selectCommitmentApplicationsByIds } from "@redux/reducers/commitmentApplication";
 
@@ -50,6 +49,10 @@ const BecomeCommitedDialog: FC = () => {
     )
   );
 
+  const commitmentApplicationFetchStatus = useAppSelector(
+    (state) => state.commitmentApplication.status
+  );
+
   // Get the latest application.
   const latestCommitmentApplication = _.head(
     _.orderBy(commitmentApplications, (ca) => ca.createdAt, "desc")
@@ -82,15 +85,19 @@ const BecomeCommitedDialog: FC = () => {
     delete request.isAwareOfConfidentiality;
     delete request.isAwareOfBackgroundCheck;
 
-    await dispatch(
+    dispatch(
       createCommitmentApplication(request as CreateCommitmentApplicationRequest)
-    )
-      .then(unwrapResult)
-      .catch(() => {
-        enqueueSnackbar("Conversion application creation failed.", {
-          variant: "error",
-        });
+    );
+
+    if (commitmentApplicationFetchStatus === "rejected") {
+      enqueueSnackbar("Conversion application creation failed.", {
+        variant: "error",
       });
+    } else if (commitmentApplicationFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully Created Conversion application!", {
+        variant: "error",
+      });
+    }
     handleClose();
   };
 

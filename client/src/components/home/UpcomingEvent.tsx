@@ -17,6 +17,7 @@ import { CREATE_EVENT_FORM_ROUTE } from "@constants/routes";
 import { SignUpStatus } from "@type/signUp";
 import { selectEventsByIds } from "@redux/reducers/event";
 import { selectSignUpsByIds } from "@redux/reducers/signUp";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 
 const useStyles = makeStyles((theme) => ({
   pane: {
@@ -60,6 +61,10 @@ const UpcomingEvent: FC<{}> = () => {
   const router = useRouter();
 
   const user = useAppSelector((state) => state.session.user);
+  const isLoading = useAppSelector(
+    (state) =>
+      state.event.status === "pending" || state.signUp.status === "pending"
+  );
 
   useEffect(() => {
     if (!user || isAdmin(user)) {
@@ -153,6 +158,10 @@ const UpcomingEvent: FC<{}> = () => {
       </Button>
     </Typography>
   );
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <div className={classes.pane}>

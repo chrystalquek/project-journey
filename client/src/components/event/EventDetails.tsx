@@ -15,6 +15,7 @@ import { VolunteerType } from "@type/volunteer";
 import { isAdmin } from "@utils/helpers/auth";
 import { useIsMobile } from "@utils/helpers/layout";
 import { useRouter } from "next/dist/client/router";
+import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import EventBreadCrumbs from "./EventBreadCrumbs";
 import AdminButtons from "./EventDetails/AdminButtons";
@@ -38,6 +39,12 @@ const EventDetails = ({ eid }: Props) => {
 
   const user = useAppSelector((state) => state.session.user);
   const event = useAppSelector((state) => selectEventById(state, eid));
+  const isLoading = useAppSelector(
+    (state) =>
+      state.event.status === "pending" || state.signUp.status === "pending"
+  );
+  const signUpFetchStatus = useAppSelector((state) => state.signUp.status);
+  const { enqueueSnackbar } = useSnackbar();
 
   const isMobile = useIsMobile();
   const isLoggedIn = !!user;
@@ -114,6 +121,15 @@ const EventDetails = ({ eid }: Props) => {
         idType: "signUpId",
       })
     );
+    if (signUpFetchStatus === "rejected") {
+      enqueueSnackbar("Sign up withdrawal failed.", {
+        variant: "error",
+      });
+    } else if (signUpFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully withdrew sign up!", {
+        variant: "success",
+      });
+    }
     router.push("/event");
   };
   const renderWithdrawCommitmentQuestion = useCallback(
@@ -130,7 +146,7 @@ const EventDetails = ({ eid }: Props) => {
   );
   // =========================
 
-  if (!event) {
+  if (!event || isLoading) {
     return <LoadingIndicator />;
   }
 

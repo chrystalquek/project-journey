@@ -51,8 +51,12 @@ const PendingRequests: FC<{}> = () => {
 
   const isLoading = useAppSelector(
     (state) =>
-      state.volunteer.status === "pending" &&
+      state.volunteer.status === "pending" ||
       state.commitmentApplication.status === "pending"
+  );
+
+  const commitmentApplicationFetchStatus = useAppSelector(
+    (state) => state.commitmentApplication.status
   );
 
   const [openApprove, setOpenApprove] = useState(false);
@@ -71,16 +75,31 @@ const PendingRequests: FC<{}> = () => {
         _id: commitmentApplication._id,
         data: updatedCommitmentApplication,
       })
-    ).catch(() =>
+    );
+    if (commitmentApplicationFetchStatus === "rejected") {
       enqueueSnackbar(
         `Conversion application ${
           status === CommitmentApplicationStatus.Accepted
-            ? "approval"
-            : "rejection"
+            ? "Approval"
+            : "Rejection"
         } failed.`,
-        { variant: "error" }
-      )
-    );
+        {
+          variant: "error",
+        }
+      );
+    } else if (commitmentApplicationFetchStatus === "fulfilled") {
+      enqueueSnackbar(
+        `Successfully ${
+          status === CommitmentApplicationStatus.Accepted
+            ? "Approved"
+            : "Rejected"
+        } Conversion application!`,
+        {
+          variant: "success",
+        }
+      );
+    }
+
     setOpenApprove(false);
     setOpenReject(false);
   };

@@ -1,4 +1,5 @@
 import DataRow from "@components/common/DataRow";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 import BecomeCommitedDialog from "@components/profile/BecomeCommitedDialog";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,6 +42,9 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
   const direction = isMobile ? "column" : "row";
   const justify = isMobile ? "center" : "flex-start";
   const user = useAppSelector((state) => state.session.user);
+  const isLoading = useAppSelector(
+    (state) => state.commitmentApplication.status === "pending"
+  );
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -60,6 +64,10 @@ const ProfileHeader: FC<Props> = ({ profilePageData }) => {
   const latestCommitmentApplication = _.head(
     _.orderBy(commitmentApplications, (ca) => ca.createdAt, "desc")
   );
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <Grid

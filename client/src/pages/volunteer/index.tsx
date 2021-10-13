@@ -1,12 +1,10 @@
 import { ROWS_PER_PAGE, VolunteerSortFieldsType } from "@api/request";
 import Table from "@components/common/data-display/Table";
-import ErrorPage from "@components/common/ErrorPage";
 import Header from "@components/common/Header";
 import LoadingIndicator from "@components/common/LoadingIndicator";
 import Accordion from "@components/common/surfaces/accordion/Accordion";
 import AccordionSummary from "@components/common/surfaces/accordion/AccordionSummary";
 import VolunteerBreadCrumbs from "@components/volunteer/VolunteerBreadCrumbs";
-import { ERROR_MESSAGE } from "@constants/messages";
 import {
   AccordionDetails,
   capitalize,
@@ -31,6 +29,7 @@ import {
 } from "@utils/helpers/filterObject";
 import { useIsMobile } from "@utils/helpers/layout";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import React, { FC, useEffect, useState } from "react";
 import { useDebounce } from "react-use";
 
@@ -38,13 +37,15 @@ const Index: FC<{}> = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const isMobile = useIsMobile();
+  const { enqueueSnackbar } = useSnackbar();
 
   const volunteers = useAppSelector((state) =>
     selectVolunteersByIds(state, state.volunteer.listVolunteersIds)
   );
   const totalCount = useAppSelector((state) => state.volunteer.totalCount);
-  const status = useAppSelector((state) => state.volunteer.status);
-  const error = useAppSelector((state) => state.volunteer.error);
+  const volunteerFetchStatus = useAppSelector(
+    (state) => state.volunteer.status
+  );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
@@ -179,11 +180,14 @@ const Index: FC<{}> = () => {
     },
   ];
 
-  if (status === "pending") {
+  if (volunteerFetchStatus === "pending") {
     return <LoadingIndicator />;
   }
-  if (status === "rejected" && error) {
-    return <ErrorPage message={error.message ?? ERROR_MESSAGE} />;
+
+  if (volunteerFetchStatus === "rejected") {
+    enqueueSnackbar("Could not retrieve volunteers.", {
+      variant: "error",
+    });
   }
 
   return (

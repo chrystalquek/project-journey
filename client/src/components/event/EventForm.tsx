@@ -1,5 +1,6 @@
 import DropZoneCard from "@components/common/DropZoneCard";
 import Header from "@components/common/Header";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 import { LoginRedirect } from "@components/user/LoginRedirect";
 import { UNAUTHORIZED } from "@constants/routes";
 import {
@@ -285,8 +286,8 @@ const AdminEventForm: FC<AdminEventFormProps> = ({ eid, isEdit }) => {
     router.push(UNAUTHORIZED);
   }
 
-  if (eid && !event) {
-    return <h1>Loading</h1>;
+  if (eventStatus === "pending") {
+    return <LoadingIndicator />;
   }
 
   return (

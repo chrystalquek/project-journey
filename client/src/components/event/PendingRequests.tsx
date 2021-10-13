@@ -1,5 +1,6 @@
 import Table from "@components/common/data-display/Table";
 import Header from "@components/common/Header";
+import LoadingIndicator from "@components/common/LoadingIndicator";
 import PendingRequestsTabs from "@components/common/PendingRequestsTabs";
 import { EVENT_VOLUNTEERS_ROUTE } from "@constants/routes";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
@@ -44,6 +45,10 @@ const PendingRequests: FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const isMobile = useIsMobile();
+  const isLoading = useAppSelector(
+    (state) =>
+      state.event.status === "pending" || state.signUp.status === "pending"
+  );
 
   useEffect(() => {
     dispatch(listEvents({ eventType: "upcoming" }));
@@ -107,6 +112,10 @@ const PendingRequests: FC = () => {
       ),
     },
   ];
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <>

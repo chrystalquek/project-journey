@@ -2,8 +2,7 @@ import { ActionableDialog } from "@components/common/ActionableDialog";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { updateCommitmentApplication } from "@redux/actions/commitmentApplication";
-import { useAppDispatch } from "@redux/store";
-import { unwrapResult } from "@reduxjs/toolkit";
+import { useAppDispatch, useAppSelector } from "@redux/store";
 import {
   CommitmentApplicationData,
   CommitmentApplicationStatus,
@@ -34,11 +33,14 @@ const ApproveCommitmentApplication: FC<Props> = ({
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+  const commitmentApplicationFetchStatus = useAppSelector(
+    (state) => state.commitmentApplication.status
+  );
+
   const DialogContent = profilePageData?.name
     ? `Are you sure you want to approve ${profilePageData.name}?`
     : "";
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const handleApproveEvent = () => {
     // Change the status of the commitment Application
@@ -51,13 +53,16 @@ const ApproveCommitmentApplication: FC<Props> = ({
         data: updatedCommitmentApplication,
         _id: commitmentApplication._id,
       })
-    )
-      .then(unwrapResult)
-      .catch(() => {
-        enqueueSnackbar("Conversion application approval failed.", {
-          variant: "error",
-        });
+    );
+    if (commitmentApplicationFetchStatus === "rejected") {
+      enqueueSnackbar("Conversion application approval failed.", {
+        variant: "error",
       });
+    } else if (commitmentApplicationFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully Approved Conversion Application!", {
+        variant: "success",
+      });
+    }
   };
 
   return (

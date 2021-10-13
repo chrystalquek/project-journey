@@ -13,11 +13,10 @@ import {
 import Dialog from "@components/common/feedback/Dialog";
 import DialogContent from "@components/common/feedback/DialogContent";
 import DialogActions from "@components/common/feedback/DialogActions";
-import { useAppDispatch } from "@redux/store";
+import { useAppDispatch, useAppSelector } from "@redux/store";
 import { VolunteerData, VolunteerType } from "@type/volunteer";
 import EditIcon from "@material-ui/icons/Edit";
 import { updateVolunteer } from "@redux/actions/volunteer";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import { assert } from "@utils/helpers/typescript";
 
@@ -43,6 +42,9 @@ type Props = {
 const ChangeVolunteerType: FC<Props> = ({ profilePageData }) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const volunteerFetchStatus = useAppSelector(
+    (state) => state.volunteer.status
+  );
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [volunteerType, setVolunteerType] = useState<VolunteerType | null>(
@@ -79,13 +81,16 @@ const ChangeVolunteerType: FC<Props> = ({ profilePageData }) => {
           _id: profilePageData._id,
           data: updatedVolunteerData,
         })
-      )
-        .then(unwrapResult)
-        .catch(() => {
-          enqueueSnackbar(`Change volunteer type failed.`, {
-            variant: "error",
-          });
+      );
+      if (volunteerFetchStatus === "rejected") {
+        enqueueSnackbar(`Change volunteer type failed.`, {
+          variant: "error",
         });
+      } else if (volunteerFetchStatus === "fulfilled") {
+        enqueueSnackbar(`Successfuly Changed volunteer type!`, {
+          variant: "success",
+        });
+      }
       handleCloseDialog();
     }
   };

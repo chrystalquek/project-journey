@@ -16,10 +16,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import { createAndAcceptSignUp, createSignUp } from "@redux/actions/signUp";
-import { useAppDispatch } from "@redux/store";
+import { useAppDispatch, useAppSelector } from "@redux/store";
 import { EventData, EventType } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
 import { VolunteerData } from "@type/volunteer";
+import { useSnackbar } from "notistack";
 import React, { FC, useState } from "react";
 
 type EventRegisterProps = {
@@ -58,6 +59,8 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
+  const signUpFetchStatus = useAppSelector((state) => state.signUp.status);
+  const { enqueueSnackbar } = useSnackbar();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
   const defaultForm: FormState = {
@@ -88,6 +91,16 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
         break;
       default:
         throw new Error("You shouldn't be here!");
+    }
+
+    if (signUpFetchStatus === "rejected") {
+      enqueueSnackbar("Sign up creation failed.", {
+        variant: "error",
+      });
+    } else if (signUpFetchStatus === "fulfilled") {
+      enqueueSnackbar("Successfully Signed Up!", {
+        variant: "success",
+      });
     }
   };
 
