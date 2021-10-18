@@ -1,4 +1,6 @@
-import User, { NewUserData, UserData } from "../models/User";
+import jwt from "jsonwebtoken";
+import { accessTokenSecret } from "../helpers/auth";
+import User, { DecodedUser, NewUserData, UserData } from "../models/User";
 import { VolunteerData } from "../models/Volunteer";
 import volunteerService from "./volunteer";
 
@@ -56,6 +58,11 @@ const addAdminRemarks = async (
   return volunteer;
 };
 
+const getUserIdFromToken = async (token: string): Promise<string> => {
+  const decoded = jwt.verify(token, accessTokenSecret) as DecodedUser;
+  return decoded.userId;
+};
+
 export default {
   createUser,
   getUser,
@@ -63,4 +70,5 @@ export default {
   updateUser,
   deleteUser,
   addAdminRemarks,
+  getUserIdFromToken,
 };

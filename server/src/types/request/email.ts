@@ -1,4 +1,4 @@
-import { EmptyBody, EmptyQuery, Request } from "./common";
+import { EmptyBody, EmptyParams, EmptyQuery, Request } from "./common";
 
 type SendFeedbackRequestParams = {
   userId: string;
@@ -22,4 +22,14 @@ export type SendCancelEventRequest = Request<
   EmptyBody,
   EmptyQuery,
   SendCancelEventParams
+>;
+
+type SendForgotPasswordBody = {
+  email: string;
+};
+
+export type SendForgotPasswordRequest = Request<
+  SendForgotPasswordBody,
+  EmptyQuery,
+  EmptyParams
 >;

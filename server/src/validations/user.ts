@@ -1,7 +1,11 @@
 import { body } from "express-validator";
-import { existingEmailValidator, passwordValidator } from "./global";
+import {
+  existingEmailValidator,
+  newPasswordValidator,
+  passwordValidator,
+} from "./global";
 
-export type UserValidatorMethod = "login" | "updatePassword";
+export type UserValidatorMethod = "login" | "updatePassword" | "resetPassword";
 
 const getValidations = (method: UserValidatorMethod) => {
   switch (method) {
@@ -13,6 +17,9 @@ const getValidations = (method: UserValidatorMethod) => {
     }
     case "updatePassword": {
       return [existingEmailValidator(), passwordValidator()];
+    }
+    case "resetPassword": {
+      return [newPasswordValidator()];
     }
     default:
       return [];

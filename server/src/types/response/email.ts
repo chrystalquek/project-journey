@@ -16,3 +16,5 @@ type SendCancelEventResponseBody = {
 };
 
 export type SendCancelEventResponse = Response<SendCancelEventResponseBody>;
+
+export type SendForgotPasswordResponse = Response;

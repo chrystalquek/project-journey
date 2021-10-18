@@ -3,8 +3,16 @@ import bcrypt from "bcrypt";
 import HTTP_CODES from "../constants/httpCodes";
 import { accessTokenSecret } from "../helpers/auth";
 import volunteerService from "../services/volunteer";
-import { LoginRequest, UpdatePasswordRequest } from "../types/request/user";
-import { LoginResponse, UpdatePasswordResponse } from "../types/response/user";
+import {
+  LoginRequest,
+  ResetPasswordRequest,
+  UpdatePasswordRequest,
+} from "../types/request/user";
+import {
+  LoginResponse,
+  ResetPasswordResponse,
+  UpdatePasswordResponse,
+} from "../types/response/user";
 import userService from "../services/user";
 import { removeUserId } from "../helpers/volunteer";
 
@@ -83,7 +91,32 @@ const updatePassword = async (
   }
 };
 
+const resetPassword = async (
+  req: ResetPasswordRequest,
+  res: ResetPasswordResponse
+) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+  try {
+    const userId = await userService.getUserIdFromToken(token);
+
+    await userService.updateUser(userId as string, { password: newPassword });
+    res.status(HTTP_CODES.OK).json({
+      message: "Password successfully updated",
+    });
+  } catch (err) {
+    res.status(HTTP_CODES.UNPROCESSABLE_ENTITIY).json({
+      errors: [
+        {
+          msg: err.message,
+        },
+      ],
+    });
+  }
+};
+
 export default {
   login,
   updatePassword,
+  resetPassword,
 };

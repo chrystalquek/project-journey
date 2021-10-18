@@ -26,4 +26,12 @@ router.post(
   userController.updatePassword
 );
 
+// @route   POST /user/reset-password/:token
+// @desc    For volunteers and admins to change their password
+router.post(
+  "/reset-password/:token",
+  validate(getValidations("resetPassword")),
+  userController.resetPassword
+);
+
 export default router;

@@ -71,6 +71,11 @@ export const passwordValidator = () =>
     min: LENGTH_MINIMUM_PASSWORD,
   });
 
+export const newPasswordValidator = () =>
+  body("newPassword").isString().isLength({
+    min: LENGTH_MINIMUM_PASSWORD,
+  });
+
 export const existingEmailValidator = () =>
   body("email")
     .isEmail()

@@ -1,4 +1,4 @@
-import { Request } from "./common";
+import { EmptyQuery, Request } from "./common";
 
 type LoginRequestBody = {
   email: string;
@@ -14,3 +14,15 @@ type UpdatePasswordRequestBody = {
 };
 
 export type UpdatePasswordRequest = Request<UpdatePasswordRequestBody>;
+
+type TokenParams = { token: string };
+
+type ResetPasswordRequestBody = {
+  newPassword: string;
+};
+
+export type ResetPasswordRequest = Request<
+  ResetPasswordRequestBody,
+  EmptyQuery,
+  TokenParams
+>;
