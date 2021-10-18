@@ -17,6 +17,8 @@ import {
 } from "@material-ui/core";
 import { createAndAcceptSignUp, createSignUp } from "@redux/actions/signUp";
 import { useAppDispatch, useAppSelector } from "@redux/store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useRouter } from "next/router";
 import { EventData, EventType } from "@type/event";
 import { SignUpStatus } from "@type/signUp";
 import { VolunteerData } from "@type/volunteer";
@@ -60,6 +62,7 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const signUpFetchStatus = useAppSelector((state) => state.signUp.status);
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const roles: Array<FormSelectRow> = parseRoles(event.roles);
@@ -83,11 +86,38 @@ const EventRegisterForm: FC<EventRegisterProps> = ({
 
     switch (event.eventType) {
       case EventType.VOLUNTEERING:
-        dispatch(createSignUp(request));
+        dispatch(createSignUp(request))
+          .then(unwrapResult)
+          .then(() => {
+            enqueueSnackbar(
+              "Your registration is recorded and pending for approval",
+              {
+                variant: "success",
+              }
+            );
+            router.push("/event");
+          })
+          .catch(() => {
+            enqueueSnackbar("Volunteer event sign up failed.", {
+              variant: "error",
+            });
+          });
         break;
       case EventType.HANGOUT:
       case EventType.WORKSHOP:
-        dispatch(createAndAcceptSignUp({ request, form: formState }));
+        dispatch(createAndAcceptSignUp({ request, form: formState }))
+          .then(unwrapResult)
+          .then(() => {
+            enqueueSnackbar("Your registration is successful", {
+              variant: "success",
+            });
+            router.push("/event");
+          })
+          .catch(() => {
+            enqueueSnackbar("Volunteer event sign up failed.", {
+              variant: "error",
+            });
+          });
         break;
       default:
         throw new Error("You shouldn't be here!");

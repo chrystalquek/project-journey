@@ -2,7 +2,8 @@ import { LoginRequest } from "@api/request";
 import Header from "@components/common/Header";
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { login } from "@redux/actions/session";
+import { login, LoginArgs } from "@redux/actions/session";
+import { useSnackbar } from "notistack";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { HOME_ROUTE } from "@utils/constants/routes";
@@ -10,7 +11,7 @@ import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -72,10 +73,10 @@ type LoginProps = {
 
 const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   const router = useRouter();
-  const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
   const user = useAppSelector((state) => state.session.user);
   const dispatch = useAppDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (user) {
@@ -91,24 +92,15 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   }, [resetStatus]);
 
   const handleSubmit = async (values) => {
-    dispatch(
-      login({
-        email: values.email,
-        password: values.password,
-      })
-    )
+    const loginArgs: LoginArgs = {
+      email: values.email,
+      password: values.password,
+    };
+    dispatch(login(loginArgs))
       .then(unwrapResult)
-      .catch(() => setInvalid(true));
-  };
-  const InvalidCredentials = () => {
-    if (invalid) {
-      return (
-        <Typography className={classes.invalidText}>
-          Invalid email &amp; password
-        </Typography>
-      );
-    }
-    return <></>;
+      .catch(() => {
+        enqueueSnackbar("User login failed.", { variant: "error" });
+      });
   };
 
   const validate = (values) => {
@@ -174,7 +166,6 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
                       autoComplete="current-password"
                     />
                     <Grid className={classes.loginButtonContainer}>
-                      <InvalidCredentials />
                       <Button
                         color="primary"
                         type="submit"

@@ -115,8 +115,8 @@ function SignUpForm({ type }: SignUpFormProps) {
         });
         router.push("/login");
       })
-      .catch((err) => {
-        enqueueSnackbar(`Error: ${err.message}`, {
+      .catch(() => {
+        enqueueSnackbar("User sign up failed.", {
           variant: "error",
         });
       });
