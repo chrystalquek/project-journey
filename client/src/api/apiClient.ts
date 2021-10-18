@@ -26,6 +26,8 @@ import {
   CreateFormQuestionsRequest,
   UploadFileRequest,
   GetEventFeedbackQuestionsRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
 } from "./request";
 import {
   LoginResponse,
@@ -47,13 +49,15 @@ import {
   UpdateCommitmentApplicationResponse,
   GetEventFeedbackQuestionsResponse,
   UploadFileResponse,
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
 } from "./response";
 
 type HttpMethod = "get" | "post" | "put" | "delete";
 
 let urlBaseEndpoint;
 
-switch (process.env.NEXT_PUBLIC_ENV) {
+switch (process.env.NODE_ENV) {
   case "development":
     urlBaseEndpoint = "http://localhost:5000";
     break;
@@ -100,6 +104,22 @@ class AxiosApiClient {
 
   async login(request: LoginRequest): Promise<LoginResponse> {
     return this.send(request, "user/login", "post");
+  }
+
+  async sendForgotPassword(
+    request: ForgotPasswordRequest
+  ): Promise<ForgotPasswordResponse> {
+    return this.send(request, "email/forgot-password", "post");
+  }
+
+  async resetPassword(
+    request: ResetPasswordRequest
+  ): Promise<ResetPasswordResponse> {
+    return this.send(
+      { newPassword: request.newPassword },
+      `user/reset-password/${request.token}`,
+      "post"
+    );
   }
 
   // event

@@ -1,88 +1,84 @@
-import { LoginRequest } from "@api/request";
-import Header from "@components/common/Header";
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { login, LoginArgs } from "@redux/actions/session";
+import React, { FC, useEffect, useState } from "react";
+import Link from "next/link";
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/dist/client/router";
+import { Formik, Form, Field } from "formik";
+import { TextField } from "formik-material-ui";
+import { forgotPassword, ForgotPasswordArgs } from "@redux/actions/session";
 import { useAppDispatch, useAppSelector } from "@redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { HOME_ROUTE } from "@utils/constants/routes";
-import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
-import { useRouter } from "next/dist/client/router";
-import Link from "next/link";
-import React, { FC, useEffect } from "react";
+import Header from "@components/common/Header";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   content: {
-    marginTop: 80,
+    marginTop: theme.spacing(10),
     textAlign: "center",
     minHeight: "90vh",
     [theme.breakpoints.down("sm")]: {
-      padding: "80px 50px 0px 50px",
+      padding: theme.spacing(20, 12.5, 0, 12.5),
     },
     [theme.breakpoints.up("md")]: {
-      padding: "80px 100px 0px 100px",
+      padding: theme.spacing(20, 25, 0, 25),
     },
   },
   rowContent: {
     justifyContent: "center",
   },
-  loginButton: {
+  button: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.black,
     textTransform: "none",
-    padding: "5px 50px",
+    padding: theme.spacing(1.25, 12.5),
     borderRadius: 20,
   },
   pageHeader: {
     fontSize: "32px",
     fontWeight: "bold",
-    marginBottom: "40px",
+    marginBottom: theme.spacing(5),
   },
-  loginButtonContainer: {
-    padding: "20px 0px 20px 0px",
+  details: {
+    margin: theme.spacing(0, 7.5, 4),
   },
-  form: {},
+  buttonContainer: {
+    padding: theme.spacing(5, 0, 5, 0),
+  },
   header: {
     textAlign: "left",
-    marginTop: "10px",
+    marginTop: theme.spacing(2.5),
     fontWeight: "bold",
     fontSize: "14px",
   },
   formContainer: {
-    padding: "20px",
+    padding: theme.spacing(5),
   },
-  signUpText: {
-    color: theme.palette.secondary.main,
-    textDecoration: "underline",
-    cursor: "pointer",
-  },
-  forgotPasswordText: {
-    textAlign: "left",
+  loginText: {
     color: theme.palette.secondary.main,
     textDecoration: "underline",
     cursor: "pointer",
   },
   invalidText: {
-    marginBottom: "10px",
+    marginBottom: theme.spacing(2.5),
     color: theme.palette.error.main,
   },
   section: {
-    margin: "20px",
+    margin: theme.spacing(5),
   },
 }));
 
-type LoginProps = {
+type Props = {
   resetStatus: () => void;
 };
 
-const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
+const ForgotPassword: FC<Props> = ({ resetStatus }: Props) => {
+  const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
+  const [invalid, setInvalid] = useState(false);
   const classes = useStyles();
   const user = useAppSelector((state) => state.session.user);
   const dispatch = useAppDispatch();
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (user) {
@@ -98,19 +94,34 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   }, [resetStatus]);
 
   const handleSubmit = async (values) => {
-    const loginArgs: LoginArgs = {
+    const forgotPasswordArgs: ForgotPasswordArgs = {
       email: values.email,
-      password: values.password,
     };
-    dispatch(login(loginArgs))
+    await dispatch(forgotPassword(forgotPasswordArgs))
       .then(unwrapResult)
+      .then(() => {
+        setInvalid(false);
+        enqueueSnackbar(`An email has been sent to ${values.email}`, {
+          variant: "success",
+        });
+      })
       .catch(() => {
-        enqueueSnackbar("User login failed.", { variant: "error" });
+        setInvalid(true);
       });
+  };
+  const InvalidCredentials = () => {
+    if (invalid) {
+      return (
+        <Typography className={classes.invalidText}>
+          Invalid email address
+        </Typography>
+      );
+    }
+    return <></>;
   };
 
   const validate = (values) => {
-    const errors: Partial<LoginRequest> = {};
+    const errors: Partial<ForgotPasswordArgs> = {};
 
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
@@ -120,27 +131,26 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
       errors.email = "Invalid email address";
     }
 
-    if (!values.password) {
-      errors.password = "Required";
-    } else if (values.password.length < 8) {
-      errors.password = "Password must contain at least 8 characters";
-    }
-
     return errors;
   };
 
   return (
     <>
-      <Header title="Login" />
+      <Header title="Forgot Password" />
       <Box style={{ width: "100%" }}>
         <Box className={classes.content}>
           <Grid container className={classes.rowContent}>
             <Grid item xs={12} sm={9} md={6}>
-              <Typography className={classes.pageHeader}>Login</Typography>
+              <Typography className={classes.pageHeader}>
+                Forgot Password
+              </Typography>
+              <Typography className={classes.details}>
+                {`Don't worry! Just fill in your email and we'll send you a
+                link to reset your password`}
+              </Typography>
               <Formik
                 initialValues={{
                   email: "",
-                  password: "",
                 }}
                 validate={validate}
                 onSubmit={handleSubmit}
@@ -157,48 +167,27 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
                       name="email"
                       autoComplete="email"
                     />
-                    <Typography className={classes.header}>
-                      {" "}
-                      Password{" "}
-                    </Typography>
-                    <Field
-                      component={TextField}
-                      variant="outlined"
-                      margin="normal"
-                      fullWidth
-                      name="password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                    />
-                    <Link href="/forgot-password">
-                      <Typography className={classes.forgotPasswordText}>
-                        Forgot password?
-                      </Typography>
-                    </Link>
-                    <Grid className={classes.loginButtonContainer}>
+                    <Grid className={classes.buttonContainer}>
+                      <InvalidCredentials />
                       <Button
                         color="primary"
                         type="submit"
                         disabled={isSubmitting}
-                        className={classes.loginButton}
+                        className={classes.button}
                         size="large"
                       >
-                        Log In
+                        Reset Password
                       </Button>
                     </Grid>
                   </Form>
                 )}
               </Formik>
-
               <div className={classes.section}>
                 <div>
-                  <Typography>Don&apos;t have an account?</Typography>
+                  <Typography>Remember your credentials?</Typography>
                 </div>
-                <Link href="/signup">
-                  <Typography className={classes.signUpText}>
-                    Sign up
-                  </Typography>
+                <Link href="/login">
+                  <Typography className={classes.loginText}>Log In</Typography>
                 </Link>
               </div>
             </Grid>
@@ -209,4 +198,4 @@ const Login: FC<LoginProps> = ({ resetStatus }: LoginProps) => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

@@ -14,6 +14,17 @@ export type LoginRequest = {
   password: string;
 };
 
+// forgot password
+
+export type ForgotPasswordRequest = {
+  email: string;
+};
+
+export type ResetPasswordRequest = {
+  token: string;
+  newPassword: string;
+};
+
 // events
 
 export type CreateEventRequest = Omit<EventData, "_id" | "createdAt"> & {

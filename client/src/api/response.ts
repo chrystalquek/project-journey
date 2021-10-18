@@ -11,6 +11,12 @@ export type LoginResponse = {
   token: string;
 };
 
+export type ForgotPasswordResponse = {
+  message: string;
+};
+
+export type ResetPasswordResponse = ForgotPasswordResponse;
+
 // event
 
 export type CreateEventResponse = EventData;
