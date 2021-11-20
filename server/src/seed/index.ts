@@ -91,12 +91,12 @@ async function seedDB() {
       {
         name: "admin1",
         volunteerType: "admin",
-        buddyId: "613d995b161c0a3bbea175e5",
+        buddyId: "",
       },
       {
         name: "admin2",
         volunteerType: "admin",
-        buddyId: "613d995b161c0a3bbea175e4",
+        buddyId: "",
       },
     ];
 
