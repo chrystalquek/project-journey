@@ -197,35 +197,33 @@ const updateSignUp = async (
   updatedFields: Partial<SignUpData>
 ): Promise<SignUpData> => {
   try {
-    let oldFields: SignUpData | null;
+    let identifier;
+
     switch (idType) {
       case "signUpId":
-        oldFields = await SignUp.findOneAndUpdate(
-          { _id: id },
-          { $set: updatedFields }
-        );
+        identifier = { _id: id };
         break;
       case "eventId":
-        oldFields = await SignUp.findOneAndUpdate(
-          { eventId: id },
-          { $set: updatedFields }
-        );
+        identifier = { eventId: id };
         break;
       case "userId":
-        oldFields = await SignUp.findOneAndUpdate(
-          { userId: id },
-          { $set: updatedFields }
-        );
+        identifier = { userId: id };
         break;
       default:
         throw new Error(INVALID_SIGN_UP_ID_TYPE);
     }
-    if (!oldFields) {
+
+    const oldSignUp = await SignUp.findOneAndUpdate(identifier, {
+      $set: updatedFields,
+    });
+    const updatedSignUp = await SignUp.findOne(identifier);
+
+    if (!oldSignUp || !updatedSignUp) {
       throw new Error(SIGN_UP_NOT_FOUND);
     }
 
-    const oldStatus = oldFields.status;
-    const oldAcceptedRole = oldFields.acceptedRole || "";
+    const oldStatus = oldSignUp.status;
+    const oldAcceptedRole = oldSignUp.acceptedRole || "";
     const newStatus = updatedFields.status;
     const newAcceptedRole = updatedFields.acceptedRole || "";
 
@@ -238,8 +236,8 @@ const updateSignUp = async (
       isSignUpAccepted(newStatus, newAcceptedRole)
     ) {
       updateEventRoles(
-        oldFields.eventId,
-        oldFields.userId,
+        oldSignUp.eventId,
+        oldSignUp.userId,
         "",
         newAcceptedRole,
         "add"
@@ -262,8 +260,8 @@ const updateSignUp = async (
       !isSignUpAccepted(newStatus, newAcceptedRole)
     ) {
       updateEventRoles(
-        oldFields.eventId,
-        oldFields.userId,
+        oldSignUp.eventId,
+        oldSignUp.userId,
         oldAcceptedRole,
         "",
         "remove"
@@ -277,15 +275,15 @@ const updateSignUp = async (
       oldAcceptedRole !== newAcceptedRole
     ) {
       updateEventRoles(
-        oldFields.eventId,
-        oldFields.userId,
+        oldSignUp.eventId,
+        oldSignUp.userId,
         oldAcceptedRole,
         newAcceptedRole,
         "replace"
       );
     }
 
-    return oldFields;
+    return updatedSignUp;
   } catch (err) {
     throw new Error(err);
   }

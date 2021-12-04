@@ -23,3 +23,4 @@ type SendBuddyResponseBody = {
 };
 
 export type SendBuddyResponse = Response<SendBuddyResponseBody>;
+export type SendForgotPasswordResponse = Response;

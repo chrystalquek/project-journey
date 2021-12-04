@@ -19,4 +19,8 @@ router.post("/event-cancel/:userId/:eventId", emailController.sendCancelEvent);
 // from volunteers involved in recent events
 router.post("/feedback-mass", emailController.sendMassFeedbackRequest);
 
+// @route   POST /email/forgot-password
+// @desc    To send emails to request changing password
+router.post("/forgot-password", emailController.sendForgotPassword);
+
 export default router;

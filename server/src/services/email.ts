@@ -12,7 +12,8 @@ type EmailTemplate =
   | "FEEDBACK"
   | "EVENT_SIGN_UP_CONFIRMATION"
   | "WAITLIST_TO_CONFIRMED"
-  | "BUDDY";
+  | "BUDDY"
+  | "FORGOT_PASSWORD";
 type EmailMetadata = {
   to: string;
   cc: string[];
@@ -32,6 +33,7 @@ const EVENT_SIGN_UP_CONFIRMATION_TEMPLATE_FILE =
   "src/views/event-sign-up-confirmation.ejs";
 const EVENT_CANCEL_TEMPLATE_FILE = "src/views/event-cancel.ejs";
 const BUDDY_TEMPLATE_FILE = "src/views/buddy.ejs";
+const FORGOT_PASSWORD_TEMPLATE_FILE = "src/views/forgot-password.ejs";
 
 const getSmtpTransport = async (): Promise<Mail> => {
   const oauth2Client = new OAuth2(
@@ -73,12 +75,12 @@ const getSmtpTransport = async (): Promise<Mail> => {
 };
 
 const sendEmailHelper = async (
-  to: string[],
+  to: string,
   cc: string[],
   bcc: string[],
   subject: string,
   templateFile: string,
-  templateData: Record<string, string>
+  templateData: object
 ): Promise<void> => {
   const smtpTransport = await getSmtpTransport();
   ejs.renderFile(templateFile, templateData, (err, content) => {
@@ -101,6 +103,37 @@ const sendEmailHelper = async (
       throw new Error(e.message);
     }
   });
+};
+
+const forgotPasswordEmailHelper = async (
+  user: VolunteerData,
+  token: string
+): Promise<EmailMetadata> => {
+  const to = user.email;
+  const cc = [];
+  const bcc = [];
+  const subject = "Forgot Password Request";
+
+  const domain =
+    process.env.NODE_ENV === "production"
+      ? "https://api-prod-dot-journey-288113.et.r.appspot.com/"
+      : "http://localhost:3000";
+  const forgotPasswordUrl = `${domain}/reset-password/${token}`;
+
+  const templateData = {
+    name: user.name,
+    forgotPasswordUrl,
+  };
+
+  const templateFile = FORGOT_PASSWORD_TEMPLATE_FILE;
+  return {
+    to,
+    cc,
+    bcc,
+    subject,
+    templateFile,
+    templateData,
+  };
 };
 
 const eventSignUpConfirmationEmailHelper = async (
@@ -292,6 +325,18 @@ export const sendEmail = async (
   return sendEmailHelper(to, cc, bcc, subject, templateFile, templateData);
 };
 
+export const sendForgotPassword = async (
+  volunteer: VolunteerData,
+  token: string
+): Promise<void> => {
+  const helperObject = await forgotPasswordEmailHelper(volunteer, token);
+
+  const { to, cc, bcc, subject, templateFile, templateData } = helperObject;
+
+  return sendEmailHelper(to, cc, bcc, subject, templateFile, templateData);
+};
+
 export default {
   sendEmail,
+  sendForgotPassword,
 };

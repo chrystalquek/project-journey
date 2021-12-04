@@ -25,3 +25,5 @@ export type NewUserData = Omit<UserData, "_id" | "createdAt">;
 
 type UserModel = UserData & mongoose.Document;
 export default mongoose.model<UserModel>("User", UserSchema);
+
+export type DecodedUser = UserData & { userId: string };

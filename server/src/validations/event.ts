@@ -36,152 +36,165 @@ const isArrayOfRoleData = (value: any[]) =>
 
 // Define validation for each field
 // Enum fields
-const volunteerType = body("volunteerType")
-  .exists()
-  .withMessage("Volunteer type is required")
-  .custom((value: string) =>
-    stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", value)
-  )
-  .withMessage("Volunteer type is invalid");
-const eventType = body("eventType")
-  .exists()
-  .withMessage("Event type is required")
-  .custom((value: string) =>
-    stringEnumValidator(EVENT_TYPE, "Event Type", value)
-  )
-  .withMessage("Event type is invalid");
-const eventSearchType = param("eventType")
-  .custom((value: string) =>
-    stringEnumValidator(EVENT_SEARCH_TYPE, "Event Search Type", value)
-  )
-  .withMessage("Event search type is invalid");
+const volunteerType = () =>
+  body("volunteerType")
+    .exists()
+    .withMessage("Volunteer type is required")
+    .custom((value: string) =>
+      stringEnumValidator(VOLUNTEER_TYPE, "Volunteer Type", value)
+    )
+    .withMessage("Volunteer type is invalid");
+const eventType = () =>
+  body("eventType")
+    .exists()
+    .withMessage("Event type is required")
+    .custom((value: string) =>
+      stringEnumValidator(EVENT_TYPE, "Event Type", value)
+    )
+    .withMessage("Event type is invalid");
+const eventSearchType = () =>
+  param("eventType")
+    .custom((value: string) =>
+      stringEnumValidator(EVENT_SEARCH_TYPE, "Event Search Type", value)
+    )
+    .withMessage("Event search type is invalid");
 
 // Date time fields
-const startDate = body("startDate")
-  .exists()
-  .withMessage("Start date is required")
-  .custom((value, { req }) => value <= req.body.endDate)
-  .withMessage("Start date must be before end date")
-  .isISO8601()
-  .withMessage("Start date is of wrong date format");
-const endDate = body("endDate")
-  .exists()
-  .withMessage("End date is required")
-  .isISO8601()
-  .withMessage("End date is of wrong date format");
-const deadline = body("deadline")
-  .exists()
-  .withMessage("Deadline is required")
-  .custom((value, { req }) => value <= req.body.startDate)
-  .withMessage("Deadline must be before start date")
-  .isISO8601()
-  .withMessage("Deadline is of wrong date format");
+const startDate = () =>
+  body("startDate")
+    .exists()
+    .withMessage("Start date is required")
+    .custom((value, { req }) => value <= req.body.endDate)
+    .withMessage("Start date must be before end date")
+    .isISO8601()
+    .withMessage("Start date is of wrong date format");
+const endDate = () =>
+  body("endDate")
+    .exists()
+    .withMessage("End date is required")
+    .isISO8601()
+    .withMessage("End date is of wrong date format");
+const deadline = () =>
+  body("deadline")
+    .exists()
+    .withMessage("Deadline is required")
+    .custom((value, { req }) => value <= req.body.startDate)
+    .withMessage("Deadline must be before start date")
+    .isISO8601()
+    .withMessage("Deadline is of wrong date format");
 
 // String fields
-const name = body("name")
-  .exists({ checkFalsy: true })
-  .withMessage("Name is required")
-  .isString()
-  .withMessage("Name must be a string");
-const coverImage = body("coverImage")
-  .isString()
-  .withMessage("cover image must be represented by a string")
-  .isURL()
-  .withMessage("Cover image must be represented by a URL");
-const description = body("description")
-  .exists({ checkFalsy: true })
-  .withMessage("Description is required")
-  .isString()
-  .withMessage("Description must be a string");
-const facilitatorName = body("facilitatorName")
-  .isString()
-  .withMessage("Facilitator name must be a string");
-const facilitatorDescription = body("facilitatorDescription")
-  .isString()
-  .withMessage("Facilitator description must be a string");
-const facilitatorPhoto = body("facilitatorPhoto")
-  .isString()
-  .withMessage("Facilitator photo must be represented by a string")
-  .isURL()
-  .withMessage("Facilitator photo must be represented by a URL");
-const location = body("location")
-  .exists({ checkFalsy: true })
-  .withMessage("Location is required")
-  .isString()
-  .withMessage("Location must be a string")
-  .notEmpty()
-  .withMessage("Location cannot be empty");
+const name = () =>
+  body("name")
+    .exists({ checkFalsy: true })
+    .withMessage("Name is required")
+    .isString()
+    .withMessage("Name must be a string");
+const coverImage = () =>
+  body("coverImage")
+    .isString()
+    .withMessage("cover image must be represented by a string")
+    .isURL()
+    .withMessage("Cover image must be represented by a URL");
+const description = () =>
+  body("description")
+    .exists({ checkFalsy: true })
+    .withMessage("Description is required")
+    .isString()
+    .withMessage("Description must be a string");
+const facilitatorName = () =>
+  body("facilitatorName")
+    .isString()
+    .withMessage("Facilitator name must be a string");
+const facilitatorDescription = () =>
+  body("facilitatorDescription")
+    .isString()
+    .withMessage("Facilitator description must be a string");
+const facilitatorPhoto = () =>
+  body("facilitatorPhoto")
+    .isString()
+    .withMessage("Facilitator photo must be represented by a string")
+    .isURL()
+    .withMessage("Facilitator photo must be represented by a URL");
+const location = () =>
+  body("location")
+    .exists({ checkFalsy: true })
+    .withMessage("Location is required")
+    .isString()
+    .withMessage("Location must be a string")
+    .notEmpty()
+    .withMessage("Location cannot be empty");
 
 // Array fields
-const roles = body("roles")
-  .exists()
-  .withMessage("Roles is required")
-  .isArray()
-  .withMessage("Roles must be an array")
-  .if((value: any[]) => !_.isEmpty(value)) // Run the following validations only if the array is non-empty.
-  .custom((value: any[]) => isArrayOfRoleData(value))
-  .withMessage("Roles must be an array of RoleData")
-  .custom((value: RoleData[]) => roleCapacityValidator(value))
-  .withMessage("Number of volunteers must not exceed role capacity");
+const roles = () =>
+  body("roles")
+    .exists()
+    .withMessage("Roles is required")
+    .isArray()
+    .withMessage("Roles must be an array")
+    .if((value: any[]) => !_.isEmpty(value)) // Run the following validations only if the array is non-empty.
+    .custom((value: any[]) => isArrayOfRoleData(value))
+    .withMessage("Roles must be an array of RoleData")
+    .custom((value: RoleData[]) => roleCapacityValidator(value))
+    .withMessage("Number of volunteers must not exceed role capacity");
 
 // URL fields
-const contentUrl = body("contentUrl")
-  .isURL()
-  .withMessage("Content URL is invalid");
+const contentUrl = () =>
+  body("contentUrl").isURL().withMessage("Content URL is invalid");
 
 const getValidations = (method: EventValidatorMethod) => {
   switch (method) {
     case "createEvent": {
       return [
-        name,
-        startDate,
-        endDate,
-        deadline,
-        description,
-        location,
+        name(),
+        startDate(),
+        endDate(),
+        deadline(),
+        description(),
+        location(),
 
         // Optional fields
-        coverImage.optional(),
-        facilitatorName.optional(),
-        facilitatorDescription.optional(),
-        facilitatorPhoto.optional(),
-        contentUrl.optional(),
+        coverImage().optional(),
+        facilitatorName().optional(),
+        facilitatorDescription().optional(),
+        facilitatorPhoto().optional(),
+        contentUrl().optional(),
 
         // Enum validator
-        eventType,
-        volunteerType,
-        roles,
+        eventType(),
+        volunteerType(),
+        roles(),
       ];
     }
     case "updateEvent": {
       return [
-        name.optional(),
-        startDate.optional(),
-        endDate.optional(),
-        deadline.optional(),
-        description.optional(),
-        location.optional(),
+        name().optional(),
+        startDate().optional(),
+        endDate().optional(),
+        deadline().optional(),
+        description().optional(),
+        location().optional(),
 
         // Optional fields
-        coverImage.optional(),
-        facilitatorName.optional(),
-        facilitatorDescription.optional(),
-        facilitatorPhoto.optional(),
-        contentUrl.optional(),
+        coverImage().optional(),
+        facilitatorName().optional(),
+        facilitatorDescription().optional(),
+        facilitatorPhoto().optional(),
+        contentUrl().optional(),
 
         // Enum validator
-        eventType.optional(),
-        volunteerType.optional(),
-        roles.optional(),
+        eventType().optional(),
+        volunteerType().optional(),
+        roles().optional(),
       ];
     }
     case "readEvent": {
-      return [idInParam];
+      return [idInParam()];
     }
 
     case "readEvents": {
       return [
-        eventSearchType,
+        eventSearchType(),
         query("pageNo")
           .isInt({ min: 0 })
           .withMessage("Page number must be a non-negative integer")
@@ -199,17 +212,17 @@ const getValidations = (method: EventValidatorMethod) => {
 
     case "readSignedUpEvents": {
       return [
-        eventSearchType,
+        eventSearchType(),
         param("userId").isString().withMessage("User id must be a string"),
       ];
     }
 
     case "cancelEvent": {
-      return [idInParam];
+      return [idInParam()];
     }
 
     case "deleteEvent": {
-      return [idInParam];
+      return [idInParam()];
     }
     default: {
       return [];
