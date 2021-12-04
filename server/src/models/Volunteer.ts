@@ -148,12 +148,18 @@ export const VolunteerSchema = createSchema({
     required: true,
     default: Date.now,
   }),
+
+  // Buddy
+  buddyId: Type.objectId({
+    required: false,
+    ref: "Volunteer",
+  }),
 });
 
 export type VolunteerData = Omit<
   ExtractProps<typeof VolunteerSchema>,
-  "__v" | "_id" | "userId"
-> & { _id: string; userId: string }; // whats retrieved from db
+  "__v" | "_id" | "userId" | "buddyId"
+> & { _id: string; userId: string; buddyId: string }; // whats retrieved from db
 
 export type GetVolunteerData = Omit<VolunteerData, "userId"> & {
   administratorRemarks?: string;

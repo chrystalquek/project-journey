@@ -9,6 +9,7 @@ import Volunteer, {
 } from "../models/Volunteer";
 import userService from "./user";
 import eventService from "./event";
+import emailService from "./email";
 
 // Helper methods
 export const doesUserEmailExist = async (email: string): Promise<boolean> => {
@@ -165,6 +166,7 @@ const updateVolunteer = async (
   id: string,
   updatedVolunteerData: Partial<VolunteerData>
 ): Promise<VolunteerData> => {
+  const originalVolunteerData = await Volunteer.findById(id);
   const savedVolunteerData = await Volunteer.findOneAndUpdate(
     { _id: id },
     updatedVolunteerData,
@@ -172,9 +174,23 @@ const updateVolunteer = async (
   )
     .lean()
     .exec();
-  if (!savedVolunteerData) {
+  if (!originalVolunteerData || !savedVolunteerData) {
     throw new Error(`Volunteer with id: ${id} not found`);
   }
+
+  // Trigger buddy email if the buddyId is different
+  if (
+    updatedVolunteerData?.buddyId &&
+    updatedVolunteerData?.buddyId !== originalVolunteerData?.buddyId?.toString()
+  ) {
+    await emailService.sendEmail(
+      "BUDDY",
+      id,
+      null,
+      updatedVolunteerData?.buddyId.toString()
+    );
+  }
+
   return savedVolunteerData;
 };
 
