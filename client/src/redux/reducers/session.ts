@@ -27,7 +27,7 @@ const sessionSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(REHYDRATE, (state, action) => {
       // @ts-ignore payload attribute not registered despite it available
-      const authToken = action?.payload?.user?.token;
+      const authToken = action?.payload?.session?.token;
       if (authToken) {
         apiClient.setAuthToken(authToken);
       }

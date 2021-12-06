@@ -7,7 +7,7 @@ import {
 import SectionalForm from "./generator/SectionalForm";
 
 const CommittedConversionForm = ({ handleSubmit }) => {
-  const userData = useAppSelector((state) => state.user.user);
+  const userData = useAppSelector((state) => state.session.user);
 
   if (!userData) {
     return null;
