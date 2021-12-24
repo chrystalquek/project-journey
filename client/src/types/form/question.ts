@@ -8,6 +8,7 @@ export type InputType =
   | "longAnswer"
   | "checkboxes"
   | "date"
+  | "datetime"
   | "mcq"
   | "password"
   | "image"
@@ -20,6 +21,7 @@ export type QuestionItem = {
   initialValue: any;
   options?: Array<OptionType>;
   isRequired: boolean;
+  props?: Record<string, any>;
 };
 
 export type QuestionList = Array<QuestionItem>;

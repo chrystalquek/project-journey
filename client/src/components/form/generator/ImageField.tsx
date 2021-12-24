@@ -12,7 +12,7 @@ type ImageFieldProps = {
 const ImageField = ({ width, height, name }: ImageFieldProps) => {
   const [, meta, helpers] = useField(name);
 
-  const { error, touched } = meta;
+  const { value, error, touched } = meta;
   const { setValue } = helpers;
 
   const onChangeImage = (e) => {
@@ -30,7 +30,7 @@ const ImageField = ({ width, height, name }: ImageFieldProps) => {
       <div style={{ width, height }}>
         <DropZoneCard
           id={name}
-          initialUrl={null}
+          initialUrl={value ?? null}
           onChangeImage={onChangeImage}
         />
       </div>

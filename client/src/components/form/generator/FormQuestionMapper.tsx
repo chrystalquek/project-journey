@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Field, ErrorMessage } from "formik";
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
-import { DatePicker } from "formik-material-ui-pickers";
+import { DatePicker, KeyboardDateTimePicker } from "formik-material-ui-pickers";
 import {
   makeStyles,
   MenuItem,
@@ -73,6 +73,21 @@ const FormQuestionMapper: FC<FormQuestionMapperProps> = ({
           {...props}
         />
       );
+    case "datetime":
+      return (
+        <Field
+          component={KeyboardDateTimePicker}
+          ampm={false}
+          clearable
+          disableToolbar
+          inputVariant="outlined"
+          format="dd/MM/yyyy HH:mm"
+          name={name}
+          fullWidth
+          margin="dense"
+          {...props}
+        />
+      );
     case "shortAnswer":
     case "password":
       return (
@@ -120,7 +135,7 @@ const FormQuestionMapper: FC<FormQuestionMapperProps> = ({
         </Field>
       );
     case "image":
-      return <ImageField name={name} />;
+      return <ImageField name={name} {...props} />;
     case "number":
       return (
         <Field

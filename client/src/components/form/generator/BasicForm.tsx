@@ -47,11 +47,12 @@ export const RawBasicForm: FC<RawBasicFormProps> = ({ formFields }) => {
 
   return (
     <>
-      {parsedData.map(({ name, type, options, displayText }) => {
+      {parsedData.map(({ name, type, options, props, displayText }) => {
         const childProps = {
           name,
           type,
           ...(options ? { options } : {}),
+          props,
         };
 
         return (
